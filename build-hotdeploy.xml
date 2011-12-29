@@ -1,0 +1,26 @@
+<project name="webfilesys-hotdeploy" default="hotdeploy" basedir=".">
+  <description>
+    deploy changed classes and webcontent to the development server
+  </description>
+
+  <property name="project-basedir" value="D:/Projekte/webfilesys/maven-project/webfilesys" />
+  <property name="deploy-target-basedir" value="D:/Programme/apache-tomcat-6.0.20/webapps/webfilesys" />
+
+  <property name="project-classes-dir" value="${project-basedir}/target/webfilesys/WEB-INF/classes" />
+  <property name="classes-deploy-target" value="${deploy-target-basedir}/WEB-INF/classes" />
+
+  <property name="webcontent-src" value="${project-basedir}/src/main/webapp" />
+  <property name="webcontent-deploy-target" value="${deploy-target-basedir}" />
+
+  <target name="hotdeploy">
+    <copy todir="${classes-deploy-target}" verbose="true">
+      <fileset dir="${project-classes-dir}" />
+    </copy>
+
+    <copy todir="${webcontent-deploy-target}" verbose="true">
+      <fileset dir="${webcontent-src}"
+         includes="css/**/*,xsl/**/*,javascript/**/*,images/**/*,icons/**/*,help/**/*,html/**/*,WEB-INF/languages/**/*" />
+    </copy>
+  </target>
+
+</project>
