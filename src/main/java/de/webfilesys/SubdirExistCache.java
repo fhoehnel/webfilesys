@@ -113,15 +113,18 @@ public class SubdirExistCache {
                         File[] subFileList = subDir.listFiles();
                         
                         boolean hasSubdirs = false;
-                        for (int k = 0; (!hasSubdirs) && (k < subFileList.length); k++) 
+                        if (subFileList != null) 
                         {
-                        	if (subFileList[k].isDirectory())
-                        	{
-            					if (!subFileList[k].getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR))
-            					{
-                            		hasSubdirs = true;
-            					}
-                        	}
+                            for (int k = 0; (!hasSubdirs) && (k < subFileList.length); k++) 
+                            {
+                            	if (subFileList[k].isDirectory())
+                            	{
+                					if (!subFileList[k].getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR))
+                					{
+                                		hasSubdirs = true;
+                					}
+                            	}
+                            }
                         }
                         if (hasSubdirs)
                         {
