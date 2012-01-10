@@ -337,28 +337,40 @@ public class Email extends Thread
         return(new String(encoder.encodeBuffer(buff)));
     }
 
-    public void printEncodedAttachment(OutputStream out) throws IOException
+    public void printEncodedAttachment(OutputStream out)
     {
-        Base64EncoderCRLF encoder = new Base64EncoderCRLF();
-    
-        FileInputStream in = new FileInputStream(attachment);
+        FileInputStream in = null;
 
-        encoder.encode(in,out);
+        try 
+    	{
+            Base64EncoderCRLF encoder = new Base64EncoderCRLF();
+            
+            in = new FileInputStream(attachment);
 
-        out.flush();
-    }
+            encoder.encode(in,out);
 
-    public String encodeAttachment() throws IOException
-    {
-		sun.misc.BASE64Encoder encoder=new sun.misc.BASE64Encoder();
-
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-    	
-		FileInputStream in = new FileInputStream(attachment);
-
-		encoder.encode(in, out);
-		
-		return(out.toString());
+            out.flush();
+            
+            in.close();
+    	}
+    	catch (IOException ioex)
+    	{
+        	Logger.getLogger(getClass()).error("failed to send attachment", ioex);
+    	}
+    	finally
+    	{
+    		if (in != null) 
+    		{
+    			try 
+    			{
+        			in.close();
+    			}
+    			catch (IOException ex)
+    			{
+    	        	Logger.getLogger(getClass()).error("failed to close attachment file", ex);
+    			}
+    		}
+    	}
     }
 
     public synchronized void getSMTPResponse(DataInputStream in,String expectedResponse)
