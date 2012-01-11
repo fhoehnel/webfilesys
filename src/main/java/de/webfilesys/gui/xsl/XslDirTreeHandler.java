@@ -17,6 +17,8 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
+import de.webfilesys.decoration.Decoration;
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.StringComparator;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -222,6 +224,8 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 			Collections.sort(subdirList,new StringComparator(StringComparator.SORT_IGNORE_CASE));
 		}
 
+		DecorationManager decoMgr = DecorationManager.getInstance();
+		
 		for (int i=0;i<subdirList.size();i++)
 		{
 			String subdirPath=(String) subdirList.elementAt(i);
@@ -281,6 +285,20 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 					currentDirNum = dirCounter;
 					
 					folderElement.setAttribute("current","true");
+				}
+				
+				Decoration deco = decoMgr.getDecoration(subdirPath);
+				
+				if (deco != null) 
+				{
+					if (deco.getIcon() != null) 
+					{
+		                folderElement.setAttribute("icon", deco.getIcon());
+					}
+					if (deco.getTextColor() != null) 
+					{
+		                folderElement.setAttribute("textColor", deco.getTextColor());
+					}
 				}
 				
 				if (File.separatorChar=='/')

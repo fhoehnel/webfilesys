@@ -533,6 +533,8 @@ public class FolderWatchManager extends Thread
                     }
                     folderWatchElement.removeChild(folderElem);
                     
+                    changed = true;
+                    
                     if (statusFileName != null) 
                     {
                         String statusFilePath = WebFileSys.getInstance().getConfigBaseDir() + "/" 

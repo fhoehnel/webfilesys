@@ -29,6 +29,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.XmlUserManager;
 import de.webfilesys.watch.FolderWatchManager;
@@ -40,7 +41,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.7.1-alpha5 (2011/12/29)";
+	public static final String VERSION = "Version 2.8.0-beta1 (2012/01/11)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -50,8 +51,6 @@ public class WebFileSys
     public static final String DEFAULT_MAIL_SENDER_NAME = "WebFileSys";
 
     public static final String LOG_CONFIG_FILE = "LogConfig.xml";
-
-    // public static final String DEFAULT_USER_MGR_CLASS = "XmlUserManager";
 
     public static final int LIC_REMINDER_INTERVAL = 10;
     
@@ -748,6 +747,8 @@ public class WebFileSys
         {
             FolderWatchManager.getInstance();
         }
+        
+        DecorationManager.getInstance();
     }
 	
     protected void readDateFormats(Properties config)

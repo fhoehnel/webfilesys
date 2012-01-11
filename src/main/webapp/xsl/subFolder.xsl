@@ -89,11 +89,18 @@
       </xsl:if>
 
       <xsl:if test="not(@type)">
-        <xsl:if test="@current">
-          <img src="/webfilesys/images/folder1.gif" border="0" width="17" height="14"/>
+        <xsl:if test="@icon">
+          <img border="0" width="16" height="16" style="margin-right:1px">
+            <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
+          </img>
         </xsl:if>
-        <xsl:if test="not(@current)">
-          <img src="/webfilesys/images/folder.gif" border="0" width="17" height="14"/>
+        <xsl:if test="not(@icon)">
+          <xsl:if test="@current">
+            <img src="/webfilesys/images/folder1.gif" border="0" width="17" height="14"/>
+          </xsl:if>
+          <xsl:if test="not(@current)">
+            <img src="/webfilesys/images/folder.gif" border="0" width="17" height="14"/>
+          </xsl:if>
         </xsl:if>
       </xsl:if>
     </a>
@@ -104,9 +111,7 @@
       <xsl:attribute name="oncontextmenu">dirContextMenu('<xsl:value-of select="@id" />');return false;</xsl:attribute>
 
       <xsl:if test="@link">
-        <xsl:attribute name="class">
-          <xsl:value-of select="'link'"/>
-        </xsl:attribute>
+        <xsl:attribute name="class">link</xsl:attribute>
 
         <xsl:attribute name="title">
           <xsl:value-of select="'--&gt; '"/>
@@ -115,9 +120,10 @@
       </xsl:if>
 
       <xsl:if test="not(@link)">
-        <xsl:attribute name="class">
-          <xsl:value-of select="'dirtree'"/>
-        </xsl:attribute>
+        <xsl:attribute name="class">dirtree</xsl:attribute>
+        <xsl:if test="@textColor">
+          <xsl:attribute name="style">color:<xsl:value-of select="@textColor" /></xsl:attribute>
+        </xsl:if>
       </xsl:if>
     
       <xsl:value-of select="@name"/>
@@ -185,7 +191,14 @@
     <a>
       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />')</xsl:attribute>
 
-      <img src="/webfilesys/images/folder.gif" border="0" width="17" height="14"/>
+      <xsl:if test="@icon">
+        <img border="0" width="16" height="16" style="margin-right:1px">
+          <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
+        </img>
+      </xsl:if>
+      <xsl:if test="not(@icon)">
+        <img src="/webfilesys/images/folder.gif" border="0" width="17" height="14"/>
+      </xsl:if>
     </a>
 
     <img src="/webfilesys/images/space.gif" border="0" width="4" height="1"/>
@@ -208,6 +221,9 @@
         <xsl:attribute name="class">
           <xsl:value-of select="'dirtree'"/>
         </xsl:attribute>
+        <xsl:if test="@textColor">
+          <xsl:attribute name="style">color:<xsl:value-of select="@textColor" /></xsl:attribute>
+        </xsl:if>
       </xsl:if>
     
       <xsl:value-of select="@name"/>

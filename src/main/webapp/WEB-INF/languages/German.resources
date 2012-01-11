@@ -136,9 +136,13 @@ tooltip.folder=Context-Menü für diesen Ordner anzeigen
 tooltip.listFiles=Dateien dieses Ordners anzeigen
 label.loginHint=Hinweis: Click auf das Ordner Icon öffnet das Context-Menü.
 
-# description window buttons
+# description window buttons and labels
 button.setdesc=Speichern
 button.close=Abbrechen
+label.textColor=Textfarbe
+label.folderIcon=Ordner Icon
+noCustomIcon=Standard Ordner-Icon
+noCustomColor=Standardfarbe
 
 # file list labels and buttons
 label.listPageSize=Dateien/Seite

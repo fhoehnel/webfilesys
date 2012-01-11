@@ -3,6 +3,7 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +23,8 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.decoration.Decoration;
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.graphics.ThumbnailThread;
@@ -206,6 +209,60 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			}
 		}
 		
+		if (path.endsWith(".")) {
+			String normalizedPath = path.substring(0, path.length() - 2);
+
+			String defaultColor = req.getParameter("defaultColor");
+			if (defaultColor != null) 
+			{
+				Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+				if (deco != null) 
+				{
+					deco.setTextColor(null);
+					DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+				}
+			}
+			else
+			{
+				String textColor = req.getParameter("textColor");
+				if ((textColor != null) && (textColor.trim().length() > 0)) 
+				{
+					Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+					if (deco == null) 
+					{
+						deco = new Decoration();
+					}
+					deco.setTextColor("#" + textColor);
+					DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+				}
+			}
+			
+			String icon = req.getParameter("icon");
+			if (icon != null) {
+				Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+				if (icon.equals("none")) 
+				{
+					if (deco != null) 
+					{
+						deco.setIcon(null);
+						DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+					}
+				} 
+				else
+				{
+					if (icon.trim().length() > 0)
+					{
+						if (deco == null) 
+						{
+							deco = new Decoration();
+						}
+						deco.setIcon(icon);
+						DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+					}
+				}
+			}
+		}
+		
 		output.println("<html>");
 		output.println("<head>");
 		output.println("<script language=\"javascript\">");
@@ -300,7 +357,14 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			addMsgResource("button.selectFromMap", getResource("button.selectFromMap","Select on map"));
 		}
 		
-		addMsgResource("button.save", getResource("button.save","Save"));
+        if (path.endsWith(".")) {
+    		addMsgResource("label.textColor", getResource("label.textColor","text color"));
+    		addMsgResource("label.folderIcon", getResource("label.folderIcon","folder icon"));
+    		addMsgResource("noCustomIcon", getResource("noCustomIcon","no custom icon"));
+    		addMsgResource("noCustomColor", getResource("noCustomColor","no custom color"));
+        }
+
+        addMsgResource("button.save", getResource("button.save","Save"));
 		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
 		
 		if (folderOrFile.isFile())
@@ -444,6 +508,45 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 	    metaInfElement.appendChild(geoTagElement);
 		
+		if (path.endsWith(".")) 
+		{
+			String normalizedPath = path.substring(0, path.length() - 2);
+			Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+			
+			if (deco != null) 
+			{
+				String textColor = deco.getTextColor();
+				if (textColor != null) 
+				{
+					if (textColor.startsWith("#")) 
+					{
+						textColor = textColor.substring(1);
+					}
+
+					XmlUtil.setChildText(metaInfElement, "textColor", textColor);
+				}
+				
+				String icon = deco.getIcon();
+				if (icon != null) {
+					XmlUtil.setChildText(metaInfElement, "icon", icon);
+				}
+			}
+			
+	        Element availableIconsElement = doc.createElement("availableIcons");
+
+	        metaInfElement.appendChild(availableIconsElement);
+			
+			Iterator iconIter = DecorationManager.getInstance().getAvailableIcons().iterator();
+			
+			while (iconIter.hasNext()) 
+			{
+				String icon = (String) iconIter.next();
+				Element iconElement = doc.createElement("icon");
+				availableIconsElement.appendChild(iconElement);
+				XmlUtil.setElementText(iconElement, icon);
+			}
+		}
+	    
 		// when XSLT processing is done by the browser, the Firefox browser and MSIE 7.0 hang up forever
 		// when loading the Google maps API Javascript functions from the Google server
 		// so we have to do the XSLT processing always on server side

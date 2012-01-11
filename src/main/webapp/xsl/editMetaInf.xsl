@@ -25,6 +25,8 @@
   
 </xsl:if>
 
+<script type="text/javascript" src="/webfilesys/javascript/jscolor/jscolor.js"></script>
+
 <title>
   <xsl:value-of select="/metaInf/resources/msg[@key='label.editMetaInfo']/@value" />
 </title>
@@ -156,7 +158,7 @@
 
 <body>
 
-  <xsl:if test="/metaInf/geoTag">
+  <xsl:if test="/metaInf/geoTag/googleMapsAPIKey">
     <xsl:attribute name="onunload">GUnload()</xsl:attribute>
   </xsl:if>
 
@@ -287,6 +289,82 @@
             <textarea name="infoText" style="width:200;height:40px;vertical-align:top;" wrap="virtual"><xsl:value-of select="/metaInf/geoTag/infoText" /></textarea>
             &#160;
             <xsl:value-of select="/metaInf/resources/msg[@key='label.geoTagInfoText']/@value" />
+          </td>
+        </tr>
+      </xsl:if>
+      
+      <xsl:if test="/metaInf/resources/msg[@key='label.textColor']">
+        <tr> 
+          <td class="formParm1">
+            <xsl:value-of select="/metaInf/resources/msg[@key='label.textColor']/@value" />
+          </td>
+          <td class="formParm2">
+            <input name="textColor" class="color">
+              <xsl:if test="/metaInf/textColor">
+                <xsl:attribute name="value"><xsl:value-of select="/metaInf/textColor" /></xsl:attribute>
+              </xsl:if>
+              <xsl:if test="not(/metaInf/textColor)">
+                <xsl:attribute name="value">000000</xsl:attribute>
+              </xsl:if>
+            </input>
+
+            &#160;
+
+            <input type="checkbox" name="defaultColor">
+              <xsl:if test="not(/metaInf/textColor)">
+                <xsl:attribute name="checked">checked</xsl:attribute>
+              </xsl:if>
+            </input>
+            
+            <xsl:value-of select="/metaInf/resources/msg[@key='noCustomColor']/@value" />
+          </td>
+        </tr>
+      </xsl:if>
+
+      <xsl:if test="/metaInf/resources/msg[@key='label.folderIcon']">
+        <tr> 
+          <td class="formParm1">
+            <xsl:value-of select="/metaInf/resources/msg[@key='label.folderIcon']/@value" />
+          </td>
+          <td class="formParm2">
+            <div style="width:300px;height:80px;overflow-x:auto;overflow-y:auto;border:1px solid #a0a0a0">
+              <table border="0">
+                <tr>
+                  <td>
+                    <input type="radio" name="icon" value="none">
+                      <xsl:if test="not(/metaInf/icon)">
+                        <xsl:attribute name="checked">checked</xsl:attribute>
+                      </xsl:if>
+                    </input>
+                  </td>
+                  <td>
+                  </td>
+                  <td class="formParm1">
+                    <xsl:value-of select="/metaInf/resources/msg[@key='noCustomIcon']/@value" />
+                  </td>
+                </tr>
+                <xsl:for-each select="/metaInf/availableIcons/icon">
+                  <tr>
+                    <td>
+                      <input type="radio" name="icon">
+                        <xsl:attribute name="value"><xsl:value-of select="." /></xsl:attribute>
+                        <xsl:if test=". = /metaInf/icon">
+                          <xsl:attribute name="checked">checked</xsl:attribute>
+                        </xsl:if>
+                      </input>
+                    </td>
+                    <td>
+                      <img border="0" width="16" height="16">
+                        <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="." /></xsl:attribute>
+                      </img>
+                    </td>
+                    <td class="formParm1">
+                      <xsl:value-of select="." />
+                    </td>
+                  </tr>
+                </xsl:for-each>
+              </table>
+            </div>
           </td>
         </tr>
       </xsl:if>

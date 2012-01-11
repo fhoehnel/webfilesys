@@ -92,8 +92,11 @@
   {
       <xsl:if test="/slideShow/crossfade">
         fadeOut();
+        setTimeout('gotoNextImg()', 500);
       </xsl:if>
-      setTimeout('gotoNextImg()', 1000);
+      <xsl:if test="not(/slideShow/crossfade)">
+        gotoNextImg();
+      </xsl:if>
   }
 
   function gotoPrevImg(paused) 
@@ -265,7 +268,6 @@
   
     <input type="button" onclick="unload()">
       <xsl:attribute name="value"><xsl:value-of select="/slideShow/resources/msg[@key='alt.next']/@value" /></xsl:attribute>
-      <xsl:attribute name="onclick">gotoNextImg()</xsl:attribute>
     </input>
   </xsl:if>
 

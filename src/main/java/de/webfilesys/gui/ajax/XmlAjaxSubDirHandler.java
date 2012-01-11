@@ -16,6 +16,8 @@ import org.w3c.dom.Element;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
+import de.webfilesys.decoration.Decoration;
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.StringComparator;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -166,6 +168,22 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 
 		parentElement.setAttribute("current","true");
 		
+		DecorationManager decoMgr = DecorationManager.getInstance();
+
+		Decoration deco = decoMgr.getDecoration(parentPath);
+		
+		if (deco != null) 
+		{
+			if (deco.getIcon() != null) 
+			{
+				parentElement.setAttribute("icon", deco.getIcon());
+			}
+			if (deco.getTextColor() != null)
+			{
+				parentElement.setAttribute("textColor", deco.getTextColor());
+			}
+		}
+		
 		if (File.separatorChar == '/')
 		{
 		    // there is no way to detect NTFS symbolic links / junctions with Java functions
@@ -296,6 +314,20 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 				folderElement.setAttribute("lastInLevel" , "false");
 			}
 			
+			deco = decoMgr.getDecoration(subdirPath);
+			
+			if (deco != null) 
+			{
+				if (deco.getIcon() != null) 
+				{
+	                folderElement.setAttribute("icon", deco.getIcon());
+				}
+				if (deco.getTextColor() != null) 
+				{
+	                folderElement.setAttribute("textColor", deco.getTextColor());
+				}
+			}
+
 			if (File.separatorChar == '/')
 			{
 				File tempFile = new File(subdirPath);

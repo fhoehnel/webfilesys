@@ -136,9 +136,13 @@ tooltip.folder=open the context menu for the directory
 tooltip.listFiles=list the files of this directory
 label.loginHint=Hint: Click on the folder icon to open the context menu of the folder!
 
-# description window buttons
+# description window buttons and labels
 button.setdesc=Save
 button.close=Cancel
+label.textColor=text color
+label.folderIcon=folder icon
+noCustomIcon=no custom icon
+noCustomColor=no custom color
 
 # file list labels and buttons
 label.listPageSize=files per page
