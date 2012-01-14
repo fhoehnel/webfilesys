@@ -46,6 +46,11 @@
       }
   } 
   
+  function uncheckDefaultColor() 
+  {
+      document.getElementById("defaultColorCheckbox").checked = false;
+  }
+  
   <xsl:if test="/metaInf/geoTag">
   
     var posMarker;
@@ -299,7 +304,7 @@
             <xsl:value-of select="/metaInf/resources/msg[@key='label.textColor']/@value" />
           </td>
           <td class="formParm2">
-            <input name="textColor" class="color">
+            <input name="textColor" class="color" onblur="uncheckDefaultColor()">
               <xsl:if test="/metaInf/textColor">
                 <xsl:attribute name="value"><xsl:value-of select="/metaInf/textColor" /></xsl:attribute>
               </xsl:if>
@@ -310,7 +315,7 @@
 
             &#160;
 
-            <input type="checkbox" name="defaultColor">
+            <input type="checkbox" name="defaultColor" id="defaultColorCheckbox" class="cb3">
               <xsl:if test="not(/metaInf/textColor)">
                 <xsl:attribute name="checked">checked</xsl:attribute>
               </xsl:if>
@@ -331,7 +336,7 @@
               <table border="0">
                 <tr>
                   <td>
-                    <input type="radio" name="icon" value="none">
+                    <input type="radio" name="icon" value="none" class="cb3">
                       <xsl:if test="not(/metaInf/icon)">
                         <xsl:attribute name="checked">checked</xsl:attribute>
                       </xsl:if>
@@ -346,7 +351,7 @@
                 <xsl:for-each select="/metaInf/availableIcons/icon">
                   <tr>
                     <td>
-                      <input type="radio" name="icon">
+                      <input type="radio" name="icon" class="cb3">
                         <xsl:attribute name="value"><xsl:value-of select="." /></xsl:attribute>
                         <xsl:if test=". = /metaInf/icon">
                           <xsl:attribute name="checked">checked</xsl:attribute>
