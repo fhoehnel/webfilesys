@@ -163,7 +163,7 @@ function handleDirRemoved()
              
             if (success == "deleted")
             {
-                pathItem = req.responseXML.getElementsByTagName("parentPath")[0];            
+                var pathItem = req.responseXML.getElementsByTagName("parentPath")[0];            
                 var parentPath = pathItem.firstChild.nodeValue;
 
                 window.location.href = "/webfilesys/servlet?command=exp&actPath=" + parentPath + "&expand=" + parentPath + "&fastPath=true";
@@ -171,6 +171,12 @@ function handleDirRemoved()
             else
             {
                 alert(message);
+                var pathItem = req.responseXML.getElementsByTagName("path")[0]; 
+                if (pathItem) 
+                {
+                    var path = pathItem.firstChild.nodeValue;
+                    window.location.href = "/webfilesys/servlet?command=exp&actPath=" + path + "&expand=" + path + "&fastPath=true";
+                }           
             }
         }
     }

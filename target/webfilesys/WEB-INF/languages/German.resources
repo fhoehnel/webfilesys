@@ -1,0 +1,862 @@
+# WebFileSys resource file for international customization 
+#
+# version for German language
+#
+# Save a copy of the unchanged file for further reference !
+
+
+# common labels
+label.login.title=WebFileSys Login
+label.userid=Nutzername
+label.password=Passwort
+label.logon=Anmelden
+label.file=Datei
+label.files=Dateien
+label.mask=Filter
+label.description=Beschreibung
+label.directory=Ordner
+label.path=Pfad
+label.oldName=alter Name
+label.newname=neuer Name
+label.currentName=aktueller Name
+label.filename=Dateiname
+label.destdir=Zielordner
+label.yes=ja
+label.no=nein
+label.in=in
+
+# common buttons
+button.create=Anlegen
+button.cancel=Abbrechen
+button.rename=Umbenennen
+button.renmove=Verschieben
+button.closewin=Fenster schliessen
+button.return=Zurück
+button.save=Speichern
+button.ok=OK
+button.next=Weiter
+button.previous=Zurück
+button.reload=Neu laden
+
+# menu bar labels
+label.fastpath=zuletzt besuchte Ordner
+label.returnToPrevDir=zurück zum vorher angezeigten Ordner
+label.processes=Prozesse
+label.fsstat=Filesystem-Statistik
+label.oscmd=BS-Befehl
+label.admin=Administration
+label.refreshDrives=Laufwerks-Liste aktualisieren
+label.diskQuotaUsage=Speicherplatznutzung
+label.thumbnails=Bilder
+label.thumbinvite=Bilder und Einladung zur Diashow
+label.slideshow=Diashow
+label.story=Bilder-Story
+label.ftpBackup=FTP Backup des Verzeichnisbaumes
+label.topdownloads=Download-Statistik
+label.downloadCommentStats=Download- und Kommentar-Statistik
+label.commentStats=Kommentar-Statistik
+label.help=Hilfe
+label.about=Über WebFileSys
+label.logout=Abmelden
+
+# directory context menu labels
+label.mkdir=Unterordner anlegen
+label.copydir=Ordner kopieren
+label.movedir=Ordner verschieben
+label.deldir=Ordner löschen
+label.renamedir=Ordner umbenennen
+label.pastedir=Einfügen
+label.statistics=Statistik
+label.subdirStats=Statistik Unterordner
+label.ageStats=Statistik Datei-Alter
+label.sizeStats=Statistik Datei-Grössen
+label.typeStats=Statistik Datei-Typen
+label.search=Suche
+label.createfile=neue Datei anlegen
+label.upload=Datei-Upload
+label.zipdir=ZIP-Archiv erstellen
+label.editdesc=Beschreibung editieren
+label.editMetaInfo=Metainfos editieren
+label.refresh=aktualisieren
+label.createthumbs=Thumbnails generieren
+label.clearthumbs=Alte Thumbnails löschen
+label.driveinfo=Datenträger-Infos
+label.publish=Freigeben
+label.winCmdLine=Kommandozeile
+label.menuMore=Weitere Funktionen ...
+label.menuSynchronize=Synchronisieren
+label.menuCancelSync=Synchronisieren abbrechen
+label.watchFolder=Änderungen überwachen
+
+# file context menu labels
+label.view=Anzeigen
+label.download=Download
+label.delete=Löschen
+label.renameFile=Umbenennen
+label.copyToClip=Kopieren
+label.cutToClip=Verschieben
+label.copymove=Kopieren/Verschieben
+label.edit=Editieren
+label.viewzip=Zip-Inhalt Anzeigen
+label.run=Ausführen
+label.open=Standard-Anwendung
+label.rights=Zugriffsrechte
+label.zip=Zip-Archivierung
+label.unzip=Zip-Archiv entpacken
+label.compress=Compress
+label.uncompress=Uncompress
+label.untar=tar-Archiv entpacken
+label.setro=Schreibschutz setzen
+label.setrw=Schreibschutz entfernen
+label.switchReadOnly=Schreibschutz ändern
+label.owner=Eigentümer
+label.group=Gruppe
+label.accessrights=Zugriffsrechte
+label.attributes=Attribute
+label.sendfile=Versenden als e-mail
+label.renameLink=Umbenennen
+label.deleteLink=Link löschen
+label.origDir=Original-Ordner
+label.diffSource=Vergleichen (diff)
+label.diffTarget=Vergleich starten
+label.cancelDiff=Vergleich abbrechen
+label.compSource=Ordner vergleichen
+label.compTarget=Vergleich starten
+label.cancelComp=Vergleich abbrechen
+label.cloneFile=Datei klonen
+label.touch=touch (Änderungsdatum)
+label.hexView=Hex Viewer
+label.encrypt=Verschlüsseln (AES)
+label.decrypt=Entschlüsseln (AES)
+label.tail=tail (letzte Zeilen)
+label.downloadFolder=Download als ZIP-Archiv
+
+# directory tree tooltips
+tooltip.folder=Context-Menü für diesen Ordner anzeigen
+tooltip.listFiles=Dateien dieses Ordners anzeigen
+label.loginHint=Hinweis: Click auf das Ordner Icon öffnet das Context-Menü.
+
+# description window buttons and labels
+button.setdesc=Speichern
+button.close=Abbrechen
+label.textColor=Textfarbe
+label.folderIcon=Ordner Icon
+noCustomIcon=Standard Ordner-Icon
+noCustomColor=Standardfarbe
+
+# file list labels and buttons
+label.listPageSize=Dateien/Seite
+label.lastModified=letzte Änderung
+label.fileSize=Grösse (Bytes)
+label.page=Seite
+button.tar=Tar Archiv anlegen
+button.zip=Zip Archiv anlegen
+button.delete=Löschen
+button.compress=Komprimieren
+button.copy=Kopieren
+button.move=Ausschneiden
+button.paste=Einfügen
+button.pasteLink=Link Einfügen
+button.upload=Datei-Upload
+label.selectedFiles=ausgewählte Dateien
+action.diff=Vergleichen (diff)
+selectTwoFilesForDiff=Zum Vergleichen müssen 2 Dateien ausgewählt werden!
+confirm.deleteFiles=Ausgewählte Dateien wirklich löschen?
+
+# file list checkboxes
+checkbox.selectall=alle
+checkbox.confirmdel=Löschen bestätigen
+
+# file list view modes
+label.modelist=File-Liste
+label.modethumb=Bilder
+label.modestory=Story
+label.modeSlideshow=Diashow
+label.fileStats=Statistik
+
+# sorting types for files
+sort.name=sortieren nach Name
+sort.name.ignorecase=sortieren nach Name
+sort.name.respectcase=Name (Gross/Klein beachten)
+sort.extension=sortieren nach Dateityp
+sort.size=sortieren nach Grösse
+sort.date=sortieren nach Datum
+sort.voteCount=Anzahl Bewertungen
+sort.voteValue=sortieren nach Bewertung
+
+# create file/subdir labels
+label.parentDir=Basis-Ordner
+label.newDirName=Neuer Ordnername
+label.newFileName=Neuer Dateiname
+
+# upload parameter window labels
+label.uploadfile=Datei-Upload
+label.upload.localFile=Datei für Upload
+label.upload.serverFileName=Dateiname auf dem Server
+label.upload.description=Datei-Beschreibung
+label.xfermode=Transfermodus
+label.xferbin=binär
+label.xfertext=text
+button.startUpload=Upload starten
+hint.upload.multizip=Mehrere Dateien oder ein ganzer Directory-Baum kann in Form eines ZIP-Archives hochgeladen werden, welches automatisch entpackt wird.
+label.upload.unzip=nach Upload ZIP Archiv entpacken
+link.multiUpload=Erweiterter Upload
+headline.multiUpload=Erweiterter Upload
+upload.selected.pictures=Bilder selektiert für Upload
+upload.dropZone=Drag and drop Dateien für Upload hier!
+upload.lastSent=zuletzt hochgeladene Datei
+upload.selectedFiles=Zum Upload ausgewählte Dateien
+upload.selectFilePrompt=Datei(en) auswählen
+upload.button.done=Fertig
+label.uploadStatus=Upload-Status
+upload.file.too.large=Die Datei ist zu gross für die erweiterte Upload-Funktion. Nutzen Sie den Upload-Basisdialog für besonders grosse Dateien!
+upload.file.exists=eine Datei mit diesem Namen existiert bereits - überschreiben?
+
+# switch Read/Only labels
+label.readWriteStatus=Schreibschutz-Status
+label.statusWritable=kein Schreibschutz
+label.statusReadOnly=Schreibschutz aktiviert
+
+# directory zip window label
+label.zippingdir=Komprimierung des Ordners
+label.ziparchive=ZIP-Archiv
+label.currentfile=in Bearbeitung
+label.zipratio=Komprimierungsrate (% der Originalgrösse)
+label.zipnofile=Der Verzeichnisbaum enthält keine Dateien!
+
+# file zip/unzip/tar/compress labels and buttons
+label.ziphead=ZIP-Archiv anlegen
+label.unziphead=ZIP-Archiv entpacken
+label.tarhead=tar-Archiv anlegen
+label.untarhead=tar-Archiv entpacken
+label.extractfrom=entpacke Archiv
+label.currentzip=in Bearbeitung
+label.unzipresult=Dateien entpackt
+label.zipCount=Dateien gepackt
+label.untarResult=Dateien entpackt
+label.tararchive=tar-Archiv
+label.sourcefile=Quell-Datei
+label.targetfile=Ziel-Datei
+button.delzip=ZIP-Archiv löschen
+button.keepzip=ZIP-Archiv behalten
+button.delTarArchive=TAR Archiv löschen
+button.keepTarArchive=TAR Archiv behalten
+button.delsource=Quelldatei löschen
+button.keepsource=Quelldatei behalten
+button.downloadAsZip=Download als Zip-Archiv
+label.sizeorig=Originalgrösse
+label.sizecompressed=Grösse komprimiert
+label.unzipError=Datei kann nicht entpackt werden (Umlaute im Dateinamen?)
+label.untarError=Fehler beim Entpacken der Datei
+
+# statistics window labels
+label.subdirs=Unterverzeichnisse
+label.subdirlevels=Verzeichnisebenen
+label.firstlevelfiles=Dateien im Hauptordner
+label.firstlevelbytes=Bytes im Hauptordner
+label.treefiles=Dateien im Verzeichnisbaum
+label.treebytes=Bytes im Verzeichnisbaum
+label.countComments=Kommentar-Statistik
+label.topdownloads=Download-Statistik
+label.nodownloads=keine Downloads aus diesem Ordner
+label.downloads=Anzahl Downloads
+label.since=seit
+button.resetStats=Statistik zurücksetzen
+label.commentNum=Anzahl Kommentare
+label.noComments=Es existieren keine Kommentare zu Dateien in diesem Ordner.
+
+stats.sizeWinTitle=Ordner-Statistik nach Dateigrößen
+stats.typeWinTitle=Ordner-Statistik nach Dateityp
+stats.ageWinTitle=Ordner-Statistik nach Datei-Alter
+stats.fileSize=Dateigröße von bis
+stats.fileNum=# Dateien
+stats.percentFileNum=% Anzahl
+stats.sizeSum=Summe Größe
+stats.percentSizeSum=% Größe
+stats.fileType=Datei-Typ
+stats.fileAge=Datei-Alter
+stats.age.day=Tag
+stats.age.days=Tage
+stats.age.week=Woche
+stats.age.weeks=Wochen
+stats.age.year=Jahr
+stats.age.years=Jahre
+
+# drive info labels
+label.driveinfo=Datenträger-Infos
+label.drive=Datenträger
+label.drivelabel=Datenträger-Bezeichnung
+label.bytesfree=Bytes frei
+
+# search window labels and buttons
+label.searchHead=Datei- und Volltextsuche
+label.searchPath=Suche in Ordner (inkl. Unterordner)
+label.filemask=Suchmaske für Dateinamen
+label.searcharg=enthaltener Text
+label.argdesc1=sucht nach Dateien, die alle diese Wörter enthalten
+label.argdesc2=Suchtext mit Leerzeichen durch Anführungszeichen umschliessen
+label.includeSubdirs=Unterverzeichnisse in Suche einbeziehen
+label.includemetainf=Meta-Infos (Beschreibung) in Suche einbeziehen
+label.metainfonly=nur in Meta-Infos (Beschreibung) suchen
+label.dateRangeFrom=Änderungsdatum vom
+label.dateRangeUntil=Änderungsdatum bis
+label.dateRange=Änderungsdatums-Bereich
+label.and=und
+label.searchCalendar=Datum im Kalender auswählen
+label.searchDateConflict=Das Endedatum muss vor dem Startdatum liegen!
+button.startsearch=Suche starten
+label.searchresults=Suchergebnisse
+label.matches=Übereinstimmungen
+label.assignedToCategory=zugeordnete Kategorie
+label.currentSearchDir=aktuell durchsuchter Ordner
+label.selectCategory=- Kategorie auswählen -
+label.searchResultAsTree=Suchergebnisse als Baum zeigen
+button.keepSearchResults=Suchergebnisse behalten
+button.discardSearchResults=Suchergebnisse verwerfen
+
+# copy/rename/move/delete/clone labels and buttons
+label.copymovehead=Kopieren/Umbenennen/Verschieben
+label.destfile=Ziel-Datei
+label.destdir=Ziel-Ordner
+label.sourcepath=Quell-Pfad
+label.seldestdir=Ziel-Ordner auswählen
+button.rename=Umbenennen
+label.copyOf=-Kopie
+label.renameLinkHead=Verknüpfung umbenennen
+label.cloneSource=Quell-Datei
+button.clone=Klon erzeugen
+error.renameFailed=konnte nicht umbenannt werden zu
+alert.destEqualsSource=der neue Dateiname muss vom alten verschieden sein
+alert.newLinkNameEmpty=Neuer Name für die Verknüpfung fehlt!
+alert.missingDestDir=Neuer Name für Folder fehlt!
+msg.delDirStarted=Lösch-Operation für Directory wurde gestartet.
+
+# upload labels and buttons
+label.uploadhead=Datei-Upload
+label.uploadbytes=übertragen
+label.uploadsize=Datei-Grösse
+alert.uploadLimitExceeded=Die Grösse der Upload-Datei übersteigt das Limit
+error.upload=Fehler beim Schreiben der Upload-Datei
+
+# download labels
+label.download.link=Hier Klicken zum Starten des Download
+label.download.text1=für die Datei
+label.download.text2=Nach Abschluss des Downloads kann dieses Fenster geschlossen werden.
+label.download.text3=der ausgewählten Dateien in
+
+# paste from clipboard labels
+label.currentcopy=in Bearbeitung
+label.copyfromclip=Kopiere Dateien
+label.movefromclip=Verschiebe Dateien
+label.copyresult=Dateien kopiert
+
+# thumbnail window labels
+label.thumbtitle=Bilder-Vorschau
+label.zoomin=Zoom +
+label.zoomout=Zoom -
+label.editPicture=Bildbearbeitung
+label.savethumbs=Vorschau Speichern
+label.of=von
+label.invite=Einladung senden
+alt.editdesc=Beschreibung editieren
+alt.imgtransform=Bild bearbeiten
+label.pagesize=Bilder je Seite
+error.compselect=Es müssen mindestens 2 Bilder zum Vergleichen ausgewählt werden
+label.compare=Vergleichen
+label.comparehead=Bildervergleich
+label.renameImage=Bilddatei umbenennen
+label.exifRename=Umbenennen nach Aufnahmedatum
+label.noThumbRefresh=Vorschaubildanzeige nicht aktualisieren
+label.selectedPictures=ausgewählte Bilder
+label.selectFunction=- Funktion auswählen -
+button.copyLinks=Verlinkte Files kopieren
+tooltip.copyLinks=Datei-Links ersetzen durch eine Kopie der Original-Datei
+confirm.copyLinks=Datei-Links durch eine Kopie der Original-Datei ersetzen?
+msg.createThumbsStarted=Speicherung von Vorschaubildern gestartet fuer Ordner
+msg.concurrentThumbThread=Vorschaubild-Speicherung fuer einen anderen Ordener läuft noch. Bitte später erneut versuchen!
+confirm.deleteImages=Ausgewählte Bilder wirklich löschen?
+
+# picture transformation labels
+label.rotateFlip=Drehen/Spiegeln
+label.rotateright=Drehen rechts
+label.rotateleft=Drehen links
+label.rotate180=Drehen 180 Grad
+label.mirrorhoriz=Spiegeln horizontal
+label.mirrorvert=Spiegeln vertikal
+label.makethumb=Thumbnail erzeugen
+label.operation=Operation
+label.imgtransform=Bildbearbeitung
+
+# view picture window labels
+alt.origsize=in Originalgrösse anzeigen
+label.origSize=Originalgrösse
+alt.delpicture=Bilddatei löschen
+alt.cameradata=Kamera-Informationen
+alt.printpict=Bild ausdrucken
+
+# picture manipulation
+label.resizetitle=Bilder skalieren/konvertieren
+label.allpictures=alle Bilder in
+label.selectedpictures=ausgewählte Bilder in
+label.picturefile=Bilddatei
+label.newsize=neue Bildgrösse
+label.keepOrigSize=keine Skalierung
+label.newformat=neues Bildformat
+button.start=Starten
+label.jpegcreated=JPEG-Datei erzeugt
+label.pngcreated=PNG-Datei erzeugt
+label.gifcreated=GIF-Datei erzeugt
+label.scaledFolder=Skalierte/konvertierte Bilder werden gespeichert im Ordner
+button.gotoScaled=Skalierte/konvertierte Bilder anzeigen
+label.addCopyRight=Copyright-Text hinzufügen
+label.copyRightText=Copyright Text
+label.copyRightPos=Text-Position
+label.copyRightColor=Text-Farbe
+label.copyRightFontSize=Schrift-Grösse
+label.posUpperLeft=oben links
+label.posUpperRight=oben rechts
+label.posLowerLeft=unten links
+label.posLowerRight=unten rechts
+label.colorBlack=schwarz
+label.colorBlue=blau
+label.colorRed=rot
+label.colorGreen=grün
+label.colorYellow=gelb
+label.colorWhite=weiss
+label.cropArea=Bildausschnitt für Beschneiden auswählen
+
+# slideshow labels and buttons
+label.slideparmhead=Diashow Parameter
+label.delay=Intervall (Sekunden)
+label.recurse=Unterordner einbeziehen
+label.autoForward=automatisch blättern
+label.fullScreen=ganzer Bildschirm
+label.crossfade=Überblend-Effekt
+button.startshow=Diashow starten
+alt.exitslideshow=Diashow beenden
+alt.pause=Stoppen (Pause)
+alt.continue=Diashow fortsetzen
+alt.next=nächstes Bild
+alt.back=vorheriges Bild
+
+# co-browsing labels
+titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)
+exitCoBrowsing=Co-Browsing beenden
+titleCoBrowsingClient=WebFileSys Co-Browsing (Client)
+headCoBrowsingClient=WebFileSys Co-Browsing Diashow: Warten auf erstes Bild
+
+# camera exif data window
+label.manufacturer=Kamera-Hersteller
+label.cameramodel=Kamera-Modell
+label.exposuredate=Aufnahmedatum
+label.exposuretime=Belichtungszeit
+label.aperture=Blende
+label.isoValue=ISO Empfindlichkeit
+label.flashfired=Blitzlicht
+label.imgheight=Bildhöhe (Pixel)
+label.imgwidth=Bildbreite (Pixel)
+label.thumbexists=enthält Vorschaubild
+label.gpsLatitude=GPS geografische Breite
+label.gpsLongitude=GPS geografische Länge
+
+# picture album invitation and publish folders/files
+label.invitehead=Bilder freigeben/Einladung zur Diashow
+label.picturedir=Bilder-Directory
+label.receiver=Empfänger (e-mail Adressen, durch Komma getrennt)
+label.subject=Betreff
+label.invitationtext=Einladungs-Text
+label.expiration=Gültigkeit in Tagen
+label.publishtree=Unterordner ebenfalls freigeben
+label.publishFile=Datei freigeben/publizieren
+label.fileToPublish=zu publizierende Datei
+label.filePublished=Die freigegebene Datei ist erreichbar über die Adresse (URL)
+button.invite=Freigabe
+button.publish=Freigeben
+label.publishhead=Freigabe für Lesezugriff
+label.publishdesc=Laden Sie andere ein, die Dateien in diesem Ordner anzusehen. Eine e-mail mit einer URL und einem Geheimcode für Lese-Zugriff wird versand. 
+alt.openpicture=in Originalgrösse anzeigen
+alert.noreceiver=Bitte mindestens einen Empfänger eingeben
+alert.emailsyntax=ungültige e-mail Adresse
+alert.nomsgtext=kein Einladungstext eingegeben
+alert.expinvalid=Gültigkeit in Tagen muss eine Zahl sein
+subject.invitation=Einladung zur Bilder-Show
+subject.publish=Einladung zum Besuch meiner Homepage
+label.publishList=Freigegebene Ordner und Dateien
+label.cancelpublish=Freigabe löschen
+alert.notpublished=Es wurden keine Ordner freigegeben.
+label.expires=gültig bis
+label.published=Ordner wurde freigegeben
+label.accesscode=URL mit Zugriffscode
+label.picture=Bild
+label.sendInvitationMail=Einladung als e-mail versenden
+label.publishType=freigeben als
+label.publishTypeExplorer=Datei-Explorer
+label.publishTypeAlbum=Bilderalbum
+button.returnToAlbum=Zurück zum Album
+
+# user comments
+label.commentList=Kommentare von Nutzern
+confirm.delcomments=Alle Kommentare für diese Datei löschen?
+label.nocomments=Zu dieser Datei existieren noch keine Kommentare
+label.addcomment=Kommentar hinzufügen
+button.addComment=Speichern
+button.delComments=Kommentare löschen
+label.allowcomments=Besucher dürfen Kommentare hinzufügen
+label.comments=Kommentare
+label.guestuser=Gast
+label.commentAuthor=Dein Name
+
+# send file as e-mail
+label.sendfilehead=Datei als e-mail versenden
+label.filetosend=Zu versendende Datei
+button.sendfile=Senden
+label.confirmsend=wird als e-mail versandt
+alert.nosubject=Bitte Betreff eingegeben!
+
+# file system statistics window
+label.filesyshead=Filesystem-Statistik
+label.filesys=Filesystem
+label.usage=belegt
+label.capacity=Kapazität (KByte)
+label.freespace=frei (KByte)
+label.percentUsed=% belegt
+label.free=frei
+label.used=benutzt
+
+# OS command window labels
+label.cmdhead=Kommandozeile
+label.cmdprompt=Betriebssystem-Kommando
+button.run=Ausführen
+button.clearCmd=Löschen
+
+# fastpath window
+label.fastpathhead=Direktzugriff - letzte besuchte Ordner
+
+# category assignment
+label.category=Kategorie
+label.manageCategories=File-Kategorien verwalten
+button.manageCategories=Kategorien verwalten
+label.newCategory=Neue Kategorie
+label.categoryName=Name der Kategorie
+button.createCategory=Kategorie anlegen
+label.assignCategories=Kategorie-Zuweisung
+label.assignedCats=zugewiesene Kategorien
+label.unassignedCats=übrige Kategorien
+label.noCategoryDefined=Es wurden noch keine Kategorien definiert.
+alert.noCategorySelected=Keine Kategorie ausgewählt!
+confirm.delCategory=Es können keine Dateien mehr über diese Kategorie-Zuordnung gefunden werden. Trotzdem löschen?
+error.duplicateCategory=Eine Kategorie mit diesem Namen existiert bereits!
+error.missingCategoryName=Bitte geben Sie einen Namen für die neue Kategorie ein!
+
+# filesystem bookmarks
+label.noBookmarksDefined=Es wurden noch keine Bookmarks angelegt!
+label.bookmarks=Ordner-Lesezeichen (Bookmarks)
+label.deleteBookmark=Ordner-Lesezeichen (Bookmark) löschen
+label.addBookmark=Lesezeichen (Bookmark) speichern
+label.bookmarkName=Bookmark-Name
+alert.bookmarkMissingName=Der Bookmark-Name darf nicht leer sein!
+button.bookmark=Bookmark
+title.bookmarkButton=Lesezeichen für aktuellen Ordner hinzufügen
+alert.bookmarkCreated=Lesezeichen wurde hinzugefügt für Ordner
+
+# diff labels
+title.diff=Textdateien vergleichen (diff)
+compareFileSizeExceeded=Eine oder beide Dateien sind zu gross für Vergleichsoperation!
+compareResult=Vergleichsergebnis
+differences=Unterschiede
+noDifferences=Keine Unterschiede gefunden.
+selectDiffSourceResult=Navigieren Sie zur Ziel-Datei für den Vergleich und wählen Sie im Context-Menü Vergleich starten!
+
+# user self-registration
+label.registerself=Als neuer Nutzer registrieren
+label.editregistration=Registrierungsdaten ändern
+label.regtitle=Anmeldung als neuer Nutzer
+label.login=Nutzername
+label.passwordconfirm=Passwort-Bestätigung
+label.ropassword=Readonly-Passwort
+label.ropwconfirm=Readonly-Passwort Bestätigung
+label.firstname=Vorname
+label.lastname=Nachname
+label.email=e-mail Adresse
+label.phone=Telefon
+label.language=Sprache
+label.settings=Einstellungen
+label.oldpassword=Altes Passwort
+label.newpassword=Neues Passwort
+label.css=Layout
+button.register=Anmelden
+error.missinglogin=Der Login-Name muss mindestens 3 Zeichen lang sein
+error.spacesinlogin=Der Login-Name darf keine Leerzeichen enthalten
+error.passwordlength=Das Passwort muss mindestens 5 Zeichen lang sein
+error.spacesinpw=Das Passwort darf keine Leerzeichen enthalten
+error.pwmissmatch=Passwort und Bestätigung stimmen nicht überein
+error.duplicatelogin=Ein Nutzer mit diesem Namen existiert bereits
+error.email=eine gültige e-mail Adresse ist erforderlich
+error.invalidpassword=Das alte Passwort ist falsch
+
+# MP3 labels
+label.editmp3=MP3 Tags editieren
+label.mp3title=Titel des Songs
+label.mp3artist=Interpret
+label.mp3album=Album
+label.mp3year=Jahr
+label.mp3genre=Genre
+label.mp3comment=Kommentar
+label.mp3Picture=Bild
+label.play=Play/Download
+
+# ftp backup labels
+label.ftpBackupHead=Backup zum FTP-Server
+label.ftpServerName=Name oder IP des FTP-Servers
+label.ftpLocalDir=Lokaler Ordner
+label.ftpUserid=Nutzername
+label.ftpPassword=Passwort
+label.ftpDir=Remote Directory (optional)
+label.ftpRecurse=Unterordner einbeziehen
+label.xferStatus=übertragen
+button.ftpBackup=Start FTP Backup
+alert.missingFtpServer=FTP-Server muss angegeben werden
+alert.missingFtpUserid=Nutzername muss angegeben werden
+alert.missingFtpPassword=Passwort muss angegeben werden
+
+# disk quota labels
+label.accountSize=Speicherplatznutzung
+label.user=Nutzer
+label.diskQuota=zugewiesener Speicherplatz
+label.spaceUsed=genutzter Speicherplatz
+
+# folder watch
+folderWatchStatusOn=Der Inhalt des Ordners wird auf Änderungen überwacht.
+folderWatchStatusOff=Überwachung für diesen Ordner, Benachrichtigung über Änderungen per e-mail.
+button.startWatch=Überwachung starten
+button.stopWatch=Überwachung stoppen
+changeType.newFile=neue Datei
+changeType.newFolder=neuer Ordner
+changeType.fileRemoved=Datei/Ordner gelöscht
+changeType.dateChanged=Datei-Datum geändert
+changeType.sizeChanged=Datei-Größe geändert
+
+# rating 
+rating.owner=Bewertung
+rating.visitor=Besucher-Wertung
+rating.notYetRated=noch keine
+rating.rateNow=Bewerten
+rating.1star=1 Stern - schlecht
+rating.2stars=2 Sterne
+rating.3stars=3 Sterne
+rating.4stars=4 Sterne
+rating.5stars=5 Sterne - gut
+rating.any=alle
+rating.count=Bewertungen
+vote.count=Bewertungen
+vote.confirm=Die Bewertung wurde gespeichert.
+
+# picture album
+label.albumTitle=WebFileSys Bilderalbum
+details.album=Details
+details.show=mehr Details anzeigen
+details.hide=Details ausblenden
+showPictureOrigSize=Bild in Originalgröße anzeigen
+
+# maintanance mode text
+label.maintanance.head=Wartungsmodus
+label.maintanance.info=Der Server ist wegen Wartungsarbeiten vorübergehend nicht verfügbar. Bitte versuchen Sie es in wenigen Minuten wieder!
+alert.maintanance=Der Server wurde in den Wartungsmodus geschaltet. Bitte melden Sie sich ab!
+
+# e-mail subjects
+subject.welcome=Willkomen bei WebFileSys
+subject.diskquota=Speicherplatz-Limit überschritten
+subject.folderChange=Änderung Ordner-Inhalt
+
+# Google Maps, Google Earth
+button.googleMap=Lokation auf Landkarte
+label.googleMapLink=Geographische Lokation in Google Maps anzeigen
+label.googleEarthLink=Geographische Lokation in Google Earth anzeigen
+label.googleEarthAllFiles=Geographische Lokation aller Bilder in Google Earth anzeigen
+label.geoTag=Geo-Tag Daten
+label.latitude=geogr. Breite in Dezimalgrad (Beispiel: 51.05 für Dresden)
+label.longitude=geogr. Länge in Dezimalgrad (Beispiel: 13.75 für Dresden)
+label.zoomFactor=Zoom Factor (1 = weit weg, 16 = ganz nah)
+label.geoTagInfoText=Text für Info-Fenster auf der Karte
+alert.missingLatitude=geogr. Breite ist ein Pflichtfeld
+alert.missingLongitude=geogr. Länge ist ein Pflichtfeld
+button.test=Test
+button.selectFromMap=auf Karte auswählen
+label.hintGoogleMapSelect=Doppelklick wählt geografische Lokation aus
+
+# folder synchronization
+label.selectSyncSourceResult=Navigieren Sie zum Ziel-Ordner der Synchronisation und wählen Sie Synchronisieren im Kontext-Menü!
+headline.syncCompare=Ordner Synchronisation
+headline.syncResult=Ordner Synchronisation
+label.syncSource=Quell-Ordner
+label.syncTarget=Ziel-Ordner
+sync.noDifference=Keine Unterschiede gefunden (Ordner sind synchron).
+button.startSync=Synchronisation starten
+diffType.missingSourceFile=Datei fehlt im Quell-Ordner
+diffType.missingTargetFile=Datei fehlt im Ziel-Ordner
+diffType.missingSourceFolder=Directory fehlt im Quell-Ordner
+diffType.missingTargetFolder=Directory fehlt im Ziel-Ordner
+diffType.size=Dateigrösse geändert
+diffType.modified=Änderungsdatum verschieden
+diffType.sizeAndModified=Dateigrösse und Änderungsdatum verschieden
+diffType.accessRights=Zugriffsrechte geändert
+sync.tableHeadPath=Pfad
+sync.tableHeadSource=Quellordner
+sync.tableHeadTarget=Zielordner
+sync.missing=fehlt
+sync.bytes=Bytes
+sync.access.none=kein Zugriff
+sync.access.readonly=lesen
+sync.access.readwrite=lesen+schreiben
+sync.nothingSelected=Es muss mindestens eine Datei/ein Order zum Synchronisieren ausgewählt werden!
+sync.folderCreated=Ordner angelegt
+sync.fileCopied=Datei kopiert
+sync.fileCopiedFailed=Datei konnte nicht kopiert werden
+sync.action.createMissingTarget=fehlende Directories im Zielordner anlegen und fehlende Dateien zum Zielordner kopieren
+sync.action.createMissingSource=fehlende Directories im Quellordner anlegen und fehlende Dateien zum Quellordner kopieren
+sync.action.removeExtraTarget=Ordner und Dateien löschen, die im Zielordner existieren, aber nicht im Quellordner
+sync.action.copyNewerToTarget=neuere Dateien vom Quellordner zum Zielordner kopieren
+sync.action.copyNewerToSource=neuere Dateien vom Zielordner zum Quellordner kopieren
+sync.action.copyDateChangeToTarget=alle Dateien mit geändertem Datum vom Quellordner zum Zielordner kopieren
+sync.action.copySizeChangeToTarget=Dateien mit geänderter Grösse vom Quellordner zum Zielordner kopieren
+sync.action.copyAccessRights=geänderte Zugriffsrechte vom Quellordner zum Zielordner übernehmen
+sync.fileDeleted=Datei gelöscht
+sync.fileDeleteError=Datei konnte nicht gelöscht werden
+sync.dirDeleted=Ordner gelöscht
+sync.dirDeleteError=Ordner konnte nicht gelöscht werden
+sync.switchedToReadonly=Zugriffsrecht "nur lesen" gesetzt
+sync.switchedToReadWrite=Zugriffsrechte "lesen und schreiben" gesetzt
+sync.confirmStartSync=Soll die Synchronisation wirklich gestartet werden?
+sync.confirmRemoveExtraTarget=Die Synchronisation löscht möglicherweise Dateien und Directories im Zielordner. Fortsetzen?
+sync.invisibleItems=Die Zahl der nicht synchronen Dateien ist ziemlich gross. Es werden nicht alle Unterschiede aufgelistet.
+sync.complete=Ordner-Synchronisation beendet
+
+# compare folders
+label.selectCompSourceResult=Navigieren Sie zum Ziel-Ordner und wählen Sie Vergleichen im Kontext-Menü!
+label.compSourceFolder=Quell-Ordner
+label.compTargetFolder=Ziel-Ordner
+checkboxCompIgnoreDate=unterschiedliches Änderungsdatum ignorieren
+checkboxCompShowAsTree=Unterschiede als Baum anzeigen
+checkboxCompIgnoreMetainf=WebFileSys metainf-Dateien ignorieren
+checkboxCompIgnorePattern=Dateien mit folgendem Muster ignorieren:
+headline.compareFolders=Ergebnisse des Ordner-Vergleichs
+button.compare=Vergleich starten
+headline.folderDiffTree=Ergebnis des Ordner-Vergleichs
+folderDiffNew=fehlt im Quell-Ordner
+folderDiffRemoved=fehlt im Ziel-Ordner
+folderDiffModified=geändert
+timeLastModified=letzte Änderung
+excludePattern=Muster für ignorierte Dateien
+
+# hex viewer
+title.hexView=Hex Viewer
+
+# AES encryption/decryption
+label.fileToEncrypt=zu verschlüsselnde Datei
+label.fileToDecrypt=zu entschlüsselnde Datei
+label.cryptoKey=geheimer Schlüssel
+button.encrypt=Verschlüsseln
+button.decrypt=Entschlüsseln
+alert.illegalCryptoKey=Der geheime Schlüssel entspricht nicht dem geforderten Format!
+error.invalidSecretKey=Der geheime Schlüssel ist falsch!
+
+# tail
+tail.lineCount=Zeilenzahl vom Dateiende
+tail.autoRefresh=automatisch neu laden
+
+# mobile version
+label.mobileWindowTitle=WebFileSys mobile Version
+menuView=Anzeigen
+menuViewZip=Zip-Inhalt Anzeigen
+menuDownload=Download
+menuComments=Kommentare
+menuPlay=Abspielen
+menuDelete=Loeschen
+menuEditDesc=Metainfos editieren
+menuRename=Umbenennen
+menuCopy=Kopieren
+menuCut=Verschieben
+menuZip=Zip-Archivierung
+menuUnzip=Zip-Archiv entpacken
+menuSendFile=als e-mail senden
+menuEdit=Editieren
+menuDelLink=Link löschen
+menuRenLink=Link umbenennen
+menuEditMP3=MP3-Tags editieren
+menuOrigDir=Original-Ordner
+menuCreateDir=Unterordner anlegen
+menuDelDir=Ordner löschen
+menuCopyDir=Ordner kopieren
+menuMoveDir=Ordner verschieben
+menuRenameDir=Ordner umbenennen
+menuSearch=Suche
+menuCreateFile=neue Datei anlegen
+menuZipDir=Ordner in ZIP-Archiv
+folderIsEmpty=Ordner enthält keine Dateien oder Unterordner, die dem Filter entsprechen
+
+# alert messages
+alert.regsuccess=Der neue Nutzer wurde erfolgreich registriert.
+alert.invalidlogin=Userid oder Passwort falsch!
+alert.confirm.delete=Löschen bestätigen ist nicht ausgewählt!
+alert.delete.failed=Datei kann nicht gelöscht werden:
+alert.dircopied=wurde als Quell-Ordner für Kopier-Operation ausgewählt
+alert.dirmoved=wurde als Quell-Ordner für Verschiebe-Operation ausgewählt
+alert.nofileselected=Es wurde keine Datei ausgewählt
+alert.nopictures=keine Bilddateien (JPG,GIF,PNG,BMP)
+alert.thumbclean=Löschung veralteter Vorschaubilder gestartet für Ordner
+alert.filescopied=Datei(en) selektiert für Kopier-Operation 
+alert.filesmoved=Datei(en) selektiert für Verschiebe-Operation
+alert.uploadtimeout=Datei-Upload ist fehlgeschlagen!
+alert.sessionexpired=Die Sitzung ist abgelaufen. Bitte neu anmelden!
+alert.untarerror=Fehler beim Entpacken des tar-Archives!
+alert.compresserror=Fehler beim Komprimieren/Dekomprimieren!
+alert.delmovederror=Quelldatei kann nicht gelöscht werden
+alert.delMovedDirError=Quell-Ordner der Verschiebe-Operation konnte nicht gelöscht werden!
+alert.copyDirError=Fehler beim Kopieren des Verzeichnisbaumes!
+alert.copycliperror=kann nicht kopiert werden nach
+alert.movecopyerror=kann nicht kopiert/umbenannt werden nach
+alert.copytosubdir=kann nicht in einen eigenen Unter-Ordner kopiert werden
+alert.copyToSelf=Datei kann nicht über sich selbst kopiert werden
+alert.destIsDir=Es existiert ein Ordner mit diesem Namen!
+alert.mkdirfail=Der Ordner konnte nicht angelegt werden
+alert.mkfileFail=Die Datei konnte nicht angelegt werden
+alert.mkfileDuplicate=Eine Datei mit diesem Namen existiert bereits
+alert.delFileError=Die Datei kann nicht gelöscht werden!
+alert.delFileFailedPart1=Die Datei
+alert.delFileFailedPart2=in Ordner
+alert.delFileFailedPart3=konnte nicht gelöscht werden!
+alert.delDirError=konnte nicht gelöscht werden!
+alert.removeDirError=Der Ordner konnte nicht gelöscht werden!
+alert.delhomedir=Das eigene Home-Verzeichnis kann nicht gelöscht werden!
+alert.renamehomedir=Das eigene Home-Verzeichnis kann nicht umbenannt werden
+alert.nocameradata=Keine Kamera-Daten verfügbar
+alert.zipformat=ZIP-Datei ist nicht lesbar oder hat falsches Format
+alert.noFilesSelected=Es wurden keine Dateien ausgewählt!
+alert.createDirError= Ordner konnte nicht angelegt werden.
+alert.dirNotFound=Nicht existierender Ordner
+alert.iframeSupport=Ihr Browser unterstützt keine IFRAMEs.\\nSie können nicht alle Funktionen nutzen.\\nBitte überprüfen Sie die Browser-Einstellungen!
+alert.linkDestAccessDenied=Zugriff zur Ziel-Datei dieser Verknüpfung ist nicht erlaubt.
+alert.linkDestRemoved=Die Ziel-Datei dieser Verknüpfung wurde entfernt. Der Link wird gelöscht.
+alert.outOfMemory=Es steht nicht genügend virtueller Speicher zur Verfügung.
+alert.saveEditError=Die geänderte Datei konnte nicht gespeichert werden unter
+alert.saveEditReadOnly=Die Datei ist schreibgeschützt
+alert.illegalCharInFilename=Der Dateiname bzw. Ordnername enthaelt nicht erlaubte Zeichen.
+alert.descriptionTooLong=Der Beschreibungs-Text ist zu lang (max 1024 Zeichen erlaubt)!
+alert.editFileSize=Die Datei ist zu gross zum Editieren auf dem Server.\\nLaden Sie die Datei auf Ihren Computer herunter, editieren sie dort und laden Sie die geänderte Datei wieder hoch!
+alert.assocProgramFailed=Die Standardanwendung fuer diese Datei konnte nicht gestartet werden
+alert.cloneTargetExists=Klone-Operation fehlgeschlagen, Ziel-Datei existiert bereits!
+alert.cloneFailed=Klone-Operation fehlgeschlagen!
+alert.touchFailed=Setzen des Änderungsdatums fehlgeschlagen!
+
+# confirmation messages
+confirm.deldir=Soll dieser Ordner wirklich gelöscht werden:
+confirm.removeDir=Soll dieser Ordner wirklich gelöscht werden?
+confirm.forcedirdel=ist nicht leer. Trotzdem löschen?
+confirm.delfile=Diese Datei wirklich löschen?
+confirm.forcefiledel=Diese Datei ist schreibgeschützt. Trotzdem löschen?
+confirm.overwritedir=dieser Ordner existiert bereits. Überschreiben?
+confirm.overwriteFile=Es existiert bereits eine Datei mit diesem Namen. Überschreiben?
+confirm.print=Dieses Bild drucken?
+
+# WebReminder plugin labels
+plugin.webreminder.title=WebReminder Kalender und Organizer

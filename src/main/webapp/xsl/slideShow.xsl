@@ -145,7 +145,13 @@
                     
                     var centerDiv = document.getElementById('centerDiv');
                     
-                    centerDiv.style.marginTop = Math.round(((getWinHeight() - imageHeight) / 2)) + 'px';
+                    var topMargin = Math.round(((getWinHeight() - imageHeight) / 2));
+                    if (topMargin >= 3)
+                    {
+                        topMargin = topMargin - 3;
+                    }
+                    
+                    centerDiv.style.marginTop = topMargin + 'px';
 
                     imageElement.src = '/webfilesys/images/space.gif';
 
@@ -336,7 +342,7 @@
 
 <xsl:template match="slideShow">
 
-  <p id="centerDiv" width="100%" style="padding:0px;margin:0px;text-align:center;">
+  <p id="centerDiv" width="100%" style="margin:0px;padding:0px;text-align:center;">
     
     <img id="slideShowImg" border="0" class="thumb">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>

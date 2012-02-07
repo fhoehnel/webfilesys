@@ -1,0 +1,492 @@
+  body {margin-top:5px;margin-left:10px;margin-right:5px;font-size:10pt;font-family:Arial,Helvetica;background-color:#ffffff;}
+  body.dirTree {margin-top:5px;margin-left:0px;margin-right:5px;font-size:10pt;font-family:Arial,Helvetica;background-color:#ffffff;}
+  body.story {margin-top:5px;margin-left:10px;font-size:12pt;background-color:silver;font-family:Arial,Helvetica;}
+  body.menubar {margin-top:0px;margin-left:10px;margin-right:10px;background-color:#c0c0c0;}
+  h1 {font-size:14pt;color:navy;font-family:Arial,Helvetica;font-weight:bold;}
+  div.centerBox {position:absolute;top:50%;left:50%;width:10px;height:10px;padding:0px;} 
+  div.loginBox {width:400px;height:250px;position:relative;top:-125px;left:-200px;background-color:lavender;border:none;border-radius:24px;}
+  div.msgBox {width:260px;height:100px;position:absolute;background-color:lavender;border-style:solid;border-width:1px;border-color:black;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:20px;}
+  div.promptBox {width:360px;height:140px;position:absolute;background-color:#ffffe0;border-style:ridge;border-width:3px;border-color:#a0a0a0;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:0;}
+  div.promptHead {background-color:lavender;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#a0a0a0;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:3px;}
+  div.uploadStatus {width:400px;height:160px;position:absolute;top:150px;left:50px;background-color:ivory;border-style:solid;border-width:1px;border-color:black;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:0px;}
+  td.loginTitle {font-size:12pt;color:navy;font-family:Arial,Helvetica;font-weight:bold;}
+  td.loginFormLabel {color:navy;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;text-align:left;vertical-align:middle;}
+  
+  div.centerHoriz {position:absolute;top:0;left:50%;width:10px;height:10px;padding:0px;} 
+  div.albumCont {width:900px;position:relative;left:-450px;padding-top:6px;}
+  
+  /* depreacted - replace with div.headline! */
+  th.headline {font-size:11pt;color:black;background-color:lavender;font-family:Arial,Helvetica;font-weight:normal;border-width:1px;border-style:solid;border-color:navy;}
+  
+  div.headline {font-size:11pt;color:black;text-align:center;background-color:lavender;font-family:Arial,Helvetica;font-weight:normal;border-width:1px;border-style:solid;border-color:navy;padding:3px;margin-bottom:5px;}  
+  th.datahead {background-color:lavender;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;}
+  td.data {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;}
+  td.dataNumber {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;text-align:right;padding-right:10px;}
+  th.menubar {background-color:#306048;}
+  a.active {font-size:8pt;color:white;font-family:Arial,Helvetica;}
+  a.drive {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.drive:hover {color:green;}
+  pre {font-size:10pt;color:black;font-family:monospace;}
+  .plaintext {font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:normal;}
+  td.prompt {font-size:11pt;color:#408060;font-family:Arial,Helvetica;}
+  td.value {font-size:11pt;color:#604080;font-family:Arial,Helvetica;}
+  th.buttonInactive {background-color:lavender;font-size:8pt;color:#606060;font-family:Arial,Helvetica;}
+  th.buttonActive {background-color:lavender;font-size:8pt;}
+  a.buttonActive {font-size:8pt;color:navy;font-family:Arial,Helvetica;text-decoration:none}
+  a.buttonActive:hover {color:green;}
+  a.dirtree {font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+  a.dir {font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.dirtree:hover {color:green;text-decoration:underline;}
+  a.dir:hover {color:green;}
+  a.link {font-size:10pt;color:maroon;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.link:hover {color:blue;}
+  font.small {font-size:8pt;color:navy;font-family:Arial,Helvetica;}
+  font.error {font-size:10pt;color:red;font-family:Arial,Helvetica;}
+  font.hidden {font-family:Arial,Helvetica;font-size:10pt;color:#808080;font-weight:bold;}
+  .info {font-family:Arial,Helvetica;font-size:10pt;color:#808080;font-weight:normal;}
+  a.fn {font-size:10pt;color:navy;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.fn:hover {color:green;text-decoration:underline;}
+  font.fixed {font-size:10pt;color:black;font-family:monospace;}
+  input,select,textarea {font-family:Arial,Helvetica;font-size:10pt;color:navy;background-color:white;}
+  input.cb {background-color:white;}
+  td.story {font-size:12pt;color:#306048;font-family:Arial,Helvetica;font-weight:bold;}
+  td.story2 {background-color:ivory;font-size:12pt;color:#306048;font-family:Arial,Helvetica;font-weight:bold;}
+  body.menu {margin-top:0px;margin-left:0px;margin-right:0px;font-size:10pt;background-color:#c0c0c0;font-family:Arial;}
+  td.menu {background-color:#e0e0e0;}
+  a.menuitem {font-size:10pt;color:#000080;font-family:Arial;text-decoration:none;font-weight:bold;}
+  a.menuitem:hover {color:maroon;}
+  td.jsmenu {background-color:#e0e0e0;padding-left:5px;padding-right:5px;padding-top:2px;padding-bottom:2px;border-top-width:1px;border-top-style:solid;border-top-color:white;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;}
+  td.border {background-color:black;}
+
+  td.fileListFunct {background-color:#ffffe0;font-size:10pt;font-family:Arial,Helvetica;color:black;}
+  th.fileListHead {background-color:lavender;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;padding-top:2px;padding-bottom:2px;}
+  td.fileListData {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding-top:2px;}
+  td.thumbData {background-color:ivory;color:black;font-size:8pt;font-family:Arial,Helvetica;vertical-align:bottom;padding:4px;}
+  .sep {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#b0b0b0;}
+  input.cb2 {background-color:ivory;}
+  input.cb3 {background-color:#ffffe0;}
+  input.cb4 {background-color:lavender;}
+  input.cb5 {background-color:#ffffe0;}
+
+  input[type="submit"], input[type="button"], input.roundedButton
+  {
+      color: black;
+      font-family: Arial,Helvetica;
+      font-size: 10pt;
+      border: 1px solid #a0a0a0;
+      background-image:url('/webfilesys/images/buttonBack.png');
+      background-repeat:repeat-x;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      margin-right: 5px;
+      -moz-border-radius: 10px;
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+  }
+
+  td.tabActive 
+  {
+      background-color:#ffffe0;
+      font-size:10pt;
+      font-family:Arial,Helvetica;
+      color:black;
+      font-weight:bold;
+      border-width:1px;
+      border-style:solid;
+      border-color:#000000;
+      border-bottom-style:none;
+      padding-left:6px;
+      padding-right:6px;
+      padding-top:2px;
+      padding-bottom:2px;
+      -moz-border-radius-topright: 10px;
+      -moz-border-radius-topleft: 10px;
+      -webkit-border-top-right-radius: 10px;
+      -webkit-border-top-left-radius: 10px;
+  }
+  
+  td.tabInactive 
+  {
+      background-color:#f0f0f0;
+      font-size:10pt;
+      font-family:Arial,Helvetica;
+      color:#808080;
+      border-width:1px;
+      border-style:solid;
+      border-color:#808080;
+      padding-left:6px;
+      padding-right:6px;
+      padding-top:2px;
+      padding-bottom:2px;
+      -moz-border-radius-topright: 10px;
+      -moz-border-radius-topleft: 10px;
+      -webkit-border-top-right-radius: 10px;
+      -webkit-border-top-left-radius: 10px;
+  }
+
+  td.tabAlbum 
+  {   
+      background-color:ivory;
+      font-size:10pt;
+      font-family:Arial,Helvetica;
+      color:#808080;
+      border-width:1px;
+      border-style:solid;
+      border-color:#808080;
+      padding-left:6px;
+      padding-right:6px;
+      padding-top:2px;
+      padding-bottom:2px;
+      -moz-border-radius-topright: 10px;
+      -moz-border-radius-topleft: 10px;
+      -webkit-border-top-right-radius: 10px;
+      -webkit-border-top-left-radius: 10px;
+  }
+  
+  a.tab {font-size:10pt;color:#808080;font-family:Arial;text-decoration:none;font-weight:bold;}
+  a.tab:hover {color:#000000;}
+  
+  table.topLess {border-width:1px;border-style:solid;border-color:black;border-top-style:none}
+  
+  td.bottomLine {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#808080;}
+  
+  .sepTop {border-top-width:1px;border-top-style:solid;border-top-color:#b0b0b0;}
+  a.listHead {font-size:10pt;color:#404040;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.listHead:hover {color:red;text-decoration:underline;}
+
+  td.imgData {font-size:8pt;color:black;font-family:Arial;}
+  img.thumb {border-style:groove;border-width:2px;border-color:#808080;}
+
+  div.more {padding-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;border-left-style:solid;border-left-width:1px;border-left-color:#808080;}
+  div.last {padding-left:12px;padding-top:0px;padding-right:0px;padding-bottom:0px;white-space:nowrap;}
+  div.indent {padding-left:4px;padding-top:0px;padding-right:0px;padding-bottom:0px;}
+
+  table.dataForm {border-width:1px;border-style:solid;border-color:#808080;background-color:#ffffe0;}
+  table.formSection {border-width:1px;border-style:solid;border-color:#a0a0a0;background-color:#ffffe0;margin:10px;}
+  td.formParm1 {background-color:#ffffe0;color:black;font-size:10pt;font-family:Arial,Helvetica;text-align:left;vertical-align:top;padding:8px;padding-top:4px;padding-bottom:4px;}
+  td.formParm2 {background-color:#ffffe0;color:navy;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding:8px;padding-top:4px;padding-bottom:4px;text-align:left;}
+  td.formButton {background-color:#ffffe0;padding:8px}
+  input.formParm1 {background-color:#ffffe0;}
+
+  div.hint {background-color:lavender;border-style:solid;border-width:1px;border-color:black;padding:5px;}
+  div.slideShowText {font-size:10pt;color:black;font-family:Arial,Helvetica;}
+  
+  div.albumPath {padding-top:8px;padding-bottom:10px;text-align:left;}
+  a.albumPath, span.albumPath {font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+
+  table.processList {border-collapse:collapse;width:100%;}
+  th.processList {font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;text-align:center;background-color:lavender;padding:4px;border:1px #404040 solid;}
+  tr.processRowRoot {background-color:#f0e4da;}
+  tr.processRowOtherUser {background-color:ivory;}
+  td.processKill {padding:4px;border:1px #404040 solid;}
+  td.processPID {font-size:10pt;font-family:Arial,Helvetica;text-align:right;padding:4px;border:1px #404040 solid;}
+  td.processUID {font-size:10pt;font-family:Arial,Helvetica;text-align:center;padding:4px;border:1px #404040 solid;}
+  td.processCMD {font-size:10pt;font-family:Arial,Helvetica;padding:4px;border:1px #404040 solid;}
+  td.processStartTime {font-size:10pt;font-family:Arial,Helvetica;text-align:center;padding:4px;border:1px #404040 solid;}
+  td.processCPUTime {font-size:10pt;font-family:Arial,Helvetica;text-align:right;padding:4px;border:1px #404040 solid;}
+  td.processTTY {font-size:10pt;font-family:Arial,Helvetica;text-align:center;padding:4px;border:1px #404040 solid;}
+ 
+  body.diff {margin:0px;background-color:white;}
+  td.diff {text-align:center;vertical-align:top;}
+  span.diff {color:black;font-family:Arial,Helvetica;font-size:12pt;font-weight:bold;clear:both;}
+  div.diff {text-align:left;font-family:monospace;overflow-y:auto;overflow-x:auto;background-color:ivory;border:2px ridge #b0b0b0;}
+  font.diff {font-family:monospace;font-size:10pt;}
+  font.diffEqual {font-family:monospace;font-size:10pt;}
+  font.diffDel {font-family:monospace;font-size:10pt;text-decoration:line-through;background-color:#d0d0d0;}
+  font.diffIns {font-family:monospace;font-size:10pt;color:#008000;font-weight:bold;background-color:#d0d0d0;}
+
+  th.syncListHead 
+  {
+      background-color:lavender;
+      font-size:10pt;
+      font-family:Arial,Helvetica;
+      font-weight:bold;
+      padding-left:5px;
+      padding-right:5px;
+      padding-top:2px;
+      padding-bottom:2px;
+  }
+
+  td.syncCompare 
+  {
+      background-color:ivory;
+      font-size:10pt;
+      font-family:Arial,Helvetica;
+      vertical-align:top;
+      padding-top:2px;
+      padding-left:5px;
+      padding-right:5px;
+      border-top-width:1px;
+      border-top-style:solid;
+      border-top-color:#b0b0b0;
+  }
+
+  /* rounded buttons container */
+  .buttonCont 
+  { 
+      overflow: hidden;
+      width: 98%;
+      padding: 0;
+  }
+
+  a.button 
+  {
+      background: transparent url('/webfilesys/images/buttonRight.gif') no-repeat scroll top right;
+      color: #444;
+      display: block;
+      float: left;
+      font: normal 12px arial, sans-serif;
+      height: 24px;
+      margin-right: 6px;
+      padding-right: 18px; /* sliding doors padding */
+      text-decoration: none;
+  }
+
+  a.button span 
+  {
+      background: transparent url('/webfilesys/images/buttonLeft.gif') no-repeat;
+      display: block;
+      line-height: 14px;
+      padding: 5px 0 5px 18px;
+  } 
+
+  a.button:active 
+  {
+      background-position: bottom right;
+      color: #000;
+      outline: none; /* hide dotted outline in Firefox */
+  }
+
+  a.button:active span 
+  {
+      background-position: bottom left;
+      padding: 6px 0 4px 18px; /* push text down 1px */
+  } 
+
+  td.statsBarGraph
+  {
+      font-size:8pt;
+      color:navy;
+      font-family:Arial,Helvetica;  
+  }
+
+  .logFatal
+  {
+      color:fuchsia;font-size:10pt;font-family:monospace;
+  }
+
+  .logError
+  {
+      color:red;font-size:10pt;font-family:monospace;
+  }
+
+  .logWarn
+  {
+      color:maroon;font-size:10pt;font-family:monospace;
+  }
+
+  .logInfo
+  {
+      color:blue;font-size:10pt;font-family:monospace;
+  }
+
+  .logDebug
+  {
+      color:navy;font-size:10pt;font-family:monospace;
+  }
+
+  .logNone
+  {
+      color:black;font-size:10pt;font-family:monospace;
+  }
+
+  td.fileFilter 
+  {
+      white-space:nowrap;
+      vertical-align:middle;
+      padding:5px;
+      padding-right:15px;
+  }
+
+  td.fileRefresh 
+  {
+      white-space:nowrap;
+      vertical-align:middle;
+      padding:5px;
+  }
+
+  td.fileCount 
+  {
+      white-space:nowrap;
+      vertical-align:middle;
+      padding:5px;
+  }
+
+  td.fileCountZero
+  {
+      text-align:right;
+      white-space:nowrap;
+      vertical-align:middle;
+      padding:5px;
+  }
+  
+  td.fileSort
+  {
+      white-space:nowrap;
+      vertical-align:middle;
+      padding:5px;
+      text-align:right;
+  }
+
+  table.fileListHead
+  {
+     width:100%;
+     background-color:ivory;
+     border-left:1px solid black;
+     border-right:1px solid black;
+  }
+
+  table.fileList
+  {
+      width:100%;
+      background-color:ivory;
+      border:0;
+      margin:0;
+  }
+
+  th.fileList 
+  {
+      background-color:lavender;
+      border-top:1px solid #b0b0b0;  
+      font-size:10pt;
+      font-family:Arial,Helvetica;
+      font-weight:bold;
+      padding:3px;
+  }
+
+  th.fileListSelector
+  {
+      width:20px;
+      min-width:20px;
+      text-align:left;
+      padding:3px;
+  }
+  
+  th.fileListIcon
+  {
+      width:22px;
+      min-width:22px;
+  }
+  
+  th.fileListName
+  {
+      text-align:left;
+  }
+
+  th.fileListModified
+  {
+      width:160px;
+      min-width:160px;
+      padding-right:20px;
+      white-space:nowrap;
+      text-align:right;
+  }
+  
+  th.fileListSize
+  {
+      width:110px;
+      min-width:110px;
+      white-space:nowrap;
+      text-align:right;
+      padding-right:10px;
+  }
+
+  div.fileListScrollDiv
+  {
+
+      background-color:ivory;
+      height:400px;
+      border-left:1px solid black;
+      border-right:1px solid black;
+      border-top:1px solid #b0b0b0;  
+      border-bottom:1px solid #b0b0b0;  
+      display:block;
+      overflow:auto;
+  }
+
+  td.fileList
+  {
+      background-color:ivory;
+      font-size:10pt;
+      font-family:Arial,Helvetica;
+      vertical-align:top;
+      padding:2px;
+  }
+
+  td.fileListSelector
+  {
+      width:20px;
+      min-width:20px;
+  }
+  
+  td.fileListIcon
+  {
+      width:20px;
+      min-width:20px;
+      padding-left:4px;
+      padding-right:4px;
+  }
+
+  td.fileListName
+  {
+      min-width:300px;
+      text-align:left;
+      padding-right:5px;
+  }
+  
+  td.fileListModified
+  {
+      width:160px;
+      min-width:160px;
+      white-space:nowrap;
+  }
+  
+  td.fileListSize
+  {
+      width:100px;
+      min-width:90px;
+      padding-right:8px;
+      white-space:nowrap;
+      text-align:right;
+  }
+  
+  td.fileListDesc
+  {
+      background-color:ivory;
+      font-size:8pt;
+      color:navy;
+      font-family:Arial,Helvetica;
+      vertical-align:top;
+      padding-top:0;
+      border-bottom:1px solid #b0b0b0;  
+  }
+  
+  .sepBot 
+  {
+      border-bottom:1px solid #b0b0b0;  
+  }
+  
+  a.treeCompare {font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+  a.treeCompNew {color:#006000;}
+  a.treeCompRemoved {color:#800000;}
+  a.treeCompModified {color:#000060;}
+  a.treeCompPath {color:#808080;}
+  
+  table.hexView {width:100%;border:1px solid #808080;border-collapse:collapse;}
+  table.hexView td {text-align:center;vertical-align:middle;padding:2px;border:1px solid #808080;font-size:10pt;color:black;font-family:monospace;}
+  table.hexView td.index {background-color:lavender;} 
+  table.hexView td.hexValue {background-color:ivory;} 
+  table.hexView td.ascii {background-color:lavender;} 
+  

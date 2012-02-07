@@ -1,0 +1,108 @@
+  body.mobile {margin:0px;font-size:12pt;font-family:Arial,Helvetica;background-color:#ffffff;}
+  div.albumPath {padding:0;padding-left:2px;text-align:left;}
+  a.currentPath {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+  a.currentPath:hover {color:green;text-decoration:underline;}
+  a.currentPathSep {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+
+  td.tabActive {background-color:#ffffe0;font-size:12pt;font-family:Arial,Helvetica;color:black;font-weight:bold;border-width:1px;border-style:solid;border-color:#000000;border-bottom-style:none;padding-left:6px;padding-right:6px;padding-top:2px;padding-bottom:2px}
+  td.tabInactive {background-color:ivory;font-size:12pt;font-family:Arial,Helvetica;color:#808080;border-width:1px;border-style:solid;border-color:#808080;padding-left:6px;padding-right:6px;padding-top:2px;padding-bottom:2px}
+  a.tabInactive {font-size:12pt;color:#808080;font-family:Arial;text-decoration:none;font-weight:bold;}
+  a.tabInactive:hover {color:#000000;}
+  
+  span.pageNum {font-size:12pt;color:black;font-family:Arial,Helvetica;padding-left:4px;padding-right:4px;}
+  a.pageNum {color:black;font-weight:bold;text-decoration:none;}
+  a.pageNum:hover {color:green;text-decoration:underline;}
+
+  a.subFolder {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+  a.subFolder:hover {color:green;text-decoration:underline;}
+
+  a.fn {font-size:12pt;color:navy;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.fn:hover {color:green;text-decoration:underline;}
+
+  a.link {font-size:12pt;color:maroon;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.link:hover {color:blue;}
+
+  td.subFolderList {background-color:ivory;padding:0px;margin:0px;border-right-width:1px;border-right-style:solid;border-right-color:#b0b0b0;}
+  td.fileList {background-color:ivory;padding:0px;margin:0px;}
+
+  td.fileListFunct {background-color:#ffffe0;font-size:10pt;font-family:Arial,Helvetica;color:black;padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;}
+  td.fileListFunct2 {background-color:#ffffe0;padding:0;margin:0;}
+
+  .sepBottom {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#b0b0b0;}
+  
+  td.folderDesc {font-size:9pt;color:navy;font-family:Arial,Helvetica;padding-left:4px;padding-right:4px;padding-top:0px;padding-bottom:2px;}
+  
+  .buttonCont 
+  { 
+      padding: 2px;
+      float:left;
+  }
+  
+  td.menu {background-color:#e0e0e0;}
+  a.menuitem {font-size:12pt;color:#000080;font-family:Arial;text-decoration:none;font-weight:bold;}
+  a.menuitem:hover {color:maroon;}
+  td.jsmenu {background-color:#c0c0c0;padding-left:5px;padding-right:5px;padding-top:2px;padding-bottom:2px;border-top-width:1px;border-top-style:solid;border-top-color:white;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;}
+
+  td.formParm1 {background-color:#ffffe0;color:black;font-size:10pt;font-family:Arial,Helvetica;text-align:left;vertical-align:top;padding:8px;padding-top:4px;padding-bottom:4px;}
+  td.formParm2 {background-color:#ffffe0;color:navy;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding:8px;padding-top:4px;padding-bottom:4px;}
+   
+  div.msgBox {width:260px;height:100px;position:absolute;background-color:lavender;border-style:solid;border-width:1px;border-color:black;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:20px;}
+  div.promptBox {width:360px;height:140px;position:absolute;background-color:#ffffe0;border-style:ridge;border-width:3px;border-color:#a0a0a0;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:0;}
+  div.promptHead {background-color:lavender;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#a0a0a0;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:3px;}
+  div.uploadStatus {width:400px;height:200px;position:absolute;top:150px;left:50px;background-color:ivory;border-style:solid;border-width:1px;border-color:black;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:0px;}
+  th.datahead {background-color:lavender;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;}
+  td.data {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;}
+  a.dir {font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.dir:hover {color:green;}
+  font.fixed {font-size:10pt;color:black;font-family:monospace;}
+  input,select,textarea {font-family:Arial,Helvetica;font-size:10pt;color:navy;background-color:white;}
+  input.cb {background-color:white;}
+  body.menu {margin-top:0px;margin-left:0px;margin-right:0px;font-size:10pt;background-color:#c0c0c0;font-family:Arial;}
+  td.border {background-color:black;}
+
+  th.fileListHead {background-color:lavender;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;padding-top:2px;padding-bottom:2px;}
+  td.fileListData {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding-top:2px;}
+  .sep {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#b0b0b0;}
+  input.cb2 {background-color:ivory;}
+  input.cb3 {background-color:#ffffe0;}
+  input.cb5 {background-color:#ffffe0;}
+  
+  table.topLess {border-width:1px;border-style:solid;border-color:black;border-top-style:none}
+
+  table.folderFileList {width:100%;border-width:1px;border-style:solid;border-color:black;border-bottom-style:none}
+  
+  input.formParm1 {background-color:#ffffe0;}
+  
+  a.button 
+  {
+      background: transparent url('/webfilesys/images/buttonRight.gif') no-repeat scroll top right;
+      color: #444;
+      display: block;
+      float: left;
+      font: normal 12px arial, sans-serif;
+      height: 24px;
+      margin-right: 6px;
+      padding-right: 18px; /* sliding doors padding */
+      text-decoration: none;
+  }
+
+  a.button span 
+  {
+      background: transparent url('/webfilesys/images/buttonLeft.gif') no-repeat;
+      display: block;
+      line-height: 14px;
+      padding: 5px 0 5px 18px;
+  } 
+
+  a.button:active 
+  {
+      background-position: bottom right;
+      color: #000;
+      outline: none; /* hide dotted outline in Firefox */
+  }
+
+  a.button:active span 
+  {
+      background-position: bottom left;
+      padding: 6px 0 4px 18px; /* push text down 1px */
+  } 

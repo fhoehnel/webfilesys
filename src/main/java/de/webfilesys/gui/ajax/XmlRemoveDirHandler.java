@@ -93,6 +93,8 @@ public class XmlRemoveDirHandler extends XmlRequestHandlerBase
                     success = "error";
                     
                     resultMsg = getResource("alert.removeDirError", "Directory could not be deleted!");
+
+                    XmlUtil.setChildText(resultElement, "path", path);
                 }
 
                 // even if only a part of the tree could be deleted we have to refresh the
