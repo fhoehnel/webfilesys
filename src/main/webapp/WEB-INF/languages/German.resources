@@ -683,6 +683,7 @@ alert.missingLongitude=geogr. Länge ist ein Pflichtfeld
 button.test=Test
 button.selectFromMap=auf Karte auswählen
 label.hintGoogleMapSelect=Doppelklick wählt geografische Lokation aus
+noFilesWithGeoData=Dieser Ordner enthält keine Bilder mit geografischen Koordinaten!
 
 # folder synchronization
 label.selectSyncSourceResult=Navigieren Sie zum Ziel-Ordner der Synchronisation und wählen Sie Synchronisieren im Kontext-Menü!

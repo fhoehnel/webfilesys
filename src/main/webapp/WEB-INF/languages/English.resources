@@ -681,6 +681,7 @@ alert.missingLongitude=longitude is a required field
 button.test=Test
 button.selectFromMap=Select on map
 label.hintGoogleMapSelect=Double click to select geographic coordinates!
+noFilesWithGeoData=This folder does not contain pictures with geographic coordinates!
 
 # folder synchronization
 label.selectSyncSourceResult=Select the synchronization target folder and choose snychronize from the context menu!

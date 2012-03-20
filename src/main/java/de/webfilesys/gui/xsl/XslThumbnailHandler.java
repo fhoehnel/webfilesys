@@ -462,7 +462,8 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 		addMsgResource("button.downloadAsZip", getResource("button.downloadAsZip","Download as Zip"));
 
 		addMsgResource("button.upload", getResource("button.upload","Upload"));
-
+		
+        addMsgResource("noFilesWithGeoData", getResource("noFilesWithGeoData", "This folder does not contain pictures with geographic coordinates!"));
         addMsgResource("label.googleEarthLink", getResource("label.googleEarthLink", "Show geographic location in Google Earth"));
         addMsgResource("label.googleEarthAllFiles", getResource("label.googleEarthAllFiles", "Show geographic location of all pictures in Google Earth"));
 

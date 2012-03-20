@@ -90,20 +90,18 @@
   }
   
   <xsl:if test="/fileList/fileGroup">
-    function checkForFilesWithGeoData() 
+    function exportGeoData()
     {
-       setTimeout('checkGeoData()', 200);          
-    }
-    
-    function checkGeoData()
-    {
+       showHourGlass();
        if (ajaxRPC("checkForGeoData", "") == 'true')
        {
-           var googleButton = document.getElementById("googleEarthButton");
-           if (googleButton)
-           {
-               googleButton.style.visibility = 'visible';
-           }
+           hideHourGlass();
+           window.location.href = "/webfilesys/servlet?command=googleEarthDirPlacemarks";
+       } 
+       else
+       {
+           hideHourGlass();
+           alert("<xsl:value-of select="/fileList/resources/msg[@key='noFilesWithGeoData']/@value" />");
        }
     } 
   </xsl:if>
@@ -216,13 +214,10 @@
 </head>
 
 <body onclick="mouseClickHandler()">
-  <xsl:if test="/fileList/fileGroup">
-    <xsl:attribute name="onload">checkForFilesWithGeoData()</xsl:attribute>
-  </xsl:if>
 
   <xsl:apply-templates />
 
-  <div id="picturePopup" style="position:absolute;top:50px;left:150px;width:400px;height:400px;background-color:#c0c0c0;padding:0px;visibility:hidden;border-style:ridge;border-color:white;border-width:6px;z-index:2;"><img id="zoomPic" src="" border="0" width="100" height="100" style="width:100%;height:100%;" onclick="hidePopupPicture()"/><div id="popupClose" style="position:absolute;top:5px;left:5px;width:16px;height:14px;padding:0px;visibility:hidden;border-style:none;z-index:3"><img src="images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupPicture()"/></div></div>
+  <div id="picturePopup" style="position:absolute;top:50px;left:150px;width:400px;height:400px;background-color:#c0c0c0;padding:0px;visibility:hidden;border-style:ridge;border-color:white;border-width:6px;z-index:2;"><img id="zoomPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/><div id="popupClose" style="position:absolute;top:5px;left:5px;width:16px;height:14px;padding:0px;visibility:hidden;border-style:none;z-index:3"><img src="images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupPicture()"/></div></div>
 
 </body>
 </html>
@@ -799,8 +794,8 @@
                   </xsl:if>
                   
                   <xsl:if test="/fileList/fileGroup">
-                    <a class="button" id="googleEarthButton" style="visibility:hidden">
-                      <xsl:attribute name="href">/webfilesys/servlet?command=googleEarthDirPlacemarks</xsl:attribute>
+                    <a class="button" onclick="this.blur()">
+                      <xsl:attribute name="href">javascript:exportGeoData()</xsl:attribute>
                       <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.googleEarthAllFiles']/@value" /></xsl:attribute>                       
                       <span>Google Earth</span>
                     </a>              

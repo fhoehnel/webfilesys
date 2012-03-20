@@ -335,3 +335,82 @@ function getFormData(formObj)
     
     return(buff);
 }
+
+function getPageYScrolled()
+{
+    if (!browserFirefox) 
+    {
+        return document.body.scrollTop;
+    }
+    
+    return window.pageYOffset;
+}
+
+function getPageXScrolled()
+{
+    if (!browserFirefox) 
+    {
+        return document.body.scrollLeft;
+    }
+    
+    return window.pageXOffset;
+}
+
+function showHourGlass()
+{
+    var waitDivElem = document.createElement('div');
+    
+    waitDivElem.setAttribute("id", "waitDiv");
+    
+    var hourGlassElem = document.createElement('img');
+    
+    hourGlassElem.setAttribute("src", "/webfilesys/images/hourglass.gif");
+    hourGlassElem.setAttribute("width", "32");
+    hourGlassElem.setAttribute("height", "32");
+    hourGlassElem.setAttribute("border", "0");
+    
+    waitDivElem.appendChild(hourGlassElem);
+    
+    var divWidth = 60;
+    var divHeight = 30;
+    
+    var windowWidth;
+    var windowHeight;
+    
+    if (!browserFirefox) 
+    {
+        windowWidth = document.body.clientWidth;
+        windowHeight = document.body.clientHeight;
+    }
+    else
+    {
+        windowWidth = window.innerWidth;
+        windowHeight = window.innerHeight
+    }    
+    
+    var xpos = getPageXScrolled() + (windowWidth - divWidth) / 2;
+    var ypos = getPageYScrolled() + (windowHeight - divHeight) / 2;
+    
+    document.getElementsByTagName('body')[0].appendChild(waitDivElem);    
+    
+    waitDivElem.style.visibility = "hidden";
+    waitDivElem.style.position = "absolute";
+    waitDivElem.style.top = ypos + "px";
+    waitDivElem.style.left = xpos + "px";
+    waitDivElem.style.width = divWidth + "px";
+    waitDivElem.style.height = divHeight + "px";
+    waitDivElem.style.border = "1px solid navy";
+    waitDivElem.style.backgroundColor = "ivory";
+    waitDivElem.style.textAlign = "center";
+    waitDivElem.style.verticalAlign = "middle";
+    waitDivElem.style.zIndex = "10";
+    waitDivElem.style.visibility = "visible";
+}
+
+function hideHourGlass()
+{
+    var waitDiv = document.getElementById("waitDiv");
+    
+    document.getElementsByTagName('body')[0].removeChild(waitDiv);
+}
+
