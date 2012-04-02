@@ -15,6 +15,8 @@ import javax.xml.stream.XMLStreamReader;
 
 import org.apache.log4j.Logger;
 
+import com.ctc.wstx.exc.WstxParsingException;
+
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.util.ISO8601DateParser;
 
@@ -64,236 +66,276 @@ public class GeoTrackViewHandler implements ViewHandler
             boolean documentEnd = false;
             boolean isCDATA = false;
             
+            String ignoreUnknownTag = null;
+            
             // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             
             while (!documentEnd) 
             {
-                int event = parser.next();
-
-                switch (event)
+                try 
                 {
-                    case XMLStreamConstants.END_DOCUMENT:
-                        parser.close();
-                        documentEnd = true;
-                        break;
-                
-                    case XMLStreamConstants.START_DOCUMENT:
-                        /*
-                        xmlOut.println(XML_HEADER);
-                        xmlOut.println(STYLESHEET_REF);
-                        */
-                        break;
-    
-                    case XMLStreamConstants.START_ELEMENT:
-                        tagName = parser.getLocalName();
-                        
-                        currentElementName = tagName;
-                        
-                        if (tagName.equals("gpx"))
-                        {
+                    int event = parser.next();
+
+                    switch (event)
+                    {
+                        case XMLStreamConstants.END_DOCUMENT:
+                            parser.close();
+                            documentEnd = true;
+                            break;
+                    
+                        case XMLStreamConstants.START_DOCUMENT:
+                            /*
                             xmlOut.println(XML_HEADER);
                             xmlOut.println(STYLESHEET_REF);
-                        }
-                        
-                        xmlOut.print("\n<"+ tagName);
-
-                        if (tagName.equals("gpx")) 
-                        {                        
-                            xmlOut.print(" xmlns=\"http://www.topografix.com/GPX/1/0\"");
-                        }
-                        
-                        if (tagName.equals("trk")) {
-                            prevLat = Double.MIN_VALUE;
-                            prevLon = Double.MIN_VALUE;
-                            startPointLat = Double.MIN_VALUE;
-                            startPointLon = Double.MIN_VALUE;
-                            prevTime = 0L;
-                            dist = Double.MIN_VALUE;
-                            totalDist = 0.0f;
-                            distFromStart = Double.MIN_VALUE;
-                            speed = Double.MIN_VALUE;
-                            prevSpeed = Double.MIN_VALUE;
-                        }
-                        
-                        if (tagName.equals("trkpt") || tagName.equals("wpt"))
-                        {
-                            speed = Double.MIN_VALUE;
-                        
-                            String lat = parser.getAttributeValue(null, "lat");
-                            String lon = parser.getAttributeValue(null, "lon");
+                            */
+                            break;
+        
+                        case XMLStreamConstants.START_ELEMENT:
+                        	
+                        	if (ignoreUnknownTag != null) {
+                        		break;
+                        	}
+                        	
+                            tagName = parser.getLocalName();
                             
-                            if ((lat != null) && (lon != null)) 
+                            if ((!tagName.equals("gpx")) &&
+                                (!tagName.equals("trk")) &&	
+                               	(!tagName.equals("trkseg")) &&	
+                               	(!tagName.equals("trkpt")) &&	
+                               	(!tagName.equals("wpt")) &&	
+                               	(!tagName.equals("ele")) &&	
+                               	(!tagName.equals("time")) &&	
+                               	(!tagName.equals("metadata")) &&	
+                               	(!tagName.equals("name")) &&	
+                               	(!tagName.equals("desc"))) {
+                              	ignoreUnknownTag = tagName;
+                                break;
+                            }
+                            
+                            currentElementName = tagName;
+                            
+                            if (tagName.equals("gpx"))
                             {
-                                xmlOut.print(" lat=\"" + lat + "\"");
-                                xmlOut.print(" lon=\"" + lon + "\"");
+                                xmlOut.println(XML_HEADER);
+                                xmlOut.println(STYLESHEET_REF);
+                            }
                             
-                                try 
+                            xmlOut.print("\n<"+ tagName);
+
+                            if (tagName.equals("gpx")) 
+                            {                        
+                                xmlOut.print(" xmlns=\"http://www.topografix.com/GPX/1/0\"");
+                            }
+                            
+                            if (tagName.equals("trk")) {
+                                prevLat = Double.MIN_VALUE;
+                                prevLon = Double.MIN_VALUE;
+                                startPointLat = Double.MIN_VALUE;
+                                startPointLon = Double.MIN_VALUE;
+                                prevTime = 0L;
+                                dist = Double.MIN_VALUE;
+                                totalDist = 0.0f;
+                                distFromStart = Double.MIN_VALUE;
+                                speed = Double.MIN_VALUE;
+                                prevSpeed = Double.MIN_VALUE;
+                            }
+                            
+                            if (tagName.equals("trkpt") || tagName.equals("wpt"))
+                            {
+                                speed = Double.MIN_VALUE;
+                            
+                                String lat = parser.getAttributeValue(null, "lat");
+                                String lon = parser.getAttributeValue(null, "lon");
+                                
+                                if ((lat != null) && (lon != null)) 
                                 {
-                                    double latitude = Double.parseDouble(lat);
-                                    double longitude = Double.parseDouble(lon);
-                                    
-                                    if (prevLat == Double.MIN_VALUE) {
-                                        dist = 0.0f;
+                                    xmlOut.print(" lat=\"" + lat + "\"");
+                                    xmlOut.print(" lon=\"" + lon + "\"");
+                                
+                                    try 
+                                    {
+                                        double latitude = Double.parseDouble(lat);
+                                        double longitude = Double.parseDouble(lon);
+                                        
+                                        if (prevLat == Double.MIN_VALUE) {
+                                            dist = 0.0f;
+                                        } else {
+                                            dist = calculateDistance(prevLat, prevLon, latitude, longitude);
+                                        }
+                                        
+                                        totalDist += dist;
+                                        
+                                        prevLat = latitude;
+                                        prevLon = longitude;
+                                        
+                                        if ((startPointLat == Double.MIN_VALUE) || (startPointLon == Double.MIN_VALUE)) 
+                                        {
+                                            distFromStart = 0.0f;
+                                            startPointLat = latitude;
+                                            startPointLon = longitude;
+                                        }
+                                        else
+                                        {
+                                            distFromStart = calculateDistance(startPointLat, startPointLon, latitude, longitude);
+                                        }
+                                    }
+                                    catch (NumberFormatException numEx)
+                                    {
+                                        Logger.getLogger(getClass()).error(numEx);
+                                    }
+                                }
+                            }
+                            
+                            xmlOut.print(">");
+
+                            if (tagName.equals("trkpt") || tagName.equals("wpt"))
+                            {
+                                if (dist != Double.MIN_VALUE) 
+                                {
+                                    xmlOut.print("\n<dist>");
+                                    if (dist < 0.001f) {
+                                        // prevent exponential format
+                                        xmlOut.print("0.0");
                                     } else {
-                                        dist = calculateDistance(prevLat, prevLon, latitude, longitude);
+                                        xmlOut.print(dist);
                                     }
-                                    
-                                    totalDist += dist;
-                                    
-                                    prevLat = latitude;
-                                    prevLon = longitude;
-                                    
-                                    if ((startPointLat == Double.MIN_VALUE) || (startPointLon == Double.MIN_VALUE)) 
-                                    {
-                                        distFromStart = 0.0f;
-                                        startPointLat = latitude;
-                                        startPointLon = longitude;
-                                    }
-                                    else
-                                    {
-                                        distFromStart = calculateDistance(startPointLat, startPointLon, latitude, longitude);
-                                    }
+                                    xmlOut.print("</dist>");
                                 }
-                                catch (NumberFormatException numEx)
-                                {
-                                    Logger.getLogger(getClass()).error(numEx);
-                                }
-                            }
-                        }
-                        
-                        xmlOut.print(">");
 
-                        if (tagName.equals("trkpt") || tagName.equals("wpt"))
-                        {
-                            if (dist != Double.MIN_VALUE) 
-                            {
-                                xmlOut.print("\n<dist>");
-                                if (dist < 0.001f) {
+                                xmlOut.print("\n<totalDist>");
+                                if (totalDist < 0.001f) {
                                     // prevent exponential format
                                     xmlOut.print("0.0");
                                 } else {
-                                    xmlOut.print(dist);
+                                    xmlOut.print(totalDist);
                                 }
-                                xmlOut.print("</dist>");
-                            }
+                                xmlOut.print("</totalDist>");
 
-                            xmlOut.print("\n<totalDist>");
-                            if (totalDist < 0.001f) {
-                                // prevent exponential format
-                                xmlOut.print("0.0");
-                            } else {
-                                xmlOut.print(totalDist);
-                            }
-                            xmlOut.print("</totalDist>");
-
-                            if (distFromStart != Double.MIN_VALUE) 
-                            {
-                                xmlOut.print("\n<distFromStart>");
-                                if (distFromStart < 0.001f) {
-                                    // prevent exponential format
-                                    xmlOut.print("0.0");
-                                } else {
-                                    xmlOut.print(distFromStart);
-                                }
-                                xmlOut.print("</distFromStart>");
-                            }
-                        }
-
-                        isCDATA = (tagName.equals("name") || tagName.equals("desc"));
-
-                        break;
-
-                    case XMLStreamConstants.END_ELEMENT:
-
-                        if (!lastWasText) 
-                        {
-                            xmlOut.println();
-                        }
-                        xmlOut.print("</"+ parser.getLocalName() + ">");
-
-                        tagName = parser.getLocalName();
-                        if (tagName.equals("time"))
-                        {
-                            if (speed != Double.MIN_VALUE)
-                            {
-                                double correctedSpeed = speed;
-
-                                if (prevSpeed != Double.MIN_VALUE) 
+                                if (distFromStart != Double.MIN_VALUE) 
                                 {
-                                    correctedSpeed = (prevSpeed * 4 + speed) / 5;
+                                    xmlOut.print("\n<distFromStart>");
+                                    if (distFromStart < 0.001f) {
+                                        // prevent exponential format
+                                        xmlOut.print("0.0");
+                                    } else {
+                                        xmlOut.print(distFromStart);
+                                    }
+                                    xmlOut.print("</distFromStart>");
                                 }
+                            }
+
+                            isCDATA = (tagName.equals("name") || tagName.equals("desc"));
+
+                            break;
+
+                        case XMLStreamConstants.END_ELEMENT:
+
+                            tagName = parser.getLocalName();
                             
-                                if (correctedSpeed < 0.001f) {
-                                    // prevent exponential format
-                                    correctedSpeed = 0.0f;
-                                }
-                                
-                                xmlOut.print("\n<speed>" + correctedSpeed + "</speed>");
-                                
-                                prevSpeed = correctedSpeed;
-                            }
-                        }
-
-                        lastWasText = false;
-                        break;
-                        
-                    case XMLStreamConstants.CHARACTERS:
-                        String elementText = parser.getText().trim();
-                        
-                        if (currentElementName.equals("time"))
-                        {
-                            if (elementText.length() > 0)
+                        	if (ignoreUnknownTag != null) {
+                        		if (tagName.equals(ignoreUnknownTag)) {
+                            		ignoreUnknownTag = null;
+                        	    }
+                        		break;
+                        	}
+                        	
+                            if (!lastWasText) 
                             {
-                                try 
+                                xmlOut.println();
+                            }
+                            xmlOut.print("</"+ parser.getLocalName() + ">");
+
+                            if (tagName.equals("time"))
+                            {
+                                if (speed != Double.MIN_VALUE)
                                 {
-                                    long trackPointTime = ISO8601DateParser.parse(elementText).getTime();
-                                    
-                                    if ((prevTime > 0L) && (dist != Double.MIN_VALUE)) 
+                                    double correctedSpeed = speed;
+
+                                    if (prevSpeed != Double.MIN_VALUE) 
                                     {
-                                        double duration = trackPointTime - prevTime;
-                          
-                                        if (duration == 0l)
-                                        {
-                                            speed = 0.0f;
-                                        }
-                                        else 
-                                        {
-                                            speed = dist / (duration / 1000f);
-                                        }
+                                        correctedSpeed = (prevSpeed * 4 + speed) / 5;
                                     }
                                 
-                                    prevTime = trackPointTime;
-                                } 
-                                catch (Exception ex)
-                                {
-                                    Logger.getLogger(getClass()).error(ex);
+                                    if (correctedSpeed < 0.001f) {
+                                        // prevent exponential format
+                                        correctedSpeed = 0.0f;
+                                    }
                                     
-                                    prevTime = 0L;
+                                    xmlOut.print("\n<speed>" + correctedSpeed + "</speed>");
+                                    
+                                    prevSpeed = correctedSpeed;
                                 }
                             }
-                        }
 
-                        if (isCDATA)
-                        {
-                            xmlOut.print("<![CDATA[");
-                        }
-                        
-                        xmlOut.print(elementText);
+                            lastWasText = false;
+                            break;
+                            
+                        case XMLStreamConstants.CHARACTERS:
+                        	if (ignoreUnknownTag != null) {
+                        		break;
+                        	}
+                        	
+                            String elementText = parser.getText().trim();
+                            
+                            if (currentElementName.equals("time"))
+                            {
+                                if (elementText.length() > 0)
+                                {
+                                    try 
+                                    {
+                                        long trackPointTime = ISO8601DateParser.parse(elementText).getTime();
+                                        
+                                        if ((prevTime > 0L) && (dist != Double.MIN_VALUE)) 
+                                        {
+                                            double duration = trackPointTime - prevTime;
+                              
+                                            if (duration == 0l)
+                                            {
+                                                speed = 0.0f;
+                                            }
+                                            else 
+                                            {
+                                                speed = dist / (duration / 1000f);
+                                            }
+                                        }
+                                    
+                                        prevTime = trackPointTime;
+                                    } 
+                                    catch (Exception ex)
+                                    {
+                                        Logger.getLogger(getClass()).error(ex);
+                                        
+                                        prevTime = 0L;
+                                    }
+                                }
+                            }
 
-                        if (isCDATA)
-                        {
-                            xmlOut.print("]]>");
-                            isCDATA = false;
-                        }
+                            if (isCDATA)
+                            {
+                                xmlOut.print("<![CDATA[");
+                            }
+                            
+                            xmlOut.print(elementText);
 
-                        if (elementText.length() > 0) 
-                        {
-                            lastWasText = true;
-                        }
-                        break;
-                    default:
-                        // System.out.println("unhandled event: " + event);
-                }   
+                            if (isCDATA)
+                            {
+                                xmlOut.print("]]>");
+                                isCDATA = false;
+                            }
+
+                            if (elementText.length() > 0) 
+                            {
+                                lastWasText = true;
+                            }
+                            break;
+                        default:
+                            // System.out.println("unhandled event: " + event);
+                    }   
+                }
+                catch (WstxParsingException epex)
+                {
+                    Logger.getLogger(getClass()).warn("GPX parsing error" + epex);
+                }
             }            
 
             xmlOut.flush();
@@ -305,6 +347,10 @@ public class GeoTrackViewHandler implements ViewHandler
         }
         catch (XMLStreamException xmlEx) {
             Logger.getLogger(getClass()).error("error parsing XML stream", xmlEx);
+        }
+        catch (Exception e) 
+        {
+            Logger.getLogger(getClass()).error("failed to transform GPX file" + e);
         }
     }
 
