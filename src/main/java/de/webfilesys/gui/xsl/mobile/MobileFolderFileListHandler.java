@@ -475,7 +475,10 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
         addMsgResource("label.mobileWindowTitle", getResource("label.mobileWindowTitle","WebFileSys mobile version"));
         addMsgResource("label.about", getResource("label.about","About WebFileSys"));
-        addMsgResource("label.bookmarks", getResource("label.bookmarks","bookmarks"));
+        addMsgResource("label.logout", getResource("label.logout","Logout"));
+        addMsgResource("label.bookmarksMobile", getResource("label.bookmarksMobile","bookmarks"));
+        addMsgResource("classicView", getResource("classicView", "classic/desktop view"));
+        addMsgResource("label.selectFunction", getResource("label.selectFunction", "- select function -"));
         addMsgResource("folderIsEmpty", getResource("folderIsEmpty","no files or subfolders in this directory"));
         addMsgResource("alert.nofileselected", getResource("alert.nofileselected","Select at least 1 file"));
 		addMsgResource("sort.name", getResource("sort.name","sort by name"));

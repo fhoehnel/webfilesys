@@ -767,6 +767,8 @@ tail.autoRefresh=automatisch neu laden
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version
+label.bookmarksMobile=Ordner-Lesezeichen
+classicView=Desktop Ansicht
 menuView=Anzeigen
 menuViewZip=Zip-Inhalt Anzeigen
 menuDownload=Download

@@ -28,6 +28,7 @@
   <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/mobile/mobileCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/contextMenuCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/fileContextMenu.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/linkContextMenu.js" type="text/javascript"></script>
@@ -215,26 +216,15 @@
         </div>
         
       </td>
-      
-      <td style="text-align:right;vertical-align:bottom;padding-bottom:1px;white-space:nowrap;">
-        <a href="/webfilesys/servlet?command=bookmarks">
-          <img src="/webfilesys/images/bookmark.gif" border="0" width="16" height="16">
-            <xsl:attribute name="title"><xsl:value-of select="/folderFileList/resources/msg[@key='label.bookmarks']/@value" /></xsl:attribute>
-          </img></a>        
-        
-        <img src="images/space.gif" border="0" width="5" />
-        
-        <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
-          <img src="/webfilesys/images/infoSmall.gif" border="0" width="18" height="18">
-            <xsl:attribute name="title"><xsl:value-of select="/folderFileList/resources/msg[@key='label.about']/@value" /></xsl:attribute>
-          </img></a>
 
-        <img src="images/space.gif" border="0" width="5" />
-
-        <a href="/webfilesys/servlet?command=logout">
-          <img src="/webfilesys/images/redx2.gif" border="0" width="16" height="16">
-            <xsl:attribute name="title">Logout</xsl:attribute>
-          </img></a>
+      <td style="text-align:right;vertical-align:bottom;padding-bottom:1px;">
+        <select id="functionSelect" onchange="mobileFunctionSelected()">
+          <option value="0" selected="selected"><xsl:value-of select="/folderFileList/resources/msg[@key='label.selectFunction']/@value" /></option>
+          <option value="1"><xsl:value-of select="/folderFileList/resources/msg[@key='label.bookmarksMobile']/@value" /></option>
+          <option value="2"><xsl:value-of select="/folderFileList/resources/msg[@key='label.about']/@value" /></option>
+          <option value="3"><xsl:value-of select="/folderFileList/resources/msg[@key='classicView']/@value" /></option>
+          <option value="4"><xsl:value-of select="/folderFileList/resources/msg[@key='label.logout']/@value" /></option>
+        </select>
       </td>
       
     </tr>

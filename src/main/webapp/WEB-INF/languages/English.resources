@@ -765,6 +765,8 @@ tail.autoRefresh=automatic refresh
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version
+label.bookmarksMobile=bookmarks
+classicView=classic/desktop view
 menuView=view file
 menuViewZip=view ZIP content
 menuDownload=download
