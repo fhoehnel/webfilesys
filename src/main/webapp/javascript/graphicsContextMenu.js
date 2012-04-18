@@ -265,7 +265,7 @@ function jsResizeParms(path)
 
 function jsExifData(path)
 {
-    exifWin = window.open('/webfilesys/servlet?command=exifData&imgFile=' + encodeURIComponent(path),'exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=400,height=520,left=200,top=20,screenX=200,screenY=20,resizable=no');
+    exifWin = window.open('/webfilesys/servlet?command=exifData&imgFile=' + encodeURIComponent(path),'exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=400,height=540,left=200,top=20,screenX=200,screenY=20,resizable=no');
     exifWin.focus();
 }
 

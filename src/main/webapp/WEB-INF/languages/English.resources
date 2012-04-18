@@ -456,6 +456,9 @@ label.imgwidth=image width (pixel)
 label.thumbexists=thumbnail included
 label.gpsLatitude=GPS latitude
 label.gpsLongitude=GPS longitude
+label.imgOrientation=orientation
+orientation.landscape=landscape
+orientation.portrait=portrait
 
 # picture album invitation and publish folders/files
 label.invitehead=Publish Pictures

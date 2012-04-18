@@ -458,6 +458,9 @@ label.imgwidth=Bildbreite (Pixel)
 label.thumbexists=enthält Vorschaubild
 label.gpsLatitude=GPS geografische Breite
 label.gpsLongitude=GPS geografische Länge
+label.imgOrientation=Format
+orientation.landscape=Querformat
+orientation.portrait=Hochformat
 
 # picture album invitation and publish folders/files
 label.invitehead=Bilder freigeben/Einladung zur Diashow

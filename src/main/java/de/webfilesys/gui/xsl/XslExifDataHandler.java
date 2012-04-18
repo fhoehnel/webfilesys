@@ -185,6 +185,17 @@ public class XslExifDataHandler extends XslRequestHandlerBase
             {
                 XmlUtil.setChildText(exifDataElement, "gpsLongitude", Float.toString(gpsLongitude) +  " " + exifData.getGpsLongitudeRef());
             }
+            
+            int orientation = exifData.getOrientation();
+            
+            if (orientation != CameraExifData.ORIENTATION_UNKNOWN)
+            {
+                XmlUtil.setChildText(exifDataElement, "orientation", Integer.toString(orientation));
+                
+                addMsgResource("label.imgOrientation", getResource("label.imgOrientation", "orientation")); 
+                addMsgResource("orientation.landscape", getResource("orientation.landscape", "lanscape")); 
+                addMsgResource("orientation.portrait", getResource("orientation.portrait", "portrait")); 
+            }
         }
 
         this.processResponse("cameraData.xsl", false);
