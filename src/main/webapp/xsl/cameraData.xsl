@@ -191,6 +191,7 @@
               <xsl:if test="(/cameraData/exifData/orientation = '6') or (/cameraData/exifData/orientation = '8')">
                 <xsl:value-of select="/cameraData/resources/msg[@key='orientation.portrait']/@value" />
               </xsl:if>
+              (<xsl:value-of select="/cameraData/exifData/orientation" />)
             </td>
           </tr>
         </xsl:if>

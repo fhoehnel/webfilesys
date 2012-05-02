@@ -791,6 +791,16 @@
                         <span><xsl:value-of select="resources/msg[@key='button.copyLinks']/@value" /></span>
                       </a>
                     </xsl:if>
+
+                    <xsl:if test="/fileList/jpegtran">
+                      <xsl:if test="/fileList/fileGroup">
+                        <a class="button" onclick="this.blur()">
+                          <xsl:attribute name="href">javascript:autoImgRotate('<xsl:value-of select="/fileList/resources/msg[@key='confirm.rotateByExif']/@value" />', '<xsl:value-of select="/fileList/resources/msg[@key='rotateByExif.noop']/@value" />')</xsl:attribute>
+                          <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='title.rotateByExif']/@value" /></xsl:attribute>                       
+                          <span><xsl:value-of select="resources/msg[@key='button.rotateByExif']/@value" /></span>
+                        </a>              
+                      </xsl:if>
+                    </xsl:if>
                   </xsl:if>
                   
                   <xsl:if test="/fileList/fileGroup">

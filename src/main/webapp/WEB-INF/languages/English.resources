@@ -373,6 +373,10 @@ confirm.copyLinks=Replace all file links by a copy of the original files?
 msg.createThumbsStarted=Generation of permanent picture thumbnails has been started for folder
 msg.concurrentThumbThread=Another thumbnail creation thread is still running. Try again later!
 confirm.deleteImages=Delete selected picture files?
+button.rotateByExif=Rotate by Exif
+title.rotateByExif=rotate pictures according to the orientation value in the camera EXIF data
+confirm.rotateByExif=Pictures, whose orientation does not match the orientation value stored in the camera EXIF data will be rotated losslessly. Continue?
+rotateByExif.noop=No picture rotated!
 
 # picture transformation
 label.rotateFlip=Rotate/Mirror

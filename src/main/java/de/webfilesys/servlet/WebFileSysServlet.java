@@ -61,6 +61,7 @@ import de.webfilesys.gui.ajax.AjaxCheckFileExistHandler;
 import de.webfilesys.gui.ajax.AjaxCheckForGeoDataHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteDirPromptHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteFilePromptHandler;
+import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
 import de.webfilesys.gui.ajax.XmlAssociatedProgramHandler;
@@ -1013,6 +1014,13 @@ public class WebFileSysServlet extends HttpServlet
         if (command.equals("transformImage"))
         {
 		    (new ImageTransformationHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+
+            return(true);
+        }
+
+        if (command.equals("autoImgRotate"))
+        {
+		    (new AutoImageRotateHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }

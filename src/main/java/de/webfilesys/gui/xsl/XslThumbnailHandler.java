@@ -138,34 +138,17 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 			fileFilter = maskFilter;
 		}
 		
-		String normalizedPath = null;
         String path_no_slash = null;
         String pathWithSlash = null;
 
 		if (actPath.endsWith(File.separator))
 		{
-			if ((File.separatorChar=='\\') && (actPath.length()==3))
-			{
-				normalizedPath=actPath;
-			}
-			else
-			{
-				if (actPath.length()==1)   // the root
-				{
-					normalizedPath=actPath;
-				}
-				else
-				{
-					normalizedPath=actPath.substring(0,actPath.length()-1);
-				}
-			}
 			path_no_slash=actPath.substring(0,actPath.length()-1);
 			pathWithSlash = actPath;
 		}
 		else
 		{
 			path_no_slash = actPath;
-			normalizedPath = actPath;
 			pathWithSlash = actPath + File.separator;
 		}
 
@@ -549,6 +532,14 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 
 		addMsgResource("label.comments", getResource("label.comments","Comments"));
 		
+		if (((File.separatorChar == '/') && (WebFileSys.getInstance().getJpegtranPath() != null)) ||
+		    (File.separatorChar == '\\')) {
+	        addMsgResource("button.rotateByExif", getResource("button.rotateByExif", "Rotate by Exif"));
+	        addMsgResource("title.rotateByExif", getResource("title.rotateByExif", "rotate pictures according to the orientation value in the camera EXIF data"));
+	        addMsgResource("confirm.rotateByExif", getResource("confirm.rotateByExif", "Are you sure?"));
+	        addMsgResource("rotateByExif.noop", getResource("rotateByExif.noop", "no picture rotated"));
+		}
+        
 		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(actPath), false);
 
 		String description = metaInfMgr.getDescription(actPath,".");
@@ -569,14 +560,6 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 		if (selectedFiles != null)
 		{
 			fileNum=selectionStatus.getNumberOfFiles();
-		}
-		
-		if (File.separatorChar == '/')
-		{
-			if (WebFileSys.getInstance().getJpegtranPath() != null)
-			{
-				XmlUtil.setChildText(fileListElement, "jpegtran", "true", false);
-			}
 		}
 		
 		XmlUtil.setChildText(fileListElement, "fileNumber", Integer.toString(fileNum), false);

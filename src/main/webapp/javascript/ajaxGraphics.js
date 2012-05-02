@@ -36,3 +36,31 @@ function checkLossless(path)
     return(false);
 }
 
+function autoImgRotate(confirmText, noopText)
+{
+    showHourGlass()
+
+    if (!confirm(confirmText))
+    {
+        hideHourGlass();
+        return;
+    }
+
+    var xmlUrl = '/webfilesys/servlet?command=autoImgRotate';
+
+    var responseXml = xmlRequestSynchron(xmlUrl);
+    
+    var anyRotatedItem = responseXml.getElementsByTagName("anyImageRotated")[0];            
+    var anyRotated = anyRotatedItem.firstChild.nodeValue;
+       
+    hideHourGlass();
+                 
+    if (anyRotated == "true")
+    {
+        window.location.href = '/webfilesys/servlet?command=thumbnail';
+        return
+    }
+    
+    alert(noopText);
+}
+
