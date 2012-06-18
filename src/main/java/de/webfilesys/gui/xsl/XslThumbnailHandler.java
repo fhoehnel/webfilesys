@@ -1043,6 +1043,19 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 		{
 			XmlUtil.setChildText(fileListElement, "geoTag", "true", false);
 			addMsgResource("label.googleMapLink", getResource("label.googleMapLink", "Show geographic location in Google Maps"));
+
+			String googleMapsAPIKey = null;
+			if (req.getScheme().equalsIgnoreCase("https"))
+			{
+				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+			}
+			else
+			{
+				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+			}
+			if (googleMapsAPIKey != null) {
+				XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
+			}
 		}
 		
 		this.processResponse("thumbnails.xsl", true);

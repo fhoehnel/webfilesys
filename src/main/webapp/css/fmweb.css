@@ -101,6 +101,8 @@
       padding-right:6px;
       padding-top:2px;
       padding-bottom:2px;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
       -moz-border-radius-topright: 10px;
       -moz-border-radius-topleft: 10px;
       -webkit-border-top-right-radius: 10px;
@@ -120,6 +122,8 @@
       padding-right:6px;
       padding-top:2px;
       padding-bottom:2px;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
       -moz-border-radius-topright: 10px;
       -moz-border-radius-topleft: 10px;
       -webkit-border-top-right-radius: 10px;
@@ -139,6 +143,8 @@
       padding-right:6px;
       padding-top:2px;
       padding-bottom:2px;
+      border-top-right-radius: 10px;
+      border-top-left-radius: 10px;
       -moz-border-radius-topright: 10px;
       -moz-border-radius-topleft: 10px;
       -webkit-border-top-right-radius: 10px;

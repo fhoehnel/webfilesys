@@ -49,15 +49,6 @@ public class SearchRequestHandler extends UserRequestHandler
 
 	protected void process()
 	{
-        String discardParm = getParameter("discardResults");
-        
-        if (discardParm != null)
-        {
-        	discardSearchResults();
-        	
-        	return;
-        }
-
 		String act_path = getParameter("actpath");
 		
 		if ((act_path == null) || (act_path.trim().length() == 0))
@@ -159,15 +150,20 @@ public class SearchRequestHandler extends UserRequestHandler
         
 		searchResultDir = searchResultDir + "searchResult-" + System.currentTimeMillis();
 
-		output.print("<HTML>");
-		output.print("<HEAD>");
-		if (search_arg==null)
-			output.print("<TITLE>" + getResource("label.searchresults","Search Results") + ": " + file_mask + " </TITLE>");
+		output.print("<html>");
+		output.print("<head>");
+		if (search_arg == null) 
+		{
+			output.print("<title>" + getResource("label.searchresults","Search Results") + ": " + file_mask + " </title>");
+		}
 		else
-			output.print("<TITLE>" + getResource("label.searchresults","Search Results") + ": " + search_arg + " </TITLE>");
+		{
+			output.print("<title>" + getResource("label.searchresults","Search Results") + ": " + search_arg + " </title>");
+		}
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
 
+		output.println("<script language=\"JavaScript\" src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
 		output.println("<script language=\"JavaScript\" src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");
 
         output.println("<script language=\"javascript\">"); 
@@ -176,24 +172,44 @@ public class SearchRequestHandler extends UserRequestHandler
         
         if (!readonly)
         {
-            String mobile = (String) session.getAttribute("mobile");
+			output.println("var keepSearchResults = false;");
+
+			String mobile = (String) session.getAttribute("mobile");
             
-			output.print("function showResults()"); 
+			output.println("function showResults() {"); 
+			output.println("keepSearchResults = true;");
             if (mobile != null) 
             {
-                output.print("{window.opener.location.href='/webfilesys/servlet?command=mobile&cmd=folderFileList&absPath=" + UTF8URLEncoder.encode(searchResultDir)+ "';"); 
+                output.println("window.opener.location.href='/webfilesys/servlet?command=mobile&cmd=folderFileList&absPath=" + UTF8URLEncoder.encode(searchResultDir)+ "';"); 
             }
             else
             {
-                output.print("{window.opener.parent.DirectoryPath.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(searchResultDir) + "&fastPath=true';"); 
+                output.println("window.opener.parent.DirectoryPath.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(searchResultDir) + "&fastPath=true';"); 
             }
-			output.print("setTimeout(\"self.close()\", 1000);}"); 
+			output.println("setTimeout(\"self.close()\", 1000);"); 
+			output.println("}");
+			
+			output.println("function discardSearchResults() {");
+			output.println("if (keepSearchResults) {");
+			output.println("return;");
+			output.println("}");
+			output.println("var discardURL = '/webfilesys/servlet?command=discardSearchResults&resultDir=" + UTF8URLEncoder.encode(searchResultDir) + "';");
+			output.println("xmlRequestSynchron(discardURL);");
+			output.println("}");
+
+			output.println("function discardAndClose() {");
+			output.println("discardSearchResults();");
+			output.println("setTimeout(\"self.close()\", 1000);"); 
+			output.println("}");
+			
+			output.println("window.onbeforeunload = discardSearchResults");
         }
 
         output.println("</script>"); 
 		
-		output.print("</HEAD>"); 
-		output.print("<BODY>");
+		output.println("</head>");
+		
+		output.print("<body>");
 
 		headLine(getResource("label.searchresults","Search Results"));
 
@@ -333,11 +349,6 @@ public class SearchRequestHandler extends UserRequestHandler
 			hitNumber = file_find_num;
 		}
 
-		output.println("<form accept-charset=\"utf-8\" name=\"form1\" method=\"post\" action=\"/webfilesys/servlet\">");
-		output.println("<input type=\"hidden\" name=\"command\" value=\"fmfindfile\">");
-		output.println("<input type=\"hidden\" name=\"discardResults\" value=\"true\">");
-		output.println("<input type=\"hidden\" name=\"searchResultDir\" value=\"" + searchResultDir + "\">");
-
 		output.println("<table class=\"dataForm\" width=\"100%\" cellpadding=\"5\">");
 		output.println("<tr>");
 		output.println("<td class=\"fileListFunct\">" + hitNumber + "  " + getResource("label.matches","matches found") + "</td>");
@@ -361,14 +372,12 @@ public class SearchRequestHandler extends UserRequestHandler
 			}
         
 			output.println("<td class=\"fileListFunct\" align=\"right\">");
-			output.println("<input type=\"submit\" value=\"" + getResource("button.discardSearchResults","Discard Search Results") + "\">");
+			output.println("<input type=\"button\" value=\"" + getResource("button.discardSearchResults","Discard Search Results") + "\" onClick=\"discardAndClose()\">");
 			output.println("</td>");
 		}
 
 		output.println("</tr>");
 		output.println("</table>");
-
-		output.println("</form>");
 		
 		output.println("<script language=\"javascript\">");
 
@@ -496,38 +505,4 @@ public class SearchRequestHandler extends UserRequestHandler
 		file_list=null;
 	}
 
-    private void discardSearchResults()
-    {
-        String searchResultDir = getParameter("searchResultDir");
-        
-        if (searchResultDir == null)
-        {
-        	return;
-        }
-
-		if (!checkAccess(searchResultDir))
-		{
-			return;
-		}
-		
-		if (!checkWriteAccess()) {
-		    return;
-		}
-		
-		CommonUtils.deleteDirTree(searchResultDir);
-		
-		MetaInfManager.getInstance().releaseMetaInf(searchResultDir);
-
-		output.print("<html>");
-		output.print("<head>");
-
-		output.print("<script language=\"javascript\">"); 
-		output.print("self.close();"); 
-		output.print("</script>"); 
-		
-		output.print("</head>"); 
-		output.print("</html>"); 
-		
-		output.flush();
-    }
 }

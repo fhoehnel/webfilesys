@@ -261,13 +261,15 @@
 
         <xsl:if test="geoTag">
         
-          <td align="right" valign="top" width="1%">
-            <a href="javascript:showGoogleMap()">
-              <img src="/webfilesys/images/GoogleMaps.gif" width="32" height="32" border="0">
-                <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.googleMapLink']/@value" /></xsl:attribute>
-              </img>
-            </a>
-          </td>
+          <xsl:if test="googleMaps">
+            <td align="right" valign="top" width="1%">
+              <a href="javascript:showGoogleMap()">
+                <img src="/webfilesys/images/GoogleMaps.gif" width="32" height="32" border="0">
+                  <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.googleMapLink']/@value" /></xsl:attribute>
+                </img>
+              </a>
+            </td>
+          </xsl:if>
 
           <td align="right" valign="top" width="1%">
             <a href="/webfilesys/servlet?command=googleEarthFolderPlacemark">

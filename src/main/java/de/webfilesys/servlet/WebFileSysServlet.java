@@ -62,6 +62,7 @@ import de.webfilesys.gui.ajax.AjaxCheckForGeoDataHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteDirPromptHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteFilePromptHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
+import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
 import de.webfilesys.gui.ajax.XmlAssociatedProgramHandler;
@@ -1815,6 +1816,13 @@ public class WebFileSysServlet extends HttpServlet
         if (command.equals("cancelSearch"))
 		{
 			(new XmlCancelSearchHandler(req, resp, session, output, userid)).handleRequest(); 
+            
+            return(true);
+		}
+        
+        if (command.equals("discardSearchResults"))
+		{
+			(new DiscardSearchResultHandler(req, resp, session, output, userid)).handleRequest(); 
             
             return(true);
 		}

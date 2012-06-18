@@ -85,7 +85,7 @@
 
 <body onclick="mouseClickHandler()">
 <xsl:attribute name="class">dirTree</xsl:attribute>
-<xsl:attribute name="onLoad">setTimeout('scrollToCurrent()', 100);</xsl:attribute>
+<xsl:attribute name="onLoad">setTimeout('scrollToCurrent()', 100);setTimeout('setTooltips()', 500);</xsl:attribute>
 
 <xsl:apply-templates />
 
@@ -121,10 +121,6 @@
       parent.frames[2].window.location.href = "/webfilesys/servlet?command=listFiles&amp;actpath=" + encodedPath + "&amp;mask=*";
     </script>
   </xsl:if>
-
-  <script language="javascript">
-      setTooltips();
-  </script>
 
 </xsl:template>
 
