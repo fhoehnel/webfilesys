@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import sun.io.MalformedInputException;
+import de.webfilesys.gui.ajax.AjaxCheckGrepAllowedHandler;
 import de.webfilesys.util.CommonUtils;
 
 /**
@@ -26,6 +27,10 @@ public class TailRequestHandler extends UserRequestHandler
     private static final int NUMBER_OF_LINES_TO_PRINT = 40;
     
     private static final String ENCODING_ERROR = "#### failed to read line due to charcater encoding problems";
+    
+	public static final int MAX_BYTES_WITHOUT_LINEBREAK = 2048;
+	
+	private static final int BYTES_TO_CHECK = 2 * 1024 * 1024;
     
     private ArrayList lineQueue = null;
     
@@ -75,6 +80,24 @@ public class TailRequestHandler extends UserRequestHandler
 		    return;	
 		}
 
+		String initial = req.getParameter("initial");
+		
+		if (initial != null) 
+		{
+			// prevent out of memory by readLine() a very large piece of data without linebreak
+			// this is not 100 % save as we check only the beginning of very large files
+			// and only on the initial call of tail
+			// alternative would be to write our own readLine() method with limited line length
+			
+	        if (!isTextFile(filePath, MAX_BYTES_WITHOUT_LINEBREAK, BYTES_TO_CHECK))
+	        {
+	            resp.setStatus(404);
+	            output.println("This file seems not to be a text file: " + filePath);
+	            output.flush();
+	            return;
+	        }
+		}
+		
 		lineCount = NUMBER_OF_LINES_TO_PRINT;
 		
 		String lineCountParam = getParameter("lineCount");

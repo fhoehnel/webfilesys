@@ -104,6 +104,12 @@
          mapWin.focus();
       }
       
+      function showOSMap()
+      {
+          mapWin=window.open('/webfilesys/servlet?command=osMap&amp;path=<xsl:value-of select="/imageData/encodedPath" />','mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
+          mapWin.focus();
+      }
+      
     </xsl:if>
     
   </script>
@@ -263,6 +269,11 @@
             
             <xsl:if test="/imageData/geoTag">
               <td align="center" valign="top" nowrap="nowrap">
+                <a href="javascript:showOSMap()">
+                  <img src="/webfilesys/images/OSMaps.png" width="32" height="32" border="0">
+                    <xsl:attribute name="title"><xsl:value-of select="/imageData/resources/msg[@key='label.osMapLink']/@value" /></xsl:attribute>
+                  </img>
+                </a>
                 <a href="javascript:showGoogleMap()">
                   <img src="/webfilesys/images/GoogleMaps.gif" width="32" height="32" border="0">
                     <xsl:attribute name="title"><xsl:value-of select="/imageData/resources/msg[@key='label.googleMapLink']/@value" /></xsl:attribute>

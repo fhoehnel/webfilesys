@@ -225,6 +225,7 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(imageDataElement, "geoTag", "true", false);
 			addMsgResource("label.googleMapLink", getResource("label.googleMapLink", "Show geographic location in Google Maps"));
             addMsgResource("label.googleEarthLink", getResource("label.googleEarthLink", "Show geographic location in Google Earth"));
+			addMsgResource("label.osMapLink", getResource("label.osMapLink", "Show geographic location in Open Street Maps"));
 		}
 		
 		this.processResponse("showImage.xsl", true);

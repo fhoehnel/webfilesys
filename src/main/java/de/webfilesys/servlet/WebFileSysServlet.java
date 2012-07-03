@@ -59,8 +59,10 @@ import de.webfilesys.gui.admin.ViewLogRequestHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFileChangeHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFileExistHandler;
 import de.webfilesys.gui.ajax.AjaxCheckForGeoDataHandler;
+import de.webfilesys.gui.ajax.AjaxCheckGrepAllowedHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteDirPromptHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteFilePromptHandler;
+import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
@@ -133,6 +135,7 @@ import de.webfilesys.gui.user.FtpBackupHandler;
 import de.webfilesys.gui.user.GUnzipRequestHandler;
 import de.webfilesys.gui.user.GetFileRequestHandler;
 import de.webfilesys.gui.user.GetThumbRequestHandler;
+import de.webfilesys.gui.user.GrepRequestHandler;
 import de.webfilesys.gui.user.HexViewHandler;
 import de.webfilesys.gui.user.ImageTransformationHandler;
 import de.webfilesys.gui.user.LicenseReminderRequestHandler;
@@ -145,6 +148,8 @@ import de.webfilesys.gui.user.MultiImageDeleteHandler;
 import de.webfilesys.gui.user.MultiImageDownloadPromptHandler;
 import de.webfilesys.gui.user.MultiMoveCopyRequestHandler;
 import de.webfilesys.gui.user.MultiZipRequestHandler;
+import de.webfilesys.gui.user.OpenStreetMapFilesPOIHandler;
+import de.webfilesys.gui.user.OpenStreetMapPOIHandler;
 import de.webfilesys.gui.user.PasteAsLinkRequestHandler;
 import de.webfilesys.gui.user.PictureStoryRequestHandler;
 import de.webfilesys.gui.user.PublishListRequestHandler;
@@ -210,6 +215,8 @@ import de.webfilesys.gui.xsl.XslListCommentsHandler;
 import de.webfilesys.gui.xsl.XslLogonHandler;
 import de.webfilesys.gui.xsl.XslMenuBarHandler;
 import de.webfilesys.gui.xsl.XslMultiUploadHandler;
+import de.webfilesys.gui.xsl.XslOpenStreetMapFilesHandler;
+import de.webfilesys.gui.xsl.XslOpenStreetMapHandler;
 import de.webfilesys.gui.xsl.XslPictureAlbumHandler;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
 import de.webfilesys.gui.xsl.XslPublishFileHandler;
@@ -771,6 +778,14 @@ public class WebFileSysServlet extends HttpServlet
             {
                 (new AjaxCheckFileExistHandler(req, resp, session, output, userid)).handleRequest(); 
             }
+            else if (method.equals("grepAllowed"))
+            {
+                (new AjaxCheckGrepAllowedHandler(req, resp, session, output, userid)).handleRequest(); 
+            }
+            else if (method.equals("grepParams"))
+            {
+                (new AjaxGrepParamsHandler(req, resp, session, output, userid)).handleRequest(); 
+            }
             else if (method.equals("refreshDriveList"))
             {
                 (new RefreshDriveListHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -1226,6 +1241,13 @@ public class WebFileSysServlet extends HttpServlet
             return(true);
         }
         
+        if (command.equals("grep"))
+        {
+            (new GrepRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+            
+            return(true);
+        }
+
         if (command.equals("checkFileChange"))
         {
             (new AjaxCheckFileChangeHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -1666,7 +1688,35 @@ public class WebFileSysServlet extends HttpServlet
             return(true);
         }
 
-        if (command.equals("publishFile"))
+		if (command.equals("osMap"))
+        {
+		    (new XslOpenStreetMapHandler(req, resp, session, output, userid)).handleRequest(); 
+        	
+            return(true);
+        }
+
+		if (command.equals("osmPOIList"))
+        {
+		    (new OpenStreetMapPOIHandler(req, resp, session, output, userid)).handleRequest(); 
+        	
+            return(true);
+        }
+
+		if (command.equals("osMapFiles"))
+        {
+		    (new XslOpenStreetMapFilesHandler(req, resp, session, output, userid)).handleRequest(); 
+        	
+            return(true);
+        }
+
+		if (command.equals("osmFilesPOIList"))
+        {
+		    (new OpenStreetMapFilesPOIHandler(req, resp, session, output, userid)).handleRequest(); 
+        	
+            return(true);
+        }
+
+		if (command.equals("publishFile"))
 		{
 		    (new XslPublishFileHandler(req, resp, session, output, userid)).handleRequest(); 
 

@@ -294,6 +294,8 @@ public class MainFrameSetHandler extends UserRequestHandler
 
         output.println("var resourceTail = '" + getResource("label.tail","tail (last lines)") + "';");
         
+        output.println("var resourceGrep = '" + getResource("label.grep", "grep (filter)") + "';");
+        
         output.println("var resourceDownloadFolder = '" + getResource("label.downloadFolder","download as zip") + "';");
         
         if (!readonly)

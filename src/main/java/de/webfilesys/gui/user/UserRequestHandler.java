@@ -1,5 +1,6 @@
 package de.webfilesys.gui.user;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -531,6 +532,95 @@ public class UserRequestHandler extends ProtectedRequestHandler
         }
 
         return FileEncodingMap.getInstance().getFileEncoding(filePath);
+    }
+    
+    /**
+     * Checks if the file is a text file.
+     * The first check is done based on the filename extension.
+     * Then we look into the file and search for linefeed characters (0x0a, 0x0d).
+     *  
+     * @param filePath the filesystem path of the file
+     * @param maxBytesWithoutLineBreak maximum line length allowed to be a text file
+     * @param bytesToCheck how many bytes of the file to read
+     * @return true if probably text file, false if probably binary file
+     */
+    protected boolean isTextFile(String filePath, int maxBytesWithoutLineBreak, int bytesToCheck) {
+        String fileExt = CommonUtils.getFileExtension(filePath);
+        
+        if (fileExt.equals(".zip") || 
+           	fileExt.equals(".exe") ||
+           	fileExt.equals(".jar") ||
+           	fileExt.equals(".war") ||
+           	fileExt.equals(".ear") ||
+           	fileExt.equals(".gif") ||
+           	fileExt.equals(".jpeg") ||
+           	fileExt.equals(".jpg") ||
+           	fileExt.equals(".png") ||
+           	fileExt.equals(".bmp") ||
+           	fileExt.equals(".tif") ||
+           	fileExt.equals(".mpg") ||
+           	fileExt.equals(".mpeg") ||
+           	fileExt.equals(".mov") ||
+           	fileExt.equals(".avi") ||
+           	fileExt.equals(".mp4") ||
+           	fileExt.equals(".wmf") ||
+           	fileExt.equals(".mp3")) 
+        {
+        	// TODO: add more extensions here
+            return false;	
+        } 
+        
+        boolean seemsToBeBinary = false;
+        
+        int byteCounter = 0;
+        
+    	BufferedInputStream fin = null;
+    	
+    	try 
+    	{
+        	fin = new BufferedInputStream(new FileInputStream(filePath));
+
+        	int bytesWithoutLineBreak = 0;
+
+    		int c;
+    		while ((!seemsToBeBinary) && (byteCounter < bytesToCheck) && ((c = fin.read()) != (-1)))
+    		{
+    			if ((c == 0x0d) || (c == 0x0a))
+    			{
+    				bytesWithoutLineBreak = 0;
+    			}
+    			else 
+    			{
+    				bytesWithoutLineBreak++;
+    				
+    				if (bytesWithoutLineBreak > maxBytesWithoutLineBreak)
+    				{
+    					seemsToBeBinary = true;
+    				}
+    			}
+    			
+    			byteCounter++;
+    		}
+    	}
+    	catch (IOException ioex)
+    	{
+    		Logger.getLogger(getClass()).error("failed to check if text file", ioex);
+    	}
+    	finally
+    	{
+    		if (fin != null) 
+    		{
+    			try
+    			{
+    				fin.close();
+    			}
+    			catch (IOException ex)
+    			{
+    			}
+    		}
+    	}
+
+    	return (!seemsToBeBinary);
     }
     
 }

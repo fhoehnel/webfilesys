@@ -129,6 +129,7 @@ label.hexView=Hex Viewer
 label.encrypt=Verschlüsseln (AES)
 label.decrypt=Entschlüsseln (AES)
 label.tail=tail (letzte Zeilen)
+label.grep=grep (Filtern)
 label.downloadFolder=Download als ZIP-Archiv
 
 # directory tree tooltips
@@ -678,8 +679,10 @@ subject.folderChange=Änderung Ordner-Inhalt
 # Google Maps, Google Earth
 button.googleMap=Lokation auf Landkarte
 label.googleMapLink=Geographische Lokation in Google Maps anzeigen
+label.osMapLink=Geografische Lokation in Open Street Maps anzeigen
 label.googleEarthLink=Geographische Lokation in Google Earth anzeigen
-label.googleEarthAllFiles=Geographische Lokation aller Bilder in Google Earth anzeigen
+label.googleEarthAllFiles=Geographische Lage aller Bilder in Google Earth anzeigen
+label.OSMapAllFiles=Geographische Lage aller Bilder in Open Street Maps anzeigen
 label.geoTag=Geo-Tag Daten
 label.latitude=geogr. Breite in Dezimalgrad (Beispiel: 51.05 für Dresden)
 label.longitude=geogr. Länge in Dezimalgrad (Beispiel: 13.75 für Dresden)
@@ -771,6 +774,12 @@ error.invalidSecretKey=Der geheime Schlüssel ist falsch!
 # tail
 tail.lineCount=Zeilenzahl vom Dateiende
 tail.autoRefresh=automatisch neu laden
+
+# grep
+grepNotAllowed=Diese Datei scheint eine Binär-Datei zu sein. grep ist nur für Text-Dateien erlaubt.
+grepPrompt=nur Zeilen anzeigen, die diesen Text enthalten
+button.startGrep=grep starten
+grepResultEmpty=keine Zeilen gefunden mit
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version

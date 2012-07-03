@@ -129,6 +129,7 @@ label.hexView=Hex Viewer
 label.encrypt=Encrypt (AES)
 label.decrypt=Decrypt (AES)
 label.tail=tail (last lines)
+label.grep=grep (filter)
 label.downloadFolder=download as zip
 
 # directory tree tooltips
@@ -673,11 +674,13 @@ subject.welcome=Welcome to WebFileSys
 subject.diskquota=Disk quota exceeded
 subject.folderChange=Folder Change
 
-# Google Maps, Google Earth
+# Google Maps, Google Earth, Open street Maps
 button.googleMap=show location on map
 label.googleMapLink=Show geographic location in Google Maps
+label.osMapLink=Show geographic location in Open Street Maps
 label.googleEarthLink=Show geographic location in Google Earth
 label.googleEarthAllFiles=Show geographic location of all pictures in Google Earth
+label.OSMapAllFiles=Show geographic location of all pictures in Open Street Map
 label.geoTag=Geo-Tag Data
 label.latitude=latitude in decimal degrees (example: 51.05 for Dresden)
 label.longitude=longitude in decimal degrees (example: 13.75 for Dresden)
@@ -769,6 +772,12 @@ error.invalidSecretKey=The decryption key is incorrect!
 # tail
 tail.lineCount=number of lines from end of file
 tail.autoRefresh=automatic refresh
+
+# grep
+grepNotAllowed=This file seems to be a binary file. The grep function is only allowed for text files.
+grepPrompt=show only lines containing this text
+button.startGrep=start grep
+grepResultEmpty=no lines found containing
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version

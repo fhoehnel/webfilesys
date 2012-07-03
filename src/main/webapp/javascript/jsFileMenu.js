@@ -118,7 +118,20 @@ function viewFile(path)
 
 function tail(path)
 {
-    window.open('/webfilesys/servlet?command=tail&filePath=' + encodeURIComponent(path),"_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
+    window.open('/webfilesys/servlet?command=tail&filePath=' + encodeURIComponent(path) + "&initial=true","_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
+}
+
+function grep(path, fileName)
+{
+    var checkResult = ajaxRPC("grepAllowed", encodeURIComponent(path));
+    if (checkResult == 'true') 
+    {
+        showPrompt('/webfilesys/servlet?command=ajaxRPC&method=grepParams&param1=' + encodeURIComponent(fileName), '/webfilesys/xsl/grepParams.xsl', 320, 130);
+    }
+    else 
+    {
+        alert(checkResult);
+    }
 }
 
 function delFile(fileName)

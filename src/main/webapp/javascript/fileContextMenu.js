@@ -347,6 +347,9 @@ function extendedFileMenu(shortFileName, path)
                  + menuEntry("javascript:touch('" + scriptPreparedFile + "')", parent.resourceTouch,null);
     }
 
+    menuText = menuText 
+             + menuEntry("javascript:grep('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", parent.resourceGrep, null);
+
     menuText = menuText + '</table>'; 
 
     menuDiv.innerHTML = menuText;

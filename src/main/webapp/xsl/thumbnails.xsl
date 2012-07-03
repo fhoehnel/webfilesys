@@ -104,6 +104,22 @@
            alert("<xsl:value-of select="/fileList/resources/msg[@key='noFilesWithGeoData']/@value" />");
        }
     } 
+    
+    function filesOSMap()
+    {
+       showHourGlass();
+       if (ajaxRPC("checkForGeoData", "") == 'true')
+       {
+           hideHourGlass();
+           var mapWin = window.open('/webfilesys/servlet?command=osMapFiles&amp;path=' + encodeURIComponent('<xsl:value-of select="/fileList/pathForScript" />'),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
+           mapWin.focus();
+       } 
+       else
+       {
+           hideHourGlass();
+           alert("<xsl:value-of select="/fileList/resources/msg[@key='noFilesWithGeoData']/@value" />");
+       }
+    }
   </xsl:if>
 
   <xsl:if test="/fileList/geoTag">
@@ -111,6 +127,12 @@
     function showGoogleMap()
     {
         mapWin=window.open('/webfilesys/servlet?command=googleMap&amp;path=' + encodeURIComponent('<xsl:value-of select="/fileList/pathForScript" />'),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
+        mapWin.focus();
+    }
+
+    function showOSMap()
+    {
+        mapWin=window.open('/webfilesys/servlet?command=osMap&amp;path=' + encodeURIComponent('<xsl:value-of select="/fileList/pathForScript" />'),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
         mapWin.focus();
     }
       
@@ -260,6 +282,13 @@
         </td>
 
         <xsl:if test="geoTag">
+          <td align="right" valign="top" width="1%">
+            <a href="javascript:showOSMap()">
+              <img src="/webfilesys/images/OSMaps.png" width="32" height="32" border="0">
+                <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.osMapLink']/@value" /></xsl:attribute>
+              </img>
+            </a>
+          </td>
         
           <xsl:if test="googleMaps">
             <td align="right" valign="top" width="1%">
@@ -810,7 +839,14 @@
                       <xsl:attribute name="href">javascript:exportGeoData()</xsl:attribute>
                       <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.googleEarthAllFiles']/@value" /></xsl:attribute>                       
                       <span>Google Earth</span>
-                    </a>              
+                    </a>        
+                    
+                    <a class="button" onclick="this.blur()">
+                      <xsl:attribute name="href">javascript:filesOSMap()</xsl:attribute>
+                      <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.OSMapAllFiles']/@value" /></xsl:attribute>                       
+                      <span>OSMap</span>
+                    </a>        
+                          
                   </xsl:if>
                   
                 </div>
