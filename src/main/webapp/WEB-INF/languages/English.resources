@@ -676,9 +676,11 @@ subject.folderChange=Folder Change
 
 # Google Maps, Google Earth, Open street Maps
 button.googleMap=show location on map
-label.googleMapLink=Show geographic location in Google Maps
-label.osMapLink=Show geographic location in Open Street Maps
-label.googleEarthLink=Show geographic location in Google Earth
+label.geoMapLink=Show geographic location on map
+selectMapType=- select map type -
+mapTypeOSM=Open Street Maps
+mapTypeGoogleMap=Google Maps
+mapTypeGoogleEarth=Google Earth
 label.googleEarthAllFiles=Show geographic location of all pictures in Google Earth
 label.OSMapAllFiles=Show geographic location of all pictures in Open Street Map
 label.geoTag=Geo-Tag Data

@@ -24,14 +24,14 @@
 
   <title>WebFileSys Picture Album</title>
 
-  <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/pictureAlbum.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
-  <!--
-  <script language="JavaScript" src="/webfilesys/javascript/albumContextMenu.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
-  -->
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/pictureAlbum.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
+
+  <xsl:if test="pictureAlbum/geoTag">
+    <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
+  </xsl:if>
 
   <script language="javascript">
   
@@ -58,16 +58,6 @@
         }
       </xsl:if>
     </xsl:for-each>  
-    
-    <xsl:if test="/pictureAlbum/geoTag">
-      
-      function showGoogleMap()
-      {
-         mapWin=window.open('/webfilesys/servlet?command=googleMap&amp;path=' + encodeURIComponent('<xsl:value-of select="/pictureAlbum/pathForScript" />'),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
-         mapWin.focus();
-      }
-      
-    </xsl:if>
     
     function switchShowDetails(showDetails)
     {
@@ -101,10 +91,10 @@
       </xsl:for-each>
   
       <xsl:if test="pictureAlbum/description or pictureAlbum/geoTag">
-        <table border="0" cellpadding="2" cellspacing="0">
+        <table border="0" cellpadding="2" cellspacing="0" width="100%">
           <tr>
             <xsl:if test="pictureAlbum/description">
-              <td>
+              <td style="width:90%">
                 <font class="small">
                   <xsl:value-of select="pictureAlbum/description" disable-output-escaping="yes" />
                 </font>
@@ -112,10 +102,22 @@
             </xsl:if>
         
             <xsl:if test="pictureAlbum/geoTag">
-              <td valign="top">
-                <a href="javascript:showGoogleMap()">
-                  <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0">
-                    <xsl:attribute name="title"><xsl:value-of select="/pictureAlbum/resources/msg[@key='label.googleMapLink']/@value" /></xsl:attribute>
+              <td style="text-align:right;vertical-align:top;">
+                <select id="geoLocSel" style="width:150px;display:none">
+                  <xsl:attribute name="onchange">geoMapFolderSelected('<xsl:value-of select="/pictureAlbum/pathForScript" />')</xsl:attribute>
+                  <option value="0"><xsl:value-of select="/pictureAlbum/resources/msg[@key='selectMapType']/@value" /></option>
+                  <option value="1"><xsl:value-of select="/pictureAlbum/resources/msg[@key='mapTypeOSM']/@value" /></option>
+                  <xsl:if test="pictureAlbum/googleMaps">
+                    <option value="2"><xsl:value-of select="/pictureAlbum/resources/msg[@key='mapTypeGoogleMap']/@value" /></option>
+                  </xsl:if>
+                  <option value="3"><xsl:value-of select="/pictureAlbum/resources/msg[@key='mapTypeGoogleEarth']/@value" /></option>
+                </select>
+              </td>
+
+              <td id="mapIcon" style="text-align:right;vertical-align:top;width:1%">
+                <a href="javascript:showMapSelection()">
+                  <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0" style="float:right">
+                    <xsl:attribute name="title"><xsl:value-of select="/pictureAlbum/resources/msg[@key='label.geoMapLink']/@value" /></xsl:attribute>
                   </img>
                 </a>
               </td>

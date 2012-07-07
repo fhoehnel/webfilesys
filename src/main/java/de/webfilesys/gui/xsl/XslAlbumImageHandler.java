@@ -23,6 +23,7 @@ import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.PictureRating;
+import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
@@ -431,8 +432,24 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
         if ((geoTag != null) || exifGpsDataPresent)
 		{
 			XmlUtil.setChildText(imageDataElement, "geoTag", "true", false);
-            addMsgResource("label.googleMapLink", getResource("label.googleMapLink", "Show geographic location in Google Maps"));
-            addMsgResource("label.googleEarthLink", getResource("label.googleEarthLink", "Show geographic location in Google Earth"));
+	        addMsgResource("label.geoMapLink", getResource("label.geoMapLink", "Show geographic location on map"));
+	        addMsgResource("selectMapType", getResource("selectMapType", "- select map type -"));
+	        addMsgResource("mapTypeOSM", getResource("mapTypeOSM", "Open Stree Maps"));
+	        addMsgResource("mapTypeGoogleMap", getResource("mapTypeGoogleMap", "Google Maps"));
+	        addMsgResource("mapTypeGoogleEarth", getResource("mapTypeGoogleEarth", "Google Earth"));
+	        
+			String googleMapsAPIKey = null;
+			if (req.getScheme().equalsIgnoreCase("https"))
+			{
+				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+			}
+			else
+			{
+				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+			}
+			if (googleMapsAPIKey != null) {
+				XmlUtil.setChildText(imageDataElement, "googleMaps", "true", false);
+			}
 		}
         
         if (req.getParameter("rating") != null) 

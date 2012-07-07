@@ -1014,7 +1014,24 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 		if (geoTag != null)
 		{
 			XmlUtil.setChildText(albumElement, "geoTag", "true", false);
-			addMsgResource("label.googleMapLink", getResource("label.googleMapLink", "Show geographic location in Google Maps"));
+	        addMsgResource("label.geoMapLink", getResource("label.geoMapLink", "Show geographic location on map"));
+	        addMsgResource("selectMapType", getResource("selectMapType", "- select map type -"));
+	        addMsgResource("mapTypeOSM", getResource("mapTypeOSM", "Open Stree Maps"));
+	        addMsgResource("mapTypeGoogleMap", getResource("mapTypeGoogleMap", "Google Maps"));
+	        addMsgResource("mapTypeGoogleEarth", getResource("mapTypeGoogleEarth", "Google Earth"));
+	        
+			String googleMapsAPIKey = null;
+			if (req.getScheme().equalsIgnoreCase("https"))
+			{
+				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+			}
+			else
+			{
+				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+			}
+			if (googleMapsAPIKey != null) {
+				XmlUtil.setChildText(albumElement, "googleMaps", "true", false);
+			}
 		}
 
 		this.processResponse("pictureAlbum.xsl", true);

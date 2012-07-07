@@ -27,10 +27,14 @@
     div.albumPath {padding-top:8px;padding-bottom:10px;text-align:left;}
   </style>
 
-  <script language="JavaScript" src="/webfilesys/javascript/fileMenu.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/fileMenu.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
 
-  <script language="JavaScript">
+  <xsl:if test="/imageData/geoTag">
+    <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
+  </xsl:if>
+
+  <script type="text/javascript">
   
     function printPage() 
     {
@@ -290,20 +294,27 @@
                 <tr>
                 
                   <xsl:if test="/imageData/geoTag">
-                    <td nowrap="nowrap" style="padding-right:10px;">
-                      <a href="javascript:showGoogleMap()">
-                        <img src="/webfilesys/images/GoogleMaps.gif" width="32" height="32" border="0">
-                          <xsl:attribute name="title"><xsl:value-of select="/imageData/resources/msg[@key='label.googleMapLink']/@value" /></xsl:attribute>
-                        </img>
-                      </a>
-                
-                      <a>
-                        <xsl:attribute name="href">/webfilesys/servlet?command=googleEarthPlacemark&amp;path=<xsl:value-of select="/imageData/encodedPath" /></xsl:attribute>
+                   
+                    <td style="padding-right:10px">
+                      <select id="geoLocSel" style="width:150px;display:none">
+                        <xsl:attribute name="onchange">geoMapFileSelected('<xsl:value-of select="/imageData/pathForScript" />')</xsl:attribute>
+                        <option value="0"><xsl:value-of select="/imageData/resources/msg[@key='selectMapType']/@value" /></option>
+                        <option value="1"><xsl:value-of select="/imageData/resources/msg[@key='mapTypeOSM']/@value" /></option>
+                        <xsl:if test="/imageData/googleMaps">
+                          <option value="2"><xsl:value-of select="/imageData/resources/msg[@key='mapTypeGoogleMap']/@value" /></option>
+                        </xsl:if>
+                        <option value="3"><xsl:value-of select="/imageData/resources/msg[@key='mapTypeGoogleEarth']/@value" /></option>
+                      </select>
+                    </td>
+
+                    <td id="mapIcon" style="vertical-align:top;padding-right:10px;">
+                      <a href="javascript:showMapSelection()">
                         <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0">
-                          <xsl:attribute name="title"><xsl:value-of select="/imageData/resources/msg[@key='label.googleEarthLink']/@value" /></xsl:attribute>
+                          <xsl:attribute name="title"><xsl:value-of select="/imageData/resources/msg[@key='label.geoMapLink']/@value" /></xsl:attribute>
                         </img>
                       </a>
-                   </td>
+                    </td>
+                   
                   </xsl:if>
 
                   <td nowrap="nowrap">

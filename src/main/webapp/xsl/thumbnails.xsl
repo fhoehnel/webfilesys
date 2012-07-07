@@ -18,45 +18,31 @@
 </link>
 
 <xsl:if test="not(/fileList/browserXslEnabled)">
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 </xsl:if>
 
-<script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/viewMode.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/graphicsLinkMenu.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/ajax.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="/webfilesys/javascript/popupPicture.js" type="text/javascript"></SCRIPT>
-<script language="JavaScript" src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/graphicsLinkMenu.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/popupPicture.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
+
+<xsl:if test="/fileList/geoTag">
+  <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
+</xsl:if>
 
 <script language="javascript">
-
-  <!--
-  function switchZoom()
-  {
-      <xsl:if test="/fileList/zoom">
-        window.location.href='/webfilesys/servlet?command=thumbnail&amp;zoom=no';
-      </xsl:if>
-      <xsl:if test="not(/fileList/zoom)">
-        window.location.href='/webfilesys/servlet?command=thumbnail&amp;zoom=yes';
-      </xsl:if>
-  }
-
-  function storeThumbs()
-  {
-      win1 = window.open('/_createThumbs?actPath=' + encodeURIComponent('<xsl:value-of select="fileList/menuPath" />') + '&amp;scope=dir','createTthums','status=no,toolbar=no,menu=no,width=200,height=200,resizable=no,scrollbars=no,left=400,top=200,screenX=400,screenY=200');  
-      win1.focus();
-  }
-  -->
 
   function publish(path)
   {
@@ -122,22 +108,6 @@
     }
   </xsl:if>
 
-  <xsl:if test="/fileList/geoTag">
-    
-    function showGoogleMap()
-    {
-        mapWin=window.open('/webfilesys/servlet?command=googleMap&amp;path=' + encodeURIComponent('<xsl:value-of select="/fileList/pathForScript" />'),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
-        mapWin.focus();
-    }
-
-    function showOSMap()
-    {
-        mapWin=window.open('/webfilesys/servlet?command=osMap&amp;path=' + encodeURIComponent('<xsl:value-of select="/fileList/pathForScript" />'),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
-        mapWin.focus();
-    }
-      
-  </xsl:if>
-  
   <xsl:if test="/fileList/resources/msg[@key='button.copyLinks']">
     function copyLinks()
     {
@@ -232,7 +202,6 @@
   </script>
 </xsl:if>
 
-
 </head>
 
 <body onclick="mouseClickHandler()">
@@ -270,10 +239,10 @@
   </table>
 
   <xsl:if test="description or geoTag">
-    <table border="0" width="100%" cellpadding="2" cellspacing="0">
+    <table width="100%" border="0" cellpadding="2" cellspacing="0">
       <tr>
       
-        <td>
+        <td style="width:90%">
           <xsl:if test="description">
             <font class="small">
               <xsl:value-of select="description" disable-output-escaping="yes" />
@@ -282,28 +251,22 @@
         </td>
 
         <xsl:if test="geoTag">
-          <td align="right" valign="top" width="1%">
-            <a href="javascript:showOSMap()">
-              <img src="/webfilesys/images/OSMaps.png" width="32" height="32" border="0">
-                <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.osMapLink']/@value" /></xsl:attribute>
-              </img>
-            </a>
+          <td valign="top" style="text-align:right">
+            <select id="geoLocSel" style="width:150px;display:none">
+              <xsl:attribute name="onchange">geoMapFolderSelected('<xsl:value-of select="/fileList/pathForScript" />')</xsl:attribute>
+              <option value="0"><xsl:value-of select="/fileList/resources/msg[@key='selectMapType']/@value" /></option>
+              <option value="1"><xsl:value-of select="/fileList/resources/msg[@key='mapTypeOSM']/@value" /></option>
+              <xsl:if test="googleMaps">
+                <option value="2"><xsl:value-of select="/fileList/resources/msg[@key='mapTypeGoogleMap']/@value" /></option>
+              </xsl:if>
+              <option value="3"><xsl:value-of select="/fileList/resources/msg[@key='mapTypeGoogleEarth']/@value" /></option>
+            </select>
           </td>
-        
-          <xsl:if test="googleMaps">
-            <td align="right" valign="top" width="1%">
-              <a href="javascript:showGoogleMap()">
-                <img src="/webfilesys/images/GoogleMaps.gif" width="32" height="32" border="0">
-                  <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.googleMapLink']/@value" /></xsl:attribute>
-                </img>
-              </a>
-            </td>
-          </xsl:if>
 
-          <td align="right" valign="top" width="1%">
-            <a href="/webfilesys/servlet?command=googleEarthFolderPlacemark">
-              <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0">
-                <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.googleEarthLink']/@value" /></xsl:attribute>
+          <td id="mapIcon" valign="top" style="text-align:right;width:1%">
+            <a href="javascript:showMapSelection()">
+              <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0" style="float:right">
+                <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.geoMapLink']/@value" /></xsl:attribute>
               </img>
             </a>
           </td>

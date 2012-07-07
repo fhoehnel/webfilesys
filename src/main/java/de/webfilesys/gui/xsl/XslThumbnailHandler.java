@@ -447,7 +447,12 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 		addMsgResource("button.upload", getResource("button.upload","Upload"));
 		
         addMsgResource("noFilesWithGeoData", getResource("noFilesWithGeoData", "This folder does not contain pictures with geographic coordinates!"));
-        addMsgResource("label.googleEarthLink", getResource("label.googleEarthLink", "Show geographic location in Google Earth"));
+        addMsgResource("label.geoMapLink", getResource("label.geoMapLink", "Show geographic location on map"));
+        addMsgResource("selectMapType", getResource("selectMapType", "- select map type -"));
+        addMsgResource("mapTypeOSM", getResource("mapTypeOSM", "Open Stree Maps"));
+        addMsgResource("mapTypeGoogleMap", getResource("mapTypeGoogleMap", "Google Maps"));
+        addMsgResource("mapTypeGoogleEarth", getResource("mapTypeGoogleEarth", "Google Earth"));
+
         addMsgResource("label.googleEarthAllFiles", getResource("label.googleEarthAllFiles", "Show geographic location of all pictures in Google Earth"));
         addMsgResource("label.OSMapAllFiles", getResource("label.OSMapAllFiles", "Show geographic location of all pictures in Open Street Map"));
 
@@ -1043,8 +1048,6 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 		if (geoTag != null)
 		{
 			XmlUtil.setChildText(fileListElement, "geoTag", "true", false);
-			addMsgResource("label.googleMapLink", getResource("label.googleMapLink", "Show geographic location in Google Maps"));
-			addMsgResource("label.osMapLink", getResource("label.osMapLink", "Show geographic location in Open Street Maps"));
 
 			String googleMapsAPIKey = null;
 			if (req.getScheme().equalsIgnoreCase("https"))

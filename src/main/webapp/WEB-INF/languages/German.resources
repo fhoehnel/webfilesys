@@ -678,9 +678,11 @@ subject.folderChange=Änderung Ordner-Inhalt
 
 # Google Maps, Google Earth
 button.googleMap=Lokation auf Landkarte
-label.googleMapLink=Geographische Lokation in Google Maps anzeigen
-label.osMapLink=Geografische Lokation in Open Street Maps anzeigen
-label.googleEarthLink=Geographische Lokation in Google Earth anzeigen
+label.geoMapLink=Geographische Lokation auf Karte anzeigen
+selectMapType=- Kartentyp wählen -
+mapTypeOSM=Open Street Maps
+mapTypeGoogleMap=Google Maps
+mapTypeGoogleEarth=Google Earth
 label.googleEarthAllFiles=Geographische Lage aller Bilder in Google Earth anzeigen
 label.OSMapAllFiles=Geographische Lage aller Bilder in Open Street Maps anzeigen
 label.geoTag=Geo-Tag Daten
