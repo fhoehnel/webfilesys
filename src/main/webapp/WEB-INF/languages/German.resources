@@ -413,6 +413,7 @@ label.pngcreated=PNG-Datei erzeugt
 label.gifcreated=GIF-Datei erzeugt
 label.scaledFolder=Skalierte/konvertierte Bilder werden gespeichert im Ordner
 button.gotoScaled=Skalierte/konvertierte Bilder anzeigen
+error.scaleSize=Original-Bild ist kleiner als die Ziel-Größe
 label.addCopyRight=Copyright-Text hinzufügen
 label.copyRightText=Copyright Text
 label.copyRightPos=Text-Position
@@ -443,6 +444,8 @@ alt.pause=Stoppen (Pause)
 alt.continue=Diashow fortsetzen
 alt.next=nächstes Bild
 alt.back=vorheriges Bild
+startSlideshowHere=Diashow hier starten
+label.startPic=Startbild
 
 # co-browsing labels
 titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)
@@ -516,10 +519,12 @@ label.commentAuthor=Dein Name
 
 # send file as e-mail
 label.sendfilehead=Datei als e-mail versenden
-label.filetosend=Zu versendende Datei
+label.filetosend=zu versendende Datei
+label.sendEmailSync=auf Sende-Bestätigung warten
 button.sendfile=Senden
 label.confirmsend=wird als e-mail versandt
 alert.nosubject=Bitte Betreff eingegeben!
+error.sendEmail=Fehler beim Senden der e-mail!
 
 # file system statistics window
 label.filesyshead=Filesystem-Statistik

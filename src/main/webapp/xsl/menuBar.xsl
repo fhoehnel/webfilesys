@@ -258,7 +258,7 @@
             </th>
 
             <th>
-              <a href="javascript:javascript:slideshow()">
+              <a href="javascript:slideshow()">
                 <img src="/webfilesys/images/menubar/slideshow.gif" border="0" width="32" height="32">
                   <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.slideshow']/@value" /></xsl:attribute>
                 </img>

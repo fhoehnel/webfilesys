@@ -280,6 +280,13 @@ public class DecorationManager extends Thread {
                         	{
                             	XmlUtil.setChildText(decorationElement, "icon", newDeco.getIcon());
                         	}
+                        	else
+                        	{
+                        		Element oldIcon = XmlUtil.getChildByTagName(decorationElement, "icon");
+                        		if (oldIcon != null) {
+                        			decorationElement.removeChild(oldIcon);
+                        		}
+                        	}
                         	if (newDeco.getTextColor() != null) 
                         	{
                             	XmlUtil.setChildText(decorationElement, "textColor", newDeco.getTextColor());

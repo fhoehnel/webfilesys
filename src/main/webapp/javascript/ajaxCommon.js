@@ -410,7 +410,9 @@ function showHourGlass()
 function hideHourGlass()
 {
     var waitDiv = document.getElementById("waitDiv");
-    
-    document.getElementsByTagName('body')[0].removeChild(waitDiv);
+    if (waitDiv)
+    {
+        document.getElementsByTagName('body')[0].removeChild(waitDiv);
+    }
 }
 

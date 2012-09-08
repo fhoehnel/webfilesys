@@ -298,6 +298,8 @@ public class MainFrameSetHandler extends UserRequestHandler
         
         output.println("var resourceDownloadFolder = '" + getResource("label.downloadFolder","download as zip") + "';");
         
+        output.println("var resourceStartSlideshow = '" + getResource("startSlideshowHere","start slideshow here") + "';");
+
         if (!readonly)
 		{
 			output.println("var resourceMenuMore = '" + getResource("label.menuMore","More ...") + "';");

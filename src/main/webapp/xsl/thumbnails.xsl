@@ -202,6 +202,12 @@
   </script>
 </xsl:if>
 
+<xsl:if test="/fileList/errorMsg">
+  <script language="javascript">
+    alert('<xsl:value-of select="/fileList/errorMsg" />');
+  </script>
+</xsl:if>
+
 </head>
 
 <body onclick="mouseClickHandler()">

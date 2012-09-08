@@ -32,7 +32,7 @@
   
     var first = true;
   
-    var imageIdx = 0;
+    var imageIdx = <xsl:value-of select="/slideShow/startIdx" />;
     
     var stopped = false;
     
@@ -330,7 +330,7 @@
 </head>
 
 <body style="margin:0px;border:0px;background-color:#c0c0c0;padding:0px;">
-  <xsl:attribute name="onload">javascript:loadImage();if (autoForward!='true') {showActionButtons();};</xsl:attribute>
+  <xsl:attribute name="onload">setTimeout('self.focus()', 500);loadImage();if (autoForward!='true') {showActionButtons();};</xsl:attribute>
 
   <xsl:apply-templates />
 

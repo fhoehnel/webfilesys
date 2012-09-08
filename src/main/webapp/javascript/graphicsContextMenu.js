@@ -150,6 +150,9 @@ function jsContextMenu(fileName, imgType, domId)
                  + menuEntry("javascript:publishFile('" + scriptPreparedPath + "')",parent.resourcePublish,null);
         
     }
+
+    menuText = menuText 
+             + menuEntry("javascript:startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')",parent.resourceStartSlideshow,null);
         
     menuText = menuText + '</table>'; 
 
@@ -294,7 +297,7 @@ function jsComments(path)
 
 function jsSendFile(fileName)
 {
-    showPrompt('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 210);
+    showPrompt('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 250);
     
     document.emailForm.receiver.focus();
     
@@ -371,4 +374,7 @@ function rotateFlipMenu(shortPath, path, domId, imgType)
     menuDiv.style.visibility = 'visible';
 }
 
-
+function startSlideshowHere(startPath, startFileName) 
+{
+    window.location.href = '/webfilesys/servlet?command=slideShowParms&cmd=getParms&startPath=' + encodeURIComponent(startPath) + '&startFile=' + encodeURIComponent(startFileName) + '&screenWidth=' + screen.width + '&amp;screenHeight=' + screen.height;
+}

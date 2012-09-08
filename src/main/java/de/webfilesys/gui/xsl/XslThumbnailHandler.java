@@ -78,7 +78,7 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 		}
 
 		session.setAttribute("cwd", actPath);
-
+		
         boolean maskChanged = false;
 
 		String mask = getParameter("mask");
@@ -93,10 +93,9 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 			}
         }
 		
-		if ((mask!=null) && (mask.length()>0))
+		if ((mask != null) && (mask.length()>0))
 		{
 			session.setAttribute("mask", mask);
-
 		}
 		else
 		{
@@ -456,6 +455,13 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
         addMsgResource("label.googleEarthAllFiles", getResource("label.googleEarthAllFiles", "Show geographic location of all pictures in Google Earth"));
         addMsgResource("label.OSMapAllFiles", getResource("label.OSMapAllFiles", "Show geographic location of all pictures in Open Street Map"));
 
+		String errorMsg = getParameter("errorMsg");
+		
+		if (errorMsg != null)
+		{
+		    XmlUtil.setChildText(fileListElement, "errorMsg", errorMsg, false);
+		}
+        
 		ClipBoard clipBoard = (ClipBoard) session.getAttribute("clipBoard");
 		
 		if ((clipBoard != null) && (!clipBoard.isEmpty()))

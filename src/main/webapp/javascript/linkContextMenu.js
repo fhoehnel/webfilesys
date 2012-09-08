@@ -293,7 +293,7 @@ function origDir(path)
 
 function emailLink(filePath)
 {
-    showPrompt('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 210);
+    showPrompt('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 250);
     
     document.emailForm.receiver.focus();
     

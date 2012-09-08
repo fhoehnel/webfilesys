@@ -110,7 +110,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         }
         catch (NumberFormatException nfe)
         {
-            System.out.println(nfe);
+			Logger.getLogger(getClass()).error("parameter new size invalid", nfe);
             newSize = 200;
         }
 
@@ -162,7 +162,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             }
             catch (NumberFormatException nfex)
             {
-                System.out.println(nfex);
+    			Logger.getLogger(getClass()).error("parameter copyRightColor invalid", nfex);
             }
         }
 
@@ -233,7 +233,6 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             output.println(shortPath);
             output.println("</td></tr>");
         }
-
         
         output.println("<tr><td colspan=\"2\"class=\"formParm1\">");
         output.println(getResource("label.currentcopy", "current file") + ":");
@@ -354,7 +353,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                         .println("<input type=\"button\" value=\""
                                 + getResource("button.gotoScaled",
                                         "View Scaled Pictures")
-                                + "\" onclick=\"gotoScaledPictures()\" style=\"padding-left:0px;padding-right:0px;\">");
+                                + "\" onclick=\"gotoScaledPictures()\">");
             }
         }
 
@@ -381,13 +380,14 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         {
             Logger.getLogger(getClass()).error(ioex3);
 
-            this.javascriptAlert("cannot read image");
+            javascriptAlert("cannot read image file");
 
             return false;
         }
         
-        if ((scaledImg.getRealHeight() <= newSize) || (scaledImg.getRealWidth() <= newSize))
+        if ((scaledImg.getRealHeight() < newSize) && (scaledImg.getRealWidth() < newSize))
         {
+        	javascriptAlert(fileName + ": " + getResource("error.scaleSize", "size of original image is less than target size"));
             return false;
         }
 
@@ -509,7 +509,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                 }
                 catch (InterruptedException iex)
                 {
-                    System.out.println(iex);
+        			Logger.getLogger(getClass()).error(iex);
                 }
             }
 

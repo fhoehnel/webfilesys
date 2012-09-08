@@ -60,14 +60,22 @@
     </tr>
 
     <tr>
+      <td colspan="2" class="formParm1">
+        <input type="checkbox" name="sendSynchronous" class="cb2" checked="checked" />
+        &#160;
+        <xsl:value-of select="/emailFile/resources/msg[@key='label.sendEmailSync']/@value" />
+      </td>
+    </tr>
+
+    <tr>
       <td colspan="2">
-        <a class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:if (validateEmailList(document.emailForm.receiver.value)) {document.emailForm.submit();} else {alert('<xsl:value-of select="/emailFile/resources/msg[@key='alert.emailsyntax']/@value" />');}</xsl:attribute>
+        <a id="sendButton" class="button" onclick="this.blur();"> 
+          <xsl:attribute name="href">javascript:if (validateEmailList(document.emailForm.receiver.value)) {setTimeout("showHourGlass()", 100); document.getElementById("sendButton").style.visibility="hidden"; document.emailForm.submit();} else {alert('<xsl:value-of select="/emailFile/resources/msg[@key='alert.emailsyntax']/@value" />');}</xsl:attribute>
           <span><xsl:value-of select="/emailFile/resources/msg[@key='button.sendfile']/@value" /></span>
         </a>              
 
         <a class="button" onclick="this.blur();" style="float:right"> 
-          <xsl:attribute name="href">javascript:hidePrompt()</xsl:attribute>
+          <xsl:attribute name="href">javascript:hidePrompt();hideHourGlass();</xsl:attribute>
           <span><xsl:value-of select="/emailFile/resources/msg[@key='button.cancel']/@value" /></span>
         </a>              
       </td>

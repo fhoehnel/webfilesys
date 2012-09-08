@@ -237,6 +237,7 @@ public class ResizeParmsRequestHandler extends UserRequestHandler
 		output.println("<option value=\"800\">800");
 		output.println("<option value=\"1024\">1024");
 		output.println("<option value=\"1280\">1280");
+		output.println("<option value=\"1600\">1600");
 		output.println("</select>");
 		output.println("</td></tr>");
 

@@ -65,39 +65,30 @@
         if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '5')
         {
             comments('<xsl:value-of select="/imageData/pathForScript" />');
-            return;
         }
-        
-        if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '1')
+        else if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '1')
         {
             deleteSelf();
-            return;
         }
-
-        if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '3')
+        else if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '3')
         {
             exifData();
-            return;
         }
-
-        if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '2')
+        else if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '2')
         {
             scale();
-            return;
         }
-
-        if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '4')
+        else if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '4')
         {
             printPage();
-            return;
         }
-
-        if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '0')
+        else if (document.form1.imgAction[document.form1.imgAction.selectedIndex].value == '0')
         {
             detailWin = window.open('<xsl:value-of select="/imageData/imageSource" />', 'detailWin')
             detailWin.focus();
-            return;
         }
+        
+        document.form1.imgAction.selectedIndex = 0;
     }
     
   </script>

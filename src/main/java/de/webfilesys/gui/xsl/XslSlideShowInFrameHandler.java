@@ -85,9 +85,6 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
         addMsgResource("alt.next", getResource("alt.next","next picture"));
 		
         // String encodedPath = UTF8URLEncoder.encode(actPath);
-        String indexString = getParameter("imageIdx");
-        String delayString = getParameter("delay");
-        String recurseString = getParameter("recurse");
         
         String windowWidth = getParameter("windowWidth");
         String windowHeight = getParameter("windowHeight");
@@ -150,34 +147,32 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
             screenHeight = heightScreen.intValue();
         }
 
-        String autoForwardParm = getParameter("autoForward");
-        
-        boolean autoForward = ((autoForwardParm != null) && autoForwardParm.equalsIgnoreCase("true"));
-
         int delay = WebFileSys.getInstance().getSlideShowDelay();
         
-        int imageIdx = 0;
+        int imageIdx = (-1);
         try
         {
-            if (delayString != null)
+            String delayParam = getParameter("delay");
+            if (delayParam != null)
             {
-                delay = Integer.parseInt(delayString);
+                delay = Integer.parseInt(delayParam);
             }
             
-            if (indexString != null)
+            String indexParam = getParameter("imageIdx");
+            if (!CommonUtils.isEmpty(indexParam))
             {
-                imageIdx=Integer.parseInt(indexString);
+                imageIdx = Integer.parseInt(indexParam);
             }
         }
         catch (NumberFormatException nfe)
         {
         }
 
-        boolean recurse = (recurseString != null) && recurseString.equalsIgnoreCase("true");
+        boolean autoForward = (!CommonUtils.isEmpty(getParameter("autoForward")));
 
-        String crossfadeParm = req.getParameter("crossfade");
-        
-        boolean crossfade = (crossfadeParm != null) && crossfadeParm.equalsIgnoreCase("true");
+        boolean recurse = (!CommonUtils.isEmpty(getParameter("recurse")));
+
+        boolean crossfade = (!CommonUtils.isEmpty(req.getParameter("crossfade")));
 
         String role = userMgr.getRole(uid);
         
@@ -188,11 +183,19 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
         
         ArrayList imageFiles = null;
         
-        if (imageIdx <= 0)
+        if (imageIdx < 0)
         {
             session.removeAttribute(SLIDESHOW_BUFFER);
             getImageTree(actPath, recurse);
-            imageIdx=0;
+
+            String startFilePath = getParameter("startFilePath");
+			if (startFilePath == null) {
+				imageIdx = 0;
+			} 
+			else 
+			{
+				imageIdx = getStartFileIndex(startFilePath);
+			}
         }
         else
         {
@@ -384,6 +387,25 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
                 }
             }
         }
+    }
+    
+    private int getStartFileIndex(String startFilePath) 
+    {
+		ArrayList imageTree = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER);
+		if (imageTree == null)
+		{
+			return 0;
+		}
+
+		for (int i = 0; i < imageTree.size(); i++) 
+		{
+			String fileName = (String) imageTree.get(i);
+			if (fileName.equals(startFilePath))
+			{
+				return i;
+			}
+		}
+		return 0;
     }
 	
 }

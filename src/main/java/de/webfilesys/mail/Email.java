@@ -1,6 +1,7 @@
 package de.webfilesys.mail;
 
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -85,6 +86,10 @@ public class Email extends Thread
         this.start();
     }
 
+    public boolean sendSynchron() {
+    	return sendInternal();
+    }
+    
     private void debug(String message, boolean response)
     {
         if (WebFileSys.getInstance().isDebugMail())
@@ -102,6 +107,13 @@ public class Email extends Thread
 
     public synchronized void run()
     {
+    	sendInternal();
+    }
+    
+    public boolean sendInternal()
+    {
+    	boolean success = false;
+    	
         for (int i = 0; i < receiverList.size(); i++)
         {
              String receiver=(String) receiverList.elementAt(i);
@@ -246,6 +258,8 @@ public class Email extends Thread
                  getSMTPResponse(in,"221");
 
                  Logger.getLogger(getClass()).info("mail to " + receiver + " sent");
+                 
+                 success = true;
              }
              catch (Exception e)
              {
@@ -266,6 +280,8 @@ public class Email extends Thread
                  }
              }
         }
+        
+        return success;
     }
     
     public String replaceNewLine(String source)
@@ -339,19 +355,21 @@ public class Email extends Thread
 
     public void printEncodedAttachment(OutputStream out)
     {
-        FileInputStream in = null;
+    	FileInputStream fin = null;
+    	BufferedInputStream bufferedIn = null;
 
         try 
     	{
             Base64EncoderCRLF encoder = new Base64EncoderCRLF();
-            
-            in = new FileInputStream(attachment);
 
-            encoder.encode(in,out);
+            BufferedOutputStream bufferedOut = new BufferedOutputStream(out);
+            
+            fin = new FileInputStream(attachment);
+            bufferedIn = new BufferedInputStream(fin);
+
+            encoder.encode(bufferedIn, bufferedOut);
 
             out.flush();
-            
-            in.close();
     	}
     	catch (IOException ioex)
     	{
@@ -359,15 +377,25 @@ public class Email extends Thread
     	}
     	finally
     	{
-    		if (in != null) 
+    		if (bufferedIn != null) 
     		{
     			try 
     			{
-        			in.close();
+    				bufferedIn.close();
     			}
     			catch (IOException ex)
     			{
     	        	Logger.getLogger(getClass()).error("failed to close attachment file", ex);
+    			}
+    		}
+    		if (fin != null) 
+    		{
+    			try 
+    			{
+        			fin.close();
+    			}
+    			catch (IOException ex)
+    			{
     			}
     		}
     	}

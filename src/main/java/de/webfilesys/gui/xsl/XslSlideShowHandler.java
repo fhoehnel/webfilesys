@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -55,6 +56,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		String recurseParm = getParameter("recurse");
 		String delayString = getParameter("delay");
 		String autoForwardParm = getParameter("autoForward");
+		String startFilePath = getParameter("startFilePath");
 
 		boolean autoForward=((autoForwardParm!=null) && autoForwardParm.equalsIgnoreCase("true"));
 
@@ -78,7 +80,13 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		{
 			session.removeAttribute(SLIDESHOW_BUFFER);
 			getImageTree(actPath,recurse);
-			imageIdx=0;
+			if (startFilePath == null) {
+				imageIdx=0;
+			} 
+			else 
+			{
+				imageIdx = getStartFileIndex(startFilePath);
+			}
 		}
 		else
 		{
@@ -110,6 +118,8 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(slideShowElement, "delay", Integer.toString(delay * 1000), false);
 
+		XmlUtil.setChildText(slideShowElement, "startIdx", Integer.toString(imageIdx), false);
+
 		XmlUtil.setChildText(slideShowElement, "autoForward", "" + autoForward, false);
 		
 		XmlUtil.setChildText(slideShowElement, "numberOfImages", Integer.toString(imageFiles.size()), false);
@@ -131,6 +141,25 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		
 		this.processResponse("slideShow.xsl", false);
 	}
+	
+    private int getStartFileIndex(String startFilePath) 
+    {
+		Vector imageTree = (Vector) session.getAttribute(SLIDESHOW_BUFFER);
+		if (imageTree == null)
+		{
+			return 0;
+		}
+
+		for (int i = 0; i < imageTree.size(); i++) 
+		{
+			String fileName = (String) imageTree.elementAt(i);
+			if (fileName.equals(startFilePath))
+			{
+				return i;
+			}
+		}
+		return 0;
+    }
 	
 	public void getImageTree(String actPath,boolean recurse)
 	{

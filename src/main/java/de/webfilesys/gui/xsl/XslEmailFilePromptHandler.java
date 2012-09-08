@@ -67,6 +67,7 @@ public class XslEmailFilePromptHandler extends XslRequestHandlerBase
 		addMsgResource("label.filetosend", getResource("label.filetosend", "File to send"));
 		addMsgResource("label.receiver", getResource("label.receiver", "Receiver(s) (comma-separated list of e-mail addresses)"));
         addMsgResource("label.subject", getResource("label.subject", "Subject"));
+        addMsgResource("label.sendEmailSync", getResource("label.sendEmailSync", "wait for send confirmation"));
         addMsgResource("button.sendfile", getResource("button.sendfile", "Send"));
         addMsgResource("button.cancel", getResource("button.cancel", "Cancel"));
         addMsgResource("alert.emailsyntax", getResource("alert.emailsyntax","invalid e-mail address"));

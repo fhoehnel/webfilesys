@@ -107,6 +107,13 @@ public class CommonUtils
 		return(new String(buffer));
 	}
 
+	public static boolean isEmpty(String val) {
+		if (val == null) {
+			return true;
+		}
+		return (val.trim().length() == 0);
+	}
+	
 	public static boolean containsString(String elementName,String searched)
 	{
 		if (elementName==null)

@@ -168,7 +168,7 @@ function untar(path)
 
 function sendFile(fileName)
 {
-    showPrompt('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 220);
+    showPrompt('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 250);
     
     document.emailForm.receiver.focus();
     

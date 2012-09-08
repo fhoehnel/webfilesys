@@ -33,6 +33,8 @@ public class XslSlideshowParmsHandler extends XslRequestHandlerBase
 	{
 		String currentPath = getCwd();
 		
+		String startFile = getParameter("startFile");
+		String startPath = getParameter("startPath");
         int screenWidth = getIntParam("screenWidth", 1024);
         int screenHeight = getIntParam("screenHeight", 768);
         
@@ -54,6 +56,14 @@ public class XslSlideshowParmsHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(slideShowParmsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(slideShowParmsElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(slideShowParmsElement, "shortPath", shortPath, false);
+
+		if ((startFile != null) && (startFile.trim().length() > 0) && 
+			(startPath != null) && (startPath.trim().length() > 0)) {
+			XmlUtil.setChildText(slideShowParmsElement, "startFile", startFile, false);
+			XmlUtil.setChildText(slideShowParmsElement, "startPath", startPath, false);
+			XmlUtil.setChildText(slideShowParmsElement, "encodedStartPath", insertDoubleBackslash(startPath), false);
+			addMsgResource("label.startPic", getResource("label.startPic","start picture"));
+		}
 		
 		addMsgResource("label.slideparmhead", getResource("label.slideparmhead","Slideshow Parameters"));
 		addMsgResource("label.directory", getResource("label.directory", "folder"));

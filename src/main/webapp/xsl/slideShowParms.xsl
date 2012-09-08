@@ -18,12 +18,20 @@
 
   <title><xsl:value-of select="resources/msg[@key='label.slideparmhead']/@value" /></title>
 
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  
   <script type="text/javascript">
     function startShow()
     {
         if (document.form1.extraWin.checked)
         {
-            var showWin=window.open('/webfilesys/servlet?command=slideShow&amp;imageIdx=0&amp;delay=' + document.form1.delay.options[document.form1.delay.selectedIndex].value + '&amp;recurse=' + document.form1.recurse.checked + '&amp;autoForward=' + document.form1.autoForward.checked,'thumbwin','status=no,toolbar=no,menu=no,width=' + (screen.availWidth-10) + ',height=' + (screen.availHeight-50) + ',resizable=yes,scrollbars=yes,left=0,top=0,screenX=0,screenY=0');
+            var slideshowURL = '/webfilesys/servlet?command=slideShow&amp;imageIdx=0&amp;delay=' + document.form1.delay.options[document.form1.delay.selectedIndex].value + '&amp;recurse=' + document.form1.recurse.checked + '&amp;autoForward=' + document.form1.autoForward.checked;
+
+            <xsl:if test="startPath">
+              slideshowURL = slideshowURL + '&amp;startFilePath=' + encodeURIComponent('<xsl:value-of select="encodedStartPath"/>');
+            </xsl:if>
+     
+            var showWin = window.open(slideshowURL,'thumbwin','status=no,toolbar=no,menu=no,width=' + (screen.availWidth-10) + ',height=' + (screen.availHeight-50) + ',resizable=yes,scrollbars=yes,left=0,top=0,screenX=0,screenY=0');
             
             showWin.focus();
 
@@ -34,7 +42,7 @@
             var windowWidth;
             var windowHeigth;
 
-            if (document.all)
+            if (browserMSIE)
             {  
                 windowWidth = document.body.clientWidth;
                 windowHeight = document.body.clientHeight;
@@ -45,17 +53,10 @@
                 windowHeight = self.innerHeight;
             }
 
-            var crossfadeParm = '';
+            document.form1.windowWidth.value = windowWidth;
+            document.form1.windowHeight.value = windowHeight;
             
-            if (document.all)
-            {
-                if (document.form1.crossfade.checked)
-                {
-                    crossfadeParm = '&amp;crossfade=true';
-                }
-            }
-            
-            window.location.href = '/webfilesys/servlet?command=slideShowInFrame&amp;imageIdx=0&amp;delay=' + document.form1.delay.options[document.form1.delay.selectedIndex].value + '&amp;recurse=' + document.form1.recurse.checked + '&amp;autoForward=' + document.form1.autoForward.checked + crossfadeParm + '&amp;windowWidth=' + windowWidth + '&amp;windowHeight=' + windowHeight;
+            document.form1.submit();            
         }
     }
     
@@ -89,9 +90,18 @@
     <xsl:value-of select="resources/msg[@key='label.slideparmhead']/@value" />
   </div>
 
-  <form accept-charset="utf-8" name="form1" method="get" action="/webfilesys/servlet">
+  <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet">
   
-    <input type="hidden" name="command" value="slideShow" />
+    <input type="hidden" name="command" value="slideShowInFrame" />
+    <input type="hidden" name="imageIdx" value="" />
+    <input type="hidden" name="windowWidth" value="" />
+    <input type="hidden" name="windowHeight" value="" />
+    
+    <xsl:if test="startPath">
+      <input type="hidden" name="startFilePath">
+        <xsl:attribute name="value"><xsl:value-of select="startPath"/></xsl:attribute>
+      </input>
+    </xsl:if>
 
     <table class="dataForm" width="100%">
       
@@ -107,6 +117,19 @@
         </td>
       </tr>
      
+      <xsl:if test="startFile">
+        <tr>
+          <td colspan="2" class="formParm1">
+            <xsl:value-of select="resources/msg[@key='label.startPic']/@value" />:
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="formParm2">
+            <xsl:value-of select="startFile"/>
+          </td>
+        </tr>
+      </xsl:if>
+
       <tr>
         <td colspan="2">&#160;</td>
       </tr>

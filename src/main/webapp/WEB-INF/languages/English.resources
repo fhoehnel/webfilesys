@@ -411,6 +411,7 @@ label.pngcreated=PNG file created
 label.gifcreated=GIF file created
 label.scaledFolder=Scaled/converted Images are stored in folder
 button.gotoScaled=View Scaled/Converted Pictures
+error.scaleSize=size of original image is less than target size
 label.addCopyRight=add copyright text
 label.copyRightText=copyright text
 label.copyRightPos=copyright text position
@@ -441,6 +442,8 @@ alt.pause=pause slideshow
 alt.continue=continue slideshow
 alt.next=next picture
 alt.back=previous picture
+startSlideshowHere=start slideshow here
+label.startPic=start picture
 
 # co-browsing labels
 titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)
@@ -514,10 +517,12 @@ label.commentAuthor=your name
 
 # send file as e-mail
 label.sendfilehead=Send file as e-mail
-label.filetosend=File to send
+label.filetosend=file to send
+label.sendEmailSync=wait for send confirmation
 button.sendfile=Send
 label.confirmsend=will be sent as e-mail
 alert.nosubject=Subject for e-mail missing
+error.sendEmail=An error occured while sending the email!
 
 # file system statistics window
 label.filesyshead=File System Statistics

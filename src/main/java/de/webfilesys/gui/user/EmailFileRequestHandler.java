@@ -69,6 +69,8 @@ public class EmailFileRequestHandler extends UserRequestHandler
             return;
         }
 
+        String sendSynchronous = getParameter("sendSynchronous");
+        
         Vector mailReceivers = new Vector();
 
         String emailList = getParameter("receiver");
@@ -131,7 +133,17 @@ public class EmailFileRequestHandler extends UserRequestHandler
             message.setMailSenderAddress(mailSenderAddress);
         }
 
-        message.send();
+        if (sendSynchronous != null) 
+        {
+        	if (!message.sendSynchron()) 
+        	{
+        		setParameter("errorMsg", getResource("error.sendEmail", "failed to send email"));
+        	}
+        }
+        else
+        {
+            message.send();
+        }
         
         int viewMode = Constants.VIEW_MODE_LIST;
         
