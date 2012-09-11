@@ -522,9 +522,10 @@ label.sendfilehead=Datei als e-mail versenden
 label.filetosend=zu versendende Datei
 label.sendEmailSync=auf Sende-Bestätigung warten
 button.sendfile=Senden
-label.confirmsend=wird als e-mail versandt
+label.confirmsend=wird als e-mail versendet
 alert.nosubject=Bitte Betreff eingegeben!
 error.sendEmail=Fehler beim Senden der e-mail!
+success.sendEmail=Datei wurde als e-mail versendet.
 
 # file system statistics window
 label.filesyshead=Filesystem-Statistik

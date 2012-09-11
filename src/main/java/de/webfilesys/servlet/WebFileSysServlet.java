@@ -63,6 +63,7 @@ import de.webfilesys.gui.ajax.AjaxCheckGrepAllowedHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteDirPromptHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteFilePromptHandler;
 import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
+import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
@@ -127,7 +128,6 @@ import de.webfilesys.gui.user.DiskQuotaRequestHandler;
 import de.webfilesys.gui.user.DownloadFolderZipHandler;
 import de.webfilesys.gui.user.EditMP3RequestHandler;
 import de.webfilesys.gui.user.EditorSaveRequestHandler;
-import de.webfilesys.gui.user.EmailFileRequestHandler;
 import de.webfilesys.gui.user.EncryptFileRequestHandler;
 import de.webfilesys.gui.user.ExecProgramRequestHandler;
 import de.webfilesys.gui.user.ExifThumbRequestHandler;
@@ -1113,7 +1113,7 @@ public class WebFileSysServlet extends HttpServlet
 
         if (command.equals("emailFile"))
         {
-            (new EmailFileRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+            (new AjaxSendEmailHandler(req, resp, session, output, userid)).handleRequest(); 
             
             return(true);
         }

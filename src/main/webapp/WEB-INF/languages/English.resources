@@ -523,6 +523,7 @@ button.sendfile=Send
 label.confirmsend=will be sent as e-mail
 alert.nosubject=Subject for e-mail missing
 error.sendEmail=An error occured while sending the email!
+success.sendEmail=File has been sent as e-mail.
 
 # file system statistics window
 label.filesyshead=File System Statistics

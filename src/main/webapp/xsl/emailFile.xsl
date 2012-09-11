@@ -70,7 +70,7 @@
     <tr>
       <td colspan="2">
         <a id="sendButton" class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:if (validateEmailList(document.emailForm.receiver.value)) {setTimeout("showHourGlass()", 100); document.getElementById("sendButton").style.visibility="hidden"; document.emailForm.submit();} else {alert('<xsl:value-of select="/emailFile/resources/msg[@key='alert.emailsyntax']/@value" />');}</xsl:attribute>
+          <xsl:attribute name="href">javascript:if (validateEmailList(document.emailForm.receiver.value)) {sendFileViaEmail(); hidePrompt(); showHourGlass();} else {alert('<xsl:value-of select="/emailFile/resources/msg[@key='alert.emailsyntax']/@value" />');}</xsl:attribute>
           <span><xsl:value-of select="/emailFile/resources/msg[@key='button.sendfile']/@value" /></span>
         </a>              
 
