@@ -203,6 +203,21 @@
   font.diffDel {font-family:monospace;font-size:10pt;text-decoration:line-through;background-color:#d0d0d0;}
   font.diffIns {font-family:monospace;font-size:10pt;color:#008000;font-weight:bold;background-color:#d0d0d0;}
 
+  ul.errorMsg 
+  {  
+      list-style-type: none;
+      padding: 0;
+  }
+  
+  li.errorMsg
+  {
+      font-family:Arial,Helvetica;
+      font-size: 12px;
+      font-weight: bold;
+      color: red;
+      margin-left: 0;
+  }
+
   th.syncListHead 
   {
       background-color:lavender;
@@ -429,6 +444,11 @@
       font-family:Arial,Helvetica;
       vertical-align:top;
       padding:2px;
+  }
+  
+  td.fileListSelectedRow 
+  {
+      background-color: #d0d070!important;
   }
 
   td.fileListSelector

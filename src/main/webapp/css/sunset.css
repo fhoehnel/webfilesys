@@ -430,6 +430,11 @@
       padding:2px;
   }
 
+  td.fileListSelectedRow 
+  {
+      background-color: #d0d070!important;
+  }
+
   td.fileListSelector
   {
       width:20px;

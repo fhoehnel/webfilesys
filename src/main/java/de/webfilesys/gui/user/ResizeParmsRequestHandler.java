@@ -66,8 +66,8 @@ public class ResizeParmsRequestHandler extends UserRequestHandler
 		// resize in popup window (called from showImage) ?
 		String popup = getParameter("popup");
 
-		output.println("<HTML>");
-		output.println("<HEAD>");
+		output.println("<html>");
+		output.println("<head>");
 
 		output.println("<title>WebFileSys - " + getResource("label.resizetitle","resize pictures") + "</title>");
 
@@ -75,54 +75,16 @@ public class ResizeParmsRequestHandler extends UserRequestHandler
 
 		output.println("<script src=\"/webfilesys/javascript/areaSelector.js\" type=\"text/javascript\"></script>");
 		
-		output.println("<script type=\"text/javascript\">");
-		  
-		output.println("function switchCopyRightFields()");
-		output.println("{");
-		output.println("if (document.form1.stampText.checked == true)");
-		output.println("{");
-		output.println("document.form1.copyRightText.disabled = false;");
-		output.println("document.form1.copyRightPos.disabled = false;");
-		output.println("document.form1.copyRightColor.disabled = false;");
-		output.println("document.form1.copyRightFontSize.disabled = false;");
-		output.println("}");
-		output.println("else");
-		output.println("{");
-		output.println("document.form1.copyRightText.disabled = true;");
-		output.println("document.form1.copyRightPos.disabled = true;");
-		output.println("document.form1.copyRightColor.disabled = true;");
-		output.println("document.form1.copyRightFontSize.disabled = true;");
-		output.println("}");
-		output.println("}");
+        output.println("<script src=\"/webfilesys/javascript/resizeImage.js\" type=\"text/javascript\"></script>");
 		
         if ((imgFileName != null) && (popup == null)) 
         {
+    		output.println("<script type=\"text/javascript\">");
+    		
             output.println("var cropInitialized = false;");
 
-            output.println("function prepareCropAreaParms()");
-            output.println("{");
-            output.println("var picture = document.getElementById('editPicture');");
-            output.println("var picturePos = findPos(picture);");
-            
-            output.println("var pictureXpos = picturePos[0];");
-            output.println("var pictureYpos = picturePos[1];");
-            
-            output.println("var selectorLeft = parseInt(areaSelector.style.left);");
-            output.println("var selectorTop = parseInt(areaSelector.style.top);");
-
-            output.println("var pictureLeft = selectorLeft - pictureXpos;");  
-            output.println("var pictureTop = selectorTop - pictureYpos + 1;");
-            output.println("var pictureWidth = parseInt(areaSelector.style.width) + 2;");   
-            output.println("var pictureHeight = parseInt(areaSelector.style.height) + 3;");
-            
-            output.println("document.form1.cropAreaLeft.value = pictureLeft;");
-            output.println("document.form1.cropAreaTop.value = pictureTop;");
-            output.println("document.form1.cropAreaWidth.value = pictureWidth;");
-            output.println("document.form1.cropAreaHeight.value = pictureHeight;");
-            output.println("}");
+            output.println("</script>");
         }
-        
-		output.println("</script>");
 		
 		output.println("</head>");
 		
@@ -226,26 +188,36 @@ public class ResizeParmsRequestHandler extends UserRequestHandler
 
 		output.println("<tr>");
 		output.println("<td class=\"formParm1\">" + getResource("label.newsize","new image size") + ":</td>");
-		output.println("<td><select name=\"newSize\" size=1>");
-		output.println("<option value=\"0\" selected>" + getResource("label.keepOrigSize","no resize"));
-		output.println("<option value=\"100\">100");
-		output.println("<option value=\"200\">200");
-		output.println("<option value=\"320\">320");
-		output.println("<option value=\"400\">400");
-		output.println("<option value=\"500\">500");
-		output.println("<option value=\"640\">640");
-		output.println("<option value=\"800\">800");
-		output.println("<option value=\"1024\">1024");
-		output.println("<option value=\"1280\">1280");
-		output.println("<option value=\"1600\">1600");
+		output.println("<td class=\"formParm2\">");
+		output.println("<select name=\"newSize\" size=\"1\" style=\"width:140px;\" onchange=\"handleTargetSizeSelection(this)\">");
+		output.println("<option value=\"0\" selected>" + getResource("label.keepOrigSize","no resize") + "</option>");
+		output.println("<option value=\"100\">100</option>");
+		output.println("<option value=\"200\">200</option>");
+		output.println("<option value=\"320\">320</option>");
+		output.println("<option value=\"400\">400</option>");
+		output.println("<option value=\"500\">500</option>");
+		output.println("<option value=\"640\">640</option>");
+		output.println("<option value=\"800\">800</option>");
+		output.println("<option value=\"1024\">1024</option>");
+		output.println("<option value=\"1280\">1280</option>");
+		output.println("<option value=\"1600\">1600</option>");
+		output.println("<option value=\"-1\">" + getResource("resizeDifferentSize", "different size") + "</option>");
 		output.println("</select>");
 		output.println("</td></tr>");
 
+		output.println("<tr id=\"targetSizeRow\" style=\"display:none\">");
+		output.println("<td></td>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<input id=\"targetSize\" name=\"targetSize\" type=\"text\" style=\"width:140px;\"/>");
+		output.println("</td>");
+		output.println("</tr>");
+		
 		output.println("<tr><td colspan=2>&nbsp;</td></tr>");
 
 		output.println("<tr>");
 		output.println("<td class=\"formParm1\">" + getResource("label.newformat","new image format") + ":</td>");
-		output.println("<td><select name=\"format\" size=1>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<select name=\"format\" size=1>");
 		output.println("<option value=\"JPEG\">JPEG</option>");
 		output.println("<option value=\"PNG\">PNG</option>");
 		output.println("<option value=\"GIF\">GIF</option>");

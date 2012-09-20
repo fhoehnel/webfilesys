@@ -363,7 +363,7 @@
       
         <tr>
           <th class="fileList fileListSelector">
-            <input type="checkbox" class="cb4" name="cb-setAll" onClick="javascript:selectAll();" />
+            <input type="checkbox" class="cb4" name="cb-setAll" onClick="javascript:setAllFilesSelected();" />
           </th>
           <th class="fileList fileListIcon">
             <img border="0" width="16" height="16">
@@ -409,13 +409,13 @@
     
     <div id="fileListTable" class="fileListScrollDiv">
     
-    <table class="fileList" cellspacing="0" cellpadding="0">
+    <table id="tableFileList" class="fileList" cellspacing="0" cellpadding="0">
 
       <xsl:if test="file">
 
         <xsl:for-each select="file">
  
-          <tr>
+          <tr onmouseup="handleRowClick(event)">
             <td>
               <xsl:attribute name="class">fileList fileListSelector <xsl:if test="not(description)">sepBot</xsl:if></xsl:attribute>
               <input type="checkbox" class="cb2">

@@ -48,6 +48,9 @@ import de.webfilesys.util.UTF8URLEncoder;
  */
 public class ResizeImageRequestHandler extends UserRequestHandler
 {
+	private static final int MIN_TARGET_SIZE = 8;
+	private static final int MAX_TARGET_SIZE = 32000;
+	
     public ResizeImageRequestHandler(HttpServletRequest req,
             HttpServletResponse resp, HttpSession session, PrintWriter output,
             String uid)
@@ -102,16 +105,26 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         
         String newSizeString = getParameter("newSize");
 
+        if (newSizeString.equals("-1"))
+        {
+        	newSizeString = req.getParameter("targetSize");
+        }
+        
+        boolean invalidNewSize = false;
+        
         int newSize = 200;
 
         try
         {
             newSize = Integer.parseInt(newSizeString);
+            if ((newSize < MIN_TARGET_SIZE) || (newSize > MAX_TARGET_SIZE))
+            {
+                invalidNewSize = true;
+            }
         }
         catch (NumberFormatException nfe)
         {
-			Logger.getLogger(getClass()).error("parameter new size invalid", nfe);
-            newSize = 200;
+            invalidNewSize = true;
         }
 
         String copyRightText = getParameter("copyRightText");
@@ -186,11 +199,12 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                 + getResource("label.resizetitle", "resize images")
                 + "</title>");
 
-        output
-                .println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/"
-                        + userMgr.getCSS(uid) + ".css\">");
+        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
 
+        output.println("<script src=\"/webfilesys/javascript/errorHandling.js\" type=\"text/javascript\"></script>");
+        
         output.println("<script language=\"javascript\">");
+        
         output.println("function returnToPictures()");
         output.println("{");
         output
@@ -207,6 +221,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                         + UTF8URLEncoder.encode(scaledImageFolder)
                         + "&fastPath=true';");
         output.println("}");
+
         output.println("</script>");
 
         output.println("</head>");
@@ -215,116 +230,128 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         headLine(getResource("label.resizetitle", "resize images"));
 
         output.println("<br/>");
-
-        String shortPath = CommonUtils.shortName(
-                getHeadlinePath(scaledImageFolder), 50);
-
-        output.println("<form accept-charset=\"utf-8\" name=\"form1\">");
-
-        output.println("<table class=\"dataForm\" width=\"100%\" border=\"0\">");
-        if (newSize > 0)
-        {
-            output.println("<tr><td class=\"formParm1\">");
-            output.println(getResource("label.scaledFolder",
-                    "Scaled Images are stored in folder")
-                    + ":");
-            output.println("</td></tr>");
-            output.println("<tr><td class=\"formParm2\">");
-            output.println(shortPath);
-            output.println("</td></tr>");
-        }
         
-        output.println("<tr><td colspan=\"2\"class=\"formParm1\">");
-        output.println(getResource("label.currentcopy", "current file") + ":");
-        output.println("</td></tr>");
-
-        output.println("<tr><td colspan=\"2\" class=\"formParm2\">");
-        output.println("<span id=\"currentFile\"/>");
-
-        output.println("</td></tr></table>");
-        output.println("</form>");
-
-        output.flush();
-
-        if (newSize > 0)
-        {
-            File scaledDir = new File(pathWithSlash + newSize);
-
-            if (!scaledDir.exists())
-            {
-                if (!scaledDir.mkdir())
-                {
-                    output.println("cannot create dir for scaled images");
-                    output.println("</body></html>");
-                    output.flush();
-                    Logger.getLogger(getClass()).error("cannot create dir for scaled images: " + scaledDir);
-                    return;
-                }
-                else
-                {
-                	SubdirExistCache.getInstance().setExistsSubdir(scaledImageFolder, new Integer(0));
-                	SubdirExistCache.getInstance().setExistsSubdir(actPath.replace('/', File.separatorChar), new Integer(1));
-                }
-            }
-        }
-
-        int cropLeft = (-1);
-        int cropTop = (-1);
-        int cropWidth = (-1);
-        int cropHeight = (-1);
+        output.println("<ul id=\"errorMsgs\" class=\"errorMsg\" style=\"display:none\">");
+        output.println("</ul>");
 
         boolean success = false;
-
-        if (pictureFileName != null)
+        
+        if (invalidNewSize) 
         {
-            // single file
-
-            String imgFile = imgFileName
-                    .substring(imgFileName.lastIndexOf('/') + 1);
-
-            String crop = req.getParameter("crop");
-            
-            if (crop != null) {
-                try 
-                {
-                    cropLeft = Integer.parseInt(cropAreaLeft);
-                    cropTop = Integer.parseInt(cropAreaTop);
-                    cropWidth = Integer.parseInt(cropAreaWidth);
-                    cropHeight = Integer.parseInt(cropAreaHeight);
-                }
-                catch (NumberFormatException numEx) 
-                {
-                    Logger.getLogger(getClass()).error(numEx);
-                }
-            }
-            
-            success = createScaledImage(pathWithSlash, imgFile, outputFormat,
-                    newSize, copyRightText, copyRightPos, copyRightColor,
-                    copyRightFontSize, cropLeft, cropTop, cropWidth, cropHeight);
+            output.println("<script type=\"text/javascript\">");
+            output.println("addErrorMsg('" + getResource("error.scaleTargetSize", "the new image size value is invalid") + ": " + newSizeString + "')");
+            output.println("</script>");
         }
         else
         {
-            // multiple selected files
+            String shortPath = CommonUtils.shortName(
+                    getHeadlinePath(scaledImageFolder), 50);
 
-            Vector selectedFiles = (Vector) session
-                    .getAttribute("selectedFiles");
+            output.println("<form accept-charset=\"utf-8\" name=\"form1\">");
 
-            if (selectedFiles != null)
+            output.println("<table class=\"dataForm\" width=\"100%\" border=\"0\">");
+            if (newSize > 0)
             {
-                for (int i = 0; i < selectedFiles.size(); i++)
+                output.println("<tr><td class=\"formParm1\">");
+                output.println(getResource("label.scaledFolder",
+                        "Scaled Images are stored in folder")
+                        + ":");
+                output.println("</td></tr>");
+                output.println("<tr><td class=\"formParm2\">");
+                output.println(shortPath);
+                output.println("</td></tr>");
+            }
+            
+            output.println("<tr><td colspan=\"2\"class=\"formParm1\">");
+            output.println(getResource("label.currentcopy", "current file") + ":");
+            output.println("</td></tr>");
+
+            output.println("<tr><td colspan=\"2\" class=\"formParm2\">");
+            output.println("<span id=\"currentFile\"/>");
+
+            output.println("</td></tr></table>");
+            output.println("</form>");
+
+            output.flush();
+
+            if (newSize > 0)
+            {
+                File scaledDir = new File(pathWithSlash + newSize);
+
+                if (!scaledDir.exists())
                 {
-                    String actFileName = UTF8URLDecoder
-                            .decode((String) selectedFiles.elementAt(i));
-
-                    if (createScaledImage(pathWithSlash, actFileName,
-                            outputFormat, newSize, copyRightText, copyRightPos,
-                            copyRightColor, copyRightFontSize, 
-                            cropLeft, cropTop, cropWidth, cropHeight))
+                    if (!scaledDir.mkdir())
                     {
-                        success = true;
+                        output.println("cannot create dir for scaled images");
+                        output.println("</body></html>");
+                        output.flush();
+                        Logger.getLogger(getClass()).error("cannot create dir for scaled images: " + scaledDir);
+                        return;
                     }
+                    else
+                    {
+                    	SubdirExistCache.getInstance().setExistsSubdir(scaledImageFolder, new Integer(0));
+                    	SubdirExistCache.getInstance().setExistsSubdir(actPath.replace('/', File.separatorChar), new Integer(1));
+                    }
+                }
+            }
 
-                    output.flush();
+            int cropLeft = (-1);
+            int cropTop = (-1);
+            int cropWidth = (-1);
+            int cropHeight = (-1);
+
+            if (pictureFileName != null)
+            {
+                // single file
+
+                String imgFile = imgFileName
+                        .substring(imgFileName.lastIndexOf('/') + 1);
+
+                String crop = req.getParameter("crop");
+                
+                if (crop != null) {
+                    try 
+                    {
+                        cropLeft = Integer.parseInt(cropAreaLeft);
+                        cropTop = Integer.parseInt(cropAreaTop);
+                        cropWidth = Integer.parseInt(cropAreaWidth);
+                        cropHeight = Integer.parseInt(cropAreaHeight);
+                    }
+                    catch (NumberFormatException numEx) 
+                    {
+                        Logger.getLogger(getClass()).error(numEx);
+                    }
+                }
+                
+                success = createScaledImage(pathWithSlash, imgFile, outputFormat,
+                        newSize, copyRightText, copyRightPos, copyRightColor,
+                        copyRightFontSize, cropLeft, cropTop, cropWidth, cropHeight);
+            }
+            else
+            {
+                // multiple selected files
+
+                Vector selectedFiles = (Vector) session
+                        .getAttribute("selectedFiles");
+
+                if (selectedFiles != null)
+                {
+                    for (int i = 0; i < selectedFiles.size(); i++)
+                    {
+                        String actFileName = UTF8URLDecoder
+                                .decode((String) selectedFiles.elementAt(i));
+
+                        if (createScaledImage(pathWithSlash, actFileName,
+                                outputFormat, newSize, copyRightText, copyRightPos,
+                                copyRightColor, copyRightFontSize, 
+                                cropLeft, cropTop, cropWidth, cropHeight))
+                        {
+                            success = true;
+                        }
+
+                        output.flush();
+                    }
                 }
             }
         }
@@ -387,8 +414,10 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         
         if ((scaledImg.getRealHeight() < newSize) && (scaledImg.getRealWidth() < newSize))
         {
-        	javascriptAlert(fileName + ": " + getResource("error.scaleSize", "size of original image is less than target size"));
-            return false;
+            output.println("<script type=\"text/javascript\">");
+            output.println("addErrorMsg('" + fileName + ": " + getResource("error.scaleSize", "size of original image is less than target size") + "')");
+            output.println("</script>");
+        	return false;
         }
 
         String destFileName = fileName;
