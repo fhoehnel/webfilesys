@@ -2,43 +2,42 @@ function selectAll()
 {
     allSelected = true;
 	
-    for (i=0;i<document.form1.elements.length;i++)
+    for (i = 0; i < document.form1.elements.length; i++)
     {
-	if ((document.form1.elements[i].type=="checkbox") &&
-            (document.form1.elements[i].name!="cb-confirm") &&
-            (document.form1.elements[i].name!="cb-setAll"))
+	    if ((document.form1.elements[i].type == "checkbox") &&
+            (document.form1.elements[i].name != "cb-confirm") &&
+            (document.form1.elements[i].name != "cb-setAll"))
         {
-	    if ((document.form1.elements[i].checked==false) &&
-	        (document.form1.elements[i].disabled==false))
+	        if ((document.form1.elements[i].checked == false) &&
+	            (document.form1.elements[i].disabled == false))
             {
-		allSelected = false;
-	    }
-	} 
+		         allSelected = false;
+	        }
+	    } 
     }
 	
-    if (allSelected==false)
+    if (allSelected == false)
     {
-	for (i=0;i<document.form1.elements.length;i++)
+	    for (i=0;i<document.form1.elements.length;i++)
         {
-            if ((document.form1.elements[i].name!="cb-confirm") &&
-                (document.form1.elements[i].disabled==false))
-	    {
-		document.form1.elements[i].checked = true;
-	    }		
-	}
+            if ((document.form1.elements[i].name != "cb-confirm") &&
+                (document.form1.elements[i].disabled == false))
+	        {
+		        document.form1.elements[i].checked = true;
+	        }		
+	    }
     }
     else
     {
- 	for (i=0;i<document.form1.elements.length;i++)
+ 	    for (i = 0; i < document.form1.elements.length; i++)
         {
-            if (document.form1.elements[i].name!="cb-confirm")
-	    {
-		document.form1.elements[i].checked = false;
-	    }	
-	}
+            if (document.form1.elements[i].name != "cb-confirm")
+	        {
+		        document.form1.elements[i].checked = false;
+	        }	
+	    }
     }	
 }
-
 
 function multiDownload()
 {
@@ -54,8 +53,6 @@ function multiDownload()
 
     downloadWin.focus();
 }
-
-
 
 function setDependendCheckbox(prereq,dependent)
 {
@@ -111,7 +108,7 @@ function resetSelected()
 {
     for (i=document.form1.elements.length-1;i>=0;i--)
     {
-	if ((document.form1.elements[i].type=="checkbox") && (document.form1.elements[i].checked==true))
+	    if ((document.form1.elements[i].type=="checkbox") && (document.form1.elements[i].checked==true))
         {
 	     document.form1.elements[i].checked=false;
         }
@@ -163,7 +160,7 @@ function checkTwoFilesSelected()
     return(true);
 }
 
-function selectedFileFunction()
+function selectedFileFunction(unhighlight)
 {
     if (!anySelected())
     {
@@ -172,7 +169,7 @@ function selectedFileFunction()
         return;
     }
 
-    idx=document.form1.cmd.selectedIndex;
+    idx = document.form1.cmd.selectedIndex;
 
     cmd = document.form1.cmd.options[idx].value;
 
@@ -208,17 +205,22 @@ function selectedFileFunction()
     }
     else if (cmd=='download')
     {
-	multiDownload();
+	    multiDownload();
     }
     else if (cmd=='diff')
     {
-	diffCompare();
+	    diffCompare();
     }
      
     document.form1.command.value = 'multiFileOp';
-    document.form1.cmd.selectedIndex=0;
+    document.form1.cmd.selectedIndex = 0;
 		
     resetSelected();
+
+    if (unhighlight) 
+    {
+        setAllFilesUnselected();
+    }
 }
 
 function licenseReminder()

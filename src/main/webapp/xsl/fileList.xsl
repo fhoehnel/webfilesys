@@ -520,7 +520,7 @@
                 <td class="fileListFunct">
                   <xsl:value-of select="resources/msg[@key='label.selectedFiles']/@value" />:
                   &#160;
-                  <select name="cmd" size="1" onchange="javascript:selectedFileFunction()">
+                  <select name="cmd" size="1" onchange="javascript:selectedFileFunction(true)">
                     <option><xsl:value-of select="resources/msg[@key='label.selectFunction']/@value" /></option>
                     <xsl:if test="not(/fileList/readonly)">
                       <option value="delete"><xsl:value-of select="resources/msg[@key='button.delete']/@value" /></option>

@@ -337,5 +337,44 @@ function setAllFilesSelected()
              }
         }
     }
+}
 
+function setAllFilesUnselected()
+{
+    var fileListTable = document.getElementById("tableFileList");
+    if (!fileListTable)
+    {
+        return;
+    }
+
+    var tbody = fileListTable.firstChild;
+    if (tbody.nodeType != 1) 
+    {
+        tbody = tbody.nextSibling;
+    }
+
+    var tableRows = tbody.childNodes;
+    
+    for (var i = 0; i < tableRows.length; i++)
+    {
+         if (tableRows[i].nodeType == "1") 
+         {
+             var tableRow = tableRows[i];
+             
+             var checkboxTableCell = tableRow.firstChild;
+             
+             if (checkboxTableCell) 
+             {
+                 if ((checkboxTableCell.nodeType != 1) || (checkboxTableCell.tagName != "TD")) 
+                 {
+                     checkboxTableCell = checkboxTableCell.nextSibling;
+                 }
+
+                 if (checkboxTableCell && (checkboxTableCell.tagName == "TD")) 
+                 {
+                     deselectTableRow(tableRow);
+                 }
+             }
+        }
+    }
 }
