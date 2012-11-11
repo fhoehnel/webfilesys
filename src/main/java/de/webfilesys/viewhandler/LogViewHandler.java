@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import sun.io.MalformedInputException;
 import de.webfilesys.ViewHandlerConfig;
+import de.webfilesys.util.CommonUtils;
 
 /**
  * Formats the log files of application servers as colored HTML.
@@ -84,6 +85,9 @@ public class LogViewHandler implements ViewHandler
         	
         	output.println("<html>");
         	output.println("<head>");
+        	output.print("<title>WebFileSys: ");
+        	output.print(CommonUtils.extractFileName(filePath));
+        	output.println("</title>");
         	output.println("</head>");
         	output.println("<body>");
         	output.println("<pre>");

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
 
+import de.webfilesys.WebFileSys;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -17,8 +18,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class AjaxCheckGrepAllowedHandler extends XmlRequestHandlerBase
 {
-	public static final int MAX_BYTES_WITHOUT_LINEBREAK = 2048;
-	
 	private static final int BYTES_TO_CHECK = 1024 * 1024;
 	
 	public AjaxCheckGrepAllowedHandler(
@@ -43,7 +42,7 @@ public class AjaxCheckGrepAllowedHandler extends XmlRequestHandlerBase
         	return;
         }
 
-        boolean grepForbidden = (!isTextFile(filePath, MAX_BYTES_WITHOUT_LINEBREAK, BYTES_TO_CHECK));
+        boolean grepForbidden = (!isTextFile(filePath, WebFileSys.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK));
         
         Element resultElement = doc.createElement("result");
         

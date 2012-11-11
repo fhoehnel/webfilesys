@@ -311,26 +311,27 @@ function getFormData(formObj)
 	
     for (i = 0; i < elemNum; i++) 
     {
-	formElem = formObj.elements[i];
+	    formElem = formObj.elements[i];
 
-	switch (formElem.type) 
-	{
-	    case 'checkbox' :
-	      if (formElem.checked)
-	      {
-	          buff += formElem.name + '=' + encodeURIComponent(formElem.value) + '&'
-	      }
+	    switch (formElem.type) 
+	    {
+	        case 'checkbox' :
+	            if (formElem.checked)
+	            {
+	                buff += formElem.name + '=' + encodeURIComponent(formElem.value) + '&'
+	            }
 	      
-	      break;
+	            break;
 	      
-	    case 'text':
-	    case 'select-one':
-	    case 'hidden':
-	    case 'password':
-	    case 'textarea':
-	      buff += formElem.name + '=' + encodeURIComponent(formElem.value) + '&'
-	      break;
-	}
+	        case 'text':
+	        case 'select-one':
+	        case 'hidden':
+	        case 'password':
+	        case 'email':
+	        case 'textarea':
+	            buff += formElem.name + '=' + encodeURIComponent(formElem.value) + '&'
+	            break;
+	    }
     }
     
     return(buff);

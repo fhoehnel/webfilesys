@@ -40,8 +40,8 @@
     </tr>
     <tr>
       <td colspan="2" class="formParm2">
-        <input type="text" name="receiver" maxlength="256" style="width:100%;">
-          <xsl:attribute name="value">nobody@nowhere.com</xsl:attribute>
+        <input type="email" name="receiver" maxlength="256" style="width:100%;">
+          <xsl:attribute name="placeholder">nobody@nowhere.com</xsl:attribute>
         </input>
       </td>
     </tr>

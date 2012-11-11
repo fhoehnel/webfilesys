@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import sun.io.MalformedInputException;
+import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.ajax.AjaxCheckGrepAllowedHandler;
 import de.webfilesys.util.CommonUtils;
 
@@ -28,8 +29,6 @@ public class TailRequestHandler extends UserRequestHandler
     
     private static final String ENCODING_ERROR = "#### failed to read line due to charcater encoding problems";
     
-	public static final int MAX_BYTES_WITHOUT_LINEBREAK = 2048;
-	
 	private static final int BYTES_TO_CHECK = 2 * 1024 * 1024;
     
     private ArrayList lineQueue = null;
@@ -89,10 +88,10 @@ public class TailRequestHandler extends UserRequestHandler
 			// and only on the initial call of tail
 			// alternative would be to write our own readLine() method with limited line length
 			
-	        if (!isTextFile(filePath, MAX_BYTES_WITHOUT_LINEBREAK, BYTES_TO_CHECK))
+	        if (!isTextFile(filePath, WebFileSys.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK))
 	        {
 	            resp.setStatus(404);
-	            output.println("This file seems not to be a text file: " + filePath);
+	            output.println("This file seems not to be a text file: " + getHeadlinePath(filePath));
 	            output.flush();
 	            return;
 	        }

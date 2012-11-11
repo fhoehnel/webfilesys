@@ -41,7 +41,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.8.2b (2012/10/03)";
+	public static final String VERSION = "Version 2.8.3beta2 (2012/11/11)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -70,6 +70,8 @@ public class WebFileSys
     private static final int DEFAULT_FOLDER_WATCH_INTERVAL = 24 * 60;
     
     private static long DEFAULT_DISK_QUOTA = (1024l * 1024l);
+    
+	public static final int DEFAULT_TEXT_FILE_MAX_LINE_LENGTH = 2048;
     
     private String webAppRootDir = null;
     
@@ -160,6 +162,8 @@ public class WebFileSys
     private int diskQuotaCheckHour = 3;
     
     private long uploadLimit = DEFAULT_UPLOAD_LIMIT;
+    
+    private int textFileMaxLineLength = DEFAULT_TEXT_FILE_MAX_LINE_LENGTH;
     
     private String googleMapsAPIKeyHTTP = null;
     private String googleMapsAPIKeyHTTPS = null;
@@ -366,6 +370,20 @@ public class WebFileSys
         	try
         	{
         		uploadLimit = Long.parseLong(temp);
+        	}
+        	catch (NumberFormatException nfex)
+        	{
+                Logger.getLogger(getClass()).warn("invalid upload limit ignored: " + temp);        		
+        	}
+        }
+        
+        temp = config.getProperty("TextFileMaxLineLength");
+        
+        if (temp != null)
+        {
+        	try
+        	{
+        		textFileMaxLineLength = Integer.parseInt(temp);
         	}
         	catch (NumberFormatException nfex)
         	{
@@ -1009,6 +1027,10 @@ public class WebFileSys
     public long getUploadLimit()
     {
     	return(uploadLimit);
+    }
+    
+    public int getTextFileMaxLineLength() {
+    	return textFileMaxLineLength;
     }
     
     public int getFolderWatchInterval() 

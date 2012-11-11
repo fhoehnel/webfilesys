@@ -93,7 +93,7 @@
                   <xsl:value-of select="/login/resources/msg[@key='label.userid']/@value" />:
                 </td>
                 <td class="value">
-                  <input type="text" name="userid" size="15" maxlength="64" style="width:100px;"/>
+                  <input type="text" name="userid" size="15" maxlength="64" style="width:100px;" required="required"/>
                 </td>
               </tr>
               <tr>
@@ -101,7 +101,7 @@
                   <xsl:value-of select="/login/resources/msg[@key='label.password']/@value" />:
                 </td>
                 <td class="value">
-                  <input type="password" name="password" size="15" maxlength="64" style="width:100px;"/>
+                  <input type="password" name="password" size="15" maxlength="64" style="width:100px;" required="required"/>
                 </td>
               </tr>
               <tr>

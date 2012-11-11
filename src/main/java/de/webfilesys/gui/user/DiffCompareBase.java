@@ -72,7 +72,21 @@ public class DiffCompareBase extends UserRequestHandler
             output.println("</head>");
             output.println("</html>");
             output.flush();
+            return;
         }
+
+        output.println("<script type=\"text/javascript\">");
+        output.println("function addScrollListener() {");
+        output.println("var file1Div = document.getElementById('file1Cont')");
+        output.println("var file2Div = document.getElementById('file2Cont')");
+        output.println("var diffDiv = document.getElementById('diffCont')");
+        output.println("diffDiv.onscroll = function reportScroll() {");
+        output.println("var scrollPos = diffDiv.scrollTop;");
+        output.println("file1Div.scrollTop = scrollPos");
+        output.println("file2Div.scrollTop = scrollPos");
+        output.println("}");
+        output.println("}");
+        output.println("</script>");
         
         String file1Content = readIntoBuffer(file1); 
         String file2Content = readIntoBuffer(file2); 
@@ -105,7 +119,7 @@ public class DiffCompareBase extends UserRequestHandler
         int compareHeight = screenHeight - 130;
             
         output.println("</head>");
-        output.println("<body class=\"diff\">");
+        output.println("<body class=\"diff\" onload=\"addScrollListener()\">");
         
         output.println("<table width=\"100%\" border=\"0\">");
         output.println("<tr>");
@@ -115,7 +129,7 @@ public class DiffCompareBase extends UserRequestHandler
         output.println(CommonUtils.shortName(getHeadlinePath(file1.getAbsolutePath()), 36));
         output.println("</span>");
        
-        output.println("<div class=\"diff\" style=\"width:" + compareSourceWidth + "px;height:" + compareHeight + "px;\">");
+        output.println("<div id=\"file1Cont\" class=\"diff\" style=\"width:" + compareSourceWidth + "px;height:" + compareHeight + "px;\">");
         
         output.println("<pre>");
 
@@ -147,7 +161,7 @@ public class DiffCompareBase extends UserRequestHandler
         output.println(": " + diffCount + " " + getResource("differences", "differences"));
         output.println("</span>");
         
-        output.println("<div class=\"diff\" style=\"width:" + compareResultWidth + "px;height:" + compareHeight + "px;\">");
+        output.println("<div id=\"diffCont\" class=\"diff\" style=\"width:" + compareResultWidth + "px;height:" + compareHeight + "px;\">");
         
         output.println("<pre>");
         
@@ -172,7 +186,7 @@ public class DiffCompareBase extends UserRequestHandler
                 diffText = encodeSpecialChars(diffText);
             }
             
-            diffText = newLineToHTML(diffText);
+            // diffText = newLineToHTML(diffText);
             
             if (diffElem.operation == Operation.EQUAL)
             {
@@ -208,7 +222,7 @@ public class DiffCompareBase extends UserRequestHandler
         output.println(CommonUtils.shortName(getHeadlinePath(file2.getAbsolutePath()), 36));
         output.println("</span>");
         
-        output.println("<div class=\"diff\" style=\"width:" + compareSourceWidth + "px;height:" + compareHeight + "px;\">");
+        output.println("<div id=\"file2Cont\" class=\"diff\" style=\"width:" + compareSourceWidth + "px;height:" + compareHeight + "px;\">");
 
         output.println("<pre>");
 
@@ -284,7 +298,7 @@ public class DiffCompareBase extends UserRequestHandler
     {
         if (!checkForLonelyLinefeeds(diffText))
         {
-            return diffText;
+            return encodeSpecialChars(diffText);
         }
         
         StringBuffer highlightBuff = new StringBuffer(diffText.length() + 1);

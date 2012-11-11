@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,7 +16,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import sun.io.MalformedInputException;
-import de.webfilesys.gui.ajax.AjaxCheckGrepAllowedHandler;
+import de.webfilesys.WebFileSys;
+import de.webfilesys.util.CommonUtils;
 
 /**
  * @author Frank Hoehnel
@@ -87,10 +89,10 @@ public class GrepRequestHandler extends UserRequestHandler
 		// this is not 100 % save as we check only the beginning of very large files
 		// alternative would be to write our own readLine() method with limited line length
         
-        if (!isTextFile(filePath, AjaxCheckGrepAllowedHandler.MAX_BYTES_WITHOUT_LINEBREAK, BYTES_TO_CHECK))
+        if (!isTextFile(filePath, WebFileSys.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK))
         {
             resp.setStatus(404);
-            output.println("This file seems not to be a text file: " + filePath);
+            output.println("This file seems not to be a text file: " + getHeadlinePath(filePath));
             output.flush();
             return;
         }
@@ -100,7 +102,7 @@ public class GrepRequestHandler extends UserRequestHandler
 
         output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
 
-        output.println("<title>WebFileSys: grep " + filePath + "</title>");
+        output.println("<title>WebFileSys: grep " + fileName + "</title>");
         
         output.println("</head>");
         output.println("<body>");
@@ -128,11 +130,15 @@ public class GrepRequestHandler extends UserRequestHandler
                 fin = new BufferedReader(new InputStreamReader(fis, fileEncoding));
             }
             
+            DecimalFormat numberFormat = new DecimalFormat("000000");
+            
             String line = null;
             
             boolean eof = false;
             
             int excCounter = 0;
+            
+            int lineCounter = 0;
             
             while ((!eof) && (excCounter < 5))
             {
@@ -146,10 +152,16 @@ public class GrepRequestHandler extends UserRequestHandler
                     } 
                     else 
                     {
+                    	lineCounter++;
+                    	
                         excCounter = 0;
                         
-                        if (line.contains(filter)) {
-                            output.println(line);
+                        if (line.contains(filter)) 
+                        {
+                        	output.print("<span style=\"color:#a0a0a0\">");
+                        	output.print(numberFormat.format(lineCounter));
+                        	output.print(": </span>");
+                            output.println(formatLine(line, filter));
                             output.flush();
                             anyMatchFound = true;
                         }
@@ -196,6 +208,52 @@ public class GrepRequestHandler extends UserRequestHandler
         output.println("</body>");
         output.println("</html>");
         output.flush();
+	}
+	
+	private String formatLine(String line, String filter) 
+	{
+		StringBuffer formattedLine = new StringBuffer();
+		
+		int filterLength = filter.length();
+		
+		String escapedFilter = CommonUtils.escapeHTML(filter);
+		
+		String restOfLine = line;
+		
+		int foundIdx = 0;
+		
+		while (foundIdx >= 0) 
+		{
+			foundIdx = restOfLine.indexOf(filter);
+			if (foundIdx >= 0) 
+			{
+				if (foundIdx > 0) 
+				{
+					formattedLine.append(CommonUtils.escapeHTML(restOfLine.substring(0, foundIdx)));
+				}
+				formattedLine.append("<span style=\"color:#0000c0\">");
+				formattedLine.append(escapedFilter);
+				formattedLine.append("</span>");
+
+				if (restOfLine.length() > foundIdx + filterLength) 
+				{
+					restOfLine = restOfLine.substring(foundIdx + filterLength);
+				}
+				else 
+				{
+					foundIdx = (-1);
+				}
+			}
+			else 
+			{
+				if (restOfLine.length() > 0) 
+				{
+					formattedLine.append(CommonUtils.escapeHTML(restOfLine));
+				}
+			}
+		}
+		
+		return formattedLine.toString();
 	}
 	
 }
