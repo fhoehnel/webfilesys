@@ -173,7 +173,9 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 				if ((copyFileCounter <= 100) ||
 				    ((copyFileCounter < 300) && (copyFileCounter % 5 == 0)) ||
-				    (copyFileCounter % 10 == 0)) {
+				    ((copyFileCounter < 1000) && (copyFileCounter % 10 == 0)) ||
+				    (copyFileCounter % 50 == 0)) {
+					
 	                output.println("<script language=\"javascript\">");
 
 	                output.println("document.getElementById('currentFile').innerHTML='" + insertDoubleBackslash(CommonUtils.shortName(getHeadlinePath(sourceFile), 40)) + "';");
@@ -190,8 +192,9 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 					copyFileCounter++;
 					
 	                if ((copyFileCounter <= 100) ||
-	                        ((copyFileCounter < 300) && (copyFileCounter % 5 == 0)) ||
-	                        (copyFileCounter % 10 == 0)) 
+	                    ((copyFileCounter < 300) && (copyFileCounter % 5 == 0)) ||
+	                    ((copyFileCounter < 1000) && (copyFileCounter % 10 == 0)) ||
+	                    (copyFileCounter % 50 == 0))
 	                {
 	                    output.println("<script language=\"javascript\">");
 

@@ -68,6 +68,7 @@ label.renamedir=Rename directory
 label.pastedir=Paste
 label.statistics=Statistics
 label.subdirStats=Subdir Statistics
+label.statSunburst=Tree Sunburst Diagram
 label.ageStats=File Age Statistics
 label.sizeStats=File Size Statistics
 label.typeStats=File Type Statistics
@@ -282,6 +283,10 @@ stats.age.week=week
 stats.age.weeks=weeks
 stats.age.year=year
 stats.age.years=years
+
+# sunburst chart
+sunburst.noSubFolders=This folder does not contain any subfolders!
+sunburst.parentFolderLink=parent folder
 
 # drive info labels
 label.driveinfo=Drive Properties
@@ -749,6 +754,15 @@ sync.confirmStartSync=Are you sure you want to start the synchronization?
 sync.confirmRemoveExtraTarget=Synchronization might remove files and directories in the target folder. Are you sure?
 sync.invisibleItems=The number of files out of sync is rather large. Not all differences are shown here.
 sync.complete=folder synchronization complete
+sync.summary=synchronization summary
+sync.summaryNoChange=source and target folder left unmodified
+sync.foldersCreatedTarget=folders created in target
+sync.foldersDeletedTarget=folders deleted in target
+sync.filesDeletedTarget=files deleted in target
+sync.foldersCreatedSource=folders created in source
+sync.copiedToTarget=files copied to target
+sync.copiedToSource=files copied to source
+sync.readWriteChanges=read/write access changed
 
 # compare folders
 label.selectCompSourceResult=Select compare from the context menu of the target folder!

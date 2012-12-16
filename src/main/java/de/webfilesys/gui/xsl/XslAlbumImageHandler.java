@@ -261,7 +261,7 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 
         if ((description != null) && (description.length() > 0))
         {
-			XmlUtil.setChildText(imageDataElement, "description", CommonUtils.readyForJavascript(description), true);
+			XmlUtil.setChildText(imageDataElement, "description", description, true);
         }
 		
 		/*

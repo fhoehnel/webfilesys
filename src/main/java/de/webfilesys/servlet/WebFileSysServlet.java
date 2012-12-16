@@ -232,6 +232,7 @@ import de.webfilesys.gui.xsl.XslSlideShowInFrameHandler;
 import de.webfilesys.gui.xsl.XslSlideshowParmsHandler;
 import de.webfilesys.gui.xsl.XslSyncCompareHandler;
 import de.webfilesys.gui.xsl.XslThumbnailHandler;
+import de.webfilesys.gui.xsl.XslTreeStatSunburstHandler;
 import de.webfilesys.gui.xsl.XslTreeStatsHandler;
 import de.webfilesys.gui.xsl.XslUnixCmdLineHandler;
 import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
@@ -1517,6 +1518,12 @@ public class WebFileSysServlet extends HttpServlet
         if (command.equals("folderDiffTree"))
         {
             (new XslFolderDiffTreeHandler(req, resp, session, output, userid)).handleRequest(); 
+            return(true);
+        }
+
+        if (command.equals("folderTreeStats"))
+        {
+            (new XslTreeStatSunburstHandler(req, resp, session, output, userid)).handleRequest(); 
             return(true);
         }
         

@@ -68,6 +68,7 @@ label.renamedir=Ordner umbenennen
 label.pastedir=Einfügen
 label.statistics=Statistik
 label.subdirStats=Statistik Unterordner
+label.statSunburst=Sunburst Diagramm
 label.ageStats=Statistik Datei-Alter
 label.sizeStats=Statistik Datei-Grössen
 label.typeStats=Statistik Datei-Typen
@@ -282,6 +283,10 @@ stats.age.week=Woche
 stats.age.weeks=Wochen
 stats.age.year=Jahr
 stats.age.years=Jahre
+
+# sunburst chart
+sunburst.noSubFolders=Dieser Ordner enthält keine Unterordner!
+sunburst.parentFolderLink=Übergeordneter Ordner
 
 # drive info labels
 label.driveinfo=Datenträger-Infos
@@ -751,6 +756,15 @@ sync.confirmStartSync=Soll die Synchronisation wirklich gestartet werden?
 sync.confirmRemoveExtraTarget=Die Synchronisation löscht möglicherweise Dateien und Directories im Zielordner. Fortsetzen?
 sync.invisibleItems=Die Zahl der nicht synchronen Dateien ist ziemlich gross. Es werden nicht alle Unterschiede aufgelistet.
 sync.complete=Ordner-Synchronisation beendet
+sync.summary=Zusammenfassung
+sync.summaryNoChange=keine Änderungen in Quell und Zielordner
+sync.foldersCreatedTarget=Unterordner im Zielordner angelegt
+sync.foldersDeletedTarget=Unterordner gelöscht im Zielordner
+sync.filesDeletedTarget=Dateien gelöscht im Zielordner
+sync.foldersCreatedSource=Unterordner im Quellordner angelegt
+sync.copiedToTarget=Dateien zum Zielordner kopiert
+sync.copiedToSource=Dateien zum Quellordner kopiert
+sync.readWriteChanges=Lese/Schreibrechte geändert
 
 # compare folders
 label.selectCompSourceResult=Navigieren Sie zum Ziel-Ordner und wählen Sie Vergleichen im Kontext-Menü!

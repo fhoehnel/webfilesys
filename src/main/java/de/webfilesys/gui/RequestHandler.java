@@ -98,6 +98,28 @@ public abstract class RequestHandler
 		return(dest.toString());
 	}
 
+	public String escapeForJavascript(String source)
+	{
+		StringBuffer dest=new StringBuffer();
+
+		for (int i=0;i<source.length();i++)
+		{
+			if (source.charAt(i)=='\\')
+			{
+				dest.append("\\\\");
+			}
+			else if (source.charAt(i)=='\'')
+			{
+				dest.append("\\\'");
+			}
+			else
+			{
+				dest.append(source.charAt(i));
+			}
+		}    
+		return(dest.toString());
+	}
+
 	protected void headLine(String text)
 	{
 		output.println("<div class=\"headline\">");

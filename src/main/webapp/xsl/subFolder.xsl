@@ -35,10 +35,10 @@
           <xsl:attribute name="href">javascript:col('<xsl:value-of select="@id" />', '<xsl:value-of select="@lastInLevel='true'" />')</xsl:attribute>
 
           <xsl:if test="@lastInLevel='true'">
-            <img src="/webfilesys/images/minusLast.gif" border="0" width="15" height="17"/>
+            <img src="/webfilesys/images/minusLast.gif" border="0" width="15" height="17" />
           </xsl:if>
           <xsl:if test="not(@lastInLevel='true')">
-            <img src="/webfilesys/images/minusMore.gif" border="0" width="15" height="17"/>
+            <img src="/webfilesys/images/minusMore.gif" border="0" width="15" height="17" />
           </xsl:if>
         </a>
       </xsl:if>

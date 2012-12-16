@@ -398,6 +398,9 @@ function statisticsMenu(shortPath, path)
              + menuEntry("javascript:statistics('" + scriptPreparedPath + "')",parent.resourceSubdirStats,null);
 
     menuText = menuText 
+             + menuEntry("javascript:statSunburst('" + scriptPreparedPath + "')",parent.resourceStatSunburst,null);
+
+    menuText = menuText 
              + menuEntry("javascript:fileSizeStatistics('" + scriptPreparedPath + "')",parent.resourceSizeStats,null);
 
     menuText = menuText 

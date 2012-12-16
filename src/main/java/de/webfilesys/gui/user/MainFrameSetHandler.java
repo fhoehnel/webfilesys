@@ -240,6 +240,7 @@ public class MainFrameSetHandler extends UserRequestHandler
 		output.println("var resourcePasteDir = '" + getResource("label.pastedir","Paste") + "';");
 
 		output.println("var resourceStatistics = '" + getResource("label.statistics", "Statistics") + "';");
+		output.println("var resourceStatSunburst = '" + getResource("label.statSunburst", "Dir Stat Diagram") + "';");
         output.println("var resourceSubdirStats = '" + getResource("label.subdirStats", "Subdir Statistics") + "';");
         output.println("var resourceAgeStats = '" + getResource("label.ageStats", "File Age Statistics") + "';");
         output.println("var resourceSizeStats = '" + getResource("label.sizeStats", "File Size Statistics") + "';");

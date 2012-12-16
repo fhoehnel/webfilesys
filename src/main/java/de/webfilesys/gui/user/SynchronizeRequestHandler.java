@@ -24,14 +24,22 @@ import de.webfilesys.sync.SyncItem;
  */
 public class SynchronizeRequestHandler extends UserRequestHandler
 {
-    boolean createMissingTarget;
-    boolean createMissingSource;
-    boolean removeExtraTarget;
-    boolean copyNewerToTarget;
-    boolean copyNewerToSource;
-    boolean copyDateChangeToTarget;
-    boolean copySizeChangeToTarget;
-    boolean copyAccessRights;
+    private boolean createMissingTarget;
+    private boolean createMissingSource;
+    private boolean removeExtraTarget;
+    private boolean copyNewerToTarget;
+    private boolean copyNewerToSource;
+    private boolean copyDateChangeToTarget;
+    private boolean copySizeChangeToTarget;
+    private boolean copyAccessRights;
+    
+    private int deletedFilesTarget = 0;
+    private int deletedFoldersTarget = 0;
+    private int copiedToTarget = 0;
+    private int copiedToSource = 0;
+    private int foldersCreatedSource = 0;
+    private int foldersCreatedTarget = 0;
+    private int readWriteChanges = 0;
 
     public SynchronizeRequestHandler(
     		HttpServletRequest req, 
@@ -91,6 +99,49 @@ public class SynchronizeRequestHandler extends UserRequestHandler
             synchronize(syncItem);
         }
         
+        output.println("<hr/>");
+        
+    	output.println("<b>" + getResource("sync.summary", "synchronization summary") + ":</b><br/>");
+
+    	if (foldersCreatedTarget > 0) {
+        	output.println(getResource("sync.foldersCreatedTarget", "folders created in target") + ": " + foldersCreatedTarget + "<br/>");
+        }
+
+        if (deletedFoldersTarget > 0) {
+        	output.println(getResource("sync.foldersDeletedTarget", "folders deleted in target") + ": " + deletedFoldersTarget + "<br/>");
+        }
+        
+        if (deletedFilesTarget > 0) {
+        	output.println(getResource("sync.filesDeletedTarget", "files deleted in target") + ": " + deletedFilesTarget + "<br/>");
+        }
+
+        if (foldersCreatedSource > 0) {
+        	output.println(getResource("sync.foldersCreatedSource", "folders created in source") + ": " + foldersCreatedSource + "<br/>");
+        }
+
+        if (copiedToTarget > 0) {
+        	output.println(getResource("sync.copiedToTarget", "files copied to target") + ": " + copiedToTarget + "<br/>");
+        }
+
+        if (copiedToSource > 0) {
+        	output.println(getResource("sync.copiedToSource", "files copied to source") + ": " + copiedToSource + "<br/>");
+        }
+
+        if (readWriteChanges > 0) {
+        	output.println(getResource("sync.readWriteChanges", "read/write access changed") + ": " + readWriteChanges + "<br/>");
+        }
+
+        if ((foldersCreatedTarget == 0) && 
+           	(deletedFoldersTarget == 0) &&	
+           	(deletedFilesTarget == 0) &&	
+           	(foldersCreatedSource == 0) &&	
+           	(copiedToTarget == 0) &&	
+           	(copiedToSource == 0) &&	
+           	(readWriteChanges == 0)) 
+        {
+        	output.println(getResource("sync.summaryNoChange", "source and target folder left unmodified"));
+        }
+        
         output.println("<form accept-charset=\"utf-8\" name=\"form1\" style=\"padding-top:15px;\">");
         output.println("<input type=\"button\" value=\"" + getResource("button.closewin", "close window") + "\" onclick=\"deselectSyncFolders()\" />");
         output.println("</form>");
@@ -112,45 +163,68 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         {
             if (createMissingTarget)
             {
-                createDirIfMissing(syncItem.getTarget().getPath(), false);
-                copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath());
+                if (createDirIfMissing(syncItem.getTarget().getPath(), false)) {
+                	foldersCreatedTarget++;
+                }
+                if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
+                {
+                	copiedToTarget++;
+                }
             }
         }
         else if (syncItem.getDiffType() == SyncItem.DIFF_TYPE_MISSING_TARGET_DIR)
         {
             if (createMissingTarget)
             {
-                createDirIfMissing(syncItem.getTarget().getPath(), true);
+                if (createDirIfMissing(syncItem.getTarget().getPath(), true))
+                {
+                	foldersCreatedTarget++;
+                }
             }
         }
         else if (syncItem.getDiffType() == SyncItem.DIFF_TYPE_MISSING_SOURCE_FILE)
         {
             if (createMissingSource)
             {
-                createDirIfMissing(syncItem.getSource().getPath(), false);
-                copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath());
+                if (createDirIfMissing(syncItem.getSource().getPath(), false)) 
+                {
+                	foldersCreatedSource++;
+                }
+                if (copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath())) 
+                {
+                	copiedToSource++;
+                }
             }
             else if (removeExtraTarget)
             {
-               deleteFile(syncItem.getTarget().getPath()); 
+                if (deleteFile(syncItem.getTarget().getPath())) 
+                {
+                	deletedFilesTarget++;
+                }
             }
         }
         else if (syncItem.getDiffType() == SyncItem.DIFF_TYPE_MISSING_SOURCE_DIR)
         {
             if (createMissingSource)
             {
-                createDirIfMissing(syncItem.getSource().getPath(), true);
+                if (createDirIfMissing(syncItem.getSource().getPath(), true)) 
+                {
+                	foldersCreatedSource++;
+                }
             }
             else if (removeExtraTarget)
             {
-               deleteDirTree(syncItem.getTarget().getPath()); 
+               deleteDirTree(syncItem.getTarget().getPath());
             }
         }
         else if (syncItem.getDiffType() == SyncItem.DIFF_TYPE_SIZE)
         {
             if (copySizeChangeToTarget)
             {
-                copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath());
+                if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
+                {
+                	copiedToTarget++;
+                }
             }
         }
         else if (syncItem.getDiffType() == SyncItem.DIFF_TYPE_MODIFICATION_TIME)
@@ -159,18 +233,27 @@ public class SynchronizeRequestHandler extends UserRequestHandler
             {
                 if (copyNewerToTarget || copyDateChangeToTarget)
                 {
-                    copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath());
+                    if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
+                    {
+                    	copiedToTarget++;
+                    }
                 }
             }
             else // target newer
             {
                 if (copyNewerToSource)
                 {
-                    copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath());
+                    if (copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath()))
+                    {
+                    	copiedToSource++;
+                    }
                 }                
                 else if (copyDateChangeToTarget)
                 {
-                    copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath());
+                    if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
+                    {
+                    	copiedToTarget++;
+                    }
                 }
             }
         }
@@ -178,7 +261,10 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         {
             if (copySizeChangeToTarget)
             {
-                copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath());
+                if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
+                {
+                	copiedToTarget++;
+                }
             }
             else
             {
@@ -186,18 +272,27 @@ public class SynchronizeRequestHandler extends UserRequestHandler
                 {
                     if (copyNewerToTarget || copyDateChangeToTarget)
                     {
-                        copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath());
+                        if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
+                        {
+                        	copiedToTarget++;
+                        }
                     }
                 }
                 else // target newer
                 {
                     if (copyNewerToSource)
                     {
-                        copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath());
+                        if (copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath()))
+                        {
+                        	copiedToSource++;
+                        }
                     }   
                     else if (copyDateChangeToTarget)
                     {
-                        copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath());
+                        if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
+                        {
+                        	copiedToTarget++;
+                        }
                     }
                 }
             }
@@ -211,16 +306,18 @@ public class SynchronizeRequestHandler extends UserRequestHandler
                 if (sourceFile.canWrite())
                 {
                     setReadWrite(syncItem.getTarget().getPath());
+                    readWriteChanges++;
                 }
                 else
                 {
                     setReadonly(syncItem.getTarget().getPath());
+                    readWriteChanges++;
                 }
             }
         }
     }
     
-    private void createDirIfMissing(String path, boolean isDir)
+    private boolean createDirIfMissing(String path, boolean isDir)
     {
         String folderPath;
 
@@ -238,12 +335,15 @@ public class SynchronizeRequestHandler extends UserRequestHandler
 
         if (newFolder.exists())
         {
-            return;
+            return false;
         }
 
-        newFolder.mkdirs();
-        
-        output.println("<nobr>" + getResource("sync.folderCreated", "folder created") + ": " + getHeadlinePath(folderPath) + "</nobr><br>");
+        if (newFolder.mkdirs()) 
+        {
+        	output.println("<nobr>" + getResource("sync.folderCreated", "folder created") + ": " + getHeadlinePath(folderPath) + "</nobr><br>");
+            return true;
+        }
+        return false;
     }
     
     private boolean copyFile(String sourceFileName, String targetFileName)
@@ -296,26 +396,30 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         return(!copyFailed);
     }
     
-    private void deleteFile(String path)
+    private boolean deleteFile(String path)
     {
         File delFile = new File(path);
      
         if (!delFile.exists())
         {
-            return;
+            return false;
         }
+        
+        boolean deleteSuccess = false;
         
         if (delFile.canWrite())
         {
             if (delFile.delete())
             {
-                output.println("<nobr>" + getResource("sync.fileDeleted", "file deleted") + ": " + getHeadlinePath(path) + "</nobr><br>");
+            	deleteSuccess = true;
+            	output.println("<nobr>" + getResource("sync.fileDeleted", "file deleted") + ": " + getHeadlinePath(path) + "</nobr><br>");
             }
             else
             {
                 output.println("<nobr>" + getResource("sync.fileDeleteError", "failed to delete file") + ": " + getHeadlinePath(path) + "</nobr><br>");
             }
         }
+        return deleteSuccess;
     }
     
     private boolean deleteDirTree(String path)
@@ -345,6 +449,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
                 {
                     if (tempFile.delete())
                     {
+                    	deletedFilesTarget++;
                         output.println("<nobr>" + getResource("sync.fileDeleted", "file deleted") + ": " + getHeadlinePath(tempFile.getAbsolutePath()) + "</nobr><br>");
                     }
                     else
@@ -359,6 +464,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
 
         if (dirToBeDeleted.delete())
         {
+     	    deletedFoldersTarget++;
             output.println("<nobr>" + getResource("sync.dirDeleted", "directory deleted") + ": " + getHeadlinePath(path) + "</nobr><br>");
         }
         else

@@ -516,3 +516,54 @@
   table.hexView td.hexValue {background-color:ivory;} 
   table.hexView td.ascii {background-color:lavender;} 
   
+  /* sunburst chart */
+  div.legendBox
+  {
+      width: 20px;
+      height: 10px;
+      border: 1px solid #a0a0a0;
+      float: left;
+  }
+  
+  div.legendText 
+  {
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      font-size: 12px;
+      color: #404040;
+      margin-left: 30px;
+  }
+  
+  a.sunburstParentLink 
+  {
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      font-size: 12px;
+      color: #404040;
+      text-decoration: underline;
+      position: absolute;
+      left: 30px;
+      bottom: 40px;
+  }
+  
+  div.sunburstText
+  {
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      font-size: 12px;
+      color: #000000;
+  }
+  
+  div.sunburstTreeSize
+  {
+      position:absolute;
+      top:20px;
+      right:35px;
+  }
+  
+  div.sunburstTreeFileNum
+  {
+      position:absolute;
+      top:40px;
+      right:35px;
+  }

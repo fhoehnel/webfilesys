@@ -44,6 +44,24 @@ function statistics(path)
     statWin.focus();
 }
 
+function statSunburst(path)
+{
+    var windowWidth = screen.availWidth - 10;
+    var windowHeight = screen.availHeight - 20;
+    
+    if (browserChrome) 
+    {
+        windowHeight = windowHeight - 40;
+    }
+    
+    if (windowHeight > windowWidth - 200)
+    {
+        windowHeight = windowWidth - 200;
+    }
+    var statWin = open("/webfilesys/servlet?command=folderTreeStats&path=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=" + windowWidth + ",height=" + windowHeight);
+    statWin.focus();
+}
+
 function fileSizeStatistics(path)
 {
     var statWin;

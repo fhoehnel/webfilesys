@@ -257,7 +257,8 @@ public class UserRequestHandler extends ProtectedRequestHandler
                 {
                     if ((fileCopyCounter <= 100) ||
                         ((fileCopyCounter < 300) && (fileCopyCounter % 5 == 0)) ||
-                        (fileCopyCounter % 10 == 0)) 
+                        ((fileCopyCounter < 1000) && (fileCopyCounter % 10 == 0)) ||
+                        (fileCopyCounter % 50 == 0)) 
                     {
                         output.println("<script language=\"javascript\">");
                         output.println("document.getElementById('currentFile').innerHTML='" + insertDoubleBackslash(CommonUtils.shortName(getHeadlinePath(sourceFileName), 40)) + "';");
@@ -271,7 +272,8 @@ public class UserRequestHandler extends ProtectedRequestHandler
                         
                         if ((fileCopyCounter <= 100) ||
                             ((fileCopyCounter < 300) && (fileCopyCounter % 5 == 0)) ||
-                            (fileCopyCounter % 10 == 0)) 
+                            ((fileCopyCounter < 1000) && (fileCopyCounter % 10 == 0)) ||
+                            (fileCopyCounter % 50 == 0)) 
                         {
                             output.println("<script language=\"javascript\">");
                             output.println("document.getElementById('fileCount').innerHTML='" + fileCopyCounter +  "';");
