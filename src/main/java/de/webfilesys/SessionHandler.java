@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSessionListener;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.calendar.AppointmentManager;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.UserManagerBase;
@@ -115,7 +116,12 @@ implements HttpSessionListener, ServletContextListener
 			WebFileSys.getInstance().getDiskQuotaInspector().interrupt();
 		}
 
-        if (AutoThumbnailCreator.instanceCreated())
+		if (WebFileSys.getInstance().isEnableCalendar())
+		{
+			AppointmentManager.getInstance().interrupt();
+		}
+
+		if (AutoThumbnailCreator.instanceCreated())
         {
 			AutoThumbnailCreator.getInstance().interrupt();
         }
@@ -135,7 +141,7 @@ implements HttpSessionListener, ServletContextListener
 		{
 			try
 			{
-				Thread.currentThread().sleep(1000);
+				Thread.currentThread().sleep(3000);
 			}
 			catch (InterruptedException iex)
 			{

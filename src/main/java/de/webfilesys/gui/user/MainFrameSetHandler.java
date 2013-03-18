@@ -390,8 +390,8 @@ public class MainFrameSetHandler extends UserRequestHandler
 
         output.println("</frameset>");
 
-        output.print("</head>");
-        output.print("</html>\n");
+        output.println("</head>");
+        output.println("</html>");
         output.flush();
         return;
 	}

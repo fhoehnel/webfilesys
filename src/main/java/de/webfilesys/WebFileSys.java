@@ -29,9 +29,11 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.calendar.AppointmentManager;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.XmlUserManager;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.watch.FolderWatchManager;
 
 /**
@@ -41,7 +43,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.8.3 (2012/12/16)";
+	public static final String VERSION = "Version 2.8.4-beta43 (2013/03/18)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -52,8 +54,6 @@ public class WebFileSys
 
     public static final String LOG_CONFIG_FILE = "LogConfig.xml";
 
-    public static final int LIC_REMINDER_INTERVAL = 10;
-    
     public static final int OS_OS2 = 1;
     public static final int OS_WIN = 2;
     public static final int OS_AIX = 3;
@@ -73,6 +73,9 @@ public class WebFileSys
     
 	public static final int DEFAULT_TEXT_FILE_MAX_LINE_LENGTH = 2048;
     
+	/** maximum number of appointment e-mails that can be sent in one hour */
+	public static final int DEFAULT_MAX_APP_MAILS_PER_HOUR = 200;
+	
     private String webAppRootDir = null;
     
     private String configBaseDir = null;
@@ -134,6 +137,9 @@ public class WebFileSys
 
     private String mailSenderName = null;
 
+	// emergency brake to prevent sending uncontrolled numbers of mails if something unexpected happens
+    private int maxAppointmentMailsPerHour = DEFAULT_MAX_APP_MAILS_PER_HOUR;
+    
     private String clientUrl = null;
     
     /** the fully qualified server DNS name, if different from localhost DNS */
@@ -158,6 +164,8 @@ public class WebFileSys
     private boolean mailNotifyQuotaUser = false;
 
     private boolean enableDiskQuota = false;
+    
+    private boolean enableCalendar = false;
 
     private int diskQuotaCheckHour = 3;
     
@@ -564,6 +572,27 @@ public class WebFileSys
 		{
 			debugMail = true;
 		}
+
+		temp = config.getProperty("EnableCalendar", "false");
+		if (temp.equalsIgnoreCase("true"))
+		{
+			enableCalendar = true;
+
+			temp = config.getProperty("MaxAppointmentMailsPerHour", null);
+	        if (!CommonUtils.isEmpty(temp))
+	        {
+	            try
+	            {
+	            	maxAppointmentMailsPerHour = Integer.parseInt(temp);
+	            }
+	            catch (NumberFormatException numEx)
+	            {
+	            	Logger.getLogger(getClass()).error("invalid property value for MaxAppointmentMailsPerHour: " + temp);
+	            	maxAppointmentMailsPerHour = DEFAULT_MAX_APP_MAILS_PER_HOUR;
+	            }
+	        }
+        	Logger.getLogger(getClass()).debug("maximum allowed appointment e-mails per hour: " + maxAppointmentMailsPerHour);
+		}
 		
         temp = config.getProperty("SyncIgnoreOffsetDST", "false");
         if (temp.equalsIgnoreCase("true"))
@@ -766,6 +795,11 @@ public class WebFileSys
             FolderWatchManager.getInstance();
         }
         
+        if (enableCalendar) 
+        {
+            AppointmentManager.getInstance();
+        }
+        
         DecorationManager.getInstance();
     }
 	
@@ -858,6 +892,11 @@ public class WebFileSys
     {
     	return(debugMail);
     }
+
+    public boolean isEnableCalendar()
+    {
+    	return(enableCalendar);
+    }
     
     public boolean isFolderWatch()
     {
@@ -872,6 +911,11 @@ public class WebFileSys
     public String getMailSenderName()
     {
     	return(mailSenderName);
+    }
+    
+    public int getMaxAppointmentMailsPerHour()
+    {
+    	return maxAppointmentMailsPerHour;
     }
     
     public String getClientUrl()

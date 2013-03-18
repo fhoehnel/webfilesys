@@ -46,10 +46,17 @@
       {
           windowHeight = window.innerHeight;
       }
-      var padding = 200;
+      
+      <xsl:if test="/fileList/description">
+        var padding = 220;
+      </xsl:if>
+      <xsl:if test="not(/fileList/description)">
+        var padding = 180;
+      </xsl:if>
+      
       document.getElementById('fileListTable').style.height = windowHeight - padding + 'px';
   }
-  
+
   function setSortField(sortBy)
   {
       window.location.href='/webfilesys/servlet?command=fileStats&amp;initial=true&amp;sortBy=' + sortBy;
@@ -74,22 +81,16 @@
     <xsl:value-of select="fileList/headLine" />
   </div>
 
-  <xsl:if test="fileList/description">
-    <table border="0" width="100%" cellpadding="2" cellspacing="0">
-      <tr>
-        <td>
-          <font class="small">
-            <xsl:value-of select="fileList/description" disable-output-escaping="yes" />
-          </font>
-        </td>
-      </tr>
-    </table>
+  <xsl:if test="/fileList/description">
+    <div class="fileListDesc">
+      <font class="small">
+        <xsl:value-of select="/fileList/description" disable-output-escaping="yes" />
+      </font>
+    </div>
   </xsl:if>
 
-  <br/>
-  
   <!-- tabs start -->
-  <table border="0" width="100%" cellpadding="0" cellspacing="0">
+  <table class="tabs" cellspacing="0">
     <tr>
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="13" height="1" /></td>
       
@@ -144,13 +145,13 @@
       <xsl:attribute name="value"><xsl:value-of select="/fileList/currentPath" /></xsl:attribute>
     </input>
     
-    <table class="fileListHead" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <table class="fileListHead" width="100%">
       <tr>
-        <td colspan="5" class="fileListFunct sepBot">&#160;</td>
+        <td colspan="4" class="fileListFunct sepBot">&#160;</td>
       </tr>
       
       <tr>
-        <th class="fileListHead" style="padding-left:30px;" align="left" valign="top">
+        <th class="fileListHead" style="padding-left:30px;text-align:left">
           <xsl:if test="/fileList/sortBy = '1'">
             <xsl:value-of select="/fileList/resources/msg[@key='label.filename']/@value" />
           </xsl:if>
@@ -160,7 +161,7 @@
             </a>
           </xsl:if>
         </th>
-        <th class="fileListHead" align="right" nowrap="nowrap" style="width:170px;padding-right:5px">
+        <th class="fileListHead" style="width:170px;padding-right:5px;text-align:right;white-space:nowrap;">
           <xsl:if test="/fileList/sortBy = '8'">
             <xsl:value-of select="/fileList/resources/msg[@key='label.downloads']/@value" />
           </xsl:if>
@@ -178,7 +179,7 @@
             </span>              
           </xsl:if>
         </th>
-        <th class="fileListHead" align="right" valign="top" nowrap="nowrap" style="width:90px;padding-left:5px;padding-right:5px">
+        <th class="fileListHead" style="width:90px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
           <xsl:if test="/fileList/sortBy = '7'">
             <xsl:value-of select="/fileList/resources/msg[@key='rating.count']/@value" />
           </xsl:if>
@@ -188,7 +189,7 @@
             </a>
           </xsl:if>
         </th>
-        <th class="fileListHead" align="right" valign="top" nowrap="nowrap" style="width:100px;padding-left:5px;padding-right:5px">
+        <th class="fileListHead" style="width:100px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
           <xsl:if test="/fileList/sortBy = '9'">
             <xsl:value-of select="/fileList/resources/msg[@key='label.comments']/@value" />
           </xsl:if>

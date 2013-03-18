@@ -90,7 +90,8 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
 		addMsgResource("label.uploadStatus", getResource("label.uploadStatus","Upload Status"));
 		addMsgResource("label.of", getResource("label.of","of"));
         addMsgResource("upload.file.exists", getResource("upload.file.exists","a file with this name already exists - overwrite?"));
-		
+        addMsgResource("alert.illegalCharInFilename", getResource("alert.illegalCharInFilename","The file name contains illegal characters!"));
+        
 		this.processResponse("uploadParms.xsl", true);
     }
 }

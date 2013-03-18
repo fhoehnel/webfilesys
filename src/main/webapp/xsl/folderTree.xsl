@@ -126,8 +126,8 @@
 
 <xsl:template name="computer" match="computer"> 
 
-  <img src="/webfilesys/images/space.gif" border="0" width="12" height="17" />
-  <img src="/webfilesys/images/computer.gif" border="0" width="17" height="14" />
+  <img src="/webfilesys/images/space.gif" style="border-style:none;width:10px;height:17px;" />
+  <img src="/webfilesys/images/computer.gif" class="computer" />
   <a class="dirtree">
     <xsl:value-of select="@name" />
   </a>
@@ -150,10 +150,10 @@
           <xsl:attribute name="href">javascript:col('<xsl:value-of select="@id" />')</xsl:attribute>
 
           <xsl:if test="position()=last()">
-            <img src="/webfilesys/images/minusLast.gif" border="0" width="15" height="17" />
+            <img src="/webfilesys/images/minusLast.gif" class="expCol" />
           </xsl:if>
           <xsl:if test="position()!=last()">
-            <img src="/webfilesys/images/minusMore.gif" border="0" width="15" height="17" />
+            <img src="/webfilesys/images/minusMore.gif" class="expCol" />
           </xsl:if>
         </a>
       </xsl:if>
@@ -165,20 +165,20 @@
             <xsl:attribute name="href">javascript:exp('<xsl:value-of select="@id" />', '<xsl:value-of select="position()=last()" />')</xsl:attribute>
 
             <xsl:if test="position()=last()">
-              <img src="/webfilesys/images/plusLast.gif" border="0" width="15" height="17" />
+              <img src="/webfilesys/images/plusLast.gif" class="expCol" />
             </xsl:if>
             <xsl:if test="position()!=last()">
-              <img src="/webfilesys/images/plusMore.gif" border="0" width="15" height="17" />
+              <img src="/webfilesys/images/plusMore.gif" class="expCol" />
             </xsl:if>
           </a>
 
         </xsl:if>
         <xsl:if test="@leaf">
           <xsl:if test="position()=last()">
-            <img src="/webfilesys/images/branchLast.gif" border="0" width="15" height="17" />
+            <img src="/webfilesys/images/branchLast.gif" class="expCol" />
           </xsl:if>
           <xsl:if test="position()!=last()">
-            <img src="/webfilesys/images/branch.gif" border="0" width="15" height="17" />
+            <img src="/webfilesys/images/branch.gif" class="expCol" />
           </xsl:if>
         </xsl:if>
       </xsl:if>
@@ -206,12 +206,12 @@
       <xsl:if test="not(@type)">
         <xsl:if test="@current">
           <xsl:if test="@icon">
-            <img border="0" width="16" height="16" style="margin-right:1px">
+            <img class="icon">
               <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
             </img>
           </xsl:if>
           <xsl:if test="not(@icon)">
-            <img src="/webfilesys/images/folder1.gif" border="0" width="17" height="14" />
+            <img src="/webfilesys/images/folder1.gif" class="folder" />
           </xsl:if>
           <script language="javascript">
             currentDirId = '<xsl:value-of select="@id" />';
@@ -219,24 +219,23 @@
         </xsl:if>
         <xsl:if test="not(@current)">
           <xsl:if test="@icon">
-            <img border="0" width="16" height="16" style="margin-right:1px">
+            <img class="icon">
               <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
             </img>
           </xsl:if>
           <xsl:if test="not(@icon)">
-            <img src="/webfilesys/images/folder.gif" border="0" width="17" height="14"/>
+            <img src="/webfilesys/images/folder.gif" class="folder" />
           </xsl:if>
         </xsl:if>
       </xsl:if>
     </a>
 
-    <img src="/webfilesys/images/space.gif" border="0" width="4" height="1" />
     <a>
       <xsl:attribute name="href">javascript:listFiles('<xsl:value-of select="@id"/>')</xsl:attribute>
       <xsl:attribute name="oncontextmenu">dirContextMenu('<xsl:value-of select="@id" />');return false;</xsl:attribute>
 
       <xsl:if test="@link">
-        <xsl:attribute name="class">link</xsl:attribute>
+        <xsl:attribute name="class">link dirSpacer</xsl:attribute>
 
         <xsl:attribute name="title">
           <xsl:value-of select="'--&gt; '"/>
@@ -245,7 +244,7 @@
       </xsl:if>
 
       <xsl:if test="not(@link)">
-        <xsl:attribute name="class">dirtree</xsl:attribute>
+        <xsl:attribute name="class">dirtree dirSpacer</xsl:attribute>
         <xsl:if test="@textColor">
           <xsl:attribute name="style">color:<xsl:value-of select="@textColor" /></xsl:attribute>
         </xsl:if>

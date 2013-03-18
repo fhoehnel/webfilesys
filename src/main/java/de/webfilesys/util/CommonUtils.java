@@ -1,6 +1,7 @@
 package de.webfilesys.util;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.log4j.Logger;
 
@@ -181,6 +182,24 @@ public class CommonUtils
 		}
 		
 		return(fileName);
+	}
+	
+	public static boolean dirIsLink(File f)
+	{
+		if (File.separatorChar != '/')
+		{
+			return(false);
+		}
+
+		try
+		{
+			return(!(f.getCanonicalPath().equals(f.getAbsolutePath())));
+		}
+		catch (IOException ioex)
+		{
+			Logger.getLogger(CommonUtils.class).error(ioex);
+			return(false);
+		}
 	}
 	
 	public static String readyForJavascript(String source)

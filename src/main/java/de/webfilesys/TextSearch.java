@@ -1,5 +1,6 @@
 package de.webfilesys;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,13 +8,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.decoration.Decoration;
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.PatternComparator;
@@ -25,7 +28,7 @@ public class TextSearch
     String full_path;
     byte buffer[];
     PrintWriter output;
-    int hit_num;
+    int hitNum;
 
     HttpSession session;
     
@@ -43,7 +46,7 @@ public class TextSearch
 
     MetaInfManager metaInfMgr=null;
 
-    Vector searchArgs;
+    ArrayList<String> searchArgs;
     
     public TextSearch(String root_dir,String file_mask,String searchString,Date fromDate,Date toDate,
                PrintWriter output, boolean includeSubdirs, boolean includeMetaInf,boolean metaInfOnly,
@@ -61,9 +64,9 @@ public class TextSearch
         this.uid = uid;
 
         buffer = new byte[4096];
-        hit_num=0;
+        hitNum = 0;
 
-        metaInfMgr=MetaInfManager.getInstance();
+        metaInfMgr = MetaInfManager.getInstance();
 
         this.includeSubdirs = includeSubdirs;
         this.includeMetaInf=includeMetaInf;
@@ -73,22 +76,27 @@ public class TextSearch
 
         getSearchArgs(searchString);
 
-        search_tree(root_dir,file_mask,fromDate.getTime(),toDate.getTime(),
-                    relativePath);
+        search_tree(root_dir,file_mask,fromDate.getTime(),toDate.getTime(), relativePath);
 
-        output.println("<script language=\"javascript\">");
-        output.println("document.getElementById('currentSearchDir').style.visibility='hidden';");
-        output.println("</script>");
+        if (hitNum > 0) 
+        {
+        	Decoration deco = new Decoration();
+        	deco.setIcon("search.gif");
+        	deco.setTextColor("#808080");
+        	DecorationManager.getInstance().setDecoration(searchResultDir, deco);
+        }
+        
+        output.flush();
     }
 
     public int getHitNumber()
     {
-        return(hit_num);
+        return(hitNum);
     }
 
     public void getSearchArgs(String searchedText)
     {
-        searchArgs=new Vector();
+        searchArgs = new ArrayList<String>();
 
         boolean quoted=false;
         boolean wordStopped=true;
@@ -103,7 +111,7 @@ public class TextSearch
             {
                 if (quoted)
                 {
-                    searchArgs.addElement(searchWord.toString());
+                    searchArgs.add(searchWord.toString());
                     quoted=false;
                     wordStopped=true;
                 }
@@ -124,7 +132,7 @@ public class TextSearch
                     {
                         if (!wordStopped)
                         {
-                            searchArgs.addElement(searchWord.toString());
+                            searchArgs.add(searchWord.toString());
                             wordStopped=true;
                         }
                     }
@@ -143,7 +151,7 @@ public class TextSearch
 
         if (!wordStopped)
         {
-            searchArgs.addElement(searchWord.toString());
+            searchArgs.add(searchWord.toString());
         }
     }
 
@@ -155,35 +163,20 @@ public class TextSearch
             return;
         }
 
-        File dir_file;
-        File temp_file;
-        int i;
-        String sub_dir;
-        String file_list[]=null;
-        boolean all_words_found;
-
-        int pathLength = relativePath.length();
-        String shortPath = relativePath;
-
-        if (pathLength>60)
+        String shortPath = CommonUtils.shortName(relativePath, 70);
+        
+        if (session.getAttribute("searchCanceled") == null)
         {
-            shortPath = relativePath.substring(0,17) + "..." + relativePath.substring(pathLength-40);
-        }
-
-        if (session.getAttribute("searchCanceled")==null)
-        {
-            output.println("<script language=\"javascript\">");
-			output.println("document.getElementById('currentSearchDir').innerHTML='" + insertDoubleBackslash(shortPath) + "';");
-            output.println("</script>");
+			output.println("<div class=\"searchPath\"><span class=\"searchPath\">" + shortPath + "</span></div>");
             output.flush();
         }
 
-        dir_file=new File(act_path);
-        file_list=dir_file.list();
+        File dirFile = new File(act_path);
+        String[] fileList = dirFile.list();
 
-        if (file_list!=null)
+        if (fileList != null)
         {
-            for (i=0;(session.getAttribute("searchCanceled")==null) && (i<file_list.length);i++)
+            for (int i = 0;(session.getAttribute("searchCanceled") == null) && (i < fileList.length);i++)
             {
                 String fullPath = null;
                 
@@ -191,72 +184,74 @@ public class TextSearch
 
                 if (act_path.endsWith(File.separator))
                 {
-                    fullPath = act_path + file_list[i];
+                    fullPath = act_path + fileList[i];
                     
-                    relativeFile = relativePath + file_list[i];
+                    relativeFile = relativePath + fileList[i];
                 }
                 else
                 {
-                    fullPath=act_path + File.separator + file_list[i];
+                    fullPath=act_path + File.separator + fileList[i];
 
-					relativeFile = relativePath + File.separator + file_list[i];
+					relativeFile = relativePath + File.separator + fileList[i];
                 }
                 
-                temp_file=new File(fullPath);
+                File tempFile = new File(fullPath);
 
-                if (temp_file.isDirectory())
+                if (tempFile.isDirectory())
                 {
                 	if (includeSubdirs)
                 	{
-                        if (!dirIsLink(temp_file))
+                        if (!CommonUtils.dirIsLink(tempFile))
                         {
-    						if (!file_list[i].equals(ThumbnailThread.THUMBNAIL_SUBDIR))
+    						if (!fileList[i].equals(ThumbnailThread.THUMBNAIL_SUBDIR))
     						{
     							String relativeSubPath = null;
     							
+    					        String subDir;
+    							
     							if (act_path.endsWith(File.separator))
     							{
-    								sub_dir = act_path + file_list[i];
+    								subDir = act_path + fileList[i];
     								
-    								relativeSubPath = relativePath + file_list[i];
+    								relativeSubPath = relativePath + fileList[i];
     							}
     							else
     							{
-    								sub_dir = act_path + File.separator + file_list[i];
+    								subDir = act_path + File.separator + fileList[i];
 
-    								relativeSubPath = relativePath + File.separator + file_list[i];
+    								relativeSubPath = relativePath + File.separator + fileList[i];
     							}
     							
-    							search_tree(sub_dir, file_mask, fromDate, toDate, relativeSubPath);
+    							search_tree(subDir, file_mask, fromDate, toDate, relativeSubPath);
     						}
                         }
                 	}
                 }
                 else
                 {
-                    if ((temp_file.lastModified()>=fromDate) &&
-                        (temp_file.lastModified()<=toDate))
+                    if ((tempFile.lastModified()>=fromDate) &&
+                        (tempFile.lastModified()<=toDate))
                     {
-                        if (PatternComparator.patternMatch(file_list[i],file_mask))
+                        if (PatternComparator.patternMatch(fileList[i],file_mask))
                         {
                         	if ((category == null) || metaInfMgr.isCategoryAssigned(fullPath, category))
                         	{
-								all_words_found=true;
+								boolean allWordsFound = true;
 
 								int firstMatchIdx[]=new int[searchArgs.size()];
 
-								for (int j=0;(j<searchArgs.size()) && all_words_found;j++)
+								for (int j=0;(j<searchArgs.size()) && allWordsFound;j++)
 								{
 									firstMatchIdx[j]=(-1);
 
 									if (metaInfOnly)
 									{
-										String description=metaInfMgr.getDescription(fullPath);
+										String description = metaInfMgr.getDescription(fullPath);
 
-										if ((description==null) ||
-											(description.toLowerCase().indexOf(((String) searchArgs.elementAt(j)).toLowerCase()) < 0))
+										if ((description == null) ||
+											(description.toLowerCase().indexOf(searchArgs.get(j).toLowerCase()) < 0))
 										{
-											all_words_found=false;
+											allWordsFound=false;
 										}
 									}
 									else
@@ -264,26 +259,26 @@ public class TextSearch
 										// if (includeMetaInf && metaInfMgr.isMetaInfFile(fullPath))
 										if (metaInfMgr.isMetaInfFile(fullPath))
 										{
-											all_words_found=false;
+											allWordsFound=false;
 										}
 										else
 										{
-											firstMatchIdx[j]=locateTextInFile(temp_file.toString(),(String) searchArgs.elementAt(j));
+											firstMatchIdx[j]=locateTextInFile(tempFile.toString(), searchArgs.get(j));
                                         
 											if (firstMatchIdx[j] < 0)
 											{
 												if (!includeMetaInf)
 												{
-													all_words_found=false;
+													allWordsFound=false;
 												}
 												else
 												{
 													String description=metaInfMgr.getDescription(fullPath);
 
 													if ((description==null) ||
-														(description.toLowerCase().indexOf(((String) searchArgs.elementAt(j)).toLowerCase()) < 0))
+														(description.toLowerCase().indexOf(searchArgs.get(j).toLowerCase()) < 0))
 													{
-														all_words_found=false;
+														allWordsFound=false;
 													}
 												}
 											}
@@ -291,7 +286,7 @@ public class TextSearch
 									}
 								}
                             
-								if (all_words_found)
+								if (allWordsFound)
 								{
                                     String viewLink = null;
                                     try
@@ -309,13 +304,13 @@ public class TextSearch
 
                                         if (WebFileSys.getInstance().isShowAssignedIcons())
                                         {
-                                            iconImg = IconManager.getInstance().getIconForFileName(file_list[i]);
+                                            iconImg = IconManager.getInstance().getIconForFileName(fileList[i]);
                                         }
 									    
 										output.println("<a class=\"fn\" href=\"" + viewLink + "\" target=\"_blank\"><img border=\"0\" src=\"icons/" + iconImg + "\" align=\"absbottom\" style=\"margin-top:8px;\"> " + relativeFile + "</a>");
 										output.println("<br/>");
 										output.flush();
-										hit_num++;
+										hitNum++;
 
 										printMatches(fullPath,firstMatchIdx);
 										
@@ -323,7 +318,7 @@ public class TextSearch
 										{
 											try
 											{
-												metaInfMgr.createLink(searchResultDir, new FileLink(file_list[i], fullPath, uid));
+												metaInfMgr.createLink(searchResultDir, new FileLink(fileList[i], fullPath, uid), true);
 											}
 											catch (FileNotFoundException nfex)
 											{
@@ -353,7 +348,7 @@ public class TextSearch
             output.flush();
         }
         
-        file_list=null;
+        fileList=null;
     }
 
     public int locateTextInFile(String act_file,String search_arg)
@@ -392,8 +387,6 @@ public class TextSearch
                     {
                         if (++equal==search_length)
                         {
-                            file_input.close();
-
                             return(idx - search_arg.length() + 1);
                         }
                     }
@@ -405,12 +398,23 @@ public class TextSearch
                     idx++;
                 }
             }
-
-            file_input.close();
         }
         catch (IOException e)
         {
         	Logger.getLogger(getClass()).warn("fulltext search error: " + e);
+        }
+        finally
+        {
+        	if (file_input != null)
+        	{
+        		try
+        		{
+        			file_input.close();
+        		}
+        		catch (Exception ex) 
+        		{
+        		}
+        	}
         }
 
         return(-1);
@@ -418,20 +422,18 @@ public class TextSearch
 
     protected void printMatches(String fileName,int firstMatchIdx[])
     {
-        for (int i=0;i < searchArgs.size();i++)
+        for (int i = 0; i < searchArgs.size(); i++)
         {
             if (firstMatchIdx[i] > 0)
             {
-                printHitEnvironment(fileName,(String) searchArgs.elementAt(i),firstMatchIdx[i]);
+                printHitEnvironment(fileName, searchArgs.get(i), firstMatchIdx[i]);
             }
         }
     }
 
     protected void printHitEnvironment(String fileName,String searched,int firstMatchIdx)
     {
-        int equal;
-
-        int searchLength=searched.length();
+        int searchLength = searched.length();
 
         FileInputStream fin = null;
 
@@ -441,7 +443,7 @@ public class TextSearch
         }
         catch (FileNotFoundException e)
         {
-            Logger.getLogger(getClass()).error("cannot read file containing search hit", e);
+            Logger.getLogger(getClass()).error("cannot read file containing search match", e);
             return;
         }
 
@@ -452,32 +454,32 @@ public class TextSearch
             resultBuff[i] = ' ';
         }
         
-        int hitNum=0;
+        int matchCounter = 0;
 
         int count=0;
 
-        equal=0;
+        int equal=0;
 
         try
         {
-            int startIdx=firstMatchIdx - 10;
+            int startIdx = firstMatchIdx - 10;
 
             if (startIdx < 0)
             {
-                startIdx=0;
+                startIdx = 0;
             }
-
-            for (int i=0;i<startIdx;i++)
+            
+            if (startIdx > 0)
             {
-                if (fin.read() < 0)
-                {
+            	if (fin.skip(startIdx) != startIdx) 
+            	{
                     Logger.getLogger(getClass()).warn("cannot locate to search hit index " + firstMatchIdx);
-                }
+            	}
             }
 
-            while ((hitNum < 5) && ((count = fin.read(buffer))>=0))
+            while ((matchCounter < 5) && ((count = fin.read(buffer))>=0))
             {
-                for (int i=0;(hitNum < 5) && (i<count);i++)
+                for (int i=0;(matchCounter < 5) && (i<count);i++)
                 {
                     char ch=(char) buffer[i];
 
@@ -495,11 +497,11 @@ public class TextSearch
                         resultBuff[resultBuff.length-1]=ch;
                     }
 
-                    if (Character.toUpperCase(ch)==Character.toUpperCase(searched.charAt(equal)))
+                    if (Character.toUpperCase(ch) == Character.toUpperCase(searched.charAt(equal)))
                     {
-                        if (++equal==searchLength)
+                        if (++equal == searchLength)
                         {
-                            if (hitNum == 0)
+                            if (matchCounter == 0)
                             {
                                 output.println("<span class=\"plaintext\" style=\"margin-left:30px;\">");
                             }
@@ -541,7 +543,7 @@ public class TextSearch
                             
                             equal = 0;
 
-                            hitNum++;
+                            matchCounter++;
                         }
                     }
                     else
@@ -551,55 +553,31 @@ public class TextSearch
                 }
             }
 
-            if (hitNum > 0)
+            if (matchCounter > 0)
             {
                 output.println("</span>");
                 output.println("<br/>");
             }
             
             output.flush();
-
-            fin.close();
         }
         catch (IOException e)
         {
-        	Logger.getLogger(getClass()).warn("fulltext search error: " + e);
+        	Logger.getLogger(getClass()).warn("fulltext search error", e);
+        }
+        finally
+        {
+        	if (fin != null) 
+        	{
+        		try
+        		{
+        			fin.close();
+        		}
+        		catch (Exception ex)
+        		{
+        		}
+        	}
         }
     }
     
-	protected boolean dirIsLink(File f)
-	{
-		if (File.separatorChar!='/')
-		{
-			return(false);
-		}
-
-		try
-		{
-			return(!(f.getCanonicalPath().equals(f.getAbsolutePath())));
-		}
-		catch (IOException ioex)
-		{
-			Logger.getLogger(getClass()).error(ioex);
-			return(false);
-		}
-	}
-    
-	private String insertDoubleBackslash(String source)
-	{
-		StringBuffer dest=new StringBuffer();
-
-		for (int i=0;i<source.length();i++)
-		{
-			if (source.charAt(i)=='\\')
-			{
-				dest.append("\\\\");
-			}
-			else
-			{
-				dest.append(source.charAt(i));
-			}
-		}    
-		return(dest.toString());
-	}
 }

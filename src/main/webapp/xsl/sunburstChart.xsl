@@ -17,6 +17,8 @@
         <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 	  
 	    <script type="text/javascript">
+	      var CLICK_TARGET = "/webfilesys/servlet?command=folderTreeStats&amp;path=";
+	    
 	      var windowWidth = getWinWidth();
           var windowHeight = getWinHeight();	
           
@@ -36,7 +38,7 @@
 	          document.getElementById("svgChart").style.width = (windowWidth - 30) + "px";
 	          document.getElementById("svgChart").style.height = (windowHeight - 30) + "px";
 	    
-	          document.getElementById("titleBox").style.left = (windowWidth - 195) + "px";
+	          document.getElementById("titleBox").style.left = (windowWidth - 200) + "px";
 	          document.getElementById("legendBox").style.left = (windowWidth - 250) + "px";
 	          document.getElementById("legendBox").style.height = (windowHeight - 180) + "px";
 
@@ -76,7 +78,9 @@
 			    
 				var endAngle = startAngle + sectorSize;
 				
-				var tooltipText = '<xsl:value-of select="@shortName" />:&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes';
+				var shortName = '<xsl:value-of select="@shortName" />';
+				
+				var tooltipText = shortName + ':&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes';
 				
 				var pathForScript = "";
 				<xsl:if test="folder">
@@ -84,7 +88,20 @@
 				</xsl:if>
 				
   	            pieChartSector(startAngle, endAngle, chartColors[colorCounter % chartColors.length], 
-  	                           innerCircleRadius, tooltipText, pathForScript); 
+  	                           innerCircleRadius, tooltipText, pathForScript, CLICK_TARGET); 
+                
+                var shortNameLength = shortName.length;
+                
+                if (((innerCircleRadius >= (10 * shortNameLength)) &amp;&amp; (endAngle - startAngle > 20)) ||
+                    ((innerCircleRadius >= (15 * shortNameLength)) &amp;&amp; (endAngle - startAngle > 10)))
+                {
+                    var innerLabelRadius = innerCircleRadius - (8 * shortNameLength) - 20;
+                    if (innerLabelRadius &lt; 20)
+                    {
+                        innerLabelRadius = 20;
+                    }
+	                sectorLabel(startAngle, endAngle, innerLabelRadius, innerCircleRadius, "#000000", '<xsl:value-of select="@shortName" />');
+                }
                 
                 var legendEntry = document.createElement("div");
                 legendEntry.style.height = "18px";
@@ -140,7 +157,7 @@
 	      </svg>
 	    </div>
 		
-	    <div id="titleBox" style="position:absolute;left:800px;top:60px;width:145px;height:30px;color:#000000;font-family:Arial,Helvetica;font-size:12px;border:1px solid #a0a0a0;padding:10px;visibility:hidden"></div>
+	    <div id="titleBox" style="position:absolute;left:800px;top:60px;width:150px;height:30px;color:#000000;font-family:Arial,Helvetica;font-size:12px;border:1px solid #a0a0a0;padding:10px;visibility:hidden"></div>
 	  
 	    <div id="legendBox" style="position:absolute;left:750px;top:120px;width:200px;height:530px;font-family:Arial,Helvetica;font-size:12px;border:1px solid #a0a0a0;padding:10px;overflow-x:hidden;overflow-y:auto;float:left"></div>
 	  

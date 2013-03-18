@@ -18,6 +18,7 @@
   </link>
 
   <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
   <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
   <script language="JavaScript" src="/webfilesys/javascript/ajaxUpload.js" type="text/javascript"></script>
   <script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
@@ -36,6 +37,12 @@
             if (targetFileName == "") 
             {
                 targetFileName = document.form1.uploadfile.value;
+            }
+            
+            if (!checkFileNameSyntax(targetFileName))
+            {
+                alert('<xsl:value-of select="resources/msg[@key='alert.illegalCharInFilename']/@value" />');
+                return;
             }
             
             if (existUploadTargetFile(targetFileName))

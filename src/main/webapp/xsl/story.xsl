@@ -246,10 +246,10 @@
                 </td>
                   
                 <td class="fileListFunct" valign="center" nowrap="true">
-                  <a class="button" onclick="this.blur();"> 
-                    <xsl:attribute name="href">javascript:document.sortform.submit();</xsl:attribute>
-                    <span><xsl:value-of select="/fileList/resources/msg[@key='label.listPageSize']/@value" /></span>
-                  </a>              
+                  <input type="button">
+                    <xsl:attribute name="onclick">javascript:document.sortform.submit()</xsl:attribute>
+                    <xsl:attribute name="value"><xsl:value-of select="/fileList/resources/msg[@key='label.listPageSize']/@value" /></xsl:attribute>
+                  </input> 
                 </td>
 
                 <xsl:if test="paging/nextStartIdx">

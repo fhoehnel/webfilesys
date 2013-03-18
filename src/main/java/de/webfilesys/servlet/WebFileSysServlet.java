@@ -100,6 +100,13 @@ import de.webfilesys.gui.ajax.XmlUploadStatusHandler;
 import de.webfilesys.gui.ajax.XmlWinCmdLineHandler;
 import de.webfilesys.gui.ajax.XslSwitchReadonlyHandler;
 import de.webfilesys.gui.ajax.XslWatchFolderHandler;
+import de.webfilesys.gui.ajax.calendar.XmlChangeAppointmentHandler;
+import de.webfilesys.gui.ajax.calendar.XmlCheckAlarmHandler;
+import de.webfilesys.gui.ajax.calendar.XmlCreateAppointmentHandler;
+import de.webfilesys.gui.ajax.calendar.XmlDelayAppointmentHandler;
+import de.webfilesys.gui.ajax.calendar.XmlDeleteAppointmentHandler;
+import de.webfilesys.gui.ajax.calendar.XmlMoveAppointmentHandler;
+import de.webfilesys.gui.ajax.calendar.XmlPasteAppointmentHandler;
 import de.webfilesys.gui.anonymous.BlankPageRequestHandler;
 import de.webfilesys.gui.anonymous.VersionInfoRequestHandler;
 import de.webfilesys.gui.anonymous.VisitorFileRequestHandler;
@@ -239,6 +246,8 @@ import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
 import de.webfilesys.gui.xsl.XslUploadParmsHandler;
 import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
 import de.webfilesys.gui.xsl.XslZipContentHandler;
+import de.webfilesys.gui.xsl.calendar.XslCalendarHandler;
+import de.webfilesys.gui.xsl.calendar.XslCalendarMonthHandler;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 import de.webfilesys.gui.xsl.mobile.MobileShowImageHandler;
 import de.webfilesys.mail.Email;
@@ -1976,6 +1985,53 @@ public class WebFileSysServlet extends HttpServlet
 
                 return(true);
             }
+        }
+
+        if (command.equals("calendar"))
+        {
+            String selCmd = req.getParameter("cmd");
+
+            if (selCmd != null) 
+            {
+                if (selCmd.equals("month"))
+                {
+                    (new XslCalendarMonthHandler(req, resp, session, output, userid)).handleRequest();
+                }
+                else if (selCmd.equals("checkAlarm"))
+                {
+                    (new XmlCheckAlarmHandler(req, resp, session, output, userid)).handleRequest();
+                }
+                else if (selCmd.equals("newAppointment"))
+                {
+                    (new XmlCreateAppointmentHandler(req, resp, session, output, userid)).handleRequest();
+                }
+                else if (selCmd.equals("changeAppointment"))
+                {
+                    (new XmlChangeAppointmentHandler(req, resp, session, output, userid)).handleRequest();
+                }
+                else if (selCmd.equals("delAppointment"))
+                {
+                    (new XmlDeleteAppointmentHandler(req, resp, session, output, userid)).handleRequest();
+                }
+                else if (selCmd.equals("moveAppointment"))
+                {
+                    (new XmlMoveAppointmentHandler(req, resp, session, output, userid)).handleRequest();
+                }
+                else if (selCmd.equals("pasteAppointment"))
+                {
+                    (new XmlPasteAppointmentHandler(req, resp, session, output, userid)).handleRequest();
+                }
+                else if (selCmd.equals("delay"))
+                {
+                    (new XmlDelayAppointmentHandler(req, resp, session, output, userid)).handleRequest();
+                }
+            } 
+            else
+            {
+                (new XslCalendarHandler(req, resp, session, output, userid)).handleRequest();
+            }
+
+            return true;        	
         }
         
         if (command.equals("admin"))

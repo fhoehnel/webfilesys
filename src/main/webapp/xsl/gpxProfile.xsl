@@ -230,51 +230,48 @@
           ctx.lineTo(chartXOffset, chartHeight);  
           ctx.fill();
 
-          if (browserFirefox || browserSafari || browserOpera)
-          {
-              <!-- elevation legend -->
-              var legendCanvas = document.getElementById('canvasAltTimeLegend' + trackNum);  
-              var legendCtx = legendCanvas.getContext("2d");  
+          <!-- elevation legend -->
+          var legendCanvas = document.getElementById('canvasAltTimeLegend' + trackNum);  
+          var legendCtx = legendCanvas.getContext("2d");  
 
-              var elevationLegendStep = Math.ceil(maxHeight / 10);
+          var elevationLegendStep = Math.ceil(maxHeight / 10);
           
-              if (elevationLegendStep &lt; 10)
+          if (elevationLegendStep &lt; 10)
+          {
+              elevationLegendStep = 10;
+          }
+          else
+          {
+              while (elevationLegendStep % 10 != 0)
               {
-                  elevationLegendStep = 10;
+                  elevationLegendStep ++;
               }
-              else
-              {
-                  while (elevationLegendStep % 10 != 0)
-                  {
-                      elevationLegendStep ++;
-                  }
-              } 
+          } 
           
-              var legendElevation = Math.ceil(minElevation[trackNum]);
+          var legendElevation = Math.ceil(minElevation[trackNum]);
           
-              while (legendElevation % 10 != 0)
-              {
-                  legendElevation++;
-              }
+          while (legendElevation % 10 != 0)
+          {
+              legendElevation++;
+          }
           
-              ctx.strokeStyle = "#c0c0c0";
-              ctx.lineWidth = 1;
+          ctx.strokeStyle = "#c0c0c0";
+          ctx.lineWidth = 1;
           
-              legendCtx.font = "10pt Arial";
+          legendCtx.font = "10pt Arial";
           
-              while (legendElevation &lt; maxElevation[trackNum])
-              {
-                  var legendYPos = chartHeight - ((legendElevation - minElevation[trackNum]) * chartHeight / maxHeight);
+          while (legendElevation &lt; maxElevation[trackNum])
+          {
+              var legendYPos = chartHeight - ((legendElevation - minElevation[trackNum]) * chartHeight / maxHeight);
               
-                  ctx.beginPath();
-                  ctx.moveTo(chartXOffset - 1, legendYPos);
-                  ctx.lineTo(canvasWidth - 1, legendYPos);
-                  ctx.stroke();
+              ctx.beginPath();
+              ctx.moveTo(chartXOffset - 1, legendYPos);
+              ctx.lineTo(canvasWidth - 1, legendYPos);
+              ctx.stroke();
  
-                  legendCtx.fillText(String(legendElevation) , 5, legendYPos + 5, 70)
-              
-                  legendElevation += elevationLegendStep;
-              }
+              legendCtx.fillText(String(legendElevation) , 5, legendYPos + 5, 70)
+            
+              legendElevation += elevationLegendStep;
           }
       }
 
@@ -347,50 +344,47 @@
           ctx.lineTo(chartXOffset, chartHeight);  
           ctx.fill();
           
-          if (browserFirefox || browserSafari || browserOpera)
+          <!-- speed legend -->
+
+          var legendCanvas = document.getElementById('canvasSpeedLegend' + trackNum);  
+          var legendCtx = legendCanvas.getContext("2d");  
+
+          var speedLegendStep = Math.ceil(maxHeight * 3.6 / 10);
+          
+          if (speedLegendStep &lt; 2)
           {
-              <!-- speed legend -->
-
-              var legendCanvas = document.getElementById('canvasSpeedLegend' + trackNum);  
-              var legendCtx = legendCanvas.getContext("2d");  
-
-              var speedLegendStep = Math.ceil(maxHeight * 3.6 / 10);
-          
-              if (speedLegendStep &lt; 2)
+              speedLegendStep = 2;
+          }
+          else
+          {
+              while (speedLegendStep % 2 != 0)
               {
-                  speedLegendStep = 2;
+                  speedLegendStep ++;
               }
-              else
-              {
-                  while (speedLegendStep % 2 != 0)
-                  {
-                      speedLegendStep ++;
-                  }
-              }
+          }
           
-              var minSpeedKmh = minSpeed[trackNum] * 3.6;
-              var maxSpeedKmh = maxSpeed[trackNum] * 3.6;
+          var minSpeedKmh = minSpeed[trackNum] * 3.6;
+          var maxSpeedKmh = maxSpeed[trackNum] * 3.6;
           
-              var legendSpeed = Math.ceil(minSpeedKmh);
+          var legendSpeed = Math.ceil(minSpeedKmh);
           
-              ctx.strokeStyle = "#c0c0c0";
-              ctx.lineWidth = 1;
+          ctx.strokeStyle = "#c0c0c0";
+          ctx.lineWidth = 1;
           
-              legendCtx.font = "10pt Arial";
+          legendCtx.font = "10pt Arial";
           
-              while (legendSpeed &lt; maxSpeedKmh)
-              {
-                  var legendYPos = chartHeight - (((legendSpeed - minSpeedKmh) / 3.6) * chartHeight / maxHeight);
-              
-                  ctx.beginPath();
-                  ctx.moveTo(chartXOffset - 1, legendYPos);
-                  ctx.lineTo(canvasWidth - 1, legendYPos);
-                  ctx.stroke();
+          while (legendSpeed &lt; maxSpeedKmh)
+          {
+              var legendYPos = chartHeight - (((legendSpeed - minSpeedKmh) / 3.6) * chartHeight / maxHeight);
+             
+              ctx.beginPath();
+              ctx.moveTo(chartXOffset - 1, legendYPos);
+              ctx.lineTo(canvasWidth - 1, legendYPos);
+              ctx.stroke();
  
-                  legendCtx.fillText(String(legendSpeed) , 5, legendYPos + 5, 70)
+              legendCtx.fillText(String(legendSpeed) , 5, legendYPos + 5, 70)
               
-                  legendSpeed += speedLegendStep;
-              }
+              legendSpeed += speedLegendStep;
           }
       }
       
@@ -448,52 +442,49 @@
           ctx.lineTo(chartXOffset, chartHeight);  
           ctx.fill();
 
-          if (browserFirefox || browserSafari || browserOpera)
+          <!-- elevation legend -->
+
+          var legendCanvas = document.getElementById('canvasAltDistLegend' + trackNum);  
+          var legendCtx = legendCanvas.getContext("2d");  
+
+          var elevationLegendStep = Math.ceil(maxHeight / 10);
+          
+          if (elevationLegendStep &lt; 10)
           {
-              <!-- elevation legend -->
-
-              var legendCanvas = document.getElementById('canvasAltDistLegend' + trackNum);  
-              var legendCtx = legendCanvas.getContext("2d");  
-
-              var elevationLegendStep = Math.ceil(maxHeight / 10);
-          
-              if (elevationLegendStep &lt; 10)
+              elevationLegendStep = 10;
+          }
+          else
+          {
+              while (elevationLegendStep % 10 != 0)
               {
-                  elevationLegendStep = 10;
+                  elevationLegendStep ++;
               }
-              else
-              {
-                  while (elevationLegendStep % 10 != 0)
-                  {
-                      elevationLegendStep ++;
-                  }
-              }
+          }
           
-              var legendElevation = Math.ceil(minElevation[trackNum]);
+          var legendElevation = Math.ceil(minElevation[trackNum]);
           
-              while (legendElevation % 10 != 0)
-              {
-                  legendElevation++;
-              }
+          while (legendElevation % 10 != 0)
+          {
+              legendElevation++;
+          }
           
-              ctx.strokeStyle = "#c0c0c0";
-              ctx.lineWidth = 1;
+          ctx.strokeStyle = "#c0c0c0";
+          ctx.lineWidth = 1;
           
-              legendCtx.font = "10pt Arial";
+          legendCtx.font = "10pt Arial";
           
-              while (legendElevation &lt; maxElevation[trackNum])
-              {
-                  var legendYPos = chartHeight - ((legendElevation - minElevation[trackNum]) * chartHeight / maxHeight);
+          while (legendElevation &lt; maxElevation[trackNum])
+          {
+              var legendYPos = chartHeight - ((legendElevation - minElevation[trackNum]) * chartHeight / maxHeight);
               
-                  ctx.beginPath();
-                  ctx.moveTo(chartXOffset - 1, legendYPos);
-                  ctx.lineTo(canvasWidth - 1, legendYPos);
-                  ctx.stroke();
+              ctx.beginPath();
+              ctx.moveTo(chartXOffset - 1, legendYPos);
+              ctx.lineTo(canvasWidth - 1, legendYPos);
+              ctx.stroke();
  
-                  legendCtx.fillText(String(legendElevation) , 5, legendYPos + 5, 70)
+              legendCtx.fillText(String(legendElevation) , 5, legendYPos + 5, 70)
               
-                  legendElevation += elevationLegendStep;
-              }
+              legendElevation += elevationLegendStep;
           }
       }
 

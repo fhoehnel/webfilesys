@@ -57,8 +57,8 @@
   td.jsmenu {background-color:#ffa000;padding-left:5px;padding-right:5px;padding-top:2px;padding-bottom:2px;border-top-width:1px;border-top-style:solid;border-top-color:white;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;}
   td.border {background-color:black;}
 
-  td.fileListFunct {background-color:#ffd060;font-size:10pt;font-family:Arial,Helvetica;color:black;}
-  th.fileListHead {background-color:#d0d0d0;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;padding-top:2px;padding-bottom:2px;}
+  td.fileListFunct {background-color:#ffd060;font-size:10pt;font-family:Arial,Helvetica;color:black;padding:6px 10px;}
+  th.fileListHead {background-color:#d0d0d0;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;padding-top:2px;padding-bottom:2px;vertical-align:top;}
   td.fileListData {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding-top:2px;}
   td.thumbData {background-color:ivory;color:black;font-size:8pt;font-family:Arial,Helvetica;vertical-align:bottom;padding:4px;}
   .sep {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#b0b0b0;}
@@ -66,6 +66,30 @@
   input.cb3 {background-color:#ffd060;}
   input.cb4 {background-color:#e0e0e0;}
   input.cb5 {background-color:#f0d060;}
+
+  img.expCol {border-style:none;width:15px;height:17px;}
+  img.icon {border-style:none;width:16px;height:16px;margin-right:1px;}
+  img.folder {border-style:none;width:17px;height:14px;}
+  img.computer {border-style:none;width:17px;height:14px;margin-right:4px;}
+
+  a.dirSpacer {margin-left:4px;}
+
+  div.fileListDesc {width:100%;padding:2px;margin-bottom:5px;}
+
+  div.searchPath
+  {
+      position: absolute;
+      top: 185px;
+      left: 20px;
+      width: 640px;
+      background-color: ivory;
+  }
+  
+  span.searchPath
+  {
+      color: navy;
+      background-color: ivory;
+  }  
 
   input[type="submit"], input[type="button"], input.roundedButton
   {
@@ -85,6 +109,14 @@
       border-radius: 10px;
   }
 
+  table.tabs
+  { 
+      width: 100%;
+      margin-top: 10px;
+      border-style: none;
+      border-spacing: 0 0;
+  }
+
   td.tabActive 
   {
       background-color:#ffd060;
@@ -92,6 +124,7 @@
       font-family:Arial,Helvetica;
       color:black;
       font-weight:bold;
+      white-space: nowrap;      
       border-width:1px;
       border-style:solid;
       border-color:#000000;
@@ -114,6 +147,7 @@
       font-size:10pt;
       font-family:Arial,Helvetica;
       color:#808080;
+      white-space: nowrap;      
       border-width:1px;
       border-style:solid;
       border-color:#808080;
@@ -155,7 +189,7 @@
   
   table.topLess {border-width:1px;border-style:solid;border-color:black;border-top-style:none}
   
-  td.bottomLine {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#808080;}
+  td.bottomLine {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#808080;padding:0;}
   
   .sepTop {border-top-width:1px;border-top-style:solid;border-top-color:#b0b0b0;}
   a.listHead {font-size:10pt;color:#404040;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
@@ -163,6 +197,7 @@
 
   td.imgData {font-size:8pt;color:black;font-family:Arial;}
   img.thumb {border-style:groove;border-width:2;border-color:#808080;}
+  td.mapIcon {text-align:right;width:1%;padding:0;}
 
   div.more {padding-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;border-left-style:solid;border-left-width:1px;border-left-color:#808080;background-color:#ffffff;}
   div.last {padding-left:12px;padding-top:0px;padding-right:0px;padding-bottom:0px;white-space:nowrap;background-color:#ffffff;}
@@ -351,6 +386,7 @@
      background-color:ivory;
      border-left:1px solid black;
      border-right:1px solid black;
+     border-collapse: collapse;
   }
 
   table.fileList
@@ -551,3 +587,23 @@
       top:40px;
       right:35px;
   }    
+  
+  div.currentTrail 
+  {
+      font-family: Arial,Helvetica;
+      font-size: 11pt;
+      color: #000000;
+  }
+  
+  a.currentTrail 
+  {
+      color: #000000;
+      text-decoration: none;
+  }
+
+  a.currentTrail:hover 
+  {
+      color: green;
+      text-decoration: underline;
+  }
+    

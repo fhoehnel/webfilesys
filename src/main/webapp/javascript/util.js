@@ -103,3 +103,25 @@ function centerBox(box)
     box.style.visibility = "visible";
 }
   
+function removeAllChildNodes(parentElementId)
+{
+	var parentNode = document.getElementById(parentElementId);
+
+	if (parentNode && parentNode.hasChildNodes())
+	{
+	    while (parentNode.childNodes.length >= 1)
+	    {
+	    	parentNode.removeChild(parentNode.firstChild);       
+	    } 
+	}
+}
+
+function shortText(origText, maxLength)
+{
+	if (origText.length <= maxLength)
+	{
+		return origText;
+	}
+	
+	return (origText.substring(0, maxLength - 4) + " ...");
+}

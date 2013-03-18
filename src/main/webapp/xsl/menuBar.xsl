@@ -17,6 +17,7 @@
   <xsl:attribute name="href">/webfilesys/css/<xsl:value-of select="/menubar/css" />.css</xsl:attribute>
 </link>
 
+<script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 
 <script language="javascript">
@@ -59,6 +60,29 @@
   {
       searchWin=open('/webfilesys/servlet?command=search','searchWin','scrollbars=yes,resizable=yes,width=500,height=480,left=100,top=60,screenX=100,screenY=60');
       searchWin.focus();
+  }
+
+  function openCalendar()
+  {
+      var windowWidth = screen.availWidth - 10;
+      var windowHeight = screen.availHeight - 20;
+    
+      if (browserChrome) 
+      {
+          windowHeight = windowHeight - 40;
+      }
+    
+      if (windowHeight > windowWidth - 200)
+      {
+          windowHeight = windowWidth - 200;
+      }
+      else if (windowWidth > windowHeight + 250)
+      {
+          windowWidth = windowHeight + 250;
+      }
+  
+      calWin = window.open('/webfilesys/servlet?command=calendar','calWin','scrollbars=yes,resizable=yes,width=' + windowWidth + ',height=' + windowHeight);
+      calWin.focus();
   }
   
   function fileSysStats()
@@ -278,6 +302,16 @@
                 <a href="javascript:ftpBackup()">
                   <img src="/webfilesys/images/menubar/ftp.gif" border="0" width="32" height="32">
                     <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.ftpBackup']/@value" /></xsl:attribute>
+                  </img>
+                </a>
+              </th>
+            </xsl:if>
+
+            <xsl:if test="calendarEnabled">
+              <th>
+                <a href="javascript:openCalendar()">
+                  <img src="/webfilesys/images/menubar/calendar.gif" border="0" width="32" height="32">
+                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.calendar']/@value" /></xsl:attribute>
                   </img>
                 </a>
               </th>

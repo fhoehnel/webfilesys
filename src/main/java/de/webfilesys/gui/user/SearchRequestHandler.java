@@ -173,6 +173,7 @@ public class SearchRequestHandler extends UserRequestHandler
         if (!readonly)
         {
 			output.println("var keepSearchResults = false;");
+			output.println("var resultsDiscarded = false;");
 
 			String mobile = (String) session.getAttribute("mobile");
             
@@ -190,11 +191,12 @@ public class SearchRequestHandler extends UserRequestHandler
 			output.println("}");
 			
 			output.println("function discardSearchResults() {");
-			output.println("if (keepSearchResults) {");
+			output.println("if (keepSearchResults || resultsDiscarded) {");
 			output.println("return;");
 			output.println("}");
 			output.println("var discardURL = '/webfilesys/servlet?command=discardSearchResults&resultDir=" + UTF8URLEncoder.encode(searchResultDir) + "';");
 			output.println("xmlRequestSynchron(discardURL);");
+			output.println("resultsDiscarded = true;");
 			output.println("}");
 
 			output.println("function discardAndClose() {");
@@ -280,7 +282,7 @@ public class SearchRequestHandler extends UserRequestHandler
 			output.println(getResource("label.currentSearchDir","searching in folder") + ":");
 			output.println("</td></tr>");
 			output.println("<tr><td class=\"formParm2\" colspan=\"3\">");
-			output.println("<div id=\"currentSearchDir\"></id>");
+			output.println("&nbsp;");
 			output.println("</td></tr>");
 		}        
 

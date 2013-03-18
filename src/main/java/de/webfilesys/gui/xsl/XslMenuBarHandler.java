@@ -82,7 +82,13 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(menuBarElement, "queryDrives", "true", false);
             addMsgResource("label.refreshDrives", getResource("label.refreshDrives","Check for added/removed drives"));
         }
-		
+
+        if (WebFileSys.getInstance().isEnableCalendar())
+        {
+            XmlUtil.setChildText(menuBarElement, "calendarEnabled", "true", false);
+    		addMsgResource("label.calendar", getResource("label.calendar","Calendar"));
+        }
+        
 		addMsgResource("label.fastpath", getResource("label.fastpath","Fast Path (last visited directories)"));
 		addMsgResource("label.bookmarks", getResource("label.bookmarks","Bookmarked Folders"));
         addMsgResource("label.returnToPrevDir", getResource("label.returnToPrevDir","Return to last visited folder"));

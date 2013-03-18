@@ -1491,6 +1491,12 @@ public class MetaInfManager extends Thread
 	public void createLink(String path, FileLink newLink)
 	throws FileNotFoundException
 	{
+		createLink(path, newLink, false);
+	}
+	
+	public void createLink(String path, FileLink newLink, boolean suppressReverseLink)
+	throws FileNotFoundException
+	{
 		File destFile = new File(newLink.getDestPath());
 		
 		if ((!destFile.exists()) || (!destFile.isFile()) || (!destFile.canRead()))
@@ -1525,9 +1531,12 @@ public class MetaInfManager extends Thread
 		XmlUtil.setChildText(linkElement,"creationTime",Long.toString(newLink.getCreationTime()),false);
 		XmlUtil.setChildText(linkElement,"creator",newLink.getCreator(),false);
         
-		if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+		if (!suppressReverseLink) 
 		{
-	        createReverseLinkRef(path, newLink);        
+			if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+			{
+		        createReverseLinkRef(path, newLink);        
+			}
 		}
 		
 		cacheDirty.put(path,new Boolean(true));

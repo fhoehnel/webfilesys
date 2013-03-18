@@ -169,7 +169,7 @@ function jsContextMenu(fileName, imgType, domId)
         maxMenuHeight = 380;
     }
     
-    if (browserType == 'msie')
+    if (!browserFirefox) 
     {
         windowWidth = document.body.clientWidth;
         windowHeight = document.body.clientHeight;

@@ -32,7 +32,7 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XslFileListHandler extends XslRequestHandlerBase
+public class XslFileListHandler extends XslFileListHandlerBase
 {
 	protected boolean initial = false;
 	
@@ -454,6 +454,8 @@ public class XslFileListHandler extends XslRequestHandlerBase
             }
 		}
 
+		addCurrentTrail(fileListElement, actPath, docRoot, mask);		
+		
 		processResponse("fileList.xsl", true);
 
 		FastPathManager.getInstance().queuePath(uid,actPath);
@@ -468,4 +470,5 @@ public class XslFileListHandler extends XslRequestHandlerBase
 			}
 		}
 	}
+	
 }

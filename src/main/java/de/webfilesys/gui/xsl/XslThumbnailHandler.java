@@ -38,7 +38,7 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XslThumbnailHandler extends XslRequestHandlerBase
+public class XslThumbnailHandler extends XslFileListHandlerBase
 {
 	private static int COLUMNS_NO_ZOOM = 4;
 	private static int COLUMNS_ZOOM = 2;
@@ -1068,6 +1068,8 @@ public class XslThumbnailHandler extends XslRequestHandlerBase
 				XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
 			}
 		}
+		
+		addCurrentTrail(fileListElement, actPath, userMgr.getDocumentRoot(uid), mask);		
 		
 		this.processResponse("thumbnails.xsl", true);
 
