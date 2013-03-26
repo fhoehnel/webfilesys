@@ -235,10 +235,18 @@
               
               <tr>
                 <td class="formParm1">
-                  <xsl:value-of select="resources/msg[@key='label.language']/@value" />
+                  <xsl:if test="validation/error[@field='language']">
+                    <xsl:attribute name="class">formError</xsl:attribute>
+                  </xsl:if>  
+                  <xsl:if test="not(validation/error[@field='language'])">
+                    <xsl:attribute name="class">formParm1</xsl:attribute>
+                  </xsl:if>  
+                  <b><xsl:value-of select="resources/msg[@key='label.language']/@value" /></b>
                 </td>
                 <td class="formParm2">
                   <select name="language" size="1">
+                  
+                    <option value=""><xsl:value-of select="resources/msg[@key='label.selectLanguage']/@value" /></option>
                   
                     <xsl:for-each select="languages/language">
                       <option>

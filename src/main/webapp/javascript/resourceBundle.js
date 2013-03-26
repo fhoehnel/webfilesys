@@ -13,8 +13,9 @@ function setBundleResources(domNode)
     		
     		if (resourceText)
     		{
-                if ((tagName == "LABEL") || (tagName == "A") || (tagName == "TD")  || 
-                	(tagName == "SPAN") || (tagName == "TH") || (tagName == "OPTION"))
+                if ((tagName == "LABEL") || (tagName == "A") || (tagName == "TD") || (tagName == "DIV")  || 
+                	(tagName == "SPAN") || (tagName == "TH") || (tagName == "OPTION") ||
+                	(tagName == "TITLE"))
                 {
                   	setNodeValue(domNode, resourceText);
                 }

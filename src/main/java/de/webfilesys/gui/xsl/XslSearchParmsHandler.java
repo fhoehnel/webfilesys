@@ -68,6 +68,8 @@ public class XslSearchParmsHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(searchParmsElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(searchParmsElement, "relativePath", relativePath, false);
 		
+	    XmlUtil.setChildText(searchParmsElement, "language", language, false);
+		
 		addMsgResource("label.searchHead", getResource("label.searchHead", "File and fulltext search"));
 		addMsgResource("label.searchPath", getResource("label.searchPath", "Search in Folder tree"));
 		addMsgResource("label.filemask", getResource("label.filemask", "file name filter"));

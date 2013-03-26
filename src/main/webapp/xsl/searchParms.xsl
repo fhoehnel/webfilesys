@@ -16,13 +16,17 @@
   <xsl:attribute name="href">/webfilesys/css/<xsl:value-of select="/searchParms/css" />.css</xsl:attribute>
 </link>
 
-<title>WebFileSys: <xsl:value-of select="resources/msg[@key='label.searchHead']/@value" /></title>
+<title resource="label.searchTitle"></title>
 
-<script language="JavaScript" src="javascript/browserCheck.js" type="text/javascript"></script>
-<script language="JavaScript" src="javascript/calendar/CalendarPopup.js" type="text/javascript"></script>
-<script language="JavaScript" src="javascript/calendar/AnchorPosition.js" type="text/javascript"></script>
-<script language="JavaScript" src="javascript/calendar/date.js" type="text/javascript"></script>
-<script language="JavaScript" src="javascript/calendar/PopupWindow.js" type="text/javascript"></script>
+<script src="javascript/browserCheck.js" type="text/javascript"></script>
+<script src="javascript/calendar/CalendarPopup.js" type="text/javascript"></script>
+<script src="javascript/calendar/AnchorPosition.js" type="text/javascript"></script>
+<script src="javascript/calendar/date.js" type="text/javascript"></script>
+<script src="javascript/calendar/PopupWindow.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/searchParms/language" /></xsl:attribute>
+</script>
 
 <style id="calendarStyle">
 </style>
@@ -121,7 +125,7 @@
   {
       if (!checkDate())
       {
-          alert('<xsl:value-of select="resources/msg[@key='label.searchDateConflict']/@value" />');
+          alert(resourceBundle["label.searchDateConflict"]);
           return;
       }
       
@@ -170,11 +174,9 @@
 
 </head>
 
-<body onload="setCalendarStyles()">
+<body onload="setBundleResources();setCalendarStyles()">
 
-  <div class="headline">
-    <xsl:value-of select="resources/msg[@key='label.searchHead']/@value" />
-  </div>
+  <div class="headline" resource="label.searchHead" />
 
   <form accept-charset="utf-8" name="findform" method="post" action="/webfilesys/servlet">
   
@@ -186,9 +188,7 @@
  
     <table class="dataForm" width="100%">
       <tr>
-        <td colspan="2" class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.searchPath']/@value" />:
-        </td>
+        <td colspan="2" class="formParm1" resource="label.searchPath" />
       </tr>
       <tr>
         <td colspan="2" class="formParm2">
@@ -197,18 +197,14 @@
       </tr>
     
       <tr>
-        <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.filemask']/@value" />:
-        </td>
+        <td class="formParm1" resource="label.filemask" />
         <td class="formParm2">
           <input type="text" name="FindMask" maxlength="256" value="*.*" style="width:100px" />
         </td>
       </tr>
 
       <tr>
-        <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.searcharg']/@value" />:
-        </td>
+        <td class="formParm1" resource="label.searcharg" />
         <td class="formParm2">
           <input id="searchArg" type="text" name="SearchArg" maxlength="256" 
               style="width:250px" onchange="switchCheckboxes()" onkeyup="switchCheckboxes()" />
@@ -217,9 +213,9 @@
 
       <tr>
         <td colspan="2" class="formParm2" style="padding-left:30px">
-          <xsl:value-of select="resources/msg[@key='label.argdesc1']/@value" />
+          <span resource="label.argdesc1" />
           <br/>
-          "<xsl:value-of select="resources/msg[@key='label.argdesc2']/@value" />"
+          <span resource="label.argdesc2" />
         </td>
       </tr>
 
@@ -227,7 +223,7 @@
         <td colspan="2" class="formParm1">
           <input type="checkbox" name="includeSubdirs" checked="true" class="cb5" />
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.includeSubdirs']/@value" />
+          <span resource="label.includeSubdirs" />
         </td>
       </tr>
 
@@ -235,7 +231,7 @@
         <td colspan="2" class="formParm1">
           <input id="includeDesc" type="checkbox" name="includeDesc" class="cb5" disabled="disabled" />
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.includemetainf']/@value" />
+          <span resource="label.includemetainf" />
         </td>
       </tr>
 
@@ -243,14 +239,12 @@
         <td colspan="2" class="formParm1">
           <input id="descOnly" type="checkbox" name="descOnly" class="cb5" disabled="disabled"/>
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.metainfonly']/@value" />
+          <span resource="label.metainfonly" />
         </td>
       </tr>
 
       <tr>
-        <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.dateRangeFrom']/@value" />:
-        </td>
+        <td class="formParm1" resource="label.dateRangeFrom" />
         <td class="formParm2">
           <input type="text" name="fromYear" size="4" maxlength="4" style="width:40px" id="fromYear" readonly="readonly"/>
           /
@@ -258,18 +252,15 @@
           /
           <input type="text" name="fromDay" size="2" maxlength="2" style="width:30px" id="fromDay" readonly="readonly"/>
           &#160;
-          <a href="#" name="anchorFrom" id="anchorFrom">
+          <a href="#" name="anchorFrom" id="anchorFrom" titleResource="label.searchCalendar">
             <xsl:attribute name="onClick">selectFromDate()</xsl:attribute>
-            <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.searchCalendar']/@value" /></xsl:attribute>
             <img src="images/calendar.gif" border="0" />
           </a>
         </td>
       </tr>
 
       <tr>
-        <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.dateRangeUntil']/@value" />:
-        </td>
+        <td class="formParm1" resource="label.dateRangeUntil" />
         <td class="formParm2">
           <input type="text" name="toYear" size="4" maxlength="4" style="width:40px" readonly="readonly">
             <xsl:attribute name="value"><xsl:value-of select="currentDate/year" /></xsl:attribute>
@@ -283,9 +274,8 @@
             <xsl:attribute name="value"><xsl:value-of select="currentDate/day" /></xsl:attribute>
           </input>
           &#160;
-          <a href="#" name="anchorTo" id="anchorTo">
+          <a href="#" name="anchorTo" id="anchorTo" titleResource="label.searchCalendar">
             <xsl:attribute name="onClick">selectToDate()</xsl:attribute>
-            <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.searchCalendar']/@value" /></xsl:attribute>
             <img src="images/calendar.gif" border="0" />
           </a>
           
@@ -293,14 +283,10 @@
       </tr>
 
       <tr>
-        <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.assignedToCategory']/@value" />:
-        </td>
+        <td class="formParm1" resource="label.assignedToCategory" />
         <td class="formParm2">
           <select name="category">
-            <option value="-1">
-              <xsl:value-of select="/searchParms/resources/msg[@key='label.selectCategory']/@value" />
-            </option>
+            <option value="-1" resource="label.selectCategory" />
 
             <xsl:for-each select="categories/category">
               <option>
@@ -316,21 +302,17 @@
         <td colspan="2" class="formParm1">
           <input id="resultAsTree" type="checkbox" name="resultAsTree" class="cb5" />
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.searchResultAsTree']/@value" />
+          <span resource="label.searchResultAsTree" />
         </td>
       </tr>
 
       <tr style="margin-top:10px">
         <td class="formButton">
-          <input id="searchButton" type="button" onclick="submitIfValid()">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.startsearch']/@value" /></xsl:attribute>
-          </input>
+          <input id="searchButton" type="button" onclick="submitIfValid()" resource="button.startsearch" />
         </td>
         
         <td class="formButton" align="right">
-          <input id="cancelButton" type="button" onclick="self.close()">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
-          </input>
+          <input id="cancelButton" type="button" onclick="self.close()" resource="button.cancel" />
         </td>
 
       </tr>

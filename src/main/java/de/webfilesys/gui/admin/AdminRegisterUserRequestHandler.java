@@ -247,7 +247,7 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
         output.println("<td class=\"formParm1\"><b>language</b></td>");
 		output.println("<td class=\"formParm2\"><select name=\"language\" size=\"1\">");
 
-		output.println("<option selected=\"selected\">" + LanguageManager.DEFAULT_LANGUAGE + "</option>");
+		output.println("<option value=\"\">- select -</option>");
 
 		for (int i = 0; i < languages.size(); i++)
 		{

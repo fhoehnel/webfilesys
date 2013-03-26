@@ -344,15 +344,6 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         output.println("<td class=\"formParm1\"><b>language</b></td>");
 		output.println("<td class=\"formParm2\"><select name=\"language\" size=\"1\">");
 
-		if (userLanguage.equals(LanguageManager.DEFAULT_LANGUAGE))
-		{
-			output.print("<option selected=\"selected\">" + LanguageManager.DEFAULT_LANGUAGE + "</option>");
-		}
-		else
-		{
-			output.print("<option>" + LanguageManager.DEFAULT_LANGUAGE + "</option>");
-		}
-
 		for (int i=0;i<languages.size();i++)
 		{
 			String lang=(String) languages.elementAt(i);

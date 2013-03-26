@@ -297,7 +297,8 @@ label.drivelabel=Drive Label
 label.bytesfree=Bytes free
 
 # search window labels and buttons
-label.searchHead=File and fulltext search
+label.searchHead=file and fulltext search
+label.searchTitle=WebFileSys: Search
 label.searchPath=Search in Folder tree
 label.filemask=file name filter
 label.searcharg=text in file/meta info
@@ -605,6 +606,7 @@ label.settings=Settings
 label.oldpassword=current password
 label.newpassword=new password
 label.css=layout
+label.selectLanguage=- select language -
 button.register=Register
 error.missinglogin=the minimum length of the login name is 3 characters
 error.spacesinlogin=the login name must not contain spaces
@@ -614,6 +616,7 @@ error.pwmissmatch=password and password confirmation do not match
 error.duplicatelogin=an user with this name already exists
 error.email=a valid e-mail address is required
 error.invalidpassword=the current password is invalid
+error.missingLanguage=language is required
 
 # MP3 labels
 label.editmp3=Edit MP3 Tags

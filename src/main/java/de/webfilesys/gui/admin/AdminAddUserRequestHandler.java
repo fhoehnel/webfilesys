@@ -133,6 +133,13 @@ public class AdminAddUserRequestHandler extends AdminRequestHandler
 			errorMsg.append("a valid e-mail address is required\\n");
 		}
 
+		String userLanguage=getParameter("language");
+
+        if ((userLanguage == null) || userLanguage.length() == 0)
+        {
+			errorMsg.append("please select a language\\n");
+        }
+		
 		int diskQuotaMB=(-1);
 
 		String checkDiskQuota=getParameter("checkDiskQuota");
@@ -200,8 +207,6 @@ public class AdminAddUserRequestHandler extends AdminRequestHandler
 
 		String phone=getParameter("phone");
 
-		String userLanguage=getParameter("language");
-
 		String css=getParameter("css");
 
 		if (role!=null)
@@ -231,10 +236,7 @@ public class AdminAddUserRequestHandler extends AdminRequestHandler
 			userMgr.setDiskQuota(login,diskQuota);
 		}
 
-		if (userLanguage!=null)
-		{
-			userMgr.setLanguage(login,userLanguage);
-		}
+		userMgr.setLanguage(login, userLanguage);
 
 		if (css!=null)
 		{

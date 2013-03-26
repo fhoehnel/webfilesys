@@ -298,6 +298,7 @@ label.bytesfree=Bytes frei
 
 # search window labels and buttons
 label.searchHead=Datei- und Volltextsuche
+label.searchTitle=WebFileSys: Suche
 label.searchPath=Suche in Ordner (inkl. Unterordner)
 label.filemask=Suchmaske für Dateinamen
 label.searcharg=enthaltener Text
@@ -607,6 +608,7 @@ label.settings=Einstellungen
 label.oldpassword=Altes Passwort
 label.newpassword=Neues Passwort
 label.css=Layout
+label.selectLanguage=- bitte auswählen -
 button.register=Anmelden
 error.missinglogin=Der Login-Name muss mindestens 3 Zeichen lang sein
 error.spacesinlogin=Der Login-Name darf keine Leerzeichen enthalten
@@ -616,6 +618,7 @@ error.pwmissmatch=Passwort und Bestätigung stimmen nicht überein
 error.duplicatelogin=Ein Nutzer mit diesem Namen existiert bereits
 error.email=eine gültige e-mail Adresse ist erforderlich
 error.invalidpassword=Das alte Passwort ist falsch
+error.missingLanguage=Sprache ist ein Pflichtfeld
 
 # MP3 labels
 label.editmp3=MP3 Tags editieren

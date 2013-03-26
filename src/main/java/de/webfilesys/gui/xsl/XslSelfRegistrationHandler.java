@@ -120,6 +120,13 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 			this.addValidationError("email", langMgr.getResource(primaryLanguage, "error.email","a valid e-mail address is required"));
 		}
 		
+		String userLanguage = getParameter("language");
+
+        if ((userLanguage == null) || (userLanguage.length() == 0))
+        {
+			this.addValidationError("language", langMgr.getResource(primaryLanguage, "error.missingLanguage","language is required"));
+        }
+		
 		if (validationElement != null)
 		{
 			selfRegistrationForm(req, session);
@@ -170,8 +177,6 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		String lastName = getParameter("lastName");
 
 		String phone = getParameter("phone");
-
-		String userLanguage = getParameter("language");
 
 		userMgr.setRole(login, "webspace");
 
@@ -269,24 +274,13 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		
 		rootElement.appendChild(languagesElement);
 		
-		Element languageElement = doc.createElement("language");
-		
-		XmlUtil.setElementText(languageElement, LanguageManager.DEFAULT_LANGUAGE);
-		
-		if (selectedLanguage == null)
-	    {
-			languageElement.setAttribute("selected", "true");
-	    }
-		
-		languagesElement.appendChild(languageElement);
-		
 		Vector languageList = langMgr.getAvailableLanguages();
 		
 		for (int i = 0; i < languageList.size(); i++ )
 		{
 			String languageName = (String) languageList.elementAt(i);
 			
-			languageElement = doc.createElement("language");
+			Element languageElement = doc.createElement("language");
 			
 			XmlUtil.setElementText(languageElement, languageName);
 			
@@ -424,6 +418,11 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 									   "button.cancel",
 									   "Cancel"));
 
+		addMsgResource("label.selectLanguage", 
+				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+									   "label.selectLanguage",
+									   "- select language -"));
+		
 		this.processResponse("registerUser.xsl", true);
     }
 }
