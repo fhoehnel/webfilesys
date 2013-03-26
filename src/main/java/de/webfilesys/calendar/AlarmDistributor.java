@@ -88,7 +88,17 @@ public class AlarmDistributor extends Thread
 							appointment.setMailAlarmed(true);
                             appointment.setLastMailAlarmed(gmtNow);
 							
-							setRepeatedAlarmTime(entryToAlarm, appointment);
+                            if (!entryToAlarm.isCloned())
+                            {
+    							setRepeatedAlarmTime(entryToAlarm, appointment);
+                            }
+                            else
+                            {
+                    			if (Logger.getLogger(getClass()).isDebugEnabled())
+                    			{
+                    				Logger.getLogger(getClass()).debug("ignoring alarm entry clone in repeat check: " + entryToAlarm);
+                    			}
+                            }
 
 							AppointmentManager.getInstance().updateAppointment(entryToAlarm.getOwner(), appointment, false);
 						}

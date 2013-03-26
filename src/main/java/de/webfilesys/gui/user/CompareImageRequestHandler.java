@@ -215,7 +215,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 			output.println(CommonUtils.shortName(imgFileName, 30));
 			
 			if (!readonly) {
-	            output.println("<a href=\"javascript:confirmDelImg('" + imgFileName + "')\"><img src=\"/webfilesys/images/trash.gif\" width=\"17\" height=\"16\" title=\"" + getResource("alt.delpicture", "delete image file") + "\"/></a>");
+	            output.println("<a href=\"javascript:confirmDelImg('" + imgFileName + "')\"><img src=\"/webfilesys/images/trash.gif\" width=\"17\" height=\"16\" border=\"0\" title=\"" + getResource("alt.delpicture", "delete image file") + "\"/></a>");
 			}
 			
 			output.println("</td>");

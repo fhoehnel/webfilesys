@@ -38,10 +38,15 @@
 <script language="JavaScript" src="/webfilesys/javascript/keyDirTree.js" type="text/javascript"></script>
 <script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/folderTree/language" /></xsl:attribute>
+</script>
+
 <script language="javascript">
 
-  var folderTip = '<xsl:value-of select="/folderTree/resources/msg[@key='folderTip']/@value" />';
-  var listTip = '<xsl:value-of select="/folderTree/resources/msg[@key='listTip']/@value" />';
+  var folderTip = resourceBundle["tooltip.folder"];
+  var listTip = resourceBundle["tooltip.listFiles"];
   
   var clipboardEmpty = <xsl:value-of select="/folderTree/clipBoardEmpty" />;
   
@@ -85,7 +90,7 @@
 
 <body onclick="mouseClickHandler()">
 <xsl:attribute name="class">dirTree</xsl:attribute>
-<xsl:attribute name="onLoad">setTimeout('scrollToCurrent()', 100);setTimeout('setTooltips()', 500);</xsl:attribute>
+<xsl:attribute name="onLoad">setBundleResources();setTimeout('scrollToCurrent()', 100);setTimeout('setTooltips()', 500);</xsl:attribute>
 
 <xsl:apply-templates />
 
@@ -98,7 +103,7 @@
   <div id="hint" class="hint" style="position:absolute;top:10px;left:50%;width:40%;">
     <xsl:attribute name="onClick">javascript:hideHint()</xsl:attribute>
     <img src="/webfilesys/images/winClose.gif" border="0" style="float:right;" />
-    <xsl:value-of select="/folderTree/resources/msg[@key='label.loginHint']/@value" />
+    <span resource="label.loginHint"></span>
   </div>
 </xsl:if>
 

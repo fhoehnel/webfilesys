@@ -175,12 +175,7 @@ function selectedFileFunction(unhighlight)
 
     if (cmd=='delete') 
     {
-        var delConfirmMsg = parent.resourceDelFiles;
-        
-        if (!delConfirmMsg)
-        {
-            delConfirmMsg = resourceDelFiles;
-        }
+        var delConfirmMsg = resourceBundle["confirm.deleteFiles"];
         
         if (confirm(delConfirmMsg)) 
         {

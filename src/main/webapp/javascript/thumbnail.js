@@ -170,11 +170,11 @@ function multiImageDelete()
 {
     if (anySelected())
     {
-        if (confirm(parent.resourceDelImages)) 
+        if (confirm(resourceBundle["confirm.deleteImages"])) 
         {
-	    document.form2.command.value='multiImageDelete';
+	        document.form2.command.value='multiImageDelete';
             document.form2.submit();
-	}
+	    }
         document.form2.command.value='compareImg';
     }
     else

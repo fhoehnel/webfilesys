@@ -94,6 +94,8 @@ public class XslWinDirTreeHandler extends XslDirTreeHandler
 		// XmlUtil.setChildText(folderTreeElement,"userid", uid, false);
 		XmlUtil.setChildText(folderTreeElement, "css", userMgr.getCSS(uid), false);
 
+	    XmlUtil.setChildText(folderTreeElement, "language", language, false);
+		
         Element computerElement = doc.createElement("computer");
 
         folderTreeElement.appendChild(computerElement);

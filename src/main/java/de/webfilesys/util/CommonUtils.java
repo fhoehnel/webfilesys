@@ -375,6 +375,25 @@ public class CommonUtils
         return(buff.toString());
     }
 
+    public static final String escapeJSON(String s)
+    {
+        StringBuffer sb = new StringBuffer();
+        int n = s.length();
+        for (int i = 0; i < n; i++) 
+        {
+            char c = s.charAt(i);
+            switch (c) {
+                case '"': sb.append("\\\"");
+  		                  break;
+                case '\'': sb.append("\\\'");
+  		                  break;
+              
+               default:  sb.append(c);
+           }
+        }
+        return sb.toString();
+     }
+    
     /**
      * This code is from http://www.rgagnon.com/javadetails/java-0306.html
      * @param s the original String

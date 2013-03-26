@@ -26,6 +26,7 @@
 </xsl:if>
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
@@ -37,6 +38,11 @@
 <script src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/popupPicture.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
+
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
+</script>
 
 <xsl:if test="/fileList/geoTag">
   <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
@@ -87,7 +93,7 @@
        else
        {
            hideHourGlass();
-           alert("<xsl:value-of select="/fileList/resources/msg[@key='noFilesWithGeoData']/@value" />");
+           alert(resourceBundle["noFilesWithGeoData"]);
        }
     } 
     
@@ -103,15 +109,15 @@
        else
        {
            hideHourGlass();
-           alert("<xsl:value-of select="/fileList/resources/msg[@key='noFilesWithGeoData']/@value" />");
+           alert(resourceBundle["noFilesWithGeoData"]);
        }
     }
   </xsl:if>
 
-  <xsl:if test="/fileList/resources/msg[@key='button.copyLinks']">
+  <xsl:if test="/fileList/linksExist">
     function copyLinks()
     {
-        if (confirm("<xsl:value-of select="/fileList/resources/msg[@key='confirm.copyLinks']/@value" />"))
+        if (confirm(resourceBundle["confirm.copyLinks"]))
         {
             document.form2.command.value = 'copyLinks';
             document.form2.submit();
@@ -119,8 +125,8 @@
     }
   </xsl:if>
   
-  var selectOnePic = '<xsl:value-of select="/fileList/resources/msg[@key='alert.nofileselected']/@value" />';
-  var selectTwoPic = '<xsl:value-of select="/fileList/resources/msg[@key='error.compselect']/@value" />';
+  var selectOnePic = resourceBundle["alert.nofileselected"];
+  var selectTwoPic = resourceBundle["error.compselect"];
   
   var path = '<xsl:value-of select="/fileList/menuPath" />';
   
@@ -131,17 +137,6 @@
     var jpegtranAvail = 'false';
   </xsl:if>
 
-  var resourceResize = '<xsl:value-of select="/fileList/resources/msg[@key='label.editPicture']/@value" />';
-  var resourceExifData = '<xsl:value-of select="/fileList/resources/msg[@key='alt.cameradata']/@value" />';
-  var resourceRotateFlip = '<xsl:value-of select="/fileList/resources/msg[@key='label.rotateFlip']/@value" />';
-  var resourceRotateRight = '<xsl:value-of select="/fileList/resources/msg[@key='label.rotateright']/@value" />';
-  var resourceRotateLeft = '<xsl:value-of select="/fileList/resources/msg[@key='label.rotateleft']/@value" />';
-  var resourceRotate180 = '<xsl:value-of select="/fileList/resources/msg[@key='label.rotate180']/@value" />';
-  var resourceFlipHoriz = '<xsl:value-of select="/fileList/resources/msg[@key='label.mirrorhoriz']/@value" />';
-  var resourceFlipVert = '<xsl:value-of select="/fileList/resources/msg[@key='label.mirrorvert']/@value" />';
-  var resourceMakeThumb = '<xsl:value-of select="/fileList/resources/msg[@key='label.makethumb']/@value" />';
-  var resourceConfirmDel = '<xsl:value-of select="/fileList/resources/msg[@key='confirm.delfile']/@value" />';
-  
   <xsl:for-each select="//file">
     <xsl:if test="@link">
       function lm<xsl:value-of select="@id" />()
@@ -190,15 +185,15 @@
   
 </script>
 
-<xsl:if test="/fileList/resources/msg[@key='alert.maintanance']">
+<xsl:if test="/fileList/maintananceMode">
   <script language="javascript">
-    alert('<xsl:value-of select="/fileList/resources/msg[@key='alert.maintanance']/@value" />');
+    alert(resourceBundle["alert.maintanance"]);
   </script>
 </xsl:if>
 
-<xsl:if test="/fileList/resources/msg[@key='alert.dirNotFound']">
+<xsl:if test="/fileList/dirNotFound">
   <script language="javascript">
-    alert('<xsl:value-of select="/fileList/resources/msg[@key='alert.dirNotFound']/@value" />');
+    alert(resourceBundle["alert.dirNotFound"]);
   </script>
 </xsl:if>
 
@@ -210,7 +205,7 @@
 
 </head>
 
-<body onclick="mouseClickHandler()">
+<body onclick="mouseClickHandler()" onload="setBundleResources()">
 
   <xsl:apply-templates />
 
@@ -258,19 +253,19 @@
           <td valign="top" style="text-align:right">
             <select id="geoLocSel" style="width:150px;display:none">
               <xsl:attribute name="onchange">geoMapFolderSelected('<xsl:value-of select="/fileList/pathForScript" />')</xsl:attribute>
-              <option value="0"><xsl:value-of select="/fileList/resources/msg[@key='selectMapType']/@value" /></option>
-              <option value="1"><xsl:value-of select="/fileList/resources/msg[@key='mapTypeOSM']/@value" /></option>
+              <option value="0" resource="selectMapType" />
+              <option value="1" resource="mapTypeOSM" />
               <xsl:if test="googleMaps">
-                <option value="2"><xsl:value-of select="/fileList/resources/msg[@key='mapTypeGoogleMap']/@value" /></option>
+                <option value="2" resource="mapTypeGoogleMap" />
               </xsl:if>
-              <option value="3"><xsl:value-of select="/fileList/resources/msg[@key='mapTypeGoogleEarth']/@value" /></option>
+              <option value="3" resource="mapTypeGoogleEarth" />
             </select>
           </td>
 
           <td id="mapIcon" class="mapIcon" valign="top">
             <a href="javascript:showMapSelection()">
               <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0" style="float:right">
-                <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.geoMapLink']/@value" /></xsl:attribute>
+                <xsl:attribute name="titleResource">label.geoMapLink</xsl:attribute>
               </img>
             </a>
           </td>
@@ -287,40 +282,30 @@
       <td class="bottomLine"><img src="images/space.gif" border="0" width="13" height="1" /></td>
       
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeList()">
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modelist']/@value" />
-        </a>
+        <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
       </td>
  
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
 
-      <td class="tabActive" nowrap="true">
-        <xsl:value-of select="/fileList/resources/msg[@key='label.modethumb']/@value" />
-      </td>
+      <td class="tabActive" nowrap="true" resource="label.modethumb" />
       
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
 
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeStory()">
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modestory']/@value" />
-        </a>
+        <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
 
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeSlideshow()">
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modeSlideshow']/@value" />
-        </a>
+        <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
       <xsl:if test="not(/fileList/readonly)">
         <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
 
         <td class="tabInactive" nowrap="true">
-          <a class="tab" href="javascript:fileStats()">
-            <xsl:value-of select="/fileList/resources/msg[@key='label.fileStats']/@value" />
-          </a>
+          <a class="tab" href="javascript:fileStats()" resource="label.fileStats" />
         </td>
       </xsl:if>
 
@@ -345,12 +330,12 @@
       <input type="hidden" name="rating" value="-1" />
 
       <tr>
-        <td colspan="5" class="fileListFunct" style="padding-top:5px">
+        <td class="fileListFunct" style="padding-top:5px">
             
           <table border="0" cellpadding="2" width="100%">
             <tr>
               <td class="fileListFunct" nowrap="true" style="vertical-align:middle;padding-right:20px;">
-                <xsl:value-of select="/fileList/resources/msg[@key='label.mask']/@value" />:
+                <label resource="label.mask"></label>:
                 <input type="text" name="mask" size="8" maxlength="256">
                   <xsl:attribute name="value">
                     <xsl:value-of select="filter" />
@@ -361,7 +346,7 @@
               <xsl:if test="/fileList/fileGroup">
   
                 <td class="fileListFunct" align="right" nowrap="true" style="vertical-align:middle;padding-right:20px;">
-                  <xsl:value-of select="/fileList/resources/msg[@key='label.listPageSize']/@value" />:
+                  <label resource="label.listPageSize"></label>:
                   <input type="text" name="pageSize" maxlength="4" style="width:35px;">
                     <xsl:attribute name="value">
                       <xsl:value-of select="paging/pageSize" />
@@ -371,9 +356,8 @@
               </xsl:if>
               
               <td style="vertical-align:middle;">
-                <input type="button">
+                <input type="button" resource="label.refresh">
                   <xsl:attribute name="onclick">javascript:document.sortform.submit()</xsl:attribute>
-                  <xsl:attribute name="value"><xsl:value-of select="/fileList/resources/msg[@key='label.refresh']/@value" /></xsl:attribute>
                 </input> 
               </td>
 
@@ -382,62 +366,53 @@
               <xsl:if test="/fileList/fileGroup">
                 <td class="fileListFunct" nowrap="true" style="text-align:right;vertical-align:middle;">
                   <select name="sortBy" size="1" onChange="document.sortform.submit();">
-                    <option value="1">
+                    <option value="1" resource="sort.name.ignorecase">
                       <xsl:if test="sortBy='1'">
                         <xsl:attribute name="selected">true</xsl:attribute>
                       </xsl:if>
-                      <xsl:value-of select="resources/msg[@key='sort.name.ignorecase']/@value" />
                     </option>
                   
-                    <option value="2">
+                    <option value="2" resource="sort.name.respectcase">
                       <xsl:if test="sortBy='2'">
                         <xsl:attribute name="selected">true</xsl:attribute>
                       </xsl:if>
-                      <xsl:value-of select="resources/msg[@key='sort.name.respectcase']/@value" />
                     </option>
                   
-                    <option value="3">
+                    <option value="3" resource="sort.extension">
                       <xsl:if test="sortBy='3'">
                         <xsl:attribute name="selected">true</xsl:attribute>
                       </xsl:if>
-                      <xsl:value-of select="resources/msg[@key='sort.extension']/@value" />
                     </option>
                   
-                    <option value="4">
+                    <option value="4" resource="sort.size">
                       <xsl:if test="sortBy='4'">
                         <xsl:attribute name="selected">true</xsl:attribute>
                       </xsl:if>
-                      <xsl:value-of select="resources/msg[@key='sort.size']/@value" />
                     </option>
                   
-                    <option value="5">
+                    <option value="5" resource="sort.date">
                       <xsl:if test="sortBy='5'">
                         <xsl:attribute name="selected">true</xsl:attribute>
                       </xsl:if>
-                      <xsl:value-of select="resources/msg[@key='sort.date']/@value" />
                     </option>
 
-                    <option value="6">
+                    <option value="6" resource="sort.voteValue">
                       <xsl:if test="sortBy='6'">
                         <xsl:attribute name="selected">true</xsl:attribute>
                       </xsl:if>
-                      <xsl:value-of select="resources/msg[@key='sort.voteValue']/@value" />
                     </option>
 
-                    <option value="7">
+                    <option value="7" resource="sort.voteCount">
                       <xsl:if test="sortBy='7'">
                         <xsl:attribute name="selected">true</xsl:attribute>
                       </xsl:if>
-                      <xsl:value-of select="resources/msg[@key='sort.voteCount']/@value" />
                     </option>
                   </select>
                 </td>
 
               </xsl:if>
               <xsl:if test="not(/fileList/fileGroup)">
-                <td class="fileListFunct" align="right" nowrap="true">
-                  <xsl:value-of select="resources/msg[@key='alert.nopictures']/@value" />
-                </td>
+                <td class="fileListFunct" align="right" nowrap="true" resource="alert.nopictures" />
               </xsl:if>
               
             </tr>
@@ -448,7 +423,7 @@
       <xsl:if test="/fileList/fileGroup">
  
         <tr>
-          <td colspan="5" class="fileListFunct sep">
+          <td class="fileListFunct sep">
 
             <table border="0" cellpadding="2" width="100%">
               <tr>
@@ -467,13 +442,13 @@
                 </xsl:if>
             
                 <td class="fileListFunct" valign="center" nowrap="true">
-                  <xsl:value-of select="resources/msg[@key='label.files']/@value" /> 
+                  <label resource="label.files"></label>
                   &#160;
                   <xsl:value-of select="paging/firstOnPage" />
                   ...
                   <xsl:value-of select="paging/lastOnPage" />
                   &#160;
-                  <xsl:value-of select="resources/msg[@key='label.of']/@value" /> 
+                  <label resource="label.of"></label>
                   &#160;
                   <xsl:value-of select="fileNumber" />
                 </td>
@@ -481,7 +456,7 @@
                 <xsl:if test="fileNumber &gt; paging/pageSize">
               
                   <td class="fileListFunct" valign="center" nowrap="true">
-                    <xsl:value-of select="resources/msg[@key='label.page']/@value" /> 
+                    <label resource="label.page"></label>
 
                     <xsl:for-each select="paging/page">
                       <img src="images/space.gif" border="0" width="5" />
@@ -620,7 +595,7 @@
                 <br/>
                 <xsl:value-of select="comments" />
                 <xsl:value-of select="' '" />
-                <xsl:value-of select="/fileList/resources/msg[@key='label.comments']/@value" />
+                <label resource="label.comments"></label>
 
                 &#160;
 
@@ -665,8 +640,8 @@
 
               <tr>
                 <td align="left" nowrap="true">
-                  <input type="checkbox" class="cb3" name="cb-setAll" onClick="javascript:setAllSelected()" />
-                  <xsl:value-of select="resources/msg[@key='checkbox.selectall']/@value" />
+                  <input type="checkbox" class="cb3" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" style="vertical-align:middle;"/>
+                  <label for="cb-setAll" resource="checkbox.selectall"></label>
                 </td>
               
                 <td width="50%">
@@ -674,32 +649,32 @@
                 </td>
 
                 <td align="right" style="white-space:nowrap">
-                  <xsl:value-of select="resources/msg[@key='label.selectedFiles']/@value" />:
+                  <label resource="label.selectedFiles"></label>:
                   <select name="cmd" size="1" onchange="multiFileFunction()">
-                    <option><xsl:value-of select="resources/msg[@key='label.selectFunction']/@value" /></option>
-                    <option value="compare"><xsl:value-of select="resources/msg[@key='label.compare']/@value" /></option>
+                    <option resource="label.selectFunction" />
+                    <option value="compare" resource="label.compare" />
                    
                     <xsl:if test="not(/fileList/readonly)">
-                      <option value="rotateLeft"><xsl:value-of select="resources/msg[@key='label.rotateleft']/@value" /></option>
-                      <option value="rotateRight"><xsl:value-of select="resources/msg[@key='label.rotateright']/@value" /></option>
-                      <option value="resize"><xsl:value-of select="resources/msg[@key='label.editPicture']/@value" /></option>
-                      <option value="copy"><xsl:value-of select="resources/msg[@key='label.copyToClip']/@value" /></option>
-                      <option value="move"><xsl:value-of select="resources/msg[@key='label.cutToClip']/@value" /></option>
-                      <option value="delete"><xsl:value-of select="resources/msg[@key='button.delete']/@value" /></option>
-                      <option value="exifRename"><xsl:value-of select="resources/msg[@key='label.exifRename']/@value" /></option>
+                      <option value="rotateLeft" resource="label.rotateleft" />
+                      <option value="rotateRight" resource="label.rotateright" />
+                      <option value="resize" resource="label.editPicture" />
+                      <option value="copy" resource="label.copyToClip" />
+                      <option value="move" resource="label.cutToClip" />
+                      <option value="delete" resource="button.delete" />
+                      <option value="exifRename" resource="label.exifRename" />
                     </xsl:if>
                    
-                    <option value="download"><xsl:value-of select="resources/msg[@key='button.downloadAsZip']/@value" /></option>
+                    <option value="download" resource="button.downloadAsZip" />
                   </select>
                 </td>
                 
                 <xsl:if test="not(/fileList/readonly)">
                   <td style="text-align:right;vertical-align:top;padding-right:10px;padding-left:10px;white-space:nowrap">
 
-                    <xsl:value-of select="resources/msg[@key='rating.owner']/@value" />:
+                    <label resource="rating.owner"></label>:
 
                     <select name="minRating" size="1" onChange="setRating()">
-                      <option value="-1">--<xsl:value-of select="resources/msg[@key='rating.any']/@value" />--</option>
+                      <option value="-1" resource="rating.any" />
                       <option value="2">
                         <xsl:if test="/fileList/rating='2'">
                           <xsl:attribute name="selected">true</xsl:attribute>
@@ -747,21 +722,18 @@
 
                   <xsl:if test="not(/fileList/readonly)">
 
-                    <input type="button">
+                    <input type="button" resource="button.upload">
                       <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');</xsl:attribute>
-                      <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.upload']/@value" /></xsl:attribute>
                     </input> 
                                  
                     <xsl:if test="not(/fileList/clipBoardEmpty)">
-                      <input type="button">
+                      <input type="button" resource="button.paste">
                         <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=pasteFiles';</xsl:attribute>
-                        <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.paste']/@value" /></xsl:attribute>
                       </input> 
         
                       <xsl:if test="/fileList/copyOperation">
-                        <input type="button">
+                        <input type="button" resource="button.pasteLink">
                           <xsl:attribute name="onclick">javascript:pasteLinks();</xsl:attribute>
-                          <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.pasteLink']/@value" /></xsl:attribute>
                         </input> 
                       </xsl:if>
                   
@@ -771,44 +743,38 @@
                       <input type="button">
                         <xsl:attribute name="onclick">javascript:publish();</xsl:attribute>
                         <xsl:if test="/fileList/mailEnabled">
-                          <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.invite']/@value" /></xsl:attribute>
+                          <xsl:attribute name="resource">button.invite</xsl:attribute>
                         </xsl:if>
                         <xsl:if test="not(/fileList/mailEnabled)">
-                          <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='label.publish']/@value" /></xsl:attribute>
+                          <xsl:attribute name="resource">label.publish</xsl:attribute>
                         </xsl:if>
                       </input> 
                     </xsl:if>
                     
-                    <xsl:if test="resources/msg[@key='button.copyLinks']">
-                      <input type="button">
+                    <xsl:if test="/fileList/linksExist">
+                      <input type="button" resource="button.copyLinks" titleResource="tooltip.copyLinks">
                         <xsl:attribute name="onclick">javascript:copyLinks()</xsl:attribute>
-                        <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.copyLinks']/@value" /></xsl:attribute>
-                        <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='tooltip.copyLinks']/@value" /></xsl:attribute>
                       </input> 
                     </xsl:if>
 
                     <xsl:if test="/fileList/jpegtran">
                       <xsl:if test="/fileList/fileGroup">
-                        <input type="button">
-                          <xsl:attribute name="onclick">javascript:autoImgRotate('<xsl:value-of select="/fileList/resources/msg[@key='confirm.rotateByExif']/@value" />', '<xsl:value-of select="/fileList/resources/msg[@key='rotateByExif.noop']/@value" />')</xsl:attribute>
-                          <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.rotateByExif']/@value" /></xsl:attribute>
-                          <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='title.rotateByExif']/@value" /></xsl:attribute>                       
+                        <input type="button" resource="button.rotateByExif" titleResource="title.rotateByExif">
+                          <xsl:attribute name="onclick">javascript:autoImgRotate(resourceBundle["confirm.rotateByExif"], resourceBundle["rotateByExif.noop"])</xsl:attribute>
                         </input> 
                       </xsl:if>
                     </xsl:if>
                   </xsl:if>
                   
                   <xsl:if test="/fileList/fileGroup">
-                    <input type="button">
+                    <input type="button" titleResource="label.googleEarthAllFiles">
                       <xsl:attribute name="onclick">javascript:exportGeoData()</xsl:attribute>
                       <xsl:attribute name="value">Google Earth</xsl:attribute>
-                      <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.googleEarthAllFiles']/@value" /></xsl:attribute>                       
                     </input> 
                     
-                    <input type="button">
+                    <input type="button" titleResource="label.OSMapAllFiles">
                       <xsl:attribute name="onclick">javascript:filesOSMap()</xsl:attribute>
                       <xsl:attribute name="value">OSMap</xsl:attribute>
-                      <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.OSMapAllFiles']/@value" /></xsl:attribute>                       
                     </input> 
                   </xsl:if>
                   

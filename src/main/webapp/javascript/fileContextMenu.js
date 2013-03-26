@@ -3,26 +3,6 @@ function hideMenu()
     document.getElementById('contextMenu').style.visibility = 'hidden';
 }
 
-function getFileNameExt(fileName)
-{
-    fileExt="";
-
-    extStart=fileName.lastIndexOf('.');
-
-    if (extStart > 0)
-    {
-	fileExt=fileName.substring(extStart).toUpperCase();
-    }
-    
-    return(fileExt);
-}
-
-function insertDoubleBackslash(source)
-{
-    return(source.replace(/\\/g,"\\\\"));
-}
-
-
 function menuEntry(href, label, target)
 {
     targetText = "";
@@ -90,19 +70,19 @@ function contextMenu(fileName)
     if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR" || fileExt == ".EAR")
     {
         menuText = menuText 
-                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",parent.resourceViewZip,null);
+                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceBundle["label.viewzip"],null);
     }
     else
     {
 	if (fileExt == ".URL")
 	{
             menuText = menuText 
-                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(fullPath) + "&random=" + (new Date().getTime()),parent.resourceView,"_blank");
+                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(fullPath) + "&random=" + (new Date().getTime()),resourceBundle["label.view"],"_blank");
 	}
 	else
 	{
             menuText = menuText 
-                     + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",parent.resourceView,null);
+                     + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceBundle["label.view"],null);
 	}
     }
         
@@ -110,11 +90,11 @@ function contextMenu(fileName)
     {
 	if (fileExt == ".MP3")
 	{
-	    downloadLabel= parent.resourcePlay;
+	    downloadLabel = resourceBundle["label.play"];
 	}
 	else
 	{
-	    downloadLabel = parent.resourceDownload;
+	    downloadLabel = resourceBundle["label.download"];
 	}
 
         menuText = menuText 
@@ -124,51 +104,51 @@ function contextMenu(fileName)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:delFile('" + scriptPreparedFile + "')",parent.resourceDelete,null);
+                 + menuEntry("javascript:delFile('" + scriptPreparedFile + "')",resourceBundle["label.delete"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:renameFile('" + scriptPreparedFile + "')",parent.resourceRenameFile,null);
+                 + menuEntry("javascript:renameFile('" + scriptPreparedFile + "')",resourceBundle["label.renameFile"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",parent.resourceCopy,null);
+                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",parent.resourceCut,null);
+                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],null);
 
 	if (parent.clientIsLocal == 'true')
 	{
             menuText = menuText 
-                     + menuEntry("javascript:editLocal('" + scriptPreparedFile + "')",parent.resourceEdit,null);
+                     + menuEntry("javascript:editLocal('" + scriptPreparedFile + "')",resourceBundle["label.edit"],null);
         }
         else
         {
             menuText = menuText 
-                     + menuEntry("javascript:editRemote('" + scriptPreparedFile + "')",parent.resourceEdit,null);
+                     + menuEntry("javascript:editRemote('" + scriptPreparedFile + "')",resourceBundle["label.edit"],null);
         }
 
 	if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR") || (fileExt == ".EAR"))
 	{
             menuText = menuText 
-                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",parent.resourceUnzip,null);
+                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["label.unzip"],null);
         }
         else
         {
   	    if ((fileExt == ".GZ")  || (fileExt == ".GZIP"))
   	    {
                 menuText = menuText 
-                         + menuEntry("javascript:gunzip('" + scriptPreparedPath + "')",parent.resourceUnzip,null);
+                         + menuEntry("javascript:gunzip('" + scriptPreparedPath + "')",resourceBundle["label.unzip"],null);
   	    }
   	    else
   	    {
                 menuText = menuText 
-                         + menuEntry("javascript:zip('" + scriptPreparedPath + "')",parent.resourceZip,null);
+                         + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["label.zip"],null);
   	    }
         }
 
         if (fileExt == ".TAR")
         {
             menuText = menuText 
-                     + menuEntry("javascript:untar('" + scriptPreparedPath + "')",parent.resourceUntar,null);
+                     + menuEntry("javascript:untar('" + scriptPreparedPath + "')",resourceBundle["label.untar"],null);
         }
 
         if (parent.serverOS == 'ix')
@@ -178,52 +158,52 @@ function contextMenu(fileName)
 		if (fileExt == ".Z")
 		{
                     menuText = menuText 
-                             + menuEntry("javascript:compress('" + scriptPreparedPath + "')",parent.resourceUncompress,null);
+                             + menuEntry("javascript:compress('" + scriptPreparedPath + "')",resourceBundle["label.uncompress"],null);
 		}
 		else
 		{
                     menuText = menuText 
-                             + menuEntry("javascript:compress('" + scriptPreparedPath + "')",parent.resourceCompress,null);
+                             + menuEntry("javascript:compress('" + scriptPreparedPath + "')",resourceBundle["label.compress"],null);
 		}
             }
         }
         else // win
         {
             menuText = menuText 
-                     + menuEntry("javascript:switchReadWrite('" + scriptPreparedPath + "')",parent.resourceSwitchReadOnly,null);
+                     + menuEntry("javascript:switchReadWrite('" + scriptPreparedPath + "')",resourceBundle["label.switchReadOnly"],null);
         }
         
         if (parent.mailEnabled == 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:sendFile('" + scriptPreparedFile + "')",parent.resourceSendFile,null);
+                     + menuEntry("javascript:sendFile('" + scriptPreparedFile + "')",resourceBundle["label.sendfile"],null);
         }
         
 	if (fileExt == ".MP3")
 	{
             menuText = menuText 
-                     + menuEntry("javascript:editMP3('" + scriptPreparedPath + "')",parent.resourceEditMP3,null);
+                     + menuEntry("javascript:editMP3('" + scriptPreparedPath + "')",resourceBundle["label.editmp3"],null);
 	}
         else
         {
             menuText = menuText 
-                     + menuEntry("javascript:description('" + scriptPreparedPath + "')",parent.resourceEditDesc,null);
+                     + menuEntry("javascript:description('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"],null);
         }
         
     }
     
     menuText = menuText 
-             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",parent.resourceComments,null);
+             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",resourceBundle["label.comments"],null);
         
     if (parent.readonly == 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:diffSelect('" + scriptPreparedPath + "')",parent.resourceDiffSource,null);
+                 + menuEntry("javascript:diffSelect('" + scriptPreparedPath + "')",resourceBundle["label.diffSource"],null);
     }  
     else
     {
         menuText = menuText 
-                 + menuEntry("javascript:extendedFileMenu('" + insertDoubleBackslash(shortFileName) + "', '" + scriptPreparedPath + "')",parent.resourceMenuMore,null);
+                 + menuEntry("javascript:extendedFileMenu('" + insertDoubleBackslash(shortFileName) + "', '" + scriptPreparedPath + "')",resourceBundle["label.menuMore"],null);
     }      
         
     menuText = menuText + '</table>'; 
@@ -291,12 +271,12 @@ function extendedFileMenu(shortFileName, path)
             if ((fileExt == ".EXE") || (fileExt == ".COM") || (fileExt == ".BAT") || (fileExt == ".CMD"))
             {
                 menuText = menuText 
-                         + menuEntry("/webfilesys/servlet?command=execProgram&progname=" + encodeURIComponent(fullPath),parent.resourceRun,null);
+                         + menuEntry("/webfilesys/servlet?command=execProgram&progname=" + encodeURIComponent(fullPath),resourceBundle["label.run"],null);
             }
             else
             {
                 menuText = menuText 
-                         + menuEntry("javascript:associatedProg('" + scriptPreparedPath + "')",parent.resourceOpen,null);
+                         + menuEntry("javascript:associatedProg('" + scriptPreparedPath + "')",resourceBundle["label.open"],null);
             }
         }
     }
@@ -305,50 +285,50 @@ function extendedFileMenu(shortFileName, path)
         if ((parent.webspaceUser != 'true') || (parent.chmodAllowed == 'true'))
         {
             menuText = menuText 
-                     + menuEntry("javascript:accessRights('" + scriptPreparedPath + "')",parent.resourceRights,null);
+                     + menuEntry("javascript:accessRights('" + scriptPreparedPath + "')",resourceBundle["label.rights"],null);
         }
 
         if (parent.adminUser == 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:associatedProg('" + scriptPreparedPath + "')",parent.resourceOpen,null);
+                     + menuEntry("javascript:associatedProg('" + scriptPreparedPath + "')",resourceBundle["label.open"],null);
         }
     }
 
     menuText = menuText 
-             + menuEntry("javascript:diffSelect('" + scriptPreparedPath + "')",parent.resourceDiffSource,null);
+             + menuEntry("javascript:diffSelect('" + scriptPreparedPath + "')",resourceBundle["label.diffSource"],null);
 
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:cloneFile('" + scriptPreparedFile + "')", parent.resourceCloneFile,null);
+                 + menuEntry("javascript:cloneFile('" + scriptPreparedFile + "')",resourceBundle["label.cloneFile"],null);
     }
 
     menuText = menuText 
-             + menuEntry("javascript:hexView('" + scriptPreparedFile + "')", parent.resourceHexView, null);
+             + menuEntry("javascript:hexView('" + scriptPreparedFile + "')", resourceBundle["label.hexView"], null);
 
     if (fileExt == ".AES")
     {
         menuText = menuText 
-                 + menuEntry("javascript:decrypt('" + scriptPreparedFile + "')", parent.resourceDecrypt, null);
+                 + menuEntry("javascript:decrypt('" + scriptPreparedFile + "')", resourceBundle["label.decrypt"], null);
     }
     else
     {
         menuText = menuText 
-                 + menuEntry("javascript:encrypt('" + scriptPreparedFile + "')", parent.resourceEncrypt, null);
+                 + menuEntry("javascript:encrypt('" + scriptPreparedFile + "')", resourceBundle["label.encrypt"], null);
     }
 
     menuText = menuText 
-             + menuEntry("javascript:tail('" + scriptPreparedPath + "')", parent.resourceTail, null);
+             + menuEntry("javascript:tail('" + scriptPreparedPath + "')", resourceBundle["label.tail"], null);
 
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:touch('" + scriptPreparedFile + "')", parent.resourceTouch,null);
+                 + menuEntry("javascript:touch('" + scriptPreparedFile + "')", resourceBundle["label.touch"], null);
     }
 
     menuText = menuText 
-             + menuEntry("javascript:grep('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", parent.resourceGrep, null);
+             + menuEntry("javascript:grep('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", resourceBundle["label.grep"], null);
 
     menuText = menuText + '</table>'; 
 
@@ -371,10 +351,10 @@ function diffSelectTarget(path, shortFileName, scriptPreparedPath)
              + '</tr>';
     
     menuText = menuText 
-             + menuEntry("javascript:diffSelect('" + scriptPreparedPath + "')",parent.resourceDiffTarget,null);
+             + menuEntry("javascript:diffSelect('" + scriptPreparedPath + "')",resourceBundle["label.diffTarget"],null);
 
     menuText = menuText 
-             + menuEntry("javascript:cancelDiff('" + scriptPreparedPath + "')",parent.resourceCancelDiff,null);
+             + menuEntry("javascript:cancelDiff('" + scriptPreparedPath + "')",resourceBundle["label.cancelDiff"],null);
 
     menuText = menuText + '</table>'; 
 

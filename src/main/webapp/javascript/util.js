@@ -125,3 +125,22 @@ function shortText(origText, maxLength)
 	
 	return (origText.substring(0, maxLength - 4) + " ...");
 }
+
+function getFileNameExt(fileName)
+{
+    fileExt="";
+
+    extStart=fileName.lastIndexOf('.');
+
+    if (extStart > 0)
+    {
+	fileExt=fileName.substring(extStart).toUpperCase();
+    }
+    
+    return(fileExt);
+}
+
+function insertDoubleBackslash(source)
+{
+    return(source.replace(/\\/g,"\\\\"));
+}

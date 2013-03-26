@@ -3,26 +3,6 @@ function hideMenu()
     document.getElementById('contextMenu').style.visibility = 'hidden';
 }
 
-function getFileNameExt(fileName)
-{
-    fileExt="";
-
-    extStart=fileName.lastIndexOf('.');
-
-    if (extStart > 0)
-    {
-	fileExt=fileName.substring(extStart).toUpperCase();
-    }
-    
-    return(fileExt);
-}
-
-function insertDoubleBackslash(source)
-{
-    return(source.replace(/\\/g,"\\\\"));
-}
-
-
 function menuEntry(href, label, target)
 {
     targetText = "";
@@ -64,20 +44,19 @@ function linkGraphicsMenu(linkName, realPath, imgType)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:jsDelImageLink('" + linkName + "')",parent.resourceDelLink,null);
+                 + menuEntry("javascript:jsDelImageLink('" + linkName + "')",resourceBundle["label.deleteLink"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:renameLink('" + linkName + "')",parent.resourceRenLink,null);
+                 + menuEntry("javascript:renameLink('" + linkName + "')",resourceBundle["label.renameLink"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:jsDescription('" + scriptPreparedPath + "')",parent.resourceEditDesc,null);
- 
+                 + menuEntry("javascript:jsDescription('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"],null);
     }
     
     if (imgType == '1') // JPEG
     {
         menuText = menuText 
-                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceExifData,null);
+                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceBundle["alt.cameradata"],null);
     }
     
     /*
@@ -86,18 +65,18 @@ function linkGraphicsMenu(linkName, realPath, imgType)
          (imgType == '3')))     // PNG
     {
         menuText = menuText 
-                 + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceMakeThumb,null);
+                 + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceBundle["label.makethumb"],null);
     }
     */
 
     menuText = menuText 
-             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",parent.resourceComments,null);
+             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",resourceBundle["label.comments"],null);
 
     if ((parent.readonly != 'true') && 
         (parent.mailEnabled == 'true'))
     {
         menuText = menuText 
-                 + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",parent.resourceSendFile,null);
+                 + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",resourceBundle["label.sendfile"],null);
     }
 
     if (parent.serverOS == 'win')
@@ -121,7 +100,7 @@ function linkGraphicsMenu(linkName, realPath, imgType)
     }
 
     menuText = menuText 
-             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",parent.resourceOrigDir,null);
+             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",resourceBundle["label.origDir"],null);
 
     menuText = menuText + '</table>'; 
 

@@ -37,13 +37,18 @@
   <script src="/webfilesys/javascript/mobile/dirContextMenu.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/jsDirMenu.js" type="text/javascript"></script>
   
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 
-  <script language="javascript">
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/folderFileList/language" /></xsl:attribute>
+  </script>
+
+  <script type="text/javascript">
   
     var noFileSelected = '<xsl:value-of select="folderFileList/resources/msg[@key='alert.nofileselected']/@value" />';
   
@@ -56,60 +61,6 @@
     var readonly = '<xsl:value-of select="/folderFileList/readonly" />';
     
     var clipboardEmpty = '<xsl:value-of select="/folderFileList/clipboardEmpty" />';
-    
-    var resourceViewZip = '<xsl:value-of select="folderFileList/resources/msg[@key='menuViewZip']/@value" />';
-  
-    var resourceView = '<xsl:value-of select="folderFileList/resources/msg[@key='menuView']/@value" />';
-    
-    var resourcePlay = '<xsl:value-of select="folderFileList/resources/msg[@key='menuPlay']/@value" />';
-  
-    var resourceDownload = '<xsl:value-of select="folderFileList/resources/msg[@key='menuDownload']/@value" />';
-  
-    var resourceDelete = '<xsl:value-of select="folderFileList/resources/msg[@key='menuDelete']/@value" />';
-  
-    var resourceRenameFile = '<xsl:value-of select="folderFileList/resources/msg[@key='menuRename']/@value" />';
-  
-    var resourceCopy = '<xsl:value-of select="folderFileList/resources/msg[@key='menuCopy']/@value" />';
-  
-    var resourceCut = '<xsl:value-of select="folderFileList/resources/msg[@key='menuCut']/@value" />';
-  
-    var resourceEdit = '<xsl:value-of select="folderFileList/resources/msg[@key='menuEdit']/@value" />';
-  
-    var resourceUnzip = '<xsl:value-of select="folderFileList/resources/msg[@key='menuUnzip']/@value" />';
-  
-    var resourceZip = '<xsl:value-of select="folderFileList/resources/msg[@key='menuZip']/@value" />';
-  
-    var resourceSendFile = '<xsl:value-of select="folderFileList/resources/msg[@key='menuSendFile']/@value" />';
-  
-    var resourceEditMP3 = '<xsl:value-of select="folderFileList/resources/msg[@key='menuEditMP3']/@value" />';
-  
-    var resourceEditDesc = '<xsl:value-of select="folderFileList/resources/msg[@key='menuEditDesc']/@value" />';
-  
-    var resourceComments = '<xsl:value-of select="folderFileList/resources/msg[@key='menuComments']/@value" />';
-  
-    var resourceCreateDir = '<xsl:value-of select="folderFileList/resources/msg[@key='menuCreateDir']/@value" />';
-  
-    var resourceCopyDir = '<xsl:value-of select="folderFileList/resources/msg[@key='menuCopyDir']/@value" />';
-    
-    var resourceMoveDir = '<xsl:value-of select="folderFileList/resources/msg[@key='menuMoveDir']/@value" />';
-  
-    var resourceDelDir = '<xsl:value-of select="folderFileList/resources/msg[@key='menuDelDir']/@value" />';
-    
-    var resourceRenameDir = '<xsl:value-of select="folderFileList/resources/msg[@key='menuRenameDir']/@value" />';
-  
-    var resourceSearch = '<xsl:value-of select="folderFileList/resources/msg[@key='menuSearch']/@value" />';
-  
-    var resourceCreateFile = '<xsl:value-of select="folderFileList/resources/msg[@key='menuCreateFile']/@value" />';
-  
-    var resourceZipDir = '<xsl:value-of select="folderFileList/resources/msg[@key='menuZipDir']/@value" />';
-
-    var resourceDelLink = '<xsl:value-of select="folderFileList/resources/msg[@key='menuDelLink']/@value" />';
-
-    var resourceRenLink = '<xsl:value-of select="folderFileList/resources/msg[@key='menuRenLink']/@value" />';
-    
-    var resourceOrigDir = '<xsl:value-of select="folderFileList/resources/msg[@key='menuOrigDir']/@value" />';
-
-    var resourceDelFiles = '<xsl:value-of select="folderFileList/resources/msg[@key='confirm.deleteFiles']/@value" />';
 
     <xsl:for-each select="/folderFileList/fileList/file">
       <xsl:if test="@link">
@@ -145,7 +96,7 @@
 
 </head>
 
-<body id="fileListBody" class="mobile" onclick="mouseClickHandler()">
+<body id="fileListBody" class="mobile" onclick="mouseClickHandler()" onload="setBundleResources()">
 
   <xsl:for-each select="folderFileList/currentPath">
     <xsl:call-template name="currentPath" />

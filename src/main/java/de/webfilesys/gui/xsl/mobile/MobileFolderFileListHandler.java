@@ -502,39 +502,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
 		// addMsgResource("label.selectFunction", getResource("label.selectFunction","- select function -"));
 
-		// file context menu
-        addMsgResource("menuView", getResource("menuView", "view file"));
-        addMsgResource("menuViewZip", getResource("menuViewZip", "view ZIP content"));
-        addMsgResource("menuDownload", getResource("menuDownload", "download"));
-        addMsgResource("menuComments", getResource("menuComments", "comments"));
-        addMsgResource("menuPlay", getResource("menuPlay", "play"));
-        addMsgResource("menuOrigDir", getResource("menuOrigDir", "original location"));
-        addMsgResource("menuSearch", getResource("menuSearch", "search"));
-                        		
 		if (!readonly)
 		{
-	        addMsgResource("menuDelete", getResource("menuDelete", "delete"));
-	        addMsgResource("menuEditDesc", getResource("menuEditDesc", "edit meta info"));
-	        addMsgResource("menuRename", getResource("menuRename", "rename"));
-	        addMsgResource("menuCopy", getResource("menuCopy", "copy"));
-            addMsgResource("menuCut", getResource("menuCut", "move"));
-            addMsgResource("menuZip", getResource("menuZip", "zip"));
-            addMsgResource("menuUnzip", getResource("menuUnzip", "unzip"));
-            addMsgResource("menuSendFile", getResource("menuSendFile", "send as e-mail"));
-            addMsgResource("menuEdit", getResource("menuEdit", "edit"));
-            addMsgResource("menuDelLink", getResource("menuDelLink", "delete link"));
-            addMsgResource("menuRenLink", getResource("menuRenLink", "rename link"));
-            addMsgResource("menuEditMP3", getResource("menuEditMP3", "edit MP3 tags"));
-            
-            addMsgResource("menuCreateDir", getResource("menuCreateDir", "create subfolder"));
-            addMsgResource("menuDelDir", getResource("menuDelDir", "delete folder tree"));
-            addMsgResource("menuCopyDir", getResource("menuCopyDir", "copy folder tree"));
-            addMsgResource("menuMoveDir", getResource("menuMoveDir", "move folder tree"));
-            addMsgResource("menuRenameDir", getResource("menuRenameDir", "rename folder"));
-            addMsgResource("menuCreateFile", getResource("menuCreateFile", "create new file"));
-            addMsgResource("menuZipDir", getResource("menuZipDir", "create ZIP archive"));
-            addMsgResource("menuRefresh", getResource("menuRefresh", "refresh"));
-            
             addMsgResource("checkbox.confirmdel", getResource("checkbox.confirmdel","Confirm Delete"));
 	        addMsgResource("button.delete", getResource("button.delete","Delete"));
 			addMsgResource("label.copyToClip", getResource("label.copyToClip","Copy to clipboard"));
@@ -575,6 +544,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(folderFileListElement, "css", "mobile", false);
 
 		XmlUtil.setChildText(folderFileListElement, "userid", uid, false);
+		
+	    XmlUtil.setChildText(folderFileListElement, "language", language, false);
 		
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{

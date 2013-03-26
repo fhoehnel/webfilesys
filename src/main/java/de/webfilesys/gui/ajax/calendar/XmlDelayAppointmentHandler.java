@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.calendar.AlarmEntry;
 import de.webfilesys.calendar.Appointment;
 import de.webfilesys.calendar.AppointmentManager;
 import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
@@ -65,9 +66,16 @@ public class XmlDelayAppointmentHandler extends XmlRequestHandlerBase {
 			
 			appointment.setAlarmTime(new Date(newAlarmTime));
 			appointment.setAlarmed(false);
-			appointment.setMailAlarmed(false);
+			appointment.setMailAlarmed(true);
 			
-			AppointmentManager.getInstance().updateAppointment(uid, appointment, true);
+			AlarmEntry clone = AppointmentManager.getInstance().getAlarmIndex().addEvent(uid, appointment);
+			
+			clone.setCloned(true);
+
+			if (Logger.getLogger(getClass()).isDebugEnabled())
+			{
+				Logger.getLogger(getClass()).debug("created AlarmEntry clone for delayed alarm: " + clone);
+			}
 		}
 		
 		Element resultElement = doc.createElement("result");

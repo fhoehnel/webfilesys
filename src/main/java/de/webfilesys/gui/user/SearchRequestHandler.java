@@ -351,32 +351,34 @@ public class SearchRequestHandler extends UserRequestHandler
 			hitNumber = file_find_num;
 		}
 
-		output.println("<table class=\"dataForm\" width=\"100%\" cellpadding=\"5\">");
+		output.println("<table class=\"dataForm\" width=\"100%\" style=\"margin-top:10px\">");
 		output.println("<tr>");
-		output.println("<td class=\"fileListFunct\">" + hitNumber + "  " + getResource("label.matches","matches found") + "</td>");
+		output.println("<td class=\"fileListFunct\" style=\"padding:5px 10px\">");
+		output.println(hitNumber + "  " + getResource("label.matches","matches found"));
+		output.println("</td>");
 		output.println("</tr>");
 		
 		output.println("<tr>");
-
+		
+        output.println("<td class=\"fileListFunct\">");		
+        output.println("<div class=\"buttonCont\">");		
+		
         if (readonly)		
 		{
-			output.println("<td class=\"fileListFunct\">");
 			output.println("<input type=\"button\" value=\"" + getResource("button.closewin","Close Window") + "\" onClick=\"self.close()\">");
-			output.println("</td>");
 		}
 		else
 		{
 			if (hitNumber > 0)
 			{		
-				output.println("<td class=\"fileListFunct\">");
 				output.println("<input type=\"button\" value=\"" + getResource("button.keepSearchResults","Keep Search Results") + "\" onClick=\"showResults()\">");
-				output.println("</td>");
 			}
         
-			output.println("<td class=\"fileListFunct\" align=\"right\">");
 			output.println("<input type=\"button\" value=\"" + getResource("button.discardSearchResults","Discard Search Results") + "\" onClick=\"discardAndClose()\">");
-			output.println("</td>");
 		}
+
+		output.println("</div>");
+		output.println("</td>");
 
 		output.println("</tr>");
 		output.println("</table>");

@@ -40,9 +40,6 @@
 
     var path = '<xsl:value-of select="/pictureAlbum/menuPath" />';
     
-    var resourceExifData = '<xsl:value-of select="pictureAlbum/resources/msg[@key='alt.cameradata']/@value" />';
-    var resourceComments = '<xsl:value-of select="pictureAlbum/resources/msg[@key='label.comments']/@value" />';
-  
     <xsl:for-each select="//file">
       <xsl:if test="@link">
         function sli<xsl:value-of select="@id" />()

@@ -38,6 +38,7 @@ import org.apache.log4j.Logger;
 
 import de.webfilesys.CategoryManager;
 import de.webfilesys.Constants;
+import de.webfilesys.ResourceBundleHandler;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
 import de.webfilesys.WebFileSys;
@@ -768,6 +769,13 @@ public class WebFileSysServlet extends HttpServlet
             return(true);
         }
         
+        if (command.equals("getResourceBundle"))
+        {
+		    (new ResourceBundleHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+
         if (command.equals("ajaxRPC"))
         {
             String method = req.getParameter("method");

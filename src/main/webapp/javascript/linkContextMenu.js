@@ -3,26 +3,6 @@ function hideMenu()
     document.getElementById('contextMenu').style.visibility = 'hidden';
 }
 
-function getFileNameExt(fileName)
-{
-    fileExt="";
-
-    extStart=fileName.lastIndexOf('.');
-
-    if (extStart > 0)
-    {
-	fileExt=fileName.substring(extStart).toUpperCase();
-    }
-    
-    return(fileExt);
-}
-
-function insertDoubleBackslash(source)
-{
-    return(source.replace(/\\/g,"\\\\"));
-}
-
-
 function menuEntry(href, label, target)
 {
     targetText = "";
@@ -65,32 +45,32 @@ function jsLinkMenu(linkName, realPath)
     if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR")
     {
         menuText = menuText 
-                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",parent.resourceViewZip,null);
+                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceBundle["label.viewzip"],null);
     }
     else
     {
-	if (fileExt == ".URL")
-	{
+	    if (fileExt == ".URL")
+	    {
             menuText = menuText 
-                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(realPath) + "&random=" + (new Date().getTime()),parent.resourceView,"_blank");
-	}
-	else
-	{
+                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(realPath) + "&random=" + (new Date().getTime()),resourceBundle["label.view"],"_blank");
+	    }
+	    else
+	    {
             menuText = menuText 
-                     + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",parent.resourceView,null);
-	}
+                     + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceBundle["label.view"],null);
+	    }
     }
 
     if (parent.clientIsLocal != 'true')
     {
-	if (fileExt == ".MP3")
-	{
-	    downloadLabel= parent.resourcePlay;
-	}
-	else
-	{
-	    downloadLabel = parent.resourceDownload;
-	}
+	    if (fileExt == ".MP3")
+	    {
+	        downloadLabel = resourceBundle["label.play"];
+	    }
+	    else
+	    {
+	        downloadLabel = resourceBundle["label.download"];
+	    }
 
         menuText = menuText 
                  + menuEntry("/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(realPath) + "&disposition=download",downloadLabel,null);
@@ -99,35 +79,35 @@ function jsLinkMenu(linkName, realPath)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:delLink('" + linkName + "')",parent.resourceDelLink,null);
+                 + menuEntry("javascript:delLink('" + linkName + "')",resourceBundle["label.deleteLink"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:renameLink('" + linkName + "')",parent.resourceRenLink,null);
+                 + menuEntry("javascript:renameLink('" + linkName + "')",resourceBundle["label.renameLink"],null);
 
 	if (parent.clientIsLocal == 'true')
 	{
             menuText = menuText 
-                     + menuEntry("javascript:editLocalLink('" + scriptPreparedPath + "')",parent.resourceEdit,null);
+                     + menuEntry("javascript:editLocalLink('" + scriptPreparedPath + "')",resourceBundle["label.edit"],null);
         }
         else
         {
             menuText = menuText 
-                     + menuEntry("javascript:editRemoteLink('" + scriptPreparedPath + "')",parent.resourceEdit,null);
+                     + menuEntry("javascript:editRemoteLink('" + scriptPreparedPath + "')",resourceBundle["label.edit"],null);
         }
 
         if (parent.serverOS == 'win')
         {
             if (parent.webspaceUser != 'true')
             {
-		if ((fileExt == ".EXE") || (fileExt == ".COM") || (fileExt == ".BAT") || (fileExt == ".CMD"))
+		        if ((fileExt == ".EXE") || (fileExt == ".COM") || (fileExt == ".BAT") || (fileExt == ".CMD"))
                 {
                     menuText = menuText 
-                             + menuEntry("/webfilesys/servlet?command=execProgram&progname=" + encodeURIComponent(realPath), parent.resourceRun, null);
+                             + menuEntry("/webfilesys/servlet?command=execProgram&progname=" + encodeURIComponent(realPath), resourceBundle["label.run"], null);
                 }
                 else
                 {
                     menuText = menuText 
-                             + menuEntry("javascript:associatedProg('" + scriptPreparedPath + "')",parent.resourceOpen,null);
+                             + menuEntry("javascript:associatedProg('" + scriptPreparedPath + "')",resourceBundle["label.open"],null);
                 }
             }
         }
@@ -136,41 +116,41 @@ function jsLinkMenu(linkName, realPath)
             if (parent.webspaceUser != 'true')
             {
                 menuText = menuText 
-                         + menuEntry("javascript:accessRights('" + scriptPreparedPath + "')",parent.resourceRights,null);
+                         + menuEntry("javascript:accessRights('" + scriptPreparedPath + "')",resourceBundle["label.rights"],null);
 
                 menuText = menuText 
-                         + menuEntry("javascript:associatedProg('" + scriptPreparedPath + "')",parent.resourceOpen,null);
+                         + menuEntry("javascript:associatedProg('" + scriptPreparedPath + "')",resourceBundle["label.open"],null);
             }
         }
 
         if (parent.serverOS == 'win')
         {
             menuText = menuText 
-                     + menuEntry("javascript:switchReadWrite('" + scriptPreparedPath + "')",parent.resourceSwitchReadOnly,null);
+                     + menuEntry("javascript:switchReadWrite('" + scriptPreparedPath + "')",resourceBundle["label.switchReadOnly"],null);
 
         }
 
         if (parent.mailEnabled == 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",parent.resourceSendFile,null);
+                     + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",resourceBundle["label.sendfile"],null);
         }
         
 	if (fileExt == ".MP3")
 	{
             menuText = menuText 
-                     + menuEntry("javascript:editMP3('" + scriptPreparedPath + "')",parent.resourceEditMP3,null);
+                     + menuEntry("javascript:editMP3('" + scriptPreparedPath + "')",resourceBundle["label.editmp3"],null);
 	}
         else
         {
             menuText = menuText 
-                     + menuEntry("javascript:description('" + scriptPreparedPath + "')",parent.resourceEditDesc,null);
+                     + menuEntry("javascript:description('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"],null);
         }
 
     }
 
     menuText = menuText 
-             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",parent.resourceComments,null);
+             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",resourceBundle["label.comments"],null);
 
     if (parent.serverOS == 'win')
     {
@@ -193,7 +173,7 @@ function jsLinkMenu(linkName, realPath)
     }
 
     menuText = menuText 
-             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",parent.resourceOrigDir,null);
+             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",resourceBundle["label.origDir"],null);
         
     menuText = menuText + '</table>'; 
 
@@ -209,7 +189,7 @@ function jsLinkMenu(linkName, realPath)
     {
         if (parent.serverOS == 'win')
         {
-            maxMenuHeight = 280;
+            maxMenuHeight = 300;
         }
         else
         {
@@ -224,44 +204,7 @@ function jsLinkMenu(linkName, realPath)
         }
     }
     
-    if (browserType == 'msie')
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-
-        if (clickXPos > windowWidth - 200)
-        {
-            clickXPos = windowWidth - 200;
-        }
-
-        if (clickYPos > windowHeight - maxMenuHeight)
-        {
-            clickYPos = windowHeight - maxMenuHeight;
-        }
-
-        clickYPos = clickYPos + yScrolled;
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-        
-        if (clickYPos > yScrolled + windowHeight - maxMenuHeight)
-        {
-            clickYPos = yScrolled + windowHeight - maxMenuHeight;
-        }
-
-        if (clickXPos > xScrolled + windowWidth - 200)
-        {
-            clickXPos = xScrolled + windowWidth - 200;
-        }
-    }
-    
-    menuDiv.style.left = clickXPos + 'px';
-    menuDiv.style.top = clickYPos + 'px';
+    positionMenuDiv(menuDiv, maxMenuHeight);
 
     menuDiv.style.visibility = 'visible';
 }

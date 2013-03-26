@@ -394,67 +394,6 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 			
 		doc.insertBefore(xslRef, fileListElement);
 
-		addMsgResource("alert.nofileselected", getResource("alert.nofileselected","Select at least 1 file"));
-		addMsgResource("sort.name.ignorecase", getResource("sort.name.ignorecase","sort by name (ignore case)"));
-		addMsgResource("sort.name.respectcase", getResource("sort.name.respectcase","sort by name (respect case)"));
-		addMsgResource("sort.extension", getResource("sort.extension","sort by extension"));
-		addMsgResource("sort.size", getResource("sort.size","sort by size"));
-		addMsgResource("sort.date", getResource("sort.date","sort by change date"));
-        addMsgResource("sort.voteCount", getResource("sort.voteCount","sort by vote count"));
-        addMsgResource("sort.voteValue", getResource("sort.voteValue","sort by vote result"));
-
-		addMsgResource("label.modelist", getResource("label.modelist","list files"));
-		addMsgResource("label.modethumb", getResource("label.modethumb","thumbnails"));
-		addMsgResource("label.modestory", getResource("label.modestory","picture story"));
-		addMsgResource("label.modeSlideshow", getResource("label.modeSlideshow","slideshow"));
-		addMsgResource("label.fileStats", getResource("label.fileStats","statistics"));
-
-		addMsgResource("label.mask", getResource("label.mask","Mask"));
-		addMsgResource("label.refresh", getResource("label.refresh","Refresh"));
-		addMsgResource("label.listPageSize", getResource("label.listPageSize","files per page"));
-		addMsgResource("label.files", getResource("label.files","files"));
-		addMsgResource("label.of", getResource("label.of","of"));
-		addMsgResource("label.page", getResource("label.page","page"));
-
-		addMsgResource("checkbox.selectall", getResource("checkbox.selectall","Select all"));
-		addMsgResource("checkbox.confirmdel", getResource("checkbox.confirmdel","Confirm Delete"));
-		addMsgResource("label.selectedFiles", getResource("label.selectedFiles","selected files"));
-
-		addMsgResource("label.selectFunction", getResource("label.selectFunction","- select function -"));
-
-		addMsgResource("label.compare", getResource("label.compare","Compare"));
-        addMsgResource("label.rotateFlip", getResource("label.rotateFlip","Rotate/Mirror"));
-		addMsgResource("label.rotateleft", getResource("label.rotateleft","Rotate left"));
-		addMsgResource("label.rotateright", getResource("label.rotateright","Rotate right"));
-		addMsgResource("label.editPicture", getResource("label.editPicture", "Edit/Convert"));
-		addMsgResource("label.exifRename", getResource("label.exifRename","Rename to Exif date"));
-		addMsgResource("alert.nofileselected", getResource("alert.nofileselected","Select at least 1 picture"));
-		addMsgResource("error.compselect", getResource("error.compselect","Select at least 2 pictures to compare"));
-		
-		if (!readonly)
-		{
-			addMsgResource("button.delete", getResource("button.delete","Delete"));
-			addMsgResource("label.copyToClip", getResource("label.copyToClip","Copy to clipboard"));
-			addMsgResource("label.cutToClip", getResource("label.cutToClip","Move to clipboard"));
-			addMsgResource("button.zip", getResource("button.zip","Create ZIP archive"));
-			
-			addMsgResource("rating.owner", getResource("rating.owner","rating by owner"));
-			addMsgResource("rating.any", getResource("rating.any","any"));
-		}
-		addMsgResource("button.downloadAsZip", getResource("button.downloadAsZip","Download as Zip"));
-
-		addMsgResource("button.upload", getResource("button.upload","Upload"));
-		
-        addMsgResource("noFilesWithGeoData", getResource("noFilesWithGeoData", "This folder does not contain pictures with geographic coordinates!"));
-        addMsgResource("label.geoMapLink", getResource("label.geoMapLink", "Show geographic location on map"));
-        addMsgResource("selectMapType", getResource("selectMapType", "- select map type -"));
-        addMsgResource("mapTypeOSM", getResource("mapTypeOSM", "Open Stree Maps"));
-        addMsgResource("mapTypeGoogleMap", getResource("mapTypeGoogleMap", "Google Maps"));
-        addMsgResource("mapTypeGoogleEarth", getResource("mapTypeGoogleEarth", "Google Earth"));
-
-        addMsgResource("label.googleEarthAllFiles", getResource("label.googleEarthAllFiles", "Show geographic location of all pictures in Google Earth"));
-        addMsgResource("label.OSMapAllFiles", getResource("label.OSMapAllFiles", "Show geographic location of all pictures in Open Street Map"));
-
 		String errorMsg = getParameter("errorMsg");
 		
 		if (errorMsg != null)
@@ -464,26 +403,6 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
         
 		ClipBoard clipBoard = (ClipBoard) session.getAttribute("clipBoard");
 		
-		if ((clipBoard != null) && (!clipBoard.isEmpty()))
-		{
-			addMsgResource("button.paste", getResource("button.paste","Paste"));
-
-            if (clipBoard.isCopyOperation())
-            {
-				addMsgResource("button.pasteLink", getResource("button.pasteLink","Paste as Link"));
-            }
-		}
-		
-        if (zoom)
-        {
-			XmlUtil.setChildText(fileListElement, "zoom", "true");
-			addMsgResource("label.zoomout", getResource("label.zoomout","Zoom out"));
-        }
-        else
-        {
-			addMsgResource("label.zoomin", getResource("label.zoomin","Zoom in"));
-        }
-
 		if (readonly)
 		{
 			XmlUtil.setChildText(fileListElement, "readonly", "true", false);
@@ -503,11 +422,13 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 		{
 			if (!isAdminUser(false))
 			{
-				addMsgResource("alert.maintanance", getResource("alert.maintanance", "The server has been switched to maintanance mode. Please logout!"));
+				XmlUtil.setChildText(fileListElement, "maintananceMode", "true", false);
 			}
 		}
 
 		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
+		
+	    XmlUtil.setChildText(fileListElement, "language", language, false);
 		
 		if (this.isBrowserXslEnabled())
 		{
@@ -518,8 +439,8 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 		
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{
-			addMsgResource("alert.dirNotFound", getResource("alert.dirNotFound","The folder is not a readable directory"));
-			this.processResponse("xsl/folderTree.xsl");
+			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
+			processResponse("xsl/folderTree.xsl");
 			return; 
 		}
 
@@ -533,23 +454,6 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 		else
 		{
 			XmlUtil.setChildText(fileListElement, "jpegtran", "true");
-		}
-
-		addMsgResource("alt.cameradata", getResource("alt.cameradata","camera data"));
-		addMsgResource("label.rotate180", getResource("label.rotate180","rotate 180 degrees"));
-		addMsgResource("label.mirrorhoriz", getResource("label.mirrorhoriz","mirror horizontal"));
-		addMsgResource("label.mirrorvert", getResource("label.mirrorvert","mirror vertical"));
-		addMsgResource("label.makethumb", getResource("label.makethumb","create thumbnail"));
-		addMsgResource("confirm.delfile", getResource("confirm.delfile","Are you sure you want to delete this picture?"));
-
-		addMsgResource("label.comments", getResource("label.comments","Comments"));
-		
-		if (((File.separatorChar == '/') && (WebFileSys.getInstance().getJpegtranPath() != null)) ||
-		    (File.separatorChar == '\\')) {
-	        addMsgResource("button.rotateByExif", getResource("button.rotateByExif", "Rotate by Exif"));
-	        addMsgResource("title.rotateByExif", getResource("title.rotateByExif", "rotate pictures according to the orientation value in the camera EXIF data"));
-	        addMsgResource("confirm.rotateByExif", getResource("confirm.rotateByExif", "Are you sure?"));
-	        addMsgResource("rotateByExif.noop", getResource("rotateByExif.noop", "no picture rotated"));
 		}
         
 		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(actPath), false);
@@ -672,10 +576,6 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
                     pageElement.setAttribute("num", Integer.toString(currentPage + 1));
 				}
 			}
-		}
-		else
-		{
-			addMsgResource("alert.nopictures", getResource("alert.nopictures","no picture files (JPG,GIF,PNG,BMP)"));
 		}
 
 		boolean linkFound = false;
@@ -1026,26 +926,15 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 			{
 				XmlUtil.setChildText(fileListElement, "autoCreateThumbs", "true");
 			}
-            else
-            {
-				this.addMsgResource("label.savethumbs", getResource("label.savethumbs","Store Thumbnails"));
-            }
 			
 			if (WebFileSys.getInstance().getMailHost() !=null)
 			{
                 XmlUtil.setChildText(fileListElement, "mailEnabled", "true");
-				this.addMsgResource("button.invite", getResource("button.invite","Publish/Invite"));
-			}
-			else
-			{
-				this.addMsgResource("label.publish", getResource("label.publish","Publish"));
 			}
 
 			if (linkFound)
 	        {
-	            addMsgResource("button.copyLinks", getResource("button.copyLinks", "Copy linked Files"));
-	            addMsgResource("tooltip.copyLinks", getResource("tooltip.copyLinks", "replace file links by a copy of the original files"));
-	            addMsgResource("confirm.copyLinks", getResource("confirm.copyLinks", "Replace all file links by a copy of the original files?"));
+				XmlUtil.setChildText(fileListElement, "linksExist", "true");
 	        }
 		}
 

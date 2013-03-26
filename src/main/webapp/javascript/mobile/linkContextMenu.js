@@ -24,32 +24,32 @@ function jsLinkMenu(linkName, realPath)
     if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR")
     {
         menuText = menuText 
-                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceViewZip,null);
+                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceBundle["menuViewZip"],null);
     }
     else
     {
 	if (fileExt == ".URL")
 	{
             menuText = menuText 
-                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(realPath) + "&random=" + (new Date().getTime()),resourceView,"_blank");
+                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(realPath) + "&random=" + (new Date().getTime()),resourceBundle["menuView"],"_blank");
 	}
 	else
 	{
 	    if (fileExt != ".MP3") 
 	    {
                 menuText = menuText 
-                         + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceView,null);
+                         + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceBundle["menuView"],null);
 	    }
 	}
     }
 
     if (fileExt == ".MP3")
     {
-        downloadLabel= parent.resourcePlay;
+        downloadLabel = resourceBundle["label.play"];
     }
     else
     {
-        downloadLabel = parent.resourceDownload;
+        downloadLabel = resourceBundle["label.download"];
     }
 
     menuText = menuText 
@@ -58,23 +58,23 @@ function jsLinkMenu(linkName, realPath)
     if (readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:delLink('" + linkName + "')",resourceDelLink,null);
+                 + menuEntry("javascript:delLink('" + linkName + "')",resourceBundle["menuDelLink"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:renameLink('" + linkName + "')",resourceRenLink,null);
+                 + menuEntry("javascript:renameLink('" + linkName + "')",resourceBundle["menuRenLink"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:editRemoteLink('" + scriptPreparedPath + "')",resourceEdit,null);
+                 + menuEntry("javascript:editRemoteLink('" + scriptPreparedPath + "')",resourceBundle["menuEdit"],null);
 
         if (parent.mailEnabled == 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",resourceSendFile,null);
+                     + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",resourceBundle["menuSendFile"],null);
         }
     }
 
     menuText = menuText 
-             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",resourceComments,null);
+             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",resourceBundle["menuComments"],null);
 
     if (serverOS == 'win')
     {
@@ -97,7 +97,7 @@ function jsLinkMenu(linkName, realPath)
     }
 
     menuText = menuText 
-             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",resourceOrigDir,null);
+             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",resourceBundle["menuOrigDir"],null);
         
     menuText = menuText + '</table>'; 
 

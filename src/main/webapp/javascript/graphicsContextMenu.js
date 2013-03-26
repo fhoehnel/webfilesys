@@ -3,26 +3,6 @@ function hideMenu()
     document.getElementById('contextMenu').style.visibility = 'hidden';
 }
 
-function getFileNameExt(fileName)
-{
-    fileExt="";
-
-    extStart=fileName.lastIndexOf('.');
-
-    if (extStart > 0)
-    {
-	fileExt=fileName.substring(extStart).toUpperCase();
-    }
-    
-    return(fileExt);
-}
-
-function insertDoubleBackslash(source)
-{
-    return(source.replace(/\\/g,"\\\\"));
-}
-
-
 function menuEntry(href, label, target)
 {
     targetText = "";
@@ -85,29 +65,29 @@ function jsContextMenu(fileName, imgType, domId)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:delImg('" + scriptPreparedFile + "')",parent.resourceDelete,null);
+                 + menuEntry("javascript:delImg('" + scriptPreparedFile + "')",resourceBundle["label.delete"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:jsRenameImg('" + scriptPreparedPath + "')",parent.resourceRenameFile,null);
+                 + menuEntry("javascript:jsRenameImg('" + scriptPreparedPath + "')",resourceBundle["label.renameFile"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",parent.resourceCopy,null);
+                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",parent.resourceCut,null);
+                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:jsEditDesc('" + scriptPreparedPath + "')",parent.resourceEditDesc,null);
+                 + menuEntry("javascript:jsEditDesc('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"],null);
 
         menuText = menuText 
-                 + menuEntry("javascript:jsResizeParms('" + scriptPreparedPath + "')",resourceResize,null);
+                 + menuEntry("javascript:jsResizeParms('" + scriptPreparedPath + "')",resourceBundle["label.editPicture"],null);
 
     }
 
     if (imgType == '1') // JPEG
     {
         menuText = menuText 
-                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceExifData,null);
+                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceBundle["alt.cameradata"],null);
     }
 
     if (parent.readonly != 'true')
@@ -119,7 +99,7 @@ function jsContextMenu(fileName, imgType, domId)
             // TODO: resource for rotate/flip
         
             menuText = menuText 
-                     + menuEntry("javascript:rotateFlipMenu('" + shortFileName + "', '" + scriptPreparedPath + "', '" + domId + "', '" + imgType + "')",resourceRotateFlip + ' >',null);
+                     + menuEntry("javascript:rotateFlipMenu('" + shortFileName + "', '" + scriptPreparedPath + "', '" + domId + "', '" + imgType + "')",resourceBundle["label.rotateFlip"] + ' >',null);
         }
 
         /*
@@ -127,32 +107,32 @@ function jsContextMenu(fileName, imgType, domId)
             (imgType == '3'))     // PNG
         {
             menuText = menuText 
-                     + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceMakeThumb,null);
+                     + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceBundle["label.makethumb"],null);
         }
         */
     }
 
     menuText = menuText 
-             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",parent.resourceComments,null);
+             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",resourceBundle["label.comments"],null);
 
     if (parent.readonly != 'true')
     { 
         menuText = menuText 
-                 + menuEntry("javascript:categories('" + scriptPreparedPath + "')",parent.resourceCategories,null);
+                 + menuEntry("javascript:categories('" + scriptPreparedPath + "')",resourceBundle["label.assignCategories"],null);
 
         if (parent.mailEnabled == 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:jsSendFile('" + scriptPreparedFile + "')",parent.resourceSendFile,null);
+                     + menuEntry("javascript:jsSendFile('" + scriptPreparedFile + "')",resourceBundle["label.sendfile"],null);
         }
         
         menuText = menuText 
-                 + menuEntry("javascript:publishFile('" + scriptPreparedPath + "')",parent.resourcePublish,null);
+                 + menuEntry("javascript:publishFile('" + scriptPreparedPath + "')",resourceBundle["label.publish"],null);
         
     }
 
     menuText = menuText 
-             + menuEntry("javascript:startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')",parent.resourceStartSlideshow,null);
+             + menuEntry("javascript:startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')",resourceBundle["startSlideshowHere"],null);
         
     menuText = menuText + '</table>'; 
 
@@ -209,13 +189,11 @@ function jsContextMenu(fileName, imgType, domId)
     menuDiv.style.top = clickYPos + "px";
 
     menuDiv.style.visibility = 'visible';
-  
-    // setTimeout('hideMenu()',8000);
 }
 
 function jsDeleteImg(path)
 {
-    if (confirm(path + '\n' + resourceConfirmDel))
+    if (confirm(path + '\n' + resourceBundle["confirm.delfile"]))
     {
         url='/webfilesys/servlet?command=delImageFromThumb&imgName=' + encodeURIComponent(path);
 
@@ -349,22 +327,22 @@ function rotateFlipMenu(shortPath, path, domId, imgType)
                  + '</tr>';
 
     menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','90','" + domId + "')",resourceRotateRight,null);
+               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','90','" + domId + "')",resourceBundle["label.rotateright"],null);
 
     menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','270','" + domId + "')",resourceRotateLeft,null);
+               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','270','" + domId + "')",resourceBundle["label.rotateleft"],null);
 
     menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','180','" + domId + "')",resourceRotate180,null);
+               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','180','" + domId + "')",resourceBundle["label.rotate180"],null);
                
     if ((imgType == '1')  &&        // JPEG
         ((parent.serverOS == "win") || (jpegtranAvail == 'true')))
     {
         menuText = menuText 
-                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Horizontal')",resourceFlipHoriz,null);
+                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Horizontal')",resourceBundle["label.mirrorhoriz"],null);
 
         menuText = menuText 
-                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Vertical')",resourceFlipVert,null);
+                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Vertical')",resourceBundle["label.mirrorvert"],null);
     }
 
     menuText = menuText + '</table>'; 

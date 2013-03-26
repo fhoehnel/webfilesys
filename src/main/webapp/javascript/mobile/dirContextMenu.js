@@ -1,8 +1,3 @@
-function insertDoubleBackslash(source)
-{
-    return(source.replace(/\\/g,"\\\\"));
-}
-
 function folderContextMenu(path, folderName)
 {
     var shortFolderName = folderName;
@@ -26,7 +21,7 @@ function folderContextMenu(path, folderName)
     if (readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceCreateDir,null);
+                 + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceBundle["menuCreateDir"],null);
     }
 
     if (((serverOS == 'win') && 
@@ -36,26 +31,26 @@ function folderContextMenu(path, folderName)
         if (readonly != 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:copyDirToClip('" + scriptPreparedPath + "')",resourceCopyDir,null);
+                     + menuEntry("javascript:copyDirToClip('" + scriptPreparedPath + "')",resourceBundle["menuCopyDir"],null);
 
             menuText = menuText 
-                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "')",resourceMoveDir,null);
+                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "')",resourceBundle["menuMoveDir"],null);
 
             menuText = menuText 
-                     + menuEntry("javascript:deleteDir('" + scriptPreparedPath + "', '')",resourceDelDir,null);
+                     + menuEntry("javascript:deleteDir('" + scriptPreparedPath + "', '')",resourceBundle["menuDelDir"],null);
 
             menuText = menuText 
-                     + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceRenameDir,null);
+                     + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceBundle["menuRenameDir"],null);
         }
     }
 
     menuText = menuText 
-             + menuEntry("javascript:search('" + scriptPreparedPath + "')",resourceSearch,null);
+             + menuEntry("javascript:search('" + scriptPreparedPath + "')",resourceBundle["menuSearch"],null);
 
     if (readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:mkfile('" + scriptPreparedPath + "')",resourceCreateFile,null);
+                 + menuEntry("javascript:mkfile('" + scriptPreparedPath + "')",resourceBundle["menuCreateFile"],null);
     }
 
     if (((serverOS == 'win') && 
@@ -65,7 +60,7 @@ function folderContextMenu(path, folderName)
         if (readonly != 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceZipDir,null);
+                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["menuZipDir"],null);
 
             lastPathChar = path.charAt(path.length - 1);
     
@@ -86,7 +81,7 @@ function folderContextMenu(path, folderName)
 	    }
 
             menuText = menuText 
-                     + menuEntry("javascript:description('" + insertDoubleBackslash(descriptionPath) + "')",resourceEditDesc,null);
+                     + menuEntry("javascript:description('" + insertDoubleBackslash(descriptionPath) + "')",resourceBundle["menuEditDesc"],null);
 	}
     }
 
@@ -96,7 +91,7 @@ function folderContextMenu(path, folderName)
     
     menuDiv.style.bgcolor = '#c0c0c0';
     
-    var maxMenuHeight = 240;
+    var maxMenuHeight = 270;
     
     positionMenuDiv(menuDiv, maxMenuHeight);
 

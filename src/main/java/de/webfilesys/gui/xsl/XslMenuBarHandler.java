@@ -43,6 +43,8 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(menuBarElement, "role", userMgr.getRole(uid), false);
 		XmlUtil.setChildText(menuBarElement, "helpLanguage", userMgr.getLanguage(uid), false);
 		
+	    XmlUtil.setChildText(menuBarElement, "language", language, false);
+		
 		if (((File.separatorChar == '/') && isAdminUser(false)) ||
 			(userMgr.getDocumentRoot(uid).equals("/") && (!isWebspaceUser())))
 		{
@@ -89,32 +91,8 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
     		addMsgResource("label.calendar", getResource("label.calendar","Calendar"));
         }
         
-		addMsgResource("label.fastpath", getResource("label.fastpath","Fast Path (last visited directories)"));
-		addMsgResource("label.bookmarks", getResource("label.bookmarks","Bookmarked Folders"));
-        addMsgResource("label.returnToPrevDir", getResource("label.returnToPrevDir","Return to last visited folder"));
-		
-		addMsgResource("label.processes", getResource("label.processes","Operating System Processes"));
-
-		addMsgResource("label.fsstat", getResource("label.fsstat","File System Statistics"));
 		addMsgResource("alert.iframeSupport", getResource("alert.iframeSupport","Your browser does not support IFRAMEs.\\nYou cannot use the download function.\\nCheck your browser settings!"));
 
-		addMsgResource("label.oscmd", getResource("label.oscmd","Run Operating System Cmd"));
-		addMsgResource("label.admin", getResource("label.admin","Administration"));
-
-		addMsgResource("label.editregistration", getResource("label.editregistration","Edit User Data"));
-		addMsgResource("label.settings", getResource("label.settings","Settings"));
-		addMsgResource("label.publishList", getResource("label.publishList","List published folders"));
-		addMsgResource("label.diskQuotaUsage", getResource("label.diskQuotaUsage","Account size usage"));
-		addMsgResource("label.search", getResource("label.search","Search"));
-
-		addMsgResource("label.slideshow", getResource("label.slideshow","Picture Slideshow"));
-		addMsgResource("label.story", getResource("label.story","Picture Story"));
-
-		addMsgResource("label.ftpBackup", getResource("label.ftpBackup","FTP Backup"));
-		addMsgResource("label.help", getResource("label.help","Help"));
-		addMsgResource("label.about", getResource("label.about", "About WebFileSys"));
-		addMsgResource("label.logout", getResource("label.logout","Logout"));
-
-		this.processResponse("menuBar.xsl", false);
+		processResponse("menuBar.xsl", false);
     }
 }

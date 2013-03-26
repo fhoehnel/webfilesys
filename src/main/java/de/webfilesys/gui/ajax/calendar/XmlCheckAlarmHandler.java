@@ -2,6 +2,7 @@ package de.webfilesys.gui.ajax.calendar;
 
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -58,6 +59,8 @@ public class XmlCheckAlarmHandler extends XmlRequestHandlerBase {
 		String language = WebFileSys.getInstance().getUserMgr().getLanguage(uid);
 		SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 		
+		ArrayList<AlarmEntry> clonesToRemove = new ArrayList<AlarmEntry>();
+		
 		Iterator<AlarmEntry> iter = alarmList.iterator();
 		while (iter.hasNext()) {
 			AlarmEntry alarmEntry = iter.next();
@@ -99,6 +102,17 @@ public class XmlCheckAlarmHandler extends XmlRequestHandlerBase {
 					}
 				}
 			}
+			
+			if (alarmEntry.isCloned()) 
+			{
+				clonesToRemove.add(alarmEntry);
+			}
+		}
+		
+		for (int i = clonesToRemove.size() - 1; i >= 0; i--)
+		{
+			AlarmEntry clone = clonesToRemove.get(i);
+			AppointmentManager.getInstance().getAlarmIndex().delEventClone(clone);
 		}
 		
 		processResponse();

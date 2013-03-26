@@ -51,6 +51,9 @@ public class XmlDeleteAppointmentHandler extends XmlRequestHandlerBase {
 		
 		appMgr.removeAppointment(uid, eventId);
 		
+		// remove the clone created by delaying
+		appMgr.getAlarmIndex().delEvent(uid, appointment);
+		
 		Element resultElement = doc.createElement("result");
 		
 		XmlUtil.setChildText(resultElement, "message", "appointment deleted");

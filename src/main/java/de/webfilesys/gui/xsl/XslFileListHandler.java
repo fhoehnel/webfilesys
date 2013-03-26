@@ -157,56 +157,11 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			
 		doc.insertBefore(xslRef, fileListElement);
 
-		addMsgResource("alert.nofileselected", getResource("alert.nofileselected","Select at least 1 file"));
-		addMsgResource("sort.name.ignorecase", getResource("sort.name.ignorecase","sort by name (ignore case)"));
-		addMsgResource("sort.name.respectcase", getResource("sort.name.respectcase","sort by name (respect case)"));
-		addMsgResource("sort.extension", getResource("sort.extension","sort by extension"));
-		addMsgResource("sort.size", getResource("sort.size","sort by size"));
-		addMsgResource("sort.date", getResource("sort.date","sort by change date"));
-
-		addMsgResource("label.modelist", getResource("label.modelist","list files"));
-		addMsgResource("label.modethumb", getResource("label.modethumb","thumbnails"));
-		addMsgResource("label.modestory", getResource("label.modestory","picture story"));
-		addMsgResource("label.modeSlideshow", getResource("label.modeSlideshow","slideshow"));
-		addMsgResource("label.fileStats", getResource("label.fileStats","statistics"));
-
-		addMsgResource("label.mask", getResource("label.mask","Mask"));
-		addMsgResource("label.refresh", getResource("label.refresh","Refresh"));
-		addMsgResource("label.files", getResource("label.files","files"));
-
-		addMsgResource("label.filename", getResource("label.filename","file name"));
-		addMsgResource("label.lastModified", getResource("label.lastModified","last modified"));
-		addMsgResource("label.fileSize", getResource("label.fileSize","size (bytes)"));
-
-		addMsgResource("checkbox.confirmdel", getResource("checkbox.confirmdel","Confirm Delete"));
-		addMsgResource("label.selectedFiles", getResource("label.selectedFiles","selected files"));
-
-		addMsgResource("label.selectFunction", getResource("label.selectFunction","- select function -"));
-
-		if (!readonly)
-		{
-			addMsgResource("button.delete", getResource("button.delete","Delete"));
-			addMsgResource("label.copyToClip", getResource("label.copyToClip","Copy to clipboard"));
-			addMsgResource("label.cutToClip", getResource("label.cutToClip","Move to clipboard"));
-			addMsgResource("button.zip", getResource("button.zip","Create ZIP archive"));
-            if (File.separatorChar == '/')
-			{
-				addMsgResource("button.tar", getResource("button.tar","Create tar archive"));
-			}
-			addMsgResource("button.bookmark", getResource("button.bookmark", "Bookmark"));
-			addMsgResource("title.bookmarkButton", getResource("title.bookmarkButton", "Create bookmark for the current folder"));
-		}
-		addMsgResource("button.downloadAsZip", getResource("button.downloadAsZip","Download as Zip"));
-        addMsgResource("action.diff", getResource("action.diff","Compare (diff)"));
-        addMsgResource("selectTwoFilesForDiff", getResource("selectTwoFilesForDiff","Select two files to compare!"));
-
-		addMsgResource("button.upload", getResource("button.upload","Upload"));
-		addMsgResource("button.paste", getResource("button.paste","Paste"));
-		addMsgResource("button.pasteLink", getResource("button.pasteLink","Paste as Link"));
-
 		String errorMsg = getParameter("errorMsg");
 		
-		if (errorMsg != null)
+	    XmlUtil.setChildText(fileListElement, "language", language, false);
+
+	    if (errorMsg != null)
 		{
 		    XmlUtil.setChildText(fileListElement, "errorMsg", errorMsg, false);
 		}
@@ -239,7 +194,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		{
 			if (!isAdminUser(false))
 			{
-				addMsgResource("alert.maintanance", getResource("alert.maintanance","The server has been switched to maintanance mode. Please logout!"));
+				XmlUtil.setChildText(fileListElement, "maintananceMode", "true", false);
 			}
 		}
 
@@ -250,7 +205,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{
 		    Logger.getLogger(getClass()).warn("folder is not a readable directory: " + actPath);
-			addMsgResource("alert.dirNotFound", getResource("alert.dirNotFound","The folder is not a readable directory"));
+			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
 			this.processResponse("xsl/folderTree.xsl");
 			return; 
 		}
@@ -448,9 +403,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			
             if (linkFound)
             {
-                addMsgResource("button.copyLinks", getResource("button.copyLinks", "Copy linked Files"));
-                addMsgResource("tooltip.copyLinks", getResource("tooltip.copyLinks", "replace file links by a copy of the original files"));
-                addMsgResource("confirm.copyLinks", getResource("confirm.copyLinks", "Replace all file links by a copy of the original files?"));
+				XmlUtil.setChildText(fileListElement, "linksExist", "true");
             }
 		}
 

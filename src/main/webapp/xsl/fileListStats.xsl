@@ -261,15 +261,11 @@
     <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr>
         <td class="fileListFunct">
-          <table width="100%" border="0" cellpadding="0" cellspacing="0">
-            <tr>
-              <td class="fileListFunct formButton" style="text-align:right">
-                <input type="button" onclick="document.resetForm.submit()">
-                  <xsl:attribute name="value"><xsl:value-of select="/fileList/resources/msg[@key='button.resetStats']/@value" /></xsl:attribute>
-                </input>
-              </td>
-            </tr>
-          </table>
+          <div class="buttonCont">
+            <input type="button" onclick="document.resetForm.submit()">
+              <xsl:attribute name="value"><xsl:value-of select="/fileList/resources/msg[@key='button.resetStats']/@value" /></xsl:attribute>
+            </input>
+          </div>
         </td>
       </tr>
     </table>

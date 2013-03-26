@@ -36,6 +36,7 @@ public class AlarmEntry implements Serializable
 	private boolean alarmed;
 	private boolean mailAlarmed;
 	private int repeatPeriod;
+	private boolean cloned;
 
     private String xmlId;
 
@@ -163,6 +164,16 @@ public class AlarmEntry implements Serializable
     	lastMailAlarmed = newVal;
     }
     
+    public void setCloned(boolean newVal) 
+    {
+    	cloned = newVal;
+    }
+    
+    public boolean isCloned() 
+    {
+    	return cloned;
+    }
+    
     public static String alarmTypeString(int alarmType)
     {
         if (alarmType==AlarmEntry.ALARM_VISUAL)
@@ -175,5 +186,32 @@ public class AlarmEntry implements Serializable
             return("all");
         return("none");
     }
-
+    
+    public String toString()
+    {
+    	StringBuffer buff = new StringBuffer();
+    	buff.append("AlarmEntry[");
+    	buff.append("xmlId=");
+    	buff.append(getXmlId());
+    	buff.append(",owner=");
+    	buff.append(getOwner());
+    	buff.append(",dateId=");
+    	buff.append(getDateId());
+    	buff.append(",eventDate=");
+    	buff.append(getEventDate());
+    	buff.append(",alarmTime=");
+    	buff.append(getAlarmTime());
+    	buff.append(",alarmType=");
+    	buff.append(getAlarmType());
+    	buff.append(",repeatPeriod=");
+    	buff.append(getRepeatPeriod());
+    	buff.append(",alarmed=");
+    	buff.append(isAlarmed());
+    	buff.append(",mailAlarmed=");
+    	buff.append(isMailAlarmed());
+    	buff.append(",cloned=");
+    	buff.append(isCloned());
+    	buff.append("]");
+    	return buff.toString();
+    }
 }

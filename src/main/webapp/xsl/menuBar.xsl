@@ -19,6 +19,11 @@
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/menubar/language" /></xsl:attribute>
+</script>
+
 
 <script language="javascript">
   function fastpath() 
@@ -130,7 +135,7 @@
 
 </head>
 
-<body class="menubar" onload="setScreenSize()">
+<body class="menubar" onload="setBundleResources();setScreenSize()">
 
   <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
@@ -141,7 +146,7 @@
             <th>
               <a href="javascript:fastpath()">
                 <img src="/webfilesys/images/menubar/fastpath.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.fastpath']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.fastpath</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -149,7 +154,7 @@
             <th>
               <a href="javascript:bookmarks()">
                 <img src="/webfilesys/images/menubar/bookmarks.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.bookmarks']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.bookmarks</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -157,7 +162,7 @@
             <th>
               <a href="javascript:returnToPrevDir()">
                 <img src="/webfilesys/images/menubar/returnDir.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.returnToPrevDir']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.returnToPrevDir</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -166,7 +171,7 @@
               <th>
                 <a href="/webfilesys/servlet?command=processList" target="_blank">
                   <img src="/webfilesys/images/menubar/process.gif" border="0" width="32" height="32">
-                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.processes']/@value" /></xsl:attribute>
+                    <xsl:attribute name="titleResource">label.processes</xsl:attribute>
                   </img>
                 </a>
               </th>
@@ -174,7 +179,7 @@
               <th>
                 <a href="javascript:fileSysStats()">
                   <img src="/webfilesys/images/menubar/bargraph.gif" border="0" width="32" height="32">
-                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.fsstat']/@value" /></xsl:attribute>
+                    <xsl:attribute name="titleResource">label.fsstat</xsl:attribute>
                   </img>
                 </a>
               </th>
@@ -182,7 +187,7 @@
               <th>
                 <a href="#" onclick="unixCmdWin()">
                   <img src="/webfilesys/images/menubar/cmdline.gif" border="0" width="32" height="32">
-                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.oscmd']/@value" /></xsl:attribute>
+                    <xsl:attribute name="titleResource">label.oscmd</xsl:attribute>
                   </img>
                 </a>
               </th>
@@ -192,7 +197,7 @@
               <th>
                 <a href="/webfilesys/servlet?command=admin&amp;cmd=menu" target="_parent">
                   <img src="/webfilesys/images/menubar/admin.gif" border="0" width="32" height="32">
-                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.admin']/@value" /></xsl:attribute>
+                    <xsl:attribute name="titleResource">label.admin</xsl:attribute>
                   </img>
                 </a>
               </th>
@@ -204,7 +209,7 @@
                   <th>
                     <a href="/webfilesys/servlet?command=selfEditUser" target="FileList">
                       <img src="/webfilesys/images/menubar/user.gif" border="0" width="32" height="32">
-                        <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.editregistration']/@value" /></xsl:attribute>
+                        <xsl:attribute name="titleResource">label.editregistration</xsl:attribute>
                       </img>
                     </a>
                   </th>
@@ -214,7 +219,7 @@
                   <th>
                     <a href="/webfilesys/servlet?command=editPw" target="FileList">
                       <img src="/webfilesys/images/menubar/key.gif" border="0" width="32" height="32">
-                        <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.settings']/@value" /></xsl:attribute>
+                        <xsl:attribute name="titleResource">label.settings</xsl:attribute>
                       </img>
                     </a>
                   </th>
@@ -226,7 +231,7 @@
               <th>
                 <a href="javascript:publishList()">
                   <img src="/webfilesys/images/menubar/published.gif" border="0" width="32" height="32">
-                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.publishList']/@value" /></xsl:attribute>
+                    <xsl:attribute name="titleResource">label.publishList</xsl:attribute>
                   </img>
                 </a>
               </th>
@@ -238,7 +243,7 @@
                   <th>
                     <a href="javascript:diskQuota()">
                       <img src="/webfilesys/images/menubar/diskQuota.gif" border="0" width="32" height="32">
-                        <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.diskQuotaUsage']/@value" /></xsl:attribute>
+                        <xsl:attribute name="titleResource">label.diskQuotaUsage</xsl:attribute>
                       </img>
                     </a>
                   </th>
@@ -250,7 +255,7 @@
               <th>
                 <a href="javascript:refreshDriveList()">
                   <img src="/webfilesys/images/menubar/drive.gif" border="0" width="32" height="32">
-                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.refreshDrives']/@value" /></xsl:attribute>
+                    <xsl:attribute name="titleResource">label.refreshDrives</xsl:attribute>
                   </img>
                 </a>
               </th>
@@ -276,7 +281,7 @@
             <th>
               <a href="javascript:searchParms()">
                 <img src="/webfilesys/images/menubar/search.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.search']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.search</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -284,7 +289,7 @@
             <th>
               <a href="javascript:slideshow()">
                 <img src="/webfilesys/images/menubar/slideshow.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.slideshow']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.slideshow</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -292,7 +297,7 @@
             <th>
               <a href="javascript:javascript:pictureStory()">
                 <img src="/webfilesys/images/menubar/film.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.story']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.story</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -301,7 +306,7 @@
               <th>
                 <a href="javascript:ftpBackup()">
                   <img src="/webfilesys/images/menubar/ftp.gif" border="0" width="32" height="32">
-                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.ftpBackup']/@value" /></xsl:attribute>
+                    <xsl:attribute name="titleResource">label.ftpBackup</xsl:attribute>
                   </img>
                 </a>
               </th>
@@ -311,7 +316,7 @@
               <th>
                 <a href="javascript:openCalendar()">
                   <img src="/webfilesys/images/menubar/calendar.gif" border="0" width="32" height="32">
-                    <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.calendar']/@value" /></xsl:attribute>
+                    <xsl:attribute name="titleResource">label.calendar</xsl:attribute>
                   </img>
                 </a>
               </th>
@@ -320,7 +325,7 @@
             <th>
               <a href="javascript:mobileVersion()">
                 <img src="/webfilesys/images/menubar/mobilePhone.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title">mobile phone version</xsl:attribute>
+                  <xsl:attribute name="titleResource">label.mobileVersion</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -329,7 +334,7 @@
               <a target="_blank">
                 <xsl:attribute name="href">/webfilesys/help/<xsl:value-of select="helpLanguage" />/help.html</xsl:attribute>
                 <img src="/webfilesys/images/menubar/help.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.help']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.help</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -337,7 +342,7 @@
             <th>
               <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
                 <img src="/webfilesys/images/menubar/info.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.about']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.about</xsl:attribute>
                 </img>
               </a>
             </th>
@@ -347,7 +352,7 @@
             <th>
               <a class="active" href="/webfilesys/servlet?command=logout" target="_parent">
                 <img src="/webfilesys/images/menubar/exit.gif" border="0" width="32" height="32">
-                  <xsl:attribute name="title"><xsl:value-of select="resources/msg[@key='label.logout']/@value" /></xsl:attribute>
+                  <xsl:attribute name="titleResource">label.logout</xsl:attribute>
                 </img>
               </a>
             </th>

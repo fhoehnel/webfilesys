@@ -82,12 +82,6 @@
 
 <div id="msg1" class="msgBox" style="visibility:hidden" />
 
-<xsl:if test="/fileList/unlicensed">
-  <script language="javascript">
-    licenseReminder();
-  </script>
-</xsl:if>
-
 </xsl:template>
 <!-- end root node-->
 
@@ -287,7 +281,7 @@
   <xsl:if test="not(/fileList/file)">
     <table class="topLess" border="0" cellpadding="5" cellspacing="0" width="100%">
       <tr>
-        <td class="fileListFunct">
+        <td class="fileListFunct" style="padding:10px 10px">
           <xsl:value-of select="resources/msg[@key='alert.nopictures']/@value" />
         </td>
       </tr>

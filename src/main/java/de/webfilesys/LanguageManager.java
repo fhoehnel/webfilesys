@@ -136,6 +136,22 @@ public class LanguageManager
         return(langResources.getProperty(resource,defaultValue));
     }
 
+    public Properties getLanguageResources(String language) 
+    {
+   	    Properties langResources = (Properties) resourceTable.get(language);
+
+        if (langResources == null)        
+        {
+            String resourceFileName = languagePath + "/" + language + "." + "resources";
+
+            langResources = new Properties();
+
+            loadResources(resourceFileName, langResources);
+        }
+           
+        return langResources;
+    }
+    
     protected synchronized boolean loadResources(String configFilename,Properties langResources)
     {
         FileInputStream configFile=null;

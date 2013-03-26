@@ -112,12 +112,6 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 		dirCounter=0;
 		currentDirNum=0;
 
-		addMsgResource("folderTip", getResource("tooltip.folder","open the context menu for the directory"));
-		addMsgResource("listTip", getResource("tooltip.listFiles","list the files of this directory"));
-
-		addMsgResource("label.directory", getResource("label.directory","Directory"));
-		// addMsgResource("alert.dircopied", getResource("alert.dircopied","has been copied to clipboard"));
-
 		String loginEvent = (String) session.getAttribute("loginEvent");
 		
         if (loginEvent != null)
@@ -127,29 +121,10 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 				Element loginEventElement = doc.createElement("loginEvent");
 			
 				folderTreeElement.appendChild(loginEventElement);
-				
-				addMsgResource("label.loginHint", getResource("label.loginHint", "Hint: Click on the folder icon to open the context menu of the folder!"));
 			}
 
             session.removeAttribute("loginEvent");
         }
-	}
-	
-	protected void addMsgResource(String key, String value)
-	{
-		if (resourcesElement == null)
-		{
-			resourcesElement = doc.createElement("resources");
-			
-			folderTreeElement.appendChild(resourcesElement);
-		}
-		
-		Element msgElement = doc.createElement("msg");
-		
-		resourcesElement.appendChild(msgElement);
-		
-		msgElement.setAttribute("key", key);
-		msgElement.setAttribute("value", value);
 	}
 	
 	protected void dirSubTree(Element parentFolder, String actPath, String partOfPath, boolean belowDocRoot)

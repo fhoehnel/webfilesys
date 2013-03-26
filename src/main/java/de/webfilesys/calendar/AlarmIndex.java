@@ -95,7 +95,12 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
             }
         }
 
-        return(newEvent);
+		if (Logger.getLogger(getClass()).isDebugEnabled())
+		{
+			Logger.getLogger(getClass()).debug("adding AlarmEntry to alarm index: " + newEvent);
+		}
+
+		return(newEvent);
     }
 
     /*
@@ -157,6 +162,48 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
     }
     */
 
+    public boolean delEventClone(AlarmEntry entryToRemove)
+    {
+		Hashtable<Integer, Vector<AlarmEntry>> userRoot = get(entryToRemove.getOwner());
+
+		if (userRoot == null)
+		{
+			return false;
+		}
+		
+        Integer dateKey = getDateKey(entryToRemove.getEventDate());        
+		
+		Vector<AlarmEntry> dayEventList = userRoot.get(dateKey);
+		if (dayEventList == null)
+		{
+			return false;
+		}
+
+		Enumeration<AlarmEntry> allEvents = dayEventList.elements();
+		
+		while (allEvents.hasMoreElements())
+		{
+			AlarmEntry nextEvent = allEvents.nextElement();
+			
+			if (nextEvent.getXmlId().equals(entryToRemove.getXmlId()))
+			{
+				if (nextEvent.isCloned())
+				{
+					if (Logger.getLogger(getClass()).isDebugEnabled())
+					{
+						Logger.getLogger(getClass()).debug("removing AlarmEntry clone from alarm index: " + nextEvent);
+					}
+					
+					dayEventList.remove(nextEvent);
+
+					return(true);
+				}
+			}
+		}
+		
+		return false;
+    }
+
 	public boolean delEvent(String owner, Appointment appointment)
 	{
 		Hashtable<Integer, Vector<AlarmEntry>> userRoot = get(owner);
@@ -200,7 +247,10 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
 			{
 				dayEventList.remove(nextEvent);
 
-				Logger.getLogger(getClass()).debug("AlarmEntry removed from alarm index " + eventXmlId + " event Time: " + eventDate);
+				if (Logger.getLogger(getClass()).isDebugEnabled())
+				{
+					Logger.getLogger(getClass()).debug("removing AlarmEntry from alarm index " + nextEvent);
+				}
 				
 				return(true);
 			}
@@ -568,6 +618,25 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
         }
     }
 
+    /**
+     * Clone is used only for delayed visual/sound alarms.
+     * @param original the original alaram entry
+     * @return the cloned alarm entry
+     */
+    /*
+    public AlarmEntry createClone(AlarmEntry original)
+    {
+    	AlarmEntry clone = new AlarmEntry(idCounter++, 
+    			                          original.getOwner(), 
+    			                          original.getEventDate(), original.getAlarmTime(),
+                                          original.getAlarmType(), original.getRepeatPeriod());
+    	
+    	clone.unsetAlarmed();
+    	clone.setCloned(true);
+    	return clone;
+    }
+    */
+    
 }
 
 
