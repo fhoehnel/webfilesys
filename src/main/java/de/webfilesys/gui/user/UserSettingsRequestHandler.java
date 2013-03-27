@@ -188,10 +188,8 @@ public class UserSettingsRequestHandler extends UserRequestHandler
     {
 		String login=uid;
 
-		output.println("<HTML>");
-		output.println("<HEAD>");
-
-		output.println("<TITLE> WebFileSys : settings </TITLE>");
+		output.println("<html>");
+		output.println("<head>");
 
 		if (errorMsg!=null)
 		{
@@ -200,8 +198,8 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
 
-		output.println("</HEAD>");
-		output.println("<BODY>");
+		output.println("</head>");
+		output.println("<body>");
 
 		headLine(getResource("label.settings","Settings"));
 
@@ -210,25 +208,36 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 		output.println("<form accept-charset=\"utf-8\" method=\"post\" action=\"/webfilesys/servlet\">");
 		output.println("<input type=\"hidden\" name=\"command\" value=\"changePw\">");
 
-		output.println("<table border=0>");
-		output.println("<tr><td class=\"value\">" + login + "</td>");
-		output.println("<td class=\"prompt\"><b>" + getResource("label.login","userid/login") + "</b></td></tr>");
+		output.println("<table class=\"dataForm\" style=\"width:100%\">");
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">" + getResource("label.login","userid/login") + "</td>");
+		output.println("<td class=\"formParm2\">" + login + "</td>");
+		output.println("</tr>");
 
-		output.println("<tr><td><INPUT TYPE=\"PASSWORD\" NAME=\"oldpw\" SIZE=20 MAXLENGTH=30 VALUE=\"\"></td>");
-		output.println("<td class=\"prompt\">" + getResource("label.oldpassword","current password") + "</td></tr>");
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">" + getResource("label.oldpassword","current password") + "</td>");
+		output.println("<td class=\"formParm2\"><input type=\"password\" name=\"oldpw\" maxlength=\"30\"/></td>");
+		output.println("</tr>");
 
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">" + getResource("label.newpassword","new password") + "</td>");
+		output.println("<td class=\"formParm2\"><input type=\"password\" name=\"password\" maxlength=\"30\" /></td>");
+		output.println("</tr>");
 
-		output.println("<tr><td><INPUT TYPE=\"PASSWORD\" NAME=\"password\" SIZE=20 MAXLENGTH=30 VALUE=\"\"></td>");
-		output.println("<td class=\"prompt\">" + getResource("label.newpassword","new password") + "</td></tr>");
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">" + getResource("label.passwordconfirm","password confirmation") + "</td>");
+		output.println("<td class=\"formParm2\"><input type=\"password\" name=\"pwconfirm\" maxlength=\"30\" /></td>");
+		output.println("</tr>");
 
-		output.println("<tr><td><INPUT TYPE=\"PASSWORD\" NAME=\"pwconfirm\" SIZE=20 MAXLENGTH=30 VALUE=\"\"></td>");
-		output.println("<td class=\"prompt\">" + getResource("label.passwordconfirm","password confirmation") + "</td></tr>");
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">" + getResource("label.ropassword","read-only password") + "</td>");
+		output.println("<td class=\"formParm2\"><input type=\"password\" name=\"ropassword\" maxlength=\"30\" /></td>");
+		output.println("</tr>");
 
-		output.println("<tr><td><INPUT TYPE=\"PASSWORD\" NAME=\"ropassword\" SIZE=20 MAXLENGTH=30 VALUE=\"\"></td>");
-		output.println("<td class=\"prompt\">" + getResource("label.ropassword","read-only password") + "</td></tr>");
-
-		output.println("<tr><td><INPUT TYPE=\"PASSWORD\" NAME=\"ropwconfirm\" SIZE=20 MAXLENGTH=30 VALUE=\"\"></td>");
-		output.println("<td class=\"prompt\">" + getResource("label.ropwconfirm","read-only password confirmation") + "</td></tr>");
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">" + getResource("label.ropwconfirm","read-only password confirmation") + "</td>");
+		output.println("<td class=\"formParm2\"><input type=\"password\" name=\"ropwconfirm\" maxlength=\"30\" /></td>");
+		output.println("</tr>");
 
         String userCss = null;
         
@@ -248,9 +257,12 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 
 		Vector cssList = CSSManager.getInstance().getAvailableCss();
 
-		output.println("<tr><td><select name=\"css\" size=\"1\">");
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">" + getResource("label.css","layout") + "</td>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<select name=\"css\" size=\"1\">");
 
-		for (int i=0;i < cssList.size();i++)
+		for (int i = 0;i < cssList.size(); i++)
 		{
 			String css = (String) cssList.elementAt(i);
 
@@ -266,15 +278,20 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 	            output.println(">" + css + "</option>");
 			}
 		}
-		output.println("</select></td>");
-		output.println("<td class=\"prompt\"><b>" + getResource("label.css","layout") + "</b></td></tr>");
+		output.println("</select>");
+		output.println("</td>");
+		output.println("</tr>");
 
 		output.println("<tr><td colspan=2>&nbsp;</td></tr>");
-		output.println("<tr><td align=left>");
+		
+		output.println("<tr>");
+		output.println("<td class=\"formButton\">");
 		output.println("<input type=\"submit\" name=\"changebutton\" value=\"" + getResource("button.save","&nbsp;Save&nbsp;") + "\">");
-		output.println("</td><td align=right>");
+		output.println("</td>");
+		output.println("<td class=\"formButton\" style=\"text-align:right\">");
 		output.println("<input type=\"button\" value=\"" + getResource("button.cancel","&nbsp;Cancel&nbsp;") + "\" onclick=\"window.location.href='/webfilesys/servlet?command=listFiles';\">");
-		output.println("</td></tr>");    
+		output.println("</td>");
+		output.println("</tr>");    
 
 		output.println("</table>");
 

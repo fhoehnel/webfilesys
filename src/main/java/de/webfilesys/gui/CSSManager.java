@@ -18,6 +18,10 @@ public class CSSManager
     public static final String DEFAULT_LAYOUT = "fmweb";
 
     private static final String CSS_DIR    = "css";
+    
+    private static final String CALENDAR_CSS_FILENAME = "calendar.css";
+    
+    private static final String MOBILE_CSS_FILENAME = "mobile.css";
 
     private Hashtable cssTable;
 
@@ -65,7 +69,9 @@ public class CSSManager
         {
              String cssFileName=cssList[i];
 
-             if (cssFileName.endsWith(".css"))
+             if (cssFileName.endsWith(".css") &&
+            	(!cssFileName.equals(CALENDAR_CSS_FILENAME)) && 
+            	(!cssFileName.equals(MOBILE_CSS_FILENAME)))
              {
                  File cssFile = new File(cssPath + "/" + cssFileName);
 
