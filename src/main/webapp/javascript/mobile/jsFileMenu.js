@@ -130,11 +130,6 @@ function delLink(linkName)
     window.location.href="/webfilesys/servlet?command=deleteLink&linkName=" + encodeURIComponent(linkName);
 }
 
-function renameLink(linkName)
-{
-    window.location.href="/webfilesys/servlet?command=renameLink&linkName=" + encodeURIComponent(linkName);
-}
-
 function switchReadWrite(path)
 {   
     showPrompt('/webfilesys/servlet?command=switchReadWrite&filePath=' + encodeURIComponent(path), '/webfilesys/xsl/switchReadWrite.xsl', 360);

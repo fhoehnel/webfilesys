@@ -176,11 +176,6 @@ function origDir(path)
     parent.parent.frames[1].location.href="/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(path) + "&fastPath=true";
 }
 
-function renameLink(linkName)
-{
-    window.location.href="/webfilesys/servlet?command=renameLink&linkName=" + encodeURIComponent(linkName);
-}
-
 function emailLink(filePath)
 {
     showPrompt('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 250);

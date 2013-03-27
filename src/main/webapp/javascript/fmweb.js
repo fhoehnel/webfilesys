@@ -556,6 +556,127 @@ function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight)
     promptBox.style.visibility = "visible";
 }
 
+function showPromptDialog(htmlFragmentURL, boxWidth, boxHeight)
+{
+    promptBox = document.getElementById("prompt");
+        
+    hideMenu();        
+    
+    if (!promptBox)
+    {
+        alert('promptBox is not defined');
+        return;
+    }
+        
+    if (window.ActiveXObject) 
+    {
+        windowWidth = document.body.clientWidth;
+        windowHeight = document.body.clientHeight;
+        yScrolled = document.body.scrollTop;
+        xScrolled = document.body.scrollLeft;
+    }
+    else
+    {
+        windowWidth = window.innerWidth;
+        windowHeight = window.innerHeight;
+        yScrolled = window.pageYOffset;
+        xScrolled = window.pageXOffset;
+        
+        if (yScrolled > 0)
+        {
+            // scrollbar exists 
+            windowWidth = windowWidth - 20;
+        }
+    }
+        
+    if (boxWidth)
+    {
+        promptBox.style.width = boxWidth + 'px';
+    }
+
+    if (boxHeight)
+    {
+        promptBox.style.height = boxHeight + 'px';
+    }
+        
+    promptBoxWidth = promptBox.offsetWidth;
+    
+    xoffset = (windowWidth - promptBoxWidth) / 2;
+    
+    if (xoffset < 2)
+    {
+        xoffset = 2;
+    }
+        
+    promptXpos = xoffset + xScrolled;
+
+    promptBox.style.left = promptXpos + 'px';
+
+    if (!boxHeight)
+    {
+        boxHeight = 100;
+    }
+
+    promptYpos = (windowHeight - boxHeight) / 2 + yScrolled;
+    if (promptYpos < 10)
+    {
+        promptYpos = 10;
+    }
+
+    promptBox.style.top = promptYpos + 'px';
+        
+    promptBox.innerHTML = xmlRequestSynchron(htmlFragmentURL, true);
+        
+    setBundleResources(promptBox);
+        
+    promptBox.style.visibility = "visible";
+
+    return promptBox;
+}
+
+function renameLink(linkName)
+{
+	var promptDialog = showPromptDialog("/webfilesys/html/renameLink.html", 360);	
+	
+	document.getElementById("oldLinkName").value = linkName;
+	document.getElementById("oldLinkNameShort").innerHTML = shortText(linkName, 35);
+
+	var newLinkName = document.getElementById("newLinkName");
+	newLinkName.value = linkName;
+	newLinkName.focus();
+	newLinkName.select();
+}
+
+function validateNewLinkName()
+{
+	var newLinkName = document.getElementById("newLinkName").value;
+	
+	if (trim(newLinkName).length == 0)
+	{
+		alert(resourceBundle["alert.newLinkNameEmpty"]);
+		document.getElementById("newLinkName").focus()
+		return;
+	}
+	
+	var oldLinkName = document.getElementById("oldLinkName").value;
+		
+	if (oldLinkName == newLinkName)
+	{
+		alert(resourceBundle["alert.destEqualsSource"]);
+		document.getElementById("newLinkName").focus()
+		return;
+	}
+		
+	if (!checkFileNameSyntax(newLinkName))
+	{
+		alert(resourceBundle["alert.illegalCharInFilename"]);
+		document.getElementById("newLinkName").focus()
+		return;
+	}
+	
+	document.getElementById("renameLinkForm").submit();
+}
+
 function validateEmail(elementValue)
 {      
    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;

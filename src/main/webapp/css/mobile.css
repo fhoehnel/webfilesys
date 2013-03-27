@@ -44,7 +44,7 @@
   td.jsmenu {background-color:#e0e0e0;padding-left:5px;padding-right:5px;padding-top:2px;padding-bottom:2px;border-top-width:1px;border-top-style:solid;border-top-color:white;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;}
 
   td.formParm1 {background-color:#ffffe0;color:black;font-size:10pt;font-family:Arial,Helvetica;text-align:left;vertical-align:top;padding:8px;padding-top:4px;padding-bottom:4px;}
-  td.formParm2 {background-color:#ffffe0;color:navy;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding:8px;padding-top:4px;padding-bottom:4px;}
+  td.formParm2 {background-color:#ffffe0;color:navy;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;text-align:left;padding:8px;padding-top:4px;padding-bottom:4px;}
    
   div.msgBox {width:260px;height:100px;position:absolute;background-color:lavender;border-style:solid;border-width:1px;border-color:black;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:20px;}
   div.promptBox {width:360px;height:140px;position:absolute;background-color:#ffffe0;border-style:ridge;border-width:3px;border-color:#a0a0a0;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:0;}

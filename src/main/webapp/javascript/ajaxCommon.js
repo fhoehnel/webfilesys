@@ -50,7 +50,7 @@ function xmlRequest(url, callBackFunction)
     }
 }
 
-function xmlRequestSynchron(url)
+function xmlRequestSynchron(url, handleAsText)
 {
     req = false;
     
@@ -90,8 +90,8 @@ function xmlRequestSynchron(url)
         
     if (req) 
     {
-	req.open("GET", url, false);
-	req.send(null);
+	    req.open("GET", url, false);
+	    req.send(null);
     }
     else
     {
@@ -102,6 +102,11 @@ function xmlRequestSynchron(url)
     {
         alert('error code from XMLHttpRequest: ' + req.status);
         return;
+    }
+    
+    if (handleAsText)
+    {
+        return(req.responseText);    
     }
     
     return(req.responseXML);    

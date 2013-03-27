@@ -144,3 +144,8 @@ function insertDoubleBackslash(source)
 {
     return(source.replace(/\\/g,"\\\\"));
 }
+
+function trim(str) 
+{
+    return str.replace (/^\s+/, '').replace (/\s+$/, '');
+}

@@ -55,7 +55,7 @@ function xmlRequest(url, callBackFunction)
     }
 }
 
-function xmlRequestSynchron(url)
+function xmlRequestSynchron(url, handleAsText)
 {
     req = false;
     
@@ -107,6 +107,11 @@ function xmlRequestSynchron(url)
     {
         alert('error code from XMLHttpRequest: ' + req.status);
         return;
+    }
+    
+    if (handleAsText)
+    {
+        return(req.responseText);    
     }
     
     return(req.responseXML);    

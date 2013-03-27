@@ -28,6 +28,7 @@
   <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/mobileCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/contextMenuCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/fileContextMenu.js" type="text/javascript"></script>
