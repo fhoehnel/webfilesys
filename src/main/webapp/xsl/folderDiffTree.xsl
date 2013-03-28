@@ -13,9 +13,7 @@
 
   <meta http-equiv="expires" content="0" />
   
-  <title>
-    WebFileSys: <xsl:value-of select="/folderDiff/resources/msg[@key='headline.folderDiffTree']/@value" />
-  </title>
+  <title resource="title.folderDiffTree" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/css/<xsl:value-of select="/folderDiff/css" />.css</xsl:attribute>
@@ -24,6 +22,11 @@
   <style type="text/css">
     img {vertical-align:middle}
   </style>
+  
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/folderDiff/language" /></xsl:attribute>
+  </script>
   
   <script type="text/javascript">
     function openDiffWin(relativePath)
@@ -65,9 +68,8 @@
 
 </head>
 
-<body>
-  <xsl:attribute name="class">dirTree</xsl:attribute>
-
+<body onload="setBundleResources()">
+   
   <xsl:for-each select="/folderDiff/differenceTree">
     <xsl:call-template name="differenceTree" />
   </xsl:for-each>
@@ -83,17 +85,13 @@
 
   <table class="dataForm" width="100%" style="margin-bottom:10px;">
     <tr>
-      <td class="formParm1">
-        <xsl:value-of select="/folderDiff/resources/msg[@key='label.compSourceFolder']/@value" />:
-      </td>
+      <td class="formParm1" resource="label.compSourceFolder" />
       <td class="formParm2">
         <xsl:value-of select="/folderDiff/sourcePath" />
       </td>
     </tr>
     <tr>
-      <td class="formParm1">
-        <xsl:value-of select="/folderDiff/resources/msg[@key='label.compTargetFolder']/@value" />:
-      </td>
+      <td class="formParm1" resource="label.compTargetFolder" />
       <td class="formParm2">
         <xsl:value-of select="/folderDiff/targetPath" />
       </td>
@@ -101,9 +99,7 @@
     
     <xsl:if test="/folderDiff/excludePattern">
       <tr>
-        <td class="formParm1">
-          <xsl:value-of select="/folderDiff/resources/msg[@key='excludePattern']/@value" />:
-        </td>
+        <td class="formParm1" resource="excludePattern" />
         <td class="formParm2">
           <xsl:value-of select="/folderDiff/excludePattern" />
         </td>
@@ -112,35 +108,41 @@
     
   </table>
 
-  <div style="float:right">
-    <img src="images/folderNew.gif" border="0" width="17" height="14" />
-    <img src="images/docNew.gif" border="0" width="15" height="16" />
-    = <xsl:value-of select="/folderDiff/resources/msg[@key='folderDiffNew']/@value" />
-    (<xsl:value-of select="/folderDiff/missingSourceFolders" />/<xsl:value-of select="/folderDiff/missingSourceFiles" />)
-    <br/>
+  <xsl:if test="folder">
 
-    <img src="images/folderRemoved.gif" border="0" width="17" height="14" />
-    <img src="images/docRemoved.gif" border="0" width="15" height="16" />
-    = <xsl:value-of select="/folderDiff/resources/msg[@key='folderDiffRemoved']/@value" />
-    (<xsl:value-of select="/folderDiff/missingTargetFolders" />/<xsl:value-of select="/folderDiff/missingTargetFiles" />)
-    <br/>
+    <div style="float:right">
+      <img src="images/folderNew.gif" border="0" width="17" height="14" />
+      <img src="images/docNew.gif" border="0" width="15" height="16" />
+      = <span resource="folderDiffNew"></span>
+      (<xsl:value-of select="/folderDiff/missingSourceFolders" />/<xsl:value-of select="/folderDiff/missingSourceFiles" />)
+      <br/>
 
-    <img src="images/space.gif" border="0" width="17" height="14" />
-    <img src="images/docChanged.gif" border="0" width="15" height="16" />
-    = <xsl:value-of select="/folderDiff/resources/msg[@key='folderDiffModified']/@value" />
-    (<xsl:value-of select="/folderDiff/modifiedFiles" />)
-  </div>
+      <img src="images/folderRemoved.gif" border="0" width="17" height="14" />
+      <img src="images/docRemoved.gif" border="0" width="15" height="16" />
+      = <span resource="folderDiffRemoved"></span>
+      (<xsl:value-of select="/folderDiff/missingTargetFolders" />/<xsl:value-of select="/folderDiff/missingTargetFiles" />)
+      <br/>
+
+      <img src="images/space.gif" border="0" width="17" height="14" />
+      <img src="images/docChanged.gif" border="0" width="15" height="16" />
+      = <span resource="folderDiffModified"></span>
+      (<xsl:value-of select="/folderDiff/modifiedFiles" />)
+    </div>
   
-  <img src="images/space.gif" border="0" width="12" height="17" />
-  <img src="images/fastpath.gif" border="0" width="19" height="14" />
-  <img src="images/space.gif" border="0" width="4" height="1" />
-  <a class="dirtree">
-    <xsl:value-of select="/folderDiff/resources/msg[@key='headline.folderDiffTree']/@value" />
-  </a>
+    <img src="images/space.gif" border="0" width="12" height="17" />
+    <img src="images/fastpath.gif" border="0" width="19" height="14" />
+    <img src="images/space.gif" border="0" width="4" height="1" />
+    <a class="dirtree" resource="headline.folderDiffTree" />
 
-  <xsl:for-each select="folder">
-    <xsl:call-template name="folder" />
-  </xsl:for-each>
+    <xsl:for-each select="folder">
+      <xsl:call-template name="folder" />
+    </xsl:for-each>
+  
+  </xsl:if>
+
+  <xsl:if test="not(folder)">
+    <span resource="sync.noDifference" style="margin-left:10px"></span>
+  </xsl:if>
 
 </xsl:template>
 
@@ -198,7 +200,7 @@
       <xsl:if test="lastModified">
         <xsl:attribute name="title">
           <xsl:value-of select="/folderDiff/resources/msg[@key='timeLastModified']/@value" />: <xsl:value-of select="lastModified" />
-        </xsl:attribute>
+        </xsl:attribute>        
       </xsl:if>
       <xsl:if test="@leaf">
         <xsl:if test="@diffType = '4'">

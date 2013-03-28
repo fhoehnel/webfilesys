@@ -678,8 +678,8 @@ function openSyncWindow()
     
     if (!syncWin)
     {
-        alert('enable popups in your browser settings!');
-        parent.syncStarted = true;        
+        alert(resourceBundle["alert.enablePopups"]);
+        cancelSynchronize();       
         return;
     }
     

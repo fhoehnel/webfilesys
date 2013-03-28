@@ -98,6 +98,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 		doc.insertBefore(xslRef, fileListElem);
 
 		XmlUtil.setChildText(fileListElem, "css", userMgr.getCSS(uid), false);
+	    XmlUtil.setChildText(fileListElem, "language", language, false);
 		XmlUtil.setChildText(fileListElem, "currentPath", currentPath, false);
 		XmlUtil.setChildText(fileListElem, "headLine", getHeadlinePath(currentPath), false);
 		XmlUtil.setChildText(fileListElem, "sortBy", Integer.toString(sortBy), false);
@@ -114,20 +115,6 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 			SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 			XmlUtil.setChildText(fileListElem, "lastResetDate", dateFormat.format(resetDate), false);
 		}
-        
-		addMsgResource("label.modelist", getResource("label.modelist","list files"));
-		addMsgResource("label.modethumb", getResource("label.modethumb","thumbnails"));
-		addMsgResource("label.modestory", getResource("label.modestory","picture story"));
-		addMsgResource("label.modeSlideshow", getResource("label.modeSlideshow","slideshow"));
-		addMsgResource("label.fileStats", getResource("label.fileStats","statistics"));
-
-		addMsgResource("label.filename", getResource("label.filename","file name"));
-		addMsgResource("label.downloads", getResource("label.downloads","views/downloads"));
-		addMsgResource("rating.count", getResource("rating.count","votes"));
-		addMsgResource("label.comments", getResource("label.comments","comments"));
-		addMsgResource("label.since", getResource("label.since","since"));
-		addMsgResource("button.resetStats", getResource("button.resetStats","Reset Statistics"));
-		addMsgResource("label.files", getResource("label.files","files"));
 		
 		String fileMasks[] = new String[1];
 		fileMasks[0] = "*";

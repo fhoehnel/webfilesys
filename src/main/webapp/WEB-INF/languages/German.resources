@@ -781,6 +781,7 @@ checkboxCompIgnoreMetainf=WebFileSys metainf-Dateien ignorieren
 checkboxCompIgnorePattern=Dateien mit folgendem Muster ignorieren:
 headline.compareFolders=Ergebnisse des Ordner-Vergleichs
 button.compare=Vergleich starten
+title.folderDiffTree=WebFileSys: Ergebnis des Ordner-Vergleichs
 headline.folderDiffTree=Ergebnis des Ordner-Vergleichs
 folderDiffNew=fehlt im Quell-Ordner
 folderDiffRemoved=fehlt im Ziel-Ordner
@@ -895,6 +896,7 @@ alert.assocProgramFailed=Die Standardanwendung fuer diese Datei konnte nicht ges
 alert.cloneTargetExists=Klone-Operation fehlgeschlagen, Ziel-Datei existiert bereits!
 alert.cloneFailed=Klone-Operation fehlgeschlagen!
 alert.touchFailed=Setzen des Änderungsdatums fehlgeschlagen!
+alert.enablePopups=Diese Funktion erfordert die Freischaltung von Popup-Windows in den Browser-Einstellungen! 
 
 # confirmation messages
 confirm.deldir=Soll dieser Ordner wirklich gelöscht werden:

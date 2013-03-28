@@ -779,6 +779,7 @@ checkboxCompIgnoreMetainf=ignore WebFileSys metainf files
 checkboxCompIgnorePattern=ignore files matching this pattern:
 headline.compareFolders=Compare Folder Results
 button.compare=start compare
+title.folderDiffTree=WebFileSys: Folder Diff Tree
 headline.folderDiffTree=Folder Diff Tree
 folderDiffNew=missing in source
 folderDiffRemoved=missing in target
@@ -893,6 +894,7 @@ alert.assocProgramFailed=failed to start associated application
 alert.cloneTargetExists=Failed to clone file, target file already exists!
 alert.cloneFailed=Failed to clone file.
 alert.touchFailed=Failed to set new modification time for file!
+alert.enablePopups=This function requires that you allow popup windows in your browser settings! 
 
 # confirmation messages
 confirm.deldir=Are you sure you want to delete the directory

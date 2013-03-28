@@ -83,6 +83,9 @@ public class XslFolderDiffTreeHandler extends XslRequestHandlerBase
 		doc.insertBefore(xslRef, compElement);
 
 		XmlUtil.setChildText(compElement, "css", userMgr.getCSS(uid), false);
+		
+	    XmlUtil.setChildText(compElement, "language", language, false);
+		
         XmlUtil.setChildText(compElement, "sourcePath", CommonUtils.shortName(getHeadlinePath(compSourcePath), 50), false);
         XmlUtil.setChildText(compElement, "targetPath", CommonUtils.shortName(getHeadlinePath(compTargetPath), 50), false);
 		
@@ -104,26 +107,7 @@ public class XslFolderDiffTreeHandler extends XslRequestHandlerBase
         XmlUtil.setChildText(compElement, "sourceViewPath", encodeViewPath(sourceAbsolutePath), false);
         XmlUtil.setChildText(compElement, "targetViewPath", encodeViewPath(targetAbsolutePath), false);
         
-        addMsgResource("headline.folderDiffTree", getResource("headline.folderDiffTree", "Folder Diff Tree"));
-        addMsgResource("label.compSourceFolder", getResource("label.compSourceFolder", "source folder"));
-        addMsgResource("label.compTargetFolder", getResource("label.compTargetFolder", "target folder"));
-        addMsgResource("button.closewin", getResource("button.closewin","close window"));
-
-        addMsgResource("folderDiffNew", getResource("folderDiffNew","new"));
-        addMsgResource("folderDiffRemoved", getResource("folderDiffRemoved","removed"));
-        addMsgResource("folderDiffModified", getResource("folderDiffModified","modified"));
-
-        addMsgResource("diffType.missingSourceFile", getResource("diffType.missingSourceFile","file missing in source folder"));
-        addMsgResource("diffType.missingTargetFile", getResource("diffType.missingTargetFile","file missing in target folder"));
-        addMsgResource("diffType.missingSourceFolder", getResource("diffType.missingSourceFolder","directory missing in source folder"));
-        addMsgResource("diffType.missingTargetFolder", getResource("diffType.missingTargetFolder","directory missing in target folder"));
-        addMsgResource("diffType.size", getResource("diffType.size","size changed"));
-        addMsgResource("diffType.modified", getResource("diffType.modified","last modification time changed"));
-        addMsgResource("diffType.sizeAndModified", getResource("diffType.sizeAndModified","size and last modification time changed"));
-        addMsgResource("diffType.accessRights", getResource("diffType.accessRights","access rights changed"));
         addMsgResource("timeLastModified", getResource("timeLastModified","last modified"));
-
-        addMsgResource("sync.noDifference", getResource("sync.noDifference","No differences found (folders are in snyc)."));
 
         Element diffTreeElem = doc.createElement("differenceTree");
         

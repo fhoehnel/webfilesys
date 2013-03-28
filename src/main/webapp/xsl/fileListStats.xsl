@@ -17,10 +17,15 @@
   <xsl:attribute name="href">/webfilesys/css/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
 </link>
 
-<script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
+
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
+</script>
 
 <script type="text/javascript" language="JavaScript">
   function setFileListHeight()
@@ -65,7 +70,7 @@
 
 </head>
 
-<body onload="setFileListHeight()">
+<body onload="setBundleResources();setFileListHeight()">
 
   <xsl:call-template name="fileList" />
 
@@ -95,40 +100,30 @@
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="13" height="1" /></td>
       
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeList()">
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modelist']/@value" />
-        </a>
+        <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
       </td>
  
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
 
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeThumbs()">
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modethumb']/@value" />
-        </a>
+        <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
       </td>
       
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
 
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeStory()">
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modestory']/@value" />
-        </a>
+        <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
 
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeSlideshow()">
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modeSlideshow']/@value" />
-        </a>
+        <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
       <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
 
-      <td class="tabActive" nowrap="true">
-        <xsl:value-of select="/fileList/resources/msg[@key='label.fileStats']/@value" />
-      </td>
+      <td class="tabActive" nowrap="true" resource="label.fileStats" />
 
       <td class="bottomLine" width="90%">
         <img src="/webfilesys/images/space.gif" border="0" width="5" height="1" />
@@ -153,50 +148,39 @@
       <tr>
         <th class="fileListHead" style="padding-left:30px;text-align:left">
           <xsl:if test="/fileList/sortBy = '1'">
-            <xsl:value-of select="/fileList/resources/msg[@key='label.filename']/@value" />
+            <span resource="label.filename"></span>
           </xsl:if>
           <xsl:if test="not(/fileList/sortBy = '1')">
-            <a href="javascript:setSortField('1')" class="listHead">
-              <xsl:value-of select="/fileList/resources/msg[@key='label.filename']/@value" />
-            </a>
+            <a href="javascript:setSortField('1')" class="listHead" resource="label.filename" />
           </xsl:if>
         </th>
         <th class="fileListHead" style="width:170px;padding-right:5px;text-align:right;white-space:nowrap;">
           <xsl:if test="/fileList/sortBy = '8'">
-            <xsl:value-of select="/fileList/resources/msg[@key='label.downloads']/@value" />
+            <span resource="label.downloads"></span>
           </xsl:if>
           <xsl:if test="not(/fileList/sortBy = '8')">
-            <a href="javascript:setSortField('8')" class="listHead">
-              <xsl:value-of select="/fileList/resources/msg[@key='label.downloads']/@value" />
-            </a>
+            <a href="javascript:setSortField('8')" class="listHead" resource="label.downloads" />
           </xsl:if>
           <xsl:if test="/fileList/lastResetDate">
             <br/>
-            <span class="plaintext">
-              <xsl:value-of select="/fileList/resources/msg[@key='label.since']/@value" /> 
-              &#160;
-              <xsl:value-of select="/fileList/lastResetDate" />
-            </span>              
+            <span class="plaintext" resource="label.since"></span>
+            <span class="plaintext" style="margin-left:5px"><xsl:value-of select="/fileList/lastResetDate" /></span>              
           </xsl:if>
         </th>
         <th class="fileListHead" style="width:90px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
           <xsl:if test="/fileList/sortBy = '7'">
-            <xsl:value-of select="/fileList/resources/msg[@key='rating.count']/@value" />
+            <span resource="rating.count"></span>
           </xsl:if>
           <xsl:if test="not(/fileList/sortBy = '7')">
-            <a href="javascript:setSortField('7')" class="listHead">
-              <xsl:value-of select="/fileList/resources/msg[@key='rating.count']/@value" />
-            </a>
+            <a href="javascript:setSortField('7')" class="listHead" resource="rating.count" />
           </xsl:if>
         </th>
         <th class="fileListHead" style="width:100px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
           <xsl:if test="/fileList/sortBy = '9'">
-            <xsl:value-of select="/fileList/resources/msg[@key='label.comments']/@value" />
+            <span resource="label.comments"></span>
           </xsl:if>
           <xsl:if test="not(/fileList/sortBy = '9')">
-            <a href="javascript:setSortField('9')" class="listHead">
-              <xsl:value-of select="/fileList/resources/msg[@key='label.comments']/@value" />
-            </a>
+            <a href="javascript:setSortField('9')" class="listHead" resource="label.comments" />
           </xsl:if>
         </th>
       </tr>
@@ -262,9 +246,7 @@
       <tr>
         <td class="fileListFunct">
           <div class="buttonCont">
-            <input type="button" onclick="document.resetForm.submit()">
-              <xsl:attribute name="value"><xsl:value-of select="/fileList/resources/msg[@key='button.resetStats']/@value" /></xsl:attribute>
-            </input>
+            <input type="button" onclick="document.resetForm.submit()" resource="button.resetStats" />
           </div>
         </td>
       </tr>
@@ -277,7 +259,7 @@
   <xsl:if test="not(/fileList/file)">
     <table class="fileListHead" cellspacing="0" cellpadding="0">
       <tr>
-        <td class="fileList sepBot" style="padding:10px">0 <xsl:value-of select="/fileList/resources/msg[@key='label.files']/@value" /></td>
+        <td class="fileList sepBot" style="padding:10px">0 <span resource="label.files"></span></td>
       </tr>
     </table>
   </xsl:if>

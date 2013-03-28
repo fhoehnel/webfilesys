@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
@@ -14,7 +15,7 @@ import org.apache.log4j.Logger;
 
 public class LanguageManager
 {
-	public static final String DEFAULT_LANGUAGE = "Default";
+	public static final String DEFAULT_LANGUAGE = "English";
 
 	public static final String DEFAULT_HELP_LANGUAGE = "English";
 
@@ -125,12 +126,10 @@ public class LanguageManager
 
             langResources=new Properties();
 
-            if (!loadResources(resourceFileName,langResources))
+            if (!loadResources(resourceFileName,langResources, language))
             {
                 return(defaultValue);
             }
-           
-            resourceTable.put(language,langResources);
         }
 
         return(langResources.getProperty(resource,defaultValue));
@@ -146,13 +145,14 @@ public class LanguageManager
 
             langResources = new Properties();
 
-            loadResources(resourceFileName, langResources);
+            loadResources(resourceFileName, langResources, language);
         }
            
         return langResources;
     }
     
-    protected synchronized boolean loadResources(String configFilename,Properties langResources)
+    protected synchronized boolean loadResources(String configFilename, Properties langResources,
+    	String language)
     {
         FileInputStream configFile=null;
 
@@ -163,23 +163,59 @@ public class LanguageManager
             configFile = new FileInputStream(configFilename);
 
             langResources.load(configFile);
+            
+            resourceTable.put(language,langResources);
         
             configFile.close();
         }
         catch(FileNotFoundException fnfe)
         {
-            Logger.getLogger(getClass()).error("LanguageManager.loadResources: resource file not found : " + configFilename);
+            Logger.getLogger(getClass()).error("failed to load language resources", fnfe);
             return(false);
         }
         catch(IOException ioex)
         {
-        	Logger.getLogger(getClass()).error("LanguageManager.loadResources: " + ioex);
+        	Logger.getLogger(getClass()).error("failed to load language resources", ioex);
             return(false);
         }
 
+        if (!language.equals(DEFAULT_LANGUAGE))
+        {
+        	mergeMissingResources(language, langResources);
+        }
+        
         return(true);
     }
 
+    private void mergeMissingResources(String language, Properties langResources)
+    {
+        Properties defaultLangResources = (Properties) resourceTable.get(DEFAULT_LANGUAGE);
+
+        if (defaultLangResources == null)        
+        {
+            String resourceFileName = languagePath + "/" + DEFAULT_LANGUAGE + "." + "resources";
+
+            defaultLangResources = new Properties();
+
+            if (!loadResources(resourceFileName, defaultLangResources, DEFAULT_LANGUAGE))
+            {
+                return;
+            }
+        }
+        
+        Enumeration<Object> defaultLangKeys = defaultLangResources.keys();
+        
+        while (defaultLangKeys.hasMoreElements()) 
+        {
+        	Object defaultLangKey = defaultLangKeys.nextElement();
+        	
+        	if (!langResources.containsKey(defaultLangKey))
+        	{
+        		langResources.put(defaultLangKey, defaultLangResources.get(defaultLangKey));
+        	}
+        }
+    }
+    
     public void addDateFormat(String language,String dateFormat)
     {
         dateFormats.put(language,new SimpleDateFormat(dateFormat));

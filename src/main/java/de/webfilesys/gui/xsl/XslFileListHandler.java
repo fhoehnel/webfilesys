@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -344,9 +345,26 @@ public class XslFileListHandler extends XslFileListHandlerBase
                 
                 if (nameLength > 40)
                 {
-                	displayName = displayName.substring(0,35) + " " + displayName.substring(35);
+                	// prevent layout distortion by too long unbreakable filename
                 	
-                	fileElement.setAttribute("displayName", displayName);
+                	StringTokenizer filenameParser = new StringTokenizer(displayName, " ");
+                	
+                	boolean tokenTooLong = false;
+                	while ((!tokenTooLong) && filenameParser.hasMoreTokens())
+                	{
+                		String token = filenameParser.nextToken();
+                		if (token.length() > 40)
+                		{
+                			tokenTooLong = true;
+                		}
+                	}
+                	
+                	if (tokenTooLong)
+                	{
+                       	displayName = displayName.substring(0,35) + " " + displayName.substring(35);
+                    	
+                    	fileElement.setAttribute("displayName", displayName);
+                	}
                 }
 
 				if (fileCont.isLink())
