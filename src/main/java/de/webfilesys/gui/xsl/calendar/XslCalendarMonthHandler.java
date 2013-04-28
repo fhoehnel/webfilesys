@@ -402,7 +402,7 @@ public class XslCalendarMonthHandler extends XslCalendarHandlerBase
         		
         		if ((appointment.getContent() != null) && (appointment.getContent().length() > 0))
         		{
-            		XmlUtil.setChildText(appointmentElem, "description", appointment.getContent(), true);
+            		XmlUtil.setChildText(appointmentElem, "description", replaceLineBreak(appointment.getContent()), true);
         		}
         		
         		if (appointment.isFullday()) 
@@ -414,6 +414,16 @@ public class XslCalendarMonthHandler extends XslCalendarHandlerBase
         		}
         	}
         }
+	}
+	
+	private String replaceLineBreak(String origText)
+	{
+		if ((origText.indexOf('\n') < 0) && (origText.indexOf('\r') < 0)) 
+		{
+			return origText;
+		}
+		
+		return (origText.replaceAll("\n", " ").replaceAll("\r", " "));
 	}
 	
 	private int getFullDayNumInCurrentMonth(Appointment appointment) 

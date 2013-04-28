@@ -356,7 +356,7 @@ public class FtpBackupHandler extends UserRequestHandler
 
 		output.println("<tr>");
 		output.println("<td colspan=\"2\" class=\"formParm1\">");
-		output.print("<input type=\"checkbox\" name=\"recursive\" value=\"true\"");
+		output.print("<input type=\"checkbox\" class=\"cb2\" name=\"recursive\" value=\"true\"");
 		if (getParameter("recursive") != null)
 		{
 			output.print(" checked");

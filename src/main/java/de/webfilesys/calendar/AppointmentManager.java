@@ -104,7 +104,8 @@ public class AppointmentManager extends Thread
             {
                 this.wait(60000);
                 saveChangedUsers();
-            	if (loopCounter == 60) 
+
+                if (loopCounter == 60) 
             	{
             		synchronized (appointmentMap)
             		{
@@ -112,6 +113,12 @@ public class AppointmentManager extends Thread
                 		{
                     		synchronized (cacheDirty)
                     		{
+                    			Date now = new Date();
+                    			if (now.getHours() == 0)
+                    			{
+                    				expireUnrepeatedEvents();
+                    			}
+                    			
                             	Logger.getLogger(getClass()).info("AppointmentManager clearing appointment cache");
                                 appointmentMap.clear();
                                 indexTable.clear();
@@ -126,10 +133,71 @@ public class AppointmentManager extends Thread
             {
             	alarmDistributor.interrupt();
                 saveChangedUsers();
-            	Logger.getLogger(getClass()).info("AppointmentManager ready for shutdown");
+            	if (Logger.getLogger(getClass()).isInfoEnabled())
+            	{
+            	    Logger.getLogger(getClass()).info("AppointmentManager ready for shutdown");
+            	}
                 stop = true;
             }
         }
+    }
+    
+    private void expireUnrepeatedEvents() 
+    {
+    	if (Logger.getLogger(getClass()).isInfoEnabled())
+    	{
+        	Logger.getLogger(getClass()).info("checking for unrepeated events to expire");
+    	}
+    	
+    	File appDir = new File(appointmentDir);
+    	File[] userFiles = appDir.listFiles();
+    	if (userFiles == null) {
+        	Logger.getLogger(getClass()).error("failed to list appointment user files");
+        	return;
+    	}
+    	
+    	long now = System.currentTimeMillis();
+    	
+    	long appointmentExpirationMillis = WebFileSys.getInstance().getCalendarExpirationPeriod() * 24 * 60 * 60 * 1000;
+    	
+    	for (int i = 0; i < userFiles.length; i++) 
+    	{
+    		File userFile = userFiles[i];
+    		if (userFile.isFile() && userFile.canRead()) 
+    		{
+    			String userFileName = userFile.getName();
+    			if (userFileName.endsWith(".xml")) 
+    			{
+    				String userid = userFileName.substring(0, userFileName.lastIndexOf('.'));
+    				
+    		    	if (Logger.getLogger(getClass()).isDebugEnabled())
+    		    	{
+    		        	Logger.getLogger(getClass()).debug("checking expiration for user " + userid);
+    		    	}
+
+    		    	ArrayList<Appointment> userAppointments = getListOfAppointments(userid, false);
+    				
+    				if (userAppointments != null)
+    				{
+    					Iterator<Appointment> iter = userAppointments.iterator();
+    					while (iter.hasNext()) {
+    						Appointment appointment = iter.next();
+    						if (appointment.getRepeatPeriod() == AlarmEntry.REPEAT_NONE) 
+    						{
+        						if (now - appointment.getEventTime().getTime() > appointmentExpirationMillis)
+        						{
+        							removeAppointment(userid, appointment.getId());
+        					    	if (Logger.getLogger(getClass()).isInfoEnabled())
+        					    	{
+        				        	    Logger.getLogger(getClass()).info("removing expired appointment: " + appointment.getId() + " for user " + userid);
+        					    	}
+        						}
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
     }
     
     public Element getAppointmentList(String userid)

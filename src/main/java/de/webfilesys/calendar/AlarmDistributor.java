@@ -34,7 +34,6 @@ public class AlarmDistributor extends Thread
 			{
 				this.wait(ALARM_CHECK_INTERVAL);
 
-				// Date gmtNow = new Date(System.currentTimeMillis() - WebReminder.serverTimeZoneOffset);
 				Date gmtNow = new Date();
 				
 				checkAlarm(gmtNow);
@@ -42,14 +41,20 @@ public class AlarmDistributor extends Thread
 			catch (InterruptedException e)
 			{
 				shutdownFlag = true;
-            	Logger.getLogger(getClass()).info("AlarmDistributor ready for shutdown");
+				if (Logger.getLogger(getClass()).isInfoEnabled())
+				{
+	            	Logger.getLogger(getClass()).info("AlarmDistributor ready for shutdown");
+				}
 			}
 		}
 	}
 
 	protected void checkAlarm(Date gmtNow)
 	{
-    	Logger.getLogger(getClass()).debug("AlarmDistributor checking for appointments to alarm");
+		if (Logger.getLogger(getClass()).isDebugEnabled())
+		{
+	    	Logger.getLogger(getClass()).debug("AlarmDistributor checking for appointments to alarm");
+		}
 
     	ArrayList<AlarmEntry> mailAlarmList = AppointmentManager.getInstance().getAlarmIndex().getMailAlarmList(gmtNow);
 

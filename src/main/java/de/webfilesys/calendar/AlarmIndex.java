@@ -103,65 +103,6 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
 		return(newEvent);
     }
 
-    /*
-    public Vector<AlarmEntry> getUserEventVector(Date searchDate, String owner)
-    {
-        Integer dateKey = getDateKey(searchDate);        
-        
-        Hashtable<Integer, Vector<AlarmEntry>> userRoot = get(owner);
-
-        if (userRoot == null)
-        {
-            return(null);
-        }
-
-        Vector<AlarmEntry> userDayEventList = userRoot.get(dateKey);
-
-        return(userDayEventList);
-    }
-    */
-
-    /*
-    public AlarmEntry getEvent(String owner,Date searchDate,long searchedId)
-    {
-    	return findDateEntry(owner, searchDate, searchedId);
-    }
-    */
-
-    /*
-    public AlarmEntry getEvent(String owner, Appointment appointment)
-    {
-        Integer dateKey = getDateKey(appointment.getEventTime());        
-		
-		Hashtable<Integer, Vector<AlarmEntry>> userRoot = get(owner);
-
-		if (userRoot == null)
-		{
-			return(null);
-		}
-
-		Vector<AlarmEntry> dayEventList = userRoot.get(dateKey);
-		if (dayEventList == null)
-		{
-			return(null);
-		}
-
-		Enumeration<AlarmEntry> allEvents = dayEventList.elements();
-		
-		while (allEvents.hasMoreElements())
-		{
-			AlarmEntry nextEvent = allEvents.nextElement();
-			
-			if (nextEvent.getXmlId() == appointment.getId())
-			{
-				return(nextEvent);
-			}
-		}
-		
-		return(null);
-    }
-    */
-
     public boolean delEventClone(AlarmEntry entryToRemove)
     {
 		Hashtable<Integer, Vector<AlarmEntry>> userRoot = get(entryToRemove.getOwner());
@@ -243,7 +184,7 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
 		{
 			AlarmEntry nextEvent = allEvents.nextElement();
 			
-			if (nextEvent.getXmlId() == eventXmlId)
+			if (nextEvent.getXmlId().equals(eventXmlId))
 			{
 				dayEventList.remove(nextEvent);
 
@@ -296,30 +237,11 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
 			
 		dayEventList.add(entryToMove);
 
-		Logger.getLogger(getClass()).debug("AlarmEntry moved from " + oldEventTime + " to " + entryToMove.getEventDate());
-	}
-	
-	/*
-    public synchronized boolean delEvent(Date searchDate, long searchedId, String userid)
-    {
-		Vector<AlarmEntry> dayEventList = getDayEventVector(userid, searchDate);
-		if (dayEventList == null)
+		if (Logger.getLogger(getClass()).isDebugEnabled())
 		{
-			return(false);
+			Logger.getLogger(getClass()).debug("AlarmEntry moved from " + oldEventTime + " to " + entryToMove.getEventDate());
 		}
-
-        for (int i = 0; i <dayEventList.size(); i++)
-        {
-            AlarmEntry nextEvent = dayEventList.elementAt(i);
-            if (nextEvent.getDateId() == searchedId)
-            {
-                dayEventList.removeElementAt(i);
-                return(true);
-            }
-        }
-        return(false);
-    }
-    */
+	}
     
 	public List<AlarmEntry> getAlarmsForDateRange(String userid, long startTime, long endTime)
 	{
@@ -618,25 +540,6 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
         }
     }
 
-    /**
-     * Clone is used only for delayed visual/sound alarms.
-     * @param original the original alaram entry
-     * @return the cloned alarm entry
-     */
-    /*
-    public AlarmEntry createClone(AlarmEntry original)
-    {
-    	AlarmEntry clone = new AlarmEntry(idCounter++, 
-    			                          original.getOwner(), 
-    			                          original.getEventDate(), original.getAlarmTime(),
-                                          original.getAlarmType(), original.getRepeatPeriod());
-    	
-    	clone.unsetAlarmed();
-    	clone.setCloned(true);
-    	return clone;
-    }
-    */
-    
 }
 
 

@@ -63,10 +63,10 @@ label.logout=Abmelden
 
 # directory context menu labels
 label.mkdir=Unterordner anlegen
-label.copydir=Ordner kopieren
-label.movedir=Ordner verschieben
-label.deldir=Ordner löschen
-label.renamedir=Ordner umbenennen
+label.copydir=kopieren
+label.movedir=verschieben
+label.deldir=löschen
+label.renamedir=umbenennen
 label.pastedir=Einfügen
 label.statistics=Statistik
 label.subdirStats=Statistik Unterordner

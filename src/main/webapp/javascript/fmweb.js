@@ -698,3 +698,4 @@ function validateEmailList(addressList)
     
     return true;
 }
+

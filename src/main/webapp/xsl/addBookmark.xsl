@@ -10,7 +10,9 @@
   <xsl:value-of select="/addBookmark/resources/msg[@key='label.addBookmark']/@value" />
 </div>
     
-<form accept-charset="utf-8" name="bookmarkForm" id="bookmarkForm" method="get" action="/webfilesys/servlet" style="display:inline;">
+<form accept-charset="utf-8" name="bookmarkForm" id="bookmarkForm" method="get" action="/webfilesys/servlet" 
+      style="display:inline;">
+  <xsl:attribute name="onsubmit">validateBookmarkName('<xsl:value-of select="/addBookmark/resources/msg[@key='alert.bookmarkMissingName']/@value" />');return false;</xsl:attribute>
   <input type="hidden" name="command" value="createBookmark" />
   <input type="hidden" name="currentPath">
     <xsl:attribute name="value"><xsl:value-of select="/addBookmark/currentPath" /></xsl:attribute>
@@ -41,15 +43,17 @@
 
     <tr>
       <td>
-        <a class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:validateBookmarkName('<xsl:value-of select="/addBookmark/resources/msg[@key='alert.bookmarkMissingName']/@value" />')</xsl:attribute>
-          <span><xsl:value-of select="/addBookmark/resources/msg[@key='button.create']/@value" /></span>
-        </a>              
+        <div class="buttonCont">
+          <input type="button" style="float:left">
+            <xsl:attribute name="onclick">javascript:validateBookmarkName('<xsl:value-of select="/addBookmark/resources/msg[@key='alert.bookmarkMissingName']/@value" />')</xsl:attribute>
+            <xsl:attribute name="value"><xsl:value-of select="/addBookmark/resources/msg[@key='button.create']/@value" /></xsl:attribute>
+          </input>              
 
-        <a class="button" onclick="this.blur();" style="float:right"> 
-          <xsl:attribute name="href">javascript:hidePrompt()</xsl:attribute>
-          <span><xsl:value-of select="/addBookmark/resources/msg[@key='button.cancel']/@value" /></span>
-        </a>              
+          <input type="button" style="float:right"> 
+            <xsl:attribute name="onclick">javascript:hidePrompt()</xsl:attribute>
+            <xsl:attribute name="value"><xsl:value-of select="/addBookmark/resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
+          </input>
+        </div>      
       </td>
     </tr>
 

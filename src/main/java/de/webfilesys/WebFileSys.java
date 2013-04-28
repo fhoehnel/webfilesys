@@ -43,7 +43,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.8.4-beta48 (2013/03/28)";
+	public static final String VERSION = "Version 2.8.4-beta55 (2013/04/28)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -75,6 +75,9 @@ public class WebFileSys
     
 	/** maximum number of appointment e-mails that can be sent in one hour */
 	public static final int DEFAULT_MAX_APP_MAILS_PER_HOUR = 200;
+	
+	/** default expiration period in days for non-repeated appointments */
+	private static final int DEFAULT_CAL_EXPIRATION_PERIOD = 365;
 	
     private String webAppRootDir = null;
     
@@ -166,6 +169,8 @@ public class WebFileSys
     private boolean enableDiskQuota = false;
     
     private boolean enableCalendar = false;
+    
+    private int calendarExpirationPeriod = DEFAULT_CAL_EXPIRATION_PERIOD;
 
     private int diskQuotaCheckHour = 3;
     
@@ -592,6 +597,20 @@ public class WebFileSys
 	            }
 	        }
         	Logger.getLogger(getClass()).debug("maximum allowed appointment e-mails per hour: " + maxAppointmentMailsPerHour);
+
+		    temp = config.getProperty("AppointmentExpirationDays", null);
+		    if (!CommonUtils.isEmpty(temp))
+		    {
+	            try
+	            {
+	                calendarExpirationPeriod = Integer.parseInt(temp);
+	            }
+	            catch (NumberFormatException numEx)
+	            {
+	            	Logger.getLogger(getClass()).error("invalid property value for AppointmentExpirationDays: " + temp);
+	            	calendarExpirationPeriod = DEFAULT_CAL_EXPIRATION_PERIOD;
+	            }
+		    }
 		}
 		
         temp = config.getProperty("SyncIgnoreOffsetDST", "false");
@@ -1152,5 +1171,9 @@ public class WebFileSys
     	return(googleMapsAPIKeyHTTPS);
     }
     
+    public int getCalendarExpirationPeriod()
+    {
+    	return calendarExpirationPeriod;
+    }
 }
 

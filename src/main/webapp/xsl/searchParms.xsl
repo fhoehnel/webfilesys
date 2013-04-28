@@ -199,7 +199,7 @@
       <tr>
         <td class="formParm1" resource="label.filemask" />
         <td class="formParm2">
-          <input type="text" name="FindMask" maxlength="256" value="*.*" style="width:100px" />
+          <input type="text" name="FindMask" maxlength="256" value="*.*" style="width:250px" />
         </td>
       </tr>
 

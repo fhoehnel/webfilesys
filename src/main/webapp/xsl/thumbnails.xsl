@@ -639,7 +639,7 @@
             <table border="0" width="100%">
 
               <tr>
-                <td align="left" nowrap="true">
+                <td align="left" class="fileListFunct" nowrap="true">
                   <input type="checkbox" class="cb3" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" style="vertical-align:middle;"/>
                   <label for="cb-setAll" resource="checkbox.selectall"></label>
                 </td>
@@ -648,7 +648,7 @@
                   &#160;
                 </td>
 
-                <td align="right" style="white-space:nowrap">
+                <td class="fileListFunct" style="text-align:right;white-space:nowrap">
                   <label resource="label.selectedFiles"></label>:
                   <select name="cmd" size="1" onchange="multiFileFunction()">
                     <option resource="label.selectFunction" />
@@ -669,7 +669,7 @@
                 </td>
                 
                 <xsl:if test="not(/fileList/readonly)">
-                  <td style="text-align:right;vertical-align:top;padding-right:10px;padding-left:10px;white-space:nowrap">
+                  <td class="fileListFunct" style="text-align:right;padding-right:10px;padding-left:10px;white-space:nowrap">
 
                     <label resource="rating.owner"></label>:
 

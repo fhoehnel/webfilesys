@@ -13,7 +13,6 @@ function handleAlarmResult()
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            
             var alarmList = resultElem.getElementsByTagName("alarm");
 
-            var alertText = "";
             var soundAlarm = false;
             
             var eventId;
@@ -55,26 +54,11 @@ function handleAlarmResult()
             		}
             	}
             	
-            	alertText = alertText + eventTime + "<br/><br/>" + subject;
-            	
-            	if (i < alarmList.length - 1)
-            	{
-            		alertText = alertText + "<br/><br/>";
-            	}
-            	
-            	if ((alarmType == 2) || (alarmType == 4))
-            	{
-            	    soundAlarm = true;	
-            	}
-            }
-            
-            if (alertText != "")
-            {
-            	if (soundAlarm)
+            	if ((alarmType == "2") || (alarmType == "4"))
             	{
            	        try 
            	        {
-           	        	beep(500, 3);
+           	        	beep(400, 3);
            	        }
            	        catch (err)
            	        {
@@ -85,6 +69,8 @@ function handleAlarmResult()
            	        }
             	}
 
+            	var alertText = eventTime + "<br/><br/>" + subject;
+            	
             	showReminder(alertText, eventId);
             }
             
@@ -96,7 +82,7 @@ function handleAlarmResult()
 function showReminder(appointmentText, eventId)
 {
    	reminderBox = document.createElement("div");
-   	reminderBox.id = "reminderBox";
+   	reminderBox.id = "reminderBox-" + eventId;
    	reminderBox.setAttribute("class", "reminderMsgBox");
    	document.documentElement.appendChild(reminderBox);
    	
@@ -104,19 +90,19 @@ function showReminder(appointmentText, eventId)
    	reminderBox.style.left = (getWinWidth() / 2 - 125) + "px";
 
    	reminderHeadline = document.createElement("span");
-   	reminderHeadline.id = "reminderHeadline";
+   	reminderHeadline.id = "reminderHeadline-" + eventId;
    	reminderHeadline.setAttribute("class", "reminderHeadline");
    	reminderHeadline.innerHTML = resourceReminder;
    	reminderBox.appendChild(reminderHeadline);
 
    	reminderText = document.createElement("span");
-   	reminderText.id = "reminderText";
+   	reminderText.id = "reminderText-" + eventId;
    	reminderText.setAttribute("class", "reminderText");
    	reminderText.innerHTML = appointmentText;
    	reminderBox.appendChild(reminderText);
    	
 	var selectbox = document.createElement("select");
-	selectbox.id = "remindAgainSel";
+	selectbox.id = "remindAgainSel-" + eventId;
 	selectbox.setAttribute("name", "remindAgain");
 	selectbox.setAttribute("class", "remindAgain");
 	
@@ -136,7 +122,7 @@ function showReminder(appointmentText, eventId)
 	reminderBox.appendChild(selectbox);
    	
 	var buttonCont = document.createElement("div");
-	buttonCont.id = "reminderButtonCont";
+	buttonCont.id = "reminderButtonCont-" + eventId;
 	buttonCont.setAttribute("class", "reminderButtonCont");
    	reminderBox.appendChild(buttonCont);
 	
@@ -153,11 +139,11 @@ function showReminder(appointmentText, eventId)
 
 function delayOrCloseReminder(eventId)
 {
-	var remindAgainSel = document.getElementById("remindAgainSel");
+	var remindAgainSel = document.getElementById("remindAgainSel-" + eventId);
 	
 	if (remindAgainSel.value == 0)
 	{
-		hideReminder();
+		hideReminder(eventId);
         return;
 	}
 
@@ -171,14 +157,17 @@ function handleDelayResult()
     {
         if (req.status == 200)
         {
-    		hideReminder();
+            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
+            var delayedId = resultElem.getElementsByTagName("delayedId")[0].firstChild.nodeValue;
+            
+    		hideReminder(delayedId);
         }
     }
 }
 
-function hideReminder()
+function hideReminder(eventId)
 {
-	var reminderBox = document.getElementById("reminderBox");
+	var reminderBox = document.getElementById("reminderBox-" + eventId);
 	if (reminderBox)
 	{
 		document.documentElement.removeChild(reminderBox);

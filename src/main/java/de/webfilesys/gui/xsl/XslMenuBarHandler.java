@@ -44,8 +44,10 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(menuBarElement, "helpLanguage", userMgr.getLanguage(uid), false);
 		
 	    XmlUtil.setChildText(menuBarElement, "language", language, false);
+	    
+	    XmlUtil.setChildText(menuBarElement, "hostname", WebFileSys.getInstance().getLocalHostName(), false);		
 		
-		if (((File.separatorChar == '/') && isAdminUser(false)) ||
+	    if (((File.separatorChar == '/') && isAdminUser(false)) ||
 			(userMgr.getDocumentRoot(uid).equals("/") && (!isWebspaceUser())))
 		{
 			XmlUtil.setChildText(menuBarElement, "unixAdmin", "true", false);
