@@ -43,10 +43,10 @@ public class XslCalendarHandlerBase  extends XslRequestHandlerBase
 		addMsgResource("calendar.november", getResource("calendar.november","November"));
 		addMsgResource("calendar.december", getResource("calendar.december","December"));
 
-		addMsgResource("calendar.year", getResource("calendar.year","Jahr"));
-		addMsgResource("calendar.today", getResource("calendar.today","heute"));
-		addMsgResource("calendar.week", getResource("calendar.week","Woche"));
-		addMsgResource("calendar.to", getResource("calendar.to","bis"));
+		addMsgResource("calendar.year", getResource("calendar.year","year"));
+		addMsgResource("calendar.today", getResource("calendar.today","today"));
+		addMsgResource("calendar.week", getResource("calendar.week","week"));
+		addMsgResource("calendar.to", getResource("calendar.to","to"));
 		
 		addMsgResource("appointment.reminder", getResource("appointment.reminder","WebFileSys Reminder"));
 		addMsgResource("appointment.reminderCloseButton", getResource("appointment.reminderCloseButton","OK"));

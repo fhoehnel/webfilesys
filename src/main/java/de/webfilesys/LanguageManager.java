@@ -13,6 +13,8 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.util.CommonUtils;
+
 public class LanguageManager
 {
 	public static final String DEFAULT_LANGUAGE = "English";
@@ -113,7 +115,7 @@ public class LanguageManager
 
     public String getResource(String language,String resource,String defaultValue)
     {
-        if ((language==null) || language.equals(DEFAULT_LANGUAGE))
+        if (CommonUtils.isEmpty(language))
         {
             return(defaultValue);
         }

@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TimeZone;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -1475,6 +1476,25 @@ public class AppointmentManager extends Thread
         }
     }
 
+    private String getTimeZoneOffset(long forTime) 
+    {
+		StringBuffer tzone = new StringBuffer();
+		tzone.append("(GMT");
+
+		TimeZone timeZone = TimeZone.getDefault();
+		
+		int offset = timeZone.getOffset(forTime);
+		
+		if (offset >= 0)
+		{
+			tzone.append("+");
+		}
+		tzone.append(Integer.toString(offset / (1000 * 60 * 60)));
+		tzone.append(")");
+		
+		return tzone.toString();
+    }
+    
     protected void loadUserAppointmentsFromXml(String userName, Calendar todayCal)
     {
         boolean downtimeAlarmSent = false;
@@ -1483,20 +1503,6 @@ public class AppointmentManager extends Thread
 
         if ((appointmentList != null) && (appointmentList.size() > 0))
         {
-			StringBuffer tzone = new StringBuffer();
-			tzone.append("(GMT");
-
-			// int tzHourOffset = XmlUserProfileManager.getInstance().getTimeZone(entryToAlarm.owner);
-			// TODO: fix this
-			int tzHourOffset = 2;
-			
-			if (tzHourOffset >= 0)
-			{
-				tzone.append("+");
-			}
-			tzone.append(Integer.toString(tzHourOffset));
-			tzone.append(")");
-        	
             for (int i = 0; i < appointmentList.size(); i++)
             {
                 Appointment appointment = appointmentList.get(i);
@@ -1509,7 +1515,13 @@ public class AppointmentManager extends Thread
 
                 if (appointment.isAlarmed())
                 {
-                    newEvent.setAlarmed();
+                	if (appointment.getRepeatPeriod() == AlarmEntry.REPEAT_NONE) {
+                        newEvent.setAlarmed();
+                	}
+                	else
+                	{
+                        newEvent.unsetAlarmed();
+                	}
                 }
 
                 if (appointment.isMailAlarmed())
@@ -1528,8 +1540,17 @@ public class AppointmentManager extends Thread
             			{
             				if (!appointment.isMailAlarmed())
             				{
-                    			Logger.getLogger(getClass()).debug("sending downtime alarm for user " + userName);
+            					if (Logger.getLogger(getClass()).isDebugEnabled()) 
+            					{
+                        			Logger.getLogger(getClass()).debug("sending downtime alarm for user " + userName);
+            					}
 
+            					// TODO: take user's timezone from user profile and calculate time
+            					// and timezone offset to show in the mail
+            					// int tzHourOffset = XmlUserProfileManager.getInstance().getTimeZone(userName);
+            					
+            					String tzone = getTimeZoneOffset(appointment.getAlarmTime().getTime());
+            					
                             	if (alarmDistributor.sendAlarmMail(userName, appointment, tzone.toString()))
         						{
         							newEvent.setMailAlarmed();
@@ -1543,8 +1564,7 @@ public class AppointmentManager extends Thread
             			}
             			else
             			{
-            				if (checkMissedRepeatedAlarms(userName, appointment, newEvent, todayCal, 
-            						                      tzone.toString()))
+            				if (checkMissedRepeatedAlarms(userName, appointment, newEvent, todayCal))
             				{
     				            downtimeAlarmSent = true;
             				}
@@ -1554,7 +1574,10 @@ public class AppointmentManager extends Thread
             }
         }
         
-    	Logger.getLogger(getClass()).debug("loaded appointments of user " + userName + " into alarm index");
+		if (Logger.getLogger(getClass()).isDebugEnabled())
+		{
+	    	Logger.getLogger(getClass()).debug("loaded appointments of user " + userName + " into alarm index");
+		}
     	
     	if (downtimeAlarmSent)
     	{
@@ -1567,7 +1590,7 @@ public class AppointmentManager extends Thread
     }
     
 	private boolean checkMissedRepeatedAlarms(String userid, Appointment appointment,
-		AlarmEntry newEvent, Calendar todayCal, String tzone)
+		AlarmEntry newEvent, Calendar todayCal)
 	{
 		boolean downtimeAlarmSent = false;
 		
@@ -1580,6 +1603,12 @@ public class AppointmentManager extends Thread
 		{
 			if (appointment.getAlarmTime().getTime() < todayCal.getTimeInMillis())
 			{
+				// TODO: take user's timezone from user profile and calculate time
+				// and timezone offset to show in the mail
+				// int tzHourOffset = XmlUserProfileManager.getInstance().getTimeZone(userid);
+				
+				String tzone = getTimeZoneOffset(appointment.getAlarmTime().getTime());
+				
     			if (alarmDistributor.sendAlarmMail(userid, appointment, tzone, appointment.getAlarmTime()))
 				{
 					newEvent.setMailAlarmed();
@@ -1611,8 +1640,17 @@ public class AppointmentManager extends Thread
 	    	alarmCal.add(Calendar.DAY_OF_MONTH, 1);
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-    			Logger.getLogger(getClass()).debug("sending daily repeated downtime alarm for user " + userid);
+	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		{
+	    			Logger.getLogger(getClass()).debug("sending daily repeated downtime alarm for user " + userid);
+	    		}
 
+				// TODO: take user's timezone from user profile and calculate time
+				// and timezone offset to show in the mail
+				// int tzHourOffset = XmlUserProfileManager.getInstance().getTimeZone(userid);
+    			
+				String tzone = getTimeZoneOffset(alarmCal.getTime().getTime());
+    			
     			if (alarmDistributor.sendAlarmMail(userid, appointment, tzone, alarmCal.getTime()))
 				{
 					newEvent.setMailAlarmed();
@@ -1633,7 +1671,16 @@ public class AppointmentManager extends Thread
 	    	alarmCal.add(Calendar.WEEK_OF_YEAR, 1);
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-    			Logger.getLogger(getClass()).debug("sending weekly repeated downtime alarm for user " + userid);
+	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		{
+	    			Logger.getLogger(getClass()).debug("sending weekly repeated downtime alarm for user " + userid);
+	    		}
+
+    			// TODO: take user's timezone from user profile and calculate time
+				// and timezone offset to show in the mail
+				// int tzHourOffset = XmlUserProfileManager.getInstance().getTimeZone(userid);
+    			
+				String tzone = getTimeZoneOffset(alarmCal.getTime().getTime());
 
     			if (alarmDistributor.sendAlarmMail(userid, appointment, tzone, alarmCal.getTime()))
 				{
@@ -1655,7 +1702,16 @@ public class AppointmentManager extends Thread
 	    	alarmCal.add(Calendar.MONTH, 1);
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-    			Logger.getLogger(getClass()).debug("sending monthly repeated downtime alarm for user " + userid);
+	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		{
+	    			Logger.getLogger(getClass()).debug("sending monthly repeated downtime alarm for user " + userid);
+	    		}
+
+    			// TODO: take user's timezone from user profile and calculate time
+				// and timezone offset to show in the mail
+				// int tzHourOffset = XmlUserProfileManager.getInstance().getTimeZone(userid);
+    			
+				String tzone = getTimeZoneOffset(alarmCal.getTime().getTime());
 
     			if (alarmDistributor.sendAlarmMail(userid, appointment, tzone, alarmCal.getTime()))
 				{
@@ -1677,7 +1733,16 @@ public class AppointmentManager extends Thread
 	    	alarmCal.add(Calendar.YEAR, 1);
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-    			Logger.getLogger(getClass()).debug("sending annual repeated downtime alarm for user " + userid);
+	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		{
+	    			Logger.getLogger(getClass()).debug("sending annual repeated downtime alarm for user " + userid);
+	    		}
+
+    			// TODO: take user's timezone from user profile and calculate time
+				// and timezone offset to show in the mail
+				// int tzHourOffset = XmlUserProfileManager.getInstance().getTimeZone(userid);
+    			
+				String tzone = getTimeZoneOffset(alarmCal.getTime().getTime());
 
     			if (alarmDistributor.sendAlarmMail(userid, appointment, tzone, alarmCal.getTime()))
 				{
@@ -1710,7 +1775,16 @@ public class AppointmentManager extends Thread
 	    	}
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-    			Logger.getLogger(getClass()).debug("sending weekday repeated downtime alarm for user " + userid + " alarm time: " + alarmCal.getTime());
+	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		{
+	    			Logger.getLogger(getClass()).debug("sending weekday repeated downtime alarm for user " + userid + " alarm time: " + alarmCal.getTime());
+	    		}
+
+    			// TODO: take user's timezone from user profile and calculate time
+				// and timezone offset to show in the mail
+				// int tzHourOffset = XmlUserProfileManager.getInstance().getTimeZone(userid);
+    			
+				String tzone = getTimeZoneOffset(alarmCal.getTime().getTime());
 
     			if (alarmDistributor.sendAlarmMail(userid, appointment, tzone, alarmCal.getTime()))
 				{

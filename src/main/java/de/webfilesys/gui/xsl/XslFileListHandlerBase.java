@@ -36,7 +36,6 @@ public class XslFileListHandlerBase extends XslRequestHandlerBase {
 		currentTrailElem.setAttribute("separator", File.separator);
 		currentTrailElem.setAttribute("mask", mask);
 
-		String docRootOS = null;
 		String docRootWithSep = null;;
 		
         if (((File.separatorChar == '\\') && (docRoot.charAt(0) != '*')) ||
@@ -44,18 +43,26 @@ public class XslFileListHandlerBase extends XslRequestHandlerBase {
         {
     		if (File.separatorChar == '\\')
     		{
-    			docRootOS = docRoot.replace('/', File.separatorChar);
-    			
-				docRootWithSep = docRootOS;
-				if (!docRootWithSep.endsWith(File.separator)) {
-					docRootWithSep = docRootWithSep + File.separatorChar;
-				}
+    			docRootWithSep = docRoot.replace('/', File.separatorChar);
     		}
+    		else
+    		{
+    			docRootWithSep = docRoot;
+    		}
+    			
+			if (!docRootWithSep.endsWith(File.separator)) {
+				docRootWithSep = docRootWithSep + File.separatorChar;
+			}
         }
         
 		StringTokenizer pathParser = new StringTokenizer(relativePath, File.separator);
 		
 		StringBuffer partialPath = new StringBuffer();
+
+        if ((File.separatorChar == '/') && (docRoot.length() == 1))
+		{
+			partialPath.append('/');
+		}
 		
 		StringBuffer linkPath = new StringBuffer();
 		
