@@ -52,11 +52,21 @@
         <xsl:for-each select="bookmark">
           <tr>
             <td>
-              <img src="/webfilesys/images/bookmark.gif" border="0" />
+              <img border="0">
+                <xsl:if test="icon">
+                  <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="icon" /></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="not(icon)">
+                  <xsl:attribute name="src">/webfilesys/images/bookmark.gif</xsl:attribute>
+                </xsl:if>
+              </img>
             </td>
           
             <td>
               <a class="dirtree">
+                <xsl:if test="textColor">
+                  <xsl:attribute name="style">color:<xsl:value-of select="textColor" /></xsl:attribute>
+                </xsl:if>
                 <xsl:if test="/bookmarkList/mobile">
                   <xsl:attribute name="href">/webfilesys/servlet?command=mobile&amp;cmd=folderFileList&amp;absPath=<xsl:value-of select="encodedPath" /></xsl:attribute>
                 </xsl:if>

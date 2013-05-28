@@ -24,6 +24,11 @@ label.destdir=Zielordner
 label.yes=ja
 label.no=nein
 label.in=in
+sizeUnit.byte=Bytes
+sizeUnit.kilobyte=KB
+sizeUnit.megabyte=MB
+sizeUnit.gigabyte=GB
+decimalFractPoint=,
 
 # common buttons
 button.create=Anlegen

@@ -291,6 +291,13 @@ public class DecorationManager extends Thread {
                         	{
                             	XmlUtil.setChildText(decorationElement, "textColor", newDeco.getTextColor());
                         	}
+                        	else
+                        	{
+                        		Element oldTextColor = XmlUtil.getChildByTagName(decorationElement, "textColor");
+                        		if (oldTextColor != null) {
+                        			decorationElement.removeChild(oldTextColor);
+                        		}
+                        	}
                         	
                         	existingFound = true;
                         }

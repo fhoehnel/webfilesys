@@ -760,7 +760,7 @@
                     <xsl:if test="/fileList/jpegtran">
                       <xsl:if test="/fileList/fileGroup">
                         <input type="button" resource="button.rotateByExif" titleResource="title.rotateByExif">
-                          <xsl:attribute name="onclick">javascript:autoImgRotate(resourceBundle["confirm.rotateByExif"], resourceBundle["rotateByExif.noop"])</xsl:attribute>
+                          <xsl:attribute name="onclick">javascript:autoImgRotate()</xsl:attribute>
                         </input> 
                       </xsl:if>
                     </xsl:if>

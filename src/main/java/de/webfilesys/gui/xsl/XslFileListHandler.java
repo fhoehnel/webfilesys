@@ -268,7 +268,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		Vector selectedFiles = selectionStatus.getSelectedFiles();
 
 		fileNum = selectionStatus.getNumberOfFiles();
-
+		
 		XmlUtil.setChildText(fileListElement, "fileNumber", Integer.toString(fileNum), false);
 
 		XmlUtil.setChildText(fileListElement, "currentPath", normalizedPath, false);
@@ -279,14 +279,50 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 		XmlUtil.setChildText(fileListElement, "sortBy", Integer.toString(sortBy), false);
 
+		long sizeSumIntegerPart;
+		long sizeSumFractionalPart;
+		String sizeSumUnit = null;
+		DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");
+		
+		long fileSizeSum = selectionStatus.getFileSizeSum();
+		
+		if (fileSizeSum >= 1024 * 1024 * 1024)
+		{
+			sizeSumIntegerPart = fileSizeSum / (1024 * 1024 * 1024);
+			sizeSumFractionalPart = (fileSizeSum % (1024 * 1024 * 1024)) * 1000 / (1024 * 1024 * 1024) / 10;
+			sizeSumUnit = getResource("sizeUnit.gigabyte", "GB");
+		}
+		else if (fileSizeSum >= 1024 * 1024)
+		{
+			sizeSumIntegerPart = fileSizeSum / (1024 * 1024);
+			sizeSumFractionalPart = (fileSizeSum % (1024 * 1024)) * 1000 / (1024 * 1024) / 10;
+			sizeSumUnit = getResource("sizeUnit.megabyte", "MB");
+		}
+		else if (fileSizeSum >= 1024)
+		{
+			sizeSumIntegerPart = fileSizeSum / 1024;
+			sizeSumFractionalPart = (fileSizeSum % 1024) * 1000 / 1024 / 10;
+			sizeSumUnit = getResource("sizeUnit.kilobyte", "KB");
+		}
+		else
+		{
+			sizeSumIntegerPart = fileSizeSum;
+			sizeSumFractionalPart = 0;
+			sizeSumUnit = getResource("sizeUnit.byte", "bytes");
+		}
+
+		XmlUtil.setChildText(fileListElement, "sizeSumInt", Long.toString(sizeSumIntegerPart), false);
+		if (sizeSumFractionalPart > 0) 
+		{
+			XmlUtil.setChildText(fileListElement, "sizeSumFract", Long.toString(sizeSumFractionalPart), false);
+		}
+		XmlUtil.setChildText(fileListElement, "sizeSumUnit", sizeSumUnit, false);
+		
         boolean linkFound = false;
 		
 		if (selectedFiles != null)
 		{
-			SimpleDateFormat dateFormat=LanguageManager.getInstance().getDateFormat(language);
-
-			// DecimalFormat numFormat=new DecimalFormat("0,000,000,000,000");
-			DecimalFormat numFormat=new DecimalFormat("#,###,###,###,###");
+			SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 
 			for (i = 0; i < selectedFiles.size(); i++)
 			{

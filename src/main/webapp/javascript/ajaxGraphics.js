@@ -36,31 +36,40 @@ function checkLossless(path)
     return(false);
 }
 
-function autoImgRotate(confirmText, noopText)
+function autoImgRotate()
 {
-    showHourGlass()
-
-    if (!confirm(confirmText))
+    if (!confirm(resourceBundle["confirm.rotateByExif"]))
     {
-        hideHourGlass();
         return;
     }
 
+    showHourGlass();
+
     var xmlUrl = '/webfilesys/servlet?command=autoImgRotate';
 
-    var responseXml = xmlRequestSynchron(xmlUrl);
-    
-    var anyRotatedItem = responseXml.getElementsByTagName("anyImageRotated")[0];            
-    var anyRotated = anyRotatedItem.firstChild.nodeValue;
-       
-    hideHourGlass();
-                 
-    if (anyRotated == "true")
-    {
-        window.location.href = '/webfilesys/servlet?command=thumbnail';
-        return
-    }
-    
-    alert(noopText);
+    var responseXml = xmlRequest(xmlUrl, autoImgRotateResult);
 }
+
+function autoImgRotateResult()
+{
+    if (req.readyState == 4)
+    {
+        if (req.status == 200)
+        {
+             var anyRotatedItem = req.responseXML.getElementsByTagName("anyImageRotated")[0];            
+             var anyRotated = anyRotatedItem.firstChild.nodeValue;
+                
+             hideHourGlass();
+                          
+             if (anyRotated == "true")
+             {
+                 window.location.href = '/webfilesys/servlet?command=thumbnail';
+                 return
+             }
+             
+             alert(resourceBundle["rotateByExif.noop"]);
+        }
+    }
+}
+
 

@@ -12,6 +12,8 @@ import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.FileSysBookmark;
 import de.webfilesys.FileSysBookmarkManager;
+import de.webfilesys.decoration.Decoration;
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -97,7 +99,21 @@ public class XslFileSysBookmarkHandler extends XslRequestHandlerBase
 
 			XmlUtil.setChildText(bookmarkElement, "path" , this.getHeadlinePath(bookmark.getPath()));
 
-			XmlUtil.setChildText(bookmarkElement, "encodedPath" , UTF8URLEncoder.encode(bookmark.getPath()));           
+			XmlUtil.setChildText(bookmarkElement, "encodedPath" , UTF8URLEncoder.encode(bookmark.getPath()));    
+			
+			Decoration deco = DecorationManager.getInstance().getDecoration(bookmark.getPath());
+			
+			if (deco != null) 
+			{
+				if (deco.getIcon() != null) 
+				{
+					XmlUtil.setChildText(bookmarkElement, "icon" , deco.getIcon());
+				}
+				if (deco.getTextColor() != null) 
+				{
+					XmlUtil.setChildText(bookmarkElement, "textColor" , deco.getTextColor());
+				}
+			}
         	
 			bookmarkListElement.appendChild(bookmarkElement);
 		}

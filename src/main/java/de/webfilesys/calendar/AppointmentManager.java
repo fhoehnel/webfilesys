@@ -120,7 +120,9 @@ public class AppointmentManager extends Thread
                     				expireUnrepeatedEvents();
                     			}
                     			
-                            	Logger.getLogger(getClass()).info("AppointmentManager clearing appointment cache");
+                    			if (Logger.getLogger(getClass()).isDebugEnabled()) {
+                                	Logger.getLogger(getClass()).debug("AppointmentManager clearing appointment cache");
+                    			}
                                 appointmentMap.clear();
                                 indexTable.clear();
                                 cacheDirty.clear();

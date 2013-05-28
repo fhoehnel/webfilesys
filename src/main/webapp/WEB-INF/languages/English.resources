@@ -25,6 +25,11 @@ label.destdir=destination folder
 label.yes=yes
 label.no=no
 label.in=in
+sizeUnit.byte=bytes
+sizeUnit.kilobyte=KB
+sizeUnit.megabyte=MB
+sizeUnit.gigabyte=GB
+decimalFractPoint=.
 
 # common buttons
 button.create=Create

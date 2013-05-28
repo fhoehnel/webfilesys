@@ -10,10 +10,10 @@ import de.webfilesys.util.PatternComparator;
 
 public class FileLinkSelector
 {
-	int sortBy;
-	Vector selectedFiles;
-	String path;
-	boolean hideMetaInf;
+	private int sortBy;
+	private Vector selectedFiles;
+	private String path;
+	private boolean hideMetaInf;
 
 	public FileLinkSelector(String path,int sortBy)
 	{
@@ -242,6 +242,8 @@ public class FileLinkSelector
 	 */
 	public FileSelectionStatus selectFiles(String searchMask[], int minRating, int pageSize, int startIdx)
 	{
+		long fileSizeSum = 0;
+		
 		FileSelectionStatus selectionStatus=new FileSelectionStatus();
 
 		Vector filesAndLinks = this.getFilesAndLinks();
@@ -286,6 +288,10 @@ public class FileLinkSelector
 
 							selectedFileNumber++;
 						}
+					}
+					
+					if (!fileCont.isLink()) {
+						fileSizeSum += fileCont.getRealFile().length();
 					}
 				}
 				else
@@ -333,7 +339,8 @@ public class FileLinkSelector
 
         for (int i = beginIdx; i <= endIdx; i++)
         {
-			filesOnPage.addElement(selectedFiles.elementAt(i));
+        	FileContainer fileOnPage = (FileContainer) selectedFiles.elementAt(i);
+			filesOnPage.addElement(fileOnPage);
         }
 
 		selectionStatus.setBeginIndex(beginIdx);
@@ -355,6 +362,8 @@ public class FileLinkSelector
 		selectionStatus.setCurrentPage(startIdx / pageSize);
          
 		selectionStatus.setSelectedFiles(filesOnPage);
+		
+		selectionStatus.setFileSizeSum(fileSizeSum);
 
 		return(selectionStatus);
 	}
@@ -397,4 +406,5 @@ public class FileLinkSelector
         
         return(filesAndLinks);
     }
+    
 }

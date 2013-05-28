@@ -51,11 +51,6 @@ public class AlarmDistributor extends Thread
 
 	protected void checkAlarm(Date gmtNow)
 	{
-		if (Logger.getLogger(getClass()).isDebugEnabled())
-		{
-	    	Logger.getLogger(getClass()).debug("AlarmDistributor checking for appointments to alarm");
-		}
-
     	ArrayList<AlarmEntry> mailAlarmList = AppointmentManager.getInstance().getAlarmIndex().getMailAlarmList(gmtNow);
 
 		if (mailAlarmList != null)

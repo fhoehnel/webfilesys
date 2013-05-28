@@ -17,6 +17,8 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.FastPathManager;
 import de.webfilesys.FileSysBookmark;
 import de.webfilesys.FileSysBookmarkManager;
+import de.webfilesys.decoration.Decoration;
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -215,6 +217,20 @@ public class XslFastPathHandler extends XslRequestHandlerBase
                     {
                         subFolderElem.setAttribute("bookmark", "true");
                     }
+                    
+    				Decoration deco = DecorationManager.getInstance().getDecoration(path);
+    				
+    				if (deco != null) 
+    				{
+    					if (deco.getIcon() != null) 
+    					{
+    						subFolderElem.setAttribute("icon", deco.getIcon());
+    					}
+    					if (deco.getTextColor() != null) 
+    					{
+    						subFolderElem.setAttribute("textColor", deco.getTextColor());
+    					}
+    				}
                 }
 
                 folderElem = subFolderElem;

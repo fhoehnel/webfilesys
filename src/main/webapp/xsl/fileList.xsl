@@ -266,6 +266,15 @@
                   <label resource="label.files" style="margin-left:5px"></label>
                 </td>
 
+                <td class="fileListFunct fileCount">
+                  <xsl:value-of select="sizeSumInt" />
+                  <xsl:if test="sizeSumFract">
+                    <label resource="decimalFractPoint"></label>
+                    <xsl:value-of select="sizeSumFract" />
+                  </xsl:if>
+                  <label style="margin-left:5px"><xsl:value-of select="sizeSumUnit" /></label>
+                </td>
+
                 <td width="30%">&#160;</td>  
                 
                 <td class="fileListFunct fileSort">

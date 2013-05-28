@@ -17,6 +17,8 @@ public class FileSelectionStatus
 	/** The start indices of all pages. */
 	private Vector pageStartIndices;
 	
+	private long fileSizeSum = 0;
+	
 	private int currentPage = 0;
 
     public FileSelectionStatus()
@@ -82,6 +84,16 @@ public class FileSelectionStatus
         return(numberOfFiles);
     }
 
+    public void setFileSizeSum(long newVal) 
+    {
+    	fileSizeSum = newVal;
+    }
+    
+    public long getFileSizeSum() 
+    {
+    	return fileSizeSum;
+    }
+    
     public void setIsLastPage(boolean isLastPage)
     { 
         this.isLastPage=isLastPage;

@@ -66,7 +66,15 @@
     </xsl:if>
 
     <xsl:if test="not(@bookmark)">
-      <img src="images/folder.gif" border="0" width="17" height="14" />
+      <xsl:if test="@icon">
+        <img class="icon">
+          <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
+        </img>
+      </xsl:if>
+    
+      <xsl:if test="not(@icon)">
+        <img src="images/folder.gif" border="0" width="17" height="14" />
+      </xsl:if>
     </xsl:if>
 
     <img src="images/space.gif" border="0" width="4" height="1" />
@@ -84,6 +92,10 @@
         <xsl:attribute name="class">
           <xsl:value-of select="'dirtree'"/>
         </xsl:attribute>
+        
+        <xsl:if test="@textColor">
+          <xsl:attribute name="style">color:<xsl:value-of select="@textColor" /></xsl:attribute>
+        </xsl:if>
       </xsl:if>
     
       <xsl:value-of select="@name" />
