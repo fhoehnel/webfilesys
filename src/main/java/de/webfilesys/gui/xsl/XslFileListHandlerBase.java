@@ -62,6 +62,9 @@ public class XslFileListHandlerBase extends XslRequestHandlerBase {
         if ((File.separatorChar == '/') && (docRoot.length() == 1))
 		{
 			partialPath.append('/');
+			if (currentPath.length() > 1) {
+				currentTrailElem.setAttribute("unixRoot", "true");
+			}
 		}
 		
 		StringBuffer linkPath = new StringBuffer();

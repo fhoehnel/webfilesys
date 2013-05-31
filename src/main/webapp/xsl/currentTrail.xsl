@@ -5,6 +5,10 @@
   <xsl:template name="currentTrail">
 
     <div class="currentTrail">
+      <xsl:if test="@unixRoot">
+        <xsl:value-of select="@separator"/>
+      </xsl:if>
+    
       <xsl:for-each select="pathElem">
         <a class="currentTrail">
           <xsl:attribute name="href">/webfilesys/servlet?command=exp&amp;expandPath=<xsl:value-of select="@path"/>&amp;fastPath=true</xsl:attribute>
