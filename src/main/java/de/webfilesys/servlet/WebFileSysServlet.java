@@ -218,6 +218,7 @@ import de.webfilesys.gui.xsl.XslFileSysBookmarkHandler;
 import de.webfilesys.gui.xsl.XslFileTypeStatsHandler;
 import de.webfilesys.gui.xsl.XslFindFileHandler;
 import de.webfilesys.gui.xsl.XslFolderDiffTreeHandler;
+import de.webfilesys.gui.xsl.XslFolderWatchListHandler;
 import de.webfilesys.gui.xsl.XslGoogleMapHandler;
 import de.webfilesys.gui.xsl.XslListCommentsHandler;
 import de.webfilesys.gui.xsl.XslLogonHandler;
@@ -1398,6 +1399,13 @@ public class WebFileSysServlet extends HttpServlet
         if (command.equals("watchFolder"))
         {
             (new XslWatchFolderHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+
+        if (command.equals("watchList"))
+        {
+            (new XslFolderWatchListHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }

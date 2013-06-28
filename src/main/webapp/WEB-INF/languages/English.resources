@@ -664,6 +664,9 @@ changeType.newFolder=new folder created
 changeType.fileRemoved=file removed
 changeType.dateChanged=modification time changed for
 changeType.sizeChanged=file size changed for
+watchList=watched folders
+watchListHeadline=folders being watched for changes
+watchListEmpty=Currently there are no watched folders. To start watching a folder select the option "watch folder change" in the context menu of the folder!
 
 # rating 
 rating.owner=Rating by owner

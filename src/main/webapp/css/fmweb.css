@@ -621,3 +621,14 @@
       text-decoration: underline;
   }
   
+  ul.folderWatchList 
+  {
+      list-style-type: none;
+      padding: 0;
+  }
+  
+  ul.folderWatchList li 
+  {
+      margin-bottom: 6px;
+  }
+  

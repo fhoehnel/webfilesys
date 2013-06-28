@@ -5,7 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,8 +19,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import java.util.Iterator;
 
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
@@ -246,7 +246,54 @@ public class FolderWatchManager extends Thread
         }
         return null;
     }
+    
+    public ArrayList<String> getWatchedFolders(String userid)
+    {
+    	ArrayList<String> watchedFolders = new ArrayList<String>();
+    	
+        NodeList folders = folderWatchElement.getElementsByTagName("folder");
 
+        if (folders != null)
+        {
+            int listLength = folders.getLength();
+            for (int i = 0; i < listLength; i++)
+            {
+                Element folderElem = (Element) folders.item(i);
+                
+                NodeList listeners = folderElem.getElementsByTagName("listener");
+
+                if (listeners != null)
+                {
+                	boolean found = false;
+                    int listenerListLength = listeners.getLength();
+                    for (int k = 0; (!found) && (k < listenerListLength); k++)
+                    {
+                        Element listener = (Element) listeners.item(k);
+                        if (XmlUtil.getElementText(listener).equals(userid))
+                        {
+                        	String watchedPath = folderElem.getAttribute("path");
+                        	
+                        	if (File.separatorChar == '\\') 
+                        	{
+                        		if (watchedPath.length() > 1) 
+                        		{
+                        			if (Character.isLowerCase(watchedPath.charAt(0))) 
+                        			{
+                        				watchedPath = Character.toUpperCase(watchedPath.charAt(0)) + watchedPath.substring(1);
+                        			}
+                        		}
+                        	}
+                        	
+                        	watchedFolders.add(watchedPath.replace('/', File.separatorChar));
+                            found = true;
+                        }
+                    }
+                }
+            }
+        }
+        return watchedFolders;
+    }
+    
     public void addFolderChangeListener(String folderPath, String userid)
     {
         String normalizedPath = normalizePath(folderPath);

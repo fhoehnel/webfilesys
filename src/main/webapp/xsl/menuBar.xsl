@@ -36,6 +36,13 @@
       parent.DirectoryPath.location.href = '/webfilesys/servlet?command=bookmarks';
   }
   
+  <xsl:if test="not(readonly) or (readonly='false')">
+    function watchList() 
+    {
+       parent.DirectoryPath.location.href = '/webfilesys/servlet?command=watchList';
+    }
+  </xsl:if>
+  
   function publishList()
   {
       window.open('/webfilesys/servlet?command=publishList&amp;random=' + new Date().getTime(),'PublishList','scrollbars=yes,resizable=yes,width=740,height=300,left=20,top=100,screenX=50,screenY=100');
@@ -256,6 +263,16 @@
                 <a href="javascript:refreshDriveList()">
                   <img src="/webfilesys/images/menubar/drive.gif" border="0" width="32" height="32">
                     <xsl:attribute name="titleResource">label.refreshDrives</xsl:attribute>
+                  </img>
+                </a>
+              </th>
+            </xsl:if>
+            
+            <xsl:if test="not(readonly) or (readonly='false')">
+              <th>
+                <a href="javascript:watchList()">
+                  <img src="/webfilesys/images/menubar/watch.gif" border="0" width="32" height="32">
+                    <xsl:attribute name="titleResource">watchList</xsl:attribute>
                   </img>
                 </a>
               </th>

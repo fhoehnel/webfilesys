@@ -666,6 +666,9 @@ changeType.newFolder=neuer Ordner
 changeType.fileRemoved=Datei/Ordner gelöscht
 changeType.dateChanged=Datei-Datum geändert
 changeType.sizeChanged=Datei-Größe geändert
+watchList=Überwachte Ordner
+watchListHeadline=auf Änderungen überwachte Ordner
+watchListEmpty=Aktuell werden keine Ordner überwacht. Die Änderungs-Überwachung eines Ordners wird mit der Option "Änderungen überwachen" im Conext-Menü des Ordners aktiviert!
 
 # rating 
 rating.owner=Bewertung

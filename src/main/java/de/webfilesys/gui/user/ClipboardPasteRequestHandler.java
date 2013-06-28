@@ -369,6 +369,10 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 		output.println("<script language=\"javascript\">");
 
+		if (clipBoard.isMoveOperation()) {
+			clipBoard.clear();
+		}
+		
 		if (pasteToFileWin)
 		{
 			if (thumbView)

@@ -533,9 +533,11 @@
                 <a href="#">
                   <xsl:if test="@link">
                     <xsl:attribute name="href">javascript:sli<xsl:value-of select="@id" />();hidePopupPicture()</xsl:attribute>
+                    <xsl:attribute name="oncontextmenu">zoomLink<xsl:value-of select="@id" />();return false;</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="not(@link)">
                     <xsl:attribute name="href">javascript:si<xsl:value-of select="@id" />();hidePopupPicture()</xsl:attribute>
+                    <xsl:attribute name="oncontextmenu">zoom<xsl:value-of select="@id" />();return false;</xsl:attribute>
                   </xsl:if>
                   <img class="thumb" border="0">
                     <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
