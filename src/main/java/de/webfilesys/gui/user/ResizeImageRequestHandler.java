@@ -199,7 +199,8 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                 + getResource("label.resizetitle", "resize images")
                 + "</title>");
 
-        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
         output.println("<script src=\"/webfilesys/javascript/errorHandling.js\" type=\"text/javascript\"></script>");
         

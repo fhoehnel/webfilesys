@@ -321,9 +321,9 @@ public class UnixOwnerRequestHandler extends UserRequestHandler
                 + getResource("label.accessrights", "owner and access rights")
                 + "</title>");
 
-        // output.println(CSSManager.getInstance().getCss(fmweb.userMgr.getCSS(uid)));
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
         output.println(
-            "<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+            "<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
         output.println("</head><body>");
 

@@ -19,7 +19,7 @@
 
     <copy todir="${webcontent-deploy-target}" verbose="true">
       <fileset dir="${webcontent-src}"
-         includes="css/**/*,xsl/**/*,javascript/**/*,images/**/*,icons/**/*,help/**/*,html/**/*,WEB-INF/languages/**/*" />
+         includes="styles/**/*,xsl/**/*,javascript/**/*,images/**/*,icons/**/*,help/**/*,html/**/*,WEB-INF/languages/**/*" />
     </copy>
   </target>
 

@@ -47,7 +47,8 @@ public class PublishListRequestHandler extends UserRequestHandler
 		output.println("<HTML>");
 		output.println("<HEAD>");
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<title>" + getResource("label.publishList","Published Folders and Files") + "</title>");
 

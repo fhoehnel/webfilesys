@@ -541,8 +541,6 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 			}
 		}
 
-		XmlUtil.setChildText(folderFileListElement, "css", "mobile", false);
-
 		XmlUtil.setChildText(folderFileListElement, "userid", uid, false);
 		
 	    XmlUtil.setChildText(folderFileListElement, "language", language, false);

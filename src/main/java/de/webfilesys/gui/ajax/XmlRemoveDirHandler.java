@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.DirTreeStatus;
 import de.webfilesys.FastPathManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.SubdirExistCache;
@@ -83,6 +84,13 @@ public class XmlRemoveDirHandler extends XmlRequestHandlerBase
                     SubdirExistCache.getInstance().cleanupExistSubdir(path);
                     
                     FastPathManager.getInstance().removeTree(uid, path);
+                    
+                    DirTreeStatus dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+                    
+                    if (dirTreeStatus != null) 
+                    {
+                    	dirTreeStatus.collapseDir(path);
+                    }
                     
                     success = "deleted";
 

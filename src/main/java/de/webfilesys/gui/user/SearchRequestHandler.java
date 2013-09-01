@@ -161,7 +161,8 @@ public class SearchRequestHandler extends UserRequestHandler
 			output.print("<title>" + getResource("label.searchresults","Search Results") + ": " + search_arg + " </title>");
 		}
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<script language=\"JavaScript\" src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
 		output.println("<script language=\"JavaScript\" src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");

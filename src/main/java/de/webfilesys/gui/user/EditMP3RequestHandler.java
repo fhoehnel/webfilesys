@@ -161,7 +161,8 @@ public class EditMP3RequestHandler extends UserRequestHandler
 
 		output.println("<TITLE>" + getResource("label.editmp3","Edit MP3 Tags") + "</TITLE>");
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("</HEAD>"); 
 		output.println("<BODY>");

@@ -2,6 +2,7 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -308,11 +309,11 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		
 		rootElement.appendChild(layoutsElement);
 		
-		Vector cssList = CSSManager.getInstance().getAvailableCss();
+		ArrayList<String> cssList = CSSManager.getInstance().getAvailableCss();
 
 		for (int i = 0; i < cssList.size(); i++)
 		{
-			String css = (String) cssList.elementAt(i);
+			String css = (String) cssList.get(i);
 			
             if (!css.equals("mobile")) 
             {

@@ -1,0 +1,7 @@
+Cuota de disco excedida para el usuario $LOGIN.
+
+Tu cuota de disco son $QUOTA KBytes.
+Y estas usando $USAGE KBytes.
+
+Por favor, borra pronto algunos de los archivos menos importantes.
+

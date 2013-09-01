@@ -383,7 +383,8 @@ public class SlideShowRequestHandler extends UserRequestHandler
 
 		output.println("<title>" + getResource("label.slideparmhead","Slideshow Parameters") + "</title>");
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("</head>");
 		output.println("<body>");

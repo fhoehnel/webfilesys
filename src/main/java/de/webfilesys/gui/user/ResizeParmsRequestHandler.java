@@ -71,7 +71,8 @@ public class ResizeParmsRequestHandler extends UserRequestHandler
 
 		output.println("<title>WebFileSys - " + getResource("label.resizetitle","resize pictures") + "</title>");
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<script src=\"/webfilesys/javascript/areaSelector.js\" type=\"text/javascript\"></script>");
 		

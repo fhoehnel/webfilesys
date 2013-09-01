@@ -1,6 +1,7 @@
 package de.webfilesys.gui.admin;
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,7 +48,8 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
 			output.println("</script>");
 		}
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<script language=\"javascript\">");
 		output.println("function selectDocRoot()");
@@ -263,7 +265,7 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
 		output.println("</select></td>");
         output.println("</tr>");
 
-		Vector cssList=CSSManager.getInstance().getAvailableCss();
+		ArrayList<String> cssList = CSSManager.getInstance().getAvailableCss();
 
         output.println("<tr>");
         output.println("<td class=\"formParm1\"><b>layout (CSS file)</b></td>");
@@ -271,14 +273,14 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
 
 		for (int i = 0; i < cssList.size(); i++)
 		{
-			if (((errorMsg != null) && getParameter("css").equals(cssList.elementAt(i))) ||
-				((errorMsg == null) && cssList.elementAt(i).equals(CSSManager.DEFAULT_LAYOUT)))
+			if (((errorMsg != null) && getParameter("css").equals(cssList.get(i))) ||
+				((errorMsg == null) && cssList.get(i).equals(CSSManager.DEFAULT_LAYOUT)))
 			{
-				output.println("<option selected=\"selected\">" + cssList.elementAt(i) + "</option>");
+				output.println("<option selected=\"selected\">" + cssList.get(i) + "</option>");
 			}
 			else
 			{
-				output.println("<option>" + cssList.elementAt(i) + "</option>");
+				output.println("<option>" + cssList.get(i) + "</option>");
 			}
 		}
 		output.println("</select></td>");

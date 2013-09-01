@@ -50,7 +50,8 @@ public class ProcessListRequestHandler extends UserRequestHandler
 		output.println("<HTML>");
 		output.println("<HEAD>");
 		
-        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 		
 		output.println("<TITLE>WebFileSys Process List</TITLE>");
 		output.println("<SCRIPT LANGUAGE=\"JavaScript\">");

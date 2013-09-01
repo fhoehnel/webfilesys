@@ -102,7 +102,8 @@ public class PictureStoryRequestHandler extends UserRequestHandler
 		output.println("<HEAD>");
 		output.println("<TITLE>WebFilesys " + getResource("label.story", "picture story") + "</TITLE>");
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<SCRIPT language=\"JavaScript\" src=\"javascript/fmweb.js\" type=\"text/javascript\"></SCRIPT>");
 		output.println("<SCRIPT language=\"JavaScript\" src=\"javascript/viewMode.js\" type=\"text/javascript\"></SCRIPT>");

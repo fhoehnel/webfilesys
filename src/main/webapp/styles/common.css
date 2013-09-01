@@ -1,0 +1,1199 @@
+html {
+    font-family: Arial,Helvetica,sans-serif;
+}
+
+body {
+    margin-top: 5px;
+    margin-left: 10px;
+    margin-right: 5px;
+    font-size: 13px;
+    font-family: Arial,Helvetica,sans-serif;
+    background-color: #ffffff;
+}
+  
+body.dirTree {
+    margin-top:5px;
+    margin-left:0px;
+    margin-right:5px;
+    font-size:13px;
+    font-family: Arial,Helvetica,sans-serif;
+    background-color:#ffffff;
+}
+  
+body.story {
+    margin-top:5px;
+    margin-left:10px;
+    font-size:12pt;
+    background-color:silver;
+    font-family: Arial,Helvetica,sans-serif;
+}
+  
+body.menubar {
+    margin-top:0px;
+    margin-left:10px;
+    margin-right:10px;
+    font-family: Arial,Helvetica,sans-serif;
+}
+
+h1 {
+    font-size:14pt;
+    color:navy;
+    font-weight:bold;
+}
+
+div.centerBox {
+    position:absolute;
+    top:50%;
+    left:50%;
+    width:10px;
+    height:10px;
+    padding:0px;
+} 
+
+div.loginBox {
+    width:400px;
+    height:250px;
+    position:relative;
+    top:-125px;
+    left:-200px;
+    background-color:lavender;
+    border:none;
+    border-radius:24px;
+    box-shadow:0 5px 10px rgba(0, 0, 0, 0.8);
+}
+
+div.msgBox {
+    width:260px;
+    height:100px;
+    position:absolute;
+    background-color:lavender;
+    border-style:solid;
+    border-width:1px;
+    border-color:black;
+    font-size:13px;
+    color:black;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    text-align:center;
+    vertical-align:middle;
+    padding:20px;
+}
+
+div.promptBox {
+    width:360px;
+    height:140px;
+    position:absolute;
+    background-color:#ffffe0;
+    border-style:ridge;
+    border-width:3px;
+    border-color:#a0a0a0;
+    font-size:13px;
+    color:black;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    text-align:center;
+    vertical-align:middle;
+    padding:0;
+}
+
+div.promptHead {
+    background-color:lavender;
+    border-bottom-style:solid;
+    border-bottom-width:1px;
+    border-bottom-color:#a0a0a0;
+    font-size:13px;
+    color:black;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    text-align:center;
+    vertical-align:middle;
+    padding:3px;
+}
+
+div.uploadStatus {
+    width:400px;
+    height:160px;
+    position:absolute;
+    top:150px;
+    left:50px;
+    border-style:solid;
+    border-width:1px;
+    border-color:black;
+    font-size:13px;
+    color:black;
+    font-family:Arial,Helvetica;
+    font-weight:bold;
+    text-align:center;
+    vertical-align:middle;
+    padding:0px;
+}
+
+td.loginTitle {
+    font-size:16px;
+    color:navy;
+    font-weight:bold;
+}
+
+td.loginFormLabel {
+    color:navy;
+    font-size:13px;
+    font-weight:bold;
+    text-align:left;
+    vertical-align:middle;
+}
+  
+div.centerHoriz {
+    position:absolute;
+    top:0;
+    left:50%;
+    width:10px;
+    height:10px;
+    padding:0px;
+} 
+
+div.albumCont {
+    width:900px;
+    position:relative;
+    left:-450px;
+    padding-top:6px;
+}
+  
+/* depreacted - replace with div.headline! */
+th.headline {
+    font-size:15px;
+    color:black;
+    font-weight:normal;
+    border-width:1px;
+    border-style:solid;
+    border-color:navy;
+}
+  
+div.headline {
+    font-size:15px;
+    color:black;
+    text-align:center;
+    font-weight:normal;
+    border-width:1px;
+    border-style:solid;
+    border-color:navy;
+    padding:3px;
+    margin-bottom:5px;
+}
+  
+th.datahead {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+td.data {
+    background-color:ivory;
+    font-size:13px;
+}
+
+td.dataNumber {
+    background-color:ivory;
+    font-size:13px;
+    text-align:right;
+    padding-right:10px;
+}
+
+th.menubar {
+    background-color:#306048;
+}
+
+a.active {
+    font-size:8pt;
+    color:white;
+}
+
+a.drive {
+    font-size:12pt;
+    color:black;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+a.drive:hover {
+    color:green;
+}
+
+pre {
+    font-size: 13px;
+    color: black;
+    font-family: monospace;
+}
+
+.plaintext {
+    font-size:13px;
+    color:black;
+    font-weight:normal;
+}
+
+td.prompt {
+    font-size:11pt;
+    color:#408060;
+}
+
+td.value {
+    font-size:11pt;
+    color:#604080;
+}
+
+th.buttonInactive {
+    background-color:lavender;
+    font-size:8pt;
+    color:#606060;
+}
+  
+th.buttonActive {
+    background-color:lavender;
+    font-size:8pt;
+}
+
+a.buttonActive {
+    font-size:8pt;
+    color:navy;
+    text-decoration:none;
+}
+
+a.buttonActive:hover {
+    color:green;
+}
+  
+a.dirtree {
+    font-size:13px;
+    color:black;
+    font-weight:bold;
+    text-decoration:none;
+    vertical-align:middle;
+}
+
+a.dir {
+    font-size:13px;
+    color:black;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+a.dirtree:hover {
+    color:green;
+    text-decoration:underline;
+}
+
+a.dir:hover {
+    color:green;
+}
+
+a.link {
+    font-size:13px;
+    color:maroon;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+a.link:hover {
+    color:blue;
+}
+
+font.small {
+    font-size:8pt;
+    color:navy;
+}
+
+font.error {
+    font-size:13px;
+    color:red;
+}
+
+font.hidden {
+    font-size:13px;
+    color:#808080;
+    font-weight:bold;
+}
+
+.info {
+    font-size:13px;
+    color:#808080;
+    font-weight:normal;
+}
+
+a.fn {
+    font-size:13px;
+    color:navy;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+a.fn:hover {
+    color:green;
+    text-decoration:underline;
+}
+
+font.fixed {
+    font-size: 13px;
+    color: black;
+    font-family: monospace;
+}
+
+input,select,textarea {
+    font-size:13px;
+    color:navy;
+    background-color:white;
+}
+
+td.story {
+    font-size:12pt;
+    color:#306048;
+    font-weight:bold;
+}
+  
+td.story2 {
+    background-color:ivory;
+    font-size:12pt;
+    color:#306048;
+    font-weight:bold;
+}
+
+body.menu {
+    margin-top:0px;
+    margin-left:0px;
+    margin-right:0px;
+    font-size:13px;
+}
+
+a.menuitem {
+    font-size:13px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+td.jsmenu {
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border-top-width:1px;
+    border-top-style:solid;
+    border-top-color:white;
+    border-bottom-width:1px;
+    border-bottom-style:solid;
+    border-bottom-color:black;
+    font-family: Arial,Helvetica,sans-serif;
+}
+
+td.border {
+    background-color:black;
+}
+
+td.fileListFunct {
+    font-size:13px;
+    color:black;
+    padding:0 5px;
+}
+  
+th.fileListHead {
+    font-size:13px;
+    font-weight:bold;
+    padding-top:2px;
+    padding-bottom:2px;
+    vertical-align:top;
+}
+
+td.fileListData {
+    background-color:ivory;
+    font-size:13px;
+    vertical-align:top;
+    padding-top:2px;
+}
+
+td.thumbData {
+    background-color:ivory;
+    color:black;
+    font-size:8pt;
+    vertical-align:bottom;
+    padding:4px;
+}
+
+.sep {
+    border-bottom-width:1px;
+    border-bottom-style:solid;
+    border-bottom-color:#b0b0b0;
+}
+
+input.cb2 {
+    background-color:ivory;
+}
+
+img.expCol {
+    border-style:none;
+    width:15px;
+    height:17px;
+}
+
+img.icon {
+    border-style:none;
+    width:16px;
+    height:16px;
+    margin-right:1px;
+}
+
+img.folder {
+    border-style:none;
+    width:17px;
+    height:14px;
+}
+
+img.computer {
+    border-style:none;
+    width:17px;
+    height:14px;
+    margin-right:4px;
+}
+
+a.dirSpacer {
+    margin-left:4px;
+}
+
+div.fileListDesc {
+    width:100%;
+    padding:2px;
+    margin-bottom:5px;
+}
+
+div.searchPath
+{
+    position: absolute;
+    top: 185px;
+    left: 20px;
+    width: 640px;
+}
+  
+span.searchPath
+{
+    color:navy;
+}  
+
+input[type="submit"], input[type="button"], input.roundedButton {
+    color: black;
+    font-size: 13px;
+    border: 1px solid #a0a0a0;
+    background-image:url('/webfilesys/images/buttonBack.png');
+    background-repeat:repeat-x;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 5px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+table.tabs
+{ 
+    width: 100%;
+    margin-top: 10px;
+    border-style: none;
+    border-spacing: 0;
+}
+
+td.tabActive {
+    font-size:13px;
+    color:black;
+    font-weight:bold;
+    white-space: nowrap;      
+    border-width:1px;
+    border-style:solid;
+    border-color:#000000;
+    border-bottom-style:none;
+    padding-left:6px;
+    padding-right:6px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    -moz-border-radius-topleft: 10px;
+    -webkit-border-top-right-radius: 10px;
+    -webkit-border-top-left-radius: 10px;
+}
+  
+td.tabInactive 
+{
+    background-color:#f0f0f0;
+    font-size:13px;
+    color:#808080;
+    white-space: nowrap;      
+    border-width:1px;
+    border-style:solid;
+    border-color:#808080;
+    padding-left:6px;
+    padding-right:6px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    -moz-border-radius-topleft: 10px;
+    -webkit-border-top-right-radius: 10px;
+    -webkit-border-top-left-radius: 10px;
+}
+
+td.tabAlbum {   
+    font-size:13px;
+    color:#808080;
+    border-width:1px;
+    border-style:solid;
+    border-color:#808080;
+    padding-left:6px;
+    padding-right:6px;
+    padding-top:2px;
+    padding-bottom:2px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    -moz-border-radius-topright: 10px;
+    -moz-border-radius-topleft: 10px;
+    -webkit-border-top-right-radius: 10px;
+    -webkit-border-top-left-radius: 10px;
+}
+  
+a.tab {
+    font-size:13px;
+    color:#808080;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+a.tab:hover {
+    color:#000000;
+}
+  
+table.topLess {
+    border-width:1px;
+    border-style:solid;
+    border-color:black;
+    border-top-style:none;
+}
+  
+td.bottomLine {
+    border-bottom-width:1px;
+    border-bottom-style:solid;
+    border-bottom-color:#808080;
+    padding:0;
+}
+  
+.sepTop {
+    border-top-width:1px;
+    border-top-style:solid;
+    border-top-color:#b0b0b0;
+}
+
+a.listHead {
+    font-size:13px;
+    color:#404040;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+a.listHead:hover {
+    color:red;
+    text-decoration:underline;
+}
+
+td.imgData {
+    font-size:8pt;
+    color:black;
+}
+
+img.thumb {
+    border-style:groove;
+    border-width:2px;
+    border-color:#808080;
+}
+
+td.mapIcon {
+    text-align:right;
+    width:1%;
+    padding:0;
+}
+
+div.more {
+    padding-left:0px;
+    padding-top:0px;
+    padding-right:0px;
+    padding-bottom:0px;
+    border-left-style:solid;
+    border-left-width:1px;
+    border-left-color:#808080;
+}
+
+div.last {
+    padding-left:12px;
+    padding-top:0px;
+    padding-right:0px;
+    padding-bottom:0px;
+    white-space:nowrap;
+}
+
+div.indent {
+    padding-left:4px;
+    padding-top:0px;
+    padding-right:0px;
+    padding-bottom:0px;
+}
+
+table.dataForm {
+    border-width:1px;
+    border-style:solid;
+    border-color:#808080;
+}
+
+table.formSection {
+    border-width:1px;
+    border-style:solid;
+    border-color:#a0a0a0;
+    margin:10px;
+}
+  
+td.formParm1 {
+    color:black;
+    font-size:13px;
+    text-align:left;
+    vertical-align:top;
+    padding:8px;
+    padding-top:4px;
+    padding-bottom:4px;
+}
+
+td.formParm2 {
+    color:navy;
+    font-size:13px;
+    vertical-align:top;
+    padding:8px;
+    padding-top:4px;
+    padding-bottom:4px;
+    text-align:left;
+}
+
+td.formButton {
+    padding:8px,
+}
+
+div.hint {
+    border-style:solid;
+    border-width:1px;
+    border-color:black;
+    padding:5px;
+    font-size:13px;
+}
+
+div.slideShowText {
+    font-size:13px;
+    color:black;
+}
+  
+div.albumPath {
+    padding-top:8px;
+    padding-bottom:10px;
+    text-align:left;
+}
+
+a.albumPath, span.albumPath {
+    font-size:13px;
+    color:black;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+table.processList {
+    border-collapse:collapse;
+    width:100%;
+}
+
+th.processList {
+    font-size:13px;
+    font-weight:bold;
+    text-align:center;
+    background-color:lavender;
+    padding:4px;
+    border:1px #404040 solid;
+}
+
+tr.processRowRoot {
+    background-color:#f0e4da;
+}
+
+tr.processRowOtherUser {
+    background-color:ivory;
+}
+
+td.processKill {
+    padding:4px;
+    border:1px #404040 solid;
+}
+
+td.processPID {
+    font-size:13px;
+    text-align:right;
+    padding:4px;
+    border:1px #404040 solid;
+}
+
+td.processUID {
+    font-size:13px;
+    text-align:center;
+    padding:4px;
+    border:1px #404040 solid;
+}
+
+td.processCMD {
+    font-size:13px;
+    padding:4px;
+    border:1px #404040 solid;
+}
+
+td.processStartTime {
+    font-size:13px;
+    text-align:center;
+    padding:4px;
+    border:1px #404040 solid;
+}
+
+td.processCPUTime {
+    font-size:13px;
+    text-align:right;
+    padding:4px;
+    border:1px #404040 solid;
+}
+
+td.processTTY {
+    font-size:13px;
+    text-align:center;
+    padding:4px;
+    border:1px #404040 solid;
+}
+ 
+body.diff {
+    margin:0px;
+    background-color:white;
+}
+
+td.diff {
+    text-align:center;
+    vertical-align:top;
+}
+
+span.diff {
+    color:black;
+    font-size:12pt;
+    font-weight:bold;
+    clear:both;
+}
+
+div.diff {
+    text-align:left;
+    font-family:monospace;
+    overflow-y:auto;
+    overflow-x:auto;
+    background-color:ivory;
+    border:2px ridge #b0b0b0;
+}
+
+font.diff {
+    font-family:monospace;
+    font-size:13px;
+}
+
+font.diffEqual {
+    font-family:monospace;
+    font-size:13px;
+}
+
+font.diffDel {
+    font-family:monospace;
+    font-size:13px;
+    text-decoration:line-through;
+    background-color:#d0d0d0;
+}
+
+font.diffIns {
+    font-family:monospace;
+    font-size:13px;
+    color:#008000;
+    font-weight:bold;
+    background-color:#d0d0d0;
+}
+
+ul.errorMsg {  
+    list-style-type: none;
+    padding: 0;
+}
+  
+li.errorMsg {
+    font-size: 12px;
+    font-weight: bold;
+    color: red;
+    margin-left: 0;
+}
+
+th.syncListHead {
+    background-color:lavender;
+    font-size:13px;
+    font-weight:bold;
+    padding-left:5px;
+    padding-right:5px;
+    padding-top:2px;
+    padding-bottom:2px;
+}
+
+td.syncCompare {
+    background-color:ivory;
+    font-size:13px;
+    vertical-align:top;
+    padding-top:2px;
+    padding-left:5px;
+    padding-right:5px;
+    border-top-width:1px;
+    border-top-style:solid;
+    border-top-color:#b0b0b0;
+}
+
+.buttonCont { 
+    overflow: hidden;
+    width: 98%;
+    padding: 6px 5px;
+}
+
+a.button {
+    background: transparent url('/webfilesys/images/buttonRight.gif') no-repeat scroll top right;
+    color: #444;
+    display: block;
+    float: left;
+    font: normal 12px arial, sans-serif;
+    height: 24px;
+    margin-right: 6px;
+    padding-right: 18px; /* sliding doors padding */
+    text-decoration: none;
+}
+
+a.button span {
+    background: transparent url('/webfilesys/images/buttonLeft.gif') no-repeat;
+    display: block;
+    line-height: 14px;
+    padding: 5px 0 5px 18px;
+} 
+
+a.button:active {
+    background-position: bottom right;
+    color: #000;
+    outline: none; /* hide dotted outline in Firefox */
+}
+
+a.button:active span 
+{
+    background-position: bottom left;
+    padding: 6px 0 4px 18px; /* push text down 1px */
+} 
+
+td.statsBarGraph {
+    font-size:8pt;
+    color:navy;
+}
+
+.logFatal {
+    color:fuchsia;font-size:13px;font-family:monospace;
+}
+
+.logError {
+    color:red;font-size:13px;font-family:monospace;
+}
+
+.logWarn {
+    color:maroon;font-size:13px;font-family:monospace;
+}
+
+.logInfo {
+    color:blue;font-size:13px;font-family:monospace;
+}
+
+.logDebug {
+    color:navy;font-size:13px;font-family:monospace;
+}
+
+.logNone {
+    color:black;font-size:13px;font-family:monospace;
+}
+
+td.fileFilter {
+    white-space:nowrap;
+    vertical-align:middle;
+    padding:5px;
+    padding-right:15px;
+}
+
+td.fileRefresh {
+    white-space:nowrap;
+    vertical-align:middle;
+    padding:5px;
+}
+
+td.fileCount {
+    white-space:nowrap;
+    vertical-align:middle;
+    padding:5px;
+}
+
+td.fileCountZero {
+    text-align:right;
+    white-space:nowrap;
+    vertical-align:middle;
+    padding:5px;
+}
+  
+td.fileSort {
+    white-space:nowrap;
+    vertical-align:middle;
+    padding:5px;
+    text-align:right;
+}
+
+table.fileListHead {
+    width:100%;
+    background-color:ivory;
+    border-left:1px solid black;
+    border-right:1px solid black;
+    border-collapse: collapse;
+}
+
+table.fileList {
+    width:100%;
+    background-color:ivory;
+    border:0;
+    margin:0;
+}
+
+th.fileList {
+    border-top:1px solid #b0b0b0;  
+    font-size:13px;
+    font-weight:bold;
+    padding:3px;
+}
+
+th.fileListSelector {
+    width:20px;
+    min-width:20px;
+    text-align:left;
+    padding:3px;
+}
+  
+th.fileListIcon {
+    width:22px;
+    min-width:22px;
+}
+  
+th.fileListName {
+    text-align:left;
+}
+
+th.fileListModified {
+    width:160px;
+    min-width:160px;
+    padding-right:20px;
+    white-space:nowrap;
+    text-align:right;
+}
+  
+th.fileListSize {
+    width:110px;
+    min-width:110px;
+    white-space:nowrap;
+    text-align:right;
+    padding-right:10px;
+}
+
+div.fileListScrollDiv {
+    background-color:ivory;
+    height:400px;
+    border-left:1px solid black;
+    border-right:1px solid black;
+    border-top:1px solid #b0b0b0;  
+    border-bottom:1px solid #b0b0b0;  
+    display:block;
+    overflow:auto;
+}
+
+td.fileList {
+    background-color:ivory;
+    font-size:13px;
+    vertical-align:top;
+    padding:2px;
+}
+  
+td.fileListSelectedRow {
+    background-color: #d0d070!important;
+}
+
+td.fileListSelector {
+    width:20px;
+    min-width:20px;
+}
+  
+td.fileListIcon {
+    width:20px;
+    min-width:20px;
+    padding-left:4px;
+    padding-right:4px;
+}
+
+td.fileListName {
+    min-width:300px;
+    text-align:left;
+    padding-right:5px;
+}
+  
+td.fileListModified {
+    width:160px;
+    min-width:160px;
+    white-space:nowrap;
+}
+  
+td.fileListSize {
+    width:100px;
+    min-width:90px;
+    padding-right:8px;
+    white-space:nowrap;
+    text-align:right;
+}
+  
+td.fileListDesc {
+    background-color:ivory;
+    font-size:8pt;
+    color:navy;
+    vertical-align:top;
+    padding-top:0;
+    border-bottom:1px solid #b0b0b0;  
+}
+  
+.sepBot {
+    border-bottom:1px solid #b0b0b0;  
+}
+  
+a.treeCompare {
+    font-size:13px;
+    font-weight:bold;
+    text-decoration:none;
+    vertical-align:middle;
+}
+
+a.treeCompNew {
+    color:#006000;
+}
+
+a.treeCompRemoved {
+    color:#800000;
+}
+
+a.treeCompModified {
+    color:#000060;
+}
+
+a.treeCompPath {
+    color:#808080;
+}
+  
+table.hexView {
+    width:100%;
+    border:1px solid #808080;
+    border-collapse:collapse;
+}
+
+table.hexView td {
+    text-align:center;
+    vertical-align:middle;
+    padding:2px;
+    border:1px solid #808080;
+    font-size:13px;
+    color:black;
+    font-family:monospace;
+}
+
+table.hexView td.index {
+    background-color:lavender;
+}
+ 
+table.hexView td.hexValue {
+    background-color:ivory;
+} 
+
+table.hexView td.ascii {
+    background-color:lavender;
+} 
+  
+/* sunburst chart */
+div.legendBox {
+    width: 20px;
+    height: 10px;
+    border: 1px solid #a0a0a0;
+    float: left;
+}
+  
+div.legendText {
+    font-weight: bold;
+    font-size: 12px;
+    color: #404040;
+    margin-left: 30px;
+}
+  
+a.sunburstParentLink {
+    font-weight: bold;
+    font-size: 12px;
+    color: #404040;
+    text-decoration: underline;
+    position: absolute;
+    left: 30px;
+    bottom: 40px;
+}
+  
+div.sunburstText {
+    font-weight: bold;
+    font-size: 12px;
+    color: #000000;
+}
+  
+div.sunburstTreeSize {
+    position:absolute;
+    top:20px;
+    right:35px;
+}
+  
+div.sunburstTreeFileNum {
+    position:absolute;
+    top:40px;
+    right:35px;
+}
+  
+div.currentTrail {
+    font-size: 15px;
+    color: #000000;
+}
+  
+a.currentTrail {
+    color: #000000;
+    text-decoration: none;
+}
+
+a.currentTrail:hover {
+    color: green;
+    text-decoration: underline;
+}
+  
+ul.folderWatchList {
+    list-style-type: none;
+    padding: 0;
+}
+  
+ul.folderWatchList li {
+    margin-bottom: 6px;
+}
+  

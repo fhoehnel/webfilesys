@@ -42,7 +42,8 @@ public class MultiTarArchiveHandler extends MultiFileRequestHandler
 		output.println("<HEAD>");
 		output.println("<TITLE>WebFileSys create tar archive</TITLE>");
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("</head>");
 		output.println("<body>");

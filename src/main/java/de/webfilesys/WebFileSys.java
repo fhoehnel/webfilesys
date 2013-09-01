@@ -43,7 +43,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.9.2-beta2 (2013/06/27)";
+	public static final String VERSION = "Version 2.9.2-beta7 (2013/08/15)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -960,7 +960,8 @@ public class WebFileSys
                 opSysName.equals("Windows 2003") ||
                 opSysName.equals("Windows Vista") ||
                 opSysName.equals("Windows 7") ||
-                opSysName.equals("Windows 2000"));
+                opSysName.equals("Windows 2000") ||
+                opSysName.startsWith("Windows Server"));
     }
     
     public String getJavaVersion()

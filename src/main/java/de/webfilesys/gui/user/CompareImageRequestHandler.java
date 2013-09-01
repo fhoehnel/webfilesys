@@ -50,7 +50,8 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 		output.println("<HEAD>");
 		output.println("<TITLE>WebFileSys - " + getResource("label.comparehead","Compare Images") + "</TITLE>");
 
-        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
         output.println("<style type=\"text/css\">");
 		output.println("body {margin-top:0px;margin-left:0px;background-color:white;}");

@@ -1,6 +1,7 @@
 package de.webfilesys.gui.admin;
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +49,8 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 			output.println("</script>");
 		}
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<script language=\"javascript\">");
 		output.println("function selectDocRoot()");
@@ -376,7 +378,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 			userCss=CSSManager.DEFAULT_LAYOUT;
 		}
 
-		Vector cssList = CSSManager.getInstance().getAvailableCss();
+		ArrayList<String> cssList = CSSManager.getInstance().getAvailableCss();
 
         output.println("<tr>");
         output.println("<td class=\"formParm1\"><b>layout (CSS file)</b></td>");
@@ -384,7 +386,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 
 		for (int i = 0; i < cssList.size(); i++)
 		{
-			String css = (String) cssList.elementAt(i);
+			String css = (String) cssList.get(i);
 
 			if (!css.equals("mobile")) 
 			{

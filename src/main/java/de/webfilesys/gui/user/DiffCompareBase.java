@@ -58,7 +58,8 @@ public class DiffCompareBase extends UserRequestHandler
         output.print("WebFileSys: " + getResource("title.diff","Compare Files (diff)"));
         output.println("</title>");
 
-        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
         File file1 = new File(file1Path);
         File file2 = new File(file2Path);

@@ -198,7 +198,8 @@ public class PublishRequestHandler extends UserRequestHandler
 
 		output.println("<title>" + getResource("label.publishhead","Publish folder content") + "</title>");
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("</head>"); 
 		output.println("<body>");
@@ -287,7 +288,8 @@ public class PublishRequestHandler extends UserRequestHandler
 		output.println("<head>");
 		output.println("<title>" + getResource("label.publishhead","Publish folder content") + "</title>");
 
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<script language=\"JavaScript\" src=\"javascript/fmweb.js\" type=\"text/javascript\"></script>"); 
 

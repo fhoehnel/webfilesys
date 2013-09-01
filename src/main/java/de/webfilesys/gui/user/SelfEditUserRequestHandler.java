@@ -1,6 +1,7 @@
 package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,7 +43,8 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
 		output.println("<html>");
 		output.println("<head>");
 
-        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/css/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+        output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
         if (errorMsg != null)
 		{
@@ -206,7 +208,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
             }
         }
 
-		Vector cssList = CSSManager.getInstance().getAvailableCss();
+		ArrayList<String> cssList = CSSManager.getInstance().getAvailableCss();
 
         output.println("<tr>");
         output.println("<td class=\"formParm1\"><b>" + getResource("label.css","layout") + "</b></td>");
@@ -214,7 +216,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
 
 		for (int i = 0; i < cssList.size(); i++)
 		{
-			String css = (String) cssList.elementAt(i);
+			String css = (String) cssList.get(i);
 
 			if (!css.equals("mobile"))
 			{
