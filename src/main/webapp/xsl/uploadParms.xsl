@@ -40,6 +40,10 @@
             if (targetFileName == "") 
             {
                 targetFileName = document.form1.uploadfile.value;
+                if (targetFileName.indexOf("C:\\fakepath") >= 0) {
+                    // MSIE macke
+                    targetFileName = targetFileName.substring(12);
+                }
             }
             else 
             {

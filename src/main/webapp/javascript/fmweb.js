@@ -494,17 +494,16 @@ function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight)
         
     hideMenu();        
     
-    if (window.ActiveXObject) 
+    var windowWidth = getWinWidth();
+    var windowHeight = getWinHeight();
+    
+    if (browserMSIE) 
     {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-        xScrolled = document.body.scrollLeft;
+        yScrolled = (document.documentElement.scrollTop || document.body.scrollTop);
+        xScrolled =(document.documentElement.scrollLeft || document.body.scrollLeft);
     }
     else
     {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
         yScrolled = window.pageYOffset;
         xScrolled = window.pageXOffset;
         
