@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:strip-space elements="folderTree computer folder" />
 
@@ -90,7 +91,7 @@
 
 </head>
 
-<body onclick="mouseClickHandler()">
+<body>
 <xsl:attribute name="class">dirTree</xsl:attribute>
 <xsl:attribute name="onLoad">setBundleResources();setTimeout('scrollToCurrent()', 100);setTimeout('setTooltips()', 500);</xsl:attribute>
 
@@ -99,7 +100,7 @@
 </body>
 </html>
 
-<div id="contextMenu" style="position:absolute;top:0px;left:0px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden" onclick="menuClicked()"></div>
+<div id="contextMenu" style="position:absolute;top:0px;left:0px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden"></div>
 
 <xsl:if test="folderTree/loginEvent">
   <div id="hint" class="hint" style="position:absolute;top:10px;left:50%;width:40%;">

@@ -60,7 +60,7 @@ function contextMenu(fileName)
         return;
     }
         
-    menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    menuText = '<table border="0" cellpadding="0" cellspacing="0" style="width:180px">'
              + '<tr>'
              + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
              + shortFileName
@@ -257,9 +257,9 @@ function extendedFileMenu(shortFileName, path)
 
     menuDiv.style.visibility = 'hidden';
 
-    var menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    var menuText = '<table class="contextMenu">'
              + '<tr>'
-             + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+             + '<th>'
              + shortFileName
              + '</th>'
              + '</tr>';
@@ -343,9 +343,9 @@ function diffSelectTarget(path, shortFileName, scriptPreparedPath)
 
     menuDiv.style.visibility = 'hidden';
 
-    var menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    var menuText = '<table class="contextMenu">'
              + '<tr>'
-             + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+             + '<th>'
              + shortFileName
              + '</th>'
              + '</tr>';
@@ -365,45 +365,3 @@ function diffSelectTarget(path, shortFileName, scriptPreparedPath)
     menuDiv.style.visibility = 'visible';
 }
 
-function positionMenuDiv(menuDiv, maxMenuHeight)
-{
-    if (browserFirefox)
-    {
-        clickYPos = clickYPos - document.getElementById('fileListTable').scrollTop + 100;
-        clickXPos = clickXPos - document.getElementById('fileListTable').scrollLeft;
-    }
-
-    if (!browserFirefox) 
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-
-        if (clickXPos > windowWidth - 200)
-        {
-            clickXPos = windowWidth - 200;
-        }
-
-        if (clickYPos > windowHeight - maxMenuHeight)
-        {
-            clickYPos = windowHeight - maxMenuHeight;
-        }
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        
-        if (clickYPos > windowHeight - maxMenuHeight)
-        {
-            clickYPos = windowHeight - maxMenuHeight;
-        }
-
-        if (clickXPos > windowWidth - 200)
-        {
-            clickXPos = windowWidth - 200;
-        }
-    }
-
-    menuDiv.style.left = clickXPos + 'px';
-    menuDiv.style.top = clickYPos + 'px';
-}

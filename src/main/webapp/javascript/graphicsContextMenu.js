@@ -54,13 +54,12 @@ function jsContextMenu(fileName, imgType, domId)
 
     scriptPreparedFile = insertDoubleBackslash(fileName);
         
-    menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    menuText = '<table class="contextMenu">'
              + '<tr>'
-             + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+             + '<th>'
              + shortFileName
              + '</th>'
              + '</tr>';
-
 
     if (parent.readonly != 'true')
     {
@@ -149,46 +148,7 @@ function jsContextMenu(fileName, imgType, domId)
         maxMenuHeight = 380;
     }
     
-    if (!browserFirefox) 
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-
-        if (clickXPos > windowWidth - 200)
-        {
-            clickXPos = windowWidth - 200;
-        }
-
-        if (clickYPos > windowHeight - maxMenuHeight)
-        {
-            clickYPos = windowHeight - maxMenuHeight;
-        }
-
-        clickYPos = clickYPos + yScrolled;
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-        
-        if (clickYPos > yScrolled + windowHeight - maxMenuHeight)
-        {
-            clickYPos = yScrolled + windowHeight - maxMenuHeight;
-        }
-
-        if (clickXPos > xScrolled + windowWidth - 200)
-        {
-            clickXPos = xScrolled + windowWidth - 200;
-        }
-    }
-    
-    menuDiv.style.left = clickXPos + "px";
-    menuDiv.style.top = clickYPos + "px";
-
-    menuDiv.style.visibility = 'visible';
+    positionMenuDiv(menuDiv, maxMenuHeight);
 }
 
 function jsDeleteImg(path)
@@ -319,9 +279,9 @@ function rotateFlipMenu(shortPath, path, domId, imgType)
 
     menuDiv.style.visibility = 'hidden';
 
-    var menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    var menuText = '<table class="contextMenu">'
                  + '<tr>'
-                 + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+                 + '<th>'
                  + shortPath
                  + '</th>'
                  + '</tr>';

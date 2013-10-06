@@ -2,8 +2,15 @@
 // var browserFirefox = /a/[-1]=='a';
 var browserFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 
-// Internet Explorer 6/7/8:
+// MSIE 6/7/8:
 var browserMSIE = '\v'=='v';
+
+// MSIE 9
+var browserMSIE9 = false
+if (document.all && document.addEventListener) {
+    browserMSIE = true;
+	browserMSIE9 = true;
+}
 
 // Google Chrome
 // var browserChrome = /source/.test((/a/.toString+''));

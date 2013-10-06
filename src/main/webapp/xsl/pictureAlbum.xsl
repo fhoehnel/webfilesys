@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:strip-space elements="pictureAlbum folders" />
 
@@ -30,10 +31,16 @@
   <script src="/webfilesys/javascript/pictureAlbum.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 
   <xsl:if test="pictureAlbum/geoTag">
     <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
   </xsl:if>
+
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/pictureAlbum/language" /></xsl:attribute>
+  </script>
 
   <script language="javascript">
   
@@ -83,6 +90,14 @@
       <div class="headline">
         <xsl:value-of select="pictureAlbum/resources/msg[@key='label.albumTitle']/@value" />:
         <xsl:value-of select="pictureAlbum/userid" />
+        
+        <div style="float:right">
+          <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
+            <img src="images/infoSmall.gif" border="0" width="18" height="18">
+              <xsl:attribute name="title"><xsl:value-of select="/pictureAlbum/resources/msg[@key='label.about']/@value" /></xsl:attribute>
+            </img>
+          </a>
+        </div>
       </div>
 
       <xsl:for-each select="pictureAlbum/currentPath">
@@ -124,7 +139,9 @@
         
           </tr>
         </table>
-        <br />
+        <xsl:if test="not (pictureAlbum/geoTag)">
+          <br/>
+        </xsl:if>
       </xsl:if>
   
       <xsl:for-each select="pictureAlbum">
@@ -159,7 +176,7 @@
 
 </html>
 
-<div id="contextMenu" style="position:absolute;top:300px;left:250px;width=180px;height=40px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden" onclick="menuClicked()">&#160;</div>
+<div id="contextMenu" style="position:absolute;top:300px;left:250px;width=180px;height=40px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden">&#160;</div>
 
 </xsl:template>
 <!-- end root node-->
@@ -168,33 +185,22 @@
 
 <xsl:template name="currentPath">
   
-  <table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-      <td>
-      
-        <div class="albumPath">
-          <xsl:for-each select="pathElem">
-            <a class="albumPath">
-              <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
-              <xsl:value-of select="@name"/> 
-            </a>
-            <xsl:if test="not(position()=last())"><span class="albumPath"> &gt; </span></xsl:if>
-          </xsl:for-each>
-    
-        </div>
-        
-      </td>
-      
-      <td align="right">
-        <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
-          <img src="images/infoSmall.gif" border="0" width="18" height="18">
-            <xsl:attribute name="title"><xsl:value-of select="/pictureAlbum/resources/msg[@key='label.about']/@value" /></xsl:attribute>
-          </img></a>
-      </td>
-      
-    </tr>
-  </table>
+  <xsl:if test="count(pathElem) &gt; 1">
   
+    <div class="albumPath">
+
+      <xsl:for-each select="pathElem">
+        <a class="albumPath">
+          <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
+          <xsl:value-of select="@name"/> 
+        </a>
+        <xsl:if test="not(position()=last())"><span class="albumPath"> &gt; </span></xsl:if>
+      </xsl:for-each>
+   
+    </div>
+        
+  </xsl:if> 
+ 
 </xsl:template>
 
 <!-- ############################## tabs ################################ -->
@@ -204,13 +210,13 @@
   <!-- tabs start -->
   <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
-      <td class="bottomLine"><img src="images/space.gif" border="0" width="13" height="1" /></td>
+      <td class="tabSpacer" style="min-width:13px;"></td>
       
       <td class="tabActive" nowrap="true">
         <xsl:value-of select="resources/msg[@key='label.modethumb']/@value" />
       </td>
       
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
       
       <td class="tabAlbum" nowrap="true">
         <a class="tab" href="javascript:viewModeStory()">
@@ -218,7 +224,7 @@
         </a>
       </td>
    
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabAlbum" nowrap="true">
         <a class="tab" href="javascript:viewModeSlideshow()">
@@ -226,9 +232,7 @@
         </a>
       </td>
 
-      <td class="bottomLine" width="90%">
-        <img src="images/space.gif" border="0" width="5" height="1" />
-      </td>
+      <td class="tabSpacer" style="width:90%"></td>
     </tr>
   </table>
   <!-- tabs end -->

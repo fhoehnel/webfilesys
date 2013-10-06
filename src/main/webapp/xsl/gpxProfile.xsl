@@ -3,7 +3,8 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:gpx="http://www.topografix.com/GPX/1/0">
     
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:template match="/gpx:gpx">
 

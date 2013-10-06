@@ -418,6 +418,8 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 			
 		doc.insertBefore(xslRef, albumElement);
 		
+	    XmlUtil.setChildText(albumElement, "language", language, false);
+		
 		// path section
 		Element currentPathElem = doc.createElement("currentPath");
 		

@@ -20,20 +20,7 @@ function viewModeStory()
 
 function viewModeSlideshow()
 {
-    var windowWidth;
-    var windowHeigth;
-    if (document.all)
-    {  
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-    }
-    else
-    {  
-        windowWidth = self.innerWidth;
-        windowHeight = self.innerHeight;
-    }
-
-    window.location.href='/webfilesys/servlet?command=slideShowInFrame&windowWidth=' + windowWidth + '&windowHeight=' + windowHeight + '&screenWidth=' + screen.width + '&screenHeight=' + screen.height + '&random=' + new Date().getTime();
+    window.location.href='/webfilesys/servlet?command=slideShowInFrame&windowWidth=' + getWinWidth() + '&windowHeight=' + getWinHeight() + '&screenWidth=' + screen.width + '&screenHeight=' + screen.height + '&random=' + new Date().getTime();
 }
 
 function fileStats()

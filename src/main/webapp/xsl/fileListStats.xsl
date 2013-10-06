@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:strip-space elements="fileList file" />
 
@@ -47,7 +48,8 @@
       var windowHeight;
       if (!browserFirefox)
       {
-          windowHeight = document.body.clientHeight;
+          // windowHeight = document.body.clientHeight;
+          windowHeight = document.documentElement.clientHeight;
       }
       else
       {
@@ -99,37 +101,35 @@
   <!-- tabs start -->
   <table class="tabs" cellspacing="0">
     <tr>
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="13" height="1" /></td>
+      <td class="tabSpacer" style="min-width:13px;"></td>
       
       <td class="tabInactive" nowrap="true">
         <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
       </td>
  
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">
         <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
       </td>
       
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">
         <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">
         <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabActive" nowrap="true" resource="label.fileStats" />
 
-      <td class="bottomLine" width="90%">
-        <img src="/webfilesys/images/space.gif" border="0" width="5" height="1" />
-      </td>
+      <td class="tabSpacer" style="width:90%"></td>
     </tr>
   </table>
   <!-- tabs end -->

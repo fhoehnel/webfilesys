@@ -157,6 +157,8 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, imageDataElement);
 
+	    XmlUtil.setChildText(imageDataElement, "language", language, false);
+		
 		XmlUtil.setChildText(imageDataElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(imageDataElement, "imagePath", imgPath, false);
 		XmlUtil.setChildText(imageDataElement, "imageName", imgName, false);

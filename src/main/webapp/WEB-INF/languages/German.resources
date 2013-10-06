@@ -220,7 +220,7 @@ upload.button.done=Fertig
 label.uploadStatus=Upload-Status
 upload.file.too.large=Die Datei ist zu gross für die erweiterte Upload-Funktion. Nutzen Sie den Upload-Basisdialog für besonders grosse Dateien!
 upload.file.exists=eine Datei mit diesem Namen existiert bereits - überschreiben?
-uploadTargetFileNameExt=Soll die Dateinamen-Erweiterung der lokalen Datei auch für den Dateinamen auf dem Server verwendet werden?
+uploadTargetFileNameExt=Die Dateinamen-Erweiterung der lokalen Datei wird auch für den Dateinamen auf dem Server verwendet. Fortfahren?
 
 # switch Read/Only labels
 label.readWriteStatus=Schreibschutz-Status

@@ -44,6 +44,7 @@ public class PublishListRequestHandler extends UserRequestHandler
 
 	protected void process()
 	{
+        output.println("<!DOCTYPE html>");
 		output.println("<HTML>");
 		output.println("<HEAD>");
 

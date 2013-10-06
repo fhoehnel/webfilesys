@@ -138,7 +138,7 @@
 
 </html>
 
-<div id="contextMenu" style="position:absolute;top:300px;left:250px;width=180px;height=40px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden" onclick="menuClicked()">&#160;</div>
+<div id="contextMenu" style="position:absolute;top:300px;left:250px;width=180px;height=40px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden">&#160;</div>
 
 <div id="msg1" class="msgBox" style="visibility:hidden" />
 

@@ -81,9 +81,9 @@ function dirContextMenu(domId)
 
     var menuDiv = document.getElementById('contextMenu');    
     
-    menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    menuText = '<table class="contextMenu">'
              + '<tr>'
-             + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+             + '<th>'
              + folderName
              + '</th>'
              + '</tr>';
@@ -230,7 +230,7 @@ function dirContextMenu(domId)
         }
     }
     
-    positionMenuDiv(menuDiv, maxMenuHeight);
+    positionMenuDivByDomId(menuDiv, maxMenuHeight, domId);
 
     menuDiv.style.visibility = 'visible';
   
@@ -254,9 +254,9 @@ function extendedDirMenu(shortPath, path)
         folderName = folderName.substring(0,7) + "..." + folderName.substring(folderName.length - 14, folderName.length);
     }    
 
-    var menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    var menuText = '<table class="contextMenu">'
                  + '<tr>'
-                 + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+                 + '<th>'
                  + folderName
                  + '</th>'
                  + '</tr>';
@@ -322,9 +322,9 @@ function syncSelectTarget(path, shortPath, scriptPreparedPath)
 
     menuDiv.style.visibility = 'hidden';
 
-    var menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    var menuText = '<table class="contextMenu">'
                  + '<tr>'
-                 + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+                 + '<th>'
                  + shortPath
                  + '</th>'
                  + '</tr>';
@@ -353,9 +353,9 @@ function compSelectTarget(path, shortPath, scriptPreparedPath)
 
     menuDiv.style.visibility = 'hidden';
 
-    var menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    var menuText = '<table class="contextMenu">'
                  + '<tr>'
-                 + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+                 + '<th>'
                  + shortPath
                  + '</th>'
                  + '</tr>';
@@ -388,9 +388,9 @@ function statisticsMenu(shortPath, path)
 
     menuDiv.style.visibility = 'hidden';
 
-    var menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    var menuText = '<table class="contextMenu">'
                  + '<tr>'
-                 + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+                 + '<th>'
                  + shortPath
                  + '</th>'
                  + '</tr>';
@@ -417,45 +417,13 @@ function statisticsMenu(shortPath, path)
     menuDiv.style.visibility = 'visible';
 }
 
-function positionMenuDiv(menuDiv, maxMenuHeight)
-{
-    if ((browserFirefox) || 
-        (rightMouseButton && (browserChrome || browserSafari)))
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-        
-        if (clickYPos > yScrolled + windowHeight - maxMenuHeight)
-        {
-            clickYPos = yScrolled + windowHeight - maxMenuHeight;
-        }
-
-        if (clickXPos > xScrolled + windowWidth - 200)
-        {
-            clickXPos = xScrolled + windowWidth - 200;
-        }
-    }
-    else
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-
-        if (clickXPos > windowWidth - 200)
-        {
-            clickXPos = windowWidth - 200;
-        }
-
-        if (clickYPos > windowHeight - maxMenuHeight)
-        {
-            clickYPos = windowHeight - maxMenuHeight;
-        }
-
-        clickYPos = clickYPos + yScrolled;
-    }
+function positionMenuDivByDomId(menuDiv, maxMenuHeight, domId) {
+    var domNode = document.getElementById(domId);
     
-    menuDiv.style.left = clickXPos + 'px';
-    menuDiv.style.top = clickYPos + 'px';
+    coordinates = getAbsolutePos(domNode);
+    clickXPos = coordinates[0];
+    clickYPos = coordinates[1];
+    
+    positionMenuDiv(menuDiv, maxMenuHeight);
 }
+

@@ -97,6 +97,7 @@ public class MainFrameSetHandler extends UserRequestHandler
             }
         }
 
+        output.println("<!DOCTYPE html>");
         output.println("<html>");
         output.println("<head>");
         

@@ -220,7 +220,7 @@ upload.button.done=Done
 label.uploadStatus=Upload Status
 upload.file.too.large=The file is too large for uploading with the extended upload function. Use the basic upload dialog for really big files!
 upload.file.exists=a file with this name already exists - overwrite?
-uploadTargetFileNameExt=Append the filename extension of the local file to the filename on the target server?
+uploadTargetFileNameExt=The filename extension of the local file will be appended to the filename on the target server. Continue?
 
 # switch Read/Only labels
 label.readWriteStatus=Read/Write status

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:strip-space elements="treeStats" />
 
@@ -31,10 +32,15 @@
 
   <script src="/webfilesys/javascript/fileMenu.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 
   <xsl:if test="/imageData/geoTag">
     <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
   </xsl:if>
+
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/pictureAlbum/language" /></xsl:attribute>
+  </script>
 
   <script type="text/javascript">
   
@@ -297,7 +303,7 @@
                 
                   <xsl:if test="/imageData/geoTag">
                    
-                    <td style="padding-right:10px">
+                    <td style="padding-left:10px;padding-right:10px">
                       <select id="geoLocSel" style="width:150px;display:none">
                         <xsl:attribute name="onchange">geoMapFileSelected('<xsl:value-of select="/imageData/pathForScript" />')</xsl:attribute>
                         <option value="0"><xsl:value-of select="/imageData/resources/msg[@key='selectMapType']/@value" /></option>

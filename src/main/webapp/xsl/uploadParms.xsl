@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:strip-space elements="upload" />
 
@@ -50,9 +51,10 @@
                     if ((dotIdx > 0) &amp;&amp; (dotIdx > sourceFileName.length - 5) &amp;&amp; 
                         (dotIdx &lt; sourceFileName.length - 1))
                     {
-                         if (confirm('<xsl:value-of select="resources/msg[@key='uploadTargetFileNameExt']/@value" />'))
+                         if (!confirm('<xsl:value-of select="resources/msg[@key='uploadTargetFileNameExt']/@value" />'))
                          {
-                             targetFileName = targetFileName + "." + sourceFileName.substring(dotIdx + 1);
+                             // targetFileName = targetFileName + "." + sourceFileName.substring(dotIdx + 1);
+                             return;
                          }
                     }
                 }

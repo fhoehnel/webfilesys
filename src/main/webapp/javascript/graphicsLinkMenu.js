@@ -34,9 +34,9 @@ function linkGraphicsMenu(linkName, realPath, imgType)
 
     scriptPreparedPath = insertDoubleBackslash(realPath);
 
-    menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    menuText = '<table class="contextMenu">'
              + '<tr>'
-             + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+             + '<th>'
              + shortFileName
              + '</th>'
              + '</tr>';
@@ -117,46 +117,7 @@ function linkGraphicsMenu(linkName, realPath, imgType)
         maxMenuHeight = 220;
     }
     
-    if (browserType == 'msie')
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-
-        if (clickXPos > windowWidth - 200)
-        {
-            clickXPos = windowWidth - 200;
-        }
-
-        if (clickYPos > windowHeight - maxMenuHeight)
-        {
-            clickYPos = windowHeight - maxMenuHeight;
-        }
-
-        clickYPos = clickYPos + yScrolled;
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-        
-        if (clickYPos > yScrolled + windowHeight - maxMenuHeight)
-        {
-            clickYPos = yScrolled + windowHeight - maxMenuHeight;
-        }
-
-        if (clickXPos > xScrolled + windowWidth - 200)
-        {
-            clickXPos = xScrolled + windowWidth - 200;
-        }
-    }
-    
-    menuDiv.style.left = clickXPos + "px";
-    menuDiv.style.top = clickYPos + "px";
-
-    menuDiv.style.visibility = 'visible';
+    positionMenuDiv(menuDiv, maxMenuHeight);
 }
 
 function jsDelImageLink(linkName)

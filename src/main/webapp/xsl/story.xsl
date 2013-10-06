@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:strip-space elements="fileList file" />
 
@@ -19,11 +20,12 @@
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
 </link>
 
-<script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-<SCRIPT language="JavaScript" src="javascript/fmweb.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="javascript/viewMode.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="javascript/contextMenuMouse.js" type="text/javascript"></SCRIPT>
-<SCRIPT language="JavaScript" src="javascript/graphicsContextMenu.js" type="text/javascript"></SCRIPT>
+<script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+<script src="javascript/fmweb.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+<script src="javascript/viewMode.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+<script src="javascript/graphicsContextMenu.js" type="text/javascript"></script>
 
 <script language="javascript">
   
@@ -114,7 +116,7 @@
   <!-- tabs start -->
   <table border="0" width="100%" cellpadding="0" cellspacing="0">
     <tr>
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="13" height="1" /></td>
+      <td class="tabSpacer" style="min-width:13px;"></td>
       
       <xsl:if test="not(role) or (role!='album')">
         <td class="tabInactive" nowrap="true">
@@ -123,7 +125,7 @@
           </a>
         </td>
 
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+        <td class="tabSpacer"></td>
 
       </xsl:if>
  
@@ -139,13 +141,13 @@
         </a>
       </td>
 
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabActive" nowrap="true">
         <xsl:value-of select="/fileList/resources/msg[@key='label.modestory']/@value" />
       </td>
       
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">
         <a class="tab" href="javascript:viewModeSlideshow()">
@@ -155,7 +157,7 @@
 
       <xsl:if test="not(role) or (role!='album')">
         <xsl:if test="not(/fileList/readonly)">
-          <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+          <td class="tabSpacer"></td>
 
           <td class="tabInactive" nowrap="true">
             <a class="tab" href="javascript:fileStats()">
@@ -165,9 +167,7 @@
         </xsl:if>
       </xsl:if>
 
-      <td class="bottomLine" width="90%">
-        <img src="/webfilesys/images/space.gif" border="0" width="5" height="1" />
-      </td>
+      <td class="tabSpacer" style="width:90%"></td>
     </tr>
   </table>
   <!-- tabs end -->
@@ -181,7 +181,7 @@
       <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
  
         <tr>
-          <td class="fileListFunct sep">
+          <td class="fileListFunctCont sep">
 
             <table border="0" cellpadding="2" width="100%">
               <tr>
@@ -217,18 +217,19 @@
                     <xsl:value-of select="resources/msg[@key='label.page']/@value" /> 
 
                     <xsl:for-each select="paging/page">
-                      <img src="/webfilesys/images/space.gif" border="0" width="5" />
-                      <xsl:if test="@num=../currentPage">
-                        <xsl:value-of select="@num" />
-                      </xsl:if>
-                      <xsl:if test="not(@num=../currentPage)">
-                        <a class="fn">
-                          <xsl:attribute name="href">
-                            <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',@startIdx)"/>
-                          </xsl:attribute>
+                      <span class="pagingPage">                    
+                        <xsl:if test="@num=../currentPage">
                           <xsl:value-of select="@num" />
-                        </a>
-                      </xsl:if>
+                        </xsl:if>
+                        <xsl:if test="not(@num=../currentPage)">
+                          <a>
+                            <xsl:attribute name="href">
+                              <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',@startIdx)"/>
+                            </xsl:attribute>
+                            <xsl:value-of select="@num" />
+                          </a>
+                        </xsl:if>
+                      </span>
                     </xsl:for-each>
                   </td>
                 </xsl:if>

@@ -246,9 +246,26 @@ public class UploadServlet extends WebFileSysServlet
         }
 
         String out_file_name = null;
-        
+
 		if ((destFileName != null) && (destFileName.length() > 0))
         {
+			if (!CommonUtils.isEmpty(fn_only)) 
+			{
+				String origFileExt = CommonUtils.getFileExtension(fn_only);
+
+				if (!CommonUtils.isEmpty(origFileExt)) 
+				{
+					if (isPictureFile(origFileExt)) 
+					{
+						String destFileExt = CommonUtils.getFileExtension(destFileName);
+						if (CommonUtils.isEmpty(destFileExt) || (!destFileExt.equalsIgnoreCase(origFileExt))) 
+						{
+							destFileName = destFileName + origFileExt;
+						}
+					}
+				}
+			}
+			
 		    destFileName = replaceIllegalChars(destFileName);
 		    
 			if (actPath.endsWith(File.separator))
@@ -759,6 +776,17 @@ public class UploadServlet extends WebFileSysServlet
         return(fileName.startsWith(docRoot) &&
                ((fileName.length()==docRoot.length()) ||
                 (fileName.charAt(docRoot.length())=='/')));
+    }
+    
+    private boolean isPictureFile(String fileExt) {
+    	if (CommonUtils.isEmpty(fileExt)) {
+    		return false;
+    	}
+    	return(fileExt.equalsIgnoreCase(".jpg") ||
+     		   fileExt.equalsIgnoreCase(".gif") ||
+    		   fileExt.equalsIgnoreCase(".png") ||
+    		   fileExt.equalsIgnoreCase(".bmp") ||
+    		   fileExt.equalsIgnoreCase(".jpeg"));
     }
     
 }

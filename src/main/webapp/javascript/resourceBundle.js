@@ -65,6 +65,21 @@ function setBundleResources(domNode)
             child = child.nextSibling;
         }
     }
+	
+	if (browserMSIE9) 
+	{
+        // Workaround for MSIE 9 bug: touch styles to trigger new rendering of selectbox
+	    if ((domNode.nodeType === 1) && (domNode.tagName == "SELECT")) 
+		{
+			var newStyleAttr = "";
+		    var oldStyleAttr = domNode.getAttribute("style");
+			if (oldStyleAttr) 
+			{
+			    newStyleAttr = oldStyleAttr + " ";
+			}
+		    domNode.setAttribute("style", newStyleAttr);
+		}
+	}
 }
 
 function setNodeValue(domNode, text)

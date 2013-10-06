@@ -99,6 +99,8 @@
 	  var COLOR_TODAY = "#ffff90";
 	  
 	  var COLOR_SUNDAY = "#ff8080";
+	  var COLOR_SATURDAY = "#ffa0a0";
+	  var COLOR_WEEKDAY = "#c0c0c0";
 
 	  var COLOR_HOLIDAY = "#ffa0a0";
 	  
@@ -338,8 +340,20 @@
 	<xsl:if test="@dayOfWeek = '6'">
       shellSector(shellSectorStartAngle, shellSectorEndAngle, 
                   COLOR_SUNDAY, 
-		          innerCircleRadius + (2 * shellWidth), innerCircleRadius + (2 * shellWidth) + 10,
-       	          '<xsl:value-of select="/calendar/resources/msg[@key='calendar.sunday']/@value" />');
+		          innerCircleRadius + (3 * shellWidth) - 20, innerCircleRadius + (3 * shellWidth),
+       	          tooltipText);
+	</xsl:if>
+	<xsl:if test="@dayOfWeek = '5'">
+      shellSector(shellSectorStartAngle, shellSectorEndAngle, 
+                  COLOR_SATURDAY, 
+		          innerCircleRadius + (3 * shellWidth) - 20, innerCircleRadius + (3 * shellWidth),
+       	          tooltipText);
+	</xsl:if>
+	<xsl:if test="(@dayOfWeek != '5') and (@dayOfWeek != '6')">
+      shellSector(shellSectorStartAngle, shellSectorEndAngle, 
+                  COLOR_WEEKDAY, 
+		          innerCircleRadius + (3 * shellWidth) - 20, innerCircleRadius + (3 * shellWidth),
+       	          tooltipText);
 	</xsl:if>
 				
 	<xsl:if test="@holiday">
@@ -376,6 +390,22 @@
 	              innerCircleRadius + (3 * shellWidth), innerCircleRadius + (3 * shellWidth) + 30,
 	              "#000000", <xsl:value-of select="@dayOfMonth" /> + 1);
        	          
+    </xsl:if>	
+	
+	<xsl:if test="not(@today) and (@dayOfWeek = '0')">
+      var dayLabelStartAngle = shellSectorStartAngle - 1;
+      if (dayLabelStartAngle &lt; 0)
+      {
+          dayLabelStartAngle = 0;
+      }
+      var dayLabelEndAngle = shellSectorEndAngle +1;
+      if (dayLabelEndAngle > 360)
+      {
+          dayLabelEndAngle = 360;
+      }
+	  sectorLabel(dayLabelStartAngle, dayLabelEndAngle, 
+	              innerCircleRadius + (3 * shellWidth), innerCircleRadius + (3 * shellWidth) + 30,
+	              "#000000", <xsl:value-of select="@dayOfMonth" /> + 1);
     </xsl:if>	
 	
     shellSectorStartAngle = shellSectorEndAngle;

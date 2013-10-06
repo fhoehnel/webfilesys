@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:strip-space elements="fileList file" />
 
@@ -207,7 +208,7 @@
 
 </head>
 
-<body onclick="mouseClickHandler()" onload="setBundleResources()">
+<body onload="setBundleResources()">
 
   <xsl:apply-templates />
 
@@ -216,7 +217,7 @@
 </body>
 </html>
 
-<div id="contextMenu" bgcolor="#c0c0c0" style="position:absolute;top:300px;left:250px;width=180px;height=80px;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden" onclick="menuClicked()"></div>
+<div id="contextMenu" bgcolor="#c0c0c0" style="position:absolute;top:300px;left:250px;width=180px;height=80px;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden"></div>
 
 <div id="msg1" class="msgBox" style="visibility:hidden" />
 
@@ -281,39 +282,37 @@
   <!-- tabs start -->
   <table class="tabs" cellspacing="0">
     <tr>
-      <td class="bottomLine"><img src="images/space.gif" border="0" width="13" height="1" /></td>
+      <td class="tabSpacer" style="min-width:13px;"></td>
       
       <td class="tabInactive" nowrap="true">
         <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
       </td>
  
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabActive" nowrap="true" resource="label.modethumb" />
       
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">
         <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">
         <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
       <xsl:if test="not(/fileList/readonly)">
-        <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+        <td class="tabSpacer"></td>
 
         <td class="tabInactive" nowrap="true">
           <a class="tab" href="javascript:fileStats()" resource="label.fileStats" />
         </td>
       </xsl:if>
 
-      <td class="bottomLine" width="90%">
-        <img src="images/space.gif" border="0" width="5" height="1" />
-      </td>
+      <td class="tabSpacer" style="width:90%"></td>
     </tr>
   </table>
   <!-- tabs end -->
@@ -332,7 +331,7 @@
       <input type="hidden" name="rating" value="-1" />
 
       <tr>
-        <td class="fileListFunct" style="padding-top:5px">
+        <td class="fileListFunctCont">
             
           <table border="0" cellpadding="2" width="100%">
             <tr>
@@ -422,89 +421,7 @@
         </td>
       </tr>
       
-      <xsl:if test="/fileList/fileGroup">
- 
-        <tr>
-          <td class="fileListFunct sep">
-
-            <table border="0" cellpadding="2" width="100%">
-              <tr>
-            
-                <xsl:if test="paging/currentPage &gt; 1">
-                  <td class="fileListFunct" valign="center" nowrap="true">
-                    <a href="/webfilesys/servlet?command=thumbnail&amp;startIdx=0"><img src="/webfilesys/images/first.gif" border="0" /></a>
-                    &#160;
-                    <a>
-                      <xsl:attribute name="href">
-                        <xsl:value-of select="concat('/webfilesys/servlet?command=thumbnail&amp;startIdx=',paging/prevStartIdx)"/>
-                      </xsl:attribute>
-                      <img src="/webfilesys/images/previous.gif" border="0" />
-                    </a>
-                  </td>
-                </xsl:if>
-            
-                <td class="fileListFunct" valign="center" nowrap="true">
-                  <label resource="label.files"></label>
-                  &#160;
-                  <xsl:value-of select="paging/firstOnPage" />
-                  ...
-                  <xsl:value-of select="paging/lastOnPage" />
-                  &#160;
-                  <label resource="label.of"></label>
-                  &#160;
-                  <xsl:value-of select="fileNumber" />
-                </td>
-              
-                <xsl:if test="fileNumber &gt; paging/pageSize">
-              
-                  <td class="fileListFunct" valign="center" nowrap="true">
-                    <label resource="label.page"></label>
-
-                    <xsl:for-each select="paging/page">
-                      <img src="images/space.gif" border="0" width="5" />
-                      <xsl:if test="@num=../currentPage">
-                        <xsl:value-of select="@num" />
-                      </xsl:if>
-                      <xsl:if test="not(@num=../currentPage)">
-                        <a class="fn">
-                          <xsl:attribute name="href">
-                            <xsl:value-of select="concat('/webfilesys/servlet?command=thumbnail&amp;startIdx=',@startIdx)"/>
-                          </xsl:attribute>
-                          <xsl:value-of select="@num" />
-                        </a>
-                      </xsl:if>
-                    </xsl:for-each>
-                  </td>
-
-                  <xsl:if test="paging/nextStartIdx">
-                    <td class="fileListFunct">
-                      <img src="images/space.gif" border="0" width="16" />
-                    </td>
-              
-                    <td class="fileListFunct" align="right" valign="center" nowrap="true">
-                      <a>
-                        <xsl:attribute name="href">
-                          <xsl:value-of select="concat('/webfilesys/servlet?command=thumbnail&amp;startIdx=',paging/nextStartIdx)"/>
-                        </xsl:attribute>
-                        <img src="/webfilesys/images/next.gif" border="0" />
-                      </a>
-                      &#160;
-                      <a>
-                        <xsl:attribute name="href">
-                          <xsl:value-of select="concat('/webfilesys/servlet?command=thumbnail&amp;startIdx=',paging/lastStartIdx)"/>
-                        </xsl:attribute>
-                        <img src="/webfilesys/images/last.gif" border="0" />
-                      </a>
-                    </td>
-                  </xsl:if>
-                
-                </xsl:if>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      
-      </xsl:if>
+      <xsl:call-template name="paging" />
       
     </table>    
   </form>
@@ -638,7 +555,7 @@
         </xsl:for-each>
 
         <tr>
-          <td colspan="4" class="fileListFunct sepTop">
+          <td colspan="4" class="fileListFunctCont sepTop">
             
             <table border="0" width="100%">
 
@@ -788,6 +705,10 @@
             
             </tr>
             
+            <xsl:if test="paging/pageSize &gt; 12">
+              <xsl:call-template name="paging" />
+            </xsl:if>
+
           </table>
 
         </td>
@@ -800,5 +721,7 @@
 </xsl:template>
 
 <xsl:include href="currentTrail.xsl" />
+
+<xsl:include href="thumbnailPaging.xsl" />
 
 </xsl:stylesheet>

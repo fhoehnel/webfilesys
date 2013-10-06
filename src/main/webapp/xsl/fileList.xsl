@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
+    doctype-public="html" />
 
 <xsl:strip-space elements="fileList file" />
 
@@ -94,13 +95,14 @@
 
       if (!browserFirefox) 
       {
-          windowHeight = document.body.clientHeight;
+          // windowHeight = document.body.clientHeight;
+          windowHeight = document.documentElement.clientHeight;
       }
       else
       {
           windowHeight = window.innerHeight;
       }
-  
+
       <xsl:if test="/fileList/description">
         var padding = 260;
       </xsl:if>
@@ -108,7 +110,7 @@
         var padding = 230;
       </xsl:if>
   
-      document.getElementById('fileListTable').style.height = windowHeight - padding + 'px';
+      document.getElementById('fileListTable').style.height = (windowHeight - padding) + 'px';
   }
 
   <xsl:if test="/fileList/linksExist">
@@ -156,14 +158,14 @@
 
 </head>
 
-<body onclick="mouseClickHandler()" onload="setFileListHeight();setBundleResources()">
+<body onload="setBundleResources();setFileListHeight()">
 
 <xsl:apply-templates />
 
 </body>
 </html>
 
-<div id="contextMenu" bgcolor="#c0c0c0" style="position:absolute;top:0px;left:0px;border-style:ridge;border-width:3px;border-color:#c0c0c0;visibility:hidden" onclick="menuClicked()"></div>
+<div id="contextMenu" bgcolor="#c0c0c0" style="position:absolute;top:0px;left:0px;border-style:ridge;border-width:3px;border-color:#c0c0c0;visibility:hidden"></div>
 
 <div id="msg1" class="msgBox" style="visibility:hidden;position:absolute;top:0px;left:0px;" />
 
@@ -191,39 +193,37 @@
   <!-- tabs start -->
   <table class="tabs" cellspacing="0">
     <tr>
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="13" height="1" /></td>
+      <td class="tabSpacer" style="min-width:13px;"></td>
       
       <td class="tabActive" resource="label.modelist" />
  
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive">
         <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
       </td>
       
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive">
         <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    
-      <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+      <td class="tabSpacer"></td>
 
       <td class="tabInactive">
         <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
       <xsl:if test="not(/fileList/readonly)">
-        <td class="bottomLine"><img src="/webfilesys/images/space.gif" border="0" width="4" height="1" /></td>
+        <td class="tabSpacer"></td>
 
         <td class="tabInactive">
           <a class="tab" href="javascript:fileStats()" resource="label.fileStats" />
         </td>
       </xsl:if>
 
-      <td class="bottomLine" width="90%">
-        <img src="/webfilesys/images/space.gif" border="0" width="5" height="1" />
-      </td>
+      <td class="tabSpacer" style="width:90%"></td>
     </tr>
   </table>
   <!-- tabs end -->
@@ -240,7 +240,7 @@
       </input>
 
       <tr>
-        <td colspan="5" class="fileListFunct" style="padding-top:5px">
+        <td colspan="5" class="fileListFunctCont">
             
           <table border="0" cellpadding="2" width="100%">
             <tr>
@@ -280,7 +280,7 @@
                 <td width="30%">&#160;</td>  
                 
                 <td class="fileListFunct fileSort">
-                  <select name="sortBy" size="1" onChange="document.sortform.submit();" style="width:160px">
+                  <select name="sortBy" size="1" onChange="document.sortform.submit();">
                     <option value="1" resource="sort.name.ignorecase">
                       <xsl:if test="sortBy='1'">
                         <xsl:attribute name="selected">true</xsl:attribute>
@@ -492,7 +492,7 @@
       <xsl:if test="file">
 
         <tr>
-          <td class="fileListFunct" style="padding:5px 10px">
+          <td class="fileListFunct">
             <label resource="label.selectedFiles"></label>:
             &#160;
             <select name="cmd" size="1" onchange="javascript:selectedFileFunction(true)">

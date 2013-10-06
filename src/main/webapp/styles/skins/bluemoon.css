@@ -30,18 +30,22 @@ input,select,textarea {
  
 input.cb {
     background-color:#e0e0ff;
+    border: none;
 }
 
 input.cb3 {
     background-color:#b0b0ff;
+    border: none;
 }
 
 input.cb4 {
     background-color:lavender;
+    border: none;
 }
 
 input.cb5 {
     background-color:ivory;
+    border: none;
 }
 
 body.menu {
@@ -64,7 +68,7 @@ td.jsmenu {
     background-color:#c0c0e0;
 }
 
-td.fileListFunct {
+td.fileListFunct, td.fileListFunctCont {
     background-color:#c0c0ff;
 }
 
@@ -124,6 +128,10 @@ div.hint {
 
 th.fileList {
     background-color:lavender;
+}
+
+table.contextMenu th {
+    background-color: silver;
 }
 
 

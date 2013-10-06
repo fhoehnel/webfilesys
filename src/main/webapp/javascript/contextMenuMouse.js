@@ -1,77 +1,79 @@
-var browserType = "msie";
-
-if (navigator.appName=='Netscape')
-{
-    browserType = "netscape";
-}
-
 var stopMenuClose = false;
 
-function mouseClickHandler(Ereignis)
+function mouseClickHandler(evt)
 {
-    if (!mouseClickHandled)
+	var rightMouseButton = false;
+
+	var clickEvent = window.event;
+		
+	if (clickEvent)
     {
-        if (window.event)
-        {
-            clickXPos = window.event.clientX;
-            clickYPos = window.event.clientY;
-        }
+		clickXPos = clickEvent.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft);
+		clickYPos = clickEvent.clientY + (document.documentElement.scrollTop || document.body.scrollTop);		
+    }
+	else
+	{
+		clickEvent = evt;
+        clickXPos = clickEvent.layerX;
+        clickYPos = clickEvent.layerY;
+    }
+
+	if ((clickEvent.button) && (clickEvent.button == 2))
+    {
+        rightMouseButton = true;
+    }
+
+    document.getElementById('contextMenu').style.visibility = 'hidden';
     
-        document.getElementById('contextMenu').style.visibility = 'hidden';
-        
-        if (window.name == 'DirectoryPath')
+    if (window.name == 'DirectoryPath')
+    {
+        if (parent.frames[2].document.getElementById('contextMenu'))
         {
-            if (parent.frames[2].document.getElementById('contextMenu'))
-            {
-                parent.frames[2].document.getElementById('contextMenu').style.visibility = 'hidden';
-            }
+            parent.frames[2].document.getElementById('contextMenu').style.visibility = 'hidden';
         }
-        else if (window.name == 'FileList')
-        {   
-            if (parent.frames[1].document.getElementById('contextMenu'))
-            {
-                parent.frames[1].document.getElementById('contextMenu').style.visibility = 'hidden';
-            }
+    }
+    else if (window.name == 'FileList')
+    {   
+        if (parent.frames[1].document.getElementById('contextMenu'))
+        {
+            parent.frames[1].document.getElementById('contextMenu').style.visibility = 'hidden';
         }
+    }
+}
+
+function positionMenuDiv(menuDiv, maxMenuHeight)
+{
+    windowWidth = getWinWidth();
+    windowHeight = getWinHeight();
+
+    var yScrolled;
+    var xScrolled;
+    
+    if (browserFirefox || browserChrome || browserSafari)
+    {
+        yScrolled = window.pageYOffset;
+        xScrolled = window.pageXOffset;
     }
     else
     {
-        mouseClickHandled = false;
-    }
-}
-
-function handleMouseClickNetscape(evt)
-{
-    if (!browserMSIE) 
-    {
-        rightMouseButton = false;
-        
-        clickXPos = evt.layerX;
-        clickYPos = evt.layerY;
-
-        if ((evt.button) && (evt.button == 2))
-        {
-            rightMouseButton = true;
-        }
-    }
-}
-
-function menuClicked()
-{
-    mouseClickHandled = true;
-    
-    setTimeout('conditionalHideMenu()',2000);
-}
-
-function conditionalHideMenu()
-{
-    if (stopMenuClose)
-    {
-        stopMenuClose = false;
-        return;
+        yScrolled = (document.documentElement.scrollTop || document.body.scrollTop);
+        xScrolled = (document.documentElement.scrollLeft || document.body.scrollLeft);
     }
     
-    hideMenu();
+	if (clickYPos > yScrolled + windowHeight - maxMenuHeight)
+    {
+        clickYPos = yScrolled + windowHeight - maxMenuHeight;
+    }
+
+    if (clickXPos > xScrolled + windowWidth - 200)
+    {
+        clickXPos = xScrolled + windowWidth - 200;
+    }
+
+    menuDiv.style.left = clickXPos + 'px';
+    menuDiv.style.top = clickYPos + 'px';
+    
+    menuDiv.style.visibility = 'visible';
 }
 
 var clickXPos = 0;
@@ -79,6 +81,4 @@ var clickYPos = 0;
 
 var rightMouseButton = false;
 
-var mouseClickHandled = false;
-
-document.onmouseup = handleMouseClickNetscape;
+document.onclick = mouseClickHandler;
