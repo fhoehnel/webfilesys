@@ -40,10 +40,15 @@
             if (targetFileName == "") 
             {
                 targetFileName = document.form1.uploadfile.value;
-                if (targetFileName.indexOf("C:\\fakepath") >= 0) {
-                    // MSIE macke
-                    targetFileName = targetFileName.substring(12);
-                }
+                if (targetFileName.indexOf('\\') >= 0) 
+				{
+                    // MSIE gives absolute path
+                    targetFileName = targetFileName.substring(targetFileName.lastIndexOf('\\') + 1);
+                } 
+				else if (targetFileName.indexOf('/') >= 0)
+				{
+                    targetFileName = targetFileName.substring(targetFileName.lastIndexOf('/') + 1);
+				}
             }
             else 
             {
