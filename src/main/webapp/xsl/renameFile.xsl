@@ -6,9 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead">
-  <xsl:value-of select="/renameFile/resources/msg[@key='label.renameFile']/@value" />
-</div>
+<div class="promptHead" resource="label.renameFile"></div>
     
 <form accept-charset="utf-8" name="renameForm" id="renameForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="renameFile" />
@@ -24,7 +22,7 @@
   
     <tr>
       <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/renameFile/resources/msg[@key='label.oldName']/@value" />:
+	    <span resource="label.oldName" />:
       </td>
       <td class="formParm2" width="70%">
         <xsl:value-of select="/renameFile/shortFileName" />
@@ -32,7 +30,7 @@
     </tr>
     <tr>
       <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/renameFile/resources/msg[@key='label.newname']/@value" />:
+	    <span resource="label.newname" />:
       </td>
       <td class="formParm2" width="80%">
         <input type="text" name="newFileName" maxlength="256" style="width:220px;">
@@ -43,16 +41,16 @@
 
     <tr>
       <td colspan="2">
-        <a class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:validateNewFileName('<xsl:value-of select="/renameFile/oldFileName" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.destEqualsSource']/@value" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
-          <span><xsl:value-of select="/renameFile/resources/msg[@key='button.rename']/@value" /></span>
-        </a>              
+	  
+        <input type="button" resource="button.rename" style="float:left">
+          <xsl:attribute name="onclick">javascript:validateNewFileName('<xsl:value-of select="/renameFile/oldFileName" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.destEqualsSource']/@value" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
+        </input> 
+	  
+        <input type="button" resource="button.cancel" style="float:right">
+          <xsl:attribute name="onclick">javascript:hidePrompt()</xsl:attribute>
+        </input> 
 
-        <a class="button" onclick="this.blur();" style="float:right"> 
-          <xsl:attribute name="href">javascript:hidePrompt()</xsl:attribute>
-          <span><xsl:value-of select="/renameFile/resources/msg[@key='button.cancel']/@value" /></span>
-        </a>              
-      </td>
+	  </td>
     </tr>
 
   </table>

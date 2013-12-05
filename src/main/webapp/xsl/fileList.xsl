@@ -158,11 +158,16 @@
 
 </head>
 
-<body onload="setBundleResources();setFileListHeight()">
+<body onload="setFileListHeight()">
 
 <xsl:apply-templates />
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
+
 </html>
 
 <div id="contextMenu" bgcolor="#c0c0c0" style="position:absolute;top:0px;left:0px;border-style:ridge;border-width:3px;border-color:#c0c0c0;visibility:hidden"></div>

@@ -162,3 +162,29 @@ function getAbsolutePos(obj) {
 	return [curleft, curtop];
 }
 
+function removeCSSRecursive(domNode, cssClassName)
+{
+    if (domNode.nodeType != 1) 
+	{
+	    return;
+	}
+
+    var cssValue = domNode.getAttribute("class");
+	if (cssValue)
+	{
+	    var newCssValue = cssValue.replace(cssClassName, "");
+		if (newCssValue != cssValue) 
+		{
+		    domNode.setAttribute("class", newCssValue);
+		}
+    }
+
+	var children = domNode.childNodes;
+	if (children) 
+	{
+	    for (var i = 0; i < children.length; i++) 
+		{
+		    removeCSSRecursive(children.item(i), cssClassName);
+		}
+	}
+}

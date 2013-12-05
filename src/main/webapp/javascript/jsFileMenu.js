@@ -54,6 +54,8 @@ function renameFile(fileName)
 {   
     showPrompt('/webfilesys/servlet?command=renameFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameFile.xsl', 360);
     
+    setBundleResources();
+	
     document.renameForm.newFileName.focus();
     
     document.renameForm.newFileName.select();
@@ -63,6 +65,8 @@ function cloneFile(fileName)
 {   
     showPrompt('/webfilesys/servlet?command=cloneFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/cloneFile.xsl', 360);
     
+    setBundleResources();
+
     document.renameForm.newFileName.focus();
     
     document.renameForm.newFileName.select();
@@ -170,6 +174,8 @@ function sendFile(fileName)
 {
     showPrompt('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 250);
     
+	setBundleResources();
+
     document.emailForm.receiver.focus();
     
     document.emailForm.receiver.select();
@@ -183,6 +189,8 @@ function delLink(linkName)
 function switchReadWrite(path)
 {   
     showPrompt('/webfilesys/servlet?command=switchReadWrite&filePath=' + encodeURIComponent(path), '/webfilesys/xsl/switchReadWrite.xsl', 360);
+
+	setBundleResources();
 }
 
 function associatedProg(path)

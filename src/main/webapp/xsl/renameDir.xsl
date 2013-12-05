@@ -6,9 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead">
-  <xsl:value-of select="/renameFolder/resources/msg[@key='label.renamedir']/@value" />
-</div>
+<div class="promptHead" resource="label.renamedir"></div>
     
 <form accept-charset="utf-8" name="mkdirForm" id="mkdirForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="renameDir" />
@@ -20,7 +18,7 @@
   
     <tr>
       <td class="formParm1" nowrap="nowrap" style="padding-right:0px;">
-        <xsl:value-of select="/renameFolder/resources/msg[@key='label.currentName']/@value" />:
+	    <span resource="label.currentName" />:
       </td>
     </tr>
     <tr>      
@@ -30,7 +28,7 @@
     </tr>
     <tr>
       <td class="formParm1" nowrap="nowrap" style="padding-right:0px;">
-        <xsl:value-of select="/renameFolder/resources/msg[@key='label.newDirName']/@value" />:
+	    <span resource="label.newDirName" />:
       </td>
     </tr>
     <tr>
@@ -43,15 +41,13 @@
 
     <tr>
       <td>
-        <a class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:validateNewFolderName('<xsl:value-of select="/renameFolder/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
-          <span><xsl:value-of select="/renameFolder/resources/msg[@key='button.rename']/@value" /></span>
-        </a>              
-
-        <a class="button" onclick="this.blur();" style="float:right"> 
-          <xsl:attribute name="href">javascript:hidePrompt()</xsl:attribute>
-          <span><xsl:value-of select="/renameFolder/resources/msg[@key='button.cancel']/@value" /></span>
-        </a>              
+        <input type="button" resource="button.rename" style="float:left">
+          <xsl:attribute name="onclick">javascript:validateNewFolderName('<xsl:value-of select="/renameFolder/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
+        </input> 
+	  
+        <input type="button" resource="button.cancel" style="float:right">
+          <xsl:attribute name="onclick">javascript:hidePrompt()</xsl:attribute>
+        </input> 
       </td>
     </tr>
 

@@ -5,7 +5,6 @@
 
 <!-- root node-->
 <xsl:template match="/">
-
   
   <div class="promptHead">
     <xsl:value-of select="/readWriteStatus/shortPath" />
@@ -33,39 +32,36 @@
     <table border="0" width="100%" cellpadding="10">
       <tr>
         <td class="formParm1">
-          <xsl:value-of select="/readWriteStatus/resources/msg[@key='label.readWriteStatus']/@value" />:
+	      <span resource="label.readWriteStatus" />:
         </td>
         <td class="formParm2">
           <xsl:if test="/readWriteStatus/readonly">
-            <xsl:value-of select="/readWriteStatus/resources/msg[@key='label.statusReadOnly']/@value" />
+		    <xsl:attribute name="resource">label.statusReadOnly</xsl:attribute>
           </xsl:if>
           <xsl:if test="not(/readWriteStatus/readonly)">
-            <xsl:value-of select="/readWriteStatus/resources/msg[@key='label.statusWritable']/@value" />
+		    <xsl:attribute name="resource">label.statusWritable</xsl:attribute>
           </xsl:if>
         </td>
       </tr>
 
       <tr>
       
-        <td class="formButton" nowrap="nowrap">
-          <a class="button" onclick="this.blur()"> 
-            <xsl:attribute name="href">javascript:submitSwitchReadWrite()</xsl:attribute>
-          
+        <td colspan="2">
+	  
+          <input type="button" style="float:left">
             <xsl:if test="/readWriteStatus/readonly">
-              <span><xsl:value-of select="/readWriteStatus/resources/msg[@key='label.setrw']/@value" /></span>
-            </xsl:if>
-
+		      <xsl:attribute name="resource">label.setrw</xsl:attribute>
+		    </xsl:if>
             <xsl:if test="not(/readWriteStatus/readonly)">
-              <span><xsl:value-of select="/readWriteStatus/resources/msg[@key='label.setro']/@value" /></span>
-            </xsl:if>
-          </a>              
-        </td>
-
-        <td class="formButton" nowrap="nowrap">
-          <a class="button" style="float:right" onclick="this.blur()"> 
-            <xsl:attribute name="href">javascript:hidePrompt()</xsl:attribute>
-            <span><xsl:value-of select="/readWriteStatus/resources/msg[@key='button.cancel']/@value" /></span>
-          </a>              
+		      <xsl:attribute name="resource">label.setro</xsl:attribute>
+		    </xsl:if>
+            <xsl:attribute name="onclick">javascript:submitSwitchReadWrite()</xsl:attribute>
+          </input> 
+	  
+          <input type="button" resource="button.cancel" style="float:right">
+            <xsl:attribute name="onclick">javascript:hidePrompt()</xsl:attribute>
+          </input> 
+	  
         </td>
         
       </tr>

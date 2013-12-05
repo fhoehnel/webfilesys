@@ -307,7 +307,15 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 					{
 						output.println("<script language=\"javascript\">");
 						output.println("if (confirm('" + insertDoubleBackslash(destSubdir) + "\\n" + getResource("confirm.overwritedir","directory already exists - overwrite?") + "'))");
-						output.println("{window.location=\"/webfilesys/servlet?command=pasteFiles&actpath=" + UTF8URLEncoder.encode(actPath) + "&ignoreExist=true\";}");
+						
+						if (pasteToFileWin) 
+						{
+							output.println("{window.location=\"/webfilesys/servlet?command=pasteFiles&ignoreExist=true\";}");
+						}
+						else 
+						{
+							output.println("{window.location=\"/webfilesys/servlet?command=pasteFiles&actpath=" + UTF8URLEncoder.encode(actPath) + "&ignoreExist=true\";}");
+						}
 						output.println("else");
 
 						output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
@@ -371,7 +379,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		output.println("<script language=\"javascript\">");
 
 		if (clipBoard.isMoveOperation()) {
-			clipBoard.clear();
+			clipBoard.reset();
 		}
 		
 		if (pasteToFileWin)

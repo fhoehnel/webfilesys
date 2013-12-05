@@ -14,8 +14,10 @@
   
     <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
   
-    <link rel="stylesheet" type="text/css" href="/webfilesys/css/fmweb.css" />
-  
+    <link rel="stylesheet" type="text/css">
+       <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="css" />.css</xsl:attribute>
+    </link>
+       
     <style type="text/css">
       img.uploadPreview {height:100px;border:2px ridge #808080;margin:4px;}
       div.dropZone {width:95%;min-height:112px;background-color:#e0e0e0;border:2px ridge #808080;}

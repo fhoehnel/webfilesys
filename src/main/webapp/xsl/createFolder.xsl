@@ -6,9 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead">
-  <xsl:value-of select="/createFolder/resources/msg[@key='label.mkdir']/@value" />
-</div>
+<div class="promptHead" resource="label.mkdir"></div>
     
 <form accept-charset="utf-8" name="mkdirForm" id="mkdirForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="mkdir" />
@@ -20,7 +18,7 @@
   
     <tr>
       <td class="formParm1" nowrap="nowrap" style="padding-right:0px;">
-        <xsl:value-of select="/createFolder/resources/msg[@key='label.parentDir']/@value" />:
+	    <span resource="label.parentDir" />:
       </td>
     </tr>
     <tr>      
@@ -30,7 +28,7 @@
     </tr>
     <tr>
       <td class="formParm1" nowrap="nowrap" style="padding-right:0px;">
-        <xsl:value-of select="/createFolder/resources/msg[@key='label.newDirName']/@value" />:
+	    <span resource="label.newDirName" />:
       </td>
     </tr>
     <tr>
@@ -41,15 +39,13 @@
 
     <tr>
       <td>
-        <a class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:validateNewFolderName('<xsl:value-of select="/createFolder/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
-          <span><xsl:value-of select="/createFolder/resources/msg[@key='button.create']/@value" /></span>
-        </a>              
+        <input type="button" resource="button.create" style="float:left">
+          <xsl:attribute name="onclick">javascript:validateNewFolderName('<xsl:value-of select="/createFolder/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
+        </input> 
 
-        <a class="button" onclick="this.blur();" style="float:right"> 
-          <xsl:attribute name="href">javascript:hidePrompt()</xsl:attribute>
-          <span><xsl:value-of select="/createFolder/resources/msg[@key='button.cancel']/@value" /></span>
-        </a>              
+        <input type="button" resource="button.cancel" style="float:right">
+          <xsl:attribute name="onclick">javascript:hidePrompt()</xsl:attribute>
+        </input> 
       </td>
     </tr>
 

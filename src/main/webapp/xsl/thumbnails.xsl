@@ -51,7 +51,7 @@
   <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
 </xsl:if>
 
-<script language="javascript">
+<script type="text/javascript">
 
   function publish(path)
   {
@@ -208,13 +208,18 @@
 
 </head>
 
-<body onload="setBundleResources()">
+<body>
 
   <xsl:apply-templates />
 
   <div id="picturePopup" style="position:absolute;top:50px;left:150px;width:400px;height:400px;background-color:#c0c0c0;padding:0px;visibility:hidden;border-style:ridge;border-color:white;border-width:6px;z-index:2;"><img id="zoomPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/><div id="popupClose" style="position:absolute;top:5px;left:5px;width:16px;height:14px;padding:0px;visibility:hidden;border-style:none;z-index:3"><img src="images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupPicture()"/></div></div>
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
+
 </html>
 
 <div id="contextMenu" bgcolor="#c0c0c0" style="position:absolute;top:300px;left:250px;width=180px;height=80px;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden"></div>

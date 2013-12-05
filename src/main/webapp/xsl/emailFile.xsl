@@ -6,9 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead">
-  <xsl:value-of select="/emailFile/resources/msg[@key='label.sendfilehead']/@value" />
-</div>
+<div class="promptHead" resource="label.sendfilehead"></div>
     
 <form accept-charset="utf-8" name="emailForm" id="emailForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="emailFile" />
@@ -26,7 +24,7 @@
   
     <tr>
       <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/emailFile/resources/msg[@key='label.filetosend']/@value" />:
+	    <span resource="label.filetosend" />:
       </td>
       <td class="formParm2" width="70%">
         <xsl:value-of select="/emailFile/shortFileName" />
@@ -35,7 +33,7 @@
     
     <tr>
       <td colspan="2" class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/emailFile/resources/msg[@key='label.receiver']/@value" />:
+	    <span resource="label.receiver" />:
       </td>
     </tr>
     <tr>
@@ -48,7 +46,7 @@
 
     <tr>
       <td colspan="2" class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/emailFile/resources/msg[@key='label.subject']/@value" />:
+	    <span resource="label.subject" />:
       </td>
     </tr>
     <tr>
@@ -63,21 +61,21 @@
       <td colspan="2" class="formParm1">
         <input type="checkbox" name="sendSynchronous" class="cb2" checked="checked" />
         &#160;
-        <xsl:value-of select="/emailFile/resources/msg[@key='label.sendEmailSync']/@value" />
+		<span resource="label.sendEmailSync" />
       </td>
     </tr>
 
     <tr>
       <td colspan="2">
-        <a id="sendButton" class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:if (validateEmailList(document.emailForm.receiver.value)) {sendFileViaEmail(); hidePrompt(); showHourGlass();} else {alert('<xsl:value-of select="/emailFile/resources/msg[@key='alert.emailsyntax']/@value" />');}</xsl:attribute>
-          <span><xsl:value-of select="/emailFile/resources/msg[@key='button.sendfile']/@value" /></span>
-        </a>              
-
-        <a class="button" onclick="this.blur();" style="float:right"> 
-          <xsl:attribute name="href">javascript:hidePrompt();hideHourGlass();</xsl:attribute>
-          <span><xsl:value-of select="/emailFile/resources/msg[@key='button.cancel']/@value" /></span>
-        </a>              
+	  
+        <input type="button" resource="button.sendfile" style="float:left">
+          <xsl:attribute name="onclick">javascript:if (validateEmailList(document.emailForm.receiver.value)) {sendFileViaEmail(); hidePrompt(); showHourGlass();} else {alert('<xsl:value-of select="/emailFile/resources/msg[@key='alert.emailsyntax']/@value" />');}</xsl:attribute>
+        </input> 
+	  
+        <input type="button" resource="button.cancel" style="float:right">
+          <xsl:attribute name="onclick">javascript:hidePrompt();hideHourGlass();</xsl:attribute>
+        </input> 
+	  
       </td>
     </tr>
 

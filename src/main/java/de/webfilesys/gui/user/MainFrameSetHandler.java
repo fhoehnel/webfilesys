@@ -195,7 +195,7 @@ public class MainFrameSetHandler extends UserRequestHandler
 		output.println("</script>");
 
         output.println(
-            "<title> WebFilesys: "
+            "<title> WebFileSys: "
                 + WebFileSys.getInstance().getLocalHostName()
                 + " ("
                 + WebFileSys.getInstance().getOpSysName()

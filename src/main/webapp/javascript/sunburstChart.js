@@ -7,6 +7,40 @@
 
 	   var ROOT_FILES_COLOR = "#b0b0b0";
 	   
+       function showDirName(titleText, sectorColor, mouseXPos, mouseYPos)	
+	   {
+	       console.log("showing dirname at location " + mouseXPos + "," + mouseYPos);
+		   
+		   var infoBoxYPos = mouseYPos;
+		   if (infoBoxYPos > 30)
+		   {
+		       infoBoxYPos = mouseYPos - 30;
+		   }
+		   
+		   var infoBoxXPos = mouseXPos + 5;
+		   
+           var infoBox = document.createElement("div");
+		   infoBox.id = "infoBox";
+           infoBox.setAttribute("class", "sunburstTreeInfo");
+           infoBox.style.left = infoBoxXPos + "px";
+           infoBox.style.top = infoBoxYPos + "px";
+           infoBox.style.backgroundColor = sectorColor;
+		   
+		   infoBox.innerHTML = titleText;
+		   
+		   document.documentElement.appendChild(infoBox);
+	   }
+	   
+	   function hideDirName() 
+	   {
+	       var infoBox = document.getElementById("infoBox");
+		   if (infoBox) 
+		   {
+		       var parent = infoBox.parentNode;
+			   parent.removeChild(infoBox);
+		   }
+	   }
+	   
 	   function showTitle(titleText, sectorColor)
 	   {
 	       var titleBox = document.getElementById("titleBox");
@@ -92,8 +126,12 @@
 		   pathElem.setAttribute("style", "fill: " + sectorColor + ";cursor:pointer");
 		   
            pathElem.addEventListener("mouseover", 
-		       function () {
+		       function (mouseEvt) {
                    showTitle(titleText, sectorColor);
+				   if (!mouseEvt) {
+				       mouseEvt = window.event;
+				   }
+				   showDirName(titleText, sectorColor, mouseEvt.clientX, mouseEvt.clientY);
                }, false);
 
            if (path || clickTarget)
@@ -105,6 +143,7 @@
            }
            
 		   pathElem.addEventListener("mouseout", hideTitleText);
+		   pathElem.addEventListener("mouseout", hideDirName);
 
 		   document.getElementById("svgChart").appendChild(pathElem);
 	   }
@@ -195,11 +234,16 @@
 		   pathElem.setAttribute("style", sectorStyle);
 		   
            pathElem.addEventListener("mouseover", 
-		       function () {
+		       function (mouseEvt) {
                    showTitle(titleText, sectorColor);
+				   if (!mouseEvt) {
+				       mouseEvt = window.event;
+				   }
+				   showDirName(titleText, sectorColor, mouseEvt.clientX, mouseEvt.clientY);
                }, false);
 			   
 		   pathElem.addEventListener("mouseout", hideTitleText);
+		   pathElem.addEventListener("mouseout", hideDirName);
 		   
            if (clickAction && clickAction.length > 0)
            {

@@ -100,10 +100,10 @@ function dirContextMenu(domId)
         if (parent.readonly != 'true')
 	{
             menuText = menuText 
-                     + menuEntry("javascript:copyDir('" + scriptPreparedPath + "')",resourceBundle["label.copydir"],null);
+                     + menuEntry("javascript:copyDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.copydir"],null);
 
             menuText = menuText 
-                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "')",resourceBundle["label.movedir"],null);
+                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.movedir"],null);
 
             menuText = menuText 
                      + menuEntry("javascript:deleteDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.deldir"],null);
@@ -196,7 +196,7 @@ function dirContextMenu(domId)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:extendedDirMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "')",resourceBundle["label.menuMore"],null);
+                 + menuEntry("javascript:extendedDirMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuMore"],null);
     }
 
     menuText = menuText + '</table>'; 
@@ -237,7 +237,7 @@ function dirContextMenu(domId)
     // setTimeout('hideMenu()',8000);
 }
 
-function extendedDirMenu(shortPath, path)
+function extendedDirMenu(shortPath, path, domId)
 {
     stopMenuClose = true;
 
@@ -288,12 +288,12 @@ function extendedDirMenu(shortPath, path)
     }
     
     menuText = menuText 
-               + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "')",resourceBundle["label.compSource"],null);
+               + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.compSource"],null);
 
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:synchronize('" + scriptPreparedPath + "')",resourceBundle["label.menuSynchronize"],null);
+                 + menuEntry("javascript:synchronize('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuSynchronize"],null);
 
         if (parent.watchEnabled)
         {

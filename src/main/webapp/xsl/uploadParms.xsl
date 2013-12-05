@@ -20,11 +20,16 @@
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="css" />.css</xsl:attribute>
   </link>
 
-  <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxUpload.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxUpload.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+  
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
+  </script>
 
   <script language="javascript">
     var resourceLabelOf = '<xsl:value-of select="resources/msg[@key='label.of']/@value" />';
@@ -193,9 +198,7 @@
 
 <body onload="showMultiUploadLink()">
 
-  <div class="headline">
-    <xsl:value-of select="resources/msg[@key='label.uploadfile']/@value" />
-  </div>
+  <div class="headline" resource="label.uploadfile"></div>
 
   <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/upload" enctype="multipart/form-data">
   
@@ -210,9 +213,7 @@
 
       <tr>
         <td colspan="2" class="formParm1">
-          <font class="small">
-            <xsl:value-of select="resources/msg[@key='hint.upload.multizip']/@value" />
-          </font>
+          <font class="small" resource="hint.upload.multizip"></font>
         </td>
       </tr>
 
@@ -220,11 +221,10 @@
 
       <tr>
         <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.destdir']/@value" />:
+		  <span resource="label.destdir"></span>:
         </td>
         <td style="text-align:right;padding-right:20px;">
-          <input id="linkMultiUpload" type="button" style="visibility:hidden">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='link.multiUpload']/@value" /></xsl:attribute>
+          <input id="linkMultiUpload" type="button" style="visibility:hidden" resource="link.multiUpload">
             <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=multiUpload';</xsl:attribute>
           </input>
         </td>
@@ -239,7 +239,7 @@
 
       <tr>
         <td colspan="2" class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.upload.localFile']/@value" />:
+		  <span resource="label.upload.localFile"></span>:
         </td>
       </tr>
       <tr>
@@ -252,7 +252,7 @@
 
       <tr>
         <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.upload.serverFileName']/@value" />:
+		  <span resource="label.upload.serverFileName"></span>:
         </td>
         <td class="formParm2" width="70%">
           <input type="text" name="serverFileName" maxlength="128" style="width:100%" />
@@ -261,7 +261,7 @@
 
       <tr>
         <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.upload.description']/@value" />:
+		  <span resource="label.upload.description"></span>:
         </td>
         <td class="formParm2">
           <textarea name="desc" rows="3" cols="40" style="width:100%" wrap="virtual"></textarea>
@@ -272,22 +272,20 @@
         <td colspan="2" class="formParm1">
           <div id="unzipDiv" style="visibility:hidden">
             <input type="checkbox" class="cb3" name="unzipFlag" onclick="setUnzipParm()" />
-            <xsl:value-of select="resources/msg[@key='label.upload.unzip']/@value" />
+		    <span resource="label.upload.unzip"></span>:
           </div>
         </td>
       </tr>
       
       <tr>
         <td class="formButton" id="uploadButton">
-          <input type="button">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.startUpload']/@value" /></xsl:attribute>
+          <input type="button" resource="button.startUpload">
             <xsl:attribute name="onclick">javascript:openStatusWindow();return false;</xsl:attribute>
           </input>
         </td>
         
         <td class="formButton" align="right">
-          <input type="button">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
+          <input type="button" resource="button.cancel">
             <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=listFiles';</xsl:attribute>
           </input>
         </td>
@@ -300,12 +298,8 @@
   
 </body>
 
-</html>
-
 <div id="uploadStatus" class="uploadStatus" style="visibility:hidden">
-  <div class="promptHead">
-    <xsl:value-of select="resources/msg[@key='label.uploadStatus']/@value" />
-  </div>
+  <div class="promptHead" resource="label.uploadStatus"></div>
   
   <br/><br/>
   <center>
@@ -318,7 +312,7 @@
       <tr>
         <td class="fileListData">
           <div id="statusText">
-            0 <xsl:value-of select="resources/msg[@key='label.of']/@value" /> 0 bytes (0 %)
+            0 <span resource="label.of"></span> 0 bytes (0 %)
           </div>
         </td>
       </tr>
@@ -327,6 +321,12 @@
   </center>
   
 </div>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
+
+</html>
 
 </xsl:template>
 

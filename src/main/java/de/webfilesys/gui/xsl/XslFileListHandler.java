@@ -377,30 +377,32 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
                 String displayName = fileName;
                 
-                int nameLength = displayName.length();
-                
-                if (nameLength > 40)
-                {
+                if (browserManufacturer == BROWSER_MSIE) {
                 	// prevent layout distortion by too long unbreakable filename
+                	// word-wrap:break-word does not work in MSIE
                 	
-                	StringTokenizer filenameParser = new StringTokenizer(displayName, " ");
-                	
-                	boolean tokenTooLong = false;
-                	while ((!tokenTooLong) && filenameParser.hasMoreTokens())
-                	{
-                		String token = filenameParser.nextToken();
-                		if (token.length() > 40)
-                		{
-                			tokenTooLong = true;
-                		}
-                	}
-                	
-                	if (tokenTooLong)
-                	{
-                       	displayName = displayName.substring(0,35) + " " + displayName.substring(35);
+                    int nameLength = displayName.length();
+                    if (nameLength > 40)
+                    {
+                    	StringTokenizer filenameParser = new StringTokenizer(displayName, " ");
                     	
-                    	fileElement.setAttribute("displayName", displayName);
-                	}
+                    	boolean tokenTooLong = false;
+                    	while ((!tokenTooLong) && filenameParser.hasMoreTokens())
+                    	{
+                    		String token = filenameParser.nextToken();
+                    		if (token.length() > 40)
+                    		{
+                    			tokenTooLong = true;
+                    		}
+                    	}
+                    	
+                    	if (tokenTooLong)
+                    	{
+                           	displayName = displayName.substring(0,35) + " " + displayName.substring(35);
+                        	
+                        	fileElement.setAttribute("displayName", displayName);
+                    	}
+                    }
                 }
 
 				if (fileCont.isLink())

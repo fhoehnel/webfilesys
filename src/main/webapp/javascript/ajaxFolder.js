@@ -124,8 +124,11 @@ function copyDirToClip(path)
     xmlRequest(url, showXmlResult);
 }
 
-function moveDirToClip(path)
+function moveDirToClip(path, domId)
 {
+    deselectFolder();
+	selectFolder(domId);
+
     url = "/webfilesys/servlet?command=moveDir&path=" + encodeURIComponent(path);
 
     xmlRequest(url, showXmlResult);
@@ -600,9 +603,12 @@ function expJavascriptXslt(parentDiv, xmlUrl, xslUrl)
     currentDirId = newId;
 }
 
-function synchronize(path)
+function synchronize(path, domId)
 {
     parent.syncStarted = !parent.syncStarted;
+	
+	deselectFolder();
+	selectFolder(domId);
 
     url = "/webfilesys/servlet?command=selectSyncFolder&path=" + encodeURIComponent(path);
 
@@ -674,6 +680,8 @@ function showMessage(message)
 
 function openSyncWindow()
 {
+    deselectFolder();
+
     syncWin = window.open("/webfilesys/servlet?command=syncCompare","syncWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=700,height=500,resizable=yes,left=10,top=10,screenX=10,screenY=10");
     
     if (!syncWin)
@@ -706,6 +714,8 @@ function deselectSyncFolderResult()
 
 function cancelSynchronize()
 {
+    deselectFolder();
+
     url = "/webfilesys/servlet?command=selectSyncFolder&cmd=deselect";
 
     xmlRequestSynchron(url);
@@ -717,9 +727,12 @@ function cancelSynchronize()
     stopMenuClose = true;
 }
 
-function compareFolders(path)
+function compareFolders(path, domId)
 {
     parent.compStarted = !parent.compStarted;
+	
+	deselectFolder();
+	selectFolder(domId);
 
     url = "/webfilesys/servlet?command=selectCompFolder&path=" + encodeURIComponent(path);
 
@@ -728,6 +741,8 @@ function compareFolders(path)
 
 function cancelCompare()
 {
+    deselectFolder();
+
     url = "/webfilesys/servlet?command=selectCompFolder&cmd=deselect";
 
     xmlRequestSynchron(url);
@@ -764,6 +779,8 @@ function compFolderParms()
 
 function openCompWindow()
 {
+    deselectFolder();
+
     compWin = window.open("/webfilesys/servlet?command=blank","compWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=700,height=500,resizable=yes,left=10,top=10,screenX=10,screenY=10");
     document.compParmsForm.target = 'compWin';
     if (document.compParmsForm.treeView.checked) 
@@ -787,6 +804,7 @@ function selectCompFolderResult()
 
              if (result == 'targetSelected')
              {
+			     deselectFolder();
                  compFolderParms();
                  return;
              }
@@ -817,4 +835,19 @@ function getPageXScrolled()
     }
     
     return window.pageXOffset;
+}
+
+function selectFolder(domId) 
+{
+	var folderDiv = document.getElementById(domId);
+	
+	if (folderDiv) 
+	{
+        folderDiv.setAttribute("class", folderDiv.getAttribute("class") + " selectedFolder");
+	}
+}
+
+function deselectFolder()
+{
+    removeCSSRecursive(document.documentElement, "selectedFolder");
 }

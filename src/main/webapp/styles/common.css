@@ -323,6 +323,7 @@ a.fn {
     color:navy;
     font-weight:bold;
     text-decoration:none;
+    word-wrap: break-word;
 }
 
 a.fn:hover {
@@ -646,7 +647,7 @@ div.last {
 }
 
 div.indent {
-    padding-left:4px;
+    padding-left:5px;
     padding-top:0px;
     padding-right:0px;
     padding-bottom:0px;
@@ -1014,8 +1015,8 @@ th.fileListModified {
 }
   
 th.fileListSize {
-    width:110px;
-    min-width:110px;
+    width:130px;
+    min-width:130px;
     white-space:nowrap;
     text-align:right;
     padding-right:10px;
@@ -1056,9 +1057,10 @@ td.fileListIcon {
 }
 
 td.fileListName {
-    min-width:300px;
-    text-align:left;
-    padding-right:5px;
+    min-width: 300px;
+    max-width: 310px;    
+    text-align: left;
+    padding-right: 5px;
 }
   
 td.fileListModified {
@@ -1181,6 +1183,17 @@ div.sunburstTreeFileNum {
     top:40px;
     right:35px;
 }
+
+div.sunburstTreeInfo {
+    position: absolute;
+	width: 150px;
+	height: 40px;
+	padding: 10px;
+	background-color: ivory;
+    border: 1px solid black;
+	font-size: 12px;
+	border-radius: 10px;
+}
   
 div.currentTrail {
     font-size: 15px;
@@ -1236,4 +1249,8 @@ table.contextMenu th {
     padding-bottom: 4px;
     text-align: left;
     border-bottom: 1px solid black;
+}
+
+div.selectedFolder {
+    border: 1px solid maroon;
 }
