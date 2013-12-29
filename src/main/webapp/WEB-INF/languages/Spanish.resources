@@ -115,6 +115,7 @@ label.loginHint=Hint: ¡Haz click en el icono de la carpeta para abrir el menu co
 # description window buttons
 button.setdesc=Guardar
 button.close=Cancelar
+button.closeMap=Cerrar
 
 # file list labels and buttons
 label.listPageSize=archivos por página
@@ -562,9 +563,9 @@ label.zoomFactor=factor de zoom (1 = vista muy alejada, 16 = vista muy cercana)
 label.geoTagInfoText=Texto para ventana de información en el mapa
 alert.missingLatitude=Se requiere la latitud
 alert.missingLongitude=Se requiere la longitud
-button.test=Test
+button.preview=Preview Map
 button.selectFromMap=Seleccionar en el mapa
-label.hintGoogleMapSelect=¡Haz doble click para seleccionar las coordenadas geográficas!
+label.hintGoogleMapSelect=¡Haz click para seleccionar las coordenadas geográficas!
 
 # folder synchronization
 label.selectSyncSourceResult=¡Selecciona la carpeta para sincronizar y elije sincronizar en el menú contextual!

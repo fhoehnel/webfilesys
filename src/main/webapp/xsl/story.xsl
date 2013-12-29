@@ -217,17 +217,17 @@
                     <xsl:value-of select="resources/msg[@key='label.page']/@value" /> 
 
                     <xsl:for-each select="paging/page">
-                      <span class="pagingPage">                    
+                      <span class="pagingPage">
                         <xsl:if test="@num=../currentPage">
-                          <xsl:value-of select="@num" />
+                          <div class="pagingPage pagingPageCurrent">
+                            <xsl:value-of select="@num" />
+                          </div>
                         </xsl:if>
                         <xsl:if test="not(@num=../currentPage)">
-                          <a>
-                            <xsl:attribute name="href">
-                              <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',@startIdx)"/>
-                            </xsl:attribute>
+                          <div class="pagingPage pagingPageOther">
+                            <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=storyInFrame&amp;startIdx=<xsl:value-of select="@startIdx" />'</xsl:attribute>
                             <xsl:value-of select="@num" />
-                          </a>
+                          </div>
                         </xsl:if>
                       </span>
                     </xsl:for-each>

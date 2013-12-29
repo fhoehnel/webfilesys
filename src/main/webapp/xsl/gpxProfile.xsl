@@ -16,7 +16,7 @@
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
 <link rel="stylesheet" type="text/css">
-  <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
+  <xsl:attribute name="href">/webfilesys/styles/common.css</xsl:attribute>
 </link>
 
 <style>
@@ -28,8 +28,47 @@
 <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 
 <script language="javascript">
-
   var trackPointList = new Array();
+  
+  function handleGoogleMapsApiReady() {
+      var mapCenter = new google.maps.LatLng(<xsl:value-of select="./gpx:trk//gpx:trkpt/@lat" />, <xsl:value-of select="./gpx:trk//gpx:trkpt/@lon" />);
+      
+      var myOptions = {
+          zoom: 11,
+          center: mapCenter,
+          mapTypeId: google.maps.MapTypeId.HYBRID
+      }
+      
+      var map = new google.maps.Map(document.getElementById("mapCont"), myOptions);      
+      
+      var bounds = new google.maps.LatLngBounds ();
+      
+      <xsl:for-each select="./gpx:trk">
+        <xsl:for-each select=".//gpx:trkpt">
+          var latLon = new google.maps.LatLng(<xsl:value-of select="@lat" />, <xsl:value-of select="@lon" />);
+          trackPointList.push(latLon);
+          bounds.extend(latLon);
+        </xsl:for-each>
+      </xsl:for-each>  
+      
+      var trackPath = new google.maps.Polyline({
+          path: trackPointList,
+          strokeColor:"#FF8000",
+          strokeOpacity:0.8,
+          strokeWeight: 4
+      });
+         
+      trackPath.setMap(map);
+      
+      map.fitBounds(bounds);
+  }
+
+  function loadGoogleMapsAPIScriptCode() {
+      var script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "http://maps.google.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady";
+      document.body.appendChild(script);
+  }
   
   var startDate = new Array();
   var endDate = new Array();
@@ -585,7 +624,7 @@
 
 </head>
 
-<body onclick="mouseClickHandler()" onload="createProfiles()">
+<body onclick="mouseClickHandler()" onload="loadGoogleMapsAPIScriptCode();createProfiles()">
 
 <xsl:if test="./gpx:name">
   <h3><xsl:value-of select="./gpx:name" /></h3>
@@ -617,6 +656,8 @@
 <xsl:template name="track">
   <xsl:param name="trackNum"/>
   <h3>Track <xsl:value-of select="$trackNum" />: <xsl:value-of select="gpx:name" /></h3>
+  
+  <div id="mapCont" style="width:720px;height:480px;border:1px solid black;"></div>
   
   <xsl:variable name="startTime">
     <xsl:for-each select=".//gpx:trkpt/gpx:time">

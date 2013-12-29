@@ -103,7 +103,7 @@ public class VisitorFileRequestHandler extends RequestHandler
 		
 		if ((disposition != null) && disposition.equals(("download")))
 		{
-			resp.setHeader("Content-Disposition:", "attachment; filename=" + fileToSend.getName());
+			resp.setHeader("Content-Disposition", "attachment; filename=" + fileToSend.getName());
 		}
 		
 		long fileSize = fileToSend.length();

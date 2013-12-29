@@ -43,7 +43,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.9.2 (2013/12/05)";
+	public static final String VERSION = "Version 2.9.3-beta7 (2013/12/29)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -177,9 +177,6 @@ public class WebFileSys
     private long uploadLimit = DEFAULT_UPLOAD_LIMIT;
     
     private int textFileMaxLineLength = DEFAULT_TEXT_FILE_MAX_LINE_LENGTH;
-    
-    private String googleMapsAPIKeyHTTP = null;
-    private String googleMapsAPIKeyHTTPS = null;
     
     /** 
      * allow chmod/chown for users of role webspace
@@ -402,20 +399,6 @@ public class WebFileSys
         	{
                 Logger.getLogger(getClass()).warn("invalid upload limit ignored: " + temp);        		
         	}
-        }
-
-        temp = config.getProperty("GoogleMapsAPIKeyHTTP");
-        
-        if (temp != null)
-        {
-        	googleMapsAPIKeyHTTP = temp;
-        }
-        
-        temp = config.getProperty("GoogleMapsAPIKeyHTTPS");
-        
-        if (temp != null)
-        {
-        	googleMapsAPIKeyHTTPS = temp;
         }
         
         downloadStatistics = false;
@@ -1160,16 +1143,6 @@ public class WebFileSys
     public DiskQuotaInspector getDiskQuotaInspector()
     {
     	return(quotaInspector);
-    }
-    
-    public String getGoogleMapsAPIKeyHTTP()
-    {
-    	return(googleMapsAPIKeyHTTP);
-    }
-
-    public String getGoogleMapsAPIKeyHTTPS()
-    {
-    	return(googleMapsAPIKeyHTTPS);
     }
     
     public int getCalendarExpirationPeriod()

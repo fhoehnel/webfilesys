@@ -22,11 +22,11 @@ import de.webfilesys.WebFileSys;
 /**
  * @author Frank Hoehnel
  */
-public class MultiDownloadRequestHandler extends UserRequestHandler
+public class MultiFileDownloadHandler extends MultiFileRequestHandler
 {
 	protected HttpServletResponse resp = null;
 
-	public MultiDownloadRequestHandler(
+	public MultiFileDownloadHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
@@ -44,12 +44,12 @@ public class MultiDownloadRequestHandler extends UserRequestHandler
 		
 		if ((selectedFiles == null) || (selectedFiles.size() == 0))
 		{
-			Logger.getLogger(getClass()).error("MultiDownloadRequestHandler: no files selected");
+			Logger.getLogger(getClass()).debug("MultiFileDownloadHandler: no files selected");
 			
 			return;
 		}
 		
-		String actPath = getParameter("actPath");
+		String actPath = getCwd();
 		
 		if (actPath == null)
 		{
@@ -70,6 +70,8 @@ public class MultiDownloadRequestHandler extends UserRequestHandler
 		
 		File tempFile = null;
 		
+		FileInputStream fin = null;
+
 		try
 		{
 			tempFile = File.createTempFile("fmweb",null);
@@ -80,32 +82,44 @@ public class MultiDownloadRequestHandler extends UserRequestHandler
 
 			int count=0;
 
-			FileInputStream fin = null;
-
 			byte buffer[] = new byte[16192];
 
-			for (int i=0;i<selectedFiles.size();i++)
+			for (int i = 0; i < selectedFiles.size(); i++)
 			{
+				FileInputStream inFile = null;
+				
 				try
 				{
 					zip_out.putNextEntry(new ZipEntry((String) selectedFiles.elementAt(i)));
 
-					fin = new FileInputStream(new File(actPath, (String) selectedFiles.elementAt(i)));
+					inFile = new FileInputStream(new File(actPath, (String) selectedFiles.elementAt(i)));
 
 					count=0;
 
-					while (( count = fin.read(buffer))>=0 )
+					while (( count = inFile.read(buffer)) >= 0 )
 					{
 						zip_out.write(buffer,0,count);
 					}
-
-					fin.close();
 				}
 				catch (Exception zioe)
 				{
-					Logger.getLogger(getClass()).warn(zioe);
+					Logger.getLogger(getClass()).warn("failed to add file to temporary zip archive", zioe);
 					return;
 				}
+		        finally 
+		        {
+		        	if (inFile != null) 
+		        	{
+		        		try 
+		        		{
+		        			inFile.close();
+		        		}
+		        		catch (IOException ioex2)
+		        		{
+		        			Logger.getLogger(getClass()).error("failed to close file", ioex2);
+		        		}
+		        	}
+		        }
 			}
 		
 			zip_out.close();
@@ -156,6 +170,20 @@ public class MultiDownloadRequestHandler extends UserRequestHandler
         {
         	Logger.getLogger(getClass()).error(ioex);
         	return;
+        }
+        finally 
+        {
+        	if (fin != null) 
+        	{
+        		try 
+        		{
+        			fin.close();
+        		}
+        		catch (IOException ioex2)
+        		{
+        			Logger.getLogger(getClass()).error("failed to close ZIP-File", ioex2);
+        		}
+        	}
         }
         
         session.removeAttribute("selectedFiles");

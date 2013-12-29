@@ -187,7 +187,7 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
         	parentFolderElem.setAttribute("formattedRootFileSize", numFormat.format(rootFileSize));
         	parentFolderElem.setAttribute("formattedTreeFileNum", numFormat.format(treeFileNum));
         }
-        else if (level == 2)
+        else
         {
             parentFolderElem.setAttribute("pathForScript", escapeForJavascript(path));
         }

@@ -148,6 +148,7 @@ label.loginHint=Hint: Click on the folder icon to open the context menu of the f
 # description window buttons and labels
 button.setdesc=Save
 button.close=Cancel
+button.closeMap=Close
 label.textColor=text color
 label.folderIcon=folder icon
 noCustomIcon=no custom icon
@@ -717,9 +718,9 @@ label.zoomFactor=zoom factor (1 = far away view, 16 = closest view)
 label.geoTagInfoText=Text for info window on the map
 alert.missingLatitude=latitude is a required field
 alert.missingLongitude=longitude is a required field
-button.test=Test
+button.preview=Preview Map
 button.selectFromMap=Select on map
-label.hintGoogleMapSelect=Double click to select geographic coordinates!
+label.hintGoogleMapSelect=Click to select geographic coordinates!
 noFilesWithGeoData=This folder does not contain pictures with geographic coordinates!
 
 # folder synchronization

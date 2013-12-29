@@ -209,6 +209,9 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			}
 		}
 		
+		boolean colorChanged = false;
+		boolean iconChanged = false;
+		
 		if (path.endsWith(".")) {
 			String normalizedPath = path.substring(0, path.length() - 2);
 
@@ -220,6 +223,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 				{
 					deco.setTextColor(null);
 					DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+					colorChanged = true;
 				}
 			}
 			else
@@ -234,6 +238,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 					}
 					deco.setTextColor("#" + textColor);
 					DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+					colorChanged = true;
 				}
 			}
 			
@@ -246,6 +251,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 					{
 						deco.setIcon(null);
 						DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+					    iconChanged = true;
 					}
 				} 
 				else
@@ -258,6 +264,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 						}
 						deco.setIcon(icon);
 						DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+					    iconChanged = true;
 					}
 				}
 			}
@@ -273,7 +280,12 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		}
 		else
 		{
-            output.println("if (window.opener) {window.opener.parent.frames[2].location.href='/webfilesys/servlet?command=listFiles&keepListStatus=true'};");
+			if (path.endsWith(".") && (colorChanged || iconChanged)) {
+				String encodedPath  = UTF8URLEncoder.encode(path.substring(0, path.length() - 1));
+	            output.println("if (window.opener) {window.opener.parent.frames[1].location.href='/webfilesys/servlet?command=exp&actPath=" + encodedPath + "&expand=" + encodedPath + "&fastPath=true'};");
+		    } else {
+	            output.println("if (window.opener) {window.opener.parent.frames[2].location.href='/webfilesys/servlet?command=listFiles&keepListStatus=true'};");
+		    }
 		}
 		
 		output.println("setTimeout('self.close()',1000);");
@@ -308,6 +320,8 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(metaInfElement, "css", userMgr.getCSS(uid), false);
 		
+	    XmlUtil.setChildText(metaInfElement, "language", language, false);
+		
         XmlUtil.setChildText(metaInfElement, "path", path, false);
 		
 		XmlUtil.setChildText(metaInfElement, "shortPath", shortPath, false);
@@ -322,50 +336,9 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(metaInfElement, "error", errorMsg, true);
 		}
 		
-		addMsgResource("label.editMetaInfo", getResource("label.editMetaInfo", "Edit Meta Information"));
-		addMsgResource("label.description", getResource("label.description", "Description"));
-		addMsgResource("alert.descriptionTooLong", getResource("alert.descriptionTooLong", "The description text is too long (max 1024 characters allowed)!"));
-
-		String googleMapsAPIKey = null;
-		
-		if ((req.getParameter("geoTag") != null) ||
-		    (req.getParameter("zoomFactor") != null)) // returned to input form because of validation error
-		{
-			if (req.getScheme().equalsIgnoreCase("https"))
-			{
-				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
-			}
-			else
-			{
-				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
-			}
-		}
-		
-        addMsgResource("label.geoTag", getResource("label.geoTag", "Geo tag data"));
-        addMsgResource("label.latitude", getResource("label.latitude", "latitude (example: 13.75 for Dresden)"));
-        addMsgResource("label.longitude", getResource("label.longitude", "longitude (example: 51.05 for Dresden)"));
-
-        if (googleMapsAPIKey != null)
-		{
-			addMsgResource("label.zoomFactor", getResource("label.zoomFactor", "zoom factor (1 = far away view, 16 = closest view)"));
-			addMsgResource("label.geoTagInfoText", getResource("label.geoTagInfoText", "Text for Info Window on the map"));
-			addMsgResource("label.hintGoogleMapSelect", getResource("label.hintGoogleMapSelect", "Double click to select geographic coordinates!"));
-
-			addMsgResource("alert.missingLatitude", getResource("alert.missingLatitude", "latitude is a required field"));
-			addMsgResource("alert.missingLongitude", getResource("alert.missingLongitude", "longitude is a required field"));
-			addMsgResource("button.test", getResource("button.test","Test"));
-			addMsgResource("button.selectFromMap", getResource("button.selectFromMap","Select on map"));
-		}
-		
         if (path.endsWith(".")) {
-    		addMsgResource("label.textColor", getResource("label.textColor","text color"));
-    		addMsgResource("label.folderIcon", getResource("label.folderIcon","folder icon"));
-    		addMsgResource("noCustomIcon", getResource("noCustomIcon","no custom icon"));
-    		addMsgResource("noCustomColor", getResource("noCustomColor","no custom color"));
-        }
-
-        addMsgResource("button.save", getResource("button.save","Save"));
-		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
+			XmlUtil.setChildText(metaInfElement, "folder", "true", true);
+        }		
 		
 		if (folderOrFile.isFile())
 		{
@@ -461,9 +434,17 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
             }
         }
 			
-	    if (googleMapsAPIKey != null)
+        boolean mapSelection = false;
+		
+		if ((req.getParameter("geoTag") != null) ||
+		    (req.getParameter("zoomFactor") != null)) // returned to input form because of validation error
+		{
+	        mapSelection = true;
+		}
+		
+	    if (mapSelection)
 	    {
-            XmlUtil.setChildText(geoTagElement, "googleMapsAPIKey", googleMapsAPIKey, false);
+            XmlUtil.setChildText(geoTagElement, "mapSelection", "true", false);
 
             int zoomFactor = 10;
 
@@ -536,11 +517,11 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 	        metaInfElement.appendChild(availableIconsElement);
 			
-			Iterator iconIter = DecorationManager.getInstance().getAvailableIcons().iterator();
+			Iterator<String> iconIter = DecorationManager.getInstance().getAvailableIcons().iterator();
 			
 			while (iconIter.hasNext()) 
 			{
-				String icon = (String) iconIter.next();
+				String icon = iconIter.next();
 				Element iconElement = doc.createElement("icon");
 				availableIconsElement.appendChild(iconElement);
 				XmlUtil.setElementText(iconElement, icon);

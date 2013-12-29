@@ -87,26 +87,22 @@
 				var tooltipText = shortName + ':&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes';
 				
 				var pathForScript = "";
+				var clickAction;
 				<xsl:if test="folder">
 				    pathForScript = '<xsl:value-of select="@pathForScript" />';
+				    clickAction = CLICK_TARGET;
 				</xsl:if>
 				
   	            pieChartSector(startAngle, endAngle, chartColors[colorCounter % chartColors.length], 
-  	                           innerCircleRadius, tooltipText, pathForScript, CLICK_TARGET); 
+  	                           innerCircleRadius, tooltipText, pathForScript, clickAction); 
                 
-                var shortNameLength = shortName.length;
-                
-                if (((innerCircleRadius >= (10 * shortNameLength)) &amp;&amp; (endAngle - startAngle > 20)) ||
-                    ((innerCircleRadius >= (15 * shortNameLength)) &amp;&amp; (endAngle - startAngle > 10)))
-                {
-                    var innerLabelRadius = innerCircleRadius - (8 * shortNameLength) - 20;
-                    if (innerLabelRadius &lt; 20)
-                    {
-                        innerLabelRadius = 20;
-                    }
-	                sectorLabel(startAngle, endAngle, innerLabelRadius, innerCircleRadius, "#000000", '<xsl:value-of select="@shortName" />');
+                if (endAngle - startAngle &gt; 15) {
+	                textOnCircle(startAngle, endAngle,
+       	                         innerCircleRadius - 20, 
+					             shortName,
+					             8, "12px");			
                 }
-                
+				
                 var legendEntry = document.createElement("div");
                 legendEntry.style.height = "18px";
                 var legendBox = document.createElement("div");
@@ -146,6 +142,13 @@
 		      var tooltipText = "files in root: <xsl:value-of select="/folderStats/@rootFileNum" />&lt;br/&gt;<xsl:value-of select="/folderStats/@formattedRootFileSize" /> bytes";
 			  
 			  pieChartSector(startAngle, endAngle, ROOT_FILES_COLOR, innerCircleRadius, tooltipText); 
+			  
+              if (endAngle - startAngle &gt; 15) {
+	              textOnCircle(startAngle, endAngle,
+       	                       innerCircleRadius - 20, 
+				               "files in root",
+					           5, "12px");			
+              }
 			  
 	          <xsl:if test="/folderStats/parentFolder">
 	            document.getElementById("parentFolderLink").setAttribute("href", "/webfilesys/servlet?command=folderTreeStats&amp;path=" + encodeURIComponent('<xsl:value-of select="/folderStats/parentFolder" />') + "&amp;random=" + (new Date()).getTime());
@@ -200,11 +203,31 @@
 	
     var shellSectorEndAngle = shellStartAngle<xsl:value-of select="$level" /> + shellSectorSize;
 	
+	var clickAction = "";
+	<xsl:if test="folder">
+      if (shellSectorEndAngle - shellStartAngle<xsl:value-of select="$level" /> &gt; 3) {
+          clickAction = CLICK_TARGET + encodeURIComponent('<xsl:value-of select="@pathForScript" />') + "&amp;random=" + (new Date()).getTime();
+      }    
+    </xsl:if>
+	
 	shellSector(shellStartAngle<xsl:value-of select="$level" />, shellSectorEndAngle, 
 	            chartColors[subFolderColor<xsl:value-of select="$level" />], 
 	            innerCircleRadius + ((level - 1) * shellWidth), 
 	    	    innerCircleRadius + (level * shellWidth),
-       	        '<xsl:value-of select="@shortName" />:&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes');
+       	        '<xsl:value-of select="@shortName" />:&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes',
+       	        clickAction);
+
+    var minAngleToShowtext = 15 - level;
+	if (minAngleToShowtext &lt; 5) {
+	    minAngleToShowtext = 5;
+	}
+				
+    if (shellSectorEndAngle - shellStartAngle<xsl:value-of select="$level" /> &gt; minAngleToShowtext) {
+	    textOnCircle(shellStartAngle<xsl:value-of select="$level" />, shellSectorEndAngle,
+       	             innerCircleRadius + (level * shellWidth) - 20, 
+					 '<xsl:value-of select="@shortName" />',
+					 5, "12px");			
+    }
 				
 	shellStartAngle<xsl:value-of select="$level" /> = shellSectorEndAngle;
 

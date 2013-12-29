@@ -89,7 +89,7 @@ public class DownloadFolderZipHandler extends UserRequestHandler
 
         resp.setContentType("application/zip");
 
-        resp.setHeader("Content-Disposition:", "attachment; filename=" + dirName + ".zip");
+        resp.setHeader("Content-Disposition", "attachment; filename=" + dirName + ".zip");
 
         OutputStream byteOut = null;
         ZipOutputStream zipOut = null;

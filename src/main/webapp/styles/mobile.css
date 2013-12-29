@@ -3,6 +3,14 @@
   a.currentPath {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
   a.currentPath:hover {color:green;text-decoration:underline;}
   a.currentPathSep {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+  span.currentPathSep {
+      font-size:12pt;
+      color:black;
+      font-family:Arial,Helvetica;
+      font-weight:bold;
+      margin:0 4px 0 4px;
+      vertical-align: middle;
+  }
 
   td.tabActive {background-color:#ffffe0;font-size:12pt;font-family:Arial,Helvetica;color:black;font-weight:bold;border-width:1px;border-style:solid;border-color:#000000;border-bottom-style:none;padding-left:6px;padding-right:6px;padding-top:2px;padding-bottom:2px}
   td.tabInactive {background-color:ivory;font-size:12pt;font-family:Arial,Helvetica;color:#808080;border-width:1px;border-style:solid;border-color:#808080;padding-left:6px;padding-right:6px;padding-top:2px;padding-bottom:2px}
@@ -106,3 +114,38 @@
       background-position: bottom left;
       padding: 6px 0 4px 18px; /* push text down 1px */
   } 
+
+  span.pagingPage {
+      font-weight: normal;
+      font-size: 14px;
+      color: #000000;
+      margin-left: 6px;
+  }
+
+  div.pagingPage {
+      display: inline;
+      padding: 2px 6px;
+      font-size: 13px;
+  }
+ 
+  div.pagingPageOther {
+      background-color: #e0e0e0;
+      border: 1px solid #c0c0c0;
+      cursor: pointer;
+      font-weight: bold;
+      color: navy;
+  } 
+
+  div.pagingPageOther:hover {
+      background-color: #E6E6FA;
+      border: 1px solid #000080;
+  } 
+
+  div.pagingPageCurrent {
+      background-color: #C0C0FF;
+      border: 1px solid #000080;
+      color: #000000;
+      font-weight: bold;
+  }
+  
+  

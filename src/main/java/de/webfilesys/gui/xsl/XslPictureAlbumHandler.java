@@ -162,7 +162,8 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
             
             if ((listPageSize == null) || (listPageSize.intValue() == 0))
             {
-                pageSize = WebFileSys.getInstance().getThumbnailsPerPage();
+                // pageSize = WebFileSys.getInstance().getThumbnailsPerPage();
+                pageSize = userMgr.getPageSize(uid);
                 session.setAttribute("listPageSize", new Integer(pageSize));
             }
             else
@@ -709,7 +710,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
             
 				Vector pageStartIndices = selectionStatus.getPageStartIndices();
             
-				for (int pageCounter = 0; pageCounter < pageStartIndices.size(); pageCounter += pageStep)
+				for (int pageCounter = 0; pageCounter < pageStartIndices.size();)
 				{
 					if (pageCounter == currentPage)
 					{
@@ -739,6 +740,14 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 						pagingElement.appendChild(pageElement);
 						pageElement.setAttribute("num", Integer.toString(pageCounter + 1));
 						pageElement.setAttribute("startIdx", Integer.toString(pageStartIdx.intValue()));
+					}
+					
+					if ((pageCounter < pageStartIndices.size() - 1) &&
+					    (pageCounter + pageStep >= pageStartIndices.size())) {
+						// show the last page even if it is not a multiple of the page step
+						pageCounter = pageStartIndices.size() - 1;
+					} else {
+						pageCounter += pageStep;
 					}
 				}
 			}
@@ -1022,18 +1031,8 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 	        addMsgResource("mapTypeGoogleMap", getResource("mapTypeGoogleMap", "Google Maps"));
 	        addMsgResource("mapTypeGoogleEarth", getResource("mapTypeGoogleEarth", "Google Earth"));
 	        
-			String googleMapsAPIKey = null;
-			if (req.getScheme().equalsIgnoreCase("https"))
-			{
-				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
-			}
-			else
-			{
-				googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
-			}
-			if (googleMapsAPIKey != null) {
-				XmlUtil.setChildText(albumElement, "googleMaps", "true", false);
-			}
+	        // the reason for this is historic: previous google maps api version required an API key
+			XmlUtil.setChildText(albumElement, "googleMaps", "true", false);
 		}
 
 		this.processResponse("pictureAlbum.xsl", true);

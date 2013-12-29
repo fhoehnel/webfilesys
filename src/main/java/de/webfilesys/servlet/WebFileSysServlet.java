@@ -150,10 +150,9 @@ import de.webfilesys.gui.user.LicenseReminderRequestHandler;
 import de.webfilesys.gui.user.MainFrameSetHandler;
 import de.webfilesys.gui.user.Mp3V2ThumbnailHandler;
 import de.webfilesys.gui.user.MultiDeleteRequestHandler;
-import de.webfilesys.gui.user.MultiDownloadRequestHandler;
-import de.webfilesys.gui.user.MultiFileDownloadPromptHandler;
+import de.webfilesys.gui.user.MultiFileDownloadHandler;
 import de.webfilesys.gui.user.MultiImageDeleteHandler;
-import de.webfilesys.gui.user.MultiImageDownloadPromptHandler;
+import de.webfilesys.gui.user.MultiImageDownloadHandler;
 import de.webfilesys.gui.user.MultiMoveCopyRequestHandler;
 import de.webfilesys.gui.user.MultiZipRequestHandler;
 import de.webfilesys.gui.user.OpenStreetMapFilesPOIHandler;
@@ -1685,27 +1684,20 @@ public class WebFileSysServlet extends HttpServlet
             return(true);
         }
         
-        if (command.equals("multiFileDownloadPrompt"))
-        {
-            (new MultiFileDownloadPromptHandler(req, resp, session, output, userid)).handleRequest();
-
-            return(true);
-        }
-
-        if (command.equals("multiImageDownloadPrompt"))
-        {
-            (new MultiImageDownloadPromptHandler(req, resp, session, output, userid)).handleRequest();
-
-            return(true);
-        }
-
         if (command.equals("multiDownload"))
         {
-            (new MultiDownloadRequestHandler(req, resp, session, output, userid)).handleRequest();
+        	(new MultiFileDownloadHandler(req, resp, session, output, userid)).handleRequest();
 
             return(true);
         }
 
+        if (command.equals("multiImgDownload"))
+        {
+        	(new MultiImageDownloadHandler(req, resp, session, output, userid)).handleRequest();
+
+            return(true);
+        }
+        
         if (command.equals("downloadPrompt"))
 		{
 		    (new XslDownloadPromptHandler(req, resp, session, output, userid)).handleRequest(); 

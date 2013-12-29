@@ -232,18 +232,8 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 	        addMsgResource("mapTypeGoogleEarth", getResource("mapTypeGoogleEarth", "Google Earth"));
 		}
 		
-		String googleMapsAPIKey = null;
-		if (req.getScheme().equalsIgnoreCase("https"))
-		{
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
-		}
-		else
-		{
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
-		}
-		if (googleMapsAPIKey != null) {
-			XmlUtil.setChildText(imageDataElement, "googleMaps", "true", false);
-		}
+        // the reason for this is historic: previous google maps api version required an API key
+		XmlUtil.setChildText(imageDataElement, "googleMaps", "true", false);
 		
 		processResponse("showImage.xsl", true);
     }

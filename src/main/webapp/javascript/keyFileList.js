@@ -235,6 +235,10 @@ function deselectTableRow(tableRow)
              if (browserMSIE)
              { 
                  oldCSS = child.getAttribute("className");
+                 if (!oldCSS) 
+                 {
+                     oldCSS = child.getAttribute("class");
+                 }
              }
              else
              {

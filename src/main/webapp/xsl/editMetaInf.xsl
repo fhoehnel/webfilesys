@@ -20,19 +20,15 @@
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/metaInf/css" />.css</xsl:attribute>
 </link>
 
-<xsl:if test="/metaInf/geoTag/googleMapsAPIKey">
-  
-  <script type="text/javascript">
-    <xsl:attribute name="src">http://maps.google.com/maps?file=api&amp;v=2&amp;key=<xsl:value-of select="/metaInf/geoTag/googleMapsAPIKey" /></xsl:attribute>
-  </script>
-  
-</xsl:if>
-
+<script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script type="text/javascript" src="/webfilesys/javascript/jscolor/jscolor.js"></script>
 
-<title>
-  <xsl:value-of select="/metaInf/resources/msg[@key='label.editMetaInfo']/@value" />
-</title>
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/metaInf/language" /></xsl:attribute>
+</script>
+
+<title resource="label.editMetaInfo"></title>
 
 <script language="javascript">
   var returnWin = '';
@@ -41,7 +37,7 @@
   {  
       if (document.form1.description.value.length>1024)
       {  
-          alert('<xsl:value-of select="/metaInf/resources/msg[@key='alert.descriptionTooLong']/@value" />');
+          alert(resourceBundle["alert.descriptionTooLong"]);
       }
       else
       { 
@@ -56,17 +52,25 @@
   
   <xsl:if test="/metaInf/geoTag">
   
-    var posMarker;
-  
-    function setMarker(overlay, point)
-    {
-        posMarker.setPoint(point);
+    function loadGoogleMapsAPIScriptCode() {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://maps.google.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady";
+        document.body.appendChild(script);
     }
+  
+    function handleGoogleMapsApiReady() {
+        // console.log("Google Maps API loaded");
+    }
+  
+    var posMarker;
   
     function selectLocation()
     {
-        document.form1.latitude.value = posMarker.getPoint().lat(); 
-        document.form1.longitude.value = posMarker.getPoint().lng();
+        var markerPos = posMarker.getPosition();
+    
+        document.form1.latitude.value = markerPos.lat(); 
+        document.form1.longitude.value = markerPos.lng();
         
         hideMap();
     }
@@ -75,15 +79,19 @@
     {
         var latitude = document.form1.latitude.value;
 
+        var coordinatesNotYetSelected = false;
+
         if (latitude == '')
         {
+            coordinatesNotYetSelected = true;
+            
             if (selectLocation)
             {
                 latitude = '51.1';
             }
             else
             {
-                alert('<xsl:value-of select="/metaInf/resources/msg[@key='alert.missingLatitude']/@value" />');
+                alert(resourceBundle["alert.missingLatitude"]);
                 return;
             }
         }
@@ -92,61 +100,70 @@
 
         if (longitude == '')
         {
+            coordinatesNotYetSelected = true;
+
             if (selectLocation)
             {
                 longitude = '13.76';
             }
             else
             {
-                alert('<xsl:value-of select="/metaInf/resources/msg[@key='alert.missingLongitude']/@value" />');
+                alert(resourceBundle["alert.missingLongitude"]);
                 return;
             }
         }
 
-        var zoomFactor = document.form1.zoomFactor[document.form1.zoomFactor.selectedIndex].value;
+        var zoomFactor = parseInt(document.form1.zoomFactor[document.form1.zoomFactor.selectedIndex].value);
       
         var infoText;
 
         if (selectLocation)
         {
-            infoText = '<xsl:value-of select="/metaInf/resources/msg[@key='label.hintGoogleMapSelect']/@value" />';
+            infoText = resourceBundle["label.hintGoogleMapSelect"];
         }   
         else
         {
             infoText = document.form1.infoText.value;
         }        
       
-        if (GBrowserIsCompatible()) 
-        {
-            var map = new GMap2(document.getElementById("map"));
-            map.addControl(new GSmallMapControl());
-            map.addControl(new GMapTypeControl());
-            map.setCenter(new GLatLng(latitude, longitude), parseInt(zoomFactor));
-            map.setMapType(G_HYBRID_MAP);
+        var mapCenter = new google.maps.LatLng(latitude, longitude);
+    
+        var myOptions = {
+            zoom: zoomFactor,
+            center: mapCenter,
+            mapTypeId: google.maps.MapTypeId.HYBRID
+        }
+      
+        var map = new google.maps.Map(document.getElementById("map"), myOptions);      
           
-            if (selectLocation)
-            {
-                document.getElementById("selectButton").style.visibility = 'visible';
-            }
+        if (selectLocation)
+        {
+            document.getElementById("selectButton").style.visibility = 'visible';
+        }
 
-            var markerPoint = new GLatLng(latitude, longitude);
-            
-            if (selectLocation)
-            {
-                posMarker = new GMarker(markerPoint, {draggable: true});
-            }
-            else
-            {
-                posMarker = new GMarker(markerPoint);
-            }
-            
-            map.addOverlay(posMarker);
-            
-            if (selectLocation)
-            {
-                GEvent.addListener(map, "click", setMarker);            
-            }
-        }      
+        var markerPos = new google.maps.LatLng(latitude, longitude);
+
+        posMarker = new google.maps.Marker({
+            position: markerPos,
+        });
+
+        posMarker.setMap(map);
+        
+        if ((selectLocation &amp;&amp; coordinatesNotYetSelected) ||
+            (!selectLocation &amp;&amp; (infoText != '')))
+        {
+            var infowindow = new google.maps.InfoWindow({
+                content: '<div style="width:160px;height:40px;overflow-x:auto;overflow-y:auto">' + infoText + '</div>'
+            });
+
+            infowindow.open(map, posMarker);
+        }    
+        
+        google.maps.event.addListener(map, 'click', function(event) {
+            var clickedPos = event.latLng;
+            posMarker.setPosition(clickedPos);
+            // map.setCenter(clickedPos);
+        });        
 
         document.getElementById("mapFrame").style.visibility = 'visible';
     }  
@@ -161,13 +178,11 @@
   </xsl:if>
 </script>
 
-
 </head>
 
 <body>
-
-  <xsl:if test="/metaInf/geoTag/googleMapsAPIKey">
-    <xsl:attribute name="onunload">GUnload()</xsl:attribute>
+  <xsl:if test="/metaInf/geoTag">
+    <xsl:attribute name="onload">loadGoogleMapsAPIScriptCode()</xsl:attribute>
   </xsl:if>
 
   <div class="headline">
@@ -200,7 +215,7 @@
     
       <tr>
         <td class="formParm1" nowrap="nowrap">
-          <xsl:value-of select="/metaInf/resources/msg[@key='label.description']/@value" />:
+          <span resource="label.description"></span>
           
           <xsl:if test="/metaInf/thumbnail">
             <div style="padding:0;padding-top:10px;">
@@ -220,7 +235,7 @@
 
       <tr>
         <td class="formParm1" nowrap="nowrap">
-          <xsl:value-of select="/metaInf/resources/msg[@key='label.geoTag']/@value" />:
+          <span resource="label.geoTag"></span>
         </td>
         <td class="formParm2" width="80%">
           <ul style="list-style:none;margin:0;padding:0;">
@@ -231,7 +246,7 @@
                 </xsl:if>
               </input>
               &#160;
-              <xsl:value-of select="/metaInf/resources/msg[@key='label.latitude']/@value" />
+              <span resource="label.latitude"></span>
             </li>
 
             <li style="padding-bottom:5px;">
@@ -241,25 +256,23 @@
                 </xsl:if>
               </input>
               &#160;
-              <xsl:value-of select="/metaInf/resources/msg[@key='label.longitude']/@value" />
+              <span resource="label.longitude"></span>
             </li>
               
-            <xsl:if test="/metaInf/geoTag/googleMapsAPIKey">
+            <xsl:if test="/metaInf/geoTag/mapSelection">
       
               <li style="padding-bottom:5px;">
                 <table border="0">
                   <tr>
                     <td>
-                  <a class="button" onclick="this.blur()"> 
-                    <xsl:attribute name="href">javascript:showMap(true)</xsl:attribute>
-                    <span><xsl:value-of select="/metaInf/resources/msg[@key='button.selectFromMap']/@value" /></span>
-                  </a>   
+                      <input type="button" resource="button.selectFromMap">
+                        <xsl:attribute name="onclick">javascript:showMap(true)</xsl:attribute>
+                      </input> 
                     </td>
                     <td>
-                  <a class="button" onclick="this.blur()"> 
-                    <xsl:attribute name="href">javascript:showMap()</xsl:attribute>
-                    <span><xsl:value-of select="/metaInf/resources/msg[@key='button.test']/@value" /></span>
-                  </a>
+                      <input type="button" resource="button.preview">
+                        <xsl:attribute name="onclick">javascript:showMap()</xsl:attribute>
+                      </input> 
                     </td> 
                   </tr>
                 </table>
@@ -278,7 +291,7 @@
                   </xsl:for-each>
                 </select>
                 &#160;
-                <xsl:value-of select="/metaInf/resources/msg[@key='label.zoomFactor']/@value" />
+                <span resource="label.zoomFactor"></span>
               </li>
               
             </xsl:if>
@@ -288,7 +301,7 @@
         </td>
       </tr>
         
-      <xsl:if test="/metaInf/geoTag/googleMapsAPIKey">
+      <xsl:if test="/metaInf/geoTag/mapSelection">
         <tr>
           <td class="formParm1">
             &#160;
@@ -296,15 +309,15 @@
           <td class="formParm2" width="80%">
             <textarea name="infoText" style="width:200;height:40px;vertical-align:top;" wrap="virtual"><xsl:value-of select="/metaInf/geoTag/infoText" /></textarea>
             &#160;
-            <xsl:value-of select="/metaInf/resources/msg[@key='label.geoTagInfoText']/@value" />
+            <span resource="label.geoTagInfoText"></span>
           </td>
         </tr>
       </xsl:if>
       
-      <xsl:if test="/metaInf/resources/msg[@key='label.textColor']">
+      <xsl:if test="/metaInf/folder">
         <tr> 
           <td class="formParm1">
-            <xsl:value-of select="/metaInf/resources/msg[@key='label.textColor']/@value" />
+            <span resource="label.textColor"></span>
           </td>
           <td class="formParm2">
             <input name="textColor" class="color" onblur="uncheckDefaultColor()">
@@ -324,15 +337,15 @@
               </xsl:if>
             </input>
             
-            <xsl:value-of select="/metaInf/resources/msg[@key='noCustomColor']/@value" />
+            <span resource="noCustomColor"></span>
           </td>
         </tr>
       </xsl:if>
 
-      <xsl:if test="/metaInf/resources/msg[@key='label.folderIcon']">
+      <xsl:if test="/metaInf/folder">
         <tr> 
           <td class="formParm1">
-            <xsl:value-of select="/metaInf/resources/msg[@key='label.folderIcon']/@value" />
+            <span resource="label.folderIcon"></span>
           </td>
           <td class="formParm2">
             <div style="width:300px;height:80px;overflow-x:auto;overflow-y:auto;border:1px solid #a0a0a0">
@@ -348,7 +361,7 @@
                   <td>
                   </td>
                   <td class="formParm1">
-                    <xsl:value-of select="/metaInf/resources/msg[@key='noCustomIcon']/@value" />
+                    <span resource="noCustomIcon"></span>
                   </td>
                 </tr>
                 <xsl:for-each select="/metaInf/availableIcons/icon">
@@ -378,23 +391,21 @@
       </xsl:if>
 
       <tr>
-        <td class="formButton" nowrap="nowrap">
-          <a class="button" onclick="this.blur()"> 
-            <xsl:attribute name="href">javascript:document.form1.submit()</xsl:attribute>
-              <span><xsl:value-of select="/metaInf/resources/msg[@key='button.save']/@value" /></span>
-          </a>              
+        <td class="formButton">
+          <input type="button" resource="button.save">
+            <xsl:attribute name="onclick">javascript:checkLengthAndSubmit()</xsl:attribute>
+          </input> 
         </td>
 
-        <td class="formButton" nowrap="nowrap">
-          <a class="button" style="float:right" onclick="this.blur()"> 
+        <td class="formButton">
+          <input type="button" resource="button.cancel" style="float:right">
             <xsl:if test="/metaInf/mobile">
-              <xsl:attribute name="href">javascript:history.back()</xsl:attribute>
+              <xsl:attribute name="onclick">javascript:history.back()</xsl:attribute>
             </xsl:if>
             <xsl:if test="not(/metaInf/mobile)">
-              <xsl:attribute name="href">javascript:window.close()</xsl:attribute>
+              <xsl:attribute name="onclick">javascript:window.close()</xsl:attribute>
             </xsl:if>
-            <span><xsl:value-of select="/metaInf/resources/msg[@key='button.cancel']/@value" /></span>
-          </a>              
+          </input> 
         </td>
       </tr>
 
@@ -411,21 +422,24 @@
   <div id="mapFrame" style="width:100%;height:100%;position:absolute;top:0px;left:0px;visibility:hidden;background-color:#d0d0d0;">
     <div id="map" style="width:100%;height:100%;position:absolute;top:0px;left:0px;"></div>
     
-    <div style="width:16px;height:14px;position:absolute;bottom:10px;right:10px;">
-      <a href="javascript:hideMap()">
-        <img src="/webfilesys/images/winClose.gif" border="0" width="16" height="14">
-          <xsl:attribute name="title"><xsl:value-of select="/metaInf/resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
-        </img>
-      </a>
+    <div style="position:absolute;bottom:15px;left:10px;"> 
+
+      <form>
+        <input id="closeButton" type="button" resource="button.closeMap" onclick="hideMap()" 
+            style="font-size:13px;font-weight:bold;color:black;"/>
+
+        <input id="selectButton" type="button" resource="button.save" onclick="javascript:selectLocation()" 
+            style="visibility:hidden;font-size:13px;font-weight:bold;color:black;"/>
+      </form>
+      
     </div>
 
-    <div id="selectButton" style="width:42px;height:15px;position:absolute;bottom:10px;left:10px;visibility:hidden;">
-      <form>
-        <input type="button" value="OK" onclick="javascript:selectLocation()" style="width:40px;font-size:10pt;color:black;"/>
-      </form>
-    </div>
   </div>
 </xsl:if>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
 
 </html>
 

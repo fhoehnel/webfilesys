@@ -1223,7 +1223,7 @@ span.pagingPage {
     font-weight: normal;
     font-size: 14px;
     color: #000000;
-    margin-left: 8px;
+    margin-left: 6px;
 }
 
 span.pagingPage a {
@@ -1231,6 +1231,33 @@ span.pagingPage a {
     font-size: 13px;
     color: navy;
     text-decoration: none;
+}
+
+div.pagingPage {
+    display: inline;
+    padding: 2px 6px;
+    font-size: 13px;
+    margin: 0 2px;
+}
+ 
+div.pagingPageOther {
+    background-color: #e0e0e0;
+    border: 1px solid #c0c0c0;
+    cursor: pointer;
+    font-weight: bold;
+    color: navy;
+} 
+
+div.pagingPageOther:hover {
+    background-color: #E6E6FA;
+    border: 1px solid #000080;
+} 
+
+div.pagingPageCurrent {
+    background-color: #C0C0FF;
+    border: 1px solid #000080;
+    color: #000000;
+    font-weight: bold;
 }
   
 table.contextMenu {
@@ -1253,4 +1280,8 @@ table.contextMenu th {
 
 div.selectedFolder {
     border: 1px solid maroon;
+}
+
+td.pagingIcon {
+    padding: 0px;
 }

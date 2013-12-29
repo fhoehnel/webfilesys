@@ -201,17 +201,8 @@ function multiImageDownload()
 {
     if (anySelected())
     {
-        xpos = (screen.width - 400) / 2;
-    
-        downloadWin = window.open("/webfilesys/servlet?command=blank","downloadWin","status=no,toolbar=no,location=no,menu=no,width=400,height=240,resizable=no,left=" + xpos + ",top=100,screenX=" + xpos + ",screenY=100");
- 
-        document.form2.target='downloadWin';
-        document.form2.command.value='multiImageDownloadPrompt';
+        document.form2.command.value = 'multiImgDownload';
         document.form2.submit();
-        resetSelected();
-        document.form2.target='';
-
-        downloadWin.focus();
     }
     else
     {   

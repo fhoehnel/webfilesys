@@ -67,7 +67,7 @@ public abstract class GoogleEarthHandlerBase extends UserRequestHandler
 	{
 		resp.setContentType(GOOGLE_KML_CONTENT_TYPE);
 
-		resp.setHeader("Content-Disposition:", "attachment; filename=WebFileSysPlacemarks.kml");
+		resp.setHeader("Content-Disposition", "attachment; filename=WebFileSysPlacemarks.kml");
 
 		BufferedWriter xmlOutFile = new BufferedWriter(output);
                 

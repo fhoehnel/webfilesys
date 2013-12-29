@@ -74,24 +74,6 @@ public class XslGoogleMapHandler extends XslRequestHandlerBase
 			}
 		}
 		
-		String googleMapsAPIKey = null;
-		
-		if (req.getScheme().equalsIgnoreCase("https"))
-		{
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
-		}
-		else
-		{
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
-		}
-
-		if (googleMapsAPIKey == null)
-		{
-			Logger.getLogger(getClass()).error("Google Maps API key not defined");
-			
-			return;
-		}
-
 		String headLinePath = this.getHeadlinePath(path);
 
         String shortPath = CommonUtils.shortName(headLinePath, 50);
@@ -108,8 +90,6 @@ public class XslGoogleMapHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(geoTagElement, "path", path, false);
 		XmlUtil.setChildText(geoTagElement, "shortPath", shortPath, false);
 			
-		XmlUtil.setChildText(geoTagElement, "googleMapsAPIKey", googleMapsAPIKey, false);
-
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 		
 		boolean geoLocationDefined = false;

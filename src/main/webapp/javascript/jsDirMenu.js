@@ -154,7 +154,7 @@ function publish(path,mailEnabled)
 
 function description(path)
 {
-    descWin=window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&geoTag=true&random=" + new Date().getTime(),"descWin","status=no,toolbar=no,location=no,menu=no,width=600,height=450,scrollbars=yes,resizable=yes,left=20,top=20,screenX=20,screenY=20");
+    descWin=window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&geoTag=true&random=" + new Date().getTime(),"descWin","status=no,toolbar=no,location=no,menu=no,width=600,height=570,scrollbars=yes,resizable=yes,left=20,top=20,screenX=20,screenY=20");
     descWin.focus();
     // descWin.opener=parent.FileList;
 }

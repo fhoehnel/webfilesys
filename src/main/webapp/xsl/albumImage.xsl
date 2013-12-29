@@ -326,10 +326,10 @@
                   </xsl:if>
 
                   <td nowrap="nowrap">
-                    <a class="button" onclick="this.blur();"> 
-                      <xsl:attribute name="href">javascript:window.location.href='/webfilesys/servlet?command=album';</xsl:attribute>
-                      <span><xsl:value-of select="/imageData/resources/msg[@key='button.returnToAlbum']/@value" /></span>
-                    </a>
+                    <input type="button">
+                      <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=album';</xsl:attribute>
+                      <xsl:attribute name="value"><xsl:value-of select="/imageData/resources/msg[@key='button.returnToAlbum']/@value" /></xsl:attribute>
+                    </input> 
                   </td>
                   
                 </tr>
@@ -427,10 +427,10 @@
 	  
             <tr>
               <td class="formParm1" style="padding-top:10px;padding-bottom:10px">
-                <a class="button" onclick="this.blur();"> 
-                  <xsl:attribute name="href">javascript:addComment();</xsl:attribute>
-                  <span><xsl:value-of select="resources/msg[@key='button.addComment']/@value" /></span>
-                </a>              
+                <input type="button">
+                  <xsl:attribute name="onclick">javascript:addComment();</xsl:attribute>
+                  <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.addComment']/@value" /></xsl:attribute>
+                </input> 
               </td>
             </tr>
 

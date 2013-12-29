@@ -283,10 +283,10 @@
               </xsl:if>
 
               <td style="vertical-align:middle;" nowrap="nowrap">
-                <a class="button" onclick="this.blur();"> 
-                  <xsl:attribute name="href">javascript:document.sortform.submit();</xsl:attribute>
-                  <span><xsl:value-of select="resources/msg[@key='label.refresh']/@value" /></span>
-                </a>              
+                <input type="button">
+                  <xsl:attribute name="onclick">javascript:document.sortform.submit()</xsl:attribute>
+                  <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='label.refresh']/@value" /></xsl:attribute>
+                </input> 
               </td>
               
               <xsl:if test="fileList/fileGroup">
@@ -389,27 +389,27 @@
               <tr>
             
                 <xsl:if test="paging/currentPage &gt; 1">
-                  <td class="fileListFunct" valign="center" nowrap="true">
-                    <a href="/webfilesys/servlet?command=album&amp;startIdx=0"><img src="/webfilesys/images/first.gif" border="0" /></a>
+                  <td class="pagingIcon" valign="center" nowrap="true">
+                    <a href="/webfilesys/servlet?command=album&amp;startIdx=0"><img src="/webfilesys/images/first2.png" border="0" /></a>
                     &#160;
                     <a>
                       <xsl:attribute name="href">
                         <xsl:value-of select="concat('/webfilesys/servlet?command=album&amp;startIdx=',paging/prevStartIdx)"/>
                       </xsl:attribute>
-                      <img src="/webfilesys/images/previous.gif" border="0" />
+                      <img src="/webfilesys/images/prev2.png" border="0" />
                     </a>
                   </td>
                 </xsl:if>
             
                 <td class="fileListFunct" valign="center" nowrap="true">
                   <xsl:value-of select="resources/msg[@key='label.files']/@value" /> 
-                  &#160;
+                  <xsl:text> </xsl:text>
                   <xsl:value-of select="paging/firstOnPage" />
                   ...
                   <xsl:value-of select="paging/lastOnPage" />
-                  &#160;
+                  <xsl:text> </xsl:text>
                   <xsl:value-of select="resources/msg[@key='label.of']/@value" /> 
-                  &#160;
+                  <xsl:text> </xsl:text>
                   <xsl:value-of select="fileNumber" />
                 </td>
               
@@ -419,39 +419,35 @@
                     <xsl:value-of select="resources/msg[@key='label.page']/@value" /> 
 
                     <xsl:for-each select="paging/page">
-                      <img src="images/space.gif" border="0" width="5" />
                       <xsl:if test="@num=../currentPage">
-                        <xsl:value-of select="@num" />
+                        <div class="pagingPage pagingPageCurrent">
+                          <xsl:value-of select="@num" />
+                        </div>
                       </xsl:if>
                       <xsl:if test="not(@num=../currentPage)">
-                        <a class="fn">
-                          <xsl:attribute name="href">
-                            <xsl:value-of select="concat('/webfilesys/servlet?command=album&amp;startIdx=',@startIdx)"/>
-                          </xsl:attribute>
+                        <div class="pagingPage pagingPageOther">
+                          <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=album&amp;startIdx=<xsl:value-of select="@startIdx" />'</xsl:attribute>
                           <xsl:value-of select="@num" />
-                        </a>
+                        </div>
                       </xsl:if>
                     </xsl:for-each>
                   </td>
 
                   <xsl:if test="paging/nextStartIdx">
-                    <td class="fileListFunct">
-                      <img src="images/space.gif" border="0" width="16" />
-                    </td>
               
-                    <td class="fileListFunct" align="right" valign="center" nowrap="true">
+                    <td class="pagingIcon" align="right" valign="center" nowrap="true">
                       <a>
                         <xsl:attribute name="href">
                           <xsl:value-of select="concat('/webfilesys/servlet?command=album&amp;startIdx=',paging/nextStartIdx)"/>
                         </xsl:attribute>
-                        <img src="/webfilesys/images/next.gif" border="0" />
+                        <img src="/webfilesys/images/next2.png" border="0" />
                       </a>
                       &#160;
                       <a>
                         <xsl:attribute name="href">
                           <xsl:value-of select="concat('/webfilesys/servlet?command=album&amp;startIdx=',paging/lastStartIdx)"/>
                         </xsl:attribute>
-                        <img src="/webfilesys/images/last.gif" border="0" />
+                        <img src="/webfilesys/images/last2.png" border="0" />
                       </a>
                     </td>
                   </xsl:if>

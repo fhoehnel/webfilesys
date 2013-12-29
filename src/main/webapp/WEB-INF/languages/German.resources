@@ -148,6 +148,7 @@ label.loginHint=Hinweis: Click auf das Ordner Icon öffnet das Context-Menü.
 # description window buttons and labels
 button.setdesc=Speichern
 button.close=Abbrechen
+button.closeMap=Schliessen
 label.textColor=Textfarbe
 label.folderIcon=Ordner Icon
 noCustomIcon=Standard Ordner-Icon
@@ -719,9 +720,9 @@ label.zoomFactor=Zoom Factor (1 = weit weg, 16 = ganz nah)
 label.geoTagInfoText=Text für Info-Fenster auf der Karte
 alert.missingLatitude=geogr. Breite ist ein Pflichtfeld
 alert.missingLongitude=geogr. Länge ist ein Pflichtfeld
-button.test=Test
+button.preview=Vorschau Karte
 button.selectFromMap=auf Karte auswählen
-label.hintGoogleMapSelect=Doppelklick wählt geografische Lokation aus
+label.hintGoogleMapSelect=Klick wählt geografische Lokation aus
 noFilesWithGeoData=Dieser Ordner enthält keine Bilder mit geografischen Koordinaten!
 
 # folder synchronization

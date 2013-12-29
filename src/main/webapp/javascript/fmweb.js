@@ -41,17 +41,8 @@ function selectAll()
 
 function multiDownload()
 {
-    xpos = (screen.width - 400) / 2;
-    
-    downloadWin = window.open("/webfilesys/servlet?command=blank","downloadWin","status=no,toolbar=no,location=no,menu=no,width=400,height=240,resizable=no,left=" + xpos + ",top=100,screenX=" + xpos + ",screenY=100");
- 
-    document.form1.command.value = 'multiFileDownloadPrompt';
-    document.form1.target='downloadWin';
+    document.form1.command.value = 'multiDownload';
     document.form1.submit();
-    resetSelected();
-    document.form1.target='';
-
-    downloadWin.focus();
 }
 
 function setDependendCheckbox(prereq,dependent)

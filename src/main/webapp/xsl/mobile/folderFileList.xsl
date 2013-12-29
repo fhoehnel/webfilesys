@@ -161,7 +161,7 @@
               <xsl:attribute name="href">/webfilesys/servlet?command=mobile&amp;cmd=folderFileList&amp;relPath=<xsl:value-of select="@path"/></xsl:attribute>
               <xsl:value-of select="@name"/> 
             </a>
-            <xsl:if test="not(position()=last())"><font class="currentPathSep"><b> / </b></font></xsl:if>
+            <xsl:if test="not(position()=last())"><span class="currentPathSep">/</span></xsl:if>
           </xsl:for-each>
         </div>
         
@@ -305,18 +305,19 @@
                     <xsl:value-of select="resources/msg[@key='label.page']/@value" /> 
 
                     <xsl:for-each select="paging/page">
-                      <img src="images/space.gif" border="0" width="5" />
-                      <xsl:if test="@num=../currentPage">
-                        <span class="pageNum"><xsl:value-of select="@num" /></span>
-                      </xsl:if>
-                      <xsl:if test="not(@num=../currentPage)">
-                        <span class="pageNum">
-                          <a class="pageNum">
-                            <xsl:attribute name="href">/webfilesys/servlet?command=mobile&amp;cmd=folderFileList&amp;startIdx=<xsl:value-of select="@startIdx"/></xsl:attribute>
+                      <span class="pagingPage">
+                        <xsl:if test="@num=../currentPage">
+                          <div class="pagingPage pagingPageCurrent">
                             <xsl:value-of select="@num" />
-                          </a>
-                        </span>
-                      </xsl:if>
+                          </div>
+                        </xsl:if>
+                        <xsl:if test="not(@num=../currentPage)">
+                          <div class="pagingPage pagingPageOther">
+                            <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=mobile&amp;cmd=folderFileList&amp;startIdx=<xsl:value-of select="@startIdx" />'</xsl:attribute>
+                            <xsl:value-of select="@num" />
+                          </div>
+                        </xsl:if>
+                      </span>
                     </xsl:for-each>
                   </td>
 

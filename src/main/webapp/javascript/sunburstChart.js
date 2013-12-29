@@ -304,3 +304,45 @@
 		   document.getElementById("svgChart").appendChild(labelText);
 	   }
 		
+	   function textOnCircle(startAngle, endAngle, radius, text, textStartOffset, fontSize)
+	   {
+	       var startRadiant = startAngle * Math.PI / 180;
+	       var endRadiant = endAngle * Math.PI / 180;
+
+           var startX = centerX + (Math.cos(startRadiant) * radius);
+		   var startY = centerY + (Math.sin(startRadiant) * radius);
+		   var endX = centerX + (Math.cos(endRadiant) * radius);
+		   var endY = centerY + (Math.sin(endRadiant) * radius);
+
+		   var largeArcFlag = 0;
+		   if (endAngle - startAngle > 180) 
+		   {
+		       largeArcFlag = 1;
+		   }
+		   
+		   var pathId = Math.random().toString(36).substr(2, 9);
+		   
+		   var pathData = "M " + startX + "," + startY + " A " + radius + " " + radius + " 0 " + largeArcFlag + ",1 " + endX + "," + endY;
+		   
+    	   var pathElem = document.createElementNS(svgNS, "path");
+		   pathElem.id = pathId;
+		   pathElem.setAttribute("d", pathData);
+		   
+		   var defsElem = document.createElementNS(svgNS, "defs");
+		   defsElem.appendChild(pathElem);
+		   
+		   document.getElementById("svgChart").appendChild(defsElem);
+		   
+		   var textPathElem = document.createElementNS(svgNS, "textPath");
+		   textPathElem.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + pathId);
+		   textPathElem.setAttribute("startOffset", textStartOffset);
+		   var textNode = document.createTextNode(text);
+           textPathElem.appendChild(textNode);
+		   
+           var textElem = document.createElementNS(svgNS, "text");
+		   textElem.setAttribute("style", "fill:#000000;font-size:" + fontSize + ";font-weight:bold;");
+		   
+           textElem.appendChild(textPathElem);		
+
+		   document.getElementById("svgChart").appendChild(textElem);
+	   }
