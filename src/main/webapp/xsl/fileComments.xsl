@@ -74,8 +74,8 @@
         <xsl:for-each select="/fileComments/comments/comment">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="user" />
-              (<xsl:value-of select="date" />)
+              <xsl:value-of select="user" />,&#160;
+              <xsl:value-of select="date" />
             </td>
           </tr>
               

@@ -63,7 +63,6 @@
   a.dir {font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
   a.dir:hover {color:green;}
   font.fixed {font-size:10pt;color:black;font-family:monospace;}
-  input,select,textarea {font-family:Arial,Helvetica;font-size:10pt;color:navy;background-color:white;}
   input.cb {background-color:white;}
   body.menu {margin-top:0px;margin-left:0px;margin-right:0px;font-size:10pt;background-color:#c0c0c0;font-family:Arial;}
   td.border {background-color:black;}
@@ -80,6 +79,31 @@
   table.folderFileList {width:100%;border-width:1px;border-style:solid;border-color:black;border-bottom-style:none}
   
   input.formParm1 {background-color:#ffffe0;}
+  
+  input, select, textarea {
+      font-size:13px;
+      color:navy;
+      background-color:white;
+      border: 1px solid #808080;
+      border-radius: 5px 5px 5px 5px;
+      padding: 2px;    
+  }
+  
+  input[type="submit"], input[type="button"], input.roundedButton {
+      color: black;
+      font-size: 13px;
+      border: 1px solid #a0a0a0;
+      background-image:url('/webfilesys/images/buttonBack.png');
+      background-repeat:repeat-x;
+      padding-left: 12px;
+      padding-right: 12px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+      margin-right: 5px;
+      -moz-border-radius: 10px;
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+  }
   
   a.button 
   {

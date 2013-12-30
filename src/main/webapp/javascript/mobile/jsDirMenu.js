@@ -2,6 +2,8 @@ function mkdir(path)
 {  
     showPrompt('/webfilesys/servlet?command=mkdirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFolder.xsl', 320, 190);
 
+    setBundleResources();
+    
     document.mkdirForm.NewDirName.focus();
     
     document.mkdirForm.NewDirName.select();
@@ -15,6 +17,8 @@ function deleteDir(path, domId)
 function renameDir(path)
 {
     showPrompt('/webfilesys/servlet?command=renDirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/renameDir.xsl', 320, 190);
+
+    setBundleResources();
 
     document.mkdirForm.NewDirName.focus();
     
@@ -47,6 +51,8 @@ function search(path)
 function mkfile(path)
 {
     showPrompt('/webfilesys/servlet?command=mkfilePrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFile.xsl', 320, 190);
+    
+    setBundleResources();
     
     document.mkfileForm.NewFileName.focus();
     
