@@ -21,7 +21,7 @@ import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.PictureRating;
 import de.webfilesys.graphics.CameraExifData;
-import de.webfilesys.graphics.ImageTransformation;
+import de.webfilesys.graphics.ImageTransform;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
@@ -75,7 +75,9 @@ public class XmlTransformImageHandler extends XmlRequestHandlerBase
 			degrees="90";
 		}
 
-		ImageTransformation imgTrans = new ImageTransformation(origImagePath, action, degrees);
+		// ImageTransformation imgTrans = new ImageTransformation(origImagePath, action, degrees);
+		
+		ImageTransform imgTrans = new ImageTransform(origImagePath, action, degrees);
 
 		String resultImageName = imgTrans.execute(false);
 		
@@ -294,7 +296,7 @@ public class XmlTransformImageHandler extends XmlRequestHandlerBase
 									thumbHeight = exifThumbHeight * thumbnailSize / exifThumbWidth;
 								}
 								
-								srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + URLEncoder.encode(fullFileName);
+								srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(fullFileName);
 								useThumb=true;
 							}
 						}
@@ -307,14 +309,14 @@ public class XmlTransformImageHandler extends XmlRequestHandlerBase
 
 			if (!useThumb)
 			{
-				srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + URLEncoder.encode(srcFileName);
+				srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(srcFileName);
 			}
 			
 			XmlUtil.setChildText(fileElement, "imgPath", srcFileName);
 			
-			XmlUtil.setChildText(fileElement, "encodedPath", URLEncoder.encode(tempFile.getAbsolutePath()), false);
+			XmlUtil.setChildText(fileElement, "encodedPath", UTF8URLEncoder.encode(tempFile.getAbsolutePath()), false);
 
-			XmlUtil.setChildText(fileElement, "encodedName", URLEncoder.encode(resultImageName), false);
+			XmlUtil.setChildText(fileElement, "encodedName", UTF8URLEncoder.encode(resultImageName), false);
 		}
 		
 		addMsgResource("label.comments", getResource("label.comments", "Comments"));

@@ -34,7 +34,7 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.graphics.GifQuantizer;
 import de.webfilesys.graphics.ImageTextStamp;
-import de.webfilesys.graphics.ImageTransformation;
+import de.webfilesys.graphics.ImageTransform;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLDecoder;
@@ -117,7 +117,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         try
         {
             newSize = Integer.parseInt(newSizeString);
-            if ((newSize < MIN_TARGET_SIZE) || (newSize > MAX_TARGET_SIZE))
+            if ((newSize != 0) && (newSize < MIN_TARGET_SIZE) || (newSize > MAX_TARGET_SIZE))
             {
                 invalidNewSize = true;
             }
@@ -599,7 +599,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             
             if (newSize != 0)
             {
-                bufferedImg = ImageTransformation.getScaledInstance(bufferedImg, scaledWidth, scaledHeight,
+                bufferedImg = ImageTransform.getScaledInstance(bufferedImg, scaledWidth, scaledHeight,
                                                                     RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
             }
 

@@ -101,6 +101,11 @@ public class ISO8601DateParser {
         } else {
             int inset = 6;
         
+            if (input.length() - inset <= 0) {
+            	Logger.getLogger(ISO8601DateParser.class).warn("ISO8601DateParser invalid Date: " + input);
+            	return new Date(0l);
+            }
+            
             String s0 = input.substring( 0, input.length() - inset );
             String s1 = input.substring( input.length() - inset, input.length() );
 

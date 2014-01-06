@@ -1,7 +1,10 @@
 package de.webfilesys;
 
 import java.io.File;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
 import org.apache.log4j.Logger;
 
 public class FastPathManager extends Thread

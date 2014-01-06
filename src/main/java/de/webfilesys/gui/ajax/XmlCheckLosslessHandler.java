@@ -54,10 +54,6 @@ public class XmlCheckLosslessHandler extends XmlRequestHandlerBase
         {
             lossless = false;
         }
-        else if ((File.separatorChar == '/') && (WebFileSys.getInstance().getJpegtranPath() == null))
-        {
-            lossless = false;
-        }
         else if ((sourceImage.getRealWidth() % 8 != 0) || (sourceImage.getRealHeight() % 8 != 0))
         {
         	lossless = false;

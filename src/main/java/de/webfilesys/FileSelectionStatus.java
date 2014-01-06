@@ -1,6 +1,6 @@
 package de.webfilesys;
 
-import java.util.*;
+import java.util.Vector;
 
 public class FileSelectionStatus
 {

@@ -1,6 +1,6 @@
 package de.webfilesys.unix;
 
-import java.util.*;
+import java.util.Vector;
 
 public class UnixProcess
 {

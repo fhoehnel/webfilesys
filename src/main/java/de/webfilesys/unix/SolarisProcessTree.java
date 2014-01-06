@@ -1,7 +1,8 @@
 package de.webfilesys.unix;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 public class SolarisProcessTree extends ProcessTree
 {

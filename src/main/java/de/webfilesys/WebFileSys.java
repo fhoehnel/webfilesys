@@ -43,7 +43,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.9.3 (30 Dec 2013)";
+	public static final String VERSION = "Version 2.9.4-beta3 (06 Jan 2014)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -149,8 +149,6 @@ public class WebFileSys
     private String serverDNS = null;
 
     private String userDocRoot = null;
-
-    private String jpegtranPath = null;
 
     private String logoutURL = null;
 
@@ -628,30 +626,6 @@ public class WebFileSys
             }
         }
         
-        if (File.separatorChar == '/')
-        {
-            jpegtranPath = config.getProperty("jpegtranExePath");
-
-            if (jpegtranPath != null)
-            {
-                File jpegTranExe = new File(jpegtranPath);
-
-                if ((!jpegTranExe.exists())
-                    || (!jpegTranExe.isFile())
-                    || (!jpegTranExe.canRead()))
-                {
-                    Logger.getLogger(getClass()).error(
-                        "jpegtran executable " + jpegtranPath + " not found");
-
-                    jpegtranPath = null;
-                }
-            }
-        }
-        else
-    	{
-        	jpegtranPath = getConfigBaseDir() + File.separator + "jpegtran.exe";
-    	}
-        
 		temp = config.getProperty("SimulateRemote");
 		
 		if ((temp != null) && temp.equalsIgnoreCase("true"))
@@ -1049,11 +1023,6 @@ public class WebFileSys
     public boolean isAutoExtractMP3()
     {
     	return(autoExtractMP3);
-    }
-    
-    public String getJpegtranPath()
-    {
-    	return(jpegtranPath);
     }
     
     public boolean isSimulateRemote()

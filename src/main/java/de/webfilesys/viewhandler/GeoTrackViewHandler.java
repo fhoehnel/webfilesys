@@ -30,8 +30,22 @@ public class GeoTrackViewHandler implements ViewHandler
     
     private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
     
+    private static final int DISTANCE_SMOOTH_FACTOR = 12;
+    
     public void process(String filePath, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req, HttpServletResponse resp)
     {
+    	double[] distanceBuffer = new double[DISTANCE_SMOOTH_FACTOR];
+    	
+    	for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
+    		distanceBuffer[i] = 0.0;
+    	}
+
+    	double[] durationBuffer = new double[DISTANCE_SMOOTH_FACTOR];
+    	
+    	for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
+    		durationBuffer[i] = 0.0;
+    	}
+    	
         try 
         {
             resp.setContentType("text/xml");
@@ -161,6 +175,11 @@ public class GeoTrackViewHandler implements ViewHandler
                                             dist = 0.0f;
                                         } else {
                                             dist = calculateDistance(prevLat, prevLon, latitude, longitude);
+                                            
+                                    	    for (int i = 0; i < DISTANCE_SMOOTH_FACTOR - 1; i++) {
+                                    		    distanceBuffer[i] = distanceBuffer[i + 1];
+                                    	    }
+                                    	    distanceBuffer[DISTANCE_SMOOTH_FACTOR - 1] = dist;
                                         }
                                         
                                         totalDist += dist;
@@ -181,7 +200,7 @@ public class GeoTrackViewHandler implements ViewHandler
                                     }
                                     catch (NumberFormatException numEx)
                                     {
-                                        Logger.getLogger(getClass()).error(numEx);
+                                        Logger.getLogger(getClass()).error(numEx, numEx);
                                     }
                                 }
                             }
@@ -247,6 +266,17 @@ public class GeoTrackViewHandler implements ViewHandler
 
                             if (tagName.equals("time"))
                             {
+                                double correctedSpeed = speed;
+                            	if (correctedSpeed < 0.001f) {
+                                    // prevent exponential format
+                                    correctedSpeed = 0.0f;
+                                }
+                            	
+                            	if (speed != Double.MIN_VALUE) {
+                                    xmlOut.print("\n<speed>" + correctedSpeed + "</speed>");
+                                }
+                                
+                                /*
                                 if (speed != Double.MIN_VALUE)
                                 {
                                     double correctedSpeed = speed;
@@ -265,6 +295,7 @@ public class GeoTrackViewHandler implements ViewHandler
                                     
                                     prevSpeed = correctedSpeed;
                                 }
+                                */
                             }
 
                             lastWasText = false;
@@ -288,14 +319,36 @@ public class GeoTrackViewHandler implements ViewHandler
                                         if ((prevTime > 0L) && (dist != Double.MIN_VALUE)) 
                                         {
                                             double duration = trackPointTime - prevTime;
-                              
-                                            if (duration == 0l)
-                                            {
+                                            
+                                            if (duration < 0) {
+                                                Logger.getLogger(getClass()).warn("invalid trkpt time (before previous timestamp): " + elementText);
                                                 speed = 0.0f;
-                                            }
-                                            else 
-                                            {
-                                                speed = dist / (duration / 1000f);
+                                            } else {
+                                        	    for (int i = 0; i < DISTANCE_SMOOTH_FACTOR - 1; i++) {
+                                        		    durationBuffer[i] = durationBuffer[i + 1];
+                                        	    }
+                                        	    durationBuffer[DISTANCE_SMOOTH_FACTOR - 1] = duration;
+                                                
+                                                if (duration == 0l)
+                                                {
+                                                    speed = 0.0f;
+                                                }
+                                                else 
+                                                {
+                                                    // speed = dist / (duration / 1000f);
+
+                                                	double bufferedDuration = 0.0;
+                                            	    for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
+                                            		    bufferedDuration += durationBuffer[i];
+                                            	    }
+                                                	
+                                            	    double bufferedDistance = 0.0;
+                                            	    for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
+                                            		    bufferedDistance += distanceBuffer[i];
+                                            	    }
+                                            	    
+                                            	    speed = bufferedDistance / (bufferedDuration / 1000f);
+                                                }
                                             }
                                         }
                                     
@@ -303,7 +356,7 @@ public class GeoTrackViewHandler implements ViewHandler
                                     } 
                                     catch (Exception ex)
                                     {
-                                        Logger.getLogger(getClass()).error(ex);
+                                        Logger.getLogger(getClass()).error(ex, ex);
                                         
                                         prevTime = 0L;
                                     }
@@ -334,7 +387,7 @@ public class GeoTrackViewHandler implements ViewHandler
                 }
                 catch (WstxParsingException epex)
                 {
-                    Logger.getLogger(getClass()).warn("GPX parsing error" + epex);
+                    Logger.getLogger(getClass()).warn("GPX parsing error", epex);
                 }
             }            
 
@@ -343,14 +396,14 @@ public class GeoTrackViewHandler implements ViewHandler
         } 
         catch (IOException e) 
         {
-            Logger.getLogger(getClass()).error("failed to read target file" + e);
+            Logger.getLogger(getClass()).error("failed to read target file", e);
         }
         catch (XMLStreamException xmlEx) {
             Logger.getLogger(getClass()).error("error parsing XML stream", xmlEx);
         }
         catch (Exception e) 
         {
-            Logger.getLogger(getClass()).error("failed to transform GPX file" + e);
+            Logger.getLogger(getClass()).error("failed to transform GPX file", e);
         }
     }
 

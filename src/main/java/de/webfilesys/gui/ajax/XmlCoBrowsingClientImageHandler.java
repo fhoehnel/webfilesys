@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import de.webfilesys.CoBrowsingManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.XmlUtil;
 

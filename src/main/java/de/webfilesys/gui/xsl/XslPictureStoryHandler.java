@@ -232,17 +232,8 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			return; 
 		}
 
-		if (File.separatorChar == '/')
-		{
-			if (WebFileSys.getInstance().getJpegtranPath() !=null)
-			{
-				XmlUtil.setChildText(fileListElement, "jpegtran", "true");
-			}
-		}
-		else
-		{
-			XmlUtil.setChildText(fileListElement, "jpegtran", "true");
-		}
+		// TODO: remove this historic relict
+		XmlUtil.setChildText(fileListElement, "jpegtran", "true");
 
 		addMsgResource("label.comments", getResource("label.comments","Comments"));
 		

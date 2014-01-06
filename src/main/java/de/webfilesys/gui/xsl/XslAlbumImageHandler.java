@@ -23,7 +23,6 @@ import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.PictureRating;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;

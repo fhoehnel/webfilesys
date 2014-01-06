@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import de.webfilesys.graphics.ImageTransformation;
+import de.webfilesys.graphics.ImageTransform;
 import de.webfilesys.util.CommonUtils;
 
 /**
@@ -123,7 +123,7 @@ public class TransformImageRequestHandler extends UserRequestHandler
 			output.println("</script>");
 			output.flush();
 
-			ImageTransformation imgTrans=new ImageTransformation(pathWithSlash + currentFile,"rotate",degrees);
+			ImageTransform imgTrans = new ImageTransform(pathWithSlash + currentFile, "rotate", degrees);
 
 			imgTrans.execute(false);
 		}

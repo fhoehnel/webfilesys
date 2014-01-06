@@ -1,7 +1,8 @@
 package de.webfilesys;
 
-import java.util.*;
-import java.io.*;
+import java.io.File;
+import java.util.Comparator;
+import java.util.Hashtable;
 
 public class FileComparator implements Comparator
 {

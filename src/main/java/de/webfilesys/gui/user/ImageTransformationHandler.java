@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import de.webfilesys.graphics.ImageTransformation;
+import de.webfilesys.graphics.ImageTransform;
 import de.webfilesys.gui.xsl.XslThumbnailHandler;
 
 /**
@@ -52,7 +52,7 @@ public class ImageTransformationHandler extends UserRequestHandler
 			degrees="90";
 		}
 
-		ImageTransformation imgTrans=new ImageTransformation(imageName,action,degrees);
+		ImageTransform imgTrans = new ImageTransform(imageName,action,degrees);
 
 		String resultFileName=imgTrans.execute(false);
 

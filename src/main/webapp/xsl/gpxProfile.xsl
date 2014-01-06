@@ -20,9 +20,10 @@
 </link>
 
 <style>
-  p.info {font-size:10pt;font-family:Arial,Helvetica;color:black;clear:both;}
-  span.chartText {font-size:9pt;font-family:Arial,Helvetica;color:black;clear:both;}
-  td.chartText {font-size:9pt;font-family:Arial,Helvetica;color:black;}
+  p.info {font-size:13px;font-family:Arial,Helvetica;color:black;clear:both;}
+  span.chartText {font-size:13px;font-family:Arial,Helvetica;color:black;clear:both;}
+  td.chartText {font-size:13px;font-family:Arial,Helvetica;color:black;}
+  h3 {font-size:14px;font-family:Arial,Helvetica;font-weight:bold;color:black}
 </style>
 
 <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
@@ -709,20 +710,21 @@
 
   <!-- ====================== elevation profile per distance ====================== -->
 
-  <span class="chartText">elevation profile
-  <br/>
-   max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
+  <h3>elevation profile</h3>
+  <span class="chartText">max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
   <br/>
   
-  <canvas width="1000" height="200">
-    <xsl:attribute name="id">canvasAltDist<xsl:value-of select="$trackNum"/></xsl:attribute>
-  </canvas>   
+  <div style="width:1100px">
   
-  <canvas width="80" height="200">
-    <xsl:attribute name="id">canvasAltDistLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
-  </canvas>
+    <canvas width="1000" height="200">
+      <xsl:attribute name="id">canvasAltDist<xsl:value-of select="$trackNum"/></xsl:attribute>
+    </canvas>   
   
-  <br/>
+    <canvas width="80" height="200">
+      <xsl:attribute name="id">canvasAltDistLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
+    </canvas>
+  
+  </div>
   
   <xsl:variable name="totalDist">
     <xsl:for-each select=".//gpx:totalDist">
@@ -757,20 +759,22 @@
     </xsl:for-each>
   </xsl:variable>
   
-  <span class="chartText">speed
-  <br/>
-  max: <xsl:value-of select="format-number($maxSpeed * 3.6, '###,###.0')" /> km/h</span>
+  <h3>speed</h3>
+  <span class="chartText">max: <xsl:value-of select="format-number($maxSpeed * 3.6, '###,###.0')" /> km/h = <xsl:value-of select="format-number($maxSpeed, '###,###.0')" /> m/s</span>
   <br/>
   
-  <canvas width='1000' height='200'>
-    <xsl:attribute name="id">canvasSpeed<xsl:value-of select="$trackNum"/></xsl:attribute>
-  </canvas>   
+  <div style="width:1100px">
+  
+    <canvas width='1000' height='200'>
+      <xsl:attribute name="id">canvasSpeed<xsl:value-of select="$trackNum"/></xsl:attribute>
+    </canvas>   
 
-  <canvas width="80" height="200">
-    <xsl:attribute name="id">canvasSpeedLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
-  </canvas>
-  <br/>
-
+    <canvas width="80" height="200">
+      <xsl:attribute name="id">canvasSpeedLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
+    </canvas>
+    
+  </div>  
+    
   <xsl:variable name="minSpeed">
     <xsl:for-each select=".//gpx:speed">
       <xsl:sort data-type="number" order="ascending"/>
@@ -780,7 +784,7 @@
     </xsl:for-each>
   </xsl:variable>
 
-  <span class="chartText">min: <xsl:value-of select="format-number($minSpeed * 3.6, '###,##0.0')" /> km/h</span>
+  <span class="chartText">min: <xsl:value-of select="format-number($minSpeed * 3.6, '###,##0.0')" /> km/h = <xsl:value-of select="format-number($minSpeed, '###,##0.0')" /> m/s</span>
 
   <br/>
 
@@ -804,21 +808,22 @@
 
   <br/><br/>
 
-  <span class="chartText">elevation / time
-  <br/>
-  max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
+  <h3>elevation / time</h3>
+  <span class="chartText">max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
   <br/>
   
-  <canvas width='1000' height='200'>
-    <xsl:attribute name="id">canvas<xsl:value-of select="$trackNum"/></xsl:attribute>
-  </canvas>   
-
-  <canvas width="80" height="200">
-    <xsl:attribute name="id">canvasAltTimeLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
-  </canvas>
+  <div style="width:1100px">
   
-  <br/>
+    <canvas width='1000' height='200'>
+      <xsl:attribute name="id">canvas<xsl:value-of select="$trackNum"/></xsl:attribute>
+    </canvas>   
 
+    <canvas width="80" height="200">
+      <xsl:attribute name="id">canvasAltTimeLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
+    </canvas>
+  
+  </div>
+  
   <span class="chartText">min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m</span>
 
   <br/>

@@ -1,7 +1,8 @@
 package de.webfilesys.unix;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.util.StringTokenizer;
 
 /**
  *  For old Linux (< Suse 6.4) wich does not support ps -eo user,pid,.......

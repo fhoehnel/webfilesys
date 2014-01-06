@@ -170,7 +170,7 @@ public class ThumbnailCreatorBase
         Graphics g = bufferedImg.getGraphics();
         g.drawImage(origImage, 0, 0, imgObserver);
 
-        bufferedImg = ImageTransformation.getScaledInstance(bufferedImg, scaledWidth, scaledHeight,
+        bufferedImg = ImageTransform.getScaledInstance(bufferedImg, scaledWidth, scaledHeight,
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
         
         if (scaledImg.getImageType() == ScaledImage.IMG_TYPE_JPEG)

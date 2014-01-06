@@ -17,7 +17,6 @@ import org.apache.log4j.Logger;
 
 import sun.io.MalformedInputException;
 import de.webfilesys.WebFileSys;
-import de.webfilesys.gui.ajax.AjaxCheckGrepAllowedHandler;
 import de.webfilesys.util.CommonUtils;
 
 /**

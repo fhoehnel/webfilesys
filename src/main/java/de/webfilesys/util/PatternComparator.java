@@ -1,6 +1,6 @@
 package de.webfilesys.util;
 
-import java.util.*;
+import java.util.StringTokenizer;
 
 public class PatternComparator
 {

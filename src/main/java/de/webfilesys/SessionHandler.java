@@ -17,7 +17,6 @@ import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.UserManagerBase;
 import de.webfilesys.watch.FolderWatchManager;
-import de.webfilesys.FastPathManager;
 
 public class SessionHandler
 implements HttpSessionListener, ServletContextListener

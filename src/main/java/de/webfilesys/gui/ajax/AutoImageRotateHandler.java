@@ -16,7 +16,7 @@ import de.webfilesys.FileContainer;
 import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.graphics.CameraExifData;
-import de.webfilesys.graphics.ImageTransformation;
+import de.webfilesys.graphics.ImageTransform;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.XmlUtil;
 
@@ -130,7 +130,7 @@ public class AutoImageRotateHandler extends XmlRequestHandlerBase
         				degrees = "270";
         			}
         			
-        			ImageTransformation imgTrans = new ImageTransformation(imgPath, "rotate", degrees);
+        			ImageTransform imgTrans = new ImageTransform(imgPath, "rotate", degrees);
 
         			imgTrans.execute(false);
         			

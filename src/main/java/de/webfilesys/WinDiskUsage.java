@@ -1,8 +1,10 @@
 package de.webfilesys;
 
-import java.io.*;
-import java.util.*;
-import java.text.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.StringTokenizer;
 
 public class WinDiskUsage
 {

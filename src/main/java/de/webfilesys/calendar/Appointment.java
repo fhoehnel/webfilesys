@@ -1,6 +1,6 @@
 package de.webfilesys.calendar;
 
-import java.util.*;
+import java.util.Date;
 
 public class Appointment extends Note
 {
