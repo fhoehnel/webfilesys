@@ -697,7 +697,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 			{
 				int numPages = fileNum / pageSize;
                 
-				int pageStep = numPages / 9;
+				int pageStep = numPages / 8;
                 
 				if (pageStep == 0)
 				{
@@ -948,33 +948,68 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
                     }
                     else
                     {
-                        int sizeBorder=500;
+						int sizeBorder=500;
 
-                        if ((scaledImage.getImageType()==ScaledImage.IMG_TYPE_JPEG) && 
-                            ((scaledImage.getRealWidth() > sizeBorder) ||
-                             (scaledImage.getRealHeight() > sizeBorder)))
-                        {
-                            exifData = new CameraExifData(fullFileName);
+						if ((scaledImage.getImageType()==ScaledImage.IMG_TYPE_JPEG) && 
+							((scaledImage.getRealWidth() > sizeBorder) ||
+							 (scaledImage.getRealHeight() > sizeBorder)))
+						{
+							exifData = new CameraExifData(fullFileName);
 
-                            if (exifData.getThumbnailLength() > 0)
-                            {
-                                if (scaledImage.getRealWidth() >= scaledImage.getRealHeight())
+							if (exifData.getThumbnailLength() > 0)
+							{
+                                useExif = true;
+                                
+                                boolean orientationMissmatch = false;
+
+                                if (scaledImage.getRealWidth() < scaledImage.getRealHeight())
+								{
+                                    // portrait orientation
+                                    
+									if (exifData.getThumbOrientation() != CameraExifData.ORIENTATION_PORTRAIT)
+									{
+                                        orientationMissmatch = true;
+									}
+								}
+                                else if (scaledImage.getRealWidth() > scaledImage.getRealHeight())
                                 {
-                                    useExif = true;
-                                }
-                                else
-                                {
-                                    if (exifData.getThumbOrientation() == CameraExifData.ORIENTATION_PORTRAIT)
+                                    // landscape orientation
+                                    
+                                    if (exifData.getThumbOrientation() != CameraExifData.ORIENTATION_LANDSCAPE)
                                     {
-                                        useExif = true;
+                                        orientationMissmatch = true;
                                     }
                                 }
 
-                                if (useExif)
-                                {
-                                    int exifThumbWidth = exifData.getThumbWidth();
-                                    int exifThumbHeight = exifData.getThumbHeight();
+                                if (orientationMissmatch) {
                                     
+                                    if (exifData.getOrientation() == 1) {
+                                        // orientation value of exif data suggests that no rotation is required
+                                        // but orientation of exif thumbnail does not match orientation of
+                                        // the JPEG picture
+                                        // some camera models that have no orientation sensor 
+                                        // set the orientation value to 1
+                                        useExif = false;
+                                    }
+                                }
+                                
+                                if (useExif) {
+                                    int exifThumbWidth;
+                                    int exifThumbHeight;
+
+                                    if (orientationMissmatch)
+                                    {
+                                        exifThumbWidth = exifData.getThumbHeight();
+                                        exifThumbHeight = exifData.getThumbWidth();
+                                        srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(fullFileName) + "&rotate=true";
+                                    }
+                                    else
+                                    {
+                                        exifThumbWidth = exifData.getThumbWidth();
+                                        exifThumbHeight = exifData.getThumbHeight();
+                                        srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(fullFileName);
+                                    }
+                                        
                                     if (exifThumbHeight > exifThumbWidth)
                                     {
                                         thumbHeight = thumbnailSize;
@@ -986,11 +1021,10 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
                                         thumbHeight = exifThumbHeight * thumbnailSize / exifThumbWidth;
                                     }
                                     
-                                    srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(fullFileName);
-                                    useThumb=true;
+                                    useThumb = true;
                                 }
-                            }
-                        }
+							}
+						}
                     }
 
 					XmlUtil.setChildText(fileElement, "thumbnailWidth", Integer.toString(thumbWidth));

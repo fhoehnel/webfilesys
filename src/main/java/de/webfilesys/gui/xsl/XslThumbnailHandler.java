@@ -511,7 +511,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 			{
 				int numPages = fileNum / pageSize;
                 
-				int pageStep = numPages / 9;
+				int pageStep = numPages / 8;
                 
 				if (pageStep == 0)
 				{
@@ -761,7 +761,6 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 					
 					boolean useThumb = false;
 					boolean useExif = false;
-                    boolean orientationMissmatch = false;
 
 					CameraExifData exifData=null;
 
@@ -805,7 +804,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 								{
                                     useExif = true;
                                     
-                                    orientationMissmatch = false;
+                                    boolean orientationMissmatch = false;
 
                                     if (scaledImage.getRealWidth() < scaledImage.getRealHeight())
 									{
