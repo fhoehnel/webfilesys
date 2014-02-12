@@ -43,7 +43,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.9.4 (16 Jan 2014)";
+	public static final String VERSION = "Version 2.10.0 (12 Feb 2014)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -63,8 +63,8 @@ public class WebFileSys
 
     private static final String LOOPBACK_ADDRESS = "127.0.0.1";
 
-    // default upload limit: 32 MBytes
-    private static final long DEFAULT_UPLOAD_LIMIT = (32l * 1024l * 1024l);
+    // default upload limit: 128 MBytes
+    private static final long DEFAULT_UPLOAD_LIMIT = (128l * 1024l * 1024l);
 
     /** folder watch interval in minutes */
     private static final int DEFAULT_FOLDER_WATCH_INTERVAL = 24 * 60;
@@ -600,7 +600,7 @@ public class WebFileSys
             syncIgnoreOffsetDST = true;
         }
 		
-        String slideShowString = config.getProperty("SlideshowDelay", "10");
+        String slideShowString = config.getProperty("SlideshowDelay", "5");
         try
         {
             slideShowDelay = Integer.parseInt(slideShowString);
@@ -917,6 +917,7 @@ public class WebFileSys
                 opSysName.equals("Windows 2003") ||
                 opSysName.equals("Windows Vista") ||
                 opSysName.equals("Windows 7") ||
+                opSysName.startsWith("Windows 8") ||
                 opSysName.equals("Windows 2000") ||
                 opSysName.startsWith("Windows Server"));
     }

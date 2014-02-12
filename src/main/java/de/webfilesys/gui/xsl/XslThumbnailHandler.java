@@ -718,7 +718,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 				try
 				{
 					// scaledImage = new ScaledImage(fullFileName,screenWidth-100,screenHeight-135);
-					scaledImage = new ScaledImage(fullFileName,screenWidth-40,screenHeight-155);
+					scaledImage = new ScaledImage(fullFileName, screenWidth-40, screenHeight-166);
 				}
 				catch (IOException io1)
 				{

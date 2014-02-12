@@ -21,10 +21,6 @@ import mediautil.image.jpeg.LLJTranException;
 
 import org.apache.log4j.Logger;
 
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-
 import de.webfilesys.WebFileSys;
 
 /**
@@ -85,10 +81,8 @@ public class ImageTransform
         {
             return(rotateLossy());
         }
-        else
-        {
-            return(transformLossless(keepSource));
-        }
+
+        return(transformLossless(keepSource));
     }
 
     public String transformLossless(boolean keepSource)
@@ -324,6 +318,8 @@ public class ImageTransform
 
         Graphics g=null;
 
+        FileOutputStream rotatedFile = null;
+        
         try
         {
             bufferedImg=new BufferedImage(newWidth,newHeight,BufferedImage.TYPE_INT_RGB);
@@ -336,38 +332,26 @@ public class ImageTransform
 
             rotatedImg.flush();
 
-            FileOutputStream rotatedFile=new FileOutputStream(resultFileName);
+            rotatedFile = new FileOutputStream(resultFileName);
             
-            if (sourceImage.getImageType()==ScaledImage.IMG_TYPE_JPEG)
-            {
-                JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(rotatedFile);
-                JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(bufferedImg);
-                param.setQuality(0.85f,false);
+            byte[] pngBytes;
+            com.keypoint.PngEncoder pngEncoder = new com.keypoint.PngEncoderB(bufferedImg);
 
-                encoder.encode(bufferedImg,param);
+            // pngEncoder.setCompressionLevel(1);
+            // pngEncoder.setFilter(com.keypoint.PngEncoder.FILTER_LAST);
+
+            pngBytes = pngEncoder.pngEncode();
+
+            if (pngBytes == null)
+            {
+                Logger.getLogger(getClass()).warn("PNG Encoder : Null image");
             }
             else
             {
-                byte[] pngBytes;
-                com.keypoint.PngEncoder pngEncoder = new com.keypoint.PngEncoderB(bufferedImg);
-
-                // pngEncoder.setCompressionLevel(1);
-                // pngEncoder.setFilter(com.keypoint.PngEncoder.FILTER_LAST);
-
-                pngBytes = pngEncoder.pngEncode();
-
-                if (pngBytes == null)
-                {
-                    Logger.getLogger(getClass()).warn("PNG Encoder : Null image");
-                }
-                else
-                {
-                    rotatedFile.write(pngBytes);
-                }
+                rotatedFile.write(pngBytes);
             }
             
             rotatedFile.flush();
-            rotatedFile.close();
         }
         catch (IOException ioex1)
         {
@@ -380,9 +364,17 @@ public class ImageTransform
         }
         finally
         {
+            if (rotatedFile != null) {
+                try {
+                	rotatedFile.close();
+                } catch (Exception ex) {
+                }
+            }
+
             bufferedImg.flush();
 
             g.dispose();
+            
         }
     }
 

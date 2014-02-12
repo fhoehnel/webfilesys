@@ -11,8 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.MetaInfManager;
-import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslShowImageHandler;
+import de.webfilesys.gui.xsl.album.XslAlbumPictureHandler;
 
 /**
  * @author Frank Hoehnel
@@ -95,7 +95,7 @@ public class RateVotingHandler extends UserRequestHandler
         
         if ((role != null) && role.equals("album"))
         {
-			(new XslAlbumImageHandler(req, resp, session, output, uid)).handleRequest();
+			(new XslAlbumPictureHandler(req, resp, session, output, uid)).handleRequest();
         }
         else
         {

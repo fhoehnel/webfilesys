@@ -3,8 +3,8 @@
     deploy changed classes and webcontent to the development server
   </description>
 
-  <property name="project-basedir" value="D:/Projekte/webfilesys/maven-project/webfilesys" />
-  <property name="deploy-target-basedir" value="D:/Programme/apache-tomcat-6.0.20/webapps/webfilesys" />
+  <property name="project-basedir" value="C:/Projekte/webfilesys/maven-project/webfilesys" />
+  <property name="deploy-target-basedir" value="C:/Program Files/apache-tomcat-7.0.50/webapps/webfilesys" />
 
   <property name="project-classes-dir" value="${project-basedir}/target/classes" />
   <property name="classes-deploy-target" value="${deploy-target-basedir}/WEB-INF/classes" />
@@ -19,7 +19,7 @@
 
     <copy todir="${webcontent-deploy-target}" verbose="true">
       <fileset dir="${webcontent-src}"
-         includes="styles/**/*,xsl/**/*,javascript/**/*,images/**/*,icons/**/*,help/**/*,html/**/*,WEB-INF/languages/**/*" />
+         includes="styles/**/*,xsl/**/*,javascript/**/*,images/**/*,icons/**/*,help/**/*,html/**/*,fonts/**/*,WEB-INF/languages/**/*" />
     </copy>
   </target>
 

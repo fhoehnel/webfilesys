@@ -369,6 +369,8 @@ public class Email extends Thread
 
             encoder.encode(bufferedIn, bufferedOut);
 
+            bufferedOut.flush();
+            
             out.flush();
     	}
     	catch (IOException ioex)

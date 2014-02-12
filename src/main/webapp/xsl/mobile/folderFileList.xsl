@@ -513,7 +513,7 @@
         
       </xsl:if> 
       
-      <xsl:if test="not(/folderFileList/readonly) or (/folderFileList/readonly != 'true')">
+      <xsl:if test="(not(/folderFileList/readonly) or (/folderFileList/readonly != 'true')) and (not (/folderFileList/cwdNotSelected))">
         <tr>
           <td colspan="3" class="fileListFunct">
           

@@ -19,6 +19,8 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import com.sun.org.apache.xml.internal.security.utils.XMLUtils;
+
 import de.webfilesys.ClipBoard;
 import de.webfilesys.FastPathManager;
 import de.webfilesys.FileComparator;
@@ -417,6 +419,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                     subDirElem.setAttribute("path", UTF8URLEncoder.encode(relPathWithSlash + subdirPath));
                 }
             }
+            
+            XmlUtil.setChildText(folderFileListElement, "cwdNotSelected", "true");
         }
         else
         {

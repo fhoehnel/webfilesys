@@ -1,0 +1,563 @@
+@font-face {
+  font-family: 'Kite One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Kite One'), local('KiteOne-Regular'), url(../fonts/GoogleKiteOne.woff) format('woff');
+}
+
+html {
+    font-size: 15px;
+}
+
+body.pictureAlbum {
+    margin: 0 10px 0 10px;
+    background-color: #a0a0a0;
+    font-family: 'Kite One',Verdana,Arial,Helvetica,sans-serif;
+    font-size: 1rem;
+}
+
+body.pictureAlbum input[type="submit"], 
+body.pictureAlbum input[type="button"] {
+    border: 1px solid black;
+    background-image: -webkit-linear-gradient(white 0%, #a0a0a0 100%); 
+    background-image: -moz-linear-gradient(white 0%, #a0a0a0 100%); 
+    background-image: -o-linear-gradient(white 0%, #a0a0a0 100%); 
+    background-image: linear-gradient(white 0%, #a0a0a0 100%);
+    color: #202020;
+    font-family: 'Kite One',Verdana,Arial,Helvetica,sans-serif;
+    font-size: 1rem;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 5px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+
+div.subFolderCont {
+    float:left;
+    margin-top: 20px;
+    margin-right: 20px;
+    width: 160px;
+}
+
+div.picturesCont {
+    float:left;
+}
+
+div.pictureAlbumCont {
+    margin: 0 auto 0 auto;
+    max-width: 960px;
+    padding-top: 16px;
+}
+
+div.pictureAlbumHeadline {
+    color: #000060;
+    font-size: 1.364rem;
+    text-align: center;
+}
+
+div.albumDescription {
+    float: left;
+    color: #1A401A;
+    font-size: 0.91rem;
+    margin-top: 10px;
+}
+
+a.filename {
+    color: #000060;
+    font-size: 0.91rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.filename:hover {
+    color: #FFFF80;
+}
+
+div.pictureSquareFrame {
+    width: 162px;
+    height: 162px;
+    float: left;
+    line-height: 160px;    
+    margin-bottom: 6px;
+}
+
+div.pictureInfo {
+    float: left;
+    clear: left;
+    font-size: 0.91rem;
+}
+
+span.albumVoteAverage {
+    font-weight: bold;
+    font-size: 0.91rem;
+}
+
+span.albumVoteCount {
+    font-size: 0.91rem;
+}
+
+img.voteStar {
+    vertical-align: bottom;
+}
+
+img.voteStars {
+    vertical-align: middle;
+}
+
+a.albumImgLink {
+    vertical-align: bottom;
+}
+
+img.albumPicture {
+    box-shadow: 10px 10px 5px #666666;
+    vertical-align: bottom;
+    border: none;
+}
+
+input.pictureAlbum, 
+select.pictureAlbum, 
+textarea.pictureAlbum,
+.albumDetailData input[type="text"],
+.albumDetailData textarea {
+    background-color: ivory;
+    color: #404040;
+    font-family: 'Kite One',Verdana,Arial,Helvetica,sans-serif;
+    font-size: 1rem;
+    border: 1px solid #808080;
+    border-radius: 5px 5px 5px 5px;
+    padding: 2px;    
+}
+
+div.albumTabActive {
+    float: left;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #FFFF80;
+    margin-right: 16px;
+}
+
+div.albumTab {
+    float: left;
+    margin-right: 16px;
+}
+
+div.albumTabOptions {
+    margin-left: 16px;
+    float: right!important;
+}
+
+div.albumTab a {
+    font-size: 1.25rem;
+    color: #FFFF80;
+    text-decoration: none;
+}
+
+div.albumTab a:hover {
+    color: #000060;
+    text-decoration: underline;
+}
+
+table.pictureAlbumPaging {
+    margin-bottom:12px;
+}
+
+td.albumPictureGrid {
+    padding: 12px 8px 0 0;
+    text-align: center;
+}
+
+body.pictureAlbum div.pagingPage {
+    font-size: 1rem;
+    display: inline;
+    padding: 2px 6px;
+    margin: 0 2px;
+}
+
+body.pictureAlbum div.pagingPageCurrent {
+    background-color: #a0a0a0;
+    border: none;
+    color: #FFFF80;
+    cursor: normal;
+    font-weight: bold;
+}    
+
+body.pictureAlbum div.pagingPageOther {
+    background-color: #a0a0a0;
+    border: none;
+    color: #000060;
+    cursor: pointer;
+}
+
+body.pictureAlbum div.pagingPageOther:hover {
+    background-color:  #FFFF80;
+}
+
+a.subdir {
+    font-size: 0.91rem;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+div.albumPictCont {
+    float: left;
+    height: 212px;
+    margin: 20px 20px 20px 0;
+}
+
+div.albumButtonCont {
+    clear: both;
+    float: left;
+}
+
+div.pictureAlbumPaging {
+    float: left;
+    margin-right: 40px;
+    margin-top: 12px;
+}
+
+div.albumPagingArrow {
+    float: left;
+    margin-right: 40px;
+    margin-top: 9px;
+}
+
+div.pictureAlbumOptions {
+    float: left;
+    margin-right: 40px;
+    margin: 10px;
+}
+
+div.pictureAlbumOptions input.pictureAlbum, 
+div.pictureAlbumOptions select.pictureAlbum {
+    border: none;
+}
+
+div.pictureAlbumOptions select {
+    width: 210px;
+}
+
+div.pictureAlbumOptions span, div.pictureAlbumOptions a {
+    font-size: 1rem;
+    color: ivory;
+}
+
+div.pictureAlbumOptions input, div.pictureAlbumOptions select {
+    background-color: ivory;
+}
+
+div.pictureAlbumOptions input[type="button"] {
+    border: 1px solid black;
+    background-image: -webkit-linear-gradient(white 0%, #a0a0a0 100%); 
+    background-image: -moz-linear-gradient(white 0%, #a0a0a0 100%); 
+    background-image: -o-linear-gradient(white 0%, #a0a0a0 100%); 
+    background-image: linear-gradient(white 0%, #a0a0a0 100%);
+    color: #202020;
+    border-radius: 6px;
+    font-family: 'Kite One',Verdana,Arial,Helvetica,sans-serif;
+}
+
+input.pictureAlbumCheckbox {
+    background-color: #a0a0a0;
+}
+
+div.albumOptionCont {
+    position: absolute;
+    width: 250px;
+    top: 60px;
+    right: 20px;
+    background-color: #303060; 
+    border: 5px solid ivory;
+    border-radius: 8px;
+    box-shadow: 10px 10px 5px #102010;
+    visibility: hidden;
+    background: -moz-linear-gradient(bottom, #404070, #202050); /* Firefox */
+    background: -webkit-gradient(linear, left top, left bottom, from(#202050),to(#404070)); /* Chrome, Safari */
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#404070',endColorstr='#202050'); /* Internet Explorer */
+}
+
+div.albumOptionClose {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    color: ivory;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border: 1px solid ivory;
+    padding: 0 4px;
+    cursor: pointer;
+}
+
+a.pictureAlbumPaging {
+    color: #FFFF80;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a.pictureAlbumPaging:hover {
+    color: #006000;
+}
+
+div.infoIcon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+div.albumMapSelection {
+    float: right;
+}
+
+#geoLocSel {
+    display: none;
+}
+
+span.pictureAlbumPath {
+    color: #FFFF80;
+}
+
+a.pictureAlbumPath {
+    color: #000000;
+    font-size: 1rem;
+    text-decoration: none;
+}
+
+a.pictureAlbumPath:hover {
+    color: #FFFF80;
+}
+
+div.resetFloat {
+    clear: both;
+}
+
+div.albumPageSize {
+    float: right;
+    margin-top: 12px;
+}
+
+div.albumPageSize input[type="text"] {
+    color: black;
+    background-color: #d0d0d0;
+}
+
+div.storyPicture {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    clear: both;
+}
+
+div.storyPictureLeft {
+    float: left;
+}
+
+div.storyPictureRight {
+    float: right;
+}
+
+span.storyDescr {
+    /*
+    color: #1a401a;
+    */
+    color: #FFFF80;
+    font-size: 1rem;
+}
+
+img.storyPicture {
+    box-shadow: 10px 10px 5px #666666;
+}
+
+div.bottomPagingForward {
+    float: right;
+}
+
+hr.pictureBook {
+    border: none;
+    border-top: 1px solid #000000;
+    height: 1px;    
+}
+
+a.pictureBookComent {
+    color: #000000;
+    font-size: 1rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+a.pictureBookComent:hover {
+    color: #FFFF80;
+}
+
+div.albumDetailCont {
+    margin: 10px 10px 10px 10px;
+}
+
+div.albumDetailPicture {
+    float: left;
+    margin-right: 10px;
+}
+
+img.albumDetailPicture {
+    box-shadow: 10px 10px 5px #666666;
+    margin-bottom: 8px;
+}
+
+div.albumDetailData {
+    float: left;
+}
+
+div.albumDetailDesc {
+    color: #FFFF80;
+    clear: both;
+    margin-bottom: 6px;
+}
+
+div.albumDetailVote {
+    float: left;
+    color: #000000;
+    clear: both;
+    margin-bottom: 12px;
+}
+
+div.albumDetailGeo {
+    float: left;
+    clear: both;
+    margin-bottom: 12px;
+}
+
+div.albumDetailReturn {
+    float: left;
+    clear: both;
+    margin-bottom: 16px;
+}
+
+div.albumDetailComments {
+    float: left;
+    clear: both;
+    min-width: 200px;
+    max-width: 400px;
+    background-color: #d0d0d0;
+    padding: 16px;
+    border-radius: 12px; 
+    margin-bottom: 10px;
+    border: 1px solid #606060;
+}
+
+div.commentCount {
+    float: left;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #1A401A;
+    clear: both;
+}
+
+div.singleCommentCont {
+    float: left;
+    background-color: #e0e0e0;
+    margin-bottom: 12px;
+    clear: both;
+    padding: 4px;
+    border-radius: 4px;
+    width: 95%;
+}
+
+div.commentHead {
+    float: left;
+    margin-bottom: 4px;
+    clear: both;
+}
+
+div.commentBody {
+    float: left;
+    margin-left: 12px;
+    margin-bottom: 8px;
+    clear: both;
+}
+
+div.addCommentLabel {
+    float: left;
+    margin-bottom: 8px;
+    clear: both;
+}
+
+div.addCommentText {
+    float: left;
+    margin-bottom: 8px;
+    clear: both;
+    width: 95%;
+}
+
+div.addCommentText textarea {
+    height: 50px;
+    min-width: 300px;
+    width: 100%;
+}
+
+div.commentAuthor {
+    float: left;
+    margin-bottom: 12px;
+    clear: both;
+}
+
+div.commentAuthor input {
+    width: 150px;
+}
+
+div.addCommentButton {
+    float: left;
+    clear: both;
+}
+
+div.slideShowButtonCont {
+    margin: 10px 0 10px 20px;
+    float: left;
+    clear: both;
+    width: 100%;
+    text-align: center;
+}
+
+div.slideShowButtonCenter {
+    margin: 0 auto;
+}
+
+div.slideShowImgCont {
+    float: left;
+    width: 100%;
+}
+
+div.slideShowImgCont img {
+    margin: 0 auto;
+    display: block;
+}
+
+div.slideShowDescCont {
+    float: left;
+    clear: both;
+    margin: 6px 0 10px 20px;
+    width: 100%;
+    text-align: center;
+}
+
+div.albumSlideShowDesc {
+    font-size: 1rem;
+    color: #FFFF80;
+}
+
+div.slideshowCurrentPicNum {
+    color: #FFFF80;
+    font-size: 1rem;
+    position: absolute;
+    top: 30px;
+    right: 20px;
+}
+
+div.slideShowHeadline {
+    color: #000060;
+    font-size: 1.25rem;
+    text-align: center;
+}

@@ -108,6 +108,8 @@
         <configuration>
           <source>1.5</source>
           <target>1.5</target>
+		  <!-- to prevent compile errors because of missing com.sun.image.codec.jpeg.* classes in Java 1.7 -->
+          <compilerArgument>-XDignore.symbol.file=true</compilerArgument>
         </configuration>
       </plugin>
     </plugins>

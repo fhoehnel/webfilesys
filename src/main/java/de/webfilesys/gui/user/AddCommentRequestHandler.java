@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 import de.webfilesys.Comment;
 import de.webfilesys.InvitationManager;
 import de.webfilesys.MetaInfManager;
-import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslListCommentsHandler;
 
 /**
@@ -88,16 +87,7 @@ public class AddCommentRequestHandler extends UserRequestHandler
         }
         else
         {
-            String role = userMgr.getRole(uid);
-            
-            if ((role != null) && role.equals("album"))
-            {
-                (new XslAlbumImageHandler(req, resp, session, output, uid)).handleRequest();
-            }
-            else
-            {
-                (new XslListCommentsHandler(req, resp, session, output, uid)).handleRequest();
-            }
+            (new XslListCommentsHandler(req, resp, session, output, uid)).handleRequest();
         }
 	}
 }

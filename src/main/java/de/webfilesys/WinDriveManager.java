@@ -1,9 +1,9 @@
 package de.webfilesys;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
+
+import javax.swing.filechooser.FileSystemView;
 
 import org.apache.log4j.Logger;
 
@@ -13,8 +13,11 @@ public class WinDriveManager extends Thread
 	
     private HashMap<Integer,String> driveLabels = null;
     
+    private FileSystemView fsView = null;     
+    
 	private WinDriveManager() {
 		driveLabels = new HashMap<Integer,String>(1);
+		fsView = FileSystemView.getFileSystemView();
 		this.start();
 	}
 	
@@ -67,94 +70,28 @@ public class WinDriveManager extends Thread
 
             String label=null;
 
-            if (fileSysRootName.charAt(0)=='A')
+            label = queryDriveLabel(fileSysRootName);
+
+            if (label == null)
             {
-                label="Floppy";
-            }
-            else
-            {
-                if (fileSysRootName.charAt(0)!='B')
-                {
-                    label=queryDriveLabel(fileSysRootName);
-                }
+                label = "";
             }
 
-            if (label==null)
-            {
-                label="";
-            }
+            char driveLetter = fileSysRootName.charAt(0);
 
-            char driveLetter=fileSysRootName.charAt(0);
-
-            int driveNum=(driveLetter - 'A') + 1;
+            int driveNum = (driveLetter - 'A') + 1;
 
             newDriveLabels.put(new Integer(driveNum),label);
         }
 
         driveLabels = newDriveLabels;
     } 
-
+    
     private String queryDriveLabel(String driveString)
     {
-        Runtime rt=Runtime.getRuntime();
-
-        Process labelProcess=null;
-
-        String osCommand=null;
-        
-        if ((WebFileSys.getInstance().getOpSysType() == WebFileSys.OS_OS2) ||
-            WebFileSys.getInstance().is32bitWindows())
-        {
-            osCommand="cmd /c dir " + driveString;
-        }
-        else  // Win95, Win98, ME
-        {
-            osCommand="command.com /c dir " + driveString;
-        }
-
-        try
-        {
-            labelProcess=rt.exec(osCommand);
-        }
-        catch (Exception e)
-        {
-        	Logger.getLogger(WinDriveManager.class).error("cannot query drive label", e);
-            return(null);
-        }
-
-        DataInputStream stdout=new DataInputStream(labelProcess.getInputStream());
-
-        try
-        {
-            String line=null;
-
-            do
-            {
-                line=stdout.readLine();
-            }
-            while ((line!=null) && (line.trim().length()==0));
-
-            stdout.close();
-            
-            if (line==null)
-            {
-                return(null);
-            }
-         
-            int lastSpaceIdx=line.lastIndexOf(':');
-
-            if (lastSpaceIdx<0)
-            {
-                return(line);
-            }
-
-            return(line.substring(lastSpaceIdx+1));
-        }
-        catch (IOException ioex)
-        {
-        	Logger.getLogger(WinDriveManager.class).error("cannot query drive label", ioex);
-            return(null);
-        }
+    	File driveFile = new File(driveString);
+    	
+    	return fsView.getSystemDisplayName(driveFile);
     }
 
     public String getDriveLabel(int drive)

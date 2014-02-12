@@ -62,18 +62,17 @@
   
 </script>
 
-<xsl:if test="/fileList/resources/msg[@key='alert.maintanance']">
-  <script language="javascript">
-    alert('<xsl:value-of select="/fileList/resources/msg[@key='alert.maintanance']/@value" />');
-  </script>
-</xsl:if>
+  <xsl:if test="/fileList/maintananceMode">
+    <script type="text/javascript">
+      alert('<xsl:value-of select="/fileList/resources/msg[@key='alert.maintanance']/@value" />');
+    </script>
+  </xsl:if>
 
-<xsl:if test="/fileList/resources/msg[@key='alert.dirNotFound']">
-  <script language="javascript">
-    alert('<xsl:value-of select="/fileList/resources/msg[@key='alert.dirNotFound']/@value" />');
-  </script>
-</xsl:if>
-
+  <xsl:if test="/fileList/dirNotFound">
+    <script type="text/javascript">
+      alert('<xsl:value-of select="/fileList/resources/msg[@key='alert.dirNotFound']/@value" />');
+    </script>
+  </xsl:if>
 
 </head>
 

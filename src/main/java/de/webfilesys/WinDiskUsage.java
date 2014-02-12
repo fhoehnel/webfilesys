@@ -6,6 +6,8 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.StringTokenizer;
 
+import org.apache.log4j.Logger;
+
 public class WinDiskUsage
 {
     String path=null;
@@ -36,7 +38,7 @@ public class WinDiskUsage
 
         if (!validDrive)
         {
-            System.out.println("WinDiskUsage.getFreeSpace: invalid path " + path);
+            Logger.getLogger(getClass()).error("failed to determine disk free space - invalid path: " + path);
             return(0L);
         }
 
@@ -66,7 +68,7 @@ public class WinDiskUsage
         }
         catch (Exception e)
         {
-            System.out.println("WinDiskUsage.getFreeSpace: " + e);
+            Logger.getLogger(getClass()).error("failed to determine disk free space for drive " + driveString, e);      
             return(0L);
         }
 
@@ -112,7 +114,7 @@ public class WinDiskUsage
         }
         catch (IOException ioex)
         {
-            System.out.println("WinDiskUsage.getFreeSpace: " + ioex);
+            Logger.getLogger(getClass()).error("failed to determine disk free space", ioex);
             return(0L);
         }
 

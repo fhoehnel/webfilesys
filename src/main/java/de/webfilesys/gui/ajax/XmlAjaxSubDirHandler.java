@@ -16,6 +16,7 @@ import org.w3c.dom.Element;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
+import de.webfilesys.WinDriveManager;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
@@ -141,14 +142,23 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 			if (parentPath.length() <= 3)
 			{
 				char driveChar = parentPath.charAt(0);
+				char upperCaseDriveChar = Character.toUpperCase(driveChar);
 				
-				if ((driveChar == 'a') || (driveChar == 'A') || (driveChar == 'b') || (driveChar == 'B'))
+				if ((upperCaseDriveChar == 'A') || (upperCaseDriveChar == 'B'))
 				{
 					parentElement.setAttribute("type", "floppy");
                 }
                 else
                 {
 					parentElement.setAttribute("type", "drive");
+                }
+
+				
+				int driveNum = upperCaseDriveChar - 'A' + 1;
+				
+				String driveLabel = WinDriveManager.getInstance().getDriveLabel(driveNum);
+                if ((driveLabel != null) && (driveLabel.length() > 0)) {
+    				parentElement.setAttribute("label", driveLabel);
                 }
 			}
 		}

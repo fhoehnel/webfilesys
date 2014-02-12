@@ -12,6 +12,7 @@ label.password=Password
 label.logon=Logon
 label.file=file
 label.files=files
+label.pictures=pictures
 label.mask=Mask
 label.description=description
 label.directory=folder
@@ -461,6 +462,7 @@ alt.next=next picture
 alt.back=previous picture
 startSlideshowHere=start slideshow here
 label.startPic=start picture
+slideshowHeadline=WebFileSys Slideshow
 
 # co-browsing labels
 titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)
@@ -691,6 +693,7 @@ details.album=details
 details.show=show more details
 details.hide=hide details
 showPictureOrigSize=show picture in full size
+albumOptions=Options
 
 # maintanance mode text
 label.maintanance.head=Maintanance Mode
@@ -705,6 +708,7 @@ subject.folderChange=Folder Change
 # Google Maps, Google Earth, Open street Maps
 button.googleMap=show location on map
 label.geoMapLink=Show geographic location on map
+geoMapLinkShort=location on map
 selectMapType=- select map type -
 mapTypeOSM=Open Street Maps
 mapTypeGoogleMap=Google Maps
@@ -860,6 +864,7 @@ alert.dircopied=has been selected for copy operation
 alert.dirmoved=has been selected for move opeartion
 alert.nofileselected=You did not select a file
 alert.nopictures=no picture files (JPG,GIF,PNG,BMP)
+alert.noPicturesInAlbum=This album does not contain any pictures.
 alert.thumbclean=Thumbnail garbage collection started for directory
 alert.filescopied=file(s) selected for copy operation
 alert.filesmoved=file(s) selected for move operation

@@ -225,7 +225,6 @@ import de.webfilesys.gui.xsl.XslMenuBarHandler;
 import de.webfilesys.gui.xsl.XslMultiUploadHandler;
 import de.webfilesys.gui.xsl.XslOpenStreetMapFilesHandler;
 import de.webfilesys.gui.xsl.XslOpenStreetMapHandler;
-import de.webfilesys.gui.xsl.XslPictureAlbumHandler;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
 import de.webfilesys.gui.xsl.XslPublishFileHandler;
 import de.webfilesys.gui.xsl.XslRenameDirHandler;
@@ -247,6 +246,10 @@ import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
 import de.webfilesys.gui.xsl.XslUploadParmsHandler;
 import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
 import de.webfilesys.gui.xsl.XslZipContentHandler;
+import de.webfilesys.gui.xsl.album.AddAlbumCommentHandler;
+import de.webfilesys.gui.xsl.album.XslAlbumPictureHandler;
+import de.webfilesys.gui.xsl.album.XslAlbumSlideShowHandler;
+import de.webfilesys.gui.xsl.album.XslPictureAlbumHandler;
 import de.webfilesys.gui.xsl.calendar.XslCalendarHandler;
 import de.webfilesys.gui.xsl.calendar.XslCalendarMonthHandler;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
@@ -863,12 +866,33 @@ public class WebFileSysServlet extends HttpServlet
 		    return(true);
     	}
     	
+    	if (command.equals("bookPicture"))
+    	{
+		    (new XslAlbumPictureHandler(req, resp, session, output, userid)).handleRequest(); 
+
+		    return(true);
+    	}
+    	
         if (command.equals("slideShowInFrame"))
         {
             (new XslSlideShowInFrameHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }
+
+        if (command.equals("albumSlideShow"))
+        {
+            (new XslAlbumSlideShowHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+        
+        if (command.equals("addAlbumComment"))
+		{
+		    (new AddAlbumCommentHandler(req, resp, session, output, userid)).handleRequest(); 
+
+		    return(true);
+		}
 
         if (command.equals("slideShowParms"))
         {
@@ -2522,8 +2546,7 @@ public class WebFileSysServlet extends HttpServlet
         		
         		if ((role != null) && role.equals("album"))
         		{
-        			(new XslPictureAlbumHandler(req, resp, session, output, userid)).handleRequest();
-        			
+           			(new XslPictureAlbumHandler(req, resp, session, output, userid)).handleRequest();
         		}
         		else
         		{
@@ -2662,10 +2685,15 @@ public class WebFileSysServlet extends HttpServlet
             return false;
         }
         
+        /* 
+           tablets and high density smartphones should see the desktop GUI after login!
+           let the user decide to use the mobile GUI
+           
         if (browserType.indexOf("Android") >= 0)
         {
             return true;
         }
+        */
         
         return false;
     }

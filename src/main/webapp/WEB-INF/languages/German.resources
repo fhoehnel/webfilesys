@@ -12,6 +12,7 @@ label.password=Passwort
 label.logon=Anmelden
 label.file=Datei
 label.files=Dateien
+label.pictures=Bilder
 label.mask=Filter
 label.description=Beschreibung
 label.directory=Ordner
@@ -463,6 +464,7 @@ alt.next=nächstes Bild
 alt.back=vorheriges Bild
 startSlideshowHere=Diashow hier starten
 label.startPic=Startbild
+slideshowHeadline=WebFileSys Diashow
 
 # co-browsing labels
 titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)
@@ -693,6 +695,7 @@ details.album=Details
 details.show=mehr Details anzeigen
 details.hide=Details ausblenden
 showPictureOrigSize=Bild in Originalgröße anzeigen
+albumOptions=Optionen
 
 # maintanance mode text
 label.maintanance.head=Wartungsmodus
@@ -707,6 +710,7 @@ subject.folderChange=Änderung Ordner-Inhalt
 # Google Maps, Google Earth
 button.googleMap=Lokation auf Landkarte
 label.geoMapLink=Geographische Lokation auf Karte anzeigen
+geoMapLinkShort=Landkarte
 selectMapType=- Kartentyp wählen -
 mapTypeOSM=Open Street Maps
 mapTypeGoogleMap=Google Maps
@@ -862,6 +866,7 @@ alert.dircopied=wurde als Quell-Ordner für Kopier-Operation ausgewählt
 alert.dirmoved=wurde als Quell-Ordner für Verschiebe-Operation ausgewählt
 alert.nofileselected=Es wurde keine Datei ausgewählt
 alert.nopictures=keine Bilddateien (JPG,GIF,PNG,BMP)
+alert.noPicturesInAlbum=Dieses Album enthält keine Bilder.
 alert.thumbclean=Löschung veralteter Vorschaubilder gestartet für Ordner
 alert.filescopied=Datei(en) selektiert für Kopier-Operation 
 alert.filesmoved=Datei(en) selektiert für Verschiebe-Operation

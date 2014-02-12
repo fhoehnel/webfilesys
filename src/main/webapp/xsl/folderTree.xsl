@@ -258,7 +258,12 @@
         </xsl:if>
       </xsl:if>
     
-      <xsl:value-of select="@name" />
+      <xsl:if test="(@type='drive') and @label and (@label!='')">
+        <xsl:value-of select="@label" />
+      </xsl:if>
+      <xsl:if test="not(@type='drive') or not(@label) or (@label='')">
+        <xsl:value-of select="@name" />
+      </xsl:if>
     </a>
 
     <xsl:if test="folder">

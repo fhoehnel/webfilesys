@@ -105,8 +105,6 @@ public class PublishRequestHandler extends UserRequestHandler
 			}
 		}
 
-		System.out.println("invitation type: " + invitationType);
-
 		String publishType = getParameter("publishType");
 
 		String commentsParm=getParameter("allowComments");

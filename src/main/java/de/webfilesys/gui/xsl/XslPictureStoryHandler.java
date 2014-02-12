@@ -55,9 +55,19 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			if ((act_path == null) || (act_path.length() == 0))
 			{
 				act_path = (String) session.getAttribute("cwd");
+				
+				if (act_path == null) {
+					act_path = WebFileSys.getInstance().getUserMgr().getDocumentRoot(uid);
+				}
 			}
 		}
 
+		String mode = "story";
+		String modeParam = getParameter("mode");
+		if ((modeParam != null) && (modeParam.length() > 0)) {
+			mode = modeParam;
+		}
+		
 		session.setAttribute("cwd", act_path);
 
 		String fileFilter[] = Constants.imgFileMasks;
@@ -145,14 +155,12 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 
 		int startIdx = (-1);
 
-        /*
 		String initial = getParameter("initial");
         
 		if ((initial != null) && (initial.equalsIgnoreCase("true")))
 		{
 			session.removeAttribute("startIdx");
 		}
-		*/
 
 		String startIdxParm = getParameter("startIdx");
 
@@ -184,7 +192,12 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			startIdx = 0;
 		}
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/story.xsl\"");
+		String stylesheetName = "story.xsl";
+		if (mode.equals("pictureBook")) {
+			stylesheetName = "album/pictureBook.xsl";
+		}
+		
+		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/" + stylesheetName + "\"");
 
 		Element fileListElement = doc.createElement("fileList");
 			
@@ -217,17 +230,21 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 		{
 			if (!isAdminUser(false))
 			{
-				addMsgResource("alert.maintanance", getResource("alert.maintanance", "The server has been switched to maintanance mode. Please logout!"));
+				XmlUtil.setChildText(fileListElement, "maintananceMode", "true", false);
+				addMsgResource("alert.maintanance", getResource("alert.maintanance", "Maintanance mode. Please logout!"));
 			}
 		}
 
 		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
 		
+	    XmlUtil.setChildText(fileListElement, "language", language, false);
+		
 		File dirFile = new File(act_path);
 		
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{
-			addMsgResource("alert.dirNotFound", getResource("alert.dirNotFound","The folder is not a readable directory"));
+			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
+			addMsgResource("alert.dirNotFound", getResource("alert.dirNotFound", "directory does not exist"));
 			this.processResponse("xsl/folderTree.xsl");
 			return; 
 		}
@@ -298,8 +315,6 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 		}
 		else
 		{
-            pageSize = WebFileSys.getInstance().getThumbnailsPerPage();
-            
 			Integer sessionThumbPageSize = (Integer) session.getAttribute("thumbPageSize");
 			
 			if ((sessionThumbPageSize != null) && (sessionThumbPageSize.intValue() != 0))
@@ -530,7 +545,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			}
 		}
 
-		this.processResponse("story.xsl", false);
+		this.processResponse(stylesheetName, false);
 
 		FastPathManager.getInstance().queuePath(uid,act_path);
 	}

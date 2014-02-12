@@ -67,7 +67,7 @@
   function showImage(imgPath, width, height)
   {
       randNum = (new Date()).getTime();
-      picWin = window.open('/webfilesys/servlet?command=showImg&amp;imgname=' + encodeURIComponent(imgPath) + '&amp;random=' + randNum,'picWin' + randNum,'status=no,toolbar=no,location=no,menu=no,width=' + width + ',height=' + (height + 52) + ',resizable=yes,left=1,top=1,screenX=1,screenY=1');
+      picWin = window.open('/webfilesys/servlet?command=showImg&amp;imgname=' + encodeURIComponent(imgPath) + '&amp;screenWidth=' + screen.width + '&amp;screenHeight=' + screen.height + '&amp;random=' + randNum,'picWin' + randNum,'status=no,toolbar=no,location=no,menu=no,width=' + width + ',height=' + (height + 52) + ',resizable=yes,left=1,top=1,screenX=1,screenY=1');
       picWin.focus();
   }
   

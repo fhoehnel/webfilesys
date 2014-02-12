@@ -112,27 +112,68 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		
 		XmlUtil.setChildText(imageDataElement, "imageSource", srcFileName, false);
 
-		int screenWidth = Constants.DEFAULT_SCREEN_WIDTH;
-		int screenHeight = Constants.DEFAULT_SCREEN_HEIGHT;
+		int screenWidth = 0;
+		int screenHeight = 0;
 		
-		Integer screenWidthSession = (Integer) session.getAttribute("screenWidth");
-		
-		if (screenWidthSession != null)
+		String screenWidthParam = getParameter("screenWidth");
+        
+		if (screenWidthParam != null)
 		{
-			screenWidth = screenWidthSession.intValue();
+			try
+			{
+				screenWidth = Integer.parseInt(screenWidthParam);        	
+				session.setAttribute("screenWidth", new Integer(screenWidth));
+			}
+			catch (NumberFormatException nfe)
+			{
+				Logger.getLogger(getClass()).error(nfe);
+			}
 		}
 		
-		Integer screenHeightSession = (Integer) session.getAttribute("screenHeight");
-		
-		if (screenHeightSession != null)
+		String screenHeightParam = getParameter("screenHeight");
+        
+		if (screenHeightParam != null)
 		{
-			screenHeight = screenHeightSession.intValue();
+			try
+			{
+				screenHeight = Integer.parseInt(screenHeightParam);        	
+				session.setAttribute("screenHeight", new Integer(screenHeight));
+			}
+			catch (NumberFormatException nfe)
+			{
+				Logger.getLogger(getClass()).error(nfe);
+			}
+		}
+		
+		if (screenWidth == 0) {
+			Integer screenWidthSession = (Integer) session.getAttribute("screenWidth");
+			if (screenWidthSession != null)
+			{
+				screenWidth = screenWidthSession.intValue();
+			}
+			else
+			{
+				screenWidth = Constants.DEFAULT_SCREEN_WIDTH;
+			}
+		}
+		
+		if (screenHeight == 0) {
+			Integer screenHeightSession = (Integer) session.getAttribute("screenHeight");
+			
+			if (screenHeightSession != null)
+			{
+				screenHeight = screenHeightSession.intValue();
+			}
+			else
+			{
+				screenHeight = Constants.DEFAULT_SCREEN_HEIGHT;
+			}
 		}
 		
 		// int maxDisplayWidth = screenWidth-100;
 		int maxDisplayWidth = screenWidth-40;
 		
-		int maxDisplayHeight = screenHeight-155;
+		int maxDisplayHeight = screenHeight - 166;
 		
 		ScaledImage scaledImage=null;
 

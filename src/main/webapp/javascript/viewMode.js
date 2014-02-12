@@ -27,3 +27,13 @@ function fileStats()
 {
     window.location.href='/webfilesys/servlet?command=fileStats&initial=true&random=' + new Date().getTime();
 }
+
+function viewModePictureBook()
+{
+    window.location.href='/webfilesys/servlet?command=storyInFrame&mode=pictureBook&initial=true&random=' + new Date().getTime() + '&screenWidth=' + screen.width + '&screenHeight=' + screen.height;
+}
+
+function viewModeAlbumSlideshow()
+{
+    window.location.href='/webfilesys/servlet?command=albumSlideShow&windowWidth=' + getWinWidth() + '&windowHeight=' + getWinHeight() + '&screenWidth=' + screen.width + '&screenHeight=' + screen.height + '&random=' + new Date().getTime();
+}
