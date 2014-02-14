@@ -96,7 +96,7 @@
 
 <body class="pictureAlbum" onload="setWindowDimensions()">
   <xsl:if test="/imageData/voteAccepted">
-    <xsl:attribute name="onload">showMsgCentered(resourceBundle['vote.confirm'], 260, 100, 4000);</xsl:attribute>
+    <xsl:attribute name="onload">setWindowDimensions();showMsgCentered(resourceBundle['vote.confirm'], 260, 100, 4000);</xsl:attribute>
   </xsl:if>
 
   <div id="toolTip" style="position:absolute;top:200px;left:100px;width=200px;height=20px;padding:5px;background-color:ivory;border-style:solid;border-width:1px;border-color:#000000;visibility:hidden"></div>

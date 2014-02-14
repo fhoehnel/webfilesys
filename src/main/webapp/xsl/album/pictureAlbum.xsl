@@ -104,13 +104,6 @@
         </a>
       </div>
 
-      <xsl:if test="pictureAlbum/description">
-        <div class="albumDescription">
-          <xsl:value-of select="pictureAlbum/description" disable-output-escaping="yes" />
-        </div>
-        <div class="resetFloat"></div>
-      </xsl:if>
-
       <xsl:for-each select="pictureAlbum/currentPath">
         <xsl:call-template name="currentPath" />
       </xsl:for-each>
@@ -125,6 +118,12 @@
         <xsl:call-template name="sortAndPaging" />
       </xsl:for-each>
       
+      <xsl:if test="pictureAlbum/description">
+        <div class="albumDescription">
+          <xsl:value-of select="pictureAlbum/description" disable-output-escaping="yes" />
+        </div>
+      </xsl:if>
+
       <table width="100%">
       
         <tr>
@@ -267,7 +266,7 @@
                 
       <xsl:if test="fileList/fileGroup">
         <div class="pictureAlbumOptions">
-          <span resource="label.listPageSize"></span>
+          <span resource="albumPageSize"></span>
           <xsl:text> </xsl:text>
                   
           <input type="text" name="pageSize" maxlength="4" style="width:35px;" class="pictureAlbum">

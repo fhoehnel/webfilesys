@@ -520,7 +520,6 @@ label.sendInvitationMail=send invitation e-mail
 label.publishType=publish as
 label.publishTypeExplorer=file explorer
 label.publishTypeAlbum=picture album
-button.returnToAlbum=Return to Album
 
 # user comments
 label.commentList=User Comments
@@ -694,6 +693,8 @@ details.show=show more details
 details.hide=hide details
 showPictureOrigSize=show picture in full size
 albumOptions=Options
+button.returnToAlbum=Return to Album
+albumPageSize=pictures/page
 
 # maintanance mode text
 label.maintanance.head=Maintanance Mode

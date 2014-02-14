@@ -522,7 +522,6 @@ label.sendInvitationMail=Einladung als e-mail versenden
 label.publishType=freigeben als
 label.publishTypeExplorer=Datei-Explorer
 label.publishTypeAlbum=Bilderalbum
-button.returnToAlbum=Zurück zum Album
 
 # user comments
 label.commentList=Kommentare von Nutzern
@@ -696,6 +695,8 @@ details.show=mehr Details anzeigen
 details.hide=Details ausblenden
 showPictureOrigSize=Bild in Originalgröße anzeigen
 albumOptions=Optionen
+button.returnToAlbum=Zurück zum Album
+albumPageSize=Bilder/Seite
 
 # maintanance mode text
 label.maintanance.head=Wartungsmodus

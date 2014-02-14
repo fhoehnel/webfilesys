@@ -61,6 +61,7 @@ div.pictureAlbumHeadline {
 
 div.albumDescription {
     float: left;
+    clear: both;
     color: #1A401A;
     font-size: 0.91rem;
     margin-top: 10px;
@@ -560,4 +561,17 @@ div.slideShowHeadline {
     color: #000060;
     font-size: 1.25rem;
     text-align: center;
+}
+
+div.msgBox {
+    width:260px;
+    height:80px;
+    position:absolute;
+    background-color: ivory;
+    border: 1px solid #000000;
+    font-size: 1rem;
+    color: #202020;
+    text-align: center;
+    vertical-align: middle;
+    padding: 20px;
 }

@@ -207,7 +207,7 @@
             </xsl:attribute>
           </input>
           <xsl:text> </xsl:text>
-          <input type="button" resource="label.listPageSize">
+          <input type="button" resource="albumPageSize">
             <xsl:attribute name="onclick">javascript:document.sortform.submit()</xsl:attribute>
           </input> 
         </div>
