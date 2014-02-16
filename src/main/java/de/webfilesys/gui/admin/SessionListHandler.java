@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 
 import de.webfilesys.SessionHandler;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.util.CommonUtils;
 
 public class SessionListHandler extends AdminRequestHandler
 {
@@ -47,7 +48,7 @@ public class SessionListHandler extends AdminRequestHandler
 
 		output.println("<table width=\"100%\" border=\"1\" cellspacing=\"0\">");
 		output.println("<tr>");
-		output.println("<th class=\"datahead\">user</th><th class=\"datahead\">host/IP</th><th class=\"datahead\">session id</th><th class=\"datahead\">creation time</th><th class=\"datahead\">last active time</th><th class=\"datahead\">inactive (min:sec)</th><th class=\"datahead\">browser</th><th class=\"datahead\">protocol</th></tr>");
+		output.println("<th class=\"datahead\">user</th><th class=\"datahead\">host/IP</th><th class=\"datahead\">creation time</th><th class=\"datahead\">last active time</th><th class=\"datahead\">inactive (min:sec)</th><th class=\"datahead\">browser</th><th class=\"datahead\">protocol</th></tr>");
 
 		Enumeration sessionList = SessionHandler.getSessions();
 
@@ -81,12 +82,6 @@ public class SessionListHandler extends AdminRequestHandler
 				output.print(hostIP);
 				output.println("</td>");
 				
-				output.print("<td class=\"data\" align=\"left\" valign=\"top\">");
-				output.print("<font class=\"small\">");
-				output.print(session.getId());
-				output.print("</font>");
-				output.println("</td>");
-
 				output.print("<td class=\"data\" align=\"left\" valign=\"top\">");
 				output.print(WebFileSys.getInstance().getLogDateFormat().format(new Date(session.getCreationTime())));
 				output.println("</td>");
@@ -132,13 +127,13 @@ public class SessionListHandler extends AdminRequestHandler
 				output.println("</td>");
 
 				String userAgent = (String) session.getAttribute("userAgent");
-
+				
 				output.println("<td class=\"data\" valign=\"top\">");
 
 				if ((userAgent != null) && (userAgent.trim().length() > 0))
 				{
 					output.print("<font class=\"small\">");
-					output.println(userAgent);
+					output.println(CommonUtils.escapeHTML(userAgent));
 					output.println("</font>");
 				}
 				else
