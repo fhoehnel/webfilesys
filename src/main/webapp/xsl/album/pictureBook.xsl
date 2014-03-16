@@ -21,9 +21,9 @@
   </link>
 
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-  <script src="javascript/fmweb.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
-  <script src="javascript/viewMode.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/pictureAlbum.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -102,7 +102,7 @@
 
     <div class="infoIcon">
       <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
-        <img src="images/info.png" border="0" width="32" height="32" titleResource="label.about" />
+        <img src="/webfilesys/images/info.png" border="0" width="32" height="32" titleResource="label.about" />
       </a>
     </div>
 

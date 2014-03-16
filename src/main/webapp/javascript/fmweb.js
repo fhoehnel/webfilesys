@@ -61,25 +61,6 @@ function setRelatedCheckbox(master,dependent)
    }
 }
 
-function switchInviteFlag()
-{
-   if (document.form1.invite.checked == true)
-   {
-       document.form1.receiver.disabled = false;
-       document.form1.subject.disabled = false;
-       document.form1.msgText.disabled = false;
-   }
-   else
-   {
-       document.form1.receiver.value = '';
-       document.form1.receiver.disabled = true;
-       document.form1.subject.value = '';
-       document.form1.subject.disabled = true;
-       document.form1.msgText.value = '';
-       document.form1.msgText.disabled = true;
-   }
-}
-
 function anySelected()
 {
     for (i=document.form1.elements.length-1;i>=0;i--)

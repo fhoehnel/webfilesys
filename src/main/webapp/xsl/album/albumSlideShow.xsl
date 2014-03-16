@@ -21,7 +21,7 @@
  
     <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
-    <script src="javascript/viewMode.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 
     <script type="text/javascript">

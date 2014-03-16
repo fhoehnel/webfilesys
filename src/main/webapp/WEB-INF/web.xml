@@ -49,6 +49,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <servlet-class>de.webfilesys.servlet.UploadServlet</servlet-class>
   </servlet>
 
+  <servlet>
+    <servlet-name>visitorServlet</servlet-name>
+    <servlet-class>de.webfilesys.servlet.VisitorServlet</servlet-class>
+  </servlet>
+
   <!-- Action Servlet Mapping -->
   <servlet-mapping>
     <servlet-name>webfilesys</servlet-name>
@@ -58,6 +63,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   <servlet-mapping>
     <servlet-name>upload</servlet-name>
     <url-pattern>/upload/*</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>visitorServlet</servlet-name>
+    <url-pattern>/visitor/*</url-pattern>
   </servlet-mapping>
 
   <session-config>

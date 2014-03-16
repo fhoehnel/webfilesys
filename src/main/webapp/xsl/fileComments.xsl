@@ -91,58 +91,64 @@
 
       </xsl:if>
     
-      <tr>
-        <td class="formParm1">
-          <xsl:value-of select="/fileComments/resources/msg[@key='label.addcomment']/@value" />:
-        </td>
-      </tr>
-
-      <tr>
-        <td class="formParm2">
-          <textarea name="newComment" cols="100" rows="4" wrap="virtual" style="width:100%" onKeyup="limitText()" onChange="limitText()"></textarea>
-        </td>
-      </tr>
-      
-      <xsl:if test="/fileComments/virtualUser">
+      <xsl:if test="/fileComments/modifyPermission">
         <tr>
           <td class="formParm1">
-            <xsl:value-of select="/fileComments/resources/msg[@key='label.commentAuthor']/@value" />:
-            &#160;
-            <input type="text" name="author" style="width:150px" />
+            <xsl:value-of select="/fileComments/resources/msg[@key='label.addcomment']/@value" />:
           </td>
         </tr>
+
+        <tr>
+          <td class="formParm2">
+            <textarea name="newComment" cols="100" rows="4" wrap="virtual" style="width:100%" onKeyup="limitText()" onChange="limitText()"></textarea>
+          </td>
+        </tr>
+
+		<xsl:if test="/fileComments/virtualUser">
+          <tr>
+            <td class="formParm1">
+              <xsl:value-of select="/fileComments/resources/msg[@key='label.commentAuthor']/@value" />:
+              &#160;
+              <input type="text" name="author" style="width:150px" />
+            </td>
+          </tr>
+        </xsl:if>
       </xsl:if>
 	  
       <tr>
-        <td class="formParm1" style="padding-top:10px;padding-bottom:10px">
+        <td>
+          <div class="buttonCont">
         
-          <xsl:if test="/fileComments/modifyPermission">
-            <a class="button" onclick="this.blur();"> 
-              <xsl:attribute name="href">javascript:document.form1.submit()</xsl:attribute>
-              <span><xsl:value-of select="/fileComments/resources/msg[@key='button.addComment']/@value" /></span>
-            </a>              
+            <xsl:if test="/fileComments/modifyPermission">
+			
+              <input type="button">
+                <xsl:attribute name="onclick">javascript:document.form1.submit()</xsl:attribute>
+                <xsl:attribute name="value"><xsl:value-of select="/fileComments/resources/msg[@key='button.addComment']/@value" /></xsl:attribute>
+              </input>              
 
-            <xsl:if test="not(/fileComments/readonly)">
-              <xsl:if test="/fileComments/comments and /fileComments/comments/comment">              
-                <a class="button" onclick="this.blur();"> 
-                  <xsl:attribute name="href">javascript:confirmDelete();</xsl:attribute>
-                  <span><xsl:value-of select="/fileComments/resources/msg[@key='button.delComments']/@value" /></span>
-                </a>
+              <xsl:if test="not(/fileComments/readonly)">
+                <xsl:if test="/fileComments/comments and /fileComments/comments/comment"> 
+                  <input type="button">
+                    <xsl:attribute name="onclick">javascript:confirmDelete()</xsl:attribute>
+                    <xsl:attribute name="value"><xsl:value-of select="/fileComments/resources/msg[@key='button.delComments']/@value" /></xsl:attribute>
+                  </input>              
+                </xsl:if>  
               </xsl:if>  
-            </xsl:if>  
               
-          </xsl:if>              
+            </xsl:if>              
 
-          <a class="button" onclick="this.blur();"> 
-            <xsl:if test="/fileComments/mobile">
-              <xsl:attribute name="href">/webfilesys/servlet?command=mobile&amp;cmd=folderFileList</xsl:attribute>
-              <span><xsl:value-of select="/fileComments/resources/msg[@key='button.return']/@value" /></span>
-            </xsl:if>
-            <xsl:if test="not(/fileComments/mobile)">
-              <xsl:attribute name="href">javascript:window.close()</xsl:attribute>
-              <span><xsl:value-of select="/fileComments/resources/msg[@key='button.closewin']/@value" /></span>
-            </xsl:if>
-          </a>              
+            <input type="button">
+              <xsl:if test="/fileComments/mobile">
+                <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=mobile&amp;cmd=folderFileList';</xsl:attribute>
+                <xsl:attribute name="value"><xsl:value-of select="/fileComments/resources/msg[@key='button.return']/@value" /></xsl:attribute>
+              </xsl:if>
+              <xsl:if test="not(/fileComments/mobile)">
+                <xsl:attribute name="onclick">window.close()</xsl:attribute>
+                <xsl:attribute name="value"><xsl:value-of select="/fileComments/resources/msg[@key='button.closewin']/@value" /></xsl:attribute>
+              </xsl:if>
+            </input>              
+          
+		  </div>
         </td>
       </tr>
     </table>

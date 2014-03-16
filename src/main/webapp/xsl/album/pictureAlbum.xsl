@@ -100,7 +100,7 @@
 
       <div class="infoIcon">
         <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
-          <img src="images/info.png" border="0" width="32" height="32" titleResource="label.about" />
+          <img src="/webfilesys/images/info.png" border="0" width="32" height="32" titleResource="label.about" />
         </a>
       </div>
 
@@ -442,7 +442,7 @@
           <a class="subdir">
             <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
             <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
-            <img class="albumFolder" src="images/foldero.gif" border="0" width="22" height="17" />&#160;<xsl:value-of select="@displayName"/> 
+            <img class="albumFolder" src="/webfilesys/images/foldero.gif" border="0" width="22" height="17" />&#160;<xsl:value-of select="@displayName"/> 
           </a>
         </td>
       </tr>
@@ -542,7 +542,7 @@
                     <xsl:text> </xsl:text>
                   
                     <xsl:if test="visitorRating">
-                      <img src="images/oneStar.png" class="voteStar" titleResource="rating.visitor" />
+                      <img src="/webfilesys/images/oneStar.png" class="voteStar" titleResource="rating.visitor" />
                       <xsl:text> </xsl:text>
                       <span class="albumVoteAverage"><xsl:value-of select="visitorRating" /></span>
                       <xsl:text> </xsl:text>

@@ -142,7 +142,7 @@ function publish(path,mailEnabled)
 {
     if (parent.mailEnabled == 'true')
     {
-         publishWin=window.open("/webfilesys/servlet?command=publishForm&actPath=" + encodeURIComponent(path) + "&type=common","publish","status=no,toolbar=no,menu=no,width=620,height=550,resizable=yes,scrollbars=no,left=30,top=20,screenX=40,screenY=20");
+         publishWin=window.open("/webfilesys/servlet?command=publishForm&actPath=" + encodeURIComponent(path) + "&type=common","publish","status=no,toolbar=no,menu=no,width=620,height=590,resizable=yes,scrollbars=no,left=30,top=20,screenX=40,screenY=20");
     }
     else
     {

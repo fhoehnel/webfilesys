@@ -509,6 +509,7 @@ alert.noreceiver=Bitte mindestens einen Empfänger eingeben
 alert.emailsyntax=ungültige e-mail Adresse
 alert.nomsgtext=kein Einladungstext eingegeben
 alert.expinvalid=Gültigkeit in Tagen muss eine Zahl sein
+alert.pageSizeInvalid=Bilder/Seite muss eine Zahl sein
 subject.invitation=Einladung zur Bilder-Show
 subject.publish=Einladung zum Besuch meiner Homepage
 label.publishList=Freigegebene Ordner und Dateien

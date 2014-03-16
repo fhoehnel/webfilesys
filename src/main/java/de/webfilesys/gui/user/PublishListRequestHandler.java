@@ -130,13 +130,22 @@ public class PublishListRequestHandler extends UserRequestHandler
 
 					if (type.equals(InvitationManager.INVITATION_TYPE_TREE))
 					{
-						secretLink.append("/webfilesys/servlet?command=silentLogin&");
-						
-						String virtualUserId = InvitationManager.getInstance().getVirtualUser(accessCode);
-						
-						secretLink.append(virtualUserId);
-						secretLink.append('=');
-						secretLink.append(accessCode);
+					    String virtualUserId = InvitationManager.getInstance().getVirtualUser(accessCode);
+
+						if (userMgr.getRole(virtualUserId).equals("album")) 
+						{
+							secretLink.append("/webfilesys/visitor/");
+							secretLink.append(virtualUserId);
+							secretLink.append('/');
+							secretLink.append(accessCode);
+						}
+						else 
+						{
+						    secretLink.append("/webfilesys/servlet?command=silentLogin&");
+						    secretLink.append(virtualUserId);
+						    secretLink.append('=');
+						    secretLink.append(accessCode);
+						}
 					}
 					else
 					{

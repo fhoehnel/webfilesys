@@ -507,6 +507,7 @@ alert.noreceiver=Enter at least one receiver
 alert.emailsyntax=invalid e-mail address
 alert.nomsgtext=Please enter the invitation text
 alert.expinvalid=Expiration must be a number
+alert.pageSizeInvalid=page size must be a number
 subject.invitation=Invitation to view my picture album
 subject.publish=Invitation to visit my web site
 label.publishList=Published Folders and Files

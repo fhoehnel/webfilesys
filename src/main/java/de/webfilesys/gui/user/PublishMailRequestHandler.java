@@ -134,6 +134,21 @@ public class PublishMailRequestHandler extends UserRequestHandler
 			}
 		}
 
+		int pageSize = userMgr.getPageSize(uid);
+		String pageSizeParm = getParameter("pageSize");
+		if (!CommonUtils.isEmpty(pageSizeParm)) 
+		{
+			try 
+			{
+			    pageSize = Integer.parseInt(pageSizeParm);	
+			}
+			catch (NumberFormatException nfex)
+			{
+				errorMsg.append(getResource("alert.pageSizeInvalid","page size must be a number"));
+				errorMsg.append("\\n");
+			}
+		}
+		
 		String includeSubdirs=getParameter("includeSub");
 
 		String commentsParm=getParameter("allowComments");
@@ -208,6 +223,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 				userMgr.setLanguage(virtualUser,userLanguage);
 			}
 			
+			userMgr.setPageSize(virtualUser, pageSize);
 		}
 
 		String accessCode=InvitationManager.getInstance().addInvitation(uid,actPath,expDays,invitationType,allowComments,virtualUser);
@@ -243,10 +259,20 @@ public class PublishMailRequestHandler extends UserRequestHandler
 
 		if (invitationType.equals(InvitationManager.INVITATION_TYPE_TREE))
 		{
-			secretURL.append("/webfilesys/servlet?command=silentLogin&");
-			secretURL.append(virtualUser);
-			secretURL.append('=');
-			secretURL.append(accessCode);
+			if ((publishType != null) && publishType.equals("album"))
+			{
+				secretURL.append("/webfilesys/visitor/");
+				secretURL.append(virtualUser);
+				secretURL.append('/');
+				secretURL.append(accessCode);
+			} 
+			else 
+			{
+				secretURL.append("/webfilesys/servlet?command=silentLogin&");
+				secretURL.append(virtualUser);
+				secretURL.append('=');
+				secretURL.append(accessCode);
+			}
 			
 			/*
 			if ((publishType != null) && publishType.equals("album"))
@@ -405,10 +431,15 @@ public class PublishMailRequestHandler extends UserRequestHandler
 			javascriptAlert(errorMsg);
 		}
 
-		output.println("<script language=\"JavaScript\" src=\"/webfilesys/javascript/fmweb.js\" type=\"text/javascript\"></script>"); 
+		output.println("<script src=\"/webfilesys/javascript/fmweb.js\" type=\"text/javascript\"></script>"); 
+		output.println("<script src=\"/webfilesys/javascript/publish.js\" type=\"text/javascript\"></script>"); 
 
+		String initialPageSize = Integer.toString(userMgr.getPageSize(uid));
+		output.println("<script type=\"text/javascript\">"); 
+		output.println("var initialPageSize = " + initialPageSize + ";"); 
+		output.println("</script>"); 
+		
 		output.println("</head>"); 
-
 		
 		output.println("<BODY>");
 
@@ -462,7 +493,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println(getResource("label.publishType", "publish as") + ":");
 		output.println("</td>");
 		output.println("<td class=\"formParm2\">");
-		output.println("<input type=\"radio\" class=\"cb3\" name=\"publishType\" value=\"explorer\"");
+		output.println("<input type=\"radio\" class=\"cb3\" name=\"publishType\" value=\"explorer\" onclick=\"switchShowPageSize()\"");
 		if (publishType.equals("explorer"))
 		{
 			 output.print(" checked");
@@ -470,7 +501,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.print(">");
 		output.println(getResource("label.publishTypeExplorer", "file explorer"));
         output.println("&nbsp;&nbsp;&nbsp;");
-		output.print("<input type=\"radio\" class=\"cb3\" name=\"publishType\" value=\"album\"");
+		output.print("<input type=\"radio\" class=\"cb3\" name=\"publishType\" value=\"album\" onclick=\"switchShowPageSize()\"");
 		if (publishType.equals("album"))
 		{
 			 output.print(" checked");
@@ -481,6 +512,26 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println("</td>");
 		output.println("</tr>");
 
+		String pageSize = "";
+		if (errorMsg != null)
+		{
+			pageSize = getParameter("pageSize");
+		}
+		
+		output.println("<tr>");
+        output.println("<td class=\"formParm1\">");
+		output.println(getResource("albumPageSize", "pictures per page") + ":");
+		output.println("</td>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<input id=\"pageSize\" type=\"text\" name=\"pageSize\" size=\"4\" maxlength=\"3\" value=\"" + pageSize + "\"");
+		if (!publishType.equals("album"))
+		{
+			 output.print(" disabled=\"disabled\"");
+		}
+		output.println(" />");
+		output.println("</td>");
+		output.println("</tr>");
+		
 		/*
 		output.println("<tr><td colspan=\"2\" class=\"prompt\">");
 		output.print("<input type=\"checkbox\" class=\"cb\" name=\"includeSub\" onclick=\"checkPublishType()\"");
@@ -528,7 +579,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println(getResource("label.receiver","Receiver(s) (comma-separated list of e-mail addresses)") + ":");
 		output.println("</td></tr>");
 
-		String temp=null;
+		String temp = null;
 
 		if (errorMsg!=null)
 		{

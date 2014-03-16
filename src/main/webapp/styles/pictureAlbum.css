@@ -351,6 +351,7 @@ div.storyPicture {
     margin-top: 10px;
     margin-bottom: 10px;
     clear: both;
+    max-height: 999999px; /* prevent font boosting on Android */
 }
 
 div.storyPictureLeft {
@@ -416,6 +417,7 @@ div.albumDetailDesc {
     color: #FFFF80;
     clear: both;
     margin-bottom: 6px;
+    max-height: 999999px; /* prevent font boosting on Android */
 }
 
 div.albumDetailVote {

@@ -307,6 +307,10 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 					{
 						userMgr.setPageSize(uid,pageSize);
 					}
+					
+					startIdx = 0;
+
+					session.setAttribute("startIdx", new Integer(0));
 				}
 			}
 			catch (NumberFormatException nfex)
