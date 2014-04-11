@@ -1,12 +1,13 @@
 package de.webfilesys;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-import de.webfilesys.mail.Email;
 import de.webfilesys.mail.MailTemplate;
+import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.user.UserManager;
 
 public class DiskQuotaInspector extends Thread
@@ -53,11 +54,11 @@ public class DiskQuotaInspector extends Thread
 
         StringBuffer adminMailBuffer=new StringBuffer();
 
-        Vector allUsers=userMgr.getListOfUsers();
+        ArrayList<String> allUsers = userMgr.getListOfUsers();
 
         for (int i=0;i<allUsers.size();i++)
         {
-            String userid=(String) allUsers.elementAt(i);
+            String userid = allUsers.get(i);
 
             String role=userMgr.getRole(userid);
 
@@ -120,7 +121,7 @@ public class DiskQuotaInspector extends Thread
 
                                         String subject = LanguageManager.getInstance().getResource(userLanguage,"subject.diskquota","Disk quota exceeded");
 
-                                        (new Email(email,subject,mailText)).send();
+                                        (new SmtpEmail(email,subject,mailText)).send();
                                     }
                                 }
 
@@ -142,7 +143,9 @@ public class DiskQuotaInspector extends Thread
                 adminMailBuffer.append("no disk quota exceeded");
             }
 
-            (new Email(userMgr.getAdminUserEmails(), "Disk quota report " + WebFileSys.getInstance().getLogDateFormat().format(new Date(endTime)),
+            ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+            
+            (new SmtpEmail(adminUserEmailList, "Disk quota report " + WebFileSys.getInstance().getLogDateFormat().format(new Date(endTime)),
                        adminMailBuffer.toString())).send();
         }
 

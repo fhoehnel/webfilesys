@@ -193,6 +193,23 @@ public class CameraExifData
         }
     }
 
+    public double getExposureBias()
+    {
+        if (exifDirectory==null)
+        {
+            return(Double.MIN_VALUE);
+        }
+
+        try
+        {
+            return exifDirectory.getDouble(ExifDirectory.TAG_EXPOSURE_BIAS);
+        }
+        catch (MetadataException metex)
+        {
+            return(-1);
+        }
+    }
+    
     public int getImageWidth()
     {
         if (exifDirectory==null)

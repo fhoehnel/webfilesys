@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
-import de.webfilesys.mail.Email;
+import de.webfilesys.mail.SmtpEmail;
 
 /**
  * @author Frank Hoehnel
@@ -155,7 +155,7 @@ public class AlarmDistributor extends Thread
 		
 		String mailSubject = reminderSubjectPrefix + ": " + appointment.getSubject();
 		
-		return (new Email(receiver, mailSubject, messageBody.toString())).sendSynchron();
+		return (new SmtpEmail(receiver, mailSubject, messageBody.toString())).sendSynchron();
     }
     
     /**

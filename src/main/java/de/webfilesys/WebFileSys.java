@@ -21,10 +21,11 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.Vector;
 
+import javax.mail.Session;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.log4j.Logger;
@@ -43,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.10.1beta3 (14 Mar 2014)";
+	public static final String VERSION = "Version 2.10.1 (11 Apr 2014)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -120,7 +121,9 @@ public class WebFileSys
     private boolean downloadStatistics = false;
 
     private boolean debugMail = false;
-
+    
+    private Session mailSession = null;
+    
     private boolean mailNotifyLogin = false;
 
     private boolean mailNotifyRegister = false;
@@ -133,8 +136,16 @@ public class WebFileSys
     private int folderWatchInterval = DEFAULT_FOLDER_WATCH_INTERVAL;
 
     private String mailHost = null;
+    
+    private boolean smtpAuth = false;
 
-    private Vector adminEmailList = null;
+    private boolean smtpSecure = false;
+    
+    private String smtpUser = null;
+
+    private String smtpPassword = null;
+
+    private ArrayList<String> adminEmailList = null;
 
     private String mailSenderAddress = null;
 
@@ -448,7 +459,31 @@ public class WebFileSys
         if ((mailHost != null) && (mailHost.trim().length() > 0))
         {
         	Logger.getLogger(getClass()).info("SMTP mail host: " + mailHost);
+        	
+        	temp = config.getProperty("SmtpAuth");
+        	
+        	smtpAuth = (temp != null) && temp.equalsIgnoreCase("true");
+        	
+        	if (smtpAuth) 
+        	{
+        		smtpUser = config.getProperty("SmtpUser");
+        		if (CommonUtils.isEmpty(smtpUser))
+        		{
+        			Logger.getLogger(getClass()).error("SmtpUser property is required if SmtpAuth=true");
+        		}
 
+        		smtpPassword = config.getProperty("SmtpPassword");
+        		
+        		if (CommonUtils.isEmpty(smtpPassword))
+        		{
+        			Logger.getLogger(getClass()).error("smtpPassword property is required if SmtpAuth=true");
+        		}
+        	}
+
+        	temp = config.getProperty("SmtpSecure");
+        	
+        	smtpSecure = (temp != null) && temp.equalsIgnoreCase("true");
+        	
             mailSenderAddress =
                 config.getProperty(
                     "MailSenderAddress",
@@ -528,22 +563,7 @@ public class WebFileSys
         	Logger.getLogger(getClass()).info("disk quota disabled");
         }
 
-        systemEditor = config.getProperty("SystemEditor", "");
-        if (systemEditor.length() == 0)
-        {
-            if (opSysType == OS_OS2)
-            {
-                systemEditor = "E.EXE";
-            }
-            else if (opSysType == OS_WIN)
-            {
-                systemEditor = "NOTEPAD.EXE";
-            }
-            else
-            {
-                systemEditor = "vi";
-            }
-        }
+        systemEditor = config.getProperty("SystemEditor");
 
         allowProcessKill = true;
 
@@ -777,8 +797,37 @@ public class WebFileSys
         }
         
         DecorationManager.getInstance();
+        
+        initMailSession();        
     }
-	
+    
+    private void initMailSession() {
+    	Properties mailProps = new Properties();
+        
+    	mailProps.put("mail.transport.protocol", "smtp");
+    	mailProps.put("mail.smtp.host", getMailHost());        
+            
+    	mailProps.put("mail.smtp.starttls.enable", isSmtpSecure());
+        
+    	mailProps.put("mail.smtp.auth", isSmtpAuth());      
+    	
+        if (getSmtpUser() != null) 
+        {
+    		mailProps.put("mail.smtp.user", getSmtpUser());        
+        }
+    	
+        mailSession = Session.getInstance(mailProps, null);
+
+        if (isDebugMail()) 
+        {
+            mailSession.setDebug(true);
+        }
+    }
+    
+    public Session getMailSession() {
+    	return mailSession;
+    }
+    
     protected void readDateFormats(Properties config)
     {
         Enumeration propertyNames = config.propertyNames();
@@ -824,6 +873,26 @@ public class WebFileSys
     	return(mailHost);
     }
     
+    public boolean isSmtpAuth() 
+    {
+    	return smtpAuth;
+    }
+    
+    public String getSmtpUser()
+    {
+    	return smtpUser;
+    }
+    
+    public String getSmtpPassword()
+    {
+    	return smtpPassword;
+    }
+
+    public boolean isSmtpSecure() 
+    {
+    	return smtpSecure;
+    }
+    
     public boolean isMailNotifyQuotaAdmin()
     {
     	return(mailNotifyQuotaAdmin);
@@ -839,7 +908,7 @@ public class WebFileSys
     	return(mailNotifyLogin);
     }
     
-    public Vector getAdminEmailList()
+    public ArrayList<String> getAdminEmailList()
     {
     	return(adminEmailList);
     }

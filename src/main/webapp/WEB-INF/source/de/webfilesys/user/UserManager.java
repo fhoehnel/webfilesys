@@ -1,5 +1,7 @@
 package de.webfilesys.user;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 public interface UserManager 
 {
@@ -7,31 +9,31 @@ public interface UserManager
     /**
      * Returns the list of the userids of all registered users.
      *
-     * @return a vector of Strings (userids)
+     * @return a list of Strings (userids)
      */
-    public Vector getListOfUsers();
+    public ArrayList<String> getListOfUsers();
 
     /**
      * Returns the e-mail addresses of all users of role "admin"
      *
-     * @return a vector of Strings (e-mail addresses)
+     * @return a list of Strings (e-mail addresses)
      */
-    public Vector getAdminUserEmails();
+    public ArrayList<String> getAdminUserEmails();
 
     /**
      * Returns the e-mail addresses of all users of a given role
      *
      * @param receiverRole the role of the users ("admin", "user" or "webspace")
-     * @return a vector of Strings (e-mail addresses)
+     * @return a list of Strings (e-mail addresses)
      */
-    public Vector getMailAddressesByRole(String receiverRole);
+    public ArrayList<String> getMailAddressesByRole(String receiverRole);
 
     /**
      * Returns the e-mail addresses of all users
      *
-     * @return a vector of Strings (e-mail addresses)
+     * @return a list of Strings (e-mail addresses)
      */
-    public Vector getAllMailAddresses();
+    public ArrayList<String> getAllMailAddresses();
 
     /**
      * Create a user with the given userid.
@@ -344,7 +346,7 @@ public interface UserManager
 	/**
 	 * Get a list of transient user objects for all non-virtual users.
 	 */
-	public Vector getRealUsers();
+	public ArrayList<TransientUser> getRealUsers();
     
     /**
      * The user manager thread is being notified before fmweb shutdown.

@@ -22,9 +22,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -254,7 +256,7 @@ import de.webfilesys.gui.xsl.calendar.XslCalendarHandler;
 import de.webfilesys.gui.xsl.calendar.XslCalendarMonthHandler;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 import de.webfilesys.gui.xsl.mobile.MobileShowImageHandler;
-import de.webfilesys.mail.Email;
+import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.util.UTF8URLDecoder;
 
@@ -423,13 +425,17 @@ public class WebFileSysServlet extends HttpServlet
         logEntry.append(' ');
         logEntry.append(req.getMethod());
         logEntry.append(' ');
+        
         logEntry.append(req.getRequestURI());
         
         String queryString = req.getQueryString();
         if (queryString != null)
         {
-            logEntry.append('?');
-            logEntry.append(queryString);
+        	if (queryString.indexOf("silentLogin") < 0)
+        	{
+                logEntry.append('?');
+                logEntry.append(queryString);
+        	}
         }
         
         logEntry.append(" (");
@@ -1134,7 +1140,7 @@ public class WebFileSysServlet extends HttpServlet
         
         if (command.equals("editFile"))
         {
-        	if (requestIsLocal)
+        	if (requestIsLocal && (WebFileSys.getInstance().getSystemEditor() != null))
         	{
     			(new XmlLocalEditorHandler(req, resp, session, output, userid)).handleRequest(); 
         	}
@@ -2325,10 +2331,11 @@ public class WebFileSysServlet extends HttpServlet
 
                 if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
                 {
-                    (new Email(WebFileSys.getInstance().getUserMgr().getAdminUserEmails(),
-                        "login successful",
-                        WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry))
-                        .send();
+                	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+                    
+                    (new SmtpEmail(adminUserEmailList,
+                               "login successful",
+                               WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry)).send();
                 }
 
                 return;
@@ -2369,10 +2376,11 @@ public class WebFileSysServlet extends HttpServlet
 
                 if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
                 {
-                    (new Email(WebFileSys.getInstance().getUserMgr().getAdminUserEmails(),
-                        "login successful",
-                        WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry))
-                        .send();
+                	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+                    
+                    (new SmtpEmail(adminUserEmailList,
+                                   "login successful",
+                                   WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry)).send();
                 }
 
                 return;
@@ -2384,10 +2392,11 @@ public class WebFileSysServlet extends HttpServlet
 
         if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
         {
-            (new Email(WebFileSys.getInstance().getUserMgr().getAdminUserEmails(),
-                "login failed",
-                WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry))
-                .send();
+        	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+            
+            (new SmtpEmail(adminUserEmailList,
+                           "login failed",
+                           WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry)).send();
         }
 
         if (WebFileSys.getInstance().getLoginErrorPage() != null)
@@ -2522,10 +2531,11 @@ public class WebFileSysServlet extends HttpServlet
 
                 if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
                 {
-                    (new Email(WebFileSys.getInstance().getUserMgr().getAdminUserEmails(),
-                        "login successful",
-                        WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry))
-                        .send();
+                	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+                    
+                    (new SmtpEmail(adminUserEmailList,
+                                   "login successful",
+                                   WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry)).send();
                 }
 
                 if (redirectURL.length() > 0)
@@ -2583,10 +2593,11 @@ public class WebFileSysServlet extends HttpServlet
 
                 if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
                 {
-                    (new Email(WebFileSys.getInstance().getUserMgr().getAdminUserEmails(),
-                        "silent login successful",
-                        WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry))
-                        .send();
+                	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+                    
+                    (new SmtpEmail(adminUserEmailList,
+                                   "silent login successful",
+                                   WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry)).send();
                 }
 
                 if (redirectURL.length() > 0)
@@ -2623,10 +2634,11 @@ public class WebFileSysServlet extends HttpServlet
 
         if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
         {
-            (new Email(WebFileSys.getInstance().getUserMgr().getAdminUserEmails(),
-                "silent login failed",
-                WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry))
-                .send();
+        	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+            
+            (new SmtpEmail(adminUserEmailList,
+                           "silent login failed",
+                           WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry)).send();
         }
 
         if (WebFileSys.getInstance().getLoginErrorPage() != null)

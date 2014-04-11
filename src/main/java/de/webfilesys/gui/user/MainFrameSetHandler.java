@@ -123,7 +123,16 @@ public class MainFrameSetHandler extends UserRequestHandler
 		{
 			output.println("var clientIsLocal = 'false';");
 		}
-	
+
+		if (clientIsLocal && (WebFileSys.getInstance().getSystemEditor() != null))
+		{
+			output.println("var localEditor = 'true';");
+		}
+		else
+		{
+			output.println("var localEditor = 'false';");
+		}
+		
 		if (readonly)
 		{
 			output.println("var readonly = 'true';");

@@ -17,8 +17,8 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.CSSManager;
-import de.webfilesys.mail.Email;
 import de.webfilesys.mail.EmailUtils;
+import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.util.XmlUtil;
 
@@ -214,7 +214,9 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 
 		if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyRegister())
 		{
-			(new Email(userMgr.getAdminUserEmails(), "new user self-registration",
+			ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+            
+			(new SmtpEmail(adminUserEmailList, "new user self-registration",
 					   WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + req.getRemoteAddr() + ": new user " + login + " registered")).send();
 		}
 

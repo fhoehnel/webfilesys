@@ -133,6 +133,6 @@ public class EmailUtils
 
 		String subject=LanguageManager.getInstance().getResource(userLanguage,"subject.welcome","Welcome to WebFileSys");
 
-		(new Email(email,subject,welcomeText)).send();
+		(new SmtpEmail(email, subject, welcomeText)).send();
 	}
 }

@@ -1,6 +1,7 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -65,6 +66,8 @@ public class XslExifDataHandler extends XslRequestHandlerBase
         addMsgResource("label.aperture", getResource("label.aperture", "aperture"));
         addMsgResource("label.isoValue", getResource("label.isoValue", "ISO equivalent"));
         addMsgResource("label.flashfired", getResource("label.flashfired", "flash fired"));
+        addMsgResource("label.exposureBias", getResource("label.exposureBias", "exposure correction"));
+        addMsgResource("apertureStops", getResource("apertureStops", "aperture stops"));
         addMsgResource("label.imgwidth", getResource("label.imgwidth", "image width"));
         addMsgResource("label.imgheight", getResource("label.imgheight", "image height"));
         addMsgResource("label.thumbexists", getResource("label.thumbexists", "thumbnail included"));
@@ -170,6 +173,15 @@ public class XslExifDataHandler extends XslRequestHandlerBase
             {
                 XmlUtil.setChildText(exifDataElement, "thumbnailWidth", Integer.toString(thumbWidth));
                 XmlUtil.setChildText(exifDataElement, "thumbnailHeight", Integer.toString(thumbHeight));
+            }
+
+            double exposureBias = exifData.getExposureBias();
+            
+            if ((exposureBias != Double.MIN_VALUE) && (exposureBias != 0))
+            {
+            	DecimalFormat exposureBiasFormat = new DecimalFormat("0.##");
+            	
+                XmlUtil.setChildText(exifDataElement, "exposureBias", exposureBiasFormat.format(exposureBias));
             }
             
             float gpsLatitude = exifData.getGpsLatitude();

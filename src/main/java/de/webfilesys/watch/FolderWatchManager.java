@@ -22,8 +22,8 @@ import org.xml.sax.SAXException;
 
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
-import de.webfilesys.mail.Email;
 import de.webfilesys.mail.MailTemplate;
+import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.util.XmlUtil;
 
@@ -666,7 +666,7 @@ public class FolderWatchManager extends Thread
 
             String subject = LanguageManager.getInstance().getResource(userLanguage,"subject.folderChange", "Folder Change");
 
-            (new Email(email, subject, mailText)).send();
+            (new SmtpEmail(email, subject, mailText)).send();
         }
         catch (IllegalArgumentException iaex)
         {

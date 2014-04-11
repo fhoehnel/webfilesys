@@ -1,13 +1,14 @@
 package de.webfilesys.gui.admin;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import de.webfilesys.mail.Email;
+import de.webfilesys.mail.SmtpEmail;
 
 /**
  * Send an email to users of a given role or to all users.
@@ -57,7 +58,7 @@ public class AdminSendEmailRequestHandler extends AdminRequestHandler
 			return;
         }
         
-        Vector mailReceivers = null;
+        ArrayList<String> mailReceivers = null;
 
         if (receiverRole.equals("all"))
         {
@@ -67,8 +68,8 @@ public class AdminSendEmailRequestHandler extends AdminRequestHandler
         {
             mailReceivers = userMgr.getMailAddressesByRole(receiverRole);
         }
-
-        (new Email(mailReceivers, subject, content)).send();
+        
+        (new SmtpEmail(mailReceivers, subject, content)).send();
 
 		(new AdminMenuRequestHandler(req, resp, session, output, uid)).handleRequest(); 
     }

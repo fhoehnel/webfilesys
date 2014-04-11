@@ -4,7 +4,7 @@
   <groupId>de.webfilesys</groupId>
   <artifactId>webfilesys</artifactId>
   <packaging>war</packaging>
-  <version>2.9.4</version>
+  <version>2.10.1</version>
   <name>webfilesys Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
@@ -90,6 +90,16 @@
       <artifactId>mediautil</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <dependency>
+	  <groupId>javax.mail</groupId>
+	  <artifactId>mail</artifactId>
+	  <version>1.4.7</version>
+    </dependency> 
+    <dependency>
+      <groupId>javax.activation</groupId>
+      <artifactId>activation</artifactId>
+      <version>1.1.1</version>
+    </dependency>       
     <!-- Procyon Java Decompiler for JavaClassProcyonViewHandler requires Java 1.7	
     <dependency>
       <groupId>procyon</groupId>

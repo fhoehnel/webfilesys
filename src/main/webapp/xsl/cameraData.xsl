@@ -137,6 +137,19 @@
             </td>
           </tr>
         </xsl:if>
+
+        <xsl:if test="/cameraData/exifData/exposureBias">
+          <tr>
+            <td class="formParm1">
+              <xsl:value-of select="/cameraData/resources/msg[@key='label.exposureBias']/@value" />
+            </td>
+            <td class="formParm2">
+              <xsl:value-of select="/cameraData/exifData/exposureBias" />
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="/cameraData/resources/msg[@key='apertureStops']/@value" />              
+            </td>
+          </tr>
+        </xsl:if>
         
         <xsl:if test="/cameraData/exifData/gpsLatitude">
           <tr>

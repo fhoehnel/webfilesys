@@ -48,6 +48,8 @@ public class XmlAssociatedProgramHandler extends XmlRequestHandlerBase
 			return;
 		}
 		
+        Element resultElement = doc.createElement("result");
+		
         String progAndParms[] = null;
 		
 		String assocProg = AssociationManager.getInstance().getAssociatedProgram(filePath);
@@ -57,54 +59,61 @@ public class XmlAssociatedProgramHandler extends XmlRequestHandlerBase
             assocProg = WebFileSys.getInstance().getSystemEditor();
         }
 
-        int spaceIdx = assocProg.indexOf(' ');
-
-        if (spaceIdx>0)
+        if (assocProg == null) 
         {
-            String parms=assocProg.substring(spaceIdx+1);
-
-            StringTokenizer parmParser=new StringTokenizer(parms);
-
-            progAndParms=new String[parmParser.countTokens() + 2];
-
-            assocProg = assocProg.substring(0,spaceIdx);
-
-            progAndParms[0]=assocProg;
-
-            int i=1;
-
-            while (parmParser.hasMoreTokens())
-            {
-                progAndParms[i]=parmParser.nextToken();
-
-                i++;
-            }
-
-            progAndParms[i]=filePath;
+            XmlUtil.setChildText(resultElement, "success", "false");
+            XmlUtil.setChildText(resultElement, "message", 
+                                 getResource("alert.assocProgramFailed", "failed to start associated application"));
         }
         else
         {
-            progAndParms=new String[2];
+            int spaceIdx = assocProg.indexOf(' ');
 
-            progAndParms[0]=assocProg;
-            progAndParms[1]=filePath;
-        }
+            if (spaceIdx>0)
+            {
+                String parms=assocProg.substring(spaceIdx+1);
 
-        Element resultElement = doc.createElement("result");
-        
-        Runtime rt=Runtime.getRuntime();
+                StringTokenizer parmParser=new StringTokenizer(parms);
 
-        try
-        {
-            rt.exec(progAndParms);
-            XmlUtil.setChildText(resultElement, "success", "true");
-        }
-        catch (Exception e)
-        {
-            Logger.getLogger(getClass()).error("cannot start associated program " + assocProg + " for " + filePath + ": " + e);
-            XmlUtil.setChildText(resultElement, "success", "false");
-            XmlUtil.setChildText(resultElement, "message", 
-                                 getResource("alert.assocProgramFailed", "failed to start associated application") + ": " + assocProg);
+                progAndParms=new String[parmParser.countTokens() + 2];
+
+                assocProg = assocProg.substring(0,spaceIdx);
+
+                progAndParms[0]=assocProg;
+
+                int i=1;
+
+                while (parmParser.hasMoreTokens())
+                {
+                    progAndParms[i]=parmParser.nextToken();
+
+                    i++;
+                }
+
+                progAndParms[i]=filePath;
+            }
+            else
+            {
+                progAndParms=new String[2];
+
+                progAndParms[0]=assocProg;
+                progAndParms[1]=filePath;
+            }
+
+            Runtime rt=Runtime.getRuntime();
+
+            try
+            {
+                rt.exec(progAndParms);
+                XmlUtil.setChildText(resultElement, "success", "true");
+            }
+            catch (Exception e)
+            {
+                Logger.getLogger(getClass()).error("cannot start associated program " + assocProg + " for " + filePath + ": " + e);
+                XmlUtil.setChildText(resultElement, "success", "false");
+                XmlUtil.setChildText(resultElement, "message", 
+                                     getResource("alert.assocProgramFailed", "failed to start associated application") + ": " + assocProg);
+            }
         }
 			
 		doc.appendChild(resultElement);

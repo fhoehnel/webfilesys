@@ -2,8 +2,8 @@ package de.webfilesys.gui.ajax;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
-import de.webfilesys.mail.Email;
 import de.webfilesys.mail.EmailUtils;
+import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
@@ -64,7 +64,7 @@ public class AjaxSendEmailHandler extends XmlRequestHandlerBase
 
         String sendSynchronous = getParameter("sendSynchronous");
         
-        Vector mailReceivers = new Vector();
+        ArrayList<String> mailReceivers = new ArrayList<String>();
 
         String emailList = getParameter("receiver");
 
@@ -114,7 +114,7 @@ public class AjaxSendEmailHandler extends XmlRequestHandlerBase
 
         File fileToSend = new File(filePath);
 
-        Email message = new Email(mailReceivers, subject, fileToSend);
+        SmtpEmail message = new SmtpEmail(mailReceivers, subject, fileToSend);
 
         message.setMailSenderName(mailSenderName.toString());
 

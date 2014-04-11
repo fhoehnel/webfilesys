@@ -1,6 +1,7 @@
 package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -11,8 +12,8 @@ import javax.servlet.http.HttpSession;
 import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
-import de.webfilesys.mail.Email;
 import de.webfilesys.mail.EmailUtils;
+import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.util.CommonUtils;
 
 /**
@@ -66,7 +67,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		String msgText = null;
 		String emailList = null;
         String subject = null;
-		Vector mailReceivers = null;
+		ArrayList<String> mailReceivers = null;
 
 		String invite = getParameter("invite");
 
@@ -74,7 +75,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
         {
 			msgText=getParameter("msgText");
 
-			mailReceivers=new Vector();
+			mailReceivers = new ArrayList<String>();
 
 			emailList=getParameter("receiver");
 
@@ -297,7 +298,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 
 			content.append("\r\n\r\n\r\n\r\n");
 
-			Email message=new Email(mailReceivers,subject,content.toString());
+			SmtpEmail message=new SmtpEmail(mailReceivers,subject,content.toString());
 
 			StringBuffer mailSenderName=new StringBuffer();
 

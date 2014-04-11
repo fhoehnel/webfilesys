@@ -1,5 +1,6 @@
 package de.webfilesys;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -39,9 +40,9 @@ public class Paging
     /** the name of the current pipeline */
     private String pipelineName;
 
-    Vector pageStartIndices;
+    ArrayList<Integer> pageStartIndices = null;
 
-    Vector elementsOnPage=null;
+    ArrayList<Object> elementsOnPage=null;
 
     String listServletClass=null;
 
@@ -54,11 +55,11 @@ public class Paging
         endIndex=0;
         nextStartIndex=0;
         prevStartIndex=0;
-        pageStartIndices=new Vector();
+        pageStartIndices = new ArrayList<Integer>();
         listServletClass=null;
     }
 
-    public Paging(Vector elementList, int pageSize, int startIdx)
+    public Paging(ArrayList<?> elementList, int pageSize, int startIdx)
     {
         init();
 
@@ -69,7 +70,7 @@ public class Paging
     {
         init();
 
-        Vector elements=new Vector();
+        ArrayList<Object> elements = new ArrayList<Object>();
 
         while (elementList.hasMoreElements())
         {
@@ -79,7 +80,7 @@ public class Paging
         preparePaging(elements, pageSize, startIdx);
     }
 
-    public void preparePaging(Vector elementList, int pageSize, int startIdx)
+    public void preparePaging(ArrayList<?> elementList, int pageSize, int startIdx)
     {
         if (startIdx > (elementList.size()-1)) {
             // element(s) removed from list - locate the previous page begin index
@@ -143,11 +144,11 @@ public class Paging
             setPrevStartIndex(0);
         }
 
-        elementsOnPage=new Vector();
+        elementsOnPage = new ArrayList<Object>();
 
         for (int i=startIdx;i<=endIdx;i++)
         {
-            elementsOnPage.add(elementList.elementAt(i));
+            elementsOnPage.add(elementList.get(i));
         }
     }
 
@@ -238,20 +239,22 @@ public class Paging
 
     public void addStartIndex(int startIndex)
     {
-        pageStartIndices.addElement(new Integer(startIndex));
+        pageStartIndices.add(new Integer(startIndex));
     }
 
-    public Enumeration getStartIndices()
+    public ArrayList<Integer> getStartIndices()
     {
-        return(pageStartIndices.elements());
+        return pageStartIndices;
     }
 
+    /*
     public Enumeration getElements()
     {
         return(elementsOnPage.elements());
     }
+    */
 
-    public Vector getElementVector()
+    public ArrayList<Object> getElementList()
     {
         return(elementsOnPage);
     }

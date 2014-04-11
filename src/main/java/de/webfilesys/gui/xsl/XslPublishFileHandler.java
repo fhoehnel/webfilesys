@@ -2,8 +2,8 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,8 +14,8 @@ import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.InvitationManager;
 import de.webfilesys.WebFileSys;
-import de.webfilesys.mail.Email;
 import de.webfilesys.mail.EmailUtils;
+import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -79,7 +79,7 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
         
         String subject = getParameter("subject");
         
-		Vector mailReceivers = null;
+		ArrayList<String> mailReceivers = null;
 
 		String msgText = getParameter("msgText");
 
@@ -131,7 +131,7 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 								{
 									if (mailReceivers == null)
 									{
-										mailReceivers = new Vector();
+										mailReceivers = new ArrayList<String>();
 									}
 								
 									mailReceivers.add(email);
@@ -152,8 +152,6 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 
 			if (errorCode == 0)
 			{
-				System.out.println("creating invitation subject=" + subject + " msgText=" + msgText + " expiration=" + expiration + " recipients=" + recipient);
-
 				String accessCode = InvitationManager.getInstance().addInvitation(uid, publishPath, expDays, InvitationManager.INVITATION_TYPE_FILE, false);
 
                 publishSecretURL(path, publishPath, accessCode, sendMail, mailReceivers, subject, msgText);
@@ -224,7 +222,7 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
     }
     
     private void publishSecretURL(String path, String publishPath, String accessCode, String sendMail,
-                                  Vector mailReceivers, String subject, String msgText)
+                                  ArrayList<String> mailReceivers, String subject, String msgText)
     {
 		StringBuffer secretURL=new StringBuffer();
 
@@ -264,7 +262,7 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 
 			content.append("\r\n\r\n\r\n\r\n");
 
-			Email message = new Email(mailReceivers,subject,content.toString());
+			SmtpEmail message = new SmtpEmail(mailReceivers, subject, content.toString());
 
 			StringBuffer mailSenderName=new StringBuffer();
 

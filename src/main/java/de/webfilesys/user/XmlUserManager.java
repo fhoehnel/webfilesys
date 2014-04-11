@@ -6,10 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.security.MessageDigest;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Hashtable;
-import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -244,11 +244,11 @@ public class XmlUserManager extends UserManagerBase
     }
 
     /**
-     * Returns a Vector of the userids of all registered users (Strings)
+     * Returns a list of the userids of all registered users (Strings)
      */
-    public Vector getListOfUsers()
+    public ArrayList<String> getListOfUsers()
     {
-        Vector listOfUsers=new Vector();
+    	ArrayList<String> listOfUsers = new ArrayList<String>();
 
         NodeList userList=userRoot.getElementsByTagName("user");
 
@@ -279,9 +279,9 @@ public class XmlUserManager extends UserManagerBase
         return(listOfUsers);
     }
 
-    public Vector getAdminUserEmails()
+    public ArrayList<String> getAdminUserEmails()
     {
-        Vector emailList=new Vector();
+        ArrayList<String> emailList = new ArrayList<String>();
 
         NodeList userList=userRoot.getElementsByTagName("user");
 
@@ -312,9 +312,9 @@ public class XmlUserManager extends UserManagerBase
         return(emailList);
     }
 
-    public Vector getMailAddressesByRole(String receiverRole)
+    public ArrayList<String> getMailAddressesByRole(String receiverRole)
     {
-        Vector emailList=new Vector();
+    	ArrayList<String> emailList = new ArrayList<String>();
 
         NodeList userList=userRoot.getElementsByTagName("user");
 
@@ -345,9 +345,9 @@ public class XmlUserManager extends UserManagerBase
         return(emailList);
     }
 
-    public Vector getAllMailAddresses()
+    public ArrayList<String> getAllMailAddresses()
     {
-        Vector emailList=new Vector();
+    	ArrayList<String> emailList = new ArrayList<String>();
 
         NodeList userList=userRoot.getElementsByTagName("user");
 
@@ -1181,9 +1181,9 @@ public class XmlUserManager extends UserManagerBase
     /**
      * Get a list of transient user objects for all non-virtual users.
      */
-	public Vector getRealUsers()
+	public ArrayList<TransientUser> getRealUsers()
 	{
-		Vector listOfUsers=new Vector();
+		ArrayList<TransientUser> listOfUsers = new ArrayList<TransientUser>();
 
 		NodeList userList=userRoot.getElementsByTagName("user");
 

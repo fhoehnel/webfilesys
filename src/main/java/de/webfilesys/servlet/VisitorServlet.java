@@ -3,8 +3,10 @@ package de.webfilesys.servlet;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,7 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumSlideShowHandler;
 import de.webfilesys.gui.xsl.album.XslPictureAlbumHandler;
-import de.webfilesys.mail.Email;
+import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.user.UserManager;
 
 /**
@@ -113,7 +115,10 @@ public class VisitorServlet extends WebFileSysServlet {
             Logger.getLogger(getClass()).info(logEntry);
 
             if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin()) {
-                (new Email(WebFileSys.getInstance().getUserMgr().getAdminUserEmails(),
+            	
+            	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+                
+                (new SmtpEmail(adminUserEmailList,
                            "visitor login successful",
                            WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry))
                            .send();

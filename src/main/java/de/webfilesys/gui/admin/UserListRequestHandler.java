@@ -2,6 +2,7 @@ package de.webfilesys.gui.admin;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -257,38 +258,38 @@ public class UserListRequestHandler extends AdminRequestHandler
 
 		SimpleDateFormat dateFormat=LanguageManager.getInstance().getDateFormat("admin");
 
-		Vector allUsers = userMgr.getRealUsers();
+		ArrayList<TransientUser> allUsers = userMgr.getRealUsers();
         
 		if (allUsers.size()>1)
 		{
-			Collections.sort(allUsers,new UserComparator(sortBy));
+			Collections.sort(allUsers, new UserComparator(sortBy));
 		}
 
 		if ((searchMask!=null) && (searchMask.trim().length()>0))
 		{
-			for (int i=allUsers.size()-1;i>=0;i--)
+			for (int i = allUsers.size() - 1; i >= 0; i--)
 			{
-				TransientUser user = (TransientUser) allUsers.elementAt(i);
+				TransientUser user = (TransientUser) allUsers.get(i);
         		
 				if ((!CommonUtils.containsString(user.getUserid(),searchMask)) &&
 					(!CommonUtils.containsString(user.getLastName(),searchMask)) &&
 					(!CommonUtils.containsString(user.getFirstName(),searchMask)) &&
 					(!CommonUtils.containsString(user.getEmail(),searchMask)))
 				{
-					allUsers.removeElementAt(i);
+					allUsers.remove(i);
 				}
 			}
         	
 			// allUserNames=filterUsers(allUserNames,searchMask);
 		}
  
-		Paging paging=new Paging(allUsers,pageSize,startIdx);
+		Paging paging=new Paging(allUsers, pageSize, startIdx);
 
-		Vector usersOnPage=paging.getElementVector();
+		ArrayList<Object> usersOnPage=paging.getElementList();
 
 		for (int i=0;i<usersOnPage.size();i++)
 		{
-			TransientUser actUser=(TransientUser) usersOnPage.elementAt(i);
+			TransientUser actUser=(TransientUser) usersOnPage.get(i);
 
 			output.println("<tr>");
 
@@ -456,18 +457,18 @@ public class UserListRequestHandler extends AdminRequestHandler
 			// if there are more than 30 pages we show not all pages in the list
 			int pageStep=paging.getElementNumber() / pageSize / 30 + 1;
 
-			Enumeration startIndices=paging.getStartIndices();
+			ArrayList<Integer> startIndices = paging.getStartIndices();
 
 			int pageCounter=1;
 
-			while (startIndices.hasMoreElements())
+			for  (int k = 0; k < startIndices.size(); k++)
 			{
-				int idx=((Integer) startIndices.nextElement()).intValue();
+				int idx = startIndices.get(k).intValue();
 
-				if (idx!=(paging.getStartIndex()-1))
+				if (idx != paging.getStartIndex() - 1)
 				{
-					if (((pageCounter-1) % pageStep == 0) ||
-						(!startIndices.hasMoreElements()))
+					if (((pageCounter - 1) % pageStep == 0) ||
+						(k == startIndices.size() - 1))
 					{
 						output.print("<a class=\"fn\" href=\"/webfilesys/servlet?command=admin&cmd=userList&startIndex=" + idx + "\">");
 						output.print(pageCounter);

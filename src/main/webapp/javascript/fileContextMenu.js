@@ -115,16 +115,16 @@ function contextMenu(fileName)
         menuText = menuText 
                  + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],null);
 
-	if (parent.clientIsLocal == 'true')
+	if (parent.localEditor == 'true')
 	{
-            menuText = menuText 
-                     + menuEntry("javascript:editLocal('" + scriptPreparedFile + "')",resourceBundle["label.edit"],null);
-        }
-        else
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:editRemote('" + scriptPreparedFile + "')",resourceBundle["label.edit"],null);
-        }
+        menuText = menuText 
+                 + menuEntry("javascript:editLocal('" + scriptPreparedFile + "')",resourceBundle["label.edit"],null);
+    }
+    else
+    {
+        menuText = menuText 
+                 + menuEntry("javascript:editRemote('" + scriptPreparedFile + "')",resourceBundle["label.edit"],null);
+    }
 
 	if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR") || (fileExt == ".EAR"))
 	{

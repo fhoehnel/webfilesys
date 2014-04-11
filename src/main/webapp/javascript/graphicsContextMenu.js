@@ -237,6 +237,8 @@ function jsSendFile(fileName)
 {
     showPrompt('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 250);
     
+	setBundleResources();
+    
     document.emailForm.receiver.focus();
     
     document.emailForm.receiver.select();
