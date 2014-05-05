@@ -124,11 +124,12 @@
 
     <xsl:for-each select="pathElem">
       <a class="pictureAlbumPath">
-        <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
         <xsl:if test="count(/imageData/currentPath/pathElem) = 1">
+          <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/></xsl:attribute>
           <xsl:attribute name="resource">button.returnToAlbum</xsl:attribute>
         </xsl:if>
         <xsl:if test="count(/imageData/currentPath/pathElem) &gt; 1">
+          <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
           <xsl:value-of select="@name"/>
         </xsl:if>
       </a>

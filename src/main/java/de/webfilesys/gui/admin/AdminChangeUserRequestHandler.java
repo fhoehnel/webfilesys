@@ -99,6 +99,14 @@ public class AdminChangeUserRequestHandler extends AdminRequestHandler
 		}
 
 		String documentRoot=getParameter("documentRoot");
+		
+        if (File.separatorChar == '\\')
+        {
+    		if (getParameter("allDrives") != null) {
+    			documentRoot = "*:";
+    		}
+        }
+		
 
 		if ((documentRoot!=null) && (documentRoot.trim().length()>0))
 		{

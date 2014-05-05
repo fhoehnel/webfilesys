@@ -57,6 +57,8 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		doc.insertBefore(xslRef, imageDataElement);
 
 		XmlUtil.setChildText(imageDataElement, "css", userMgr.getCSS(uid), false);
+	    XmlUtil.setChildText(imageDataElement, "language", language, false);
+		
 		XmlUtil.setChildText(imageDataElement, "imagePath", imgPath, false);
 		XmlUtil.setChildText(imageDataElement, "encodedPath", UTF8URLEncoder.encode(imgPath), false);
 		XmlUtil.setChildText(imageDataElement, "pathForScript", insertDoubleBackslash(imgPath), false);
@@ -70,32 +72,6 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		{
 			XmlUtil.setChildText(imageDataElement, "readonly", "false", false);
 		}
-		
-		addMsgResource("confirm.delfile", getResource("confirm.delfile","Are you sure you want to delete this picture?"));
-		addMsgResource("confirm.print", getResource("confirm.print","Do you want to print this picture?"));
-
-		addMsgResource("rating.owner", getResource("rating.owner","Rating by owner"));
-		addMsgResource("rating.visitor", getResource("rating.visitor","Rating by visitors"));
-
-		addMsgResource("rating.notYetRated", getResource("rating.notYetRated","not yet rated"));
-		addMsgResource("rating.rateNow", getResource("rating.rateNow","Rate now"));
-
-		addMsgResource("rating.1star", getResource("rating.1star","1 star - worst"));
-		addMsgResource("rating.2stars", getResource("rating.2stars","2 stars"));
-		addMsgResource("rating.3stars", getResource("rating.3stars","3 stars"));
-		addMsgResource("rating.4stars", getResource("rating.4stars","4 stars"));
-		addMsgResource("rating.5stars", getResource("rating.5stars","5 stars - best"));
-
-		addMsgResource("label.comments", getResource("label.comments","Comments"));
-		addMsgResource("label.picture", getResource("label.picture","Bild"));
-
-		addMsgResource("label.origSize", getResource("label.origSize","Original Size"));
-		addMsgResource("label.delete", getResource("label.delete","Delete"));
-		addMsgResource("label.editPicture", getResource("label.editPicture", "Edit/Convert"));
-		addMsgResource("alt.cameradata", getResource("alt.cameradata","Camera Data"));
-		addMsgResource("alt.printpict", getResource("alt.printpict","Print Picture"));
-
-		addMsgResource("label.selectFunction", getResource("label.selectFunction","- select function -"));
 
 		String description = metaInfMgr.getDescription(imgPath);
 
@@ -264,12 +240,6 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		if ((geoTag != null) || exifGpsDataPresent)
 		{
 			XmlUtil.setChildText(imageDataElement, "geoTag", "true", false);
-			
-	        addMsgResource("label.geoMapLink", getResource("label.geoMapLink", "Show geographic location on map"));
-	        addMsgResource("selectMapType", getResource("selectMapType", "- select map type -"));
-	        addMsgResource("mapTypeOSM", getResource("mapTypeOSM", "Open Stree Maps"));
-	        addMsgResource("mapTypeGoogleMap", getResource("mapTypeGoogleMap", "Google Maps"));
-	        addMsgResource("mapTypeGoogleEarth", getResource("mapTypeGoogleEarth", "Google Earth"));
 		}
 		
         // the reason for this is historic: previous google maps api version required an API key

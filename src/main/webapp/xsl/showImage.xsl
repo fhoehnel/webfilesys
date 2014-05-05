@@ -22,8 +22,14 @@
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/imageData/css" />.css</xsl:attribute>
   </link>
 
-  <script language="JavaScript" src="javascript/titleToolTip.js" type="text/javascript" />
-  <script language="JavaScript" src="javascript/jsFileMenu.js" type="text/javascript" />
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="javascript/titleToolTip.js" type="text/javascript" />
+  <script src="javascript/jsFileMenu.js" type="text/javascript" />
+
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/imageData/language" /></xsl:attribute>
+  </script>
 
   <xsl:if test="/imageData/geoTag">
     <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
@@ -32,7 +38,7 @@
   <script language="JavaScript">
     function deleteSelf()
     {
-        if (confirm("<xsl:value-of select="/imageData/resources/msg[@key='confirm.delfile']/@value" />"))
+        if (confirm(resourceBundle["confirm.delfile"]))
         {
             location.href='/webfilesys/servlet?command=delImage&amp;imgName=<xsl:value-of select="/imageData/encodedPath" />';
         }
@@ -40,7 +46,7 @@
 
     function printPage() 
     {
-        if (confirm('<xsl:value-of select="/imageData/resources/msg[@key='confirm.print']/@value" />'))
+        if (confirm(resourceBundle["confirm.print"]))
         {
             window.print();
         }
@@ -103,14 +109,17 @@
 
 <body style="margin:0px;border:0px;">
 
-<div id="toolTip" style="position:absolute;top:200px;left:100px;width=200px;height=20px;padding:5px;background-color:ivory;border-style:solid;border-width:1px;border-color:#000000;visibility:hidden"></div>
+  <div id="toolTip" style="position:absolute;top:200px;left:100px;width=200px;height=20px;padding:5px;background-color:ivory;border-style:solid;border-width:1px;border-color:#000000;visibility:hidden"></div>
 
-<xsl:apply-templates />
+  <xsl:apply-templates />
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
+
 </html>
-
-
 
 </xsl:template>
 <!-- end root node-->
@@ -151,7 +160,7 @@
                 <xsl:if test="not(readonly) or (readonly = 'false')">
                   <tr>
                     <td class="plaintext" nowrap="nowrap" style="padding-right:4px">
-                      <xsl:value-of select="/imageData/resources/msg[@key='rating.owner']/@value" />:
+                      <span  resource="rating.owner"></span>:
                     </td>
                     <td class="plaintext" nowrap="nowrap">
                       <xsl:if test="ownerRating">
@@ -172,7 +181,7 @@
                         </xsl:if>
                       </xsl:if>
                       <xsl:if test="not(ownerRating)">
-                        <xsl:value-of select="/imageData/resources/msg[@key='rating.notYetRated']/@value" />
+                        <span resource="rating.notYetRated"></span>
                       </xsl:if>
                     </td>
                   </tr>
@@ -180,7 +189,7 @@
 
                 <tr>
                   <td class="plaintext" nowrap="nowrap" style="padding-right:4px">
-                    <xsl:value-of select="/imageData/resources/msg[@key='rating.visitor']/@value" /><xsl:if test="voteCount"> (<xsl:value-of select="voteCount" />)</xsl:if>:
+                    <span resource="rating.visitor"></span><xsl:if test="voteCount"> (<xsl:value-of select="voteCount" />)</xsl:if>:
                   </td>
                   <td class="plaintext" nowrap="nowrap">
                     <xsl:if test="visitorRating">
@@ -201,7 +210,7 @@
                       </xsl:if>
                     </xsl:if>
                     <xsl:if test="not(visitorRating)">
-                      <xsl:value-of select="/imageData/resources/msg[@key='rating.notYetRated']/@value" />
+                      <span resource="rating.notYetRated"></span>
                     </xsl:if>
                   </td>
                 </tr>
@@ -217,12 +226,12 @@
                     <td>
                       <select name="rating">
                         <xsl:attribute name="onChange">javascript:rate()</xsl:attribute>
-                        <option value="-1">-- <xsl:value-of select="/imageData/resources/msg[@key='rating.rateNow']/@value" /> --</option>
-                        <option value="1"><xsl:value-of select="/imageData/resources/msg[@key='rating.1star']/@value" /></option>
-                        <option value="2"><xsl:value-of select="/imageData/resources/msg[@key='rating.2stars']/@value" /></option>
-                        <option value="3"><xsl:value-of select="/imageData/resources/msg[@key='rating.3stars']/@value" /></option>
-                        <option value="4"><xsl:value-of select="/imageData/resources/msg[@key='rating.4stars']/@value" /></option>
-                        <option value="5"><xsl:value-of select="/imageData/resources/msg[@key='rating.5stars']/@value" /></option>
+                        <option value="-1">-- <span resource="rating.rateNow"></span> --</option>
+                        <option value="1" resource="rating.1star" />
+                        <option value="2" resource="rating.2stars" />
+                        <option value="3" resource="rating.3stars" />
+                        <option value="4" resource="rating.4stars" />
+                        <option value="5" resource="rating.5stars" />
                       </select>
                     </td>
                   </tr>
@@ -238,7 +247,7 @@
                       <xsl:if test="not(commentCount)">
                         0
                       </xsl:if>
-                      <xsl:value-of select="/imageData/resources/msg[@key='label.comments']/@value" />
+                      <span resource="label.comments"></span>
                     </a>
                   </td>
                 </tr>
@@ -254,20 +263,18 @@
               <td valign="top">
                 <select id="geoLocSel" style="width:150px;display:none">
                   <xsl:attribute name="onchange">geoMapFileSelected('<xsl:value-of select="/imageData/pathForScript" />')</xsl:attribute>
-                  <option value="0"><xsl:value-of select="/imageData/resources/msg[@key='selectMapType']/@value" /></option>
-                  <option value="1"><xsl:value-of select="/imageData/resources/msg[@key='mapTypeOSM']/@value" /></option>
+                  <option value="0" resource="selectMapType" />
+                  <option value="1" resource="mapTypeOSM" />
                   <xsl:if test="/imageData/googleMaps">
-                    <option value="2"><xsl:value-of select="/imageData/resources/msg[@key='mapTypeGoogleMap']/@value" /></option>
+                    <option value="2" resource="mapTypeGoogleMap" />
                   </xsl:if>
-                  <option value="3"><xsl:value-of select="/imageData/resources/msg[@key='mapTypeGoogleEarth']/@value" /></option>
+                  <option value="3" resource="mapTypeGoogleEarth" />
                 </select>
               </td>
 
               <td id="mapIcon" valign="top">
                 <a href="javascript:showMapSelection()">
-                  <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0">
-                    <xsl:attribute name="title"><xsl:value-of select="/imageData/resources/msg[@key='label.geoMapLink']/@value" /></xsl:attribute>
-                  </img>
+                  <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0" titleResource="label.geoMapLink" />
                 </a>
               </td>
             
@@ -281,23 +288,23 @@
               <table border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="right" class="plaintext" nowrap="nowrap">
-            
-                    <xsl:value-of select="/imageData/resources/msg[@key='label.picture']/@value" />: 
+                    <span resource="label.picture"></span>
+                    <xsl:text>: </xsl:text>
                     <select name="imgAction">
                       <xsl:attribute name="onChange">actionSelected()</xsl:attribute>
-                      <option value="-1"><xsl:value-of select="/imageData/resources/msg[@key='label.selectFunction']/@value" /></option>
+                      <option value="-1" resource="label.selectFunction" />
                       <xsl:if test="scaled">
-                        <option value="0"><xsl:value-of select="/imageData/resources/msg[@key='label.origSize']/@value" /></option>
+                        <option value="0" resource="label.origSize" />
                       </xsl:if>
                       <xsl:if test="not(readonly) or (readonly = 'false')">
-                        <option value="1"><xsl:value-of select="/imageData/resources/msg[@key='label.delete']/@value" /></option>
-                        <option value="2"><xsl:value-of select="/imageData/resources/msg[@key='label.editPicture']/@value" /></option>
+                        <option value="1" resource="label.delete" />
+                        <option value="2" resource="label.editPicture" />
                       </xsl:if>
                       <xsl:if test="imageType = '1'">
-                        <option value="3"><xsl:value-of select="/imageData/resources/msg[@key='alt.cameradata']/@value" /></option>
+                        <option value="3" resource="alt.cameradata" />
                       </xsl:if>
-                      <option value="4"><xsl:value-of select="/imageData/resources/msg[@key='alt.printpict']/@value" /></option>
-                      <option value="5"><xsl:value-of select="/imageData/resources/msg[@key='label.comments']/@value" /></option>
+                      <option value="4" resource="alt.printpict" />
+                      <option value="5" resource="label.comments" />
                     </select>
                    
                   </td>
