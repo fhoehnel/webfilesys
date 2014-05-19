@@ -348,18 +348,6 @@ public class WebFileSysServlet extends HttpServlet
         
         webFileSys.initialize(configProperties);
         
-        /*
-        String licFileName = context.getRealPath("/WEB-INF") + "/" + new String(lic);
-
-		File licFile = new File(licFileName);
-
-		boolean licensed = licFile.exists();
-		
-		Logger.getLogger(getClass()).info("licensed: " + licensed);
-		
-        webFileSys.setLicensed(licensed);
-        */
-        
         // we are open source now!
         webFileSys.setLicensed(true);
         

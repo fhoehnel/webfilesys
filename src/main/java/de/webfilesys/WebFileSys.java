@@ -44,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.10.2-beta4 (04 May 2014)";
+	public static final String VERSION = "Version 2.10.2-beta6 (19 May 2014)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -798,7 +798,10 @@ public class WebFileSys
         
         DecorationManager.getInstance();
         
-        initMailSession();        
+        if ((mailHost != null) && (mailHost.trim().length() > 0))
+        {
+            initMailSession();        
+        }
     }
     
     private void initMailSession() {

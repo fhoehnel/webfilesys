@@ -542,7 +542,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 					XmlUtil.setChildText(fileElement, "fullScreenWidth", Integer.toString(fullScreenWidth));
 					XmlUtil.setChildText(fileElement, "fullScreenHeight", Integer.toString(scaledImage.getScaledHeight()));
 					
-					String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(fullFileName);
+					String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(fullFileName) + "&cached=true";
 					
 					XmlUtil.setChildText(fileElement, "imgPath", srcFileName);
 				}

@@ -969,7 +969,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 
 					if (!useThumb)
 					{
-						srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(srcFileName);
+						srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(srcFileName) + "&cached=true";
 					}
 					
 					XmlUtil.setChildText(fileElement, "imgPath", srcFileName);
