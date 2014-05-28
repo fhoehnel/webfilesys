@@ -123,14 +123,14 @@ span.appointmentLabel
 
 select.appointmentHour
 {
-    width: 44px;
+    width: 50px;
     float: left;
     font-weight: bold;
 }
 
 select.appointmentMinute
 {
-    width: 44px;
+    width: 50px;
     float: left;
     font-weight: bold;
 }
