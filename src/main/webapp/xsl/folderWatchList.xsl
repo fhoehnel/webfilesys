@@ -20,6 +20,7 @@
       <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/watchList/css" />.css</xsl:attribute>
     </link>
 
+    <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 	<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 
     <script type="text/javascript">

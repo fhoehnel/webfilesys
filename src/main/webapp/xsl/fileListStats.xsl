@@ -22,6 +22,7 @@
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
 
