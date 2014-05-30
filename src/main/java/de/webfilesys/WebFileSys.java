@@ -44,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.10.2b (29 May 2014)";
+	public static final String VERSION = "Version 2.10.2c-beta1 (30 May 2014)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -791,16 +791,16 @@ public class WebFileSys
             FolderWatchManager.getInstance();
         }
         
-        if (enableCalendar) 
-        {
-            AppointmentManager.getInstance();
-        }
-        
         DecorationManager.getInstance();
         
         if ((mailHost != null) && (mailHost.trim().length() > 0))
         {
             initMailSession();        
+        }
+
+        if (enableCalendar) 
+        {
+            AppointmentManager.getInstance();
         }
     }
     

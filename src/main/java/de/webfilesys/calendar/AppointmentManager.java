@@ -105,7 +105,7 @@ public class AppointmentManager extends Thread
             {
                 this.wait(60000);
                 saveChangedUsers();
-
+                
                 if (loopCounter == 60) 
             	{
             		synchronized (appointmentMap)
@@ -118,6 +118,7 @@ public class AppointmentManager extends Thread
                     			if (now.getHours() == 0)
                     			{
                     				expireUnrepeatedEvents();
+                                    saveChangedUsers();
                     			}
                     			
                     			if (Logger.getLogger(getClass()).isDebugEnabled()) {
