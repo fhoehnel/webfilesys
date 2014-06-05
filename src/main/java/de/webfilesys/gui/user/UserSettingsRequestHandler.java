@@ -7,35 +7,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import de.webfilesys.gui.CSSManager;
 import de.webfilesys.gui.xsl.XslFileListHandler;
+import de.webfilesys.user.TransientUser;
+import de.webfilesys.user.UserMgmtException;
+import de.webfilesys.util.CommonUtils;
 
 /**
  * @author Frank Hoehnel
  */
-public class UserSettingsRequestHandler extends UserRequestHandler
-{
+public class UserSettingsRequestHandler extends UserRequestHandler {
 	public UserSettingsRequestHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 
         String password = getParameter("password");
         
-        if (password == null)
-        {
+        if (password == null) {
         	userForm(null);
         	
         	return;
@@ -49,10 +49,8 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 
 		String oldPassword=getParameter("oldpw");
 
-		if ((oldPassword!=null) && (oldPassword.trim().length() > 0))
-		{
-			if (!userMgr.checkPassword(login,oldPassword))
-			{
+		if ((oldPassword!=null) && (oldPassword.trim().length() > 0)) {
+			if (!userMgr.checkPassword(login,oldPassword)) {
 				temp=getResource("error.invalidpassword","the current password is invalid");
 				errorMsg.append(temp + "\\n");
 			}
@@ -61,39 +59,27 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 		String pwconfirm=getParameter("pwconfirm");
 
 		if (((password!=null) && (password.trim().length() > 0)) ||
-			((pwconfirm!=null) && (pwconfirm.trim().length() > 0)))
-		{
-			if ((oldPassword==null) || (oldPassword.trim().length()==0))
-			{
+			((pwconfirm!=null) && (pwconfirm.trim().length() > 0))) {
+			if ((oldPassword==null) || (oldPassword.trim().length()==0)) {
 				temp=getResource("error.invalidpassword","the current password is invalid");
 				errorMsg.append(temp + "\\n");
 			}
 
-			if (password==null)
-			{
+			if (password==null) {
 				password="";
-			}
-			else
-			{
+			} else {
 				password=password.trim();
 			}
 
-			if (password.length() < 5)
-			{
+			if (password.length() < 5) {
 				temp=getResource("error.passwordlength","the minimum password length is 5 characters");
 				errorMsg.append(temp + "\\n");
-			}
-			else
-			{
-				if (password.indexOf(' ')>0)
-				{
+			} else {
+				if (password.indexOf(' ')>0) {
 					temp=getResource("error.spacesinpw","the password must not contain spaces");
 					errorMsg.append(temp + "\\n");
-				}
-				else
-				{
-					if ((pwconfirm==null) || (!pwconfirm.equals(password)))
-					{
+				} else {
+					if ((pwconfirm==null) || (!pwconfirm.equals(password))) {
 						temp=getResource("error.pwmissmatch","the password and the password confirmation are not equal");
 						errorMsg.append(temp + "\\n");
 					}
@@ -105,50 +91,34 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 		String ropwconfirm=getParameter("ropwconfirm");
 
 		if (((ropassword!=null) && (ropassword.trim().length() > 0)) ||
-			((ropwconfirm!=null) && (ropwconfirm.trim().length() > 0)))
-		{
-			if ((oldPassword==null) || (oldPassword.trim().length()==0))
-			{
+			((ropwconfirm!=null) && (ropwconfirm.trim().length() > 0))) {
+			if ((oldPassword==null) || (oldPassword.trim().length()==0)) {
 				temp=getResource("error.invalidpassword","the current password is invalid");
 				errorMsg.append(temp + "\\n");
 			}
 
-			if (ropassword==null)
-			{
+			if (ropassword==null) {
 				ropassword="";
-			}
-			else
-			{
+			} else {
 				ropassword=ropassword.trim();
 			}
 
-			if (ropwconfirm==null)
-			{
+			if (ropwconfirm==null) {
 				ropwconfirm="";
-			}
-			else
-			{
+			} else {
 				ropwconfirm=ropwconfirm.trim();
 			}
 
-			if ((ropassword.length() > 0) || (ropwconfirm.length() > 0))
-			{
-				if (ropassword.length() < 5)
-				{
+			if ((ropassword.length() > 0) || (ropwconfirm.length() > 0)) {
+				if (ropassword.length() < 5) {
 					temp=getResource("error.passwordlength","the minimum password length is 5 characters");
 					errorMsg.append(temp + "\\n");
-				}
-				else
-				{
-					if (ropassword.indexOf(' ') >= 0)
-					{
+				} else {
+					if (ropassword.indexOf(' ') >= 0) {
 						temp=getResource("error.spacesinpw","the password must not contain spaces");
 						errorMsg.append(temp + "\\n");
-					}
-					else
-					{
-						if (!ropassword.equals(ropwconfirm))
-						{
+					} else {
+						if (!ropassword.equals(ropwconfirm)) {
 							temp=getResource("error.pwmissmatch","password and password confirmation do not match");
 							errorMsg.append(temp + "\\n");
 						}
@@ -157,42 +127,59 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 			}
 		}
 
-		if (errorMsg.length()>0)
-		{
+		if (errorMsg.length()>0) {
 			userForm(errorMsg.toString());
-
 			return;
 		}
 
-		if (password.length() > 0)
-		{
-			userMgr.setPassword(login,password);
+		TransientUser changedUser = userMgr.getUser(login);
+		
+		if (changedUser == null) {
+            Logger.getLogger(getClass()).error("user for update not found: " + login);
+			errorMsg.append("user for update not found: " + login);
+			userForm(errorMsg.toString());
+			return;
 		}
 
-		if (ropassword.length() > 0)
-		{
-			userMgr.setReadonlyPassword(login,ropassword);
+		if (!CommonUtils.isEmpty(password)) {
+			changedUser.setPassword(password);
 		}
 
-		String css=getParameter("css");
-
-		if (css!=null)
-		{
-			userMgr.setCSS(login,css);
+		if (!CommonUtils.isEmpty(ropassword)) {
+			changedUser.setReadonlyPassword(ropassword);
 		}
 
+		String css = getParameter("css");
+
+		if (!CommonUtils.isEmpty(css)) {
+			changedUser.setCss(css);
+		}
+
+		try {
+			userMgr.updateUser(changedUser);
+		} catch (UserMgmtException ex) {
+            Logger.getLogger(getClass()).error("failed to update user " + login, ex);
+			errorMsg.append("failed to update user " + login);
+			userForm(errorMsg.toString());
+			return;
+		}
+		
 		(new XslFileListHandler(req, resp, session, output, uid, true)).handleRequest();
 	}
 	
-	protected void userForm(String errorMsg)
-    {
-		String login=uid;
+	protected void userForm(String errorMsg) {
+		String login = uid;
+
+		TransientUser user = userMgr.getUser(login);
+		if (user == null) {
+        	Logger.getLogger(getClass()).error("user not found: " + login);
+        	return;
+		}
 
 		output.println("<html>");
 		output.println("<head>");
 
-		if (errorMsg!=null)
-		{
+		if (errorMsg!=null) {
 			javascriptAlert(errorMsg);
 		}
 
@@ -242,17 +229,13 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 
         String userCss = null;
         
-        if (errorMsg != null)
-        {
+        if (errorMsg != null) {
         	userCss = getParameter("css");
-        }
-        else
-        {
-			userCss = userMgr.getCSS(login);
+        } else {
+			userCss = user.getCss();
 
-			if (userCss==null)
-			{
-				userCss=CSSManager.DEFAULT_LAYOUT;
+			if (userCss == null) {
+				userCss = CSSManager.DEFAULT_LAYOUT;
 			}
         }
 
@@ -263,16 +246,13 @@ public class UserSettingsRequestHandler extends UserRequestHandler
 		output.println("<td class=\"formParm2\">");
 		output.println("<select name=\"css\" size=\"1\">");
 
-		for (int i = 0;i < cssList.size(); i++)
-		{
+		for (int i = 0; i < cssList.size(); i++) {
 			String css = (String) cssList.get(i);
 
-			if (!css.equals("mobile"))
-			{
+			if (!css.equals("mobile")) {
 	            output.print("<option");
 
-	            if (css.equals(userCss))
-	            {
+	            if (css.equals(userCss)) {
 	                output.print(" selected=\"true\"");
 	            }
 

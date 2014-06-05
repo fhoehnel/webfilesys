@@ -6,8 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import de.webfilesys.WebFileSys;
 import de.webfilesys.mail.EmailUtils;
+import de.webfilesys.user.TransientUser;
+import de.webfilesys.user.UserMgmtException;
 
 /**
  * @author Frank Hoehnel
@@ -179,7 +183,7 @@ public class AdminAddUserRequestHandler extends AdminRequestHandler
 			return;
 		}
 
-		if (!userMgr.addUser(login))
+		if (userMgr.userExists(login))
 		{
 			errorMsg.append("user " + login + " already exists");
 
@@ -187,74 +191,42 @@ public class AdminAddUserRequestHandler extends AdminRequestHandler
 
 			return;
 		}
+		
+		TransientUser newUser = new TransientUser();
+		
+		newUser.setUserid(login);
+		newUser.setPassword(password);
+		newUser.setReadonlyPassword(ropassword);
+		newUser.setDocumentRoot(documentRoot);
+		newUser.setEmail(email);
+		newUser.setReadonly(getParameter("readonly") != null);
+        newUser.setRole(getParameter("role"));
+        newUser.setFirstName(getParameter("firstName"));
+        newUser.setLastName(getParameter("lastName"));
+        newUser.setPhone(getParameter("phone"));
+        newUser.setCss(getParameter("css"));
+        newUser.setLanguage(userLanguage);
 
-		userMgr.setPassword(login,password);
-
-		if (ropassword.length() > 0)
+		if (checkDiskQuota != null)
 		{
-			userMgr.setReadonlyPassword(login,ropassword);
+			long diskQuota = ((long) diskQuotaMB) * (1024l) * (1024l); 
+			newUser.setDiskQuota(diskQuota);
 		}
 
-		userMgr.setDocumentRoot(login,documentRoot);
-
-		userMgr.setEmail(login,email);
-
-		String readonly=getParameter("readonly");
-
-		if (readonly!=null)
-		{
-			userMgr.setReadonly(login,true);
+		try {
+			userMgr.createUser(newUser);
+		} catch (UserMgmtException ex) {
+        	Logger.getLogger(getClass()).warn("failed to create new user " + newUser.getUserid(), ex);
+			errorMsg.append("failed to create new user " + newUser.getUserid());
+			(new AdminRegisterUserRequestHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest(); 
+			return;
 		}
+		
+		String sendWelcomeMail = getParameter("sendWelcomeMail");
 
-		String role=getParameter("role");
-
-		String firstName=getParameter("firstName");
-
-		String lastName=getParameter("lastName");
-
-		String phone=getParameter("phone");
-
-		String css=getParameter("css");
-
-		if (role!=null)
+		if ((WebFileSys.getInstance().getMailHost() != null) && (sendWelcomeMail != null))
 		{
-			userMgr.setRole(login,role);
-		}
-
-		if (firstName!=null)
-		{
-			userMgr.setFirstName(login,firstName);
-		}
-
-		if (lastName!=null)
-		{
-			userMgr.setLastName(login,lastName);
-		}
-
-		if (phone!=null)
-		{
-			userMgr.setPhone(login,phone);
-		}
-
-		if (checkDiskQuota!=null)
-		{
-			long diskQuota=((long) diskQuotaMB) * (1024l) * (1024l); 
-
-			userMgr.setDiskQuota(login,diskQuota);
-		}
-
-		userMgr.setLanguage(login, userLanguage);
-
-		if (css!=null)
-		{
-			userMgr.setCSS(login,css);
-		}
-
-		String sendWelcomeMail=getParameter("sendWelcomeMail");
-
-		if ((WebFileSys.getInstance().getMailHost() !=null) && (sendWelcomeMail!=null))
-		{
-			EmailUtils.sendWelcomeMail(email,firstName,lastName,login,password,userLanguage); 
+			EmailUtils.sendWelcomeMail(email, newUser.getFirstName(), newUser.getLastName(), login, password, userLanguage); 
 		}
 
 		(new UserListRequestHandler(req, resp, session, output, uid)).handleRequest(); 

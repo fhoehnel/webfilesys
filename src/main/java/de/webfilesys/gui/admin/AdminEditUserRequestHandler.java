@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import de.webfilesys.LanguageManager;
 import de.webfilesys.gui.CSSManager;
+import de.webfilesys.user.TransientUser;
 
 /**
  * Administrator edits the account of an user.
@@ -37,6 +40,12 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 	{
 		String login = getParameter("username");
 
+		TransientUser user = userMgr.getUser(login);
+		if (user == null) {
+        	Logger.getLogger(getClass()).error("user not found: " + login);
+        	return;
+		}
+		
 		output.print("<html>");
 		output.print("<head>");
 
@@ -109,7 +118,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         else
         {
-            userDocRoot = userMgr.getDocumentRoot(login);
+        	userDocRoot = user.getDocumentRoot();
             if (File.separatorChar == '\\') 
             {
             	if (userDocRoot.equals("*:")) 
@@ -167,7 +176,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         else
         {
-            readonly = userMgr.isReadonly(login);
+        	readonly = user.isReadonly();
         }
         
         output.println("<tr>");
@@ -191,7 +200,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         else
         {
-            firstName = userMgr.getFirstName(login);
+        	firstName = user.getFirstName();
         }
         
         if (firstName == null)
@@ -212,7 +221,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         else
         {
-            lastName = userMgr.getLastName(login);
+        	lastName = user.getLastName();
         }
         
         if (lastName == null)
@@ -233,7 +242,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         else
         {
-            val = userMgr.getEmail(login);
+        	val = user.getEmail();
         }
         
 		if (val == null)
@@ -251,7 +260,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         else
         {
-            val = userMgr.getPhone(login);
+        	val = user.getPhone();
         }
         
 		if (val == null)
@@ -263,7 +272,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 		output.println("<td class=\"formParm2\"><input type=\"text\" id=\"phone\" name=\"phone\" maxlength=\"30\" value=\"" + val + "\"></td>");
         output.println("</tr>");
 
-		long diskQuota = userMgr.getDiskQuota(login);
+		long diskQuota = user.getDiskQuota();
         
         boolean checkDiskQuota = false;
         
@@ -332,7 +341,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         else 
         {
-            role = userMgr.getRole(login);
+        	role = user.getRole();
         }
 
         if ((role == null) || role.equals("user"))
@@ -373,7 +382,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         else
         {
-            userLanguage = userMgr.getLanguage(login);
+            userLanguage = user.getLanguage();
         }
         
 		if (userLanguage == null)
@@ -411,12 +420,12 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 		}
 		else
 		{
-			userCss = userMgr.getCSS(login);
+			userCss = user.getCss();
 		}
 
 		if (userCss == null)
 		{
-			userCss=CSSManager.DEFAULT_LAYOUT;
+			userCss = CSSManager.DEFAULT_LAYOUT;
 		}
 
 		ArrayList<String> cssList = CSSManager.getInstance().getAvailableCss();

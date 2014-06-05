@@ -19,7 +19,9 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.CSSManager;
 import de.webfilesys.mail.EmailUtils;
 import de.webfilesys.mail.SmtpEmail;
+import de.webfilesys.user.TransientUser;
 import de.webfilesys.user.UserManager;
+import de.webfilesys.user.UserMgmtException;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -137,9 +139,8 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		
 		UserManager userMgr = WebFileSys.getInstance().getUserMgr();
 
-		if (!userMgr.addUser(login))
-		{
-			this.addValidationError("username", langMgr.getResource(primaryLanguage, "error.duplicatelogin", "an user with this name already exists"));
+		if (userMgr.userExists(login)) {
+			addValidationError("username", langMgr.getResource(primaryLanguage, "error.duplicatelogin", "an user with this name already exists"));
 			
 			selfRegistrationForm(req, session);
 
@@ -159,55 +160,31 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 				Logger.getLogger(getClass()).error("cannot create home directory for new user " + login + ": " + docRoot);
 			}
 		}
+		
+		TransientUser newUser = new TransientUser();
+		
+		newUser.setUserid(login);
+		newUser.setPassword(password);
+		newUser.setReadonlyPassword(ropassword);
+		newUser.setDocumentRoot(docRoot);
+		newUser.setEmail(email);
+		newUser.setReadonly(false);
+        newUser.setRole("webspace");
+        newUser.setFirstName(getParameter("firstName"));
+        newUser.setLastName(getParameter("lastName"));
+        newUser.setPhone(getParameter("phone"));
+        newUser.setCss(getParameter("css"));
+        newUser.setLanguage(userLanguage);
 
-		userMgr.setPassword(login, password);
+		newUser.setDiskQuota(WebFileSys.getInstance().getDefaultDiskQuota());
 
-		if (ropassword.length() > 0)
-		{
-			userMgr.setReadonlyPassword(login,ropassword);
-		}
-
-		userMgr.setDocumentRoot(login, docRoot);
-
-		userMgr.setReadonly(login, false);
-
-		userMgr.setEmail(login, email);
-
-		String firstName = getParameter("firstName");
-
-		String lastName = getParameter("lastName");
-
-		String phone = getParameter("phone");
-
-		userMgr.setRole(login, "webspace");
-
-		if (firstName != null)
-		{
-			userMgr.setFirstName(login,firstName);
-		}
-
-		if (lastName != null)
-		{
-			userMgr.setLastName(login,lastName);
-		}
-
-		if (phone != null)
-		{
-			userMgr.setPhone(login,phone);
-		}
-
-		userMgr.setDiskQuota(login, WebFileSys.getInstance().getDefaultDiskQuota());
-
-		if (userLanguage != null)
-		{
-			userMgr.setLanguage(login, userLanguage);
-		}
-
-		String css = getParameter("css");
-
-		if (css != null)
-		{
-			userMgr.setCSS(login,css);
+		try {
+			userMgr.createUser(newUser);
+		} catch (UserMgmtException ex) {
+        	Logger.getLogger(getClass()).warn("failed to create new user " + login, ex);
+			addValidationError("username", "failed to create new user");
+			selfRegistrationForm(req, session);
+			return;
 		}
 
 		Logger.getLogger(getClass()).info(req.getRemoteAddr() + ": new user " + login + " registered");
@@ -222,7 +199,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 
 		if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyWelcome())
 		{
-			EmailUtils.sendWelcomeMail(email,firstName,lastName,login,password,userLanguage); 
+			EmailUtils.sendWelcomeMail(email, newUser.getFirstName(), newUser.getLastName(), login, password, userLanguage); 
 		}
 
 		if (session != null)
@@ -426,6 +403,6 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 									   "label.selectLanguage",
 									   "- select language -"));
 		
-		this.processResponse("registerUser.xsl", true);
+		processResponse("registerUser.xsl", true);
     }
 }

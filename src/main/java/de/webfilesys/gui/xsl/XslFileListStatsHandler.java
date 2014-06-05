@@ -100,6 +100,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(fileListElem, "css", userMgr.getCSS(uid), false);
 	    XmlUtil.setChildText(fileListElem, "language", language, false);
 		XmlUtil.setChildText(fileListElem, "currentPath", currentPath, false);
+    	XmlUtil.setChildText(fileListElem, "pathForScript", insertDoubleBackslash(currentPath));
 		XmlUtil.setChildText(fileListElem, "headLine", getHeadlinePath(currentPath), false);
 		XmlUtil.setChildText(fileListElem, "sortBy", Integer.toString(sortBy), false);
 		

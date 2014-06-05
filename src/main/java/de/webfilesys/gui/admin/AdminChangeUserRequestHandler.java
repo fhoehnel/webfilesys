@@ -6,25 +6,27 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import de.webfilesys.mail.EmailUtils;
+import de.webfilesys.user.TransientUser;
+import de.webfilesys.user.UserMgmtException;
+import de.webfilesys.util.CommonUtils;
 
 /**
  * @author Frank Hoehnel
  */
-public class AdminChangeUserRequestHandler extends AdminRequestHandler
-{
+public class AdminChangeUserRequestHandler extends AdminRequestHandler {
 	public AdminChangeUserRequestHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 	
-	protected void process()
-	{
+	protected void process() {
 		StringBuffer errorMsg = new StringBuffer();
 
 		String login=getParameter("username");
@@ -160,78 +162,81 @@ public class AdminChangeUserRequestHandler extends AdminRequestHandler
 			return;
 		}
 
-		if ((password!=null) && (password.trim().length()>0))
-		{
-			userMgr.setPassword(login,password);
+		TransientUser changedUser = userMgr.getUser(login);
+		
+		if (changedUser == null) {
+            Logger.getLogger(getClass()).error("user for update not found: " + login);
+			errorMsg.append("user for update not found: " + login);
+			(new AdminEditUserRequestHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest(); 
+			return;
+		}
+		
+		if (!CommonUtils.isEmpty(password)) {
+			changedUser.setPassword(password);
 		}
 
-		if (ropassword.length() > 0)
-		{
-			userMgr.setReadonlyPassword(login,ropassword);
+		if (!CommonUtils.isEmpty(ropassword)) {
+			changedUser.setReadonlyPassword(ropassword);
 		}
 
-		if ((documentRoot!=null) && (documentRoot.trim().length()>0))
-		{
-			userMgr.setDocumentRoot(login,documentRoot);
+		if (!CommonUtils.isEmpty(documentRoot)) {
+			changedUser.setDocumentRoot(documentRoot);
 		}
 
-		String readonly=getParameter("readonly");
+		changedUser.setReadonly(getParameter("readonly") != null);
 
-		userMgr.setReadonly(login,(readonly!=null));
+		changedUser.setEmail(email);
 
-		userMgr.setEmail(login,email);
+		String role = getParameter("role");
 
-		String role=getParameter("role");
-
-		if (role!=null)
-		{
-			userMgr.setRole(login,role);
+		if (!CommonUtils.isEmpty(role)) {
+			changedUser.setRole(role);
 		}
 
-		String firstName=getParameter("firstName");
+		String firstName = getParameter("firstName");
 
-		if (firstName!=null)
-		{
-			userMgr.setFirstName(login,firstName);
+		if (!CommonUtils.isEmpty(firstName)) {
+			changedUser.setFirstName(firstName);
 		}
 
-		String lastName=getParameter("lastName");
+		String lastName = getParameter("lastName");
 
-		if (lastName!=null)
-		{
-			userMgr.setLastName(login,lastName);
+		if (!CommonUtils.isEmpty(lastName)) {
+			changedUser.setLastName(lastName);
 		}
 
-		String phone=getParameter("phone");
+		String phone = getParameter("phone");
 
-		if (phone!=null)
-		{
-			userMgr.setPhone(login,phone);
+		if (!CommonUtils.isEmpty(phone)) {
+			changedUser.setPhone(phone);
 		}
 
-		String css=getParameter("css");
+		String css = getParameter("css");
 
-		if (css!=null)
-		{
-			userMgr.setCSS(login,css);
+		if (!CommonUtils.isEmpty(css)) {
+			changedUser.setCss(css);
 		}
 
-		if (checkDiskQuota!=null)
-		{
+		if (checkDiskQuota!=null) {
 			long diskQuota=((long) diskQuotaMB) * (1024l) * (1024l); 
-
-			userMgr.setDiskQuota(login,diskQuota);
-		}
-		else
-		{
-			userMgr.setDiskQuota(login,(-1));
+            changedUser.setDiskQuota(diskQuota);
+		} else {
+            changedUser.setDiskQuota(-1);
 		}
 
-		String userLanguage=getParameter("language");
+		String userLanguage = getParameter("language");
 
-		if (userLanguage!=null)
-		{
-			userMgr.setLanguage(login,userLanguage);
+		if (userLanguage != null) {
+			changedUser.setLanguage(userLanguage);
+		}
+		
+		try {
+			userMgr.updateUser(changedUser);
+		} catch (UserMgmtException ex) {
+            Logger.getLogger(getClass()).error("failed to update user " + login, ex);
+			errorMsg.append("failed to update user " + login);
+			(new AdminEditUserRequestHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest(); 
+			return;
 		}
 
 		(new UserListRequestHandler(req, resp, session, output, uid)).handleRequest(); 

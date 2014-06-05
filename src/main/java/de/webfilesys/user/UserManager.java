@@ -5,6 +5,11 @@ import java.util.Date;
 
 public interface UserManager 
 {
+	public static final String USER_TYPE_DEFAULT = "default";
+
+	public static final String USER_TYPE_VIRTUAL = "virtual";
+	
+	public static final int DEFAULT_THUMB_PAGE_SIZE = 12;
 
     /**
      * Returns the list of the userids of all registered users.
@@ -35,6 +40,29 @@ public interface UserManager
      */
     public ArrayList<String> getAllMailAddresses();
 
+    /**
+     * Create a new user.
+     * 
+     * @param newUser the data of the new user
+     * @exception UserMgmtException user could not be created
+     */
+    public void createUser(TransientUser newUser) throws UserMgmtException;
+
+    /**
+     * Update an existing user.
+     * 
+     * @param changedUser the data of the changed user
+     * @exception UserMgmtException user could not be updated
+     */
+    public void updateUser(TransientUser changedUser) throws UserMgmtException;
+    
+    /** Get the user with the given userId.
+     * 
+     * @param userId the userid of the user
+     * @return user object or null if not found
+     */
+    public TransientUser getUser(String userId);
+    
     /**
      * Create a user with the given userid.
      *
@@ -71,19 +99,10 @@ public interface UserManager
      * @param realUser the userid of the user that owns this folder
      * @param docRoot the path of the published folder, used as document root
      * @param expDays the time to live of the user in days
+     * @param language language to use 
      * @return the generated unique userid of the virtual user created
      */
-    public String createVirtualUser(String realUser,String docRoot,String role,int expDays);
-
-    /**
-     * The user type is used to flag virtual users that are created for
-     * published folder trees.
-     *
-     * @param userId the userid of the user
-     * @param type the type of the user (for example "virtual")
-     * @return false if the user does not exist, otherwise true     
-     */
-    public boolean setUserType(String userId,String type);
+    public String createVirtualUser(String realUser, String docRoot, String role, int expDays, String language);
 
     /**
      * Get the type of the user.
@@ -102,28 +121,12 @@ public interface UserManager
     public String getFirstName(String userId);
       
     /**
-     * Set a new first name for an user.
-     *
-     * @param userId the userid of the user
-     * @param newValue the new first name
-     */
-    public void setFirstName(String userId,String newValue);
-
-    /**
      * Get the last name of the user.
      *
      * @param userId the userid of the user
      * @return the last name of the user
      */
     public String getLastName(String userId);
-
-    /**
-     * Set a new last name for an user.
-     *
-     * @param userId the userid of the user
-     * @param newValue the new last name
-     */
-    public void setLastName(String userId,String newValue);
 
     /**
      * Get the e-mail address of the user.
@@ -134,14 +137,6 @@ public interface UserManager
     public String getEmail(String userId);
 
     /**
-     * Set a new e-mail address for an user.
-     *
-     * @param userId the userid of the user
-     * @param newValue the new e-mail address
-     */
-    public void setEmail(String userId,String newValue);
-
-    /**
      * Get the disk quota (bytes) of the user. If no disk quota is
      * defined for the user, this method returns -1.
      *
@@ -149,15 +144,6 @@ public interface UserManager
      * @return the disk quota of the user (in bytes) or -1 if unlimited
      */
     public long getDiskQuota(String userId);
-
-    /**
-     * Set a new disk quota for an user.
-     *
-     * @param userId the userid of the user
-     * @param newValue the new disk quota value (bytes)
-     */
-    public void setDiskQuota(String userId,long newValue);
-
 
     /**
      * Get the number of pictures displayed per page.
@@ -201,28 +187,12 @@ public interface UserManager
     public String getPhone(String userId);
 
     /**
-     * Set a new phone number for an user.
-     *
-     * @param userId the userid of the user
-     * @param newValue the new phone number
-     */
-    public void setPhone(String userId,String newValue);
-
-    /**
      * Get the language of the user.
      *
      * @param userId the userid of the user
      * @return the language of the user
      */
     public String getLanguage(String userId);
-
-    /**
-     * Set a new language for the user.
-     *
-     * @param userId the userid of the user
-     * @param newValue the new language
-     */
-    public void setLanguage(String userId,String newValue);
 
     /**
      * Get the role of the user. Can be "admin", "user" or "webspace".
@@ -233,14 +203,6 @@ public interface UserManager
     public String getRole(String userId);
 
     /**
-     * Set a new role for the user. Can be "admin", "user" or "webspace".
-     *
-     * @param userId the userid of the user
-     * @param newRole the new role
-     */
-    public void setRole(String userId,String newRole);
-
-    /**
      * Checks if the user has read-only access.
      *
      * @param userId the userid of the user
@@ -248,14 +210,6 @@ public interface UserManager
      */
     public boolean isReadonly(String userId);
     
-    /**
-     * Set read-only access to the file system for the user.
-     *
-     * @param userId the userid of the user
-     * @param readonly set to true for read-only access
-     */
-    public void setReadonly(String userId,boolean readonly);
-
     /**
      * Get the document root for the user.
      * If the document root is not defined, this method
@@ -284,14 +238,6 @@ public interface UserManager
      * @return the normalized document root
      */
     public String normalizeDocRoot(String documentRoot);
-
-    /**
-     * Set a new document root for the user.
-     *
-     * @param userId the userid of the user
-     * @param newValue a valid filesystem path
-     */
-    public void setDocumentRoot(String userId,String newValue);
 
     /**
      * Set a new password for the user.
@@ -335,14 +281,6 @@ public interface UserManager
      */
     public String getCSS(String userId);
  
-    /**
-     * Assigns a CSS stylesheet to the user.
-     *
-     * @param userId the userid of the user
-     * @param newCSS the name of the new CSS stylesheet
-     */
-    public void setCSS(String userId,String newCSS);
-    
 	/**
 	 * Get a list of transient user objects for all non-virtual users.
 	 */

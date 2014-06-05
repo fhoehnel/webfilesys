@@ -215,14 +215,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 				role = "album";
 			}
 
-			virtualUser = userMgr.createVirtualUser(uid, actPath, role, expDays);
-			
-			String userLanguage=getParameter("language");
-
-			if ((userLanguage!=null) && (userLanguage.trim().length()>0))
-			{
-				userMgr.setLanguage(virtualUser,userLanguage);
-			}
+			virtualUser = userMgr.createVirtualUser(uid, actPath, role, expDays, getParameter("language"));
 			
 			userMgr.setPageSize(virtualUser, pageSize);
 		}

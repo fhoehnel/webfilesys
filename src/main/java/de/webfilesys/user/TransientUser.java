@@ -12,6 +12,15 @@ public class TransientUser
 	/** the userid of the user */
     private String userid = null;
     
+    /** type of user (real or virtual) */
+    private String userType = null;
+    
+    /** the password */
+    private String password = null;
+    
+    /** the read-only password */
+    private String readonlyPassword = null;
+    
     /** the root directory for the user's file system access */
     private String documentRoot = null;
 
@@ -21,7 +30,7 @@ public class TransientUser
     /** user has read-only access only */    
     private boolean readonly = false;
     
-    /** the role of the user (can be admin, user, webspace) */
+    /** the role of the user (can be "admin", "user", "webspace") */
     private String role = null;
     
     /** the language */
@@ -44,6 +53,9 @@ public class TransientUser
     
     /** date of the last login */
     private Date lastLogin = null;
+    
+    /** number of picture thumbnails per page */
+    private int pageSize = UserManager.DEFAULT_THUMB_PAGE_SIZE;
     
     public String getCss()
     {
@@ -164,4 +176,37 @@ public class TransientUser
     {
         userid = newVal;
     }
+    
+    public void setPassword(String newVal) {
+    	password = newVal;
+    }
+    
+    public String getPassword() {
+    	return password;
+    }
+    
+    public void setReadonlyPassword(String newVal) {
+    	readonlyPassword = newVal;
+    }
+    
+    public String getReadonlyPassword() {
+    	return readonlyPassword;
+    }
+    
+    public void setUserType(String newVal) {
+        userType = newVal;
+    }
+    
+    public String getUserType() {
+    	return userType;
+    }
+    
+    public void setPageSize(int newVal) {
+    	pageSize = newVal;
+    }
+    
+    public int getPageSize() {
+    	return pageSize;
+    }
 }
+

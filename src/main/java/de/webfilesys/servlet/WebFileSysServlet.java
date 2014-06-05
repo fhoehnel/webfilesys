@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -91,6 +90,7 @@ import de.webfilesys.gui.ajax.XmlMultiCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlMultiImageCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlRemoveDirHandler;
 import de.webfilesys.gui.ajax.XmlRunUnixCmdHandler;
+import de.webfilesys.gui.ajax.XmlSaveRemoteEditorHandler;
 import de.webfilesys.gui.ajax.XmlSelectCompFolderHandler;
 import de.webfilesys.gui.ajax.XmlSelectDiffFileHandler;
 import de.webfilesys.gui.ajax.XmlSelectSyncFolderHandler;
@@ -137,7 +137,6 @@ import de.webfilesys.gui.user.DiffRequestHandler;
 import de.webfilesys.gui.user.DiskQuotaRequestHandler;
 import de.webfilesys.gui.user.DownloadFolderZipHandler;
 import de.webfilesys.gui.user.EditMP3RequestHandler;
-import de.webfilesys.gui.user.EditorSaveRequestHandler;
 import de.webfilesys.gui.user.EncryptFileRequestHandler;
 import de.webfilesys.gui.user.ExecProgramRequestHandler;
 import de.webfilesys.gui.user.ExifThumbRequestHandler;
@@ -1161,9 +1160,8 @@ public class WebFileSysServlet extends HttpServlet
             return(true);
         }
         
-        if (command.equals("saveEditor"))
-        {
-            (new EditorSaveRequestHandler(req, resp, session, output, userid)).handleRequest();
+        if (command.equals("saveRemoteEditor")) {
+            (new XmlSaveRemoteEditorHandler(req, resp, session, output, userid)).handleRequest();
             return (true);
         }
         

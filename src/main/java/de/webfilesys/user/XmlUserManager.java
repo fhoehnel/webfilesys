@@ -23,6 +23,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import de.webfilesys.WebFileSys;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 public class XmlUserManager extends UserManagerBase
@@ -39,7 +40,7 @@ public class XmlUserManager extends UserManagerBase
 
     private boolean modified;
 
-    private Hashtable userCache;
+    private Hashtable<String, Element> userCache;
 
     public boolean readyForShutdown;
     
@@ -61,7 +62,7 @@ public class XmlUserManager extends UserManagerBase
 
        userFilePath = WebFileSys.getInstance().getConfigBaseDir() + "/" + USER_FILE_NAME;
        
-       userCache=new Hashtable(10);
+       userCache = new Hashtable(10);
 
        userRoot=loadFromFile();
 
@@ -383,6 +384,167 @@ public class XmlUserManager extends UserManagerBase
         return(getUserElement(userId)!=null);
     }
 
+    /**
+     * Create a new user.
+     * 
+     * @param newUser the data of the new user
+     * @exception UserMgmtException user could not be created
+     */
+    public void createUser(TransientUser newUser) 
+    throws UserMgmtException {
+    	if (newUser == null) {
+    		throw new UserMgmtException("user is null");
+    	}
+    	
+    	if (userExists(newUser.getUserid())) {
+    		throw new UserMgmtException("a user with this name already exists");
+    	}
+    	
+        Element newUserElement = doc.createElement("user");
+
+        newUserElement.setAttribute("id", newUser.getUserid());
+        
+        if (!CommonUtils.isEmpty(newUser.getUserType())) {
+        	newUserElement.setAttribute("type", newUser.getUserType());
+        }
+        
+        if (!CommonUtils.isEmpty(newUser.getRole())) {
+            XmlUtil.setChildText(newUserElement, "role", newUser.getRole());
+        }
+        
+        if (!CommonUtils.isEmpty(newUser.getFirstName())) {
+            XmlUtil.setChildText(newUserElement, "firstName", newUser.getFirstName());
+        }
+
+        if (!CommonUtils.isEmpty(newUser.getLastName())) {
+            XmlUtil.setChildText(newUserElement, "lastName", newUser.getLastName());
+        }
+        
+        if (!CommonUtils.isEmpty(newUser.getEmail())) {
+            XmlUtil.setChildText(newUserElement, "email", newUser.getEmail());
+        }
+        
+        if (!CommonUtils.isEmpty(newUser.getPhone())) {
+            XmlUtil.setChildText(newUserElement, "phone", newUser.getPhone());
+        }
+        
+        if (newUser.getDiskQuota() != 0l) {
+            XmlUtil.setChildText(newUserElement, "diskQuota", Long.toString(newUser.getDiskQuota()));
+        }
+        
+        if (!CommonUtils.isEmpty(newUser.getLanguage())) {
+            XmlUtil.setChildText(newUserElement, "language", newUser.getLanguage());
+        }
+        
+        if (!CommonUtils.isEmpty(newUser.getCss())) {
+            XmlUtil.setChildText(newUserElement, "css", newUser.getCss());
+        }
+        
+        if (!CommonUtils.isEmpty(newUser.getDocumentRoot())) {
+            XmlUtil.setChildText(newUserElement, "documentRoot", normalizeDocRoot(newUser.getDocumentRoot()));
+        }
+        
+        if (newUser.isReadonly()) {
+            XmlUtil.setChildText(newUserElement, "readonly", "true");
+        } else {
+            XmlUtil.setChildText(newUserElement,"readonly","false");
+        }
+        
+        XmlUtil.setChildText(newUserElement, "pageSize", Integer.toString(newUser.getPageSize()));
+        
+        userRoot.appendChild(newUserElement);
+
+        userCache.put(newUser.getUserid(), newUserElement);
+
+        setPassword(newUser.getUserid(), newUser.getPassword());
+        
+        if (!CommonUtils.isEmpty(newUser.getReadonlyPassword())) {
+            setReadonlyPassword(newUser.getUserid(), newUser.getReadonlyPassword());
+        }
+        
+        modified = true;
+    }
+    
+    /**
+     * Update an existing user.
+     * 
+     * @param changedUser the data of the changed user
+     * @exception UserMgmtException user could not be updated
+     */
+    public void updateUser(TransientUser changedUser) 
+    throws UserMgmtException {
+    	if (changedUser == null) {
+    		throw new UserMgmtException("user for update is null");
+    	}
+
+    	Element userElem = getUserElement(changedUser.getUserid());
+    	if (userElem == null) {
+    		throw new UserMgmtException("user for update operation not found");
+    	}
+    	
+        if (!CommonUtils.isEmpty(changedUser.getRole())) {
+            XmlUtil.setChildText(userElem, "role", changedUser.getRole());
+        }
+        
+        XmlUtil.setChildText(userElem, "firstName", changedUser.getFirstName());
+
+        if (!CommonUtils.isEmpty(changedUser.getLastName())) {
+            XmlUtil.setChildText(userElem, "lastName", changedUser.getLastName());
+        }
+        
+        if (!CommonUtils.isEmpty(changedUser.getEmail())) {
+            XmlUtil.setChildText(userElem, "email", changedUser.getEmail());
+        }
+        
+        XmlUtil.setChildText(userElem, "phone", changedUser.getPhone());
+        
+        XmlUtil.setChildText(userElem, "diskQuota", Long.toString(changedUser.getDiskQuota()));
+        
+        if (!CommonUtils.isEmpty(changedUser.getLanguage())) {
+            XmlUtil.setChildText(userElem, "language", changedUser.getLanguage());
+        }
+        
+        if (!CommonUtils.isEmpty(changedUser.getCss())) {
+            XmlUtil.setChildText(userElem, "css", changedUser.getCss());
+        }
+        
+        if (!CommonUtils.isEmpty(changedUser.getDocumentRoot())) {
+            XmlUtil.setChildText(userElem, "documentRoot", normalizeDocRoot(changedUser.getDocumentRoot()));
+        }
+        
+        if (changedUser.isReadonly()) {
+            XmlUtil.setChildText(userElem, "readonly", "true");
+        } else {
+            XmlUtil.setChildText(userElem,"readonly","false");
+        }
+        
+        if (!CommonUtils.isEmpty(changedUser.getPassword())) {
+            setPassword(changedUser.getUserid(), changedUser.getPassword());
+        }
+        
+        if (!CommonUtils.isEmpty(changedUser.getReadonlyPassword())) {
+            setReadonlyPassword(changedUser.getUserid(), changedUser.getReadonlyPassword());
+        }
+        
+        modified = true;
+    }
+    
+    /** 
+     * Get the user with the given userId.
+     * 
+     * @param userId the userid of the user
+     * @return user object or null if not found
+     */
+    public TransientUser getUser(String userId) {
+    	Element userElem = getUserElement(userId);
+    	
+    	if (userElem == null) {
+    		return null;
+    	}
+    	
+    	return getTransientUser(userElem);
+    }
+    
     public boolean addUser(String userId)
     {
         if (getUserElement(userId)!=null)
@@ -403,50 +565,42 @@ public class XmlUserManager extends UserManagerBase
         return(true);
     }
 
-    public String createVirtualUser(String realUser,String docRoot,String role,int expDays)
-    {
+    public String createVirtualUser(String realUser, String docRoot, String role, int expDays, String language) {
         String virtualUserId=null;
 
         int i=1;
 
-        do
-        {
-            virtualUserId=realUser + "-" + i;
-
+        do {
+            virtualUserId = realUser + "-" + i;
             i++;
+        } while (userExists(virtualUserId));
+        
+        TransientUser virtualUser = new TransientUser();
+
+        virtualUser.setUserType(UserManager.USER_TYPE_VIRTUAL);
+        virtualUser.setUserid(virtualUserId);
+        virtualUser.setPassword("public");
+        virtualUser.setDocumentRoot(docRoot);
+        virtualUser.setReadonly(true);
+        virtualUser.setRole(role);
+        virtualUser.setCss(getCSS(realUser));
+        virtualUser.setPageSize(getPageSize(realUser));
+
+        if (CommonUtils.isEmpty(language)) {
+            virtualUser.setLanguage(getLanguage(realUser));
+        } else {
+            virtualUser.setLanguage(language);
         }
-        while (userExists(virtualUserId));
-    
-        addUser(virtualUserId);
+        
+        try {
+            createUser(virtualUser);
+        } catch (UserMgmtException ex) {
+        	Logger.getLogger(getClass()).warn("failed to create virtual user " + virtualUserId, ex);
+        }
 
-        setUserType(virtualUserId,"virtual");
-
-        setPassword(virtualUserId, "public");
-        setReadonly(virtualUserId,true);
-        setDocumentRoot(virtualUserId,docRoot);
-        setLanguage(virtualUserId,this.getLanguage(realUser));
-        setRole(virtualUserId, role);
-        // setDiskQuota();
-        setCSS(virtualUserId,this.getCSS(realUser));
-        setPageSize(virtualUserId,this.getPageSize(realUser));
-
-        modified=true;
+        modified = true;
 
         return(virtualUserId);
-    }
-
-    public boolean setUserType(String userId,String type)
-    {
-        Element userElem=getUserElement(userId);
-        
-        if (userElem==null)
-        {
-            return(false);
-        }
-        
-        userElem.setAttribute("type",type);
-
-        return(true);
     }
 
     public String getUserType(String userId)
@@ -498,20 +652,6 @@ public class XmlUserManager extends UserManagerBase
         return(XmlUtil.getChildText(userElement,"firstName"));
     }
       
-    public void setFirstName(String userId,String newValue)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        XmlUtil.setChildText(userElement,"firstName",newValue);
-
-        modified=true;
-    }
-
     public String getLastName(String userId)
     {
         Element userElement=getUserElement(userId);
@@ -524,20 +664,6 @@ public class XmlUserManager extends UserManagerBase
         return(XmlUtil.getChildText(userElement,"lastName"));
     }
 
-    public void setLastName(String userId,String newValue)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        XmlUtil.setChildText(userElement,"lastName",newValue);
-
-        modified=true;
-    }
-
     public String getEmail(String userId)
     {
         Element userElement=getUserElement(userId);
@@ -548,20 +674,6 @@ public class XmlUserManager extends UserManagerBase
         }
 
         return(XmlUtil.getChildText(userElement,"email"));
-    }
-
-    public void setEmail(String userId,String newValue)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        XmlUtil.setChildText(userElement,"email",newValue);
-
-        modified=true;
     }
 
     public long getDiskQuota(String userId)
@@ -590,20 +702,6 @@ public class XmlUserManager extends UserManagerBase
         }
 
         return(diskQuota);
-    }
-
-    public void setDiskQuota(String userId,long newValue)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        XmlUtil.setChildText(userElement,"diskQuota",(new Long(newValue)).toString());
-
-        modified=true;
     }
 
     public int getPageSize(String userId)
@@ -659,20 +757,6 @@ public class XmlUserManager extends UserManagerBase
         return(XmlUtil.getChildText(userElement,"phone"));
     }
 
-    public void setPhone(String userId,String newValue)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        XmlUtil.setChildText(userElement,"phone",newValue);
-
-        modified=true;
-    }
-
     public String getLanguage(String userId)
     {
         Element userElement=getUserElement(userId);
@@ -692,21 +776,6 @@ public class XmlUserManager extends UserManagerBase
         return(language);
     }
 
-    public void setLanguage(String userId,String newValue)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        XmlUtil.setChildText(userElement,"language",newValue);
-
-        modified=true;
-    }
-
-
     public String getRole(String userId)
     {
         Element userElement=getUserElement(userId);
@@ -717,20 +786,6 @@ public class XmlUserManager extends UserManagerBase
         }
 
         return(XmlUtil.getChildText(userElement,"role"));
-    }
-
-    public void setRole(String userId,String newRole)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        XmlUtil.setChildText(userElement,"role",newRole);
-
-        modified=true;
     }
 
     /**
@@ -751,26 +806,6 @@ public class XmlUserManager extends UserManagerBase
         return(XmlUtil.getChildText(userElement,"css"));
     }
 
-    /**
-     * Assigns a CSS stylesheet to the user.
-     *
-     * @param userId the userid of the user
-     * @param newCSS the name of the new CSS stylesheet
-     */
-    public void setCSS(String userId,String newCSS)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        XmlUtil.setChildText(userElement,"css",newCSS);
-
-        modified=true;
-    }
-
     public boolean isReadonly(String userId)
     {
         Element userElement=getUserElement(userId);
@@ -783,25 +818,6 @@ public class XmlUserManager extends UserManagerBase
         String readonly=XmlUtil.getChildText(userElement,"readonly");
 
         return((readonly!=null) && readonly.equals("true"));
-    }
-
-    public void setReadonly(String userId,boolean readonly)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        if (readonly)
-        {
-            XmlUtil.setChildText(userElement,"readonly","true");
-        }
-        else
-        {
-            XmlUtil.setChildText(userElement,"readonly","false");
-        }
     }
 
     public String getDocumentRoot(String userId)
@@ -836,22 +852,6 @@ public class XmlUserManager extends UserManagerBase
     public String getLowerCaseDocRoot(String userId)
     {
         return(getDocumentRoot(userId).toLowerCase());
-    }
-
-    public void setDocumentRoot(String userId,String newValue)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        String documentRoot=normalizeDocRoot(newValue);
-
-        XmlUtil.setChildText(userElement,"documentRoot",documentRoot);
-
-        modified=true;
     }
 
     public String normalizeDocRoot(String documentRoot)
@@ -894,168 +894,118 @@ public class XmlUserManager extends UserManagerBase
         return(documentRoot);
     }
 
-    public void setPassword(String userId,String newPassword)
-    {
-        Element userElement=getUserElement(userId);
-
-        if (userElement==null)
-        {
-            return;
-        }
-
-        try
-        {
+    private String encryptPassword(String cleartextPassword) {
+    	try {
             MessageDigest md=MessageDigest.getInstance(ENCRYPTION_METHOD);
 
-            byte[] encryptedPassword = md.digest(newPassword.getBytes());
+            byte[] encryptedPassword = md.digest(cleartextPassword.getBytes());
 
             sun.misc.BASE64Encoder encoder=new sun.misc.BASE64Encoder();
 
-            String encodedPassword=encoder.encodeBuffer(encryptedPassword).trim();
-
-            XmlUtil.setChildText(userElement,"password",encodedPassword);
-
-            Element passwordElement=XmlUtil.getChildByTagName(userElement,"password");
-
-            passwordElement.setAttribute("encryption", ENCRYPTION_METHOD);
+            return encoder.encodeBuffer(encryptedPassword).trim();
+    	} catch (java.security.NoSuchAlgorithmException nsaEx) {
+    	    Logger.getLogger(getClass()).error("failed to encrypt password", nsaEx);
+        	return "";
         }
-        catch (java.security.NoSuchAlgorithmException nsaEx)
-        {
-        	Logger.getLogger(getClass()).error("nsa");
+    }
+    
+    public void setPassword(String userId, String newPassword) {
+        Element userElement = getUserElement(userId);
+
+        if (userElement == null) {
+            return;
         }
+
+        XmlUtil.setChildText(userElement, "password", encryptPassword(newPassword));
+
+        Element passwordElement = XmlUtil.getChildByTagName(userElement, "password");
+
+        passwordElement.setAttribute("encryption", ENCRYPTION_METHOD);
     }
 
     public boolean checkPassword(String userId,String password)
     {
-        if ((password==null) || (password.trim().length()==0))
+        if ((password == null) || (password.trim().length() == 0))
         {
             return(false);
         }
         
-        Element userElement=getUserElement(userId);
+        Element userElement = getUserElement(userId);
 
-        if (userElement==null)
+        if (userElement  == null)
         {
             return(false);
         }
 
-        Element passwordElement=XmlUtil.getChildByTagName(userElement,"password");
+        Element passwordElement = XmlUtil.getChildByTagName(userElement,"password");
 
-        if (passwordElement==null)
+        if (passwordElement == null)
         {
             return(false);
         }
 
-        String storedPassword=XmlUtil.getElementText(passwordElement);
+        String storedPassword = XmlUtil.getElementText(passwordElement);
 
-        String encryptionMethod=passwordElement.getAttribute("encryption");
+        String encryptionMethod = passwordElement.getAttribute("encryption");
 
-        if ((encryptionMethod==null) || encryptionMethod.equalsIgnoreCase("none") ||
-            (encryptionMethod.trim().length()==0))
-        {
+        if ((encryptionMethod == null) || encryptionMethod.equalsIgnoreCase("none") ||
+            (encryptionMethod.trim().length() == 0)) {
             return(password.equals(storedPassword));
         }
 
-        try
-        {
-            MessageDigest md=MessageDigest.getInstance(encryptionMethod);
+        String encryptedPassword = encryptPassword(password);
 
-            byte[] encryptedPassword = md.digest(password.getBytes());
-
-            sun.misc.BASE64Encoder encoder=new sun.misc.BASE64Encoder();
-
-            String encodedPassword=encoder.encodeBuffer(encryptedPassword).trim();
-
-            return(encodedPassword.equals(storedPassword));
-        }
-        catch (java.security.NoSuchAlgorithmException nsaEx)
-        {
-        	Logger.getLogger(getClass()).error("nsa");
-            return(false);
-        }
+        return(encryptedPassword.equals(storedPassword));
     }
 
-    public boolean checkReadonlyPassword(String userId,String password)
+    public boolean checkReadonlyPassword(String userId, String password)
     {
-        if ((password==null) || (password.trim().length()==0))
-        {
+        if ((password == null) || (password.trim().length() == 0)) {
             return(false);
         }
 
-        Element userElement=getUserElement(userId);
+        Element userElement = getUserElement(userId);
 
-        if (userElement==null)
-        {
+        if (userElement == null) {
             return(false);
         }
 
-        Element passwordElement=XmlUtil.getChildByTagName(userElement,"read-password");
+        Element passwordElement = XmlUtil.getChildByTagName(userElement,"read-password");
 
-        if (passwordElement==null)
-        {
+        if (passwordElement == null) {
             return(false);
         }
 
-        String storedPassword=XmlUtil.getElementText(passwordElement);
+        String storedPassword = XmlUtil.getElementText(passwordElement);
 
-        String encryptionMethod=passwordElement.getAttribute("encryption");
+        String encryptionMethod = passwordElement.getAttribute("encryption");
 
-        if ((encryptionMethod==null) || encryptionMethod.equalsIgnoreCase("none") ||
-            (encryptionMethod.trim().length()==0))
-        {
+        if ((encryptionMethod == null) || encryptionMethod.equalsIgnoreCase("none") ||
+            (encryptionMethod.trim().length() == 0)) {
             return(password.equals(storedPassword));
         }
 
-        try
-        {
-            MessageDigest md=MessageDigest.getInstance(encryptionMethod);
+        String encryptedPassword = encryptPassword(password);
 
-            byte[] encryptedPassword = md.digest(password.getBytes());
-
-            sun.misc.BASE64Encoder encoder=new sun.misc.BASE64Encoder();
-
-            String encodedPassword=encoder.encodeBuffer(encryptedPassword).trim();
-
-            return(encodedPassword.equals(storedPassword));
-        }
-        catch (java.security.NoSuchAlgorithmException nsaEx)
-        {
-        	Logger.getLogger(getClass()).error("nsa");
-            return(false);
-        }
+        return(encryptedPassword.equals(storedPassword));
     }
 
     public void setReadonlyPassword(String userId,String newPassword)
     {
-        Element userElement=getUserElement(userId);
+        Element userElement = getUserElement(userId);
 
-        if (userElement==null)
+        if (userElement == null)
         {
             return;
         }
 
         String encryptionMethod = "MD5";
 
-        try
-        {
-            MessageDigest md=MessageDigest.getInstance(encryptionMethod);
+        XmlUtil.setChildText(userElement, "read-password", encryptPassword(newPassword));
 
-            byte[] encryptedPassword = md.digest(newPassword.getBytes());
+        Element passwordElement=XmlUtil.getChildByTagName(userElement, "read-password");
 
-            sun.misc.BASE64Encoder encoder=new sun.misc.BASE64Encoder();
-
-            String encodedPassword=encoder.encodeBuffer(encryptedPassword).trim();
-
-            XmlUtil.setChildText(userElement,"read-password",encodedPassword);
-
-            Element passwordElement=XmlUtil.getChildByTagName(userElement,"read-password");
-
-            passwordElement.setAttribute("encryption",encryptionMethod);
-        }
-        catch (java.security.NoSuchAlgorithmException nsaEx)
-        {
-        	Logger.getLogger(getClass()).error("nsa");
-        }
+        passwordElement.setAttribute("encryption", encryptionMethod);
     }
 
     public void setLastLoginTime(String userId,Date newVal)
@@ -1105,11 +1055,18 @@ public class XmlUserManager extends UserManagerBase
      * @param userElement the DOM user element
      * @return an transient user object
      */
-	public TransientUser createTransientUser(Element userElement)
+	public TransientUser getTransientUser(Element userElement)
 	{
         TransientUser user = new TransientUser();
 
         user.setUserid(userElement.getAttribute("id"));
+        
+        String userType = userElement.getAttribute("type");
+        if (CommonUtils.isEmpty(userType)) {
+            user.setUserType(UserManager.USER_TYPE_DEFAULT);
+        } else {
+            user.setUserType(userType);
+        }
 
 		String readonly=XmlUtil.getChildText(userElement,"readonly");
 
@@ -1129,7 +1086,6 @@ public class XmlUserManager extends UserManagerBase
 
 		user.setCss(XmlUtil.getChildText(userElement,"css"));
 
-
 		String documentRoot=XmlUtil.getChildText(userElement,"documentRoot");
 
 		if ((documentRoot==null) || (documentRoot.trim().length()==0))
@@ -1138,12 +1094,13 @@ public class XmlUserManager extends UserManagerBase
 			{
 				documentRoot="/tmp";
 			}
-
-			documentRoot="c:\\temp";
+			else
+			{
+				documentRoot="c:\\temp";
+			}
 		}
 
 		user.setDocumentRoot(documentRoot);
-
 
 		long diskQuota=(-1l);
 
@@ -1161,6 +1118,19 @@ public class XmlUserManager extends UserManagerBase
 		}
 
 		user.setDiskQuota(diskQuota);
+		
+		int pageSize = UserManager.DEFAULT_THUMB_PAGE_SIZE;
+
+		String pageSizeString = XmlUtil.getChildText(userElement, "pageSize");
+
+		if (!CommonUtils.isEmpty(pageSizeString)) {
+			try {
+				pageSize = Integer.parseInt(pageSizeString);
+			} catch (NumberFormatException nfex) {
+			}
+		}
+
+		user.setPageSize(pageSize);
 		
 		String timeString=XmlUtil.getChildText(userElement,"lastLogin");
 
@@ -1202,7 +1172,7 @@ public class XmlUserManager extends UserManagerBase
 
 			if ((userType==null) || (!userType.equals("virtual")))
 			{
-				listOfUsers.add(this.createTransientUser(userElement));
+				listOfUsers.add(this.getTransientUser(userElement));
 			}
 		}
 

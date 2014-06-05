@@ -1,0 +1,7 @@
+Disk quota exceeded for user $LOGIN.
+
+Your disk quota is $QUOTA KBytes.
+You are using $USAGE KBytes.
+
+Please delete some of your less important files soon.
+

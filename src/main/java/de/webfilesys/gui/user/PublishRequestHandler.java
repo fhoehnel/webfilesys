@@ -122,14 +122,7 @@ public class PublishRequestHandler extends UserRequestHandler
 				role = "album";
 			}
 			
-			virtualUser = userMgr.createVirtualUser(uid, actPath, role, expDays);
-			
-			String userLanguage=getParameter("language");
-
-			if ((userLanguage!=null) && (userLanguage.trim().length()>0))
-			{
-				userMgr.setLanguage(virtualUser,userLanguage);
-			}
+			virtualUser = userMgr.createVirtualUser(uid, actPath, role, expDays, getParameter("language"));
 		}
 
 		String accessCode=InvitationManager.getInstance().addInvitation(uid,actPath,expDays,invitationType,allowComments,virtualUser);

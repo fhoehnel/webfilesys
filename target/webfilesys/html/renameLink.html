@@ -1,0 +1,39 @@
+<div class="promptHead" resource="label.renameLink"></div>
+    
+<form accept-charset="utf-8" name="renameForm" id="renameLinkForm" method="post" 
+    action="/webfilesys/servlet" style="display:inline;">
+  
+  <input type="hidden" name="command" value="renameLink" />
+  <input type="hidden" id="oldLinkName" name="oldLinkName" />
+  
+  <table border="0" width="100%" cellpadding="10">
+  
+    <tr>
+      <td class="formParm1" resource="label.oldName" style="white-space:nowrap" />
+      <td id="oldLinkNameShort" class="formParm2" style="width:70%" />
+    </tr>
+    <tr>
+      <td class="formParm1" resource="label.newname" style="white-space:nowrap" />
+      <td class="formParm2" style="width:80%">
+        <input type="text" id="newLinkName" name="newLinkName" maxlength="256" style="width:220px;" />
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <table border="0" width="100%">
+          <tr>
+            <td style="text-align:left">
+              <input type="button" onclick="javascript:validateNewLinkName()" resource="button.rename" />
+            </td>
+            <td style="text-align:right">
+              <input type="button" onclick="javascript:hidePrompt()" resource="button.cancel" />
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+  </table>
+  
+</form>

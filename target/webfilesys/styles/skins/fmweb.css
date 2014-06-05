@@ -1,0 +1,136 @@
+body.menubar {
+    background-color:#c0c0c0;
+}
+
+div.msgBox {
+    background-color:lavender;
+    color:black;
+}
+ 
+div.uploadStatus {
+    background-color:ivory;
+}
+
+/* depreacted - replace with div.headline! */
+th.headline {
+    background-color:lavender;
+}
+ 
+div.headline {
+    background-color:lavender;
+}
+ 
+th.datahead {
+    background-color:lavender;
+}
+
+input,select,textarea {
+    background-color:white;
+}
+ 
+input.cb {
+    background-color:white;
+    border: none;
+}
+
+input.cb3 {
+    background-color:#ffffe0;
+    border: none;
+}
+
+input.cb4 {
+    background-color:lavender;
+    border: none;
+}
+
+input.cb5 {
+    background-color:#ffffe0;
+    border: none;
+}
+
+body.menu {
+    background-color:#c0c0c0;
+}
+
+td.menu {
+    background-color:#e0e0e0;
+}
+
+a.menuitem {
+    color:#000080;
+}
+
+a.menuitem:hover {
+    color:maroon;
+}
+
+td.jsmenu {
+    background-color:#e0e0e0;
+}
+
+td.fileListFunct, td.fileListFunctCont {
+    background-color:#ffffe0;
+}
+
+th.fileListHead {
+    background-color:lavender;
+}
+
+div.searchPath
+{
+    background-color: #ffffe0;
+}
+
+span.searchPath
+{
+    background-color:#ffffe0;
+}  
+
+td.tabActive {
+    background-color:#ffffe0;
+}
+ 
+td.tabAlbum {   
+    background-color:ivory;
+}
+
+div.more {
+    background-color:#ffffff;
+} 
+
+table.dataForm {
+    background-color:#ffffe0;
+}
+
+table.formSection {
+    background-color:#ffffe0;
+}
+
+td.formParm1 {
+    background-color:#ffffe0;
+}
+
+td.formParm2 {
+    background-color:#ffffe0;
+}
+
+td.formButton {
+    background-color:#ffffe0;
+}
+
+input.formParm1 {
+    background-color:#ffffe0;
+}
+
+div.hint {
+    background-color:lavender;
+}
+
+th.fileList {
+    background-color:lavender;
+}
+
+table.contextMenu th {
+    background-color: lavender;
+}
+

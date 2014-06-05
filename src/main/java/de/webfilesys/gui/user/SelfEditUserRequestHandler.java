@@ -8,8 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
 import de.webfilesys.LanguageManager;
 import de.webfilesys.gui.CSSManager;
+import de.webfilesys.user.TransientUser;
 
 /**
  * @author Frank Hoehnel
@@ -38,7 +41,13 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
 			return;
 		}
 
-		String login=uid;
+		String login = uid;
+		
+		TransientUser user = userMgr.getUser(login);
+		if (user == null) {
+        	Logger.getLogger(getClass()).error("user not found: " + login);
+        	return;
+		}
 
 		output.println("<html>");
 		output.println("<head>");
@@ -96,7 +105,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
         }
         else
         {
-            val = userMgr.getFirstName(login);
+            val = user.getFirstName();
         }
         
         output.println("<tr>");
@@ -110,7 +119,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
         }
         else
         {
-            val = userMgr.getLastName(login);
+            val = user.getLastName();
         }
 
         output.println("<tr>");
@@ -124,7 +133,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
         }
         else
         {
-            val = userMgr.getEmail(login);
+            val = user.getEmail();
             if (val == null)
             {
                 val = "";
@@ -142,7 +151,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
         }
         else
         {
-            val = userMgr.getPhone(login);
+            val = user.getPhone();
             if (val == null)
             {
                 val = "";
@@ -162,7 +171,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
         }
         else
         {
-            userLang = userMgr.getLanguage(login);
+            userLang = user.getLanguage();
 
             if (userLang == null)
             {
@@ -200,7 +209,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
         }
         else
         {
-            userCss = userMgr.getCSS(login);
+            userCss = user.getCss();
 
             if (userCss == null)
             {

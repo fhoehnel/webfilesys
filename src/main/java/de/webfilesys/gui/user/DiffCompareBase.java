@@ -61,6 +61,8 @@ public class DiffCompareBase extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
         output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
+		output.println("<script src=\"javascript/fileDiff.js\" type=\"text/javascript\"></script>");
+        
         File file1 = new File(file1Path);
         File file2 = new File(file2Path);
         
@@ -75,19 +77,6 @@ public class DiffCompareBase extends UserRequestHandler
             output.flush();
             return;
         }
-
-        output.println("<script type=\"text/javascript\">");
-        output.println("function addScrollListener() {");
-        output.println("var file1Div = document.getElementById('file1Cont')");
-        output.println("var file2Div = document.getElementById('file2Cont')");
-        output.println("var diffDiv = document.getElementById('diffCont')");
-        output.println("diffDiv.onscroll = function reportScroll() {");
-        output.println("var scrollPos = diffDiv.scrollTop;");
-        output.println("file1Div.scrollTop = scrollPos");
-        output.println("file2Div.scrollTop = scrollPos");
-        output.println("}");
-        output.println("}");
-        output.println("</script>");
         
         String file1Content = readIntoBuffer(file1); 
         String file2Content = readIntoBuffer(file2); 
@@ -162,6 +151,17 @@ public class DiffCompareBase extends UserRequestHandler
         output.println(": " + diffCount + " " + getResource("differences", "differences"));
         output.println("</span>");
         
+        if (diffCount > 0) {
+            output.println("&nbsp;&nbsp;");
+            output.println("<a href=\"javascript:gotoFirstDiff()\"><img src=\"/webfilesys/images/first.gif\"></a>");
+            output.println("&nbsp;");
+            output.println("<a href=\"javascript:gotoPrevDiff()\"><img src=\"/webfilesys/images/previous.gif\"></a>");
+            output.println("&nbsp;");
+            output.println("<a href=\"javascript:gotoNextDiff()\"><img src=\"/webfilesys/images/next.gif\"></a>");
+            output.println("&nbsp;");
+            output.println("<a href=\"javascript:gotoLastDiff()\"><img src=\"/webfilesys/images/last.gif\"></a>");
+        }
+        
         output.println("<div id=\"diffCont\" class=\"diff\" style=\"width:" + compareResultWidth + "px;height:" + compareHeight + "px;\">");
         
         output.println("<pre>");
@@ -197,16 +197,16 @@ public class DiffCompareBase extends UserRequestHandler
             }
             else if (diffElem.operation == Operation.DELETE)
             {
-                output.print("<font class=\"diffDel\">");
+                output.print("<i class=\"diffDel\">");
                 output.print(diffText);
-                output.print("</font>");
+                output.print("</i>");
                 diffCount++;
             }
             else if (diffElem.operation == Operation.INSERT)
             {
-                output.print("<font class=\"diffIns\">");
+                output.print("<i class=\"diffIns\">");
                 output.print(diffText);
-                output.print("</font>");
+                output.print("</i>");
                 diffCount++;
             }
             
@@ -354,7 +354,7 @@ public class DiffCompareBase extends UserRequestHandler
             }
         }
         
-        return highlightBuff.toString();
+        return encodeSpecialChars(highlightBuff.toString());
     }
     
     private String readIntoBuffer(File file) {
