@@ -53,6 +53,18 @@
 
 <script type="text/javascript">
 
+  var addCopyAllowed = false;
+  var addMoveAllowed = false;
+  
+  <xsl:if test="not(/fileList/clipBoardEmpty)">
+    <xsl:if test="/fileList/copyOperation">
+      addCopyAllowed = true;
+    </xsl:if>
+    <xsl:if test="not(/fileList/copyOperation)">
+      addMoveAllowed = true;
+    </xsl:if>
+  </xsl:if>
+
   function publish(path)
   {
       <xsl:if test="/fileList/mailEnabled">
@@ -585,7 +597,21 @@
                       <option value="rotateRight" resource="label.rotateright" />
                       <option value="resize" resource="label.editPicture" />
                       <option value="copy" resource="label.copyToClip" />
+                      
+                      <xsl:if test="not(/fileList/clipBoardEmpty)">
+                        <xsl:if test="/fileList/copyOperation">
+                          <option value="copyAdd" resource="label.copyToClipAdd" />
+                        </xsl:if>
+                      </xsl:if>
+                      
                       <option value="move" resource="label.cutToClip" />
+
+                      <xsl:if test="not(/fileList/clipBoardEmpty)">
+                        <xsl:if test="not(/fileList/copyOperation)">
+                          <option value="moveAdd" resource="label.cutToClipAdd" />
+                        </xsl:if>
+                      </xsl:if>
+
                       <option value="delete" resource="button.delete" />
                       <option value="exifRename" resource="label.exifRename" />
                     </xsl:if>

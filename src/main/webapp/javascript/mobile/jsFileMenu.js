@@ -42,7 +42,7 @@ function copyToClipboard(fileName)
 
 function cutToClipboard(fileName)
 {
-    cutCopyToClip(fileName, 'cut');
+    cutCopyToClip(fileName, 'move');
 }
 
 function editRemote(fileName)

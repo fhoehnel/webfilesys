@@ -105,6 +105,8 @@ label.delete=Delete
 label.renameFile=Rename
 label.copyToClip=Copy
 label.cutToClip=Move
+label.copyToClipAdd=Copy +
+label.cutToClipAdd=Move +
 label.copymove=Copy/Move
 label.edit=Edit
 label.viewzip=View ZIP content
@@ -141,9 +143,11 @@ label.decrypt=Decrypt (AES)
 label.tail=tail (last lines)
 label.grep=grep (filter)
 label.downloadFolder=download as zip
+title.addCopyToClip=Add to clipboard for copy operation
+title.addMoveToClip=Add to clipboard for move operation
 
 # directory tree tooltips
-tooltip.folder=open the context menu for the directory
+tooltip.folder=open the context menu for folder
 tooltip.listFiles=list the files of this directory
 label.loginHint=Hint: Click on the folder icon to open the context menu of the folder!
 
@@ -877,6 +881,9 @@ alert.noPicturesInAlbum=This album does not contain any pictures.
 alert.thumbclean=Thumbnail garbage collection started for directory
 alert.filescopied=file(s) selected for copy operation
 alert.filesmoved=file(s) selected for move operation
+alert.filesAddedForCopy=file(s) added for copy operation.
+alert.filesAddedForMove=file(s) added for move operation.
+alert.filesInClipboard=files are selected now.
 alert.uploadtimeout=Upload timeout.\\nThe browser has stopped sending data.
 alert.sessionexpired=Your session has expired.\\nYou have to re-logon now!
 alert.untarerror=Error during extracting tar archive!

@@ -36,11 +36,19 @@ public class XmlMultiImageCutCopyHandler extends XmlMultiImageRequestHandler
 		
 		ClipBoard clipBoard = (ClipBoard) session.getAttribute("clipBoard");
 		
-		// boolean clipBoardWasEmpty = ((clipBoard == null) || clipBoard.isEmpty());
+		boolean clipBoardWasEmpty = ((clipBoard == null) || clipBoard.isEmpty());
+		
+        boolean wasCopyOperation = false;
+        boolean wasMoveOperation = false;
 		
 		if (clipBoard != null)
 		{
-			clipBoard.reset();
+			wasCopyOperation = clipBoard.isCopyOperation();
+			wasMoveOperation = clipBoard.isMoveOperation();
+			
+			if ((!cmd.equals("copyAdd")) && (!cmd.equals("moveAdd"))) {
+				clipBoard.reset();
+			}
 		}
 		else
 		{
@@ -68,7 +76,7 @@ public class XmlMultiImageCutCopyHandler extends XmlMultiImageRequestHandler
         {
 			clipBoard.setCopyOperation();
         }
-        else
+        else if (cmd.equals("move"))
         {
 			clipBoard.setMoveOperation();
         }
@@ -79,29 +87,36 @@ public class XmlMultiImageCutCopyHandler extends XmlMultiImageRequestHandler
 		{	
 			resultMsg = selectedFiles.size() + " " + getResource("alert.filescopied","files copied to clipboard");
 		}
-		else
+		else if (cmd.equals("move"))
 		{
 			resultMsg = selectedFiles.size() + " " + getResource("alert.filesmoved","files moved to clipboard");
+		}
+		else if (cmd.equals("copyAdd"))
+		{
+			resultMsg = selectedFiles.size() + " " + getResource("alert.filesAddedForCopy","files added for copy operation.")
+			          + " " + clipBoard.keySet().size() + " " + getResource("alert.filesInClipboard","files are selected now.");
+		}
+		else if (cmd.equals("moveAdd"))
+		{
+			resultMsg = selectedFiles.size() + " " + getResource("alert.filesAddedForMove","files added for move operation.")
+			          + " " + clipBoard.keySet().size() + " " + getResource("alert.filesInClipboard","files are selected now.");
 		}
 
 		Element resultElement = doc.createElement("result");
 		
 		XmlUtil.setChildText(resultElement, "message", resultMsg);
 
-		/*
-        if (clipBoardWasEmpty)
-        {
+		if ((clipBoardWasEmpty) ||
+			(wasCopyOperation && cmd.equals("move")) ||
+			(wasMoveOperation && cmd.equals("copy")))
+		{
 			XmlUtil.setChildText(resultElement, "clipboardWasEmpty", "true");
-        }
-        else
-        {
+		} 
+		else 
+		{
 			XmlUtil.setChildText(resultElement, "clipboardWasEmpty", "false");
-        }
-        */
-
-		// do NOT reload the file list even if the clipboard was empty and the paste buttons are not showing
-		XmlUtil.setChildText(resultElement, "clipboardWasEmpty", "false");
-
+		}
+	
 		XmlUtil.setChildText(resultElement, "success", "true");
 			
 		doc.appendChild(resultElement);

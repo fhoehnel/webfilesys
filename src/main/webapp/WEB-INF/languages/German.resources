@@ -105,6 +105,8 @@ label.delete=Löschen
 label.renameFile=Umbenennen
 label.copyToClip=Kopieren
 label.cutToClip=Verschieben
+label.copyToClipAdd=Kopieren +
+label.cutToClipAdd=Verschieben +
 label.copymove=Kopieren/Verschieben
 label.edit=Editieren
 label.viewzip=Zip-Inhalt Anzeigen
@@ -141,9 +143,11 @@ label.decrypt=Entschlüsseln (AES)
 label.tail=tail (letzte Zeilen)
 label.grep=grep (Filtern)
 label.downloadFolder=Download als ZIP-Archiv
+title.addCopyToClip=Zur Zwischenablage hinzufügen für Kopier-Operation
+title.addMoveToClip=Zur Zwischenablage hinzufügen für Verschiebe-Operation
 
 # directory tree tooltips
-tooltip.folder=Context-Menü für diesen Ordner anzeigen
+tooltip.folder=Context-Menü anzeigen für Ordner
 tooltip.listFiles=Dateien dieses Ordners anzeigen
 label.loginHint=Hinweis: Click auf das Ordner Icon öffnet das Context-Menü.
 
@@ -880,6 +884,10 @@ alert.noPicturesInAlbum=Dieses Album enthält keine Bilder.
 alert.thumbclean=Löschung veralteter Vorschaubilder gestartet für Ordner
 alert.filescopied=Datei(en) selektiert für Kopier-Operation 
 alert.filesmoved=Datei(en) selektiert für Verschiebe-Operation
+alert.fileAddedForCopy=Datei(en) hinzugefügt für Kopier-Operation.
+alert.filesAddedForCopy=Datei(en) hinzugefügt für Kopier-Operation.
+alert.filesAddedForMove=Datei(en) hinzugefügt für Verschiebe-Operation.
+alert.filesInClipboard=Dateien sind jetzt ausgewählt.
 alert.uploadtimeout=Datei-Upload ist fehlgeschlagen!
 alert.sessionexpired=Die Sitzung ist abgelaufen. Bitte neu anmelden!
 alert.untarerror=Fehler beim Entpacken des tar-Archives!

@@ -10,7 +10,17 @@
           {
               if (image.title.length == 0)
               {
-                  image.title = folderTip;
+            	  var path = "";
+            	  var domNode = image.parentNode;
+            	  if (domNode) 
+            	  {
+            		  domNode = domNode.parentNode;
+            		  if (domNode) 
+            		  {
+            			  path = domNode.getAttribute("path");
+            		  }
+            	  }
+                  image.title = folderTip + " " + decodeURIComponent(path);
               }
           }
       }

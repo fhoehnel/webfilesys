@@ -20,11 +20,7 @@ function multiFileFunction()
     {
         resize();
     }
-    else if (cmd=='copy')
-    {
-        multiImageCopyMove();
-    }
-    else if (cmd=='move')
+    else if ((cmd=='copy') || (cmd=='move') || (cmd=='copyAdd') || (cmd=='moveAdd'))
     {
         multiImageCopyMove();
     }
@@ -158,7 +154,7 @@ function multiImageCopyMove()
 
         xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), showCopyResult);
     
-	document.form2.command.value='compareImg';
+	    document.form2.command.value='compareImg';
     }
     else
     {   

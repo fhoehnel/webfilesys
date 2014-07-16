@@ -386,6 +386,10 @@ td.jsmenu {
     font-family: Arial,Helvetica,sans-serif;
 }
 
+a.menuPlus {
+	margin-left: 20px;
+}
+
 td.border {
     background-color:black;
 }

@@ -87,7 +87,7 @@ function resetSelected()
     }
 }
 
-function multiFileCopyMove(cmd)
+function multiFileCopyMove()
 {
     document.form1.command.value='multiFileCopyMove';
 
@@ -162,13 +162,9 @@ function selectedFileFunction(unhighlight)
         return;
     }
 
-    if (cmd=='copy')
+    if ((cmd=='copy') || (cmd=='copyAdd') || (cmd=='move') || (cmd=='moveAdd'))
     {
-        multiFileCopyMove('copy');
-    }
-    else if (cmd=='move')
-    {
-        multiFileCopyMove('move');
+        multiFileCopyMove();
     }
     else if (cmd=='download')
     {

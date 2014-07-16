@@ -19,6 +19,17 @@ function menuEntry(href, label, target)
              + '</tr>');
 }
 
+function menuEntryPlus(href, label, plusRef, plusTitle) {
+    return('<tr>'
+            + '<td class="jsmenu">'
+            + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
+            + '<a href="' + plusRef + '" class="menuPlus" >'
+            + '<img src="/webfilesys/images/menuPlus.gif" title="' + plusTitle + '"/>'
+            + '</a>'
+            + '</td>'
+            + '</tr>');
+}
+
 function jsContextMenu(fileName, imgType, domId)
 {
     menuDiv = document.getElementById('contextMenu');    
@@ -69,12 +80,28 @@ function jsContextMenu(fileName, imgType, domId)
         menuText = menuText 
                  + menuEntry("javascript:jsRenameImg('" + scriptPreparedPath + "')",resourceBundle["label.renameFile"],null);
 
-        menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],null);
-
-        menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],null);
-
+        if (addCopyAllowed) 
+        {
+            menuText = menuText 
+                     + menuEntryPlus("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],"javascript:addCopyToClipboard('" + scriptPreparedFile + "')",resourceBundle["title.addCopyToClip"]);
+        }
+        else
+        {
+            menuText = menuText 
+                     + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],null);
+        }
+        
+        if (addMoveAllowed) 
+        {
+            menuText = menuText 
+                     + menuEntryPlus("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],"javascript:addMoveToClipboard('" + scriptPreparedFile + "')",resourceBundle["title.addMoveToClip"]);
+        }
+        else
+        {
+            menuText = menuText 
+                     + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],null);
+        }
+        
         menuText = menuText 
                  + menuEntry("javascript:jsEditDesc('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"],null);
 
@@ -251,7 +278,17 @@ function copyToClipboard(fileName)
 
 function cutToClipboard(fileName)
 {
-    cutCopyToClip(fileName, 'cut');
+    cutCopyToClip(fileName, 'move');
+}
+
+function addCopyToClipboard(fileName)
+{
+    cutCopyToClip(fileName, 'addCopy');
+}
+
+function addMoveToClipboard(fileName)
+{
+    cutCopyToClip(fileName, 'addMove');
 }
 
 function publishFile(path)

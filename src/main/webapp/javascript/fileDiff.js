@@ -55,7 +55,11 @@ function gotoDiff(index) {
 	
 	currentDiff = index;
 	
-	// currentMarker.style.text-decoration = 
+	for (var i = 0; i < diffMarkers.length; i++) {
+		diffMarkers[i].style.backgroundColor = "#D0D0D0";
+	}
+	
+	currentMarker.style.backgroundColor = "#F0C0C0";
 	
     var offsetTop = currentMarker.offsetTop;
     var offsetLeft = currentMarker.offsetLeft;

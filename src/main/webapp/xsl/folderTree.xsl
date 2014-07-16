@@ -81,7 +81,7 @@
       xslTemplate.stylesheet = xsl;
   }
 
-  document.onkeypress = handleFolderTreeKey;
+  document.onkeydown = handleFolderTreeKey;
 
 </script>
 

@@ -57,15 +57,22 @@ public class XmlCutCopyHandler extends XmlRequestHandlerBase
 		ClipBoard clipBoard = (ClipBoard) session.getAttribute("clipBoard");
 		
 		boolean clipBoardWasEmpty = ((clipBoard == null) || clipBoard.isEmpty());
-
-		if (clipBoard == null)
+		
+        boolean wasCopyOperation = false;
+        boolean wasMoveOperation = false;
+		
+		if (clipBoard != null)
 		{
-			clipBoard = new ClipBoard();
+			wasCopyOperation = clipBoard.isCopyOperation();
+			wasMoveOperation = clipBoard.isMoveOperation();
 			
+			if ((!cmd.equals("addCopy")) && (!cmd.equals("addMove"))) {
+				clipBoard.reset();
+			}
+		} else {
+			clipBoard = new ClipBoard();
 			session.setAttribute("clipBoard", clipBoard);
 		}
-		
-		clipBoard.reset();
 
 		clipBoard.addFile(path);
 		
@@ -73,7 +80,7 @@ public class XmlCutCopyHandler extends XmlRequestHandlerBase
 		{
 			clipBoard.setCopyOperation();
 		}
-		else
+		else if (cmd.equals("move"))
 		{
 			clipBoard.setMoveOperation();
 		}
@@ -84,7 +91,17 @@ public class XmlCutCopyHandler extends XmlRequestHandlerBase
 		{	
 			resultMsg = "1 " + getResource("alert.filescopied","files copied to clipboard");
 		}
-		else
+		else if (cmd.equals("addCopy"))
+		{	
+			resultMsg = "1 " + getResource("alert.filesAddedForCopy","files added for copy operation.")
+			          + " " + clipBoard.keySet().size() + " " + getResource("alert.filesInClipboard","files are selected now.");
+		}
+		else if (cmd.equals("addMove"))
+		{	
+			resultMsg = "1 " + getResource("alert.filesAddedForMove","files added for move operation.")
+			          + " " + clipBoard.keySet().size() + " " + getResource("alert.filesInClipboard","files are selected now.");
+		}
+		else if (cmd.equals("move"))
 		{
 			resultMsg = "1 " + getResource("alert.filesmoved","files moved to clipboard");
 		}
@@ -93,8 +110,10 @@ public class XmlCutCopyHandler extends XmlRequestHandlerBase
 		
 		XmlUtil.setChildText(resultElement, "message", resultMsg);
 
-        if (clipBoardWasEmpty)
-        {
+		if ((clipBoardWasEmpty) ||
+			(wasCopyOperation && cmd.equals("move")) ||
+			(wasMoveOperation && cmd.equals("copy")))
+		{
 			XmlUtil.setChildText(resultElement, "clipboardWasEmpty", "true");
         }
         else

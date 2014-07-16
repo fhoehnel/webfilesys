@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.Date;
+import java.util.UUID;
 import java.util.Vector;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -200,17 +201,7 @@ public class InvitationManager extends Thread
 
     protected String generateAccessCode()
     {
-        String now=Long.toString(System.currentTimeMillis());
-
-        StringBuffer codeBuffer=new StringBuffer();
-
-        for (int i=now.length()-1;i>=0;i--)
-        {
-             codeBuffer.append(now.charAt(i));
-             codeBuffer.append((char) ('A' + i));
-        }
-
-        return(codeBuffer.toString());
+    	return UUID.randomUUID().toString();    
     }
 
     public String addInvitation(String userid,String path,int expirationDays,String type,
