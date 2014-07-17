@@ -598,19 +598,21 @@
                       <option value="resize" resource="label.editPicture" />
                       <option value="copy" resource="label.copyToClip" />
                       
-                      <xsl:if test="not(/fileList/clipBoardEmpty)">
-                        <xsl:if test="/fileList/copyOperation">
-                          <option value="copyAdd" resource="label.copyToClipAdd" />
+                      <option value="copyAdd" resource="label.copyToClipAdd" id="copyAddOption">
+                        <xsl:if test="(/fileList/clipBoardEmpty) or not(/fileList/copyOperation)">
+                          <xsl:attribute name="style">display:none</xsl:attribute>
+                          <xsl:attribute name="disabled">disabled</xsl:attribute>
                         </xsl:if>
-                      </xsl:if>
+                      </option>
                       
                       <option value="move" resource="label.cutToClip" />
 
-                      <xsl:if test="not(/fileList/clipBoardEmpty)">
-                        <xsl:if test="not(/fileList/copyOperation)">
-                          <option value="moveAdd" resource="label.cutToClipAdd" />
+                      <option value="moveAdd" resource="label.cutToClipAdd" id="moveAddOption">
+                        <xsl:if test="(/fileList/clipBoardEmpty) or (/fileList/copyOperation)">
+                          <xsl:attribute name="style">display:none</xsl:attribute>
+                          <xsl:attribute name="disabled">disabled</xsl:attribute>
                         </xsl:if>
-                      </xsl:if>
+                      </option>
 
                       <option value="delete" resource="button.delete" />
                       <option value="exifRename" resource="label.exifRename" />
@@ -678,18 +680,19 @@
                       <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');</xsl:attribute>
                     </input> 
                                  
-                    <xsl:if test="not(/fileList/clipBoardEmpty)">
-                      <input type="button" resource="button.paste">
-                        <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=pasteFiles';</xsl:attribute>
-                      </input> 
-        
-                      <xsl:if test="/fileList/copyOperation">
-                        <input type="button" resource="button.pasteLink">
-                          <xsl:attribute name="onclick">javascript:pasteLinks();</xsl:attribute>
-                        </input> 
+                    <input type="button" resource="button.paste" id="pasteButton">
+                      <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=pasteFiles';</xsl:attribute>
+                      <xsl:if test="/fileList/clipBoardEmpty">
+                        <xsl:attribute name="style">display:none</xsl:attribute>
                       </xsl:if>
-                  
-                    </xsl:if>
+                    </input> 
+        
+                    <input type="button" resource="button.pasteLink" id="pasteLinkButton">
+                      <xsl:attribute name="onclick">javascript:pasteLinks();</xsl:attribute>
+                      <xsl:if test="not(/fileList/copyOperation) or (/fileList/clipBoardEmpty)">
+                        <xsl:attribute name="style">display:none</xsl:attribute>
+                      </xsl:if>
+                    </input> 
               
                     <xsl:if test="/fileList/fileGroup">
                       <input type="button">

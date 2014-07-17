@@ -58,12 +58,10 @@ public class XmlCutCopyHandler extends XmlRequestHandlerBase
 		
 		boolean clipBoardWasEmpty = ((clipBoard == null) || clipBoard.isEmpty());
 		
-        boolean wasCopyOperation = false;
         boolean wasMoveOperation = false;
 		
 		if (clipBoard != null)
 		{
-			wasCopyOperation = clipBoard.isCopyOperation();
 			wasMoveOperation = clipBoard.isMoveOperation();
 			
 			if ((!cmd.equals("addCopy")) && (!cmd.equals("addMove"))) {
@@ -110,17 +108,21 @@ public class XmlCutCopyHandler extends XmlRequestHandlerBase
 		
 		XmlUtil.setChildText(resultElement, "message", resultMsg);
 
-		if ((clipBoardWasEmpty) ||
-			(wasCopyOperation && cmd.equals("move")) ||
-			(wasMoveOperation && cmd.equals("copy")))
-		{
-			XmlUtil.setChildText(resultElement, "clipboardWasEmpty", "true");
-        }
-        else
-        {
-			XmlUtil.setChildText(resultElement, "clipboardWasEmpty", "false");
-        }
+		if (clipBoard.isCopyOperation()) {
+			XmlUtil.setChildText(resultElement, "copyOperation", "true");
+		}
+		if (clipBoard.isMoveOperation()) {
+			XmlUtil.setChildText(resultElement, "moveOperation", "true");
+		}
 
+		if (clipBoardWasEmpty) {
+			XmlUtil.setChildText(resultElement, "enablePaste", "true");
+		}
+
+		if ((clipBoardWasEmpty || wasMoveOperation) && clipBoard.isCopyOperation()) {
+			XmlUtil.setChildText(resultElement, "enablePasteAsLink", "true");
+		}
+		
 		XmlUtil.setChildText(resultElement, "success", "true");
 			
 		doc.appendChild(resultElement);

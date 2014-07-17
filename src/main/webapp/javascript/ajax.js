@@ -64,17 +64,37 @@ function showCopyResult()
              
              msgBox1.innerHTML = message;
              
-             item = req.responseXML.getElementsByTagName("clipboardWasEmpty")[0];
-             var reload = item.firstChild.nodeValue;
+             setTimeout("hideMsg()", 2000);
+
+             if (req.responseXML.getElementsByTagName("copyOperation").length > 0) 
+             {
+                 addCopyAllowed = true;
+                 addMoveAllowed = false;
+                 document.getElementById("copyAddOption").style.display = "inline";
+                 document.getElementById("copyAddOption").disabled = false;
+                 document.getElementById("moveAddOption").style.display = "none";
+                 document.getElementById("moveAddOption").disabled = true;
+             }
+             if (req.responseXML.getElementsByTagName("moveOperation").length > 0) 
+             {
+                 addMoveAllowed = true;
+                 addCopyAllowed = false;
+                 document.getElementById("moveAddOption").style.display = "inline";
+                 document.getElementById("moveAddOption").disabled = false;
+                 document.getElementById("copyAddOption").style.display = "none";
+                 document.getElementById("copyAddOption").disabled = true;
+             }
+
+             if (req.responseXML.getElementsByTagName("enablePaste").length > 0) 
+             {
+                 document.getElementById("pasteButton").style.display = "inline";
+             }
+
+             if (req.responseXML.getElementsByTagName("enablePasteAsLink").length > 0) 
+             {
+                 document.getElementById("pasteLinkButton").style.display = "inline";
+             }
              
-             if (reload == 'true')
-             {
-                 setTimeout("reloadPage()", 2000);
-             }
-             else
-             {
-                 setTimeout("hideMsg()", 2000);
-             }
         }
     }
 }
