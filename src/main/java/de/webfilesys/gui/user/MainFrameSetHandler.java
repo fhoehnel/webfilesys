@@ -101,10 +101,10 @@ public class MainFrameSetHandler extends UserRequestHandler
         output.println("<html>");
         output.println("<head>");
         
-		output.println("<link rel=\"SHORTCUT ICON\" href=\"/webfilesys/images/favicon.ico\">");
+		output.println("<link rel=\"SHORTCUT ICON\" href=\"/webfilesys/images/favicon.ico\" />");
 
 		// global JavaScript variables needed for context menu
-		output.println("<script language=\"javascript\">");
+		output.println("<script type=\"text/javascript\">");
 	
 		if (File.separatorChar == '/')
 		{
@@ -187,8 +187,6 @@ public class MainFrameSetHandler extends UserRequestHandler
         {
 			output.println("var chmodAllowed = 'false';");
         }
-
-        output.println("var resourceDelDirStarted = '" + getResource("msg.delDirStarted","Delete operation for folder started.") + "';");
 
         if (!readonly)
 		{

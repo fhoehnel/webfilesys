@@ -63,16 +63,16 @@ implements HttpSessionListener, ServletContextListener
 
 			if (userid == null)
 			{
-		        Logger.getLogger(getClass()).info("session expired with id " + sessionId);
+		        Logger.getLogger(getClass()).info("session expired/destroyed with id " + sessionId);
 			}
 			else
 			{
-		        Logger.getLogger(getClass()).info("session expired for user: " + userid + " sessionId: " + sessionId);
+		        Logger.getLogger(getClass()).info("session expired/destroyed for user: " + userid + " sessionId: " + sessionId);
 			}
 		}
 		catch (IllegalStateException iex)
 		{
-			Logger.getLogger(getClass()).info("session expired with id " + sessionId);
+			Logger.getLogger(getClass()).info("session expired/destroyed with id " + sessionId);
 
 			// In tomcat version 4 the session has already been invalidated when sessionDestroyed()
 			// is called. So we get an IllegalStateException when we try to read the userid attribute.

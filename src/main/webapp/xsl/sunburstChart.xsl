@@ -84,7 +84,7 @@
 				
 				var shortName = '<xsl:value-of select="@shortName" />';
 				
-				var tooltipText = shortName + ':&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes';
+				var tooltipText = shortName + ':&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes&lt;br/&gt;<xsl:value-of select="@formattedTreeFileNum" /> files';
 				
 				var pathForScript = "";
 				var clickAction;
@@ -108,7 +108,7 @@
                 var legendBox = document.createElement("div");
                 legendBox.className = "legendBox";
                 legendBox.style.backgroundColor = chartColors[colorCounter % chartColors.length];
-				legendBox.setAttribute("title", "<xsl:value-of select="@name" />" + ": <xsl:value-of select="@formattedTreeSize" /> bytes");
+				legendBox.setAttribute("title", "<xsl:value-of select="@name" />" + ": <xsl:value-of select="@formattedTreeSize" /> bytes, <xsl:value-of select="@formattedTreeFileNum" /> files");
                 legendEntry.appendChild(legendBox);
                 var legendText = document.createElement("div");
                 legendText.className = "legendText";
@@ -164,7 +164,7 @@
 	      </svg>
 	    </div>
 		
-	    <div id="titleBox" style="position:absolute;left:800px;top:60px;width:150px;height:30px;color:#000000;font-family:Arial,Helvetica;font-size:12px;border:1px solid #a0a0a0;padding:10px;visibility:hidden"></div>
+	    <div id="titleBox" style="position:absolute;left:800px;top:60px;width:150px;height:42px;color:#000000;font-family:Arial,Helvetica;font-size:12px;border:1px solid #a0a0a0;padding:5px 10px;visibility:hidden"></div>
 	  
 	    <div id="legendBox" style="position:absolute;left:750px;top:120px;width:200px;height:530px;font-family:Arial,Helvetica;font-size:12px;border:1px solid #a0a0a0;padding:10px;overflow-x:hidden;overflow-y:auto;float:left"></div>
 	  
@@ -214,7 +214,7 @@
 	            chartColors[subFolderColor<xsl:value-of select="$level" />], 
 	            innerCircleRadius + ((level - 1) * shellWidth), 
 	    	    innerCircleRadius + (level * shellWidth),
-       	        '<xsl:value-of select="@shortName" />:&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes',
+       	        '<xsl:value-of select="@shortName" />:&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes&lt;br/&gt;<xsl:value-of select="@formattedTreeFileNum" /> files',
        	        clickAction);
 
     var minAngleToShowtext = 15 - level;

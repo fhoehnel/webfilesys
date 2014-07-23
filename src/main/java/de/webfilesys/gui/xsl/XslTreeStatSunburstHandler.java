@@ -90,11 +90,13 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
 		processResponse("sunburstChart.xsl", false);
 	}
 
-	private long processFolder(Element parentFolderElem, String path, int level) {
+	private FolderInfo processFolder(Element parentFolderElem, String path, int level) {
         File dirFile = new File(path);
         File[] fileList = dirFile.listFiles();
 
-        long folderTreeSize = 0;
+        // long folderTreeSize = 0;
+        
+        FolderInfo treeInfo = new FolderInfo();
         
         long rootFileSize = 0; // size sum of all files in root folder
         
@@ -118,7 +120,9 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
                         depthOfTree = level;
                     }
 
-                    long subFolderTreeSize = processFolder(folderElem, file.getAbsolutePath(), level + 1);
+                    // long subFolderTreeSize = processFolder(folderElem, file.getAbsolutePath(), level + 1);
+
+                    FolderInfo subTreeInfo = processFolder(folderElem, file.getAbsolutePath(), level + 1);
 
                     if (level == 1) 
                     {
@@ -137,7 +141,7 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
             					if (compElem.getTagName().equals("folder"))
             					{
                     				long compSize = Long.parseLong(compElem.getAttribute("treeSize"));
-                    				if (subFolderTreeSize > compSize)
+                    				if (subTreeInfo.getTreeFileSize() > compSize)
                     				{
                     					parentFolderElem.insertBefore(folderElem, compElem);
                     					inserted = true;
@@ -155,13 +159,17 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
                         parentFolderElem.appendChild(folderElem);
                     }
                     
-                    folderTreeSize += subFolderTreeSize;
+                    treeInfo.addTreeFileSize(subTreeInfo.getTreeFileSize());
+                    
+                    treeInfo.addTreeFileNum(subTreeInfo.getTreeFileNum());
                 }
                 else
                 {
                     if (file.isFile())
                     {
-                    	folderTreeSize += file.length();
+                    	// folderTreeSize += file.length();
+                    	treeInfo.addTreeFileSize(file.length());
+                    	treeInfo.addTreeFileNum(1);
 
                     	if (level == 1) 
                     	{
@@ -175,8 +183,12 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
             }
         }
 
-        parentFolderElem.setAttribute("treeSize", Long.toString(folderTreeSize));
-        parentFolderElem.setAttribute("formattedTreeSize", numFormat.format(folderTreeSize));
+        parentFolderElem.setAttribute("treeSize", Long.toString(treeInfo.getTreeFileSize()));
+        parentFolderElem.setAttribute("formattedTreeSize", numFormat.format(treeInfo.getTreeFileSize()));
+        
+        parentFolderElem.setAttribute("treeFileNum", Long.toString(treeInfo.getTreeFileNum()));
+        parentFolderElem.setAttribute("formattedTreeFileNum", numFormat.format(treeInfo.getTreeFileNum()));
+
         parentFolderElem.setAttribute("path", path);
         parentFolderElem.setAttribute("shortPath", escapeForJavascript(CommonUtils.shortName(path, 60)));
         
@@ -192,6 +204,28 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
             parentFolderElem.setAttribute("pathForScript", escapeForJavascript(path));
         }
         
-        return folderTreeSize;
+        return treeInfo;
+	}
+	
+	public class FolderInfo {
+		private long treeFileSize = 0;
+		private long treeFileNum = 0;
+		
+		public void addTreeFileSize(long addVal) {
+			treeFileSize += addVal;
+		}
+		
+		public long getTreeFileSize() {
+			return treeFileSize;
+		}
+		
+		public void addTreeFileNum(long addVal) {
+			treeFileNum += addVal;
+		}
+		
+		public long getTreeFileNum() {
+			return treeFileNum;
+		}
+		
 	}
 }

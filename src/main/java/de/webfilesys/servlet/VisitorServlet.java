@@ -6,7 +6,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +40,7 @@ public class VisitorServlet extends WebFileSysServlet {
     throws ServletException, java.io.IOException {
         // prevent caching
 		resp.setDateHeader("expires", 0l); 
+		resp.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
 		
 		// done in XslRequestHandlerBase
 		// resp.setContentType("text/xml");

@@ -442,7 +442,9 @@ public class WebFileSysServlet extends HttpServlet
 		
         // prevent caching
         // will be overwritten in GetFileRequestHandler and VisitorFileRequestHandler with Parameter cache=true
+        // and in ResourceBundleHandler
 		resp.setDateHeader("expires", 0l); 
+		resp.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
 		
 		// inserted 2008/10/08
 		// content type will be overwritten in some request handlers
@@ -2276,6 +2278,12 @@ public class WebFileSysServlet extends HttpServlet
         {
             if (userMgr.checkPassword(userid, password))
             {
+            	session = req.getSession(false);
+            	if (session != null) {
+            		Logger.getLogger(getClass()).debug("destroying existing session");
+            		session.invalidate();
+            	}
+            	
         		session = req.getSession(true);
 
         		session.setAttribute("userid", userid);
@@ -2329,6 +2337,12 @@ public class WebFileSysServlet extends HttpServlet
 
             if (userMgr.checkReadonlyPassword(userid, password))
             {
+            	session = req.getSession(false);
+            	if (session != null) {
+            		Logger.getLogger(getClass()).debug("destroying existing session");
+            		session.invalidate();
+            	}
+            	
         		session = req.getSession(true);
 
         		session.setAttribute("userid", userid);
@@ -2492,6 +2506,12 @@ public class WebFileSysServlet extends HttpServlet
         {
             if (userMgr.checkPassword(userid, password))
             {
+            	session = req.getSession(false);
+            	if (session != null) {
+            		Logger.getLogger(getClass()).debug("destroying existing session");
+            		session.invalidate();
+            	}
+            	
         		session = req.getSession(true);
 
         		session.setAttribute("userid", userid);

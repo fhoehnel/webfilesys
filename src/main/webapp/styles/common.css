@@ -1303,3 +1303,10 @@ div.toastBox span {
     font-size: 13px;
     color: #000000;
 }
+
+span.searchDateSep {
+	font-size: 20px;
+	margin-left: 6px;
+	margin-right: 6px;
+	vertical-align: bottom;
+}

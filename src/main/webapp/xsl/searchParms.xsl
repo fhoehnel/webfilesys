@@ -180,7 +180,7 @@
 <body onload="setBundleResources();setCalendarStyles()">
 
   <div class="headline" resource="label.searchHead" />
-
+  
   <form accept-charset="utf-8" name="findform" method="post" action="/webfilesys/servlet">
   
     <input type="hidden" name="command" value="fmfindfile" />
@@ -250,9 +250,9 @@
         <td class="formParm1" resource="label.dateRangeFrom" />
         <td class="formParm2">
           <input type="text" name="fromYear" size="4" maxlength="4" style="width:40px" id="fromYear" readonly="readonly"/>
-          /
+          <span class="searchDateSep">/</span>
           <input type="text" name="fromMonth" size="2" maxlength="2" style="width:30px" id="fromMonth" readonly="readonly"/>
-          /
+          <span class="searchDateSep">/</span>
           <input type="text" name="fromDay" size="2" maxlength="2" style="width:30px" id="fromDay" readonly="readonly"/>
           &#160;
           <a href="#" name="anchorFrom" id="anchorFrom" titleResource="label.searchCalendar">
@@ -268,11 +268,11 @@
           <input type="text" name="toYear" size="4" maxlength="4" style="width:40px" readonly="readonly">
             <xsl:attribute name="value"><xsl:value-of select="currentDate/year" /></xsl:attribute>
           </input>
-          /
+          <span class="searchDateSep">/</span>
           <input type="text" name="toMonth" size="2" maxlength="2" style="width:30px" readonly="readonly">
             <xsl:attribute name="value"><xsl:value-of select="currentDate/month" /></xsl:attribute>
           </input>
-          /
+          <span class="searchDateSep">/</span>
           <input type="text" name="toDay" size="2" maxlength="2" style="width:30px" readonly="readonly">
             <xsl:attribute name="value"><xsl:value-of select="currentDate/day" /></xsl:attribute>
           </input>

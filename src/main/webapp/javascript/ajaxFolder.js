@@ -146,7 +146,7 @@ function checkLongRunningDelDir()
 {
     if (delDirStarted)
     {
-        showMessage(parent.resourceDelDirStarted);
+        showMessage(resourceBundle["msg.delDirStarted"]);
     }
 }
 
