@@ -689,6 +689,7 @@ watchListEmpty=Aktuell werden keine Ordner überwacht. Die Änderungs-Überwachung 
 # rating 
 rating.owner=Bewertung
 rating.visitor=Besucher-Wertung
+rating.myself=meine Bewertung
 rating.notYetRated=noch keine
 rating.rateNow=Bewerten
 rating.1star=1 Stern - schlecht
@@ -698,6 +699,7 @@ rating.4stars=4 Sterne
 rating.5stars=5 Sterne - gut
 rating.any=-- alle --
 rating.count=Bewertungen
+rating.starSum=Punkte
 vote.count=Bewertungen
 vote.confirm=Die Bewertung wurde gespeichert.
 
@@ -710,6 +712,7 @@ showPictureOrigSize=Bild in Originalgröße anzeigen
 albumOptions=Optionen
 button.returnToAlbum=Zurück zum Album
 albumPageSize=Bilder/Seite
+nextAlbumImgLink=nächstes Bild
 
 # maintanance mode text
 label.maintanance.head=Wartungsmodus

@@ -686,6 +686,7 @@ watchListEmpty=Currently there are no watched folders. To start watching a folde
 # rating 
 rating.owner=Rating by owner
 rating.visitor=Visitor rating
+rating.myself=my own rating
 rating.notYetRated=not yet rated
 rating.rateNow=Rate now
 rating.1star=1 star - worst
@@ -695,6 +696,7 @@ rating.4stars=4 stars
 rating.5stars=5 stars - best
 rating.any=-- any --
 rating.count=votes
+rating.starSum=stars
 vote.count=votes
 vote.confirm=The vote has been accepted.
 
@@ -707,6 +709,7 @@ showPictureOrigSize=show picture in full size
 albumOptions=Options
 button.returnToAlbum=Return to Album
 albumPageSize=pictures/page
+nextAlbumImgLink=next picture
 
 # maintanance mode text
 label.maintanance.head=Maintanance Mode

@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.gui.xsl.XslShowImageHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumPictureHandler;
+import de.webfilesys.servlet.VisitorServlet;
 
 /**
  * @author Frank Hoehnel
@@ -81,7 +82,13 @@ public class RateVotingHandler extends UserRequestHandler
 
 			if (ratedPictures.get(imagePathOS) == null)
             {
-				metaInfMgr.addVisitorRating(imagePathOS, rating);
+				String visitorId = (String) req.getSession().getAttribute(VisitorServlet.SESSION_ATTRIB_VISITOR_ID);
+				
+				if (visitorId != null) {
+					metaInfMgr.addIdentifiedVisitorRating(visitorId, imagePathOS, rating);
+				} else {
+					metaInfMgr.addVisitorRating(imagePathOS, rating);
+				}
 
 				ratedPictures.put(imagePathOS, new Boolean(true));
             }

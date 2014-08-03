@@ -18,6 +18,11 @@ import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.Comment;
 import de.webfilesys.Constants;
+import de.webfilesys.FileComparator;
+import de.webfilesys.FileContainer;
+import de.webfilesys.FileContainerComparator;
+import de.webfilesys.FileLinkSelector;
+import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.GeoTag;
 import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
@@ -26,6 +31,7 @@ import de.webfilesys.PictureRating;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
+import de.webfilesys.servlet.VisitorServlet;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -54,6 +60,8 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 		String actPath = null;
 		
 		String imgPath = null;
+		
+		boolean isLastImg = false;
 
 		if (realPath != null)
 		{
@@ -68,10 +76,25 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 		}
 		else
 		{
-			imgName = getParameter("imgName");
-		
 			actPath = getCwd();
+
+			imgName = getParameter("imgName");
+			
+			if (CommonUtils.isEmpty(imgName)) {
+				String afterParam = getParameter("after");
+				if (!CommonUtils.isEmpty(afterParam)) {
+					imgName = getAdjacentPicture(actPath, afterParam);
+					if (imgName.equals(afterParam)) {
+						isLastImg = true;
+					}
+				}
+			}
 		
+			if (CommonUtils.isEmpty(imgName)) {
+				Logger.getLogger(getClass()).error("missing imageName or after parameter");
+				return;
+			}
+				
 			if (actPath.endsWith(File.separator))
 			{
 				imgPath = actPath + imgName;
@@ -308,6 +331,22 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 				}
 			}
 			
+			int myRating = (-1);
+			String visitorId = (String) session.getAttribute(VisitorServlet.SESSION_ATTRIB_VISITOR_ID);
+			if (visitorId != null) {
+			    myRating = metaInfMgr.getIdentifiedVisitorRating(visitorId, imgPathOS);
+
+			    if (myRating > 0) {
+				    XmlUtil.setChildText(imageDataElement, "myRating", Integer.toString(myRating));
+			    }
+			}
+				
+			if (!alreadyRated) {
+				if (myRating > 0) {
+					alreadyRated = true;
+				}
+			}
+
 			boolean ratingAllowed = (!readonly) || (!alreadyRated);
         
 			if (ratingAllowed)
@@ -407,6 +446,14 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(imageDataElement, "googleMaps", "true", false);
 		}
         
+        if (!isLastImg) {
+            Integer sortBy = (Integer) session.getAttribute("sortField");
+            if ((sortBy == null) || (sortBy.intValue() == FileContainerComparator.SORT_BY_FILENAME)) 
+            {
+                XmlUtil.setChildText(imageDataElement, "nextLink", "true", false);
+            }
+        }
+        
         if (req.getParameter("rating") != null) 
         {
             XmlUtil.setChildText(imageDataElement, "voteAccepted", "true", false);
@@ -433,5 +480,37 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
         }
       
         return false;
+    }
+    
+    public String getAdjacentPicture(String imgPath, String afterFileName) {
+	    
+        FileLinkSelector fileSelector = new FileLinkSelector(imgPath, FileComparator.SORT_BY_FILENAME);
+
+        FileSelectionStatus selectionStatus = fileSelector.selectFiles(Constants.imgFileMasks, 4096, null, null);
+
+        Vector imageFiles = selectionStatus.getSelectedFiles();
+
+        String nextImg = null;
+        
+        if (imageFiles != null) {
+            boolean found = false;
+            
+            for (int i = 0; (!found) && (i < imageFiles.size()); i++) {
+                FileContainer fileCont = (FileContainer) imageFiles.elementAt(i);
+                
+                if (!fileCont.isLink()) {
+                	if (fileCont.getName().compareToIgnoreCase(afterFileName) > 0) {
+                        nextImg = fileCont.getName();
+                        found = true;
+                	}
+                }
+            }
+        }
+
+        if (nextImg != null) {
+            return nextImg;
+        }
+
+        return afterFileName;
     }
 }

@@ -174,6 +174,9 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
                 int voteCount = MetaInfManager.getInstance().getVisitorRatingCount(tempFile.getAbsolutePath());
                 XmlUtil.setChildText(fileElem, "voteCount", Integer.toString(voteCount));
 
+                int voteStarSum = MetaInfManager.getInstance().getVisitorRatingStarSum(tempFile.getAbsolutePath());
+                XmlUtil.setChildText(fileElem, "voteStarSum", Integer.toString(voteStarSum));
+                
                 String realPath = tempFile.getParent();
                 String realFileName = tempFile.getName();
 

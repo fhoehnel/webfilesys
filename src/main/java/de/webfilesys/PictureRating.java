@@ -10,7 +10,11 @@ public class PictureRating
     
     private int averageVisitorRating = (-1);
     
+    private float averageVoteVal = 0;
+    
     private int ownerRating = (-1);
+    
+    private int visitorRatingSum = (-1);
     
     public void setNumberOfVotes(int newVal) 
     {
@@ -32,6 +36,14 @@ public class PictureRating
         return averageVisitorRating;
     }
     
+    public void setAverageVoteVal(float newVal) {
+    	averageVoteVal = newVal;
+    }
+    
+    public float getAverageVoteVal() {
+    	return averageVoteVal;
+    }
+    
     public void setOwnerRating(int newVal)
     {
         ownerRating = newVal;
@@ -40,5 +52,13 @@ public class PictureRating
     public int getOwnerRating() 
     {
         return ownerRating;
+    }
+    
+    public void setVisitorRatingSum(int newVal) {
+    	visitorRatingSum = newVal;
+    }
+    
+    public int getVisitorRatingSum() {
+    	return visitorRatingSum;
     }
 }

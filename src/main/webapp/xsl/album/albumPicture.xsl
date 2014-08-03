@@ -90,6 +90,13 @@
         detailWin.focus();
     }
     
+    <xsl:if test="/imageData/nextLink">
+      function nextImage() 
+      {
+          window.location.href = '/webfilesys/servlet?command=bookPicture&amp;after=' + encodeURIComponent('<xsl:value-of select="/imageData/imageName" />') + '&amp;windowWidth=' + getWinWidth() + '&amp;windowHeight=' + getWinHeight();
+      }
+    </xsl:if>
+    
   </script>
   
 </head>
@@ -135,6 +142,12 @@
       </a>
       <xsl:if test="not(position()=last())"><span class="pictureAlbumPath"> &gt; </span></xsl:if>
     </xsl:for-each>
+    
+    <xsl:if test="/imageData/nextLink"> 
+      <a href="javascript:nextImage()" class="pictureAlbumPath" style="margin-left:100px;">
+        <xsl:attribute name="resource">nextAlbumImgLink</xsl:attribute>
+      </a>
+    </xsl:if>   
    
   </div>
         
@@ -244,6 +257,29 @@
           </xsl:if>
                   
         </div>
+        
+        <xsl:if test="myRating">
+          <div class="albumDetailVote">
+            <span resource="rating.myself"></span>
+            <xsl:text>: </xsl:text>
+            
+            <xsl:if test="myRating = 5">
+              <img src="images/5stars.png" class="voteStars" />
+            </xsl:if>
+            <xsl:if test="myRating = 4">
+              <img src="images/4stars.png" class="voteStars" />
+            </xsl:if>
+            <xsl:if test="myRating = 3">
+              <img src="images/3stars.png" class="voteStars" />
+            </xsl:if>
+            <xsl:if test="myRating = 2">
+              <img src="images/2stars.png" class="voteStars" />
+            </xsl:if>
+            <xsl:if test="myRating = 1">
+              <img src="images/1star.png" class="voteStars" />
+            </xsl:if>
+          </div>
+        </xsl:if>
                 
         <xsl:if test="/imageData/geoTag">
           <div class="albumDetailGeo">

@@ -14,6 +14,7 @@ public class FileContainerComparator implements Comparator
     public static final int SORT_BY_VOTE_COUNT = 7; 
     public static final int SORT_BY_VIEW_COUNT = 8; 
     public static final int SORT_BY_COMMENT_COUNT = 9; 
+    public static final int SORT_BY_VOTE_STARS = 10; 
     
 	int sortBy;
 	String path;
@@ -187,11 +188,11 @@ public class FileContainerComparator implements Comparator
                 {
                     return (-1);
                 }
-                if (rating1.getAverageVisitorRating() > rating2.getAverageVisitorRating())
+                if (rating1.getAverageVoteVal() > rating2.getAverageVoteVal())
                 {
                     return (-1);
                 }
-                if (rating2.getAverageVisitorRating() > rating1.getAverageVisitorRating())
+                if (rating2.getAverageVoteVal() > rating1.getAverageVoteVal())
                 {
                     return 1;
                 }
@@ -248,6 +249,49 @@ public class FileContainerComparator implements Comparator
                 return 1;
             }
             return(fileName1.toUpperCase().compareTo(fileName2.toUpperCase()));
+        }
+        
+        if (sortBy == SORT_BY_VOTE_STARS)
+        {
+            PictureRating rating1 = getPictureRating(fileCont1);
+            PictureRating rating2 = getPictureRating(fileCont2);
+            
+            if (rating1 != null)
+            {
+                if (rating2 == null)
+                {
+                    return (-1);
+                }
+                if (rating1.getVisitorRatingSum() > rating2.getVisitorRatingSum())
+                {
+                    return (-1);
+                }
+                if (rating2.getVisitorRatingSum() > rating1.getVisitorRatingSum())
+                {
+                    return 1;
+                }
+                
+                // equal number of vote stars - consider vote count
+                
+                if (rating1.getNumberOfVotes() > rating2.getNumberOfVotes())
+                {
+                    return (-1);
+                }
+                if (rating2.getNumberOfVotes() > rating1.getNumberOfVotes())
+                {
+                    return 1;
+                }
+                return 0;
+            }
+            else
+            {
+                if (rating2 == null)
+                {
+                    // both files not rated yet - fallback to compare by filename
+                    return(fileName1.toUpperCase().compareTo(fileName2.toUpperCase()));
+                }
+                return 1;
+            }
         }
         
         return(fileName1.toUpperCase().compareTo(fileName2.toUpperCase()));

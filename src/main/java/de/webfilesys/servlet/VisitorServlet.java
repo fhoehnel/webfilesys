@@ -6,8 +6,10 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
+import java.util.UUID;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -35,6 +37,14 @@ public class VisitorServlet extends WebFileSysServlet {
 	private static final long serialVersionUID = 1L;
 
 	private static int REQUEST_PATH_LENGTH = "/webfilesys/visitor".length();
+	
+	public static final String VISITOR_COOKIE_NAME = "webfilesys-visitor";
+	
+	public static final String VISITOR_COOKIE_PATH = "/webfilesys/visitor";
+	
+	public static final String SESSION_ATTRIB_VISITOR_ID = "visitorId";
+	
+	private static final int VISITOR_COOKIE_MAX_AGE = 120 * 24 * 60 * 60; // expires after 120 days
 	
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws ServletException, java.io.IOException {
@@ -124,6 +134,15 @@ public class VisitorServlet extends WebFileSysServlet {
                            .send();
             }
 
+            String visitorId = getVisitorIdFromCookie(req);
+            
+            if (visitorId == null) {
+            	visitorId = UUID.randomUUID().toString();
+                resp.addCookie(createVisitorCookie(visitorId));
+            }
+            
+            req.getSession(true).setAttribute(SESSION_ATTRIB_VISITOR_ID, visitorId);
+            
             PrintWriter output = new PrintWriter(new OutputStreamWriter(resp.getOutputStream(), "UTF-8"));            
             
             if ((viewType != null) && viewType.equals("slideshow")) {
@@ -145,6 +164,25 @@ public class VisitorServlet extends WebFileSysServlet {
 		doGet(req, resp);
 	}
 
+	private String getVisitorIdFromCookie(HttpServletRequest req) {
+		Cookie[] cookies = req.getCookies();
+		if (cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				if (cookies[i].getName().equals(VISITOR_COOKIE_NAME)) {
+					return cookies[i].getValue();
+				}
+			}
+		}
+		return null;
+	}
+	
+	private Cookie createVisitorCookie(String visitorId) {
+		Cookie cookie = new Cookie(VISITOR_COOKIE_NAME, visitorId);
+		cookie.setPath(VISITOR_COOKIE_PATH);
+		cookie.setMaxAge(VISITOR_COOKIE_MAX_AGE);
+		return cookie;
+	}
+	
 	private void sendNotAuthorizedPage(HttpServletResponse resp)
 	throws IOException {
 		resp.setStatus(HttpServletResponse.SC_FORBIDDEN);

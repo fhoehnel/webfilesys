@@ -63,37 +63,39 @@ div.loginBox {
 }
 
 div.msgBox {
-    width:260px;
-    height:100px;
-    position:absolute;
-    background-color:lavender;
-    border-style:solid;
-    border-width:1px;
-    border-color:black;
-    font-size:13px;
-    color:black;
-    font-family:Arial,Helvetica;
-    font-weight:bold;
-    text-align:center;
-    vertical-align:middle;
-    padding:20px;
+    width: 260px;
+    height: 100px;
+    position: absolute;
+    top: 0;
+    background-color: lavender;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    font-size: 13px;
+    color: black;
+    font-family: Arial,Helvetica;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    padding: 20px;
 }
 
 div.promptBox {
-    width:360px;
-    height:140px;
-    position:absolute;
-    background-color:#ffffe0;
-    border-style:ridge;
-    border-width:3px;
-    border-color:#a0a0a0;
-    font-size:13px;
-    color:black;
-    font-family:Arial,Helvetica;
-    font-weight:bold;
-    text-align:center;
-    vertical-align:middle;
-    padding:0;
+    width: 360px;
+    height: 140px;
+    position: absolute;
+    top: 0;
+    background-color: #ffffe0;
+    border-style: ridge;
+    border-width: 3px;
+    border-color: #a0a0a0;
+    font-size: 13px;
+    color: black;
+    font-family: Arial,Helvetica;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
 }
 
 div.promptHead {

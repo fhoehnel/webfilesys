@@ -31,6 +31,7 @@
 </link>
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
@@ -155,7 +156,7 @@
     
     <table class="fileListHead" width="100%">
       <tr>
-        <td colspan="4" class="fileListFunct sepBot">&#160;</td>
+        <td colspan="5" class="fileListFunct sepBot">&#160;</td>
       </tr>
       
       <tr>
@@ -180,7 +181,7 @@
             <span class="plaintext" style="margin-left:5px"><xsl:value-of select="/fileList/lastResetDate" /></span>              
           </xsl:if>
         </th>
-        <th class="fileListHead" style="width:90px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
+        <th class="fileListHead" style="width:80px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
           <xsl:if test="/fileList/sortBy = '7'">
             <span resource="rating.count"></span>
           </xsl:if>
@@ -188,7 +189,15 @@
             <a href="javascript:setSortField('7')" class="listHead" resource="rating.count" />
           </xsl:if>
         </th>
-        <th class="fileListHead" style="width:100px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
+        <th class="fileListHead" style="width:70px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
+          <xsl:if test="/fileList/sortBy = '10'">
+            <span resource="rating.starSum"></span>
+          </xsl:if>
+          <xsl:if test="not(/fileList/sortBy = '10')">
+            <a href="javascript:setSortField('10')" class="listHead" resource="rating.starSum" />
+          </xsl:if>
+        </th>
+        <th class="fileListHead" style="width:90px;padding-left:5px;padding-right:5px;text-align:right;white-space:nowrap;">
           <xsl:if test="/fileList/sortBy = '9'">
             <span resource="label.comments"></span>
           </xsl:if>
@@ -233,11 +242,15 @@
               <xsl:value-of select="viewCount"/>
             </td>
             
-            <td class="fileList sepBot" align="right" style="width:90px;padding-right:10px" nowrap="nowrap">
+            <td class="fileList sepBot" align="right" style="width:80px;padding-right:10px" nowrap="nowrap">
               <xsl:value-of select="voteCount"/>
             </td>
 
-            <td class="fileList sepBot" align="right" style="width:90px;padding-right:20px" nowrap="nowrap">
+            <td class="fileList sepBot" align="right" style="width:70px;padding-right:10px" nowrap="nowrap">
+              <xsl:value-of select="voteStarSum"/>
+            </td>
+
+            <td class="fileList sepBot" align="right" style="width:80px;padding-right:20px" nowrap="nowrap">
               <xsl:if test="commentCount != '0'">
                 <a class="fn">
                   <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>

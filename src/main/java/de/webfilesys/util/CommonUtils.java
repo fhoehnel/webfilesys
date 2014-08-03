@@ -454,4 +454,34 @@ public class CommonUtils
         return sb.toString();
      }
     
+	public static String[] splitPath(String path) {
+		String dir = null;
+
+		String fileName = null;
+
+		int separatorIdx = path.lastIndexOf(File.separatorChar);
+		if (separatorIdx < 0) {
+	        separatorIdx = path.lastIndexOf('/');
+	    }		
+
+		if (separatorIdx > 0) {
+			dir = path.substring(0, separatorIdx);
+			fileName = path.substring(separatorIdx + 1);
+		} else {
+			if (separatorIdx == 0) {
+				dir = path.substring(0, 1);
+				fileName = path.substring(1);
+			} else {
+				dir = path;
+				fileName = ".";
+			}
+		}
+
+		String[] partsOfPath = new String[2];
+		partsOfPath[0] = dir;
+		partsOfPath[1] = fileName;
+
+        return partsOfPath;		
+	}
+    
 }
