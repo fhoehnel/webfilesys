@@ -14,11 +14,14 @@ function mouseClickHandler(evt)
 	else
 	{
 		clickEvent = evt;
-        clickXPos = clickEvent.layerX;
-        clickYPos = clickEvent.layerY;
+		if (clickEvent) 
+		{
+            clickXPos = clickEvent.layerX;
+            clickYPos = clickEvent.layerY;
+		}
     }
 
-	if ((clickEvent.button) && (clickEvent.button == 2))
+	if (clickEvent && clickEvent.button && (clickEvent.button == 2))
     {
         rightMouseButton = true;
     }

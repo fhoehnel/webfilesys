@@ -86,7 +86,7 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 					imgName = getAdjacentPicture(actPath, afterParam);
 					if (imgName.equals(afterParam)) {
 						isLastImg = true;
-					}
+					} 
 				}
 			}
 		

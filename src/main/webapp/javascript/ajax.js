@@ -70,31 +70,47 @@ function showCopyResult()
              {
                  addCopyAllowed = true;
                  addMoveAllowed = false;
-                 document.getElementById("copyAddOption").style.display = "inline";
-                 document.getElementById("copyAddOption").disabled = false;
-                 document.getElementById("moveAddOption").style.display = "none";
-                 document.getElementById("moveAddOption").disabled = true;
+                 if (document.getElementById("copyAddOption")) 
+                 {
+                     document.getElementById("copyAddOption").style.display = "inline";
+                     document.getElementById("copyAddOption").disabled = false;
+                     document.getElementById("moveAddOption").style.display = "none";
+                     document.getElementById("moveAddOption").disabled = true;
+                 }
              }
              if (req.responseXML.getElementsByTagName("moveOperation").length > 0) 
              {
                  addMoveAllowed = true;
                  addCopyAllowed = false;
-                 document.getElementById("moveAddOption").style.display = "inline";
-                 document.getElementById("moveAddOption").disabled = false;
-                 document.getElementById("copyAddOption").style.display = "none";
-                 document.getElementById("copyAddOption").disabled = true;
+                 if (document.getElementById("moveAddOption")) 
+                 {
+                     document.getElementById("moveAddOption").style.display = "inline";
+                     document.getElementById("moveAddOption").disabled = false;
+                     document.getElementById("copyAddOption").style.display = "none";
+                     document.getElementById("copyAddOption").disabled = true;
+                 }
              }
 
              if (req.responseXML.getElementsByTagName("enablePaste").length > 0) 
              {
-                 document.getElementById("pasteButton").style.display = "inline";
+                 if (document.getElementById("pasteButton"))
+                 {
+                     document.getElementById("pasteButton").style.display = "inline";
+                 }
              }
 
              if (req.responseXML.getElementsByTagName("enablePasteAsLink").length > 0) 
              {
-                 document.getElementById("pasteLinkButton").style.display = "inline";
+                 if (document.getElementById("pasteLinkButton"))
+                 {
+                     document.getElementById("pasteLinkButton").style.display = "inline";
+                 }
              }
              
+             if (parent && parent.parent && parent.parent.frames[1]) 
+             {
+                 parent.parent.frames[1].clipboardEmpty = false;
+             }
         }
     }
 }
