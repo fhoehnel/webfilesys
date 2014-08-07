@@ -95,7 +95,7 @@
 
 </head>
 
-<body id="fileListBody" class="mobile" onclick="mouseClickHandler()" onload="setBundleResources()">
+<body id="fileListBody" class="mobile" onload="setBundleResources()">
 
   <xsl:for-each select="folderFileList/currentPath">
     <xsl:call-template name="currentPath" />
