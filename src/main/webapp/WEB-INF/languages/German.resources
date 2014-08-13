@@ -497,7 +497,7 @@ label.imgwidth=Bildbreite (Pixel)
 label.thumbexists=enthält Vorschaubild
 label.gpsLatitude=GPS geografische Breite
 label.gpsLongitude=GPS geografische Länge
-label.imgOrientation=Format
+label.imgOrientation=Orientierung
 orientation.landscape=Querformat
 orientation.portrait=Hochformat
 

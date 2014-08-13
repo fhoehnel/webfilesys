@@ -812,7 +812,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
                                         
 										if (exifData.getThumbOrientation() != CameraExifData.ORIENTATION_PORTRAIT)
 										{
-                                            orientationMissmatch = true;
+	                    					orientationMissmatch = true;
 										}
 									}
                                     else if (scaledImage.getRealWidth() > scaledImage.getRealHeight())

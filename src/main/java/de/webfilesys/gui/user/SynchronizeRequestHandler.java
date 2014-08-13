@@ -385,7 +385,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
 
         if (copyFailed)
         {
-            output.println("<nobr>" + getResource("sync.fileCopiedFailed", "failed to copy file") + ": " + getHeadlinePath(sourceFileName) + "</nobr><br>");
+            output.println("<nobr><span style=\"color:red\">" + getResource("sync.fileCopiedFailed", "failed to copy file") + ": " + getHeadlinePath(sourceFileName) + "</span></nobr><br>");
         }
         else
         {

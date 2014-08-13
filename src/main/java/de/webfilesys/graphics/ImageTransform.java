@@ -137,7 +137,7 @@ public class ImageTransform
             // loaded and hence will not be written.
             llj.read(LLJTran.READ_ALL, true);
             
-            int options = LLJTran.OPT_DEFAULTS | LLJTran.OPT_XFORM_ORIENTATION;
+            int options = LLJTran.OPT_DEFAULTS | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL ;
             
             llj.transform(operation, options);    
             

@@ -201,13 +201,7 @@
               <xsl:value-of select="/cameraData/resources/msg[@key='label.imgOrientation']/@value" />
             </td>
             <td class="formParm2">
-              <xsl:if test="(/cameraData/exifData/orientation = '1') or (/cameraData/exifData/orientation = '3')">
-                <xsl:value-of select="/cameraData/resources/msg[@key='orientation.landscape']/@value" />
-              </xsl:if>
-              <xsl:if test="(/cameraData/exifData/orientation = '6') or (/cameraData/exifData/orientation = '8')">
-                <xsl:value-of select="/cameraData/resources/msg[@key='orientation.portrait']/@value" />
-              </xsl:if>
-              (<xsl:value-of select="/cameraData/exifData/orientation" />)
+              <xsl:value-of select="/cameraData/exifData/orientation" />
             </td>
           </tr>
         </xsl:if>

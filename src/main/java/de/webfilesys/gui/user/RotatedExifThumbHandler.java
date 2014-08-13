@@ -77,8 +77,8 @@ public class RotatedExifThumbHandler extends UserRequestHandler
         }
         else if (orientation == 8)
         {
-            // degree = 90;
-            degree = 270;
+            degree = 90;
+            // degree = 270;
         }
         else if (orientation == 3)
         {
