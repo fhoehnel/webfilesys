@@ -101,6 +101,7 @@ label.watchFolder=Änderungen überwachen
 # file context menu labels
 label.view=Anzeigen
 label.download=Download
+label.playVideo=Video abspielen
 label.delete=Löschen
 label.renameFile=Umbenennen
 label.copyToClip=Kopieren
@@ -193,7 +194,7 @@ label.fileStats=Statistik
 # sorting types for files
 sort.name=sortieren nach Name
 sort.name.ignorecase=sortieren nach Name
-sort.name.respectcase=Name (Gross/Klein beachten)
+sort.name.respectcase=Name (Gross/Klein)
 sort.extension=sortieren nach Dateityp
 sort.size=sortieren nach Grösse
 sort.date=sortieren nach Datum
@@ -228,6 +229,8 @@ label.uploadStatus=Upload-Status
 upload.file.too.large=Die Datei ist zu gross für die erweiterte Upload-Funktion. Nutzen Sie den Upload-Basisdialog für besonders grosse Dateien!
 upload.file.exists=eine Datei mit diesem Namen existiert bereits - überschreiben?
 uploadTargetFileNameExt=Die Dateinamen-Erweiterung der lokalen Datei wird auch für den Dateinamen auf dem Server verwendet. Fortfahren?
+upload.total.status=Gesamt-Status
+upload.error=Fehler beim Upload der Datei
 
 # switch Read/Only labels
 label.readWriteStatus=Schreibschutz-Status

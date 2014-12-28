@@ -11,108 +11,109 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<html>
-<head>
+  <html>
+  <head>
 
-<meta http-equiv="expires" content="0" />
+    <meta http-equiv="expires" content="0" />
 
-<link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+    <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
-<link rel="stylesheet" type="text/css">
-  <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/folderTree/css" />.css</xsl:attribute>
-</link>
+    <link rel="stylesheet" type="text/css">
+      <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/folderTree/css" />.css</xsl:attribute>
+    </link>
 
-<xsl:if test="not(folderTree/browserXslEnabled)">
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
-</xsl:if>
+    <xsl:if test="not(folderTree/browserXslEnabled)">
+      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
+    </xsl:if>
 
-<script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/tooltips.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/dirContextMenu.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/jsDirMenu.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/keyDirTree.js" type="text/javascript"></script>
-<script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/tooltips.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/dirContextMenu.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/jsDirMenu.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/keyDirTree.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 
-<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
-<script type="text/javascript">
-  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/folderTree/language" /></xsl:attribute>
-</script>
+    <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/folderTree/language" /></xsl:attribute>
+    </script>
 
-<script language="javascript">
+    <script language="javascript">
 
-  var folderTip = resourceBundle["tooltip.folder"];
-  var listTip = resourceBundle["tooltip.listFiles"];
+      var folderTip = resourceBundle["tooltip.folder"];
+      var listTip = resourceBundle["tooltip.listFiles"];
   
-  var clipboardEmpty = <xsl:value-of select="/folderTree/clipBoardEmpty" />;
+      var clipboardEmpty = <xsl:value-of select="/folderTree/clipBoardEmpty" />;
   
-  <!-- Id of the div of the current folder -->
-  var currentDirId = '';
+      <!-- Id of the div of the current folder -->
+      var currentDirId = '';
   
-  var delDirStarted = false;
+      var delDirStarted = false;
 
-  function scrollToCurrent()
-  {
-      scrollTo(0,<xsl:value-of select="/folderTree/scrollPos" />);
-  }
+      function scrollToCurrent()
+      {
+          scrollTo(0,<xsl:value-of select="/folderTree/scrollPos" />);
+      }
+
+      <xsl:if test="folderTree/loginEvent">
+        function hideHint()
+        {
+            document.getElementById('hint').style.visibility = 'hidden';
+        }
+      </xsl:if>
+
+      <!-- create Stylesheet-Processor for MSIE and precompile stylesheet -->  
+      if (window.ActiveXObject !== undefined) 
+      {
+          var xsl = new ActiveXObject('MSXML2.FreeThreadedDOMDocument.3.0');
+          xsl.async = false;
+          xsl.load("/webfilesys/xsl/subFolder.xsl");
+
+          xslTemplate = new ActiveXObject("Msxml2.XSLTemplate.3.0");
+          xslTemplate.stylesheet = xsl;
+      }
+
+      document.onkeydown = handleFolderTreeKey;
+
+    </script>
+
+    <style type="text/css">
+      img {vertical-align:middle}
+    </style>
+
+  </head>
+
+  <body>
+    <xsl:attribute name="class">dirTree</xsl:attribute>
+    <xsl:attribute name="onLoad">setBundleResources();setTimeout('scrollToCurrent()', 100);setTimeout('setTooltips()', 500);</xsl:attribute>
+
+    <xsl:apply-templates />
+
+  </body>
+
+  <div id="contextMenu" style="position:absolute;top:0px;left:0px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden"></div>
+
+  <div id="msg1" class="msgBox" style="visibility:hidden" />
+
+  <div id="prompt" class="promptBox" />
 
   <xsl:if test="folderTree/loginEvent">
-    function hideHint()
-    {
-        document.getElementById('hint').style.visibility = 'hidden';
-    }
+    <div id="hint" class="hint" style="position:absolute;top:10px;left:50%;width:40%;">
+      <xsl:attribute name="onClick">javascript:hideHint()</xsl:attribute>
+      <img src="/webfilesys/images/winClose.gif" border="0" style="float:right;" />
+      <span resource="label.loginHint"></span>
+    </div>
   </xsl:if>
 
-  <!-- create Stylesheet-Processor for MSIE and precompile stylesheet -->  
-  if (window.ActiveXObject !== undefined) 
-  {
-      var xsl = new ActiveXObject('MSXML2.FreeThreadedDOMDocument.3.0');
-      xsl.async = false;
-      xsl.load("/webfilesys/xsl/subFolder.xsl");
-
-      xslTemplate = new ActiveXObject("Msxml2.XSLTemplate.3.0");
-      xslTemplate.stylesheet = xsl;
-  }
-
-  document.onkeydown = handleFolderTreeKey;
-
-</script>
-
-<style type="text/css">
-  img {vertical-align:middle}
-</style>
-
-</head>
-
-<body>
-<xsl:attribute name="class">dirTree</xsl:attribute>
-<xsl:attribute name="onLoad">setBundleResources();setTimeout('scrollToCurrent()', 100);setTimeout('setTooltips()', 500);</xsl:attribute>
-
-<xsl:apply-templates />
-
-</body>
-</html>
-
-<div id="contextMenu" style="position:absolute;top:0px;left:0px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden"></div>
-
-<xsl:if test="folderTree/loginEvent">
-  <div id="hint" class="hint" style="position:absolute;top:10px;left:50%;width:40%;">
-    <xsl:attribute name="onClick">javascript:hideHint()</xsl:attribute>
-    <img src="/webfilesys/images/winClose.gif" border="0" style="float:right;" />
-    <span resource="label.loginHint"></span>
-  </div>
-</xsl:if>
-
-<div id="msg1" class="msgBox" style="visibility:hidden" />
-
-<div id="prompt" class="promptBox" style="visibility:hidden" />
+  </html>
 
 </xsl:template>
 <!-- end root node-->

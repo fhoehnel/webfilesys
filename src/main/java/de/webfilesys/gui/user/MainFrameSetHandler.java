@@ -101,6 +101,8 @@ public class MainFrameSetHandler extends UserRequestHandler
         output.println("<html>");
         output.println("<head>");
         
+        output.println("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\" />");
+        
 		output.println("<link rel=\"SHORTCUT ICON\" href=\"/webfilesys/images/favicon.ico\" />");
 
 		// global JavaScript variables needed for context menu

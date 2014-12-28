@@ -447,6 +447,7 @@ function hidePrompt()
      }
 
      promptBox.style.visibility = "hidden";
+     promptBox.style.width = "100px";
 }
 
 function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight)
@@ -484,6 +485,10 @@ function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight)
         
     if (boxWidth)
     {
+        if (boxWidth > windowWidth - 10) 
+        {
+            boxWidth = windowWidth - 10;
+        }
         promptBox.style.width = boxWidth + 'px';
     }
 

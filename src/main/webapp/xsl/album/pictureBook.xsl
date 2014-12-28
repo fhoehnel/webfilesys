@@ -12,6 +12,7 @@
 <html>
 <head>
 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/> 
   <meta http-equiv="expires" content="0" />
 
   <title>WebFileSys Picture Book</title>
@@ -51,7 +52,7 @@
       <xsl:if test="not(@link)">
         function si<xsl:value-of select="@id" />()
         {
-            albumImg('<xsl:value-of select="@name" />');
+            albumImg('<xsl:value-of select="@name" />', true);
         }
 
         function comm<xsl:value-of select="@id" />()

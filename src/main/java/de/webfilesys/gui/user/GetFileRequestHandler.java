@@ -140,11 +140,13 @@ public class GetFileRequestHandler extends UserRequestHandler
             buffer = new byte[65536];
         }
 		
+		FileInputStream fileInput = null;
+
 		try
 		{
 			OutputStream byteOut = resp.getOutputStream();
 
-			FileInputStream fileInput = new FileInputStream(fileToSend);
+			fileInput = new FileInputStream(fileToSend);
 			
 			int count = 0;
 			long bytesWritten = 0;
@@ -156,8 +158,6 @@ public class GetFileRequestHandler extends UserRequestHandler
                 bytesWritten += count;
             }
 
-            fileInput.close();
-	            
 	        if (bytesWritten != fileSize)
 	        {
 	            Logger.getLogger(getClass()).warn(
@@ -178,6 +178,19 @@ public class GetFileRequestHandler extends UserRequestHandler
         {
         	Logger.getLogger(getClass()).warn(ioEx);
         }
+		finally 
+		{
+			if (fileInput != null) 
+			{
+			    try
+			    {
+		            fileInput.close();
+			    }
+			    catch (Exception ex) 
+			    {
+			    }
+			}
+		}
 	}
 	
 }

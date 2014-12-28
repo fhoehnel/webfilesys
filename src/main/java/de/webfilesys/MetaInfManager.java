@@ -997,6 +997,28 @@ public class MetaInfManager extends Thread
 
 		int starSum = 0;
 		
+        // anonymous visitors
+		Element visitorElement = XmlUtil.getChildByTagName(metaInfElement, "visitor");
+
+		if (visitorElement != null) {
+			NodeList voteList = visitorElement.getElementsByTagName("vote");
+
+			if (voteList != null) {
+				int listLength = voteList.getLength();
+				for (int i = 0; i < listLength; i++) {
+					Element voteElem = (Element) voteList.item(i);
+					String vote = XmlUtil.getElementText(voteElem);
+
+					try {
+						starSum += Integer.parseInt(vote);
+					} catch (Exception ex) {
+		            	Logger.getLogger(getClass()).error("invalid vote value: " + vote);
+					}
+				}
+			}
+		}
+
+		// identified visitors
 		NodeList identifiedVisitors = ratingElement.getElementsByTagName("guest");
 
 		if (identifiedVisitors != null) {

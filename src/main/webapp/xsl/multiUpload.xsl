@@ -21,7 +21,7 @@
     <style type="text/css">
       img.uploadPreview {height:100px;border:2px ridge #808080;margin:4px;}
       div.dropZone {width:95%;min-height:112px;background-color:#e0e0e0;border:2px ridge #808080;}
-      p.dragDropHint {color:#808080;font-family:Arial,Helvetica;font-size:16pt;font-weight:bold;}
+      div.dragDropHint {color:#808080;font-family:Arial,Helvetica;font-size:16pt;font-weight:bold;margin-top:45px;}
       div#dragDropHint {position:relative;left:0px;top:0px;}
       li.selectedFile {color:navy;font-family:Arial,Helvetica;font-size:10pt;}
     </style>
@@ -30,10 +30,15 @@
     <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/ajaxUpload.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+    
+    <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="language" /></xsl:attribute>
+    </script>
   
     <script type="text/javascript">
     
-      var confirmOverwriteText = '<xsl:value-of select="resources/msg[@key='upload.file.exists']/@value" />';
+      var confirmOverwriteText = resourceBundle["upload.file.exists"];
     
       var selectedForUpload = new Array();
       
@@ -46,9 +51,17 @@
       var MAX_PICTURE_SIZE_SUM = 40000000;
       
       var pictureFileSize = 0;
+	  
+	  var currentFileNum = 1;
+	  
+	  var totalSizeSum = 0;
+	  
+	  var totalLoaded = 0;
+	  
+	  var sizeOfCurrentFile = 0;
       
-      var resourceOf = '<xsl:value-of select="resources/msg[@key='label.of']/@value" />';
-      var resourceFileTooLarge = '<xsl:value-of select="resources/msg[@key='upload.file.too.large']/@value" />';
+      var resourceOf = resourceBundle["label.of"];
+      var resourceFileTooLarge = resourceBundle["upload.file.too.large"];
           
       function hideBrowserSpecifics()
       {
@@ -71,18 +84,14 @@
 
   <body onload="prepareDropZone();hideBrowserSpecifics();positionStatusDiv();">
     
-  <div class="headline">
-    <xsl:value-of select="resources/msg[@key='headline.multiUpload']/@value" />
-  </div>
+  <div class="headline" resource="headline.multiUpload"></div>
     
   <form accept-charset="utf-8" name="form1">
   
     <table class="dataForm" width="100%">
 
       <tr>
-        <td colspan="2" class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.destdir']/@value" />:
-        </td>
+        <td colspan="2" class="formParm1" resource="label.destdir"></td>
       </tr>
       <tr>
         <td colspan="2" class="formParm2">
@@ -93,15 +102,13 @@
       <tr id="dropTarget">
         <td colspan="2" style="text-align:center;padding:10px;">
           <div id="dropZone" class="dropZone">
-            <div id="dragDropHint"><p class="dragDropHint"><xsl:value-of select="resources/msg[@key='upload.dropZone']/@value" /></p></div>
+            <div id="dragDropHint"><div class="dragDropHint" resource="upload.dropZone"></div></div>
           </div>
         </td>
       </tr>
 
       <tr id="lastUploaded">
-        <td class="formParm1">
-          <xsl:value-of select="resources/msg[@key='upload.lastSent']/@value" />:
-        </td>
+        <td class="formParm1" resource="upload.lastSent"></td>
         <td colspan="2" class="formParm2">
           <span id="lastUploadedFile"/>
         </td>
@@ -111,14 +118,14 @@
 
       <tr id="selectedForUpload">
         <td colspan="2" class="formParm1">
-          <xsl:value-of select="resources/msg[@key='upload.selectedFiles']/@value" />:
+          <span resource="upload.selectedFiles"></span>:
           <ul id="uploadFiles"/>
         </td>
       </tr>
 
       <tr>
         <td colspan="2" class="formParm1">
-          <xsl:value-of select="resources/msg[@key='upload.selectFilePrompt']/@value" />:
+          <span resource="upload.selectFilePrompt"></span>:
         </td>
       </tr>
       <tr>
@@ -131,19 +138,13 @@
       
       <tr>
         <td class="formButton">
-          <input id="uploadButton" type="button" onclick="positionStatusDiv();sendFiles()" style="visibility:hidden;display:none;">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.startUpload']/@value" /></xsl:attribute>
-          </input>
-          <input id="doneButton" type="button" style="visibility:hidden"
-                 onclick="window.location.href='/webfilesys/servlet?command=listFiles&amp;keepListStatus=true'">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='upload.button.done']/@value" /></xsl:attribute>
-          </input>
+          <input id="uploadButton" type="button" onclick="positionStatusDiv();sendFiles()" resource="button.startUpload" style="visibility:hidden;display:none;" />
+          <input id="doneButton" type="button" style="visibility:hidden" resource="upload.button.done"
+                 onclick="window.location.href='/webfilesys/servlet?command=listFiles&amp;keepListStatus=true'" />
         </td>
         
         <td class="formButton" align="right">
-          <input type="button" onclick="window.location.href='/webfilesys/servlet?command=listFiles&amp;keepListStatus=true'">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
-          </input>
+          <input type="button" onclick="window.location.href='/webfilesys/servlet?command=listFiles&amp;keepListStatus=true'" resource="button.cancel" />
         </td>
       </tr>
       
@@ -155,41 +156,75 @@
   <div id="uploadStatus" class="uploadStatus" style="visibility:hidden">
     <table border="0" width="100%" cellpadding="2" cellspacing="0">
       <tr>
-        <th class="headline" style="border-width:0;border-bottom-width:1px;">
-          <xsl:value-of select="resources/msg[@key='label.uploadStatus']/@value" />
-        </th>
-      </tr>
-      
-      <tr>
-        <td style="text-align:center;padding-top:10px;"><span id="currentFile"></span></td> 
+        <th class="headline" style="border-width:0;border-bottom-width:1px;" resource="label.uploadStatus"></th>
       </tr>
     </table>
+	
+	<div id="currentFile" class="uploadStatusCurrentFile"></div>
   
-    <br/><br/>
     <center>
 
-      <div style="width:302px;height:20px;border-style:solid;border-width:1px;border-color:blue;margin:0px;padding:0px;text-align:left;">
+      <div class="uploadStatusBar">
         <img id="done" src="/webfilesys/images/bluedot.gif" width="1" height="20" border="0" />
         <img id="todo" src="/webfilesys/images/space.gif" width="299" height="20" border="0" />  
       </div>
 
-      <br/>
-
-      <table border="0" cellspacing="0" cellpadding="0">
+      <table border="0" cellspacing="0" cellpadding="0" style="width:300px">
         <tr>
           <td class="fileListData">
-            <div id="statusText">
+            <div id="statusText" class="uploadStatusText">
               0 
-              <xsl:value-of select="resources/msg[@key='label.of']/@value" />
+              <span resource="label.of"></span>
               0 bytes (0 %)
             </div>
           </td>
         </tr>
+
+      </table>
+	  
+	  <div class="uploadStatusCurrentFile">
+	    <span resource="upload.total.status"></span>:
+	  </div>
+	  
+      <div class="uploadStatusBar">
+        <img id="totalDone" src="/webfilesys/images/bluedot.gif" width="1" height="20" border="0" />
+        <img id="totalTodo" src="/webfilesys/images/space.gif" width="299" height="20" border="0" />  
+      </div>
+
+      <table border="0" cellspacing="0" cellpadding="0" style="width:300px">
+
+        <tr>
+          <td class="fileListData">
+            <div id="statusText" class="uploadStatusText">
+			  <span resource="label.file"></span>
+			  <xsl:text> </xsl:text>
+              <span id="currentFileNum">1</span> 
+			  <xsl:text> </xsl:text>
+              <span resource="label.of"></span>
+			  <xsl:text> </xsl:text>
+              <span id="filesToUploadNum"></span>
+		    </div>
+
+            <div id="totalStatusText" class="uploadStatusText">
+              0 
+			  <xsl:text> </xsl:text>
+              <span resource="label.of"></span>
+			  <xsl:text> </xsl:text>
+              0 bytes (0 %)
+            </div>
+
+          </td>
+        </tr>
     
       </table>
+	  
     </center>
   
   </div>
+  
+  <script type="text/javascript">
+    setBundleResources();
+  </script>
   
 </html>
 

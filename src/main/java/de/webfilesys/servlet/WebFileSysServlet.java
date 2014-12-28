@@ -519,6 +519,10 @@ public class WebFileSysServlet extends HttpServlet
 				return;
 			}
 
+			if (output == null) 
+			{
+	            output = new PrintWriter(new OutputStreamWriter(resp.getOutputStream(), "UTF-8"));
+			}
 			redirectToLogin(output);
 		}
 		
@@ -1493,7 +1497,7 @@ public class WebFileSysServlet extends HttpServlet
             
             return(true);
         }
-            
+           
         if (command.equals("selectSyncFolder"))
         {
 			(new XmlSelectSyncFolderHandler(req, resp, session, output, userid)).handleRequest();

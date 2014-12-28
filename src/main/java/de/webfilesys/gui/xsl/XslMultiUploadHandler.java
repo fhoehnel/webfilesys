@@ -67,6 +67,9 @@ public class XslMultiUploadHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(uploadElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(uploadElement, "shortPath", shortPath, false);
 		
+	    XmlUtil.setChildText(uploadElement, "language", language, false);
+		
+	    /*
 		addMsgResource("headline.multiUpload", getResource("headline.multiUpload", "Extended Upload"));
         addMsgResource("upload.selected.pictures", getResource("upload.selected.pictures", "pictures selected for upload"));
         addMsgResource("upload.dropZone", getResource("upload.dropZone", "Drag and drop Image files for upload here!"));
@@ -85,6 +88,7 @@ public class XslMultiUploadHandler extends XslRequestHandlerBase
         addMsgResource("label.of", getResource("label.of","of"));
         addMsgResource("upload.file.too.large", getResource("upload.file.too.large","The file is too large for uploading with the extended upload function. Use the basic upload dialog for really big files!"));
         addMsgResource("upload.file.exists", getResource("upload.file.exists","a file with this name already exists - overwrite?"));
+		*/
 		
 		this.processResponse("multiUpload.xsl", true);
     }

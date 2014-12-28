@@ -7,6 +7,7 @@
 
     <html>
       <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/> 
         <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
         <link rel="stylesheet" type="text/css">

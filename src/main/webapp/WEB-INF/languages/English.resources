@@ -101,6 +101,7 @@ label.watchFolder=watch folder change
 # file context menu labels
 label.view=View
 label.download=Download
+label.playVideo=Play Video
 label.delete=Delete
 label.renameFile=Rename
 label.copyToClip=Copy
@@ -228,6 +229,8 @@ label.uploadStatus=Upload Status
 upload.file.too.large=The file is too large for uploading with the extended upload function. Use the basic upload dialog for really big files!
 upload.file.exists=a file with this name already exists - overwrite?
 uploadTargetFileNameExt=The filename extension of the local file will be appended to the filename on the target server. Continue?
+upload.total.status=total status
+upload.error=failed to upload file
 
 # switch Read/Only labels
 label.readWriteStatus=Read/Write status

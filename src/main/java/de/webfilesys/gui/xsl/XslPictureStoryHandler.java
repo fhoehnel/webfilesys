@@ -46,60 +46,85 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 
 		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_STORY));
 
-		MetaInfManager metaInfMgr=MetaInfManager.getInstance();
-
-		String act_path = getParameter("actPath");
-		if ((act_path == null) || (act_path.length() == 0))
-		{
-			act_path = getParameter("actpath");
-			if ((act_path == null) || (act_path.length() == 0))
-			{
-				act_path = (String) session.getAttribute("cwd");
-				
-				if (act_path == null) {
-					act_path = WebFileSys.getInstance().getUserMgr().getDocumentRoot(uid);
-				}
-			}
-		}
+		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
 		String mode = "story";
 		String modeParam = getParameter("mode");
 		if ((modeParam != null) && (modeParam.length() > 0)) {
 			mode = modeParam;
 		}
+
+		String act_path = null;
+		
+		if (mode.equals("pictureBook")) {
+	        String relativePath = getParameter("relPath");
+	        
+	        if ((relativePath != null) && (relativePath.trim().length() > 0))
+	        {
+				String docRoot = userMgr.getDocumentRoot(uid);
+				
+				String docRootOS = docRoot;
+				
+				if (File.separatorChar == '\\')
+				{
+					docRootOS = docRoot.replace('/', File.separatorChar);
+				}
+
+	        	if (relativePath.equals(File.separator))
+	        	{
+	        		act_path = docRoot;
+	        		
+					if (File.separatorChar == '\\')
+					{
+						act_path = act_path.replace('/', File.separatorChar);
+					}
+	        	}
+	        	else
+	        	{
+	        		if (relativePath.startsWith(File.separator))
+	        		{
+						act_path = docRootOS + relativePath;
+	        		}
+	        		else
+	        		{
+						act_path = docRootOS + File.separator + relativePath;
+	        		}
+	        	}
+	        }
+		}
+	        
+	    if (act_path == null)
+	    {
+			act_path = getParameter("actPath");
+			if ((act_path == null) || (act_path.length() == 0))
+			{
+				act_path = getParameter("actpath");
+				if ((act_path == null) || (act_path.length() == 0))
+				{
+					act_path = (String) session.getAttribute("cwd");
+					
+					if (act_path == null) {
+						act_path = WebFileSys.getInstance().getUserMgr().getDocumentRoot(uid);
+					}
+				}
+			}
+		}
 		
 		session.setAttribute("cwd", act_path);
 
 		String fileFilter[] = Constants.imgFileMasks;
 		
-		String normalizedPath = null;
         String path_no_slash = null;
         String pathWithSlash = null;
 
 		if (act_path.endsWith(File.separator))
 		{
-			if ((File.separatorChar=='\\') && (act_path.length()==3))
-			{
-				normalizedPath=act_path;
-			}
-			else
-			{
-				if (act_path.length()==1)   // the root
-				{
-					normalizedPath=act_path;
-				}
-				else
-				{
-					normalizedPath=act_path.substring(0,act_path.length()-1);
-				}
-			}
 			path_no_slash=act_path.substring(0,act_path.length()-1);
 			pathWithSlash = act_path;
 		}
 		else
 		{
 			path_no_slash = act_path;
-			normalizedPath = act_path;
 			pathWithSlash = act_path + File.separator;
 		}
 
@@ -121,7 +146,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			}
 		}
 
-		if (screenHeightParm!=null)
+		if (screenHeightParm != null)
 		{
 			try
 			{

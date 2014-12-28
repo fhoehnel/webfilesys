@@ -718,7 +718,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 				try
 				{
 					// scaledImage = new ScaledImage(fullFileName,screenWidth-100,screenHeight-135);
-					scaledImage = new ScaledImage(fullFileName, screenWidth-40, screenHeight-166);
+					scaledImage = new ScaledImage(fullFileName, screenWidth - 40, screenHeight - 175);
 				}
 				catch (IOException io1)
 				{
@@ -747,7 +747,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 					}
 					
 					// int fullScreenWidth = scaledImage.getScaledWidth() + 20;
-					int fullScreenWidth = scaledImage.getScaledWidth() + 10;
+					int fullScreenWidth = scaledImage.getScaledWidth() + 8;
 					
 					if (fullScreenWidth < 600)
 					{

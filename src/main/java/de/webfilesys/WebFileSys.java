@@ -44,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.10.3b (13 Aug 2014)";
+	public static final String VERSION = "Version 2.10.4-beta1 (28 Dec 2014)";
  
     public static final String THUMB_DIR = "thumbnails";
 

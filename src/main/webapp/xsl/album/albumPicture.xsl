@@ -12,6 +12,9 @@
 <html>
 <head>
 
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/> 
+  <meta http-equiv="expires" content="0" />
+
   <title>  
     <!-- 
     <span resource="label.albumTitle"></span>
@@ -20,8 +23,6 @@
     WebFileSys Picture Album:
     <xsl:value-of select="/imageData/imageName" />
   </title>
-
-  <meta http-equiv="expires" content="0" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/styles/pictureAlbum.css</xsl:attribute>
@@ -132,11 +133,26 @@
     <xsl:for-each select="pathElem">
       <a class="pictureAlbumPath">
         <xsl:if test="count(/imageData/currentPath/pathElem) = 1">
-          <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/></xsl:attribute>
+          <xsl:if test="not(/imageData/fromStory)">
+            <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/></xsl:attribute>
+          </xsl:if>
+          <xsl:if test="/imageData/fromStory">
+            <xsl:attribute name="href">/webfilesys/servlet?command=storyInFrame&amp;mode=pictureBook</xsl:attribute>
+          </xsl:if>
           <xsl:attribute name="resource">button.returnToAlbum</xsl:attribute>
         </xsl:if>
         <xsl:if test="count(/imageData/currentPath/pathElem) &gt; 1">
-          <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
+          <xsl:if test="not(/imageData/fromStory)">
+            <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
+          </xsl:if>
+          <xsl:if test="/imageData/fromStory">
+            <xsl:if test="position() = count(/imageData/currentPath/pathElem)">
+              <xsl:attribute name="href">/webfilesys/servlet?command=storyInFrame&amp;mode=pictureBook&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="position() &lt; count(/imageData/currentPath/pathElem)">
+              <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/>&amp;initial=true</xsl:attribute>
+            </xsl:if>
+          </xsl:if>
           <xsl:value-of select="@name"/>
         </xsl:if>
       </a>
@@ -301,7 +317,12 @@
 
         <div class="albumDetailReturn">                  
           <input type="button" resource="button.returnToAlbum">
-            <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=album';</xsl:attribute>
+            <xsl:if test="/imageData/fromStory">
+              <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=storyInFrame&amp;mode=pictureBook';</xsl:attribute>
+            </xsl:if>          
+            <xsl:if test="not(/imageData/fromStory)">
+              <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=album';</xsl:attribute>
+            </xsl:if>
           </input> 
         </div>
                   

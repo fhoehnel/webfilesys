@@ -1,6 +1,11 @@
-function albumImg(imgName)
+function albumImg(imgName, fromStory) 
 {
-    window.location.href = '/webfilesys/servlet?command=bookPicture&imgName=' + encodeURIComponent(imgName) + '&windowWidth=' + getWinWidth() + '&windowHeight=' + getWinHeight();
+    var url = '/webfilesys/servlet?command=bookPicture&imgName=' + encodeURIComponent(imgName) + '&windowWidth=' + getWinWidth() + '&windowHeight=' + getWinHeight();
+    if (fromStory) 
+    {
+        url = url + "&fromStory=true";
+    }
+    window.location.href = url;
 }
 
 function albumLinkedImg(realPath)

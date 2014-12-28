@@ -143,6 +143,12 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 						setParameter("actPath", newPath);
 						setParameter("expand", newPath);
 						
+						String cwd = getCwd();
+						
+						if ((cwd != null) && cwd.equals(currentPath)) {
+							setParameter("fastPath",  "true");
+						}
+						
 						SubdirExistCache.getInstance().setExistsSubdir(newPath, new Integer(0));
 						
 						SubdirExistCache.getInstance().cleanupExistSubdir(currentPath);

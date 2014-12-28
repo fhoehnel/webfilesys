@@ -11,6 +11,8 @@
 
 <html>
   <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/> 
+  
     <meta http-equiv="expires" content="0" />
 
     <link rel="stylesheet" type="text/css">

@@ -4,7 +4,8 @@
       
       if (browserFirefox)
       {
-          SINGLE_FILE_MAX_SIZE = 134217728;
+          // SINGLE_FILE_MAX_SIZE = 134217728;
+          SINGLE_FILE_MAX_SIZE = 500000000;
       }
       else 
       {
@@ -65,7 +66,8 @@
               handleFiles(files);  
           }
           else
-          {   positionStatusDiv();
+          {   
+		      positionStatusDiv();
 
               var fileNum = files.length;
   
@@ -75,7 +77,7 @@
 
               var file = selectedForUpload.pop();
               if (file) {
-                  new SingleFileBinaryUpload(file); 
+                  new singleFileBinaryUpload(file); 
               }
           }
       }     
@@ -200,15 +202,27 @@
       
       function sendFiles() {  
           uploadStartedByButton = true;
-          
+
+          var filesToUploadNumCont = document.getElementById("filesToUploadNum");
+
+          filesToUploadNumCont.innerHTML = selectedForUpload.length;  
+		  
+		  for (var i = 0; i < selectedForUpload.length; i++) {
+		      if (browserSafari) {
+		          totalSizeSum += selectedForUpload[i].fileSize;
+			  } else {
+		          totalSizeSum += selectedForUpload[i].size;
+			  }
+		  }
+		  
           var file = selectedForUpload.pop();
           
           if (file) {
-              new SingleFileBinaryUpload(file)
+              new singleFileBinaryUpload(file)
           }
       } 
       
-      function SingleFileBinaryUpload(file) {
+      function singleFileBinaryUpload(file) {
       
           var fileName;
           var fileSize;
@@ -220,6 +234,8 @@
               fileSize = file.size;
           }
       
+	      sizeOfCurrentFile = fileSize;
+	  
           if (existUploadTargetFile(fileName))
           {
               if (!confirm(fileName + ': ' + confirmOverwriteText)) 
@@ -227,7 +243,7 @@
                   var nextFile = selectedForUpload.pop();
                   if (nextFile) 
                   {
-                      new SingleFileBinaryUpload(nextFile)
+                      new singleFileBinaryUpload(nextFile)
                   }
 
                   return;
@@ -236,7 +252,7 @@
       
           lastUploadedFile = fileName;
       
-          document.getElementById("currentFile").innerHTML = fileName;
+          document.getElementById("currentFile").innerHTML = shortText(fileName, 50);
           
           document.getElementById("statusText").innerHTML = "0 " + resourceOf + " " + formatDecimalNumber(fileSize) + " bytes ( 0%)";
 
@@ -244,13 +260,16 @@
           statusWin.style.visibility = 'visible';
 
           xhr = new XMLHttpRequest();  
-         
+
           xhr.onreadystatechange = handleUploadState;
           xhr.upload.addEventListener("progress", updateProgress, false);
           xhr.upload.addEventListener("load", uploadComplete, false);
-         
+
           xhr.open("POST", "/webfilesys/upload/singleBinary/" + encodeURIComponent(fileName), true);  
-          xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');  
+
+		  if (!browserMSIE) {
+              xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');  
+	      }
          
           if (firefoxDragDrop) {
               try {
@@ -270,10 +289,17 @@
               statusWin.style.visibility = 'hidden';
 
               if (xhr.status == 200) {
+			  
+			      totalLoaded += sizeOfCurrentFile;
+			  
                   // start uploading the next file
                   var file = selectedForUpload.pop();
                   if (file) {
-                      new SingleFileBinaryUpload(file)
+				      currentFileNum++;
+                      var currentFileNumCont = document.getElementById("currentFileNum");
+                      currentFileNumCont.innerHTML = currentFileNum;  
+				  
+                      new singleFileBinaryUpload(file)
                   } else {
                       if (firefoxDragDrop || uploadStartedByButton) {
                           window.location.href = '/webfilesys/servlet?command=listFiles&keepListStatus=true';
@@ -285,7 +311,14 @@
                       }
                   }
               } else {
-                  alert("failed to upload file");
+                  alert(resourceBundle["upload.error"] + " " + lastUploadedFile);
+                  var file = selectedForUpload.pop();
+                  if (file) {
+				      currentFileNum++;
+                      var currentFileNumCont = document.getElementById("currentFileNum");
+                      currentFileNumCont.innerHTML = currentFileNum;  
+                      new singleFileBinaryUpload(file)
+				  }
               }
           }
       }
@@ -299,6 +332,14 @@
               document.getElementById("done").width = 3 * percent;
 
               document.getElementById("todo").width = 300 - (3 * percent);
+			  
+			  percent = Math.round(((totalLoaded + e.loaded) * 100) / totalSizeSum);
+
+              document.getElementById("totalStatusText").innerHTML = formatDecimalNumber(totalLoaded + e.loaded) + " " + resourceOf + " " + formatDecimalNumber(totalSizeSum) + " bytes (" + percent + "%)";
+
+              document.getElementById("totalDone").width = 3 * percent;
+
+              document.getElementById("totalTodo").width = 300 - (3 * percent);
           }  
       }
       

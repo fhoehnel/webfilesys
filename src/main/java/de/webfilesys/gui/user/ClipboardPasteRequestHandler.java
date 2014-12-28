@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 
 import de.webfilesys.Category;
 import de.webfilesys.ClipBoard;
+import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.TestSubDirThread;
 import de.webfilesys.WebFileSys;
@@ -209,6 +210,8 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 					String description=metaInfMgr.getDescription(sourceFile);
 					
 					Vector assignedCategories = metaInfMgr.getListOfCategories(sourceFile);
+					
+					GeoTag geoData =  metaInfMgr.getGeoTag(sourceFile);
 
 					if (clipBoard.isMoveOperation())
 					{
@@ -252,6 +255,10 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 						{
 							metaInfMgr.addCategory(destFile, (Category) assignedCategories.elementAt(i));
 						}
+					}
+					
+					if (geoData != null) {
+					    metaInfMgr.setGeoTag(destFile, geoData);	
 					}
 				}
 				else

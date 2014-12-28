@@ -199,6 +199,11 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(imageDataElement, "readonly", "false", false);
 		}
 
+		if (req.getParameter("fromStory") != null) 
+		{
+			XmlUtil.setChildText(imageDataElement, "fromStory", "true", false);
+		}
+		
 		// path section
 		
 		String docRoot = userMgr.getDocumentRoot(uid);

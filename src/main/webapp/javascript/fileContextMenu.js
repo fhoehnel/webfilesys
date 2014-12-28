@@ -78,35 +78,27 @@ function contextMenu(fileName)
              + '</th>'
              + '</tr>';
 
-    if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR" || fileExt == ".EAR")
-    {
+    if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR" || fileExt == ".EAR") {
         menuText = menuText 
                  + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceBundle["label.viewzip"],null);
-    }
-    else
-    {
-	if (fileExt == ".URL")
-	{
-            menuText = menuText 
-                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(fullPath) + "&random=" + (new Date().getTime()),resourceBundle["label.view"],"_blank");
-	}
-	else
-	{
-            menuText = menuText 
-                     + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceBundle["label.view"],null);
-	}
+    } else if (fileExt == ".URL") {
+        menuText = menuText 
+                 + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(fullPath) + "&random=" + (new Date().getTime()),resourceBundle["label.view"],"_blank");
+    } else {
+         if ((fileExt == ".MP4") || (fileExt == ".OGG") || (fileExt == ".OGV")|| (fileExt == ".WEBM")) {
+             menuText = menuText 
+                      + menuEntry("javascript:playVideo('" + scriptPreparedPath + "')", resourceBundle["label.playVideo"],null);
+         }
+         menuText = menuText 
+                  + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceBundle["label.view"],null);
     }
         
-    if (parent.clientIsLocal != 'true')
-    {
-	if (fileExt == ".MP3")
-	{
-	    downloadLabel = resourceBundle["label.play"];
-	}
-	else
-	{
-	    downloadLabel = resourceBundle["label.download"];
-	}
+    if (parent.clientIsLocal != 'true') {
+	    if (fileExt == ".MP3") {
+	        downloadLabel = resourceBundle["label.play"];
+	    } else {
+	        downloadLabel = resourceBundle["label.download"];
+	    }
 
         menuText = menuText 
                  + menuEntry("/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(fullPath) + "&disposition=download",downloadLabel,null);

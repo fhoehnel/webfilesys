@@ -149,7 +149,7 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		// int maxDisplayWidth = screenWidth-100;
 		int maxDisplayWidth = screenWidth-40;
 		
-		int maxDisplayHeight = screenHeight - 166;
+		int maxDisplayHeight = screenHeight - 175;
 		
 		ScaledImage scaledImage=null;
 

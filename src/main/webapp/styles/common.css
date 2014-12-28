@@ -81,7 +81,7 @@ div.msgBox {
 }
 
 div.promptBox {
-    width: 360px;
+    width: 100px;
     height: 140px;
     position: absolute;
     top: 0;
@@ -96,6 +96,7 @@ div.promptBox {
     text-align: center;
     vertical-align: middle;
     padding: 0;
+    visibility: hidden;
 }
 
 div.promptHead {
@@ -113,21 +114,42 @@ div.promptHead {
 }
 
 div.uploadStatus {
-    width:400px;
-    height:160px;
-    position:absolute;
-    top:150px;
-    left:50px;
-    border-style:solid;
-    border-width:1px;
-    border-color:black;
-    font-size:13px;
-    color:black;
-    font-family:Arial,Helvetica;
-    font-weight:bold;
-    text-align:center;
-    vertical-align:middle;
-    padding:0px;
+    width: 400px;
+    height: 230px;
+    position: absolute;
+    top: 150px;
+    left: 50px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0px;
+}
+
+div.uploadStatusText {
+    font-family: Arial,Helvetica;
+    font-size: 13px;
+    color: black;
+    font-weight: normal;
+}
+
+div.uploadStatusCurrentFile {
+    font-family: Arial,Helvetica;
+    font-weight: bold;
+    font-size: 13px;
+	margin: 12px auto 12px auto;
+}
+
+div.uploadStatusBar {
+    width: 302px;
+	height: 20px;
+	border-style: solid;
+	border-width: 1px;
+	border-color: blue;
+	margin: 0 0 10px 0;
+	padding: 0;
+	text-align: left;
 }
 
 td.loginTitle {
@@ -1311,4 +1333,28 @@ span.searchDateSep {
 	margin-left: 6px;
 	margin-right: 6px;
 	vertical-align: bottom;
+}
+
+div.videoCont {
+    position: absolute;
+    top: 40px;
+    left: 10px;
+    width: 500px;
+    height: 300px;
+    background-color: #c0c0c0;
+    border-style: ridge;
+    border-width: 3px;
+    border-color: #a0a0a0;
+    padding: 30px 10px 10px 10px;
+    text-align: center;
+}
+
+div.videoCont video {
+    width: 480px;
+}
+
+div.videoCont img.closeButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
