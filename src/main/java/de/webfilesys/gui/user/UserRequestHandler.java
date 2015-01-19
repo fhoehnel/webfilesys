@@ -97,7 +97,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
         }
         else
         {
-            if (!isWebspaceUser())
+            if ((!isWebspaceUser()) && (!userMgr.getRole(uid).equals("blog")))
             {
                 return (fullPath);
             }

@@ -241,6 +241,15 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
         output.println("<td class=\"formParm1\"><b>role</b></td>");
 		output.println("<td class=\"formParm2\"><select id=\"role\" name=\"role\" size=\"1\">");
 
+		if ((errorMsg != null) && getParameter("role").equals("webspace"))
+		{
+			output.println("<option selected>webspace</option>");
+		}
+		else
+		{
+			output.println("<option>webspace</option>");
+		}
+
 		if ((errorMsg != null) && getParameter("role").equals("user"))
 		{
 			output.println("<option selected>user</option>");
@@ -259,14 +268,15 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
 			output.println("<option>admin</option>");
 		}
 
-		if (CommonUtils.isEmpty(errorMsg) || getParameter("role").equals("webspace"))
+		if ((errorMsg != null) && getParameter("role").equals("blog"))
 		{
-			output.println("<option selected>webspace</option>");
+			output.println("<option selected>blog</option>");
 		}
 		else
 		{
-			output.println("<option>webspace</option>");
+			output.println("<option>blog</option>");
 		}
+		
 		output.println("</select></td>");
         output.println("</tr>");
 

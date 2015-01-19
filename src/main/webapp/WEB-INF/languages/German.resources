@@ -1024,3 +1024,38 @@ calender.reminderSubjectPrefix=WebFileSys Erinnerung
 
 # WebReminder plugin labels
 plugin.webreminder.title=WebReminder Kalender und Organizer
+
+blog.empty=Es existieren noch keine Blog-Einträge.
+blog.dateRangeEmpty=Es existieren keine Blog-Einträge in diesem Datumsbereich.
+blog.createPostHeadline=Neuen Blog-Eintrag erstellen
+blog.editPostHeadline=Blog-Eintrag bearbeiten
+blog.uploadDropZone=Drag and drop Bilddatei für Upload hier!
+blog.uploadFileNames=ausgewählte Bilder
+blog.sendPostButton=Senden
+blog.cancelButton=Abbrechen
+blog.calendarTitle=Datum im Kalender auswählen
+blog.selectDate=Datum
+blog.dateInFuture=Das ausgewählte Datum liegt in der Zukunft!
+blog.uploadFileTooLarge=Die ausgewählte Datei ist zu gross für den Upload!
+blog.emptyPost=Es wurde kein Bild ausgewählt und kein Text eingegeben!
+blog.confirmSendEmptyText=Es wurde kein Text eingegeben. Trotzdem senden?
+blog.listHeadline=WebFileSys Blog
+blog.buttonCreate=Neuer Eintrag
+blog.buttonPublish=Blog publizieren
+blog.buttonPublicLink=Öffentlichen Link anzeigen
+blog.buttonUnpublish=Publizierung beenden
+blog.buttonlogout=Logout
+blog.confirmCancel=Änderungen verwerfen?
+blog.confirmUnpublish=Publizierung des Blog wirklich beenden?
+blog.pagingNewer=neuere Einträge
+blog.pagingOlder=ältere Einträge
+blog.deleteError=Fehler beim Löschen eines Blog-Eintrages
+blog.confirmDelete=Soll der Blog-Eintrag wirklich gelöscht werden?
+blog.textTooLong=Der Text dieses Blog-Eintrages ist zu lang!
+blog.publishTitle=Blog publizieren
+blog.daysPerPage=Tage je Seite
+blog.invalidDaysPerPageValue=Der Wert für Tage je Seite ist ungültig!
+blog.invalidExpirationDays=Der Wert für Gültigkeit ist ungültig!
+
+error.latitudeInvalid=geografische Breite muss zwischen -90 und 90 liegen
+error.longitudeInvalid=geografische Länge muss zwischen -180.0 und 180.0 liegen

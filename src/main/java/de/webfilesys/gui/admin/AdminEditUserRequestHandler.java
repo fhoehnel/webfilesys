@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.gui.CSSManager;
 import de.webfilesys.user.TransientUser;
+import de.webfilesys.util.CommonUtils;
 
 /**
  * Administrator edits the account of an user.
@@ -370,6 +371,15 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         {
             output.println("<option>webspace</option>");
         }
+        
+        if ((role != null) && role.equals("blog"))
+		{
+			output.println("<option selected>blog</option>");
+		}
+		else
+		{
+			output.println("<option>blog</option>");
+		}
         
 		output.println("</select></td>");
         output.println("</tr>");

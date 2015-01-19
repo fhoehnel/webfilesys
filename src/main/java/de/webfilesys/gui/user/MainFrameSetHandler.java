@@ -213,7 +213,7 @@ public class MainFrameSetHandler extends UserRequestHandler
                 + "</title>");
 
         // output.println("<frameset rows=\"32,*\" frameborder=\"0\" framespacing=\"0\" border=\"0\">");
-        output.println("<frameset rows=\"32,*\">");
+        output.println("<frameset rows=\"35,*\">");
         output.println(
             "<frame name=\"menu\" scrolling=\"no\" src=\"/webfilesys/servlet?command=menuBar\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\" noresize />");
 

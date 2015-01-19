@@ -171,6 +171,8 @@
           zoomImgObj.src = '/webfilesys/images/space.gif';
 
           currentPicture = '';
+          
+          // document.getElementsByTagName("body")[0].style.opacity = "1.0";
       }
 
       function showPicturePopup(imgSrc, xsize, ysize)
@@ -255,4 +257,10 @@
           
           var popupClose = document.getElementById('popupClose');
           popupClose.style.visibility = 'visible';
+          
+          /*
+          document.getElementsByTagName("body")[0].style.opacity = "0.5";
+          
+          picturePopup.style.opacity = "1.0";
+          */
       }

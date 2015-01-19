@@ -55,7 +55,7 @@
   function selectFromDate()
   {
      cal1x.setReturnFunction("splitFromDate");
-     cal1x.select(document.findform.fromYear,'anchorFrom','MM/dd/yyyy')
+     cal1x.select(document.findform.fromYear,'anchorFrom','MM/dd/yyyy');
   }
 
   function splitFromDate(y,m,d) 
@@ -68,7 +68,7 @@
   function selectToDate()
   {
      cal1x.setReturnFunction("splitToDate");
-     cal1x.select(document.findform.toYear,'anchorTo','MM/dd/yyyy')
+     cal1x.select(document.findform.toYear,'anchorTo','MM/dd/yyyy');
   }
 
   function splitToDate(y,m,d) 

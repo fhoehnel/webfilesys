@@ -1,7 +1,15 @@
-    function showMapSelection()
+    function showMapSelection(counter)
     {
-        document.getElementById("mapIcon").style.display = "none";
-        document.getElementById("geoLocSel").style.display = "block";
+        if (counter) 
+        {
+            document.getElementById("mapIcon-" + counter).style.display = "none";
+            document.getElementById("geoLocSel-" + counter).style.display = "block";
+        }
+        else 
+        {
+            document.getElementById("mapIcon").style.display = "none";
+            document.getElementById("geoLocSel").style.display = "block";
+        }
     }
       
     function geoMapFolderSelected(folderPath) 
@@ -46,9 +54,17 @@
         }
     }  
 
-    function geoMapFileSelected(filePath) 
+    function geoMapFileSelected(filePath, counter) 
     {
-        var mapSel = document.getElementById("geoLocSel");
+        var mapSel;
+        if (counter) 
+        {
+            mapSel = document.getElementById("geoLocSel-" + counter);
+        }
+        else 
+        {
+            mapSel = document.getElementById("geoLocSel");
+        }
     
         var idx = mapSel.selectedIndex;
 
@@ -56,7 +72,17 @@
 
         mapSel.selectedIndex = 0;
         mapSel.style.display = "none";
-        document.getElementById("mapIcon").style.display = "inline";
+        
+        var mapIcon;
+        if (counter)
+        {
+            mapIcon = document.getElementById("mapIcon-" + counter)
+        }
+        else 
+        {
+            mapIcon = document.getElementById("mapIcon")
+        }
+        mapIcon.style.display = "inline";
 
         if (mapType == "1")
         {

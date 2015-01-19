@@ -15,6 +15,7 @@
 <meta http-equiv="expires" content="0" />
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/menubar/css" />.css</xsl:attribute>
@@ -154,62 +155,62 @@
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
             <th>
-              <a href="javascript:fastpath()">
-                <img src="/webfilesys/images/menubar/fastpath.gif" border="0" width="32" height="32">
+	          <div class="icon-button">
+                <a href="javascript:fastpath()" class="icon-font icon-folderOpen">
                   <xsl:attribute name="titleResource">label.fastpath</xsl:attribute>
-                </img>
-              </a>
-            </th>
+                </a>
+              </div>
+		    </th>
 
             <th>
-              <a href="javascript:bookmarks()">
-                <img src="/webfilesys/images/menubar/bookmarks.gif" border="0" width="32" height="32">
+	          <div class="icon-button">
+                <a href="javascript:bookmarks()" class="icon-font icon-bookmark">
                   <xsl:attribute name="titleResource">label.bookmarks</xsl:attribute>
-                </img>
-              </a>
+                </a>
+			  </div>
             </th>
             
             <th>
-              <a href="javascript:returnToPrevDir()">
-                <img src="/webfilesys/images/menubar/returnDir.gif" border="0" width="32" height="32">
+	          <div class="icon-button">
+                <a href="javascript:returnToPrevDir()" class="icon-font icon-return">
                   <xsl:attribute name="titleResource">label.returnToPrevDir</xsl:attribute>
-                </img>
-              </a>
-            </th>
+                </a>
+              </div>
+		    </th>
 
             <xsl:if test="/menubar/unixAdmin">
               <th>
-                <a href="/webfilesys/servlet?command=processList" target="_blank">
-                  <img src="/webfilesys/images/menubar/process.gif" border="0" width="32" height="32">
+	            <div class="icon-button">
+                  <a href="/webfilesys/servlet?command=processList" target="_blank" class="icon-font icon-process">
                     <xsl:attribute name="titleResource">label.processes</xsl:attribute>
-                  </img>
-                </a>
+                  </a>
+				</div>
               </th>
               
               <th>
-                <a href="javascript:fileSysStats()">
-                  <img src="/webfilesys/images/menubar/bargraph.gif" border="0" width="32" height="32">
+	            <div class="icon-button">
+                  <a href="javascript:fileSysStats()" class="icon-font icon-chart">
                     <xsl:attribute name="titleResource">label.fsstat</xsl:attribute>
-                  </img>
-                </a>
+                  </a>
+				</div>
               </th>
 
               <th>
-                <a href="#" onclick="unixCmdWin()">
-                  <img src="/webfilesys/images/menubar/cmdline.gif" border="0" width="32" height="32">
+	            <div class="icon-button">
+                  <a href="#" onclick="unixCmdWin()" class="icon-font icon-console">
                     <xsl:attribute name="titleResource">label.oscmd</xsl:attribute>
-                  </img>
-                </a>
+                  </a>
+				</div>
               </th>
             </xsl:if>
 
             <xsl:if test="/menubar/role='admin'">
               <th>
-                <a href="/webfilesys/servlet?command=admin&amp;cmd=menu" target="_parent">
-                  <img src="/webfilesys/images/menubar/admin.gif" border="0" width="32" height="32">
+	            <div class="icon-button">
+                  <a href="/webfilesys/servlet?command=admin&amp;cmd=menu" target="_parent" class="icon-font icon-admin">
                     <xsl:attribute name="titleResource">label.admin</xsl:attribute>
-                  </img>
-                </a>
+                  </a>
+				</div>
               </th>
             </xsl:if>
 
@@ -217,21 +218,21 @@
               <xsl:if test="not(readonly) or (readonly='false')">
                 <xsl:if test="registrationType='open'">
                   <th>
-                    <a href="/webfilesys/servlet?command=selfEditUser" target="FileList">
-                      <img src="/webfilesys/images/menubar/user.gif" border="0" width="32" height="32">
+	                <div class="icon-button">
+                      <a href="/webfilesys/servlet?command=selfEditUser" target="FileList" class="icon-font icon-user">
                         <xsl:attribute name="titleResource">label.editregistration</xsl:attribute>
-                      </img>
-                    </a>
+                      </a>
+					</div>
                   </th>
                 </xsl:if>
 
                 <xsl:if test="not(registrationType='open')">
                   <th>
-                    <a href="/webfilesys/servlet?command=editPw" target="FileList">
-                      <img src="/webfilesys/images/menubar/key.gif" border="0" width="32" height="32">
+	                <div class="icon-button">
+                      <a href="/webfilesys/servlet?command=editPw" target="FileList" class="icon-font icon-user">
                         <xsl:attribute name="titleResource">label.settings</xsl:attribute>
-                      </img>
-                    </a>
+                      </a>
+					</div>
                   </th>
                 </xsl:if>
               </xsl:if>
@@ -239,23 +240,23 @@
 
             <xsl:if test="not(readonly) or (readonly='false')">
               <th>
-                <a href="javascript:publishList()">
-                  <img src="/webfilesys/images/menubar/published.gif" border="0" width="32" height="32">
+	            <div class="icon-button">
+                  <a href="javascript:publishList()" class="icon-font icon-share">
                     <xsl:attribute name="titleResource">label.publishList</xsl:attribute>
-                  </img>
-                </a>
-              </th>
+                  </a>
+                </div>
+			  </th>
             </xsl:if>
             
             <xsl:if test="not(role='admin')">
               <xsl:if test="not(readonly) or (readonly='false')">
                 <xsl:if test="diskQuota='true'">
                   <th>
-                    <a href="javascript:diskQuota()">
-                      <img src="/webfilesys/images/menubar/diskQuota.gif" border="0" width="32" height="32">
+	                <div class="icon-button">
+                      <a href="javascript:diskQuota()" class="icon-font icon-chart">
                         <xsl:attribute name="titleResource">label.diskQuotaUsage</xsl:attribute>
-                      </img>
-                    </a>
+                      </a>
+					</div>
                   </th>
                 </xsl:if>
               </xsl:if>
@@ -263,21 +264,21 @@
 
             <xsl:if test="/menubar/queryDrives">
               <th>
-                <a href="javascript:refreshDriveList()">
-                  <img src="/webfilesys/images/menubar/drive.gif" border="0" width="32" height="32">
+	            <div class="icon-button">
+                  <a href="javascript:refreshDriveList()" class="icon-font icon-drive">
                     <xsl:attribute name="titleResource">label.refreshDrives</xsl:attribute>
-                  </img>
-                </a>
+                  </a>
+				</div>
               </th>
             </xsl:if>
             
             <xsl:if test="not(readonly) or (readonly='false')">
               <th>
-                <a href="javascript:watchList()">
-                  <img src="/webfilesys/images/menubar/watch.gif" border="0" width="32" height="32">
+	            <div class="icon-button">
+                  <a href="javascript:watchList()" class="icon-font icon-watch">
                     <xsl:attribute name="titleResource">watchList</xsl:attribute>
-                  </img>
-                </a>
+                  </a>
+				</div>
               </th>
             </xsl:if>
 
@@ -293,88 +294,87 @@
 
         <xsl:if test="maintananceMode"> (maintanance mode)</xsl:if>
       </td>
-
+	  
       <td align="right">
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
 
             <th>
-              <a href="javascript:searchParms()">
-                <img src="/webfilesys/images/menubar/search.gif" border="0" width="32" height="32">
+		      <div class="icon-button">
+                <a href="javascript:searchParms()" class="icon-font icon-search">
                   <xsl:attribute name="titleResource">label.search</xsl:attribute>
-                </img>
-              </a>
+                </a>
+			  </div>
             </th>
 
             <th>
-              <a href="javascript:slideshow()">
-                <img src="/webfilesys/images/menubar/slideshow.gif" border="0" width="32" height="32">
+		      <div class="icon-button">
+                <a href="javascript:slideshow()" class="icon-font icon-picture">
                   <xsl:attribute name="titleResource">label.slideshow</xsl:attribute>
-                </img>
-              </a>
+                </a>
+		      </div>
             </th>
 
             <th>
-              <a href="javascript:javascript:pictureStory()">
-                <img src="/webfilesys/images/menubar/film.gif" border="0" width="32" height="32">
+		      <div class="icon-button">
+                <a href="javascript:javascript:pictureStory()" class="icon-font icon-book">
                   <xsl:attribute name="titleResource">label.story</xsl:attribute>
-                </img>
-              </a>
+                </a>
+			  </div>
             </th>
 
             <xsl:if test="not(readonly) or (readonly='false')">
               <th>
-                <a href="javascript:ftpBackup()">
-                  <img src="/webfilesys/images/menubar/ftp.gif" border="0" width="32" height="32">
+		        <div class="icon-button">
+                  <a href="javascript:ftpBackup()" class="icon-font icon-upload">
                     <xsl:attribute name="titleResource">label.ftpBackup</xsl:attribute>
-                  </img>
-                </a>
+                  </a>
+				</div>
               </th>
             </xsl:if>
 
             <xsl:if test="calendarEnabled">
               <th>
-                <a href="javascript:openCalendar()">
-                  <img src="/webfilesys/images/menubar/calendar.gif" border="0" width="32" height="32">
+			    <div class="icon-button">
+                  <a href="javascript:openCalendar()" class="icon-font icon-calendar">
                     <xsl:attribute name="titleResource">label.calendar</xsl:attribute>
-                  </img>
-                </a>
+                  </a>
+				</div>
               </th>
             </xsl:if>
 
             <th>
-              <a href="javascript:mobileVersion()">
-                <img src="/webfilesys/images/menubar/mobilePhone.gif" border="0" width="32" height="32">
+			  <div class="icon-button">
+                <a href="javascript:mobileVersion()" class="icon-font icon-mobilePhone">
                   <xsl:attribute name="titleResource">label.mobileVersion</xsl:attribute>
-                </img>
-              </a>
+                </a>
+		      </div>
             </th>
 
             <th>
-              <a target="_blank">
-                <xsl:attribute name="href">/webfilesys/help/<xsl:value-of select="helpLanguage" />/help.html</xsl:attribute>
-                <img src="/webfilesys/images/menubar/help.gif" border="0" width="32" height="32">
+			  <div class="icon-button">
+                <a target="_blank" class="icon-font icon-help">
+                  <xsl:attribute name="href">/webfilesys/help/<xsl:value-of select="helpLanguage" />/help.html</xsl:attribute>
                   <xsl:attribute name="titleResource">label.help</xsl:attribute>
-                </img>
-              </a>
+                </a>
+			  </div>
             </th>
 
             <th>
-              <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
-                <img src="/webfilesys/images/menubar/info.gif" border="0" width="32" height="32">
+			  <div class="icon-button">
+                <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')"
+				    class="icon-font icon-info">
                   <xsl:attribute name="titleResource">label.about</xsl:attribute>
-                </img>
-              </a>
+                </a>
+			  </div>
             </th>
-            
-            <th>&#160;&#160;&#160;&#160;</th>
 
-            <th>
-              <a class="active" href="/webfilesys/servlet?command=logout" target="_parent">
-                <img src="/webfilesys/images/menubar/exit.gif" border="0" width="32" height="32">
+            <th style="padding-left:20px">
+			  <div class="icon-button">
+                <a href="/webfilesys/servlet?command=logout" target="_parent" class="icon-font icon-exit">
                   <xsl:attribute name="titleResource">label.logout</xsl:attribute>
-                </img>
-              </a>
+                </a>
+			  </div>
             </th>
 
           </tr>

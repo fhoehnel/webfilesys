@@ -42,18 +42,21 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 			return;
 		}
 
+        String shortPath = null;
 		
-        String headLinePath = this.getHeadlinePath(actPath);
+        if (!userMgr.getRole(uid).equals("blog")) {
+    		String headLinePath = getHeadlinePath(actPath);
 
-		String shortPath = headLinePath;
+    		shortPath = headLinePath;
 
-		int pathLength = headLinePath.length();
+    		int pathLength = headLinePath.length();
 
-		if (pathLength > 50)
-		{
-			shortPath = headLinePath.substring(0,15) + "..." + headLinePath.substring(pathLength - 31);
-		}
-		
+    		if (pathLength > 50)
+    		{
+    			shortPath = headLinePath.substring(0,15) + "..." + headLinePath.substring(pathLength - 31);
+    		}
+        }
+        
 		Element fileCommentsElement = doc.createElement("fileComments");
 			
 		doc.appendChild(fileCommentsElement);
@@ -64,7 +67,12 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(fileCommentsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(fileCommentsElement, "path", actPath, false);
-		XmlUtil.setChildText(fileCommentsElement, "shortPath", shortPath, false);
+	    XmlUtil.setChildText(fileCommentsElement, "language", language, false);
+		
+		if (shortPath != null) {
+			XmlUtil.setChildText(fileCommentsElement, "shortPath", shortPath, false);
+		}
+
 		XmlUtil.setChildText(fileCommentsElement, "encodedPath", UTF8URLEncoder.encode(actPath), false);
 		
 		addMsgResource("label.commentList", getResource("label.commentList", "User Comments"));

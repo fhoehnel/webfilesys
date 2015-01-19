@@ -20,6 +20,7 @@ import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
+import de.webfilesys.graphics.ImageTransformUtil;
 import de.webfilesys.gui.user.ZipFileRequestHandler;
 import de.webfilesys.gui.xsl.XslFileListHandler;
 import de.webfilesys.gui.xsl.XslLogonHandler;
@@ -582,7 +583,7 @@ public class UploadServlet extends WebFileSysServlet
         String fileName = UTF8URLDecoder.decode(requestPath.substring(lastPathDelimiterIdx + 1));
 
         fileName = replaceIllegalChars(fileName);
-        
+
         File outFile = new File(currentPath, fileName);
         
         if (Logger.getLogger(getClass()).isDebugEnabled())
@@ -620,15 +621,6 @@ public class UploadServlet extends WebFileSysServlet
             
             uploadOut.flush();
             
-            if (WebFileSys.getInstance().isAutoCreateThumbs())
-            {
-                String ext = CommonUtils.getFileExtension(fileName);
-                
-                if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png")))
-                {
-                    AutoThumbnailCreator.getInstance().queuePath(outFile.getAbsolutePath(), AutoThumbnailCreator.SCOPE_FILE);
-                }
-            }
         }
         catch (IOException ex) 
         {
@@ -646,6 +638,38 @@ public class UploadServlet extends WebFileSysServlet
                 catch (Exception closeEx)
                 {
                 }
+            }
+        }
+
+        
+		if (requestPath.indexOf("/blog/") > 0) {
+			String origImgPath = outFile.getAbsolutePath();
+			
+			int lastSepIdx = origImgPath.lastIndexOf(File.separatorChar);
+			
+			String scaledImgPath = origImgPath.substring(0, lastSepIdx + 1) + "scaled-" + origImgPath.substring(lastSepIdx + 1);
+
+			// TODO: image size from blog settings
+			if (ImageTransformUtil.createScaledImage(origImgPath, scaledImgPath, 1280, 1280)) {
+				File origImgFile = new File(origImgPath);
+				if (!origImgFile.delete()) {
+		            Logger.getLogger(getClass()).error("failed to delete original image after scaling: " + origImgPath);
+				} else {
+					File scaledImgFile = new File(scaledImgPath);
+					if (!scaledImgFile.renameTo(origImgFile)) {
+			            Logger.getLogger(getClass()).error("failed to rename scaled image file " + scaledImgPath + " to " + origImgPath);
+					}
+				}
+			}
+		}
+        
+        if (WebFileSys.getInstance().isAutoCreateThumbs())
+        {
+            String ext = CommonUtils.getFileExtension(fileName);
+            
+            if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png")))
+            {
+                AutoThumbnailCreator.getInstance().queuePath(outFile.getAbsolutePath(), AutoThumbnailCreator.SCOPE_FILE);
             }
         }
     }

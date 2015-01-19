@@ -286,11 +286,11 @@ a.buttonActive:hover {
 }
   
 a.dirtree {
-    font-size:13px;
-    color:black;
-    font-weight:bold;
-    text-decoration:none;
-    vertical-align:middle;
+    font-size: 13px;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    vertical-align: middle;
 }
 
 a.dir {
@@ -374,6 +374,7 @@ td.story {
     font-size:12pt;
     color:#306048;
     font-weight:bold;
+    max-height: 999999px;  /* prevent android font boosting */
 }
   
 td.story2 {

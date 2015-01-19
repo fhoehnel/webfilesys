@@ -12,17 +12,21 @@
 <html>
 <head>
 
-<meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="0" />
 
-<link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
-<link rel="stylesheet" type="text/css">
-  <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileComments/css" />.css</xsl:attribute>
-</link>
+  <link rel="stylesheet" type="text/css">
+    <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileComments/css" />.css</xsl:attribute>
+  </link>
 
-<title>
-  <xsl:value-of select="/fileComments/resources/msg[@key='label.commentList']/@value" />
-</title>
+  <title resource="label.commentList"></title>
+
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileComments/language" /></xsl:attribute>
+  </script>
 
 <script language="javascript">
   function limitText()
@@ -35,20 +39,32 @@
   
   function confirmDelete()
   {  
-      if (confirm('<xsl:value-of select="/fileComments/resources/msg[@key='confirm.delcomments']/@value" />'))
+      if (confirm(resourceBundle["confirm.delcomments"]))
       { 
           window.location.href='/webfilesys/servlet?command=delComments&amp;actPath=<xsl:value-of select="/fileComments/encodedPath" />';
       }
   }
+  
+  <xsl:if test="/fileComments/modifyPermission">
+    function refreshParentWindow() {
+        window.opener.location.reload();
+    }
+    
+    window.onbeforeunload = refreshParentWindow;  
+  </xsl:if>
 </script>
-
 
 </head>
 
 <body>
 
   <div class="headline">
-    <xsl:value-of select="/fileComments/shortPath" />
+    <xsl:if test="/fileComments/shortPath">
+      <xsl:value-of select="/fileComments/shortPath" />
+    </xsl:if>
+    <xsl:if test="not(/fileComments/shortPath)">
+      <span resource="label.commentList"></span>
+    </xsl:if>
   </div>
 
   <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet">
@@ -63,9 +79,7 @@
    
       <xsl:if test="not(/fileComments/comments) or not(/fileComments/comments/comment)">
         <tr>
-          <td class="formParm1">
-            <xsl:value-of select="/fileComments/resources/msg[@key='label.nocomments']/@value" />
-          </td>
+          <td class="formParm1" resource="label.nocomments"></td>
         </tr>
       </xsl:if>
 
@@ -94,7 +108,7 @@
       <xsl:if test="/fileComments/modifyPermission">
         <tr>
           <td class="formParm1">
-            <xsl:value-of select="/fileComments/resources/msg[@key='label.addcomment']/@value" />:
+            <span resource="label.addcomment"></span>:
           </td>
         </tr>
 
@@ -107,7 +121,7 @@
 		<xsl:if test="/fileComments/virtualUser">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/fileComments/resources/msg[@key='label.commentAuthor']/@value" />:
+              <span resource="label.commentAuthor"></span>:
               &#160;
               <input type="text" name="author" style="width:150px" />
             </td>
@@ -121,33 +135,31 @@
         
             <xsl:if test="/fileComments/modifyPermission">
 			
-              <input type="button">
+              <input type="button" resource="button.addComment">
                 <xsl:attribute name="onclick">javascript:document.form1.submit()</xsl:attribute>
-                <xsl:attribute name="value"><xsl:value-of select="/fileComments/resources/msg[@key='button.addComment']/@value" /></xsl:attribute>
               </input>              
 
               <xsl:if test="not(/fileComments/readonly)">
                 <xsl:if test="/fileComments/comments and /fileComments/comments/comment"> 
-                  <input type="button">
+                  <input type="button" resource="button.delComments">
                     <xsl:attribute name="onclick">javascript:confirmDelete()</xsl:attribute>
-                    <xsl:attribute name="value"><xsl:value-of select="/fileComments/resources/msg[@key='button.delComments']/@value" /></xsl:attribute>
                   </input>              
                 </xsl:if>  
               </xsl:if>  
               
             </xsl:if>              
 
-            <input type="button">
-              <xsl:if test="/fileComments/mobile">
+            <xsl:if test="/fileComments/mobile">
+              <input type="button" resource="button.return">
                 <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=mobile&amp;cmd=folderFileList';</xsl:attribute>
-                <xsl:attribute name="value"><xsl:value-of select="/fileComments/resources/msg[@key='button.return']/@value" /></xsl:attribute>
-              </xsl:if>
-              <xsl:if test="not(/fileComments/mobile)">
+              </input>
+            </xsl:if>
+            <xsl:if test="not(/fileComments/mobile)">
+              <input type="button" resource="button.closewin">
                 <xsl:attribute name="onclick">window.close()</xsl:attribute>
-                <xsl:attribute name="value"><xsl:value-of select="/fileComments/resources/msg[@key='button.closewin']/@value" /></xsl:attribute>
-              </xsl:if>
-            </input>              
-          
+              </input>
+            </xsl:if>
+
 		  </div>
         </td>
       </tr>
@@ -156,6 +168,10 @@
   </form>
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
 
 </html>
 

@@ -1020,3 +1020,38 @@ calender.reminderSubjectPrefix=WebFileSys Reminder
 
 # WebReminder plugin labels
 plugin.webreminder.title=WebReminder Calendar and Organizer
+
+blog.empty=This blog is still empty.
+blog.dateRangeEmpty=There are no blog entries for this date range!
+blog.createPostHeadline=post a new blog entry
+blog.editPostHeadline=edit blog entry
+blog.uploadDropZone=Drag and drop picture file for upload here!
+blog.uploadFileNames=selected pictures
+blog.sendPostButton=Send
+blog.cancelButton=Cancel
+blog.calendarTitle=select date from calendar
+blog.selectDate=date
+blog.dateInFuture=The selected day is in the future!
+blog.uploadFileTooLarge=The selected file is too large for upload!
+blog.emptyPost=Select a picture for upload and/or enter any text!
+blog.confirmSendEmptyText=You have not entered any text. Submit anyway?
+blog.listHeadline=WebFileSys Blog
+blog.buttonCreate=Create new Entry
+blog.buttonPublish=Publish Blog
+blog.buttonPublicLink=Show Public Link
+blog.buttonUnpublish=Unpublish Blog
+blog.buttonlogout=Logout
+blog.confirmCancel=Discard changes?
+blog.confirmUnpublish=Are you sure you want to stop the publication of the blog?
+blog.pagingNewer=newer entries
+blog.pagingOlder=older entries
+blog.deleteError=failed to delete blog entry
+blog.confirmDelete=Are you sure you want to delete this blog entry?
+blog.textTooLong=The text of this blog entry ist too long.
+blog.publishTitle=Publish Blog
+blog.daysPerPage=days per page
+blog.invalidDaysPerPageValue=The value for day per page is invalid!
+blog.invalidExpirationDays=The value for the expiration days is invalid!
+
+error.latitudeInvalid=latitude must be a number between -90.0 and 90.0
+error.longitudeInvalid=longitude must be a number between -180.0 and 180.0
