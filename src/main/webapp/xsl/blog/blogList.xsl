@@ -13,8 +13,11 @@
     <head>
 
       <meta http-equiv="expires" content="0" />
-      
+
+      <meta name="viewport" content="width=800, initial-scale=1.0, user-scalable=yes" />
+      <!--        
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+      -->
 
       <title>WebFileSys Blog</title>
 
@@ -106,6 +109,12 @@
           <xsl:value-of select="/blog/blogTitle" />
         </div> 
       
+        <xsl:if test="not(/blog/readonly)">
+          <a href="#" class="icon-font icon-menu blogMenu" titleResource="blog.settingsHeadline">
+            <xsl:attribute name="onClick">showSettings()</xsl:attribute>
+          </a>
+        </xsl:if>
+
         <div class="blogCalenderCont">
           <a href="#" name="anchorDate" id="anchorDate" class="icon-font icon-calender blogCalender" titleResource="blog.calendarTitle">
             <xsl:attribute name="onClick">selectDate()</xsl:attribute>
@@ -138,6 +147,7 @@
             <input type="button" resource="blog.buttonCreate" onclick="window.location.href='/webfilesys/servlet?command=blog&amp;cmd=post'" />
 
             <input type="button" resource="blog.buttonlogout" onclick="window.location.href='/webfilesys/servlet?command=logout'" />
+
           </xsl:if>
         </div>   
     
@@ -209,7 +219,10 @@
               </xsl:if>
 
               <a class="pictureBookComent" titleResource="label.comments">
+                <!--  
                 <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>
+                -->
+                <xsl:attribute name="href">javascript:blogComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>
                 (<xsl:value-of select="comments" /><xsl:text> </xsl:text><span resource="label.comments"></span>)
               </a>
           
@@ -295,6 +308,12 @@
     <div id="picturePopup" style="position:absolute;top:50px;left:150px;width:400px;height:400px;background-color:#c0c0c0;padding:0px;visibility:hidden;border-style:ridge;border-color:white;border-width:6px;z-index:2;"><img id="zoomPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/><div id="popupClose" style="position:absolute;top:5px;left:5px;width:16px;height:14px;padding:0px;visibility:hidden;border-style:none;z-index:3"><img src="/webfilesys/images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupPicture()"/></div></div>
     
     <div id="publishCont" class="blogPublishCont"></div>
+
+    <div id="commentCont" class="blogCommentCont"></div>
+    
+    <xsl:if test="not(/blog/readonly)">
+      <div id="settingsCont" class="blogSettingsCont"></div>
+    </xsl:if>    
     
     <script type="text/javascript">
       setBundleResources();

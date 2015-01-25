@@ -113,15 +113,20 @@ import de.webfilesys.gui.ajax.calendar.XmlPasteAppointmentHandler;
 import de.webfilesys.gui.anonymous.BlankPageRequestHandler;
 import de.webfilesys.gui.anonymous.VersionInfoRequestHandler;
 import de.webfilesys.gui.anonymous.VisitorFileRequestHandler;
+import de.webfilesys.gui.blog.BlogAddCommentHandler;
 import de.webfilesys.gui.blog.BlogChangeEntryHandler;
+import de.webfilesys.gui.blog.BlogDeleteCommentsHandler;
 import de.webfilesys.gui.blog.BlogDeleteEntryHandler;
 import de.webfilesys.gui.blog.BlogEditEntryHandler;
 import de.webfilesys.gui.blog.BlogGetPublicUrlHandler;
+import de.webfilesys.gui.blog.BlogListCommentsHandler;
 import de.webfilesys.gui.blog.BlogListHandler;
 import de.webfilesys.gui.blog.BlogPostHandler;
 import de.webfilesys.gui.blog.BlogPublishFormHandler;
 import de.webfilesys.gui.blog.BlogPublishHandler;
+import de.webfilesys.gui.blog.BlogSaveSettingsHandler;
 import de.webfilesys.gui.blog.BlogSetDescrHandler;
+import de.webfilesys.gui.blog.BlogShowSettingsHandler;
 import de.webfilesys.gui.blog.BlogUnpublishHandler;
 import de.webfilesys.gui.google.GoogleEarthDirPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthFolderPlacemarkHandler;
@@ -2266,6 +2271,36 @@ public class WebFileSysServlet extends HttpServlet
            	else if (cmd.equals("unpublish"))
             {
     			(new BlogUnpublishHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("listComments"))
+            {
+    			(new BlogListCommentsHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("addComment"))
+            {
+    			(new BlogAddCommentHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("delComments"))
+            {
+    			(new BlogDeleteCommentsHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("showSettings"))
+            {
+    			(new BlogShowSettingsHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("saveSettings"))
+            {
+    			(new BlogSaveSettingsHandler(req, resp, session, output, userid)).handleRequest(); 
                 
                 return(true);
         	}

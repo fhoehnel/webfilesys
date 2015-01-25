@@ -21,6 +21,8 @@ body.blog input[type="submit"],
 body.blog input[type="button"],
 .blogPublishForm input[type="button"],
 .blogGeoMapFrame input[type="button"],
+.blogCommentForm input[type="button"],
+.blogSettingsForm input[type="button"],
 input.blogUploadFileSelButton {
     height: 32px;
     background: linear-gradient(#d0d0d0, #f0f0f0);
@@ -82,13 +84,24 @@ div.blogDateRange {
     color: #ffff80
 }
 
-a.blogCalender {
+a.blogCalender,
+a.blogMenu {
     text-decoration: none;
 }
 
-a.blogCalender:before {
-    font-size: 2rem;
+a.blogCalender:before,
+a.blogMenu:before {
     color: #000060;
+    font-size: 2rem;
+}
+
+a.blogMenu {
+    float: left;
+    margin-top: 16px;
+}
+
+a.blogMenu:before {
+    margin-right: 20px;
 }
 
 div.blogFormCont {
@@ -327,9 +340,59 @@ div.blogEmpty {
     clear: both;
 }
 
+div.blogCommentCont {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 2px ridge #808080;
+    background-color: #ffffe0;
+    visibility: hidden;
+}
+
+div.blogComments {
+}
+
+div.blogCommentList {
+    overflow-y: auto;
+    padding: 10px;
+    max-height: 400px;
+}
+
+table.blogCommentForm {
+    background-color: #ffffe0;
+}
+
+div.commentContHead,
+div.blogSettingsHead {
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: lavender;  
+    border-bottom: 1px solid #808080;  
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+}
+
+textarea.commentText {
+    width: 95%;
+}
+
 html.blog td.formParm1,
 html.blog td.formParm2 {
     font-size: 1rem;
+}
+
+div.blogSettingsCont {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 2px ridge #808080;
+    background-color: #ffffe0;
+    visibility: hidden;
+}
+
+form.blogSettingsForm {
+    padding: 16px;
 }
 
 #calDiv {

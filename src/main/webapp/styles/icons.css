@@ -104,6 +104,10 @@
 	content: '\f073';
 }
 
+.icon-menu:before {
+	content: '\f0c9';
+}
+
 .icon-page-prev:before {
 	content: '\f04a';
 }

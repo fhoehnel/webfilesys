@@ -28,6 +28,8 @@ import de.webfilesys.util.XmlUtil;
 
 public class BlogListHandler extends XslRequestHandlerBase {
 	
+	public static final int DEFAULT_PAGE_SIZE = 6;
+	
 	public BlogListHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -139,7 +141,7 @@ public class BlogListHandler extends XslRequestHandlerBase {
 				}
 			}
 			
-			int daysPageSize = 6;
+			int daysPageSize = DEFAULT_PAGE_SIZE;
 			
 			int pageSize = userMgr.getPageSize(uid);
 			

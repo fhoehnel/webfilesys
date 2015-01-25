@@ -896,3 +896,172 @@ function handleUnpublishResult() {
         }
     }
 }
+
+function blogComments(filePath) {
+
+    var commentCont = document.getElementById("commentCont");
+    
+    var xmlUrl = '/webfilesys/servlet?command=blog&cmd=listComments&filePath=' + encodeURIComponent(filePath);
+    
+    var xslUrl = '/webfilesys/xsl/blog/comments.xsl';
+
+    commentCont.innerHTML = browserXslt(xmlUrl, xslUrl);
+    
+    setBundleResources();
+    
+    centerBox(commentCont);
+
+    commentCont.style.visibility = "visible";
+}
+
+function closeBlogComments() {
+    var commentCont = document.getElementById("commentCont");
+    commentCont.style.visibility = "hidden";
+}
+
+function submitComment() {
+    if (document.getElementById("newComment").value.length == 0) {
+        alert(resourceBundle["blog.newCommentEmpty"]);
+        return;
+    }
+    
+    var commentCont = document.getElementById("commentCont");
+    commentCont.style.visibility = "hidden";
+
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.getElementById("blogCommentForm")), showPostCommentResult);
+}
+
+function showPostCommentResult() {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
+            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+
+            if (success == 'true') {
+                window.location.reload();
+                /*
+                var filePath = resultElem.getElementsByTagName("filePath")[0].firstChild.nodeValue;
+                blogComments(filePath);
+                */            
+            } else {
+                alert("failed to create comment");
+            }
+        }
+    }
+}
+
+function limitCommentText() { 
+    var newComment = document.getElementById("newComment");
+ 
+    if (newComment.value.length > 2048) {  
+        newComment.value = newComment.value.substring(0, 2048);
+    }
+}
+  
+function confirmDelComments(filePath) {  
+    if (!confirm(resourceBundle["confirm.delcomments"])) { 
+        return;
+    }
+    
+    showHourGlass();
+    
+    var url = "/webfilesys/servlet?command=blog&cmd=delComments&filePath=" + encodeURIComponent(filePath);
+
+    var responseXml = xmlRequestSynchron(url);
+   
+    var success = null;
+   
+    if (responseXml) {
+        var successItem = responseXml.getElementsByTagName("success")[0];
+        if (successItem) {
+            success = successItem.firstChild.nodeValue;
+        }         
+    }
+
+    if ((success != null) && (success == "true")) {
+        blogComments(filePath);            
+    } else {
+        alert("failed to delete comments");
+    }
+    
+    hideHourGlass();   
+}
+
+function showSettings() {
+
+    var settingsCont = document.getElementById("settingsCont");
+    
+    var xmlUrl = "/webfilesys/servlet?command=blog&cmd=showSettings";
+    
+    var xslUrl = "/webfilesys/xsl/blog/settings.xsl";
+
+    settingsCont.innerHTML = browserXslt(xmlUrl, xslUrl);
+    
+    setBundleResources();
+    
+    centerBox(settingsCont);
+
+    settingsCont.style.visibility = "visible";
+}
+
+function hideSettings() {
+    var settingsCont = document.getElementById("settingsCont");
+
+    settingsCont.style.visibility = "hidden";
+}
+
+function validateSettingsForm() {
+    
+  	var daysPerPage = document.getElementById("daysPerPage").value;
+
+    var pageSize = parseInt(daysPerPage);
+
+    if ((daysPerPage == "") || isNaN(pageSize) || (pageSize < 1) || (pageSize > 64)) {
+        alert(resourceBundle["blog.invalidDaysPerPage"]);
+    	return;
+    }
+    
+    var newPassword = document.getElementById("newPassword").value;
+    
+    if ((newPassword.length > 0) && (newPassword.length < 5)) {
+        alert(resourceBundle["error.passwordlength"]);
+        return;
+    }
+
+    var newPasswdConfirm = document.getElementById("newPasswdConfirm").value;
+    
+    if (newPassword != newPasswdConfirm) {
+        alert(resourceBundle["error.pwmissmatch"]);
+        return;
+    }
+
+    showHourGlass();
+
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.getElementById("blogSettingsForm")), showSaveSettingsResult);
+}
+
+function showSaveSettingsResult() {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
+            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+
+            if (success != 'true') {
+                alert("failed to save settings");
+            }
+
+            var pageSizeChanged = resultElem.getElementsByTagName("pageSizeChanged")[0].firstChild.nodeValue;
+            var blogTitleChanged = resultElem.getElementsByTagName("blogTitleChanged")[0].firstChild.nodeValue;
+
+            var settingsCont = document.getElementById("settingsCont");
+            settingsCont.style.visibility = "hidden";
+            
+            hideHourGlass();
+
+            if ((pageSizeChanged && (pageSizeChanged == "true")) || (blogTitleChanged && (blogTitleChanged == "true"))) {
+                window.location.reload();
+            }
+        }
+        hideHourGlass();
+    }
+}

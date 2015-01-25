@@ -1052,6 +1052,13 @@ blog.publishTitle=Publish Blog
 blog.daysPerPage=days per page
 blog.invalidDaysPerPageValue=The value for day per page is invalid!
 blog.invalidExpirationDays=The value for the expiration days is invalid!
+blog.newCommentEmpty=Please enter a comment text!
+blog.settingsHeadline=blog settings
+blog.titleText=blog title text
+blog.daysPerPage=days per page
+blog.newPassword=new password
+blog.newPasswdConfirm=confirm new password 
+blog.invalidDaysPerPage=The value for days per page muste be a number between 1 and 64!
 
 error.latitudeInvalid=latitude must be a number between -90.0 and 90.0
 error.longitudeInvalid=longitude must be a number between -180.0 and 180.0

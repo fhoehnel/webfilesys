@@ -1,4 +1,4 @@
-package de.webfilesys.gui.xsl;
+package de.webfilesys.gui.blog;
 
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
@@ -15,15 +15,16 @@ import de.webfilesys.Comment;
 import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
+import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
 /**
  * @author Frank Hoehnel
  */
-public class XslListCommentsHandler extends XslRequestHandlerBase
+public class BlogListCommentsHandler extends XslRequestHandlerBase
 {
-	public XslListCommentsHandler(
+	public BlogListCommentsHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
@@ -35,33 +36,18 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 	  
 	protected void process()
 	{
-		String actPath = getParameter("actPath");
+		String actPath = getParameter("filePath");
 
 		if (!checkAccess(actPath))
 		{
 			return;
 		}
 
-        String shortPath = null;
-		
-        if (!userMgr.getRole(uid).equals("blog")) {
-    		String headLinePath = getHeadlinePath(actPath);
-
-    		shortPath = headLinePath;
-
-    		int pathLength = headLinePath.length();
-
-    		if (pathLength > 50)
-    		{
-    			shortPath = headLinePath.substring(0,15) + "..." + headLinePath.substring(pathLength - 31);
-    		}
-        }
-        
 		Element fileCommentsElement = doc.createElement("fileComments");
 			
 		doc.appendChild(fileCommentsElement);
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/fileComments.xsl\"");
+		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/blog/comments.xsl\"");
 
 		doc.insertBefore(xslRef, fileCommentsElement);
 
@@ -69,11 +55,8 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(fileCommentsElement, "path", actPath, false);
 	    XmlUtil.setChildText(fileCommentsElement, "language", language, false);
 		
-		if (shortPath != null) {
-			XmlUtil.setChildText(fileCommentsElement, "shortPath", shortPath, false);
-		}
-
 		XmlUtil.setChildText(fileCommentsElement, "encodedPath", UTF8URLEncoder.encode(actPath), false);
+		XmlUtil.setChildText(fileCommentsElement, "pathForScript", insertDoubleBackslash(actPath), false);
 
 		boolean modifyPermission=true;
 
@@ -164,6 +147,6 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 			}
 		}
 			
-		this.processResponse("fileComments.xsl", false);
+		this.processResponse("blog/comments.xsl", false);
     }
 }
