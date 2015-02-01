@@ -48,8 +48,11 @@ public class BlogUnpublishHandler extends XmlRequestHandlerBase {
 
 				if (path != null) { // not expired
 				    if (path.equals(currentPath)) {
-				        InvitationManager.getInstance().removeInvitation(accessCode);
-                        removed = true;
+				        String virtualUser = InvitationManager.getInstance().getVirtualUser(accessCode);
+				        if (virtualUser != null) {
+				        	removed = userMgr.removeUser(virtualUser);
+					        InvitationManager.getInstance().removeInvitation(accessCode);
+				        }
 				    }
 				}
 			}

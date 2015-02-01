@@ -237,7 +237,9 @@ function PopupWindow_isClicked(e) {
 			return false;
 			}
 		else if (this.use_gebi && e) {
-			var t = e.originalTarget;
+			// var t = e.originalTarget;
+			var t = e.target;  // changed by fho to prevent exception in Chrome
+			
 			while (t.parentNode != null) {
 				if (t.id==this.divName) {
 					return true;

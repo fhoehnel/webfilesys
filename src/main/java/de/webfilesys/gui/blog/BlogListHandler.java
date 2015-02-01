@@ -214,6 +214,8 @@ public class BlogListHandler extends XslRequestHandlerBase {
 				Date dateRangeFrom = null;
 				Date dateRangeUntil = null;
 				
+				int globalEntryCounter = 0;
+				
 				for (String blogDate : daysOnPage) {
 					try {
 						Date day = dateFormat.parse(blogDate);
@@ -242,6 +244,8 @@ public class BlogListHandler extends XslRequestHandlerBase {
 							
 		                    for (File file : entriesOfDay) {
 		                    	
+		                    	globalEntryCounter++;
+		                    	
 		        				Element fileElement = doc.createElement("file");
 		                        
 		        				dayEntriesElement.appendChild(fileElement);
@@ -251,6 +255,12 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		        				fileElement.setAttribute("name", actFilename);
 
 		        				fileElement.setAttribute("id", Integer.toString(i));
+		        				
+		        				if (globalEntryCounter % 2 == 0) {
+			        				XmlUtil.setChildText(fileElement, "align", "right");
+		        				} else {
+			        				XmlUtil.setChildText(fileElement, "align", "left");
+		        				}
 		        				
 		        				String description = null;
 

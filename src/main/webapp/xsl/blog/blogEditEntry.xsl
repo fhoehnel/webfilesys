@@ -44,14 +44,6 @@
       </script>
       
       <script type="text/javascript">
-        function setCalendarStyles() 
-        {
-            if (browserFirefox) 
-            {
-                var calendarCssElem = document.getElementById("calendarStyle");
-                calendarCssElem.innerHTML = getCalStyles();
-            }
-        }
 
         if (!browserFirefox) 
         {
@@ -59,33 +51,6 @@
         }
   
         var cal1x = new CalendarPopup("calDiv");
-   
-        function selectDate()
-        {
-            cal1x.setReturnFunction("setSelectedDate");
-            cal1x.select(document.getElementById("blogDate"), "anchorDate", "MM/dd/yyyy");
-            centerBox(document.getElementById("calDiv"));
-        }
-
-        function setSelectedDate(y, m, d) 
-        { 
-            document.getElementById("dateDay").value = LZ(d);        
-            document.getElementById("dateMonth").value = LZ(m);        
-            document.getElementById("dateYear").value = y;        
-            
-            var selectedDate = new Date();
-            selectedDate.setDate(d);
-            selectedDate.setMonth(m - 1);
-            selectedDate.setYear(y);
-        
-            var now = new Date();
-            
-            if (selectedDate.getTime() - (24 * 60 * 60 * 1000) > now.getTime()) {
-                alert(resourceBundle["blog.dateInFuture"])
-            }
-        
-            document.getElementById("blogDate").value = selectedDate.toLocaleString().split(" ")[0];
-        }
 
         function setInitialDate() {
             var initialDate = new Date(<xsl:value-of select="/blog/blogEntry/blogDate/year" />,
@@ -103,7 +68,8 @@
 
     </head>
 
-    <body class="blog" onload="setCalendarStyles();setInitialDate()">
+    <body class="blog">
+      <xsl:attribute name="onload">setCalendarStyles();setInitialDate();loadGoogleMapsAPIScriptCode();<xsl:if test="/blog/blogEntry/geoTag">toggleGeoData(document.getElementById('blogGeoDataSwitcher'));</xsl:if></xsl:attribute>
       
       <div class="headline" resource="blog.editPostHeadline"></div>    
       
@@ -144,6 +110,79 @@
             <textarea id="blogText" name="blogText" class="blogText"><xsl:value-of select="/blog/blogEntry/blogText" /></textarea>
           </div>
         
+          <div class="blogGeoDataSwitcher">
+            <input type="checkbox" id="blogGeoDataSwitcher" name="geoDataSwitcher" onchange="toggleGeoData(this)">
+              <xsl:if test="/blog/blogEntry/geoTag">
+                <xsl:attribute name="checked">checked</xsl:attribute>
+              </xsl:if>
+            </input>
+            <label for="blogGeoDataSwitcher" resource="label.geoTag"></label>
+          </div>
+              
+          <div id="blogGeoTagCont" class="blogGeoTagCont">
+            <ul style="list-style:none;margin:0;padding:0;">
+              <li class="blogGeoTag">
+                <input id="latitude" name="latitude" class="blogLatLong">
+                  <xsl:if test="/blog/blogEntry/geoTag/latitude">
+                    <xsl:attribute name="value"><xsl:value-of select="/blog/blogEntry/geoTag/latitude" /></xsl:attribute>
+                  </xsl:if>
+                </input>
+                &#160;
+                <span resource="label.latitude"></span>
+              </li>
+
+              <li class="blogGeoTag">
+                <input id="longitude" name="longitude" class="blogLatLong">
+                  <xsl:if test="/blog/blogEntry/geoTag/longitude">
+                    <xsl:attribute name="value"><xsl:value-of select="/blog/blogEntry/geoTag/longitude" /></xsl:attribute>
+                  </xsl:if>
+                </input>
+                &#160;
+                <span resource="label.longitude"></span>
+              </li>
+              
+              <li class="blogGeoTag">
+                <table border="0">
+                  <tr>
+                    <td>
+                      <input type="button" resource="button.selectFromMap">
+                        <xsl:attribute name="onclick">javascript:showMap(true)</xsl:attribute>
+                      </input> 
+                    </td>
+                    <td>
+                      <input type="button" resource="button.preview">
+                        <xsl:attribute name="onclick">javascript:showMap()</xsl:attribute>
+                      </input> 
+                    </td> 
+                  </tr>
+                </table>
+              </li>
+              
+              <li class="blogGeoTag">
+                <select id="zoomFactor" name="zoomFactor">
+                  <xsl:for-each select="/blog/blogEntry/zoomLevel/zoomFactor">
+                    <option>
+                      <xsl:if test="@current">
+                        <xsl:attribute name="selected">selected</xsl:attribute>
+                      </xsl:if>
+                      <xsl:attribute name="value"><xsl:value-of select="." /></xsl:attribute>
+                      <xsl:value-of select="." />
+                    </option>
+                  </xsl:for-each>
+                </select>
+                &#160;
+                <span resource="label.zoomFactor"></span>
+              </li>
+
+              <li class="blogGeoTag">            
+                <textarea name="infoText" class="blogGeoTagHint" wrap="virtual" maxlength="100"><xsl:value-of select="/blog/blogEntry/geoTag/infoText" /></textarea>
+                &#160;
+                <span resource="label.geoTagInfoText"></span>
+              </li>
+            </ul>
+
+          </div>
+        
           <div class="blogButtonSection">
             <input type="button" id="sendButton" resource="blog.sendPostButton" onclick="submitPost()" />
             <input type="button" id="cancelButton" resource="blog.cancelButton" class="rightAlignedButton" onclick="returnToList()"/>
@@ -156,6 +195,23 @@
     </body>
     
     <div id="calDiv"></div>
+    
+    <div id="mapFrame" class="blogGeoMapFrame">
+      <div id="map" class="blogGeoMap"></div>
+    
+      <div style="position:absolute;bottom:15px;left:10px;"> 
+
+        <form>
+          <input id="closeButton" type="button" resource="button.closeMap" onclick="hideMap()" 
+              style="font-size:13px;font-weight:bold;color:black;"/>
+
+          <input id="selectButton" type="button" resource="button.save" onclick="javascript:selectLocation()" 
+              style="visibility:hidden;font-size:13px;font-weight:bold;color:black;"/>
+        </form>
+      
+      </div>
+
+    </div>
     
     <script type="text/javascript">
       setBundleResources();

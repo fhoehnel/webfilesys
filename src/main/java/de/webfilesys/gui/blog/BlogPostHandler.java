@@ -44,21 +44,12 @@ public class BlogPostHandler extends XslRequestHandlerBase {
 		
 		geoTagElement.appendChild(zoomLevelElement);
 		
-		for (int i = 0; i < 16; i++)
-		{
+		for (int i = 0; i < 16; i++) {
 			Element zoomFactorElement = doc.createElement("zoomFactor");
 			
 			XmlUtil.setElementText(zoomFactorElement, Integer.toString(i));
-			
-			/*
-			if (i == zoomFactor)
-			{
-				zoomFactorElement.setAttribute("current", "true");
-			}
-			*/
 
-			if (i == 10)
-			{
+			if (i == 10) {
 				zoomFactorElement.setAttribute("current", "true");
 			}
 			

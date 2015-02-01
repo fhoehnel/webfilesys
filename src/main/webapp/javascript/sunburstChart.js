@@ -9,8 +9,6 @@
 	   
        function showDirName(titleText, sectorColor, mouseXPos, mouseYPos)	
 	   {
-	       console.log("showing dirname at location " + mouseXPos + "," + mouseYPos);
-		   
 		   var infoBoxYPos = mouseYPos;
 		   if (infoBoxYPos > 30)
 		   {

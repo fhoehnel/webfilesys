@@ -543,12 +543,12 @@ public class MetaInfManager extends Thread
     	}
     }
 
-    public Vector getListOfComments(String absoluteFileName) {
+    public Vector<Comment> getListOfComments(String absoluteFileName) {
         String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
         return(getListOfComments(partsOfPath[0], partsOfPath[1]));
     }
 
-    public Vector getListOfComments(String path, String fileName)
+    public Vector<Comment> getListOfComments(String path, String fileName)
     {
         Element metaInfElement=getMetaInfElement(path,fileName);
 

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.Category;
+import de.webfilesys.Comment;
+import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
@@ -131,6 +133,18 @@ public class RenameFileRequestHandler extends UserRequestHandler
 			}
 		}
 
+		GeoTag geoTag = metaInfMgr.getGeoTag(oldFilePath);
+		if (geoTag != null) {
+			metaInfMgr.setGeoTag(newFilePath, geoTag);
+		}
+
+		Vector<Comment> comments = metaInfMgr.getListOfComments(oldFilePath);
+		if ((comments != null) && (comments.size() > 0)) {
+			for (Comment comment : comments) {
+				metaInfMgr.addComment(newFilePath, comment);
+			}
+		}
+		
         if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
         {
             metaInfMgr.updateLinksAfterMove(oldFilePath, newFilePath, uid);

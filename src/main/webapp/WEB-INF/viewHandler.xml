@@ -6,7 +6,6 @@
     <class>de.webfilesys.viewhandler.LogViewHandler</class>
     <filePatternList>
       <filePattern>*.log</filePattern>
-      <filePattern>*log*</filePattern>
     </filePatternList>
     <parameterList>
       <parameter>

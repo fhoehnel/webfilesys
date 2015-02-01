@@ -126,7 +126,7 @@ function drop(e) {
              selectedForUpload.push(files[i]);
         }
 
-        var file = selectedForUpload.pop();
+        var file = selectedForUpload.shift();
         if (file) {
             new singleFileBinaryUpload(file); 
         }
@@ -317,7 +317,7 @@ function sendFiles() {
 		}
 	}
 		  
-    var file = selectedForUpload.pop();
+    var file = selectedForUpload.shift();
           
     if (file) {
         singleFileBinaryUpload(file);
@@ -342,7 +342,7 @@ function singleFileBinaryUpload(file) {
     {
         if (!confirm(fileName + ': ' + resourceBundle["upload.file.exists"])) 
         {
-            var nextFile = selectedForUpload.pop();
+            var nextFile = selectedForUpload.shift();
             if (nextFile) 
             {
                 new singleFileBinaryUpload(nextFile)
@@ -410,7 +410,7 @@ function handleUploadState() {
             totalLoaded += sizeOfCurrentFile;
 			  
             // start uploading the next file
-            var file = selectedForUpload.pop();
+            var file = selectedForUpload.shift();
             if (file) {
 		        currentFileNum++;
                 var currentFileNumCont = document.getElementById("currentFileNum");
@@ -429,7 +429,7 @@ function handleUploadState() {
             }
         } else {
             alert(resourceBundle["upload.error"] + " " + lastUploadedFile);
-            var file = selectedForUpload.pop();
+            var file = selectedForUpload.shift();
             if (file) {
 		        currentFileNum++;
                 var currentFileNumCont = document.getElementById("currentFileNum");
@@ -507,7 +507,7 @@ function deleteBlogEntry(fileName) {
     hideHourGlass();    
     
     if (success == "deleted") {
-        window.location.reload();
+        window.location.href = "/webfilesys/servlet?command=blog";
     } else {
         alert(resourceBundle["blog.deleteError"]);
     }
@@ -660,7 +660,7 @@ function publishBlog() {
         }
     }
         
-    var boxWidth = 400;
+    var boxWidth = 500;
         
     if (boxWidth > windowWidth - 10) {
         boxWidth = windowWidth - 10;
@@ -892,7 +892,9 @@ function handleUnpublishResult() {
                 document.getElementById("publicURLButton").style.display = "none";
                 document.getElementById("publishBlogButton").style.display = "inline";
                 publicUrl = null;
-            } 
+            } else {
+                alert("failed to unpublish blog");
+            }
         }
     }
 }
@@ -938,7 +940,7 @@ function showPostCommentResult() {
             var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
 
             if (success == 'true') {
-                window.location.reload();
+                window.location.href = "/webfilesys/servlet?command=blog";
                 /*
                 var filePath = resultElem.getElementsByTagName("filePath")[0].firstChild.nodeValue;
                 blogComments(filePath);
@@ -1059,9 +1061,41 @@ function showSaveSettingsResult() {
             hideHourGlass();
 
             if ((pageSizeChanged && (pageSizeChanged == "true")) || (blogTitleChanged && (blogTitleChanged == "true"))) {
-                window.location.reload();
+                window.location.href = "/webfilesys/servlet?command=blog";
             }
         }
         hideHourGlass();
     }
+}
+
+function setCalendarStyles() {
+    if (browserFirefox) {
+        var calendarCssElem = document.getElementById("calendarStyle");
+        calendarCssElem.innerHTML = getCalStyles();
+    }
+}
+   
+function selectDate() {
+    cal1x.setReturnFunction("setSelectedDate");
+    cal1x.select(document.getElementById("blogDate"), "anchorDate", "MM/dd/yyyy");
+    centerBox(document.getElementById("calDiv"));
+}
+
+function setSelectedDate(y, m, d) { 
+    document.getElementById("dateDay").value = LZ(d);        
+    document.getElementById("dateMonth").value = LZ(m);        
+    document.getElementById("dateYear").value = y;        
+            
+    var selectedDate = new Date();
+    selectedDate.setYear(y);
+    selectedDate.setMonth(m - 1);
+    selectedDate.setDate(d);
+        
+    var now = new Date();
+           
+    if (selectedDate.getTime() - (24 * 60 * 60 * 1000) > now.getTime()) {
+        alert(resourceBundle["blog.dateInFuture"])
+    }
+        
+    document.getElementById("blogDate").value = selectedDate.toLocaleString().split(" ")[0];
 }

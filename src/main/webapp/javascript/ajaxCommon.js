@@ -152,14 +152,12 @@ function xmlRequestPost(url, params, callBackFunction)
         
     if (req) 
     {
-	req.onreadystatechange = callBackFunction;
-	req.open("POST", url, true);
+	    req.onreadystatechange = callBackFunction;
+	    req.open("POST", url, true);
 
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        req.setRequestHeader("Content-length", params.length);
-        req.setRequestHeader("Connection", "close");
-	
-	req.send(params);
+        
+	    req.send(params);
     }
     else
     {

@@ -45,48 +45,11 @@
       </script>
       
       <script type="text/javascript">
-        function setCalendarStyles() 
-        {
-            if (browserFirefox) 
-            {
-                var calendarCssElem = document.getElementById("calendarStyle");
-                calendarCssElem.innerHTML = getCalStyles();
-            }
-        }
-
-        if (!browserFirefox) 
-        {
+        if (!browserFirefox) {
             document.write(getCalendarStyles());
         }
   
         var cal1x = new CalendarPopup("calDiv");
-   
-        function selectDate()
-        {
-            cal1x.setReturnFunction("setSelectedDate");
-            cal1x.select(document.getElementById("blogDate"), "anchorDate", "MM/dd/yyyy");
-            centerBox(document.getElementById("calDiv"));
-        }
-
-        function setSelectedDate(y, m, d) 
-        { 
-            document.getElementById("dateDay").value = LZ(d);        
-            document.getElementById("dateMonth").value = LZ(m);        
-            document.getElementById("dateYear").value = y;        
-            
-            var selectedDate = new Date();
-            selectedDate.setDate(d);
-            selectedDate.setMonth(m - 1);
-            selectedDate.setYear(y);
-        
-            var now = new Date();
-            
-            if (selectedDate.getTime() - (24 * 60 * 60 * 1000) > now.getTime()) {
-                alert(resourceBundle["blog.dateInFuture"])
-            }
-        
-            document.getElementById("blogDate").value = selectedDate.toLocaleString().split(" ")[0];
-        }
 
         function setInitialDate() {
             var now = new Date();

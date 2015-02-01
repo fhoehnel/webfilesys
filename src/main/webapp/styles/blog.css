@@ -288,6 +288,7 @@ div.blogGeoMapFrame {
     left: 0;
     visibility: hidden;
     background-color: #d0d0d0;
+    border: 2px ridge #808080;
 }
 
 div.blogGeoMap {

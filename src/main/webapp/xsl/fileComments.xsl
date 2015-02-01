@@ -44,14 +44,6 @@
           window.location.href='/webfilesys/servlet?command=delComments&amp;actPath=<xsl:value-of select="/fileComments/encodedPath" />';
       }
   }
-  
-  <xsl:if test="/fileComments/modifyPermission">
-    function refreshParentWindow() {
-        window.opener.location.reload();
-    }
-    
-    window.onbeforeunload = refreshParentWindow;  
-  </xsl:if>
 </script>
 
 </head>

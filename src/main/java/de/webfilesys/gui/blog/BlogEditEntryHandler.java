@@ -3,9 +3,6 @@ package de.webfilesys.gui.blog;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
@@ -108,6 +106,39 @@ public class BlogEditEntryHandler extends XslRequestHandlerBase {
 		XmlUtil.setChildText(blogDateElement, "year", fileName.substring(0, 4));
 		XmlUtil.setChildText(blogDateElement, "month", fileName.substring(5, 7));
 		XmlUtil.setChildText(blogDateElement, "day", fileName.substring(8, 10));
+		
+		int zoomFactor = 10;
+
+		GeoTag geoTag = metaInfMgr.getGeoTag(picFile.getAbsolutePath());
+		
+		if (geoTag != null) {
+			Element geoTagElement = doc.createElement("geoTag");
+			blogEntryElement.appendChild(geoTagElement);
+			
+			XmlUtil.setChildText(geoTagElement, "latitude", Float.toString(geoTag.getLatitude()));
+			XmlUtil.setChildText(geoTagElement, "longitude", Float.toString(geoTag.getLongitude()));
+			
+			if (!CommonUtils.isEmpty(geoTag.getInfoText())) {
+				XmlUtil.setChildText(geoTagElement, "infoText", geoTag.getInfoText());
+			}
+			
+			zoomFactor = geoTag.getZoomFactor();
+		}
+
+		Element zoomLevelElem = doc.createElement("zoomLevel");
+		blogEntryElement.appendChild(zoomLevelElem);
+		
+		for (int i = 0; i < 16; i++) {
+			Element zoomFactorElement = doc.createElement("zoomFactor");
+			
+			XmlUtil.setElementText(zoomFactorElement, Integer.toString(i));
+			
+			if (i == zoomFactor) {
+				zoomFactorElement.setAttribute("current", "true");
+			}
+			
+			zoomLevelElem.appendChild(zoomFactorElement);
+		}
 		
 		processResponse("blog/blogEditEntry.xsl", true);
     }

@@ -77,9 +77,9 @@
         function setSelectedDate(y, m, d) 
         { 
             var selectedDate = new Date();
-            selectedDate.setDate(d);
-            selectedDate.setMonth(m - 1);
             selectedDate.setYear(y);
+            selectedDate.setMonth(m - 1);
+            selectedDate.setDate(d);
             
             selectedDate.setMilliseconds(selectedDate.getMilliseconds() + (24 * 60 * 60 * 1000));
 
@@ -182,10 +182,10 @@
           <xsl:for-each select="dayEntries/file">
           
             <div>
-              <xsl:if test="position() mod 2 = 1">
+              <xsl:if test="align='left'">
                 <xsl:attribute name="class">blogEntry storyPictureLeft</xsl:attribute>
               </xsl:if>
-              <xsl:if test="position() mod 2 = 0">
+              <xsl:if test="align='right'">
                 <xsl:attribute name="class">blogEntry storyPictureRight</xsl:attribute>
               </xsl:if>
 
@@ -197,11 +197,11 @@
                   <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
                   <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
                   <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
-                  <xsl:if test="position() mod 2 = 0">
+                  <xsl:if test="align='right'">
                     <xsl:attribute name="align">right</xsl:attribute>
                     <xsl:attribute name="style">margin-left:10px</xsl:attribute>
                   </xsl:if>
-                  <xsl:if test="position() mod 2 = 1">
+                  <xsl:if test="align='left'">
                     <xsl:attribute name="align">left</xsl:attribute>
                     <xsl:attribute name="style">margin-right:10px</xsl:attribute>
                   </xsl:if>
