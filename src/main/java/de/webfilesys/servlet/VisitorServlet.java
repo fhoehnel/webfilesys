@@ -104,6 +104,8 @@ public class VisitorServlet extends WebFileSysServlet {
         // if (userMgr.checkReadonlyPassword(visitorUserId, password)) {
         if (userMgr.checkPassword(visitorUserId, password)) {
             session = req.getSession(true);
+            
+		    setSessionInfo(req, session);
 
             session.setAttribute("userid", visitorUserId);
         

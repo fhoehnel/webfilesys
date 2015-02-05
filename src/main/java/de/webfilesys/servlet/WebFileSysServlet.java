@@ -280,7 +280,7 @@ import de.webfilesys.util.UTF8URLDecoder;
  * 
  * @author Frank Hoehnel
  */
-public class WebFileSysServlet extends HttpServlet
+public class WebFileSysServlet extends ServletBase
 {
 	// we are open source now!
 	// private static char lic[] = {'l','i','c','e','n','s','e','.','t','x','t'};
@@ -511,16 +511,7 @@ public class WebFileSysServlet extends HttpServlet
 		{
 		    session = req.getSession(true);
 		    
-		    session.setAttribute("protocol", req.getScheme());
-		    
-		    session.setAttribute("clientAddress", getClientAddress(req));
-		    
-		    String userAgent = req.getHeader("User-Agent");
-		    
-		    if (userAgent != null)
-		    {
-		    	session.setAttribute("userAgent", userAgent);
-		    }
+		    setSessionInfo(req, session);
 		    
 			if (anonymousCommand(command, req, resp, output, requestIsLocal))
 			{
@@ -2414,6 +2405,8 @@ public class WebFileSysServlet extends HttpServlet
             	}
             	
         		session = req.getSession(true);
+        		
+        		setSessionInfo(req, session);
 
         		session.setAttribute("userid", userid);
         		
@@ -2482,6 +2475,8 @@ public class WebFileSysServlet extends HttpServlet
             	}
             	
         		session = req.getSession(true);
+
+        		setSessionInfo(req, session);
 
         		session.setAttribute("userid", userid);
         		
@@ -2651,6 +2646,8 @@ public class WebFileSysServlet extends HttpServlet
             	}
             	
         		session = req.getSession(true);
+        		
+        		setSessionInfo(req, session);
 
         		session.setAttribute("userid", userid);
         		
@@ -2820,18 +2817,6 @@ public class WebFileSysServlet extends HttpServlet
 		output.println("</html>");
 		
 		output.flush();
-    }
-    
-    private String getClientAddress(HttpServletRequest req)
-    {
-		String hostIP = req.getRemoteHost();
-		
-		if ((hostIP == null) || (hostIP.trim().length() == 0))
-		{
-			hostIP = req.getRemoteAddr();
-		}
-		
-		return(hostIP);
     }
     
     private boolean isMobileClient(String browserType)

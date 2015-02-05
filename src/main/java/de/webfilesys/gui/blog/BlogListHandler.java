@@ -84,17 +84,11 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		for (int i = 0; i < filesInDir.length; i++) {
 			if (filesInDir[i].isFile() && filesInDir[i].canRead()) {
 	            
-				Logger.getLogger(getClass()).debug("file: " + filesInDir[i]);
-
 	            if (isPictureFile(filesInDir[i])) {
 					
-	            	Logger.getLogger(getClass()).debug("picture file: " + filesInDir[i]);
-
 					String fileName = filesInDir[i].getName();
 					if (fileName.length() >= 10) {
 						String blogDate = fileName.substring(0, 10);
-						
-						Logger.getLogger(getClass()).debug("blogDate: " + blogDate);
 						
 						ArrayList<File> entriesOfDay = blogDays.get(blogDate);
 						if (entriesOfDay == null) {
@@ -394,8 +388,6 @@ public class BlogListHandler extends XslRequestHandlerBase {
 	private boolean isPictureFile(File file) {
 		String fileNameExt = CommonUtils.getFileExtension(file.getName());
 		
-		Logger.getLogger(getClass()).debug("fileNameExt: " + fileNameExt);
-
 		return fileNameExt.equals(".jpg") || fileNameExt.equals(".jpeg") || fileNameExt.equals(".png") || fileNameExt.equals(".gif");
 	}
 	
