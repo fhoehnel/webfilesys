@@ -536,6 +536,8 @@ function selectLocation() {
 }
   
 function showMap(selectLocation) {
+    document.getElementById("mapFrame").style.display = 'block';
+
     var latitude = document.blogForm.latitude.value;
 
     var coordinatesNotYetSelected = false;
@@ -619,6 +621,7 @@ function showMap(selectLocation) {
 function hideMap() {
     document.getElementById("selectButton").style.visibility = 'hidden';
     document.getElementById("mapFrame").style.visibility = 'hidden';
+    document.getElementById("mapFrame").style.display = 'none';
 }
 
 function toggleGeoData(checkbox) {

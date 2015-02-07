@@ -78,6 +78,8 @@
   
     function showMap(selectLocation)
     {
+        document.getElementById("mapFrame").style.display = 'block';
+
         var latitude = document.form1.latitude.value;
 
         var coordinatesNotYetSelected = false;
@@ -174,6 +176,7 @@
         document.getElementById("selectButton").style.visibility = 'hidden';
 
         document.getElementById("mapFrame").style.visibility = 'hidden';
+        document.getElementById("mapFrame").style.display = 'none';
     }
     
   </xsl:if>
