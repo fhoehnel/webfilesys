@@ -24,11 +24,13 @@
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
   
   <script type="text/javascript">
-    function startShow()
-    {
-        if (document.form1.extraWin.checked)
-        {
-            var slideshowURL = '/webfilesys/servlet?command=slideShow&amp;imageIdx=0&amp;delay=' + document.form1.delay.options[document.form1.delay.selectedIndex].value + '&amp;recurse=' + document.form1.recurse.checked + '&amp;autoForward=' + document.form1.autoForward.checked;
+    function startShow() {
+        if (document.form1.extraWin.checked) {
+            var slideshowURL = '/webfilesys/servlet?command=slideShow&amp;imageIdx=0&amp;delay=' + 
+                               document.form1.delay.options[document.form1.delay.selectedIndex].value + 
+                               '&amp;recurse=' + document.form1.recurse.checked + 
+                               '&amp;autoForward=' + document.form1.autoForward.checked +
+                               '&amp;fadeInOut=' + document.form1.fadeInOut.checked;
 
             <xsl:if test="startPath">
               slideshowURL = slideshowURL + '&amp;startFilePath=' + encodeURIComponent('<xsl:value-of select="encodedStartPath"/>');
@@ -39,19 +41,14 @@
             showWin.focus();
 
             window.location.href = '/webfilesys/servlet?command=listFiles';
-        }
-        else
-        {
+        } else {
             var windowWidth;
             var windowHeigth;
 
-            if (browserMSIE)
-            {  
+            if (browserMSIE) {  
                 windowWidth = document.body.clientWidth;
                 windowHeight = document.body.clientHeight;
-            }
-            else
-            {  
+            } else {  
                 windowWidth = self.innerWidth;
                 windowHeight = self.innerHeight;
             }
@@ -63,25 +60,18 @@
         }
     }
     
-    <xsl:if test="resources/msg[@key='label.crossfade']">
-      function setCrossfade(fullscreenCheckbox)
-      {
-          crossfadeCheckbox = document.getElementById('crossfade');
+    function setCrossfade(fullscreenCheckbox) {
+        crossfadeCheckbox = document.getElementById('crossfade');
 				
-	  if (crossfadeCheckbox)
-          {
-	      if (fullscreenCheckbox.checked)
-	      {
-		  crossfadeCheckbox.checked = false;
-		  crossfadeCheckbox.disabled = true;
-              }
-              else
-              {
-		  crossfadeCheckbox.disabled = false;
-              }
-          }
-      }
-    </xsl:if>
+	    if (crossfadeCheckbox) {
+	        if (fullscreenCheckbox.checked) {
+		        crossfadeCheckbox.disabled = false;
+            } else {
+		        crossfadeCheckbox.checked = false;
+		        crossfadeCheckbox.disabled = true;
+            }
+        }
+    }
     
 </script>
 
@@ -175,26 +165,19 @@
      
       <tr>
         <td colspan="2" class="formParm1">
-          <xsl:if test="resources/msg[@key='label.crossfade']">
-            <input type="checkbox" class="cb3" name="extraWin" onclick="setCrossfade(this);" />
-          </xsl:if>
-          <xsl:if test="not(resources/msg[@key='label.crossfade'])">
-            <input type="checkbox" class="cb3" name="extraWin" />
-          </xsl:if>
+          <input type="checkbox" class="cb3" name="extraWin" onclick="setCrossfade(this);" />
           &#160;
           <xsl:value-of select="resources/msg[@key='label.fullScreen']/@value" />
         </td>
       </tr>
      
-      <xsl:if test="resources/msg[@key='label.crossfade']">
-        <tr>
-          <td colspan="2" class="formParm1">
-            <input id="crossfade" type="checkbox" class="cb3" name="crossfade" />
-            &#160;
-            <xsl:value-of select="resources/msg[@key='label.crossfade']/@value" />
-          </td>
-        </tr>
-      </xsl:if>
+      <tr>
+        <td colspan="2" class="formParm1">
+          <input id="crossfade" type="checkbox" class="cb3" name="fadeInOut" disabled="true" />
+          &#160;
+          <xsl:value-of select="resources/msg[@key='label.crossfade']/@value" />
+        </td>
+      </tr>
      
       <tr>
         <td colspan="2">&#160;</td>

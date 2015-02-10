@@ -132,6 +132,11 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(slideShowElement, "readonly", "false", false);
 		}
 		
+		String fadeParm = getParameter("fadeInOut");
+		if ((fadeParm != null) && fadeParm.equals("true")) {
+			XmlUtil.setChildText(slideShowElement, "fadeInOut", "true", false);
+		}
+		
 		addMsgResource("label.slideshow", getResource("label.slideshow", "Picture Slideshow"));
 		addMsgResource("alt.exitslideshow", getResource("alt.exitslideshow","exit slideshow"));
 		addMsgResource("alt.pause", getResource("alt.pause","pause slideshow"));

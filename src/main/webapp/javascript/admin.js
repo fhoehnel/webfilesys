@@ -153,13 +153,15 @@ function validateUser(isEdit) {
         }
     }
 
-    var languageSelect = document.getElementById('language');
+    if (!isEdit) {
+        var languageSelect = document.getElementById('language');
 
-    if (languageSelect.selectedIndex == 0) {
-        addValidationError("language", "please select a language");
-        validationError = true;
+        if (languageSelect.selectedIndex == 0) {
+            addValidationError("language", "please select a language");
+            validationError = true;
+        }
     }
-
+	
     if (!validationError) {
         document.getElementById('userForm').submit();
     }

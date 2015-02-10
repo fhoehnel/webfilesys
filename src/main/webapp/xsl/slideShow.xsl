@@ -29,311 +29,35 @@
 
   <script src="javascript/util.js" type="text/javascript" />
   
+  <script src="javascript/slideshow.js" type="text/javascript"></script>
   <script src="javascript/slideShowActions.js" type="text/javascript"></script>
   
   <script type="text/javascript">
-  
-    var first = true;
-  
     var imageIdx = <xsl:value-of select="/slideShow/startIdx" />;
-    
-    var stopped = false;
-    
+
     var numberOfImages = <xsl:value-of select="/slideShow/numberOfImages" />;
 
     var autoForward = <xsl:value-of select="/slideShow/autoForward" />;
     
-    var prefetchSrc = '/webfilesys/images/space.gif';
+    var pauseGoTitle = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.continue']/@value" />';
+  
+    var slideShowDelay = <xsl:value-of select="/slideShow/delay" />;
     
-    var prefetchWidth = 1;
+    var pauseTitle = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.pause']/@value" />';
+  
+    var continueTitle = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.continue']/@value" />';
     
-    var prefetchHeight = 1;
+    var fadeEnabled = false;
+    <xsl:if test="/slideShow/fadeInOut">
+        fadeEnabled = true;
+    </xsl:if>
     
-    var timeout;
-    
-    var prefetchLoading = false;
-    
-    var imgLoadRunning = false;
-    
-    var prefetchImg = new Image();    
-    
-    prefetchImg.onload = prefetchLoaded;
-    
-    function prefetchLoaded()
-    {
-        prefetchLoading = false;
-        
-        if (!autoForward)
-        {
-            var pauseGoImg = document.getElementById('pauseGo');
-            if (pauseGoImg) 
-            {
-                pauseGoImg.src = '/webfilesys/images/next.png';
-                pauseGoImg.title = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.continue']/@value" />';
-            }
-
-            document.getElementById('stopAndGoLink').href = 'javascript:stopAndGo()';
-        }
-    }
-    
-    function loadImage()
-    {
-        if (prefetchLoading)
-        {
-            timeout = window.setTimeout('loadImage()', 1000);
-        
-            return;
-        }
-
-        if (!autoForward)
-        {
-            if (imgLoadRunning) 
-            {
-                return;
-            }
-        
-            imgLoadRunning = true;
-        
-            document.getElementById('stopAndGoLink').href = 'javascript:void(0)';
-        
-            var pauseGoImg = document.getElementById('pauseGo');
-            pauseGoImg.src = '/webfilesys/images/pause.gif';
-            pauseGoImg.title = 'loading next picture ...';
-        }
-
-        url = '/webfilesys/servlet?command=slideShowImage&amp;imageIdx=' + imageIdx + '&amp;windowWidth=' + getWinWidth() + '&amp;windowHeight=' + getWinHeight();
-
-        xmlRequest(url, showImage);
-    }
-
-    function showImage()
-    {
-        if (req.readyState == 4)
-        {
-            if (req.status == 200)
-            {
-                var item = req.responseXML.getElementsByTagName("imagePath")[0];            
-
-                var imagePath = item.firstChild.nodeValue;
-                
-                item = req.responseXML.getElementsByTagName("displayWidth")[0]; 
-                
-                var displayWidth = item.firstChild.nodeValue;
-
-                item = req.responseXML.getElementsByTagName("displayHeight")[0]; 
-                
-                var displayHeight = item.firstChild.nodeValue;
-
-                if (imagePath != '')
-                {
-                    var imageElement = document.getElementById('slideShowImg');
-                    
-                    var imgsrc = prefetchSrc;
-                    
-                    var imageWidth = prefetchWidth;
-                    
-                    var imageHeight = prefetchHeight;
-                    
-                    prefetchWidth = displayWidth;
-                    
-                    prefetchHeight = displayHeight;
-                    
-                    prefetchLoading = true;
-                    
-                    prefetchSrc = '/webfilesys/servlet?command=getFile&amp;filePath=' + encodeURIComponent(imagePath) + '&amp;cached=true';
-
-                    prefetchImg.src = prefetchSrc;
-                    
-                    imageElement.style.visibility = 'hidden';
-                    
-                    var centerDiv = document.getElementById('centerDiv');
-                    
-                    var topMargin = Math.round(((getWinHeight() - imageHeight) / 2));
-                    if (topMargin >= 3)
-                    {
-                        topMargin = topMargin - 3;
-                    }
-                    
-                    centerDiv.style.marginTop = topMargin + 'px';
-
-                    imageElement.src = '/webfilesys/images/space.gif';
-
-                    imageElement.width = 1;
-                    
-                    imageElement.heigth = 1;
-                    
-                    imageElement.src = imgsrc;
-                    
-                    imageElement.width = imageWidth;
-                    
-                    imageElement.heigth = imageHeight;
-             
-                    imageElement.style.visibility = 'visible';
-                    
-                    imageIdx = imageIdx + 1;
-                    
-                    if (imageIdx == numberOfImages)
-                    {
-                        imageIdx = 0;
-                    }
-                    
-                    if (first) 
-                    {
-                        timeout = window.setTimeout('loadImage()', 0);
-                        first = false;
-                    } 
-                    else
-                    {
-                        if (autoForward)
-                        {
-                            timeout = window.setTimeout('loadImage()', <xsl:value-of select="/slideShow/delay" />);
-                        }
-                    }
-                }
-            }
-            
-            imgLoadRunning = false;
-        }
-        
-    }
-
-    function stopAndGo()
-    {
-        if (!autoForward)
-        {
-            loadImage();     
-            return;   
-        }
-    
-        var pauseGoImg = document.getElementById('pauseGo');
-
-        if (stopped)
-        {
-            timeout = window.setTimeout('loadImage()', 1000);
-
-            if (pauseGoImg)
-            {
-                pauseGoImg.src = '/webfilesys/images/pause.gif';
-
-                pauseGoImg.title = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.pause']/@value" />';            
-            }
-
-            stopped = false
-        }
-        else
-        {
-            clearTimeout(timeout);
-        
-            if (pauseGoImg)
-            {
-                pauseGoImg.src = '/webfilesys/images/go.gif';
-            
-                pauseGoImg.title = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.continue']/@value" />';            
-            }
-            
-            stopped = true;        
-        }
-    }
-    
-    function loadImageIgnorePrefetch()
-    {
-        url = '/webfilesys/servlet?command=slideShowImage&amp;imageIdx=' + imageIdx + '&amp;windowWidth=' + getWinWidth() + '&amp;windowHeight=' + getWinHeight();
-
-        xmlRequest(url, showImageNoPrefetch);
-    }
-    
-    function showImageNoPrefetch()
-    {
-        if (req.readyState == 4)
-        {
-            if (req.status == 200)
-            {
-                var item = req.responseXML.getElementsByTagName("imagePath")[0];            
-
-                var imagePath = item.firstChild.nodeValue;
-                
-                item = req.responseXML.getElementsByTagName("displayWidth")[0]; 
-                
-                var displayWidth = item.firstChild.nodeValue;
-
-                item = req.responseXML.getElementsByTagName("displayHeight")[0]; 
-                
-                var displayHeight = item.firstChild.nodeValue;
-                
-                if (imagePath != '')
-                {
-                    var imageElement = document.getElementById('slideShowImg');
-                    
-                    imageElement.style.visibility = 'hidden';
-                    
-                    var centerDiv = document.getElementById('centerDiv');
-
-                    centerDiv.style.marginTop = Math.round(((getWinHeight() - displayHeight) / 2)) + 'px';
-                    
-                    imageElement.src = '/webfilesys/images/space.gif';
-
-                    imageElement.width = 1;
-                    
-                    imageElement.heigth = 1;
-                    
-                    imageElement.src = '/webfilesys/servlet?command=getFile&amp;filePath=' + encodeURIComponent(imagePath) + '&amp;cached=true';
-                    
-                    imageElement.width = displayWidth;
-                    
-                    imageElement.heigth = displayHeight;
-             
-                    imageElement.style.visibility = 'visible';
-
-                    imageIdx = imageIdx + 1;
-                    
-                    if (imageIdx == numberOfImages) 
-                    {
-                        imageIdx = 0;
-                    } 
-                    
-                    first = true;
-                    prefetchSrc = '/webfilesys/images/space.gif';
-                }
-            }
-        }
-        
-    }
-    
-    function goBack() 
-    {
-       if (first) 
-       {
-           rollBackImageIdx(2);
-       }
-       else 
-       {
-           rollBackImageIdx(3);
-       }
-
-       loadImageIgnorePrefetch();  
-    }
-    
-    function rollBackImageIdx(count)
-    {
-        for (i = 0; i &lt; count; i++) 
-        {
-            if (imageIdx == 0) 
-            {
-                imageIdx = numberOfImages - 1;
-            }
-            else 
-            {
-                imageIdx = imageIdx - 1;
-            }
-        }
-    }
-    
-  </script>  
-
+  </script>
+  
 </head>
 
 <body style="margin:0px;border:0px;background-color:#c0c0c0;padding:0px;">
-  <xsl:attribute name="onload">setTimeout('self.focus()', 500);loadImage();if (autoForward!='true') {showActionButtons();};</xsl:attribute>
+  <xsl:attribute name="onload">setTimeout('self.focus()', 500); initSlideshow(); loadImage();if (autoForward!='true') {showActionButtons();};</xsl:attribute>
 
   <xsl:apply-templates />
 
@@ -347,7 +71,12 @@
 
   <p id="centerDiv" width="100%" style="margin:0px;padding:0px;text-align:center;">
     
-    <img id="slideShowImg" border="0" class="thumb">
+    <img id="slideShowImg0" border="0" class="thumb" style="position:absolute;opacity:1">
+      <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
+      <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
+    </img>
+
+    <img id="slideShowImg1" border="0" class="thumb" style="position:absolute;opacity:0">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
       <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
     </img>

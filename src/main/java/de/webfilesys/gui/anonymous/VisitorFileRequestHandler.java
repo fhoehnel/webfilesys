@@ -97,8 +97,8 @@ public class VisitorFileRequestHandler extends RequestHandler
 		if ((cached != null) && (cached.equals("true")))
 		{
             // overwrite the no chache headers already set in WebFileSysServlet
-			resp.setHeader("Cache-Control", null);
-			resp.setDateHeader("expires", System.currentTimeMillis() + (10 * 60 * 60 * 1000)); // now + 10 hours
+			resp.setHeader("Cache-Control", "public, max-age=3600, s-maxage=3600");
+			resp.setDateHeader("expires", System.currentTimeMillis() + (60 * 60 * 1000)); // now + 10 hours
 		}
 
 		String disposition = getParameter("disposition");

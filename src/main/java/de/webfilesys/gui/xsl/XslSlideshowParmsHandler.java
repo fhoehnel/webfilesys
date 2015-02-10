@@ -72,10 +72,7 @@ public class XslSlideshowParmsHandler extends XslRequestHandlerBase
 		addMsgResource("label.delay", getResource("label.delay","delay (seconds)"));
 		addMsgResource("label.fullScreen", getResource("label.fullScreen", "fullscreen"));
 		
-		if (browserManufacturer == BROWSER_MSIE) 
-		{
-	        addMsgResource("label.crossfade", getResource("label.crossfade", "crossfade"));
-		}
+        addMsgResource("label.crossfade", getResource("label.crossfade", "crossfade"));
 		
 		addMsgResource("button.startshow", getResource("button.startshow","start slideshow"));
 		addMsgResource("button.cancel", getResource("button.cancel", "cancel"));

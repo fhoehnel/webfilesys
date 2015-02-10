@@ -1,9 +1,7 @@
 var buttonDivShown = false;
 
-function showActionButtons()
-{
-    if (buttonDivShown)
-    {
+function showActionButtons() {
+    if (buttonDivShown) {
         return;
     }
 
@@ -14,9 +12,9 @@ function showActionButtons()
     buttonDivShown = true;
 }
 
-function hideActionButtons()
-{
+function hideActionButtons() {
     actionButtonDiv = document.getElementById('buttonDiv');    
 
     actionButtonDiv.style.visibility = 'hidden';
 }
+
