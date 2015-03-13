@@ -67,7 +67,7 @@
 
     <body class="blog" onload="setCalendarStyles();setInitialDate();prepareDropZone();hideBrowserSpecifics();loadGoogleMapsAPIScriptCode();">
     
-      <div class="headline" resource="blog.createPostHeadline"></div>    
+      <div class="blogEditHead" resource="blog.createPostHeadline"></div>    
       
       <div class="blogFormCont">
       

@@ -62,7 +62,9 @@ div.blogHeadline {
     font-size: 1.364rem;
     font-weight: bold;
     text-align: center;
-    text-shadow: 2px 2px 2px #ffff80;
+    border-bottom: 1px solid #000060;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
 }
 
 div.blogCont {
@@ -102,6 +104,19 @@ a.blogMenu {
 
 a.blogMenu:before {
     margin-right: 20px;
+}
+
+div.blogEditHead {
+    border-top: 1px solid #000060;
+    border-bottom: 1px solid #000060;
+    color: #000060;
+    background-color: #ffffc0;
+    clear: both;
+    margin: 5px 0 10px 0;
+    padding: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
 }
 
 div.blogFormCont {
@@ -190,6 +205,7 @@ div.blogDate {
     padding: 6px;
     font-size: 1rem;
     font-weight: bold;
+    box-shadow: 5px 5px 5px #666666;
 }
 
 div.blogEntry {
@@ -421,10 +437,36 @@ form.blogSettingsForm {
     white-space: nowrap;
 }
 
+#calDiv table table:first-child {
+    width: 100%;
+    border-bottom: 1px solid #000060;
+}
+
+#calDiv table table:last-child tr:last-child {
+    background-color: #ffffc0;
+}
+
+#calDiv table table:last-child tr:last-child td{
+    border-top: 1px solid #000060;
+}
+
+#calDiv table table:last-child tr:not(:last-child) td:first-child:not(.cpOtherMonthDate) a {
+    color: #c00000;
+}
+
+#calDiv table table:last-child tr:not(:last-child) td:last-child:not(.cpOtherMonthDate) a {
+    color: #b06060;
+}
+
 #calDiv .cpMonthNavigation,
 #calDiv .cpYearNavigation {
     color: #000060;
-    background-color: ivory;
+    background-color: #ffffc0;
+}
+
+#calDiv .cpMonthNavigation a:hover,
+#calDiv .cpTodayText a:hover {
+    color: #a00000;
 }
 
 #calDiv .cpDayColumnHeader {

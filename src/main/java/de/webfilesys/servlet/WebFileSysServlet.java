@@ -30,7 +30,6 @@ import java.util.StringTokenizer;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -60,6 +59,7 @@ import de.webfilesys.gui.admin.UserListRequestHandler;
 import de.webfilesys.gui.admin.ViewLogRequestHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFileChangeHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFileExistHandler;
+import de.webfilesys.gui.ajax.AjaxCheckFolderExistHandler;
 import de.webfilesys.gui.ajax.AjaxCheckForGeoDataHandler;
 import de.webfilesys.gui.ajax.AjaxCheckGrepAllowedHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteDirPromptHandler;
@@ -823,6 +823,10 @@ public class WebFileSysServlet extends ServletBase
             else if (method.equals("refreshDriveList"))
             {
                 (new RefreshDriveListHandler(req, resp, session, output, userid)).handleRequest(); 
+            }
+            else if (method.equals("existFolder"))
+            {
+                (new AjaxCheckFolderExistHandler(req, resp, session, output, userid)).handleRequest(); 
             }
             
             return(true);

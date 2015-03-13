@@ -53,6 +53,7 @@ label.fsstat=Filesystem-Statistik
 label.oscmd=BS-Befehl
 label.admin=Administration
 label.refreshDrives=Laufwerks-Liste aktualisieren
+label.directPath=Filesystem-Pfad eingeben
 label.diskQuotaUsage=Speicherplatznutzung
 label.thumbnails=Bilder
 label.thumbinvite=Bilder und Einladung zur Diashow
@@ -67,6 +68,9 @@ label.mobileVersion=Mobil-Version
 label.help=Hilfe
 label.about=Über WebFileSys
 label.logout=Abmelden
+label.jumpDestPath=Ziel-Pfad
+button.directPath=Los!
+invalidDirectPath=ist kein gültiger Filesystem-Pfad!
 
 # directory context menu labels
 label.mkdir=Unterordner anlegen

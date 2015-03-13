@@ -9,6 +9,11 @@
 .icon-font {
     font-family: 'Icons';
 	font-size: 20px;
+	text-decoration: none;
+}
+
+a.icon-font {
+	text-decoration: none;
 }
 
 .icon-search:before {
@@ -80,6 +85,10 @@
 	content: '\f05a';
 }
 
+.icon-pencil:before {
+	content: '\f040';
+}
+
 .icon-help:before {
 	content: '\f059';
 }
@@ -90,6 +99,10 @@
 
 .icon-exit:before {
 	content: '\f08b';
+}
+
+.icon-close:before {
+	content: '\f00d';
 }
 
 .icon-edit:before {
@@ -126,6 +139,11 @@ a.icon-paging {
 
 a.icon-paging:before {
 	color: #ffff80;
+    font-size: 24px;
+}
+
+a.icon-darkgrey:before {
+	color: #404040;
     font-size: 24px;
 }
 

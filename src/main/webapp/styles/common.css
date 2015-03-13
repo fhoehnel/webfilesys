@@ -1360,3 +1360,31 @@ div.videoCont img.closeButton {
     top: 5px;
     right: 5px;
 }
+
+div.directPathCont {
+    position: absolute;
+	top: 1px;
+	width: 600px;
+	height: 27px;
+	padding: 4px 10px 0 10px;
+	background-color: ivory;
+	border: 1px solid #000000;
+	border-radius: 4px;
+	visibility: hidden;
+}
+
+div.directPathCont span {
+    font-size: 13px;
+}
+
+input.directPath {
+    margin: 0 10px 0 10px;
+	width: 420px;
+	height: 20px;
+}
+
+a.directPathCloseIcon {
+    position: absolute;
+	top: 2px;
+	right: 10px;
+}

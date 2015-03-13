@@ -54,6 +54,7 @@ label.fsstat=File System Statistics
 label.oscmd=Run OS Cmd
 label.admin=Administration
 label.refreshDrives=Check for added/removed drives
+label.directPath=enter filesystem path
 label.diskQuotaUsage=Account size usage
 label.thumbnails=Picture Thumbnails
 label.thumbinvite=Picture Thumbnails and Visitor Invitation
@@ -67,6 +68,9 @@ label.mobileVersion=mobile phone version
 label.help=Help
 label.about=About WebFileSys
 label.logout=Logout
+label.jumpDestPath=jump to path
+button.directPath=go
+invalidDirectPath=is not a valid filesystem path!
 
 # directory context menu labels
 label.mkdir=Create subdirectory

@@ -16,10 +16,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.Constants;
+import de.webfilesys.GeoTag;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
+import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ImageTransformUtil;
 import de.webfilesys.gui.user.ZipFileRequestHandler;
 import de.webfilesys.gui.xsl.XslFileListHandler;
@@ -645,6 +647,36 @@ public class UploadServlet extends WebFileSysServlet
 		if (requestPath.indexOf("/blog/") > 0) {
 			String origImgPath = outFile.getAbsolutePath();
 			
+        	GeoTag geoTag = null;
+
+        	CameraExifData exifData = new CameraExifData(origImgPath);
+
+            if (exifData.hasExifData()) {
+                float gpsLatitude = exifData.getGpsLatitude();
+                float gpsLongitude = exifData.getGpsLongitude();
+                
+                if ((gpsLatitude >= 0.0f) && (gpsLongitude >= 0.0f)) {
+                	
+                    String latitudeRef = exifData.getGpsLatitudeRef();
+                    
+                    if ((latitudeRef != null) && latitudeRef.equalsIgnoreCase("S")) 
+                    {
+                        gpsLatitude = (-gpsLatitude);
+                    }
+                    
+                    String longitudeRef = exifData.getGpsLongitudeRef();
+
+                    if ((longitudeRef != null) && longitudeRef.equalsIgnoreCase("W")) 
+                    {
+                        gpsLongitude = (-gpsLongitude);
+                    } 
+                	
+                	geoTag = new GeoTag();
+                	geoTag.setLatitude(gpsLatitude);
+                	geoTag.setLongitude(gpsLongitude);
+                }
+            }
+			
 			int lastSepIdx = origImgPath.lastIndexOf(File.separatorChar);
 			
 			String scaledImgPath = origImgPath.substring(0, lastSepIdx + 1) + "scaled-" + origImgPath.substring(lastSepIdx + 1);
@@ -661,6 +693,10 @@ public class UploadServlet extends WebFileSysServlet
 					}
 				}
 			}
+
+			if (geoTag != null) {
+				MetaInfManager.getInstance().setGeoTag(origImgPath, geoTag);
+            }
 		}
         
         if (WebFileSys.getInstance().isAutoCreateThumbs())

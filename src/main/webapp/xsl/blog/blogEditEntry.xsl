@@ -71,7 +71,7 @@
     <body class="blog">
       <xsl:attribute name="onload">setCalendarStyles();setInitialDate();loadGoogleMapsAPIScriptCode();<xsl:if test="/blog/blogEntry/geoTag">toggleGeoData(document.getElementById('blogGeoDataSwitcher'));</xsl:if></xsl:attribute>
       
-      <div class="headline" resource="blog.editPostHeadline"></div>    
+      <div class="blogEditHead" resource="blog.editPostHeadline"></div>    
       
       <div class="blogFormCont">
       

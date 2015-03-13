@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.TreeMap;
 
@@ -18,6 +19,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.Constants;
+import de.webfilesys.FileComparator;
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.graphics.ScaledImage;
@@ -229,6 +231,10 @@ public class BlogListHandler extends XslRequestHandlerBase {
 						ArrayList<File> entriesOfDay = blogDays.get(blogDate);
 						
 						if ((entriesOfDay != null) && (entriesOfDay.size() > 0)) {
+							
+                            if (entriesOfDay.size() > 1) {
+    							Collections.sort(entriesOfDay, new FileComparator());
+                            }
 							
 							Element dayEntriesElement = doc.createElement("dayEntries");
 							

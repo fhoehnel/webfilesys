@@ -23,6 +23,7 @@
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/menuBar.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
   <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/menubar/language" /></xsl:attribute>
@@ -142,6 +143,7 @@
   function dummyCallback()
   {
   }
+  
 </script>
 
 </head>
@@ -282,6 +284,16 @@
               </th>
             </xsl:if>
 
+            <xsl:if test="(/menubar/role='admin') or /menubar/queryDrives">
+              <th>
+	            <div class="icon-button">
+                  <a href="javascript:enterDirectPath()" class="icon-font icon-pencil">
+                    <xsl:attribute name="titleResource">label.directPath</xsl:attribute>
+                  </a>
+				</div>
+              </th>
+            </xsl:if>
+			
           </tr>
         </table>
  
@@ -385,6 +397,16 @@
   </table>
   
 </body>
+
+  <div id="directPathCont" class="directPathCont">
+    <form onsubmit="gotoDirectPath();return false;">
+	  <span resource="label.jumpDestPath"></span>
+      <input id="directPath" type="text" class="directPath" />
+	  <input type="button" onclick="gotoDirectPath()" resource="button.directPath" />
+      <a href="javascript:hideDirectPath()" class="icon-font icon-darkgrey icon-close directPathCloseIcon"></a>
+    </form>
+  </div>
+
 </html>
 
 </xsl:template>
