@@ -1063,6 +1063,9 @@ blog.daysPerPage=days per page
 blog.newPassword=new password
 blog.newPasswdConfirm=confirm new password 
 blog.invalidDaysPerPage=The value for days per page muste be a number between 1 and 64!
+blog.moveUp=move up
+blog.moveDown=move down
+blog.moveError=failed to move blog entry
 
 error.latitudeInvalid=latitude must be a number between -90.0 and 90.0
 error.longitudeInvalid=longitude must be a number between -180.0 and 180.0

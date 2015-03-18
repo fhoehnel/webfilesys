@@ -360,8 +360,7 @@ function getPageXScrolled()
     return window.pageXOffset;
 }
 
-function showHourGlass()
-{
+function showHourGlass() {
     var waitDivElem = document.createElement('div');
     
     waitDivElem.setAttribute("id", "waitDiv");
@@ -377,37 +376,14 @@ function showHourGlass()
     
     var divWidth = 60;
     var divHeight = 30;
-    
-    var windowWidth;
-    var windowHeight;
-    
-    if (!browserFirefox) 
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight
-    }    
-    
-    var xpos = getPageXScrolled() + (windowWidth - divWidth) / 2;
-    var ypos = getPageYScrolled() + (windowHeight - divHeight) / 2;
-    
-    document.getElementsByTagName('body')[0].appendChild(waitDivElem);    
-    
-    waitDivElem.style.visibility = "hidden";
-    waitDivElem.style.position = "absolute";
-    waitDivElem.style.top = ypos + "px";
-    waitDivElem.style.left = xpos + "px";
+	
     waitDivElem.style.width = divWidth + "px";
     waitDivElem.style.height = divHeight + "px";
-    waitDivElem.style.border = "1px solid navy";
-    waitDivElem.style.backgroundColor = "ivory";
-    waitDivElem.style.textAlign = "center";
-    waitDivElem.style.verticalAlign = "middle";
-    waitDivElem.style.zIndex = "10";
+
+    document.getElementsByTagName('body')[0].appendChild(waitDivElem);    
+	
+	centerBox(waitDivElem);
+	
     waitDivElem.style.visibility = "visible";
 }
 

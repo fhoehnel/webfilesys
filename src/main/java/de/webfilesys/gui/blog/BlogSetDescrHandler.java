@@ -137,6 +137,9 @@ public class BlogSetDescrHandler extends UserRequestHandler
 			}
 		}
 		
+		session.removeAttribute(BlogListHandler.SESSION_KEY_BEFORE_DAY);
+		session.removeAttribute(BlogListHandler.SESSION_KEY_AFTER_DAY);
+		
 		(new BlogListHandler(req, resp, session, output, uid)).handleRequest(); 
 	}
 	

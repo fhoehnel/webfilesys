@@ -1,46 +1,35 @@
-function selectAll()
-{
-    allSelected = true;
+function selectAll() {
+    var allSelected = true;
 	
-    for (i = 0; i < document.form1.elements.length; i++)
-    {
-	    if ((document.form1.elements[i].type == "checkbox") &&
-            (document.form1.elements[i].name != "cb-confirm") &&
-            (document.form1.elements[i].name != "cb-setAll"))
-        {
-	        if ((document.form1.elements[i].checked == false) &&
-	            (document.form1.elements[i].disabled == false))
-            {
-		         allSelected = false;
+	var fileCheckboxes = new Array();
+	
+    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
+        if ((document.form1.elements[i].type == "checkbox") &&
+		    (document.form1.elements[i].name != "cb-confirm") &&
+            (document.form1.elements[i].name != "cb-setAll")) {
+			fileCheckboxes.push(document.form1.elements[i]);
+	        if ((!document.form1.elements[i].checked) &&
+	            (!document.form1.elements[i].disabled)) {
+		        allSelected = false;
 	        }
 	    } 
     }
 	
-    if (allSelected == false)
-    {
-	    for (i=0;i<document.form1.elements.length;i++)
-        {
-            if ((document.form1.elements[i].name != "cb-confirm") &&
-                (document.form1.elements[i].disabled == false))
-	        {
-		        document.form1.elements[i].checked = true;
-	        }		
+    if (allSelected) {
+	    for (var i = 0; i < fileCheckboxes.length; i++) {
+		    fileCheckboxes[i].checked = false;
 	    }
-    }
-    else
-    {
- 	    for (i = 0; i < document.form1.elements.length; i++)
-        {
-            if (document.form1.elements[i].name != "cb-confirm")
-	        {
-		        document.form1.elements[i].checked = false;
-	        }	
+    } else {
+	    for (var i = 0; i < fileCheckboxes.length; i++) {
+		    if (!fileCheckboxes[i].disabled) {
+		        fileCheckboxes[i].checked = true;
+			}
 	    }
+		document.getElementById("cb-setAll").checked = true;
     }	
 }
 
-function multiDownload()
-{
+function multiDownload() {
     document.form1.command.value = 'multiDownload';
     document.form1.submit();
 }
@@ -61,28 +50,22 @@ function setRelatedCheckbox(master,dependent)
    }
 }
 
-function anySelected()
-{
-    for (i=document.form1.elements.length-1;i>=0;i--)
-    {
-         if ((document.form1.elements[i].type=="checkbox") &&
-             (document.form1.elements[i].checked==true) &&
-             (document.form1.elements[i].name!='cb-confirm'))
-	 {
-	      return(true);
-	 }
+function anySelected() {
+    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
+        if ((document.form1.elements[i].type == "checkbox") &&
+            document.form1.elements[i].checked &&
+            (document.form1.elements[i].name != 'cb-confirm')) {
+	        return(true);
+	    }
     }
 
     return(false);
 }
 
-function resetSelected()
-{
-    for (i=document.form1.elements.length-1;i>=0;i--)
-    {
-	    if ((document.form1.elements[i].type=="checkbox") && (document.form1.elements[i].checked==true))
-        {
-	     document.form1.elements[i].checked=false;
+function resetSelected() {
+    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
+	    if ((document.form1.elements[i].type == "checkbox") && document.form1.elements[i].checked) {
+	        document.form1.elements[i].checked = false;
         }
     }
 }
@@ -96,82 +79,67 @@ function multiFileCopyMove()
     document.form1.command.value='multiFileOp';
 }
 
-function diffCompare()
-{
-    if (checkTwoFilesSelected())
-    {
-	compareWin = window.open('/webfilesys/servlet?command=blank','compareWin','width=' + (screen.width - 20) + ',height=' + (screen.height - 80) + ',scrollbars=yes,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
+function diffCompare() {
+    if (checkTwoFilesSelected()) {
+	    var compareWin = window.open('/webfilesys/servlet?command=blank','compareWin','width=' + (screen.width - 20) + ',height=' + (screen.height - 80) + ',scrollbars=yes,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
         compareWin.focus();
         document.form1.command.value = 'diff';
         document.form1.target = 'compareWin';
         
-	document.form1.submit();
+	    document.form1.submit();
         document.form1.target = '';
     }
 }
 
-function checkTwoFilesSelected()
-{
+function checkTwoFilesSelected() {
     var numChecked = 0;
     
-    for (i= document.form1.elements.length-1; i >= 0; i--)
-    {
-         if ((document.form1.elements[i].type=="checkbox") && (document.form1.elements[i].checked==true))
-         {
-	     numChecked++;
+    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
+         if ((document.form1.elements[i].type == "checkbox") && 
+		     (document.form1.elements[i].name != "cb-setAll") &&
+		     document.form1.elements[i].checked) {
+	         numChecked++;
          }
     }
     
-    if (numChecked != 2)
-    {
+    if (numChecked != 2) {
         alert(selectTwoFiles);
-	
-	return(false);
+	    return(false);
     }
     
     return(true);
 }
 
-function selectedFileFunction(unhighlight)
-{
-    if (!anySelected())
-    {
+function selectedFileFunction(unhighlight) {
+    if (!anySelected()) {
         alert(noFileSelected + '!');
-        document.form1.cmd.selectedIndex=0;
+        document.form1.cmd.selectedIndex = 0;
         return;
     }
 
-    idx = document.form1.cmd.selectedIndex;
+    var idx = document.form1.cmd.selectedIndex;
 
-    cmd = document.form1.cmd.options[idx].value;
+    var cmd = document.form1.cmd.options[idx].value;
 
-    if (cmd=='delete') 
-    {
+    if (cmd == 'delete') {
         var delConfirmMsg = resourceBundle["confirm.deleteFiles"];
         
-        if (confirm(delConfirmMsg)) 
-        {
+        if (confirm(delConfirmMsg)) {
             document.form1.submit();
             return;
         }
     }
 
-    if ((cmd=='zip') || (cmd=='tar'))
-    {
+    if ((cmd == 'zip') || (cmd == 'tar')) {
         document.form1.submit();
         return;
     }
 
-    if ((cmd=='copy') || (cmd=='copyAdd') || (cmd=='move') || (cmd=='moveAdd'))
-    {
+    if ((cmd == 'copy') || (cmd == 'copyAdd') || (cmd == 'move') || (cmd == 'moveAdd')) {
         multiFileCopyMove();
-    }
-    else if (cmd=='download')
-    {
+    } else if (cmd == 'download') {
 	    multiDownload();
-    }
-    else if (cmd=='diff')
-    {
+    } else if (cmd == 'diff') {
 	    diffCompare();
     }
      
@@ -180,8 +148,7 @@ function selectedFileFunction(unhighlight)
 		
     resetSelected();
 
-    if (unhighlight) 
-    {
+    if (unhighlight) {
         setAllFilesUnselected();
     }
 }
@@ -301,41 +268,29 @@ function checkFileNameSyntax(str)
     return(true);
 }
 
-function validateNewFileName(oldFileName, errorMsg1, errorMsg2)
-{
-    newFileName = document.getElementById('renameForm').newFileName.value;
+function validateNewFileName(oldFileName, errorMsg1, errorMsg2) {
+    var newFileName = document.getElementById('renameForm').newFileName.value;
 
-    if (newFileName == oldFileName)
-    {
+    if (newFileName == oldFileName) {
         alert(errorMsg1);
-    }
-    else
-    {
-        if (!checkFileNameSyntax(newFileName))
-        {
+    } else {
+        if (!checkFileNameSyntax(newFileName)) {
             alert(errorMsg2);
-        }
-        else
-        {
-            if (newFileName != '')
-            {
+        } else {
+            if (newFileName != '') {
                 document.renameForm.submit();
             }
         }
     }
 }
 
-function validateNewFolderName(errorMsg)
-{
-    newDirName = document.mkdirForm.NewDirName.value;
+function validateNewFolderName(errorMsg) {
+    var newDirName = document.mkdirForm.NewDirName.value;
 
-    if (checkFileNameSyntax(newDirName))
-    {
-        if (newDirName != '')
-        {
+    if (checkFileNameSyntax(newDirName)) {
+        if (newDirName != '') {
             document.mkdirForm.submit();
         }
-        
         return;
     }
     
@@ -346,46 +301,33 @@ function validateNewFolderName(errorMsg)
     document.mkdirForm.NewDirName.select();
 }
 
-function validateBookmarkName(errorMsg)
-{
-    bookmarkName = document.bookmarkForm.bookmarkName.value;
+function validateBookmarkName(errorMsg) {
+    var bookmarkName = document.bookmarkForm.bookmarkName.value;
 
-    if (bookmarkName != '')
-    {
+    if (bookmarkName != '') {
         var createBookmarkUrl = '/webfilesys/servlet?command=createBookmark&path=' + encodeURIComponent(document.bookmarkForm.currentPath.value) + '&bookmarkName=' + encodeURIComponent(document.bookmarkForm.bookmarkName.value);
-    
         xmlRequestSynchron(createBookmarkUrl);   
-        
         hidePrompt();
-    
         return;
     }
     
     alert(errorMsg);
-
     document.bookmarkForm.bookmarkName.focus();
-
     document.bookmarkForm.bookmarkName.select();
 }
 
-function validateCreateFileName(errorMsg)
-{
-    newFileName = document.mkfileForm.NewFileName.value;
+function validateCreateFileName(errorMsg) {
+    var newFileName = document.mkfileForm.NewFileName.value;
 
-    if (checkFileNameSyntax(newFileName))
-    {
-        if (newFileName != '')
-        {
+    if (checkFileNameSyntax(newFileName)) {
+        if (newFileName != '') {
             document.mkfileForm.submit();
         }
-        
         return;
     }
     
     alert(errorMsg);
-
     document.mkfileForm.NewFileName.focus();
-
     document.mkfileForm.NewFileName.select();
 }
 
@@ -437,12 +379,10 @@ function bookmark(path)
     document.bookmarkForm.bookmarkName.select();
 }
 
-function hidePrompt()
-{
-     promptBox = document.getElementById("prompt");
+function hidePrompt() {
+     var promptBox = document.getElementById("prompt");
      
-     if (!promptBox)
-     {
+     if (!promptBox) {
          return;
      }
 
@@ -450,14 +390,11 @@ function hidePrompt()
      promptBox.style.width = "100px";
 }
 
-function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight)
-{
-    promptBox = document.getElementById("prompt");
+function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight) {
+    var promptBox = document.getElementById("prompt");
         
-    if (!promptBox)
-    {
+    if (!promptBox) {
         alert('promptBox is not defined');
-         
         return;
     }
         
@@ -466,34 +403,30 @@ function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight)
     var windowWidth = getWinWidth();
     var windowHeight = getWinHeight();
     
-    if (browserMSIE) 
-    {
+	var yScrolled;
+	var xScrolled;
+	
+    if (browserMSIE) {
         yScrolled = (document.documentElement.scrollTop || document.body.scrollTop);
         xScrolled =(document.documentElement.scrollLeft || document.body.scrollLeft);
-    }
-    else
-    {
+    } else {
         yScrolled = window.pageYOffset;
         xScrolled = window.pageXOffset;
         
-        if (yScrolled > 0)
-        {
+        if (yScrolled > 0) {
             // scrollbar exists 
             windowWidth = windowWidth - 20;
         }
     }
         
-    if (boxWidth)
-    {
-        if (boxWidth > windowWidth - 10) 
-        {
+    if (boxWidth) {
+        if (boxWidth > windowWidth - 10) {
             boxWidth = windowWidth - 10;
         }
         promptBox.style.width = boxWidth + 'px';
     }
 
-    if (boxHeight)
-    {
+    if (boxHeight) {
         promptBox.style.height = boxHeight + 'px';
     }
         
@@ -501,23 +434,20 @@ function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight)
     
     xoffset = (windowWidth - promptBoxWidth) / 2;
     
-    if (xoffset < 2)
-    {
+    if (xoffset < 2) {
         xoffset = 2;
     }
         
-    promptXpos = xoffset + xScrolled;
+    var promptXpos = xoffset + xScrolled;
 
     promptBox.style.left = promptXpos + 'px';
 
-    if (!boxHeight)
-    {
+    if (!boxHeight) {
         boxHeight = 100;
     }
 
-    promptYpos = (windowHeight - boxHeight) / 2 + yScrolled;
-    if (promptYpos < 10)
-    {
+    var promptYpos = (windowHeight - boxHeight) / 2 + yScrolled;
+    if (promptYpos < 10) {
         promptYpos = 10;
     }
 
@@ -528,70 +458,61 @@ function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight)
     promptBox.style.visibility = "visible";
 }
 
-function showPromptDialog(htmlFragmentURL, boxWidth, boxHeight)
-{
-    promptBox = document.getElementById("prompt");
+function showPromptDialog(htmlFragmentURL, boxWidth, boxHeight) {
+    var promptBox = document.getElementById("prompt");
         
     hideMenu();        
     
-    if (!promptBox)
-    {
+    if (!promptBox) {
         alert('promptBox is not defined');
         return;
     }
         
-    if (window.ActiveXObject !== undefined) 
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-        xScrolled = document.body.scrollLeft;
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
+    var windowWidth = getWinWidth();
+    var windowHeight = getWinHeight();
+		
+	var yScrolled;
+	var xScrolled;
+	
+    if (browserMSIE) {
+        yScrolled = (document.documentElement.scrollTop || document.body.scrollTop);
+        xScrolled =(document.documentElement.scrollLeft || document.body.scrollLeft);
+    } else {
         yScrolled = window.pageYOffset;
         xScrolled = window.pageXOffset;
         
-        if (yScrolled > 0)
-        {
+        if (yScrolled > 0) {
             // scrollbar exists 
             windowWidth = windowWidth - 20;
         }
     }
         
-    if (boxWidth)
-    {
+    if (boxWidth) {
         promptBox.style.width = boxWidth + 'px';
     }
 
-    if (boxHeight)
-    {
+    if (boxHeight) {
         promptBox.style.height = boxHeight + 'px';
     }
         
-    promptBoxWidth = promptBox.offsetWidth;
+    var promptBoxWidth = promptBox.offsetWidth;
     
-    xoffset = (windowWidth - promptBoxWidth) / 2;
-    
-    if (xoffset < 2)
-    {
+    var xoffset = (windowWidth - promptBoxWidth) / 2;
+	
+    if (xoffset < 2) {
         xoffset = 2;
     }
         
-    promptXpos = xoffset + xScrolled;
+    var promptXpos = xoffset + xScrolled;
 
     promptBox.style.left = promptXpos + 'px';
 
-    if (!boxHeight)
-    {
+    if (!boxHeight) {
         boxHeight = 100;
     }
 
     promptYpos = (windowHeight - boxHeight) / 2 + yScrolled;
-    if (promptYpos < 10)
-    {
+    if (promptYpos < 10) {
         promptYpos = 10;
     }
 
@@ -619,12 +540,10 @@ function renameLink(linkName)
 	newLinkName.select();
 }
 
-function validateNewLinkName()
-{
+function validateNewLinkName() {
 	var newLinkName = document.getElementById("newLinkName").value;
 	
-	if (trim(newLinkName).length == 0)
-	{
+	if (trim(newLinkName).length == 0) {
 		alert(resourceBundle["alert.newLinkNameEmpty"]);
 		document.getElementById("newLinkName").focus()
 		return;
@@ -632,15 +551,13 @@ function validateNewLinkName()
 	
 	var oldLinkName = document.getElementById("oldLinkName").value;
 		
-	if (oldLinkName == newLinkName)
-	{
+	if (oldLinkName == newLinkName) {
 		alert(resourceBundle["alert.destEqualsSource"]);
 		document.getElementById("newLinkName").focus()
 		return;
 	}
 		
-	if (!checkFileNameSyntax(newLinkName))
-	{
+	if (!checkFileNameSyntax(newLinkName)) {
 		alert(resourceBundle["alert.illegalCharInFilename"]);
 		document.getElementById("newLinkName").focus()
 		return;
@@ -649,21 +566,17 @@ function validateNewLinkName()
 	document.getElementById("renameLinkForm").submit();
 }
 
-function validateEmail(elementValue)
-{      
+function validateEmail(elementValue) {      
    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
    
    return emailPattern.test(elementValue); 
 }
 
-function validateEmailList(addressList)
-{
+function validateEmailList(addressList) {
     var addressArr = addressList.split(",");
     
-    for (i = 0; i < addressArr.length; i++)
-    {
-        if (!validateEmail(addressArr[i]))
-        {
+    for (var i = 0; i < addressArr.length; i++) {
+        if (!validateEmail(addressArr[i])) {
             return false;
         }
     }

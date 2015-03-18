@@ -366,7 +366,7 @@
       
         <tr>
           <th class="fileList fileListSelector">
-            <input type="checkbox" class="cb4" name="cb-setAll" onClick="javascript:setAllFilesSelected();" />
+            <input type="checkbox" class="cb4" id="cb-setAll" name="cb-setAll" onClick="javascript:setAllFilesSelected();" />
           </th>
           <th class="fileList fileListIcon">
             <img border="0" width="16" height="16">

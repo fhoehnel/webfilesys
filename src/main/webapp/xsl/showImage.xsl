@@ -23,6 +23,7 @@
   </link>
 
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
   <script src="javascript/titleToolTip.js" type="text/javascript" />
   <script src="javascript/jsFileMenu.js" type="text/javascript" />
 

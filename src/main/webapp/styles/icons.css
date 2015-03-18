@@ -89,6 +89,14 @@ a.icon-font {
 	content: '\f040';
 }
 
+.icon-arrow-up:before {
+	content: '\f062';
+}
+
+.icon-arrow-down:before {
+	content: '\f063';
+}
+
 .icon-help:before {
 	content: '\f059';
 }

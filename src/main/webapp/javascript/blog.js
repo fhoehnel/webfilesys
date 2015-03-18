@@ -513,6 +513,40 @@ function deleteBlogEntry(fileName) {
     }
 }
 
+function moveBlogEntryUp(fileName) {
+    moveBlogEntry(fileName, "up");
+}
+
+function moveBlogEntryDown(fileName) {
+    moveBlogEntry(fileName, "down");
+}
+
+function moveBlogEntry(fileName, direction) {
+
+    showHourGlass();
+    
+    var url = "/webfilesys/servlet?command=blog&cmd=moveEntry&fileName=" + encodeURIComponent(fileName) + "&direction=" + direction;
+    
+    var responseXml = xmlRequestSynchron(url);
+   
+    var success = null;
+   
+    if (responseXml) {
+        var successItem = responseXml.getElementsByTagName("success")[0];
+        if (successItem) {
+            success = successItem.firstChild.nodeValue;
+        }         
+    }
+
+    hideHourGlass();    
+    
+    if (success == "true") {
+        window.location.href = "/webfilesys/servlet?command=blog";
+    } else {
+        alert(resourceBundle["blog.moveError"]);
+    }
+}
+
 function loadGoogleMapsAPIScriptCode() {
     var script = document.createElement("script");
     script.type = "text/javascript";

@@ -238,6 +238,21 @@
                 <a class="icon-font icon-delete icon-blog-delete" titleResource="label.delete">
                   <xsl:attribute name="href">javascript:deleteBlogEntry('<xsl:value-of select="@name" />')</xsl:attribute>
                 </a>
+
+                <xsl:if test="position() != 1">
+                  &#160;
+                  <a class="icon-font icon-arrow-up icon-blog-move" titleResource="blog.moveUp">
+                    <xsl:attribute name="href">javascript:moveBlogEntryUp('<xsl:value-of select="@name" />')</xsl:attribute>
+                  </a>
+                </xsl:if>
+
+                <xsl:if test="position() != last()">
+                  &#160;
+                  <a class="icon-font icon-arrow-down icon-blog-move" titleResource="blog.moveDown">
+                    <xsl:attribute name="href">javascript:moveBlogEntryDown('<xsl:value-of select="@name" />')</xsl:attribute>
+                  </a>
+                </xsl:if>
+              
               </xsl:if>
               
               <xsl:if test="geoTag">

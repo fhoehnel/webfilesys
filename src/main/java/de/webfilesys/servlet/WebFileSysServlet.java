@@ -121,6 +121,7 @@ import de.webfilesys.gui.blog.BlogEditEntryHandler;
 import de.webfilesys.gui.blog.BlogGetPublicUrlHandler;
 import de.webfilesys.gui.blog.BlogListCommentsHandler;
 import de.webfilesys.gui.blog.BlogListHandler;
+import de.webfilesys.gui.blog.BlogMoveEntryHandler;
 import de.webfilesys.gui.blog.BlogPostHandler;
 import de.webfilesys.gui.blog.BlogPublishFormHandler;
 import de.webfilesys.gui.blog.BlogPublishHandler;
@@ -2242,6 +2243,12 @@ public class WebFileSysServlet extends ServletBase
         	else if (cmd.equals("deleteEntry"))
         	{
     			(new BlogDeleteEntryHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+        	else if (cmd.equals("moveEntry"))
+        	{
+    			(new BlogMoveEntryHandler(req, resp, session, output, userid)).handleRequest(); 
                 
                 return(true);
         	}

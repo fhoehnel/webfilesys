@@ -32,6 +32,10 @@ public class BlogListHandler extends XslRequestHandlerBase {
 	
 	public static final int DEFAULT_PAGE_SIZE = 6;
 	
+	public static final String SESSION_KEY_BEFORE_DAY = "blogBeforeDay";
+
+	public static final String SESSION_KEY_AFTER_DAY = "blogAfterDay";
+	
 	public BlogListHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -120,6 +124,8 @@ public class BlogListHandler extends XslRequestHandlerBase {
 			if (!CommonUtils.isEmpty(afterDay)) {
 				try {
 					pageAfterDay = dateFormat.parse(afterDay);
+					session.removeAttribute(SESSION_KEY_BEFORE_DAY);
+					session.setAttribute(SESSION_KEY_AFTER_DAY, pageAfterDay);
 				} catch (ParseException pex) {
 		            Logger.getLogger(getClass()).error("invalid date format in paging parameter " + afterDay , pex);
 				}
@@ -132,8 +138,17 @@ public class BlogListHandler extends XslRequestHandlerBase {
 			if (!CommonUtils.isEmpty(beforeDay)) {
 				try {
 					pageBeforeDay = dateFormat.parse(beforeDay);
+					session.removeAttribute(SESSION_KEY_AFTER_DAY);
+					session.setAttribute(SESSION_KEY_BEFORE_DAY, pageBeforeDay);
 				} catch (ParseException pex) {
 		            Logger.getLogger(getClass()).error("invalid date format in paging parameter " + beforeDay , pex);
+				}
+			}
+			
+			if ((pageAfterDay == null) && (pageBeforeDay == null)) {
+				pageAfterDay = (Date) session.getAttribute(SESSION_KEY_AFTER_DAY);
+				if (pageAfterDay == null) {
+					pageBeforeDay = (Date) session.getAttribute(SESSION_KEY_BEFORE_DAY);
 				}
 			}
 			

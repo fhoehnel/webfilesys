@@ -417,6 +417,29 @@ public class MetaInfManager extends Thread
     	}
     }
 
+    public boolean moveMetaInf(String currentPath, String srcFileName, String destFileName) {
+    	synchronized(this) {
+            Element destMetaInfElement = getMetaInfElement(currentPath, destFileName);
+            
+            if (destMetaInfElement != null) {
+            	removeMetaInf(currentPath, destFileName);            
+            }
+            
+            boolean moved = false;
+
+            Element srcMetaInfElement = getMetaInfElement(currentPath, srcFileName);
+            
+            if (srcMetaInfElement != null) {
+                srcMetaInfElement.setAttribute("filename", destFileName);
+                moved = true;
+            }
+            
+            cacheDirty.put(currentPath, new Boolean(true));
+            
+            return moved;
+    	}
+    }
+    
     public void removeMetaInf(String absoluteFileName)
     {
         int separatorIdx=absoluteFileName.lastIndexOf(File.separator);

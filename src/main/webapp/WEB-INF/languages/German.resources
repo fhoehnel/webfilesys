@@ -1067,6 +1067,9 @@ blog.daysPerPage=Tage je Seite
 blog.newPassword=neues Passwort
 blog.newPasswdConfirm=neues Passwort (Wiederholung) 
 blog.invalidDaysPerPage=Der Wert für Tage je Seite muss eine Zahl zwischen 1 und 64 sein!
+blog.moveUp=nach oben verschieben
+blog.moveDown=nach unten verschieben
+blog.moveError=Fehler beim Verschieben des Blog-Eintrages
 
 error.latitudeInvalid=geografische Breite muss zwischen -90 und 90 liegen
 error.longitudeInvalid=geografische Länge muss zwischen -180.0 und 180.0 liegen

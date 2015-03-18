@@ -5,112 +5,63 @@ var browserIsChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 
 var req;
 
-function xmlRequest(url, callBackFunction)
-{
-    req = false;
+function createAjaxRequest() {
+    ajaxReq = false;
     
-    if (window.XMLHttpRequest) 
-    {
-    	try 
-    	{
-	    req = new XMLHttpRequest();
-        } 
-        catch (e) 
-        {
-	    req = false;
+    if (window.XMLHttpRequest) {
+    	try {
+	        ajaxReq = new XMLHttpRequest();
+        } catch (e) {
+	        ajaxReq = false;
         }
-    } 
-    else
-    {
-        // branch for IE/Windows ActiveX version
-        if (window.ActiveXObject !== undefined) 
-        {
-       	    try 
-       	    {
-        	req = new ActiveXObject("Msxml2.XMLHTTP");
-      	    } 
-      	    catch (e) 
-      	    {
-        	try 
-        	{
-          	    req = new ActiveXObject("Microsoft.XMLHTTP");
-        	} 
-        	catch (e) 
-        	{
-          	    req = false;
-        	}
-	    }
+    } else {
+        // MSIE ActiveX
+        if (window.ActiveXObject !== undefined) {
+       	    try {
+        	    ajaxReq = new ActiveXObject("Msxml2.XMLHTTP");
+      	    } catch (e) {
+        	    try {
+          	        ajaxReq = new ActiveXObject("Microsoft.XMLHTTP");
+        	    } catch (e) {
+          	        ajaxReq = false;
+        	    }
+	        }
         }
     }
         
-    if (req) 
-    {
-	req.onreadystatechange = callBackFunction;
-	req.open("GET", url, true);
-	req.send("");
+    if (!ajaxReq) {
+        alert('Your browser does not support Ajax communication');
     }
-    else
-    {
-        alert('Your browser does not support the XMLHttpRequest');
-    }
+	
+	return ajaxReq;
 }
 
-function xmlRequestSynchron(url, handleAsText)
-{
-    req = false;
-    
-    if (window.XMLHttpRequest) 
-    {
-    	try 
-    	{
-	    req = new XMLHttpRequest();
-        } 
-        catch (e) 
-        {
-	    req = false;
-        }
-    } 
-    else
-    {
-        // branch for IE/Windows ActiveX version
-        if (window.ActiveXObject !== undefined) 
-        {
-       	    try 
-       	    {
-        	req = new ActiveXObject("Msxml2.XMLHTTP");
-      	    } 
-      	    catch (e) 
-      	    {
-        	try 
-        	{
-          	    req = new ActiveXObject("Microsoft.XMLHTTP");
-        	} 
-        	catch (e) 
-        	{
-          	    req = false;
-        	}
-	    }
-        }
-    }
+function xmlRequest(url, callBackFunction) {
+    req = createAjaxRequest();
         
-    if (req) 
-    {
-	req.open("GET", url, false);
-	req.send(null);
-    }
-    else
-    {
-        alert('Your browser does not support the XMLHttpRequest');
-    }
+    if (req) {
+	    req.onreadystatechange = callBackFunction;
+	    req.open("GET", url, true);
+	    req.send("");
+    } 
+}
+
+function xmlRequestSynchron(url, handleAsText) {
+    req = createAjaxRequest();
+
+	if (!req) {
+	    return;
+	}
+
+    req.open("GET", url, false);
+    req.send(null);
     
-    if (req.status != 200)
-    {
+    if (req.status != 200) {
         alert('error code from XMLHttpRequest: ' + req.status);
         return;
     }
     
-    if (handleAsText)
-    {
+    if (handleAsText) {
         return(req.responseText);    
     }
     
@@ -480,13 +431,11 @@ function exp(parentDivId, lastInLevel)
 
     var xmlUrl = "/webfilesys/servlet?command=ajaxExp&path=" + urlEncodedPath + "&lastInLevel=" + lastInLevel;
 
-    var xslUrl;
+    var xslUrl = "/webfilesys/xsl/subFolder.xsl";
 
     if (window.ActiveXObject !== undefined) 
     {
         // MSIE  
-                
-        xslUrl = "/webfilesys/xsl/subFolder.xsl";
 
         expMSIE(parentDiv, xmlUrl, xslUrl);
     }
@@ -495,16 +444,12 @@ function exp(parentDivId, lastInLevel)
         if (browserIsFirefox || browserIsChrome)
         { 
             // Firefox & Chrome
-            
-            xslUrl = "/webfilesys/xsl/subFolder.xsl";
 
             expMozilla(parentDiv, xmlUrl, xslUrl);
         }
         else
         {
             // XSLT with Javascript (google ajaxslt)
-            
-            xslUrl = "/webfilesys/xsl/subFolder.xsl";
             
             expJavascriptXslt(parentDiv, xmlUrl, xslUrl)
         }
@@ -513,39 +458,42 @@ function exp(parentDivId, lastInLevel)
     setTimeout('setTooltips()', 500);
 }
     
-function expMozilla(parentDiv, xmlUrl, xslUrl)
-{ 
+function expMozilla(parentDiv, xmlUrl, xslUrl) { 
     var xslStyleSheet = xmlRequestSynchron(xslUrl);
    
-    if (!xslStyleSheet)
-    {
+    if (!xslStyleSheet) {
         window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
 
         return;
     }
 
-    var xmlDoc = xmlRequestSynchron(xmlUrl);
-
-    if (!xmlDoc)
-    {
-        window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-
-        return;
-    }
-
-    var html;
-
-    var xsltProcessor = new XSLTProcessor();
+	xmlRequest(xmlUrl, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+				
+				if (!xmlDoc) {
+                    window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
+                    return;
+				}
+				
+                var xsltProcessor = new XSLTProcessor();
        
-    xsltProcessor.importStylesheet(xslStyleSheet);
+                xsltProcessor.importStylesheet(xslStyleSheet);
 
-    fragment = xsltProcessor.transformToFragment(xmlDoc, document);
+                var fragment = xsltProcessor.transformToFragment(xmlDoc, document);
        
-    parentDiv.innerHTML = '';
+                parentDiv.innerHTML = '';
 
-    currentDirId = fragment.childNodes[0].id;
+                currentDirId = fragment.childNodes[0].id;
 
-    parentDiv.parentNode.replaceChild(fragment, parentDiv);
+                parentDiv.parentNode.replaceChild(fragment, parentDiv);
+            } else {
+                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
+                return;
+			}
+		}
+	});
 }
 
 function expMSIE(parentDiv, xmlUrl, xslUrl)
@@ -572,35 +520,40 @@ function expMSIE(parentDiv, xmlUrl, xslUrl)
     currentDirId = newId;
 }
 
-function expJavascriptXslt(parentDiv, xmlUrl, xslUrl)
-{ 
+function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) { 
     var xslStyleSheet = xmlRequestSynchron(xslUrl);
    
-    if (!xslStyleSheet)
-    {
+    if (!xslStyleSheet) {
         window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
 
         return;
     }
+	
+	xmlRequest(xmlUrl, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
 
-    var xmlDoc = xmlRequestSynchron(xmlUrl);
-   
-    if (!xmlDoc)
-    {
-        window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
+				if (!xmlDoc) {
+                    window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
+                    return;
+				}
 
-        return;
-    }
-    
-    var newId = xmlDoc.documentElement.getAttribute('id');
+                var newId = xmlDoc.documentElement.getAttribute('id');
 
-    // browser-independend client-side XSL transformation with google ajaxslt 
+                // browser-independend client-side XSL transformation with google ajaxslt 
        
-    var html = xsltProcess(xmlDoc, xslStyleSheet);
+                var html = xsltProcess(xmlDoc, xslStyleSheet);
 
-    parentDiv.outerHTML = html;
+                parentDiv.outerHTML = html;
     
-    currentDirId = newId;
+                currentDirId = newId;
+            } else {
+                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
+                return;
+			}
+        }
+    });		
 }
 
 function synchronize(path, domId)

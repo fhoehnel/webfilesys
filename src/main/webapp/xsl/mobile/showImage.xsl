@@ -18,6 +18,9 @@
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/mobile.css" />
 
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+
   <script src="javascript/titleToolTip.js" type="text/javascript" />
   
   <script type="text/javascript">
@@ -46,7 +49,7 @@
 
 </head>
 
-<body style="margin:0px;border:0px;" onclick="showNavigation()">
+<body class="mobile" onclick="showNavigation()">
 
     <div style="width:100%;height:100%;padding:0px;text-align:center;vertical-align:middle;">
     
@@ -62,9 +65,8 @@
       
     </div>
 
+    <div id="toolTip" style="position:absolute;top:200px;left:100px;width=200px;height=20px;padding:5px;background-color:ivory;border-style:solid;border-width:1px;border-color:#000000;visibility:hidden"></div>
 </body>
-
-<div id="toolTip" style="position:absolute;top:200px;left:100px;width=200px;height=20px;padding:5px;background-color:ivory;border-style:solid;border-width:1px;border-color:#000000;visibility:hidden"></div>
 
 <div id="navigationPrevDiv" onclick="prevImage()"
     style="position:absolute;top:5px;left:5px;width=20px;height=22px;padding:10px;background-color:ivory;border-style:solid;border-width:1px;border-color:#000000;visibility:hidden">
