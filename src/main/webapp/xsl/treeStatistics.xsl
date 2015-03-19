@@ -53,7 +53,7 @@
   {
       if (folderNum == 0)
       {
-          document.getElementById('inProgressIcon').src = 'images/space.gif';
+          document.getElementById('inProgressIcon').src = '/webfilesys/images/space.gif';
           return;
       }
       
@@ -115,7 +115,7 @@
              } 
              else
              {
-                 document.getElementById('inProgressIcon').src = 'images/space.gif';
+                 document.getElementById('inProgressIcon').src = '/webfilesys/images/space.gif';
              
                  prepareDiagram();
              }            
@@ -211,8 +211,8 @@
         <xsl:value-of select="subdirNum" />
       </td>
 
-      <td width="80%">
-        <img src="/images/space.gif" border="0" width="15" height="1" />
+      <td width="80%" style="width:80%;min-width:15px;">
+        &#160;
       </td>
 
       <td class="formParm1" nowrap="nowrap">
@@ -252,8 +252,8 @@
         <xsl:value-of select="format-number(dirFiles,'#.###','decimalFormat')" />
       </td>
 
-      <td width="80%">
-        <img src="/images/space.gif" border="0" width="15" height="1" />
+      <td width="80%" style="width:80%;min-width:15px;">
+        &#160;
       </td>
   
       <td class="formParm1" nowrap="nowrap">
@@ -280,9 +280,7 @@
             <td>
               <table border="0" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td bgcolor="white"><img src="images/space.gif" border="0" width="1" height="1" /></td>
-
-                  <td height="20" class="statsBarGraph" style="width:1px;background-image:url(images/bar.gif);border-width:0px;">
+                  <td height="20" class="statsBarGraph" style="width:1px;background-image:url(images/bar.gif);border-width:0px;padding-left:2px">
                     <xsl:attribute name="id">bar-<xsl:value-of select="position()-1"/></xsl:attribute>
                     <div class="small" style="color:black;"><xsl:attribute name="id">largeSizeText-<xsl:value-of select="position()-1"/></xsl:attribute>&#160;</div>
                   </td>

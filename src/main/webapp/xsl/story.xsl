@@ -367,7 +367,7 @@
       <xsl:if test="position() != last()">
         <tr>
           <td class="story2 sepTop">
-            <img src="//webfilesys/images/space.gif" border="0" width="1" height="1" />
+            <img src="/webfilesys/images/space.gif" border="0" width="1" height="1" />
           </td>
         </tr>
       </xsl:if>  
