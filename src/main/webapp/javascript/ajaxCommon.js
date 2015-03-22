@@ -1,111 +1,62 @@
 var req;
 
-function xmlRequest(url, callBackFunction)
-{
-    req = false;
+function createAjaxRequest() {
+    ajaxReq = false;
     
-    if (window.XMLHttpRequest) 
-    {
-    	try 
-    	{
-	    req = new XMLHttpRequest();
-        } 
-        catch (e) 
-        {
-	    req = false;
+    if (window.XMLHttpRequest) {
+    	try {
+	        ajaxReq = new XMLHttpRequest();
+        } catch (e) {
+	        ajaxReq = false;
         }
-    } 
-    else
-    {
-        // branch for IE/Windows ActiveX version
-        if (window.ActiveXObject !== undefined) 
-        {
-       	    try 
-       	    {
-        	req = new ActiveXObject("Msxml2.XMLHTTP");
-      	    } 
-      	    catch (e) 
-      	    {
-        	try 
-        	{
-          	    req = new ActiveXObject("Microsoft.XMLHTTP");
-        	} 
-        	catch (e) 
-        	{
-          	    req = false;
-        	}
-	    }
+    } else {
+        // MSIE ActiveX
+        if (window.ActiveXObject !== undefined) {
+       	    try {
+        	    ajaxReq = new ActiveXObject("Msxml2.XMLHTTP");
+      	    } catch (e) {
+        	    try {
+          	        ajaxReq = new ActiveXObject("Microsoft.XMLHTTP");
+        	    } catch (e) {
+          	        ajaxReq = false;
+        	    }
+	        }
         }
     }
         
-    if (req) 
-    {
-	req.onreadystatechange = callBackFunction;
-	req.open("GET", url, true);
-	req.send("");
+    if (!ajaxReq) {
+        alert('Your browser does not support Ajax communication');
     }
-    else
-    {
-        alert('Your browser does not support the XMLHttpRequest');
-    }
+	
+	return ajaxReq;
 }
 
-function xmlRequestSynchron(url, handleAsText)
-{
-    req = false;
-    
-    if (window.XMLHttpRequest) 
-    {
-    	try 
-    	{
-	    req = new XMLHttpRequest();
-        } 
-        catch (e) 
-        {
-	    req = false;
-        }
-    } 
-    else
-    {
-        // branch for IE/Windows ActiveX version
-        if (window.ActiveXObject !== undefined) 
-        {
-       	    try 
-       	    {
-        	req = new ActiveXObject("Msxml2.XMLHTTP");
-      	    } 
-      	    catch (e) 
-      	    {
-        	try 
-        	{
-          	    req = new ActiveXObject("Microsoft.XMLHTTP");
-        	} 
-        	catch (e) 
-        	{
-          	    req = false;
-        	}
-	    }
-        }
-    }
+function xmlRequest(url, callBackFunction) {
+    req = createAjaxRequest();
         
-    if (req) 
-    {
-	    req.open("GET", url, false);
-	    req.send(null);
-    }
-    else
-    {
-        alert('Your browser does not support the XMLHttpRequest');
-    }
+    if (req) {
+	    req.onreadystatechange = callBackFunction;
+	    req.open("GET", url, true);
+	    req.send("");
+    } 
+}
+
+function xmlRequestSynchron(url, handleAsText) {
+    req = createAjaxRequest();
+
+	if (!req) {
+	    return;
+	}
+
+    req.open("GET", url, false);
+    req.send(null);
     
-    if (req.status != 200)
-    {
+    if (req.status != 200) {
         alert('error code from XMLHttpRequest: ' + req.status);
         return;
     }
     
-    if (handleAsText)
-    {
+    if (handleAsText) {
         return(req.responseText);    
     }
     

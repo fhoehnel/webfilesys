@@ -133,3 +133,7 @@ th.fileList {
 table.contextMenu th {
     background-color: #d0d0d0;
 }
+
+.icon-button a:before {
+	color: #ff8000;
+}

@@ -24,7 +24,8 @@
     <xsl:value-of select="/compareFolder/resources/msg[@key='headline.compareFolders']/@value" />
   </title>
 
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
 
 </head>
 

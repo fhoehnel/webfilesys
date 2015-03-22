@@ -134,3 +134,7 @@ table.contextMenu th {
     background-color: lavender;
 }
 
+.icon-button a:before {
+	color: #4060a0;
+}
+

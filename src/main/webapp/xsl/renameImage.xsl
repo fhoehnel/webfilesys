@@ -33,7 +33,7 @@
       </td>
       <td class="formParm2" width="80%">
         <input type="text" name="newFileName" maxlength="256" style="width:100%;">
-          <xsl:attribute name="value"><xsl:value-of select="/renameFile/shortFileName" /></xsl:attribute>
+          <xsl:attribute name="value"><xsl:value-of select="/renameFile/oldFileName" /></xsl:attribute>
         </input>
       </td>
     </tr>

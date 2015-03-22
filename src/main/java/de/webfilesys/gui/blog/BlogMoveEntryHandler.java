@@ -20,8 +20,7 @@ import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 /**
- * Delete a folder tree.
- * Mobile version.
+ * Move a blog entry up or down within a day.
  */
 public class BlogMoveEntryHandler extends XmlRequestHandlerBase {
 	public BlogMoveEntryHandler(

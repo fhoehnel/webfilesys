@@ -160,7 +160,7 @@
 	          <div class="icon-button">
                 <a href="javascript:fastpath()" class="icon-font icon-folderOpen">
                   <xsl:attribute name="titleResource">label.fastpath</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
               </div>
 		    </th>
@@ -169,7 +169,7 @@
 	          <div class="icon-button">
                 <a href="javascript:bookmarks()" class="icon-font icon-bookmark">
                   <xsl:attribute name="titleResource">label.bookmarks</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
@@ -178,7 +178,7 @@
 	          <div class="icon-button">
                 <a href="javascript:returnToPrevDir()" class="icon-font icon-return">
                   <xsl:attribute name="titleResource">label.returnToPrevDir</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
               </div>
 		    </th>
@@ -188,7 +188,7 @@
 	            <div class="icon-button">
                   <a href="/webfilesys/servlet?command=processList" target="_blank" class="icon-font icon-process">
                     <xsl:attribute name="titleResource">label.processes</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -197,7 +197,7 @@
 	            <div class="icon-button">
                   <a href="javascript:fileSysStats()" class="icon-font icon-chart">
                     <xsl:attribute name="titleResource">label.fsstat</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -206,7 +206,7 @@
 	            <div class="icon-button">
                   <a href="#" onclick="unixCmdWin()" class="icon-font icon-console">
                     <xsl:attribute name="titleResource">label.oscmd</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -217,7 +217,7 @@
 	            <div class="icon-button">
                   <a href="/webfilesys/servlet?command=admin&amp;cmd=menu" target="_parent" class="icon-font icon-admin">
                     <xsl:attribute name="titleResource">label.admin</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -230,7 +230,7 @@
 	                <div class="icon-button">
                       <a href="/webfilesys/servlet?command=selfEditUser" target="FileList" class="icon-font icon-user">
                         <xsl:attribute name="titleResource">label.editregistration</xsl:attribute>
-                        &#160;
+                        <xsl:text> </xsl:text>
                       </a>
 					</div>
                   </th>
@@ -241,7 +241,7 @@
 	                <div class="icon-button">
                       <a href="/webfilesys/servlet?command=editPw" target="FileList" class="icon-font icon-user">
                         <xsl:attribute name="titleResource">label.settings</xsl:attribute>
-                        &#160;
+                        <xsl:text> </xsl:text>
                       </a>
 					</div>
                   </th>
@@ -254,7 +254,7 @@
 	            <div class="icon-button">
                   <a href="javascript:publishList()" class="icon-font icon-share">
                     <xsl:attribute name="titleResource">label.publishList</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
                 </div>
 			  </th>
@@ -267,7 +267,7 @@
 	                <div class="icon-button">
                       <a href="javascript:diskQuota()" class="icon-font icon-chart">
                         <xsl:attribute name="titleResource">label.diskQuotaUsage</xsl:attribute>
-                        &#160;
+                        <xsl:text> </xsl:text>
                       </a>
 					</div>
                   </th>
@@ -280,7 +280,7 @@
 	            <div class="icon-button">
                   <a href="javascript:refreshDriveList()" class="icon-font icon-drive">
                     <xsl:attribute name="titleResource">label.refreshDrives</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -291,7 +291,7 @@
 	            <div class="icon-button">
                   <a href="javascript:watchList()" class="icon-font icon-watch">
                     <xsl:attribute name="titleResource">watchList</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -302,7 +302,7 @@
 	            <div class="icon-button">
                   <a href="javascript:enterDirectPath()" class="icon-font icon-pencil">
                     <xsl:attribute name="titleResource">label.directPath</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -329,7 +329,7 @@
 		      <div class="icon-button">
                 <a href="javascript:searchParms()" class="icon-font icon-search">
                   <xsl:attribute name="titleResource">label.search</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
@@ -338,7 +338,7 @@
 		      <div class="icon-button">
                 <a href="javascript:slideshow()" class="icon-font icon-picture">
                   <xsl:attribute name="titleResource">label.slideshow</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
 		      </div>
             </th>
@@ -347,7 +347,7 @@
 		      <div class="icon-button">
                 <a href="javascript:javascript:pictureStory()" class="icon-font icon-book">
                   <xsl:attribute name="titleResource">label.story</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
@@ -357,7 +357,7 @@
 		        <div class="icon-button">
                   <a href="javascript:ftpBackup()" class="icon-font icon-upload">
                     <xsl:attribute name="titleResource">label.ftpBackup</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -368,7 +368,7 @@
 			    <div class="icon-button">
                   <a href="javascript:openCalendar()" class="icon-font icon-calendar">
                     <xsl:attribute name="titleResource">label.calendar</xsl:attribute>
-                    &#160;
+                    <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
@@ -378,7 +378,7 @@
 			  <div class="icon-button">
                 <a href="javascript:mobileVersion()" class="icon-font icon-mobilePhone">
                   <xsl:attribute name="titleResource">label.mobileVersion</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
 		      </div>
             </th>
@@ -388,7 +388,7 @@
                 <a target="_blank" class="icon-font icon-help">
                   <xsl:attribute name="href">/webfilesys/help/<xsl:value-of select="helpLanguage" />/help.html</xsl:attribute>
                   <xsl:attribute name="titleResource">label.help</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
@@ -398,7 +398,7 @@
                 <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')"
 				    class="icon-font icon-info">
                   <xsl:attribute name="titleResource">label.about</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
@@ -407,7 +407,7 @@
 			  <div class="icon-button">
                 <a href="/webfilesys/servlet?command=logout" target="_parent" class="icon-font icon-exit">
                   <xsl:attribute name="titleResource">label.logout</xsl:attribute>
-                  &#160;
+                  <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>

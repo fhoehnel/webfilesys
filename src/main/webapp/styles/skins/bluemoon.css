@@ -134,4 +134,6 @@ table.contextMenu th {
     background-color: silver;
 }
 
-
+.icon-button a:before {
+	color: #8080e0;
+}

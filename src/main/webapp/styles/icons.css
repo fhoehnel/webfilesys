@@ -155,10 +155,6 @@ a.icon-darkgrey:before {
     font-size: 24px;
 }
 
-.icon-button a:before {
-	color: #4060a0;
-}
-
 .icon-button a {
 	text-decoration: none;
 }
