@@ -125,6 +125,7 @@ import de.webfilesys.gui.blog.BlogMoveEntryHandler;
 import de.webfilesys.gui.blog.BlogPostHandler;
 import de.webfilesys.gui.blog.BlogPublishFormHandler;
 import de.webfilesys.gui.blog.BlogPublishHandler;
+import de.webfilesys.gui.blog.BlogRotateImgHandler;
 import de.webfilesys.gui.blog.BlogSaveSettingsHandler;
 import de.webfilesys.gui.blog.BlogSetDescrHandler;
 import de.webfilesys.gui.blog.BlogShowSettingsHandler;
@@ -2291,6 +2292,12 @@ public class WebFileSysServlet extends ServletBase
            	else if (cmd.equals("delComments"))
             {
     			(new BlogDeleteCommentsHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("rotate"))
+            {
+    			(new BlogRotateImgHandler(req, resp, session, output, userid)).handleRequest(); 
                 
                 return(true);
         	}

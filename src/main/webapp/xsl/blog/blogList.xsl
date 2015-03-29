@@ -192,11 +192,10 @@
               <a>
                 <xsl:attribute name="href">javascript:showPicturePopup('<xsl:value-of select="imgPathForScript" />', <xsl:value-of select="xpix" />, <xsl:value-of select="ypix" />)</xsl:attribute>
 
-                <img class="storyPicture" border="0">
+                <img class="storyPicture" border="0" titleResource="blog.showFullSize">
                   <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
                   <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
                   <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
-                  <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
                   <xsl:if test="align='right'">
                     <xsl:attribute name="align">right</xsl:attribute>
                     <xsl:attribute name="style">margin-left:10px</xsl:attribute>
@@ -237,6 +236,16 @@
           
                 <a class="icon-font icon-delete icon-blog-delete" titleResource="label.delete">
                   <xsl:attribute name="href">javascript:deleteBlogEntry('<xsl:value-of select="@name" />')</xsl:attribute>
+                </a>
+
+                &#160;
+             
+                <a href="#" id="rotateLeftIcon" class="icon-font icon-rotate-left icon-blog-rotate" titleResource="blog.rotateLeft">
+                  <xsl:attribute name="onClick">rotateBlogPic('<xsl:value-of select="@name" />', 'left')</xsl:attribute>
+                </a>
+                &#160;
+                <a href="#" id="rotateRightIcon" class="icon-font icon-rotate-right icon-blog-rotate" titleResource="blog.rotateRight">
+                  <xsl:attribute name="onClick">rotateBlogPic('<xsl:value-of select="@name" />', 'right')</xsl:attribute>
                 </a>
 
                 <xsl:if test="position() != 1">

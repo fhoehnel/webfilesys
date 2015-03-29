@@ -97,6 +97,14 @@ a.icon-font {
 	content: '\f063';
 }
 
+.icon-rotate-left:before {
+	content: '\f0e2';
+}
+
+.icon-rotate-right:before {
+	content: '\f01e';
+}
+
 .icon-help:before {
 	content: '\f059';
 }

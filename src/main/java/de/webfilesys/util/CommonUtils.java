@@ -483,5 +483,19 @@ public class CommonUtils
 
         return partsOfPath;		
 	}
+	
+    public static String filterForbiddenChars(String text) {
+    	StringBuffer cleanText = new StringBuffer();
+    	
+    	for (int i = 0; i < text.length(); i++) {
+    		char c = text.charAt(i);
+    		
+    		if (c < 0xd800) {
+    			cleanText.append(c);
+    		} 
+    	}
+    	
+    	return cleanText.toString();
+    }
     
 }

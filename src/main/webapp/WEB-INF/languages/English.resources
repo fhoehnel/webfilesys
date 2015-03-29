@@ -1065,7 +1065,11 @@ blog.newPasswdConfirm=confirm new password
 blog.invalidDaysPerPage=The value for days per page muste be a number between 1 and 64!
 blog.moveUp=move up
 blog.moveDown=move down
+blog.rotateLeft=rotate picture left
+blog.rotateRight=rotate picture right
+blog.showFullSize=show picture in full size
 blog.moveError=failed to move blog entry
+blog.rotateError=failed to rotate picture
 
 error.latitudeInvalid=latitude must be a number between -90.0 and 90.0
 error.longitudeInvalid=longitude must be a number between -180.0 and 180.0

@@ -1131,8 +1131,34 @@ function setSelectedDate(y, m, d) {
     var now = new Date();
            
     if (selectedDate.getTime() - (24 * 60 * 60 * 1000) > now.getTime()) {
-        alert(resourceBundle["blog.dateInFuture"])
+        alert(resourceBundle["blog.dateInFuture"]);
     }
         
     document.getElementById("blogDate").value = selectedDate.toLocaleString().split(" ")[0];
+}
+
+function rotateBlogPic(imgName, direction) {
+
+    showHourGlass();
+
+    var xmlUrl = "/webfilesys/servlet?command=blog&cmd=rotate&imgName=" + imgName + "&direction=" + direction;
+
+	xmlRequest(xmlUrl, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var successItem = req.responseXML.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
+             
+                if (success == 'true') {
+                    window.location.href = "/webfilesys/servlet?command=blog";
+                } else {
+                    alert(resourceBundle["blog.rotateError"]);
+                }
+                hideHourGlass();
+            } else {
+                hideHourGlass();
+                alert(resourceBundle["blog.rotateError"]);
+            }
+        }
+    });   
 }

@@ -64,6 +64,9 @@ public class BlogAddCommentHandler extends XmlRequestHandlerBase {
 		boolean commentCreated = false;
 		
 		if (!CommonUtils.isEmpty(newComment)) {
+			
+			newComment = CommonUtils.filterForbiddenChars(newComment);
+			
 			String currentPathOS = filePath.replace('/', File.separatorChar);
 			
 			MetaInfManager.getInstance().addComment(currentPathOS, new Comment(commentAuthor, new Date(), newComment));
@@ -81,4 +84,5 @@ public class BlogAddCommentHandler extends XmlRequestHandlerBase {
 		
 		processResponse();
 	}
+	
 }

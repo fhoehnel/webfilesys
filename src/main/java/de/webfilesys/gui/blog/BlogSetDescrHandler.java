@@ -74,6 +74,7 @@ public class BlogSetDescrHandler extends UserRequestHandler
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
 		if (!CommonUtils.isEmpty(blogText)) {
+			blogText = CommonUtils.filterForbiddenChars(blogText);
 			metaInfMgr.setDescription(currentPath, firstUploadFileName, blogText);
 		}
 		

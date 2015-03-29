@@ -19,8 +19,7 @@ import de.webfilesys.util.CommonUtils;
 /**
  * @author Frank Hoehnel
  */
-public class BlogChangeEntryHandler extends UserRequestHandler
-{
+public class BlogChangeEntryHandler extends UserRequestHandler {
 	protected HttpServletRequest req = null;
 
 	protected HttpServletResponse resp = null;
@@ -30,29 +29,24 @@ public class BlogChangeEntryHandler extends UserRequestHandler
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
         this.req = req;
         this.resp = resp;
 	}
 
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 
 		String currentPath = getCwd();
 
-		if ((currentPath == null) || (currentPath.trim().length() == 0))
-		{
+		if ((currentPath == null) || (currentPath.trim().length() == 0)) {
 			currentPath = userMgr.getDocumentRoot(uid).replace('/',  File.separatorChar);
 		}
 
-		if (!checkAccess(currentPath))
-		{
+		if (!checkAccess(currentPath)) {
 			return;
 		}
 
@@ -107,6 +101,7 @@ public class BlogChangeEntryHandler extends UserRequestHandler
 		String blogText = req.getParameter("blogText");
 		
 		if (!CommonUtils.isEmpty(blogText)) {
+			blogText = CommonUtils.filterForbiddenChars(blogText);
 			metaInfMgr.setDescription(currentPath, newFileName, blogText);
 		} else {
 			metaInfMgr.setDescription(currentPath, newFileName, "");
@@ -188,4 +183,5 @@ public class BlogChangeEntryHandler extends UserRequestHandler
 		
 		return dateYear + "-" + dateMonth + "-" + dateDay;
     }
+    
 }

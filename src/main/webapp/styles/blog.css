@@ -224,33 +224,20 @@ div.blogPagingCont {
     margin: 10px 0;
 }
 
-.icon-blog-edit:before {
-	color: #000060;
-    font-size: 24px;
-}
-
-a.icon-blog-edit {
-    text-decoration: none;
-}
-
-.icon-blog-delete:before {
-	color: #000060;
-    font-size: 24px;
-}
-
-a.icon-blog-delete {
-    text-decoration: none;
-}
-
+.icon-blog-edit:before,
+.icon-blog-delete:before,
+.icon-blog-rotate:before,
 .icon-blog-move:before {
 	color: #000060;
     font-size: 24px;
 }
 
-a.icon-blog-move {
+a.icon-blog-edit,
+a.icon-blog-move,
+a.icon-blog-delete,
+a.icon-blog-rotate {
     text-decoration: none;
 }
-
 
 div.blogGeoDataSwitcher {
     margin-top: 16px;
