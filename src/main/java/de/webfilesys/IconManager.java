@@ -7,8 +7,7 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
-public class IconManager
-{
+public class IconManager {
     private static final String ICON_FILE = "iconAssignment.conf";
 
     public static final String DEFAULT_ICON = "doc.gif";
@@ -19,48 +18,48 @@ public class IconManager
     
     private String iconFilePath = null;
 
-    public static IconManager getInstance()
-    {
-        if (iconMgr==null)
-        {
-            iconMgr=new IconManager();
+    public static IconManager getInstance() {
+        if (iconMgr == null) {
+            iconMgr = new IconManager();
         }
 
         return(iconMgr);
     }
 
-    private IconManager()
-    {
-        iconTable=new Properties();
+    private IconManager() {
+        iconTable = new Properties();
 
         loadIconAssignment();
     }
 
-    protected void loadIconAssignment()
-    {
+    protected void loadIconAssignment() {
     	iconFilePath = WebFileSys.getInstance().getConfigBaseDir() + File.separator + ICON_FILE;
 
     	File iconFile = new File(iconFilePath);
 
-         if ((!iconFile.exists()) || (!iconFile.isFile()) || (!iconFile.canRead()))
-         {
-             Logger.getLogger(getClass()).error("icon assignment file " + iconFilePath + " can not be read");
-
+        if ((!iconFile.exists()) || (!iconFile.isFile()) || (!iconFile.canRead())) {
+             Logger.getLogger(getClass()).error("icon assignment file " + iconFilePath + " is not a readable file");
              return;
          }
 
-         try
-         {
-             iconTable.load(new FileInputStream(iconFile));
-         }
-         catch (IOException ioex)
-         {
-        	 Logger.getLogger(getClass()).error(ioex);
-         }
+         FileInputStream fis = null;
+
+         try {
+             fis = new FileInputStream(iconFile);
+             iconTable.load(fis);
+         } catch (IOException ioex) {
+        	 Logger.getLogger(getClass()).error("failed to load icon assignment file", ioex);
+         } finally {
+ 			if (fis != null) {
+ 				try {
+ 					fis.close();
+ 				} catch (IOException ex) {
+ 				}
+ 			}
+ 		 }
     }
 
-    public String getAssignedIcon(String fileExtension)
-    {
+    public String getAssignedIcon(String fileExtension) {
         return(iconTable.getProperty(fileExtension.toLowerCase(),DEFAULT_ICON));
     }
     
@@ -69,8 +68,7 @@ public class IconManager
 
         int extIdx = fileName.lastIndexOf('.');
 
-        if ((extIdx > 0) && (extIdx < (fileName.length() - 1)))
-        {
+        if ((extIdx > 0) && (extIdx < (fileName.length() - 1))) {
             iconImg = getAssignedIcon(fileName.substring(extIdx + 1));
         }
         

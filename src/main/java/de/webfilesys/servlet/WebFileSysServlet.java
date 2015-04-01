@@ -339,9 +339,11 @@ public class WebFileSysServlet extends ServletBase
 		
 		configProperties = new Properties();
 		
+		FileInputStream propFile = null;
+		
 		try
 		{
-			FileInputStream propFile = new FileInputStream(configFile);
+			propFile = new FileInputStream(configFile);
 			
 			configProperties.load(propFile);
 			
@@ -351,6 +353,19 @@ public class WebFileSysServlet extends ServletBase
 		{
 			Logger.getLogger(getClass()).fatal("error reading config file: " + ioEx);
 			throw new ServletException ("error reading config file: " + ioEx);
+		}
+		finally
+		{
+			if (propFile != null) 
+			{
+				try 
+				{
+					propFile.close();
+				}
+				catch (IOException ex)
+				{
+				}
+			}
 		}
 
 		String webAppRootDir = context.getRealPath("/");

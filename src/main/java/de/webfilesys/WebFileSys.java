@@ -44,12 +44,11 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.11.2beta10 (29 Mar 2015)";
+	public static final String VERSION = "Version 2.11.2beta13 (01 Apr 2015)";
  
     public static final String THUMB_DIR = "thumbnails";
 
-    public static final String DEFAULT_MAIL_SENDER_ADDRESS =
-        "WebFileSys@nowhere.com";
+    public static final String DEFAULT_MAIL_SENDER_ADDRESS = "WebFileSys@nowhere.com";
 
     public static final String DEFAULT_MAIL_SENDER_NAME = "WebFileSys";
 
@@ -990,6 +989,7 @@ public class WebFileSys
                 opSysName.equals("Windows Vista") ||
                 opSysName.equals("Windows 7") ||
                 opSysName.startsWith("Windows 8") ||
+                opSysName.startsWith("Windows 10") ||
                 opSysName.equals("Windows 2000") ||
                 opSysName.startsWith("Windows Server"));
     }

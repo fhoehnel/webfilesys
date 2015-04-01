@@ -35,6 +35,12 @@ body.menubar {
     font-family: Arial,Helvetica,sans-serif;
 }
 
+body.compareImg {
+    margin: 0;
+    background-color: #d0d0d0;
+    overflow: hidden;
+}
+
 h1 {
     font-size:14pt;
     color:navy;
@@ -1399,4 +1405,12 @@ a.directPathCloseIcon {
     border-radius: 8px;
     box-shadow: 5px 5px 5px #666666;
     z-index: 10;
+}
+
+td.compareImg {
+    font-size: 13px;
+    color: black;
+    font-family: Arial,Helvetica,sans-serif;
+    vertical-align: top;
+    text-align: center;
 }

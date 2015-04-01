@@ -14,21 +14,17 @@ import de.webfilesys.util.CommonUtils;
 /**
  * @author Frank Hoehnel
  */
-public class ViewLogRequestHandler extends LogRequestHandlerBase
-{
+public class ViewLogRequestHandler extends LogRequestHandlerBase {
 	public ViewLogRequestHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 	
-	protected void process()
-	{
-		String logFileName = getSystemLogFilePath();
+	protected void process() {
 		
 		String title = "WebFileSys Administration - Event Log";
 		
@@ -44,72 +40,41 @@ public class ViewLogRequestHandler extends LogRequestHandlerBase
 
 		headLine(title);
 
-		File logFile = null;
-		if (logFileName != null) 
-		{
-	        logFile = new File(logFileName);
-	        if (!logFile.exists()) 
-	        {
-	            logFile = null;
+		String logFileName = getSystemLogFilePath();
+		if (logFileName != null) {
+	        File logFile = new File(logFileName);
+	        if ((!logFile.exists()) || (!logFile.isFile()) || (!logFile.canRead())) {
+	            output.println("WebFileSys system log file " + logFileName + " could not be located. Check the log4j configuration!");
+	            output.println("</body></html>");
+	            output.flush();
+	            return;
 	        }
 		}
 		
-		if (logFile == null) {
-            output.println("WebFileSys system log file could not be located! Check the log4j configuration.");
-            output.println("</body></html>");
-            output.flush();
-            return;
-		}
-
 		output.println("<pre>");
 		
 		BufferedReader logIn=null;
 
-		try
-		{
-			logIn=new BufferedReader(new FileReader(logFileName));
+		try {
+			logIn = new BufferedReader(new FileReader(logFileName));
 
 			String rawLine;
 
-			while ((rawLine=logIn.readLine())!=null)
-			{
+			while ((rawLine = logIn.readLine()) != null) {
 				output.print("<span class=\"");
 
-				if (rawLine.indexOf(" DEBUG ") > 0)
-				{
+				if (rawLine.indexOf(" DEBUG ") > 0) {
 					output.print("logDebug");
-				}
-				else
-				{
-					if (rawLine.indexOf(" INFO ") > 0)
-					{
-						output.print("logInfo");
-					}
-					else
-					{
-						if (rawLine.indexOf(" WARN ") > 0)
-						{
-							output.print("logWarn");
-						}
-						else
-						{
-							if (rawLine.indexOf(" ERROR ") > 0)
-							{
-								output.print("logError");
-							}
-							else
-							{
-								if (rawLine.indexOf(" FATAL ") > 0)
-								{
-									output.print("logFatal");
-								}
-								else
-								{
-									output.print("logNone");
-								}
-							}
-						}
-					}
+				} else if (rawLine.indexOf(" INFO ") > 0) {
+					output.print("logInfo");
+				} else if (rawLine.indexOf(" WARN ") > 0) {
+					output.print("logWarn");
+				} else if (rawLine.indexOf(" ERROR ") > 0) {
+					output.print("logError");
+				} else if (rawLine.indexOf(" FATAL ") > 0) {
+					output.print("logFatal");
+				} else {
+					output.print("logNone");
 				}
 
 				output.print("\">");
@@ -118,16 +83,21 @@ public class ViewLogRequestHandler extends LogRequestHandlerBase
 
 				output.println("</span>");
 			}
-		}
-		catch (IOException ioe)
-		{
+		} catch (IOException ioe) {
 			System.out.println(ioe);
 			output.println(ioe);
+		} finally {
+			if (logIn != null) {
+				try {
+					logIn.close();
+				} catch (IOException ioex) {
+				}
+			}
 		}
 
 		output.println("</pre>");
 
-		output.println("<script language=\"javascript\">");
+		output.println("<script type=\"text/javascript\">");
 		output.println("setTimeout(\"window.scrollTo(0,1000000)\",1000);");
 		output.println("</script>");
 

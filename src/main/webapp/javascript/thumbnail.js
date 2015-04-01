@@ -36,10 +36,10 @@ function resetSelected() {
 
 function compare() {
     if (checkSelected()) {
-	    compareWin = window.open('/webfilesys/servlet?command=blank','compareWin','width=screen.width,height=screen.height-30,scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
+	    compareWin = window.open('/webfilesys/servlet?command=blank','compareWin','scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
         
         if (!compareWin) {
-            alert('Failed to open new browser window. You have to allow popups for this website in your browser settings!');
+            alert(resourceBundle["alert.enablePopups"]);
             return;
         }
         

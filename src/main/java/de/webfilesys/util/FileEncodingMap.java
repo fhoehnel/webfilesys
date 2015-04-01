@@ -20,25 +20,37 @@ public class FileEncodingMap
     private FileEncodingMap()
     {
         encodingMap = new Properties();
+    	FileInputStream fin = null;
 
         try
         {
         	String propFilePath = WebFileSys.getInstance().getConfigBaseDir() + "/" + MAPPING_FILE;
         	
-        	FileInputStream fin = new FileInputStream(propFilePath);
+        	fin = new FileInputStream(propFilePath);
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
                 Logger.getLogger(getClass()).debug("reading file encoding map from " + propFilePath);
             }
             
         	encodingMap.load(fin);
-        	
-        	fin.close();
         }
         catch (IOException ioex)
         {
             Logger.getLogger(getClass()).error("Failed to read file encoding configuration", ioex);
         }
+		finally
+		{
+			if (fin != null) 
+			{
+				try 
+				{
+					fin.close();
+				}
+				catch (IOException ex)
+				{
+				}
+			}
+		}
     }
 
     public static FileEncodingMap getInstance()

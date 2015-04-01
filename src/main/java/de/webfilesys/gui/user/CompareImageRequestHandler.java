@@ -53,11 +53,6 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
         output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
-        output.println("<style type=\"text/css\">");
-		output.println("body {margin-top:0px;margin-left:0px;background-color:white;}");
-		output.println("td {font-size:8pt;color:black;font-family:Arial;}");
-		output.println("</style>");
-		
         output.println("<script type=\"text/javascript\">");
         output.println("function confirmDelImg(imgFileName)");
         output.println("{");
@@ -69,7 +64,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
         output.println("</script>");
 
 		output.println("</head>");
-		output.println("<body>");
+		output.println("<body class=\"compareImg\">");
 
 		output.println("<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"1\">");
 
@@ -108,7 +103,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 		
 		if (screenWidth != null)
 		{
-			displayWidth = screenWidth.intValue() - 20;
+			displayWidth = screenWidth.intValue() - 28;
 		}
 		
 		int displayHeight = 520;
@@ -126,26 +121,19 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 
 		int widthSum=0;
 		
-		for (int i=0;i<fileNum;i++)
+		for (int i = 0; i < fileNum; i++)
 		{
-			String imgFileName=pathWithSlash + (String) selectedFiles.elementAt(i);
+			String imgFileName = pathWithSlash + (String) selectedFiles.elementAt(i);
 
 			ScaledImage scaledImage=null;
 
 			try
 			{
-				scaledImage=new ScaledImage(imgFileName,displayWidth,displayHeight);
+				scaledImage = new ScaledImage(imgFileName,displayWidth,displayHeight);
 
-				if (scaledImage.getScaledHeight() < scaledImage.getRealHeight())
-				{
-					imgWidth[i]=scaledImage.getScaledWidth();
-				}
-				else
-				{
-					imgWidth[i]=scaledImage.getRealWidth();
-				}
+				imgWidth[i] = scaledImage.getRealWidth();
 
-				widthSum+=imgWidth[i];
+				widthSum += imgWidth[i];
 			}
 			catch (IOException io1)
 			{
@@ -155,33 +143,31 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 
 		if (widthSum > displayWidth)
 		{
-			for (int i=0;i<fileNum;i++)
+			for (int i = 0; i < fileNum; i++)
 			{
-				int scale=imgWidth[i] * 100 / widthSum;
-
-				imgWidth[i]=(scale * displayWidth) / 100;
+				imgWidth[i] = imgWidth[i] * displayWidth / widthSum;
 			}
 		}
 
-		int maxHeight=0;
+		int maxHeight = 0;
 
 		output.println("<tr>");
 		
-		for (int i=0;i<fileNum;i++)
+		for (int i = 0; i < fileNum; i++)
 		{
-			output.println("<td style=\"vertical-align:top;text-align:center\">");
+			output.println("<td class=\"compareImg\">");
 
-			String imgFileName=pathWithSlash + (String) selectedFiles.elementAt(i);
+			String imgFileName = pathWithSlash + (String) selectedFiles.elementAt(i);
 
-			ScaledImage scaledImage=null;
+			ScaledImage scaledImage = null;
 
 			try
 			{
-				scaledImage=new ScaledImage(imgFileName,imgWidth[i],displayHeight);
+				scaledImage = new ScaledImage(imgFileName, imgWidth[i], displayHeight);
 
 				if (scaledImage.getScaledHeight() > maxHeight)
 				{
-					maxHeight=scaledImage.getScaledHeight();
+					maxHeight = scaledImage.getScaledHeight();
 				}
 			}
 			catch (IOException io1)
@@ -206,7 +192,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 		{
 		    String imgFileName = (String) selectedFiles.elementAt(i);
 		    
-			output.print("<td style=\"vertical-align:top;text-align:center\"");
+			output.print("<td class=\"compareImg\"");
 			if (imgFileName.length() > 30) 
 			{
 			    output.print(" title=\"" + imgFileName + "\"");
@@ -226,9 +212,9 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 		
 		output.println("</table>");
 
-		int windowHeight=maxHeight + 130;
+		int windowHeight = maxHeight + 135;
 
-		output.println("<script language=\"javascript\">");
+		output.println("<script>");
 		output.println("if (" + windowHeight + " < (screen.height-30))");
 		output.println("{window.resizeTo(screen.width," + (windowHeight - 30) + ");}");
 		output.println("else");

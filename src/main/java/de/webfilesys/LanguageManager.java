@@ -156,7 +156,7 @@ public class LanguageManager
     protected synchronized boolean loadResources(String configFilename, Properties langResources,
     	String language)
     {
-        FileInputStream configFile=null;
+        FileInputStream configFile = null;
 
         Logger.getLogger(getClass()).info("Loading Resources from " + configFilename);
 
@@ -167,8 +167,6 @@ public class LanguageManager
             langResources.load(configFile);
             
             resourceTable.put(language,langResources);
-        
-            configFile.close();
         }
         catch(FileNotFoundException fnfe)
         {
@@ -180,6 +178,20 @@ public class LanguageManager
         	Logger.getLogger(getClass()).error("failed to load language resources", ioex);
             return(false);
         }
+		finally
+		{
+			if (configFile != null) 
+			{
+				try 
+				{
+					configFile.close();
+				}
+				catch (IOException ex)
+				{
+				}
+			}
+		}
+        
 
         if (!language.equals(DEFAULT_LANGUAGE))
         {
