@@ -1,5 +1,7 @@
 package de.webfilesys.mail;
 
+import org.apache.log4j.Logger;
+
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
 
@@ -128,7 +130,7 @@ public class EmailUtils
 		}
 		catch (IllegalArgumentException iaex)
 		{
-			System.out.println(iaex);
+            Logger.getLogger(EmailUtils.class).error("failed to send welcome mail", iaex);
 		}
 
 		String subject=LanguageManager.getInstance().getResource(userLanguage,"subject.welcome","Welcome to WebFileSys");
