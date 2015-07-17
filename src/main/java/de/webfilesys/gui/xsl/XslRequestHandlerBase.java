@@ -34,6 +34,8 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslRequestHandlerBase extends UserRequestHandler
 {
+	private static final Logger LOG = Logger.getLogger(XslRequestHandlerBase.class);
+	
 	protected Document doc;
 
 	private DocumentBuilder builder;
@@ -67,8 +69,7 @@ public class XslRequestHandlerBase extends UserRequestHandler
 		}
 		catch (ParserConfigurationException pcex)
 		{
-			Logger.getLogger(getClass()).error(pcex.toString());
-			System.out.println(pcex.toString());
+			LOG.error("failed to build XML DOM doc", pcex);
 		}
 	}
 
@@ -239,6 +240,8 @@ public class XslRequestHandlerBase extends UserRequestHandler
 		}
         else
         { 
+    		resp.setContentType("text/html");
+        	
 			String xslPath = WebFileSys.getInstance().getWebAppRootDir() + "xsl" + File.separator + xslFile;
         	
         	// Logger.getLogger(getClass()).debug("server-side XSLT: " + xslPath);
@@ -258,15 +261,18 @@ public class XslRequestHandlerBase extends UserRequestHandler
 		 		    
 				long end = System.currentTimeMillis();
         
-				Logger.getLogger(getClass()).debug("server-side XSLTC transformation in " + (end - start) + " ms");
+				if (LOG.isDebugEnabled()) 
+				{
+					LOG.debug("server-side XSL transformation in " + (end - start) + " ms");
+				}
 			}
 			catch (TransformerConfigurationException tex)
 			{
-				Logger.getLogger(getClass()).warn(tex);
+				LOG.warn(tex);
 			}
 			catch (TransformerException tex)
 			{
-				Logger.getLogger(getClass()).warn(tex);
+				LOG.warn(tex);
 			}
         }
 

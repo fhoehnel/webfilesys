@@ -22,6 +22,11 @@ public class ResourceBundleHandler extends UserRequestHandler{
 	{
 		super(req, resp, session, output, uid);
 	}
+
+	public ResourceBundleHandler(HttpServletRequest req, HttpServletResponse resp, PrintWriter output) 
+	{
+		super(req, resp, null, output, null);
+	}
 	
 	protected void process()
 	{

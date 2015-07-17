@@ -622,7 +622,7 @@ selectDiffSourceResult=Navigieren Sie zur Ziel-Datei für den Vergleich und wähle
 # user self-registration
 label.registerself=Als neuer Nutzer registrieren
 label.editregistration=Registrierungsdaten ändern
-label.regtitle=Anmeldung als neuer Nutzer
+label.regtitle=Registrierung als neuer Nutzer
 label.login=Nutzername
 label.passwordconfirm=Passwort-Bestätigung
 label.ropassword=Readonly-Passwort

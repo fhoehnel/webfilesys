@@ -43,10 +43,10 @@ public class UserListRequestHandler extends AdminRequestHandler
 	
 	protected void process()
 	{
-		output.print("<HTML>");
-		output.print("<HEAD>");
+		output.print("<html>");
+		output.print("<head>");
 
-		output.println("<SCRIPT LANGUAGE=\"JavaScript\">");
+		output.println("<script type=\"text/javascript\">");
 		output.println("function confirmDelete(delUser)");
 		output.println("{if (confirm(\"Are you sure you want to delete user \" + delUser + \" ?\"))");
 		output.println("    {window.location=\"/webfilesys/servlet?command=admin&cmd=deleteUser&userToBeDeleted=\" + delUser ;");
@@ -55,15 +55,15 @@ public class UserListRequestHandler extends AdminRequestHandler
 
 		output.println("function diskQuota(userid) {window.open('/webfilesys/servlet?command=diskQuota&userid=' + encodeURIComponent(userid) + '&random=' + new Date().getTime(),'quotaWin','scrollbars=no,resizable=no,width=400,height=230,left=100,top=100,screenX=100,screenY=100');}");
 
-		output.println("</SCRIPT>");
+		output.println("</script>");
 
-		output.print("<TITLE> WebFileSys User Administration </TITLE>");
+		output.print("<title> WebFileSys User Administration </title>");
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
-		output.println("</HEAD>");
-		output.println("<BODY>");
+		output.println("</head>");
+		output.println("<body>");
 
 		headLine("WebFileSys User Administration");
 

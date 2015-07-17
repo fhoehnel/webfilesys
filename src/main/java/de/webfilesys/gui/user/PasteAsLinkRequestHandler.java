@@ -3,7 +3,7 @@ package de.webfilesys.gui.user;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -75,7 +75,7 @@ public class PasteAsLinkRequestHandler extends UserRequestHandler
 		    return;
 		}
 
-		Enumeration clipFiles = clipBoard.getAllFiles();
+		ArrayList<String> clipFiles = clipBoard.getAllFiles();
 
 		if (clipFiles!=null)
 		{
@@ -88,10 +88,8 @@ public class PasteAsLinkRequestHandler extends UserRequestHandler
 				destDir=destDir + File.separator;
 			}
 
-			while (clipFiles.hasMoreElements())
+			for (String sourceFile : clipFiles)
 			{
-				String sourceFile=(String) clipFiles.nextElement();
-                
 				int lastSepIdx=sourceFile.lastIndexOf(File.separatorChar);
                 
                 try

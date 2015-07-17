@@ -573,42 +573,49 @@ public class WebFileSysServlet extends ServletBase
     		return(false);
     	}
     	
-    	if (command.equals("login"))
+        if (command.equals("getResourceBundle"))
+        {
+		    (new ResourceBundleHandler(req, resp, output)).handleRequest(); 
+
+            return(true);
+        }
+        
+        if (command.equals("login"))
     	{
     		verifyLogin(req, resp, output, requestIsLocal);
     		
     		return(true);
     	}
-    		
-    	if (command.equals("silentLogin"))
+        
+        if (command.equals("silentLogin"))
     	{
     		silentLogin(req, resp, output, requestIsLocal);
     		
     		return(true);
     	}
-    		
-    	if (command.equals("registerSelf"))
+        
+        if (command.equals("registerSelf"))
     	{
 			(new XslSelfRegistrationHandler(req, resp, req.getSession(true), output)).handleRequest(); 
     		
     		return(true);
     	}
-    		
-    	if (command.equals("visitorFile"))
+        
+        if (command.equals("visitorFile"))
     	{
 		    (new VisitorFileRequestHandler(req, resp, null, output)).handleRequest(); 
 		    
     		return(true);
     	}
-    		
-    	if (command.equals("blank"))
+        
+        if (command.equals("blank"))
     	{
 		    (new BlankPageRequestHandler(req, resp, output)).handleRequest(); 
     		
     		return(true);
     	}
-    	
-    	if (command.equals("versionInfo"))
+        
+        if (command.equals("versionInfo"))
     	{
 		    (new VersionInfoRequestHandler(output)).handleRequest(); 
     		

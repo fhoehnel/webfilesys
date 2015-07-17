@@ -448,6 +448,8 @@ public class DecorationManager extends Thread {
                 	saveToFile();
                 }
 				
+                Logger.getLogger(getClass()).debug("DecorationManager ready for shutdown");
+                
 				stop = true;
             }
         }

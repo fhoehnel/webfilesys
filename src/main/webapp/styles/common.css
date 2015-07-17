@@ -1234,6 +1234,7 @@ div.sunburstTreeInfo {
 div.currentTrail {
     font-size: 15px;
     color: #000000;
+    word-wrap: break-word;
 }
   
 a.currentTrail {

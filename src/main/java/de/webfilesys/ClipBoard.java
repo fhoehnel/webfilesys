@@ -1,12 +1,14 @@
 package de.webfilesys;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 
-public class ClipBoard extends Hashtable
+public class ClipBoard extends Hashtable<String, Integer>
 {
-    private final int CONTENT_TYPE_DIR =  1;
+	private static final long serialVersionUID = 1L;
+	
+	private final int CONTENT_TYPE_DIR =  1;
     private final int CONTENT_TYPE_FILE = 2;
 
     private final int OPERATION_COPY = 1;
@@ -27,18 +29,18 @@ public class ClipBoard extends Hashtable
 
     public void addFile(String path)
     {
-        put(path,new Integer(CONTENT_TYPE_FILE));
+        put(path, new Integer(CONTENT_TYPE_FILE));
     }
 
     public void addDir(String path)
     {
-        put(path,new Integer(CONTENT_TYPE_DIR));
+        put(path, new Integer(CONTENT_TYPE_DIR));
     }
 
     public int getContentType(String ident)
     {
         Integer contentType=(Integer) get(ident);
-        if (contentType==null)
+        if (contentType == null)
         {
             return(0);
         }
@@ -46,50 +48,50 @@ public class ClipBoard extends Hashtable
         return(contentType.intValue());
     }
 
-    public Enumeration getAllFiles()
+    public ArrayList<String> getAllFiles()
     {
         return(getAllOfType(CONTENT_TYPE_FILE));
     }
 
-    public Enumeration getAllDirs()
+    public ArrayList<String> getAllDirs()
     {
         return(getAllOfType(CONTENT_TYPE_DIR));
     }
 
-    public Enumeration getAllOfType(int typeToRemove)
+    public ArrayList<String> getAllOfType(int typeToRemove)
     {
-        Vector allFiles=null;
+        ArrayList<String> allFiles = null;
 
-        Enumeration allKeys=keys();
+        Enumeration<String> allKeys = keys();
 
-        if (allKeys!=null)
+        if (allKeys != null)
         {
             while (allKeys.hasMoreElements())
             {
-                String path=(String) allKeys.nextElement();
-                int contentType=((Integer) get(path)).intValue();
-                if (contentType==typeToRemove)
+                String path = (String) allKeys.nextElement();
+                int contentType = ((Integer) get(path)).intValue();
+                if (contentType == typeToRemove)
                 {
-                    if (allFiles==null)
+                    if (allFiles == null)
                     {
-                        allFiles=new Vector();
+                        allFiles = new ArrayList<String>();
                     }
                     allFiles.add(path);
                 }   
             }
         }
 
-        if (allFiles==null)
+        if (allFiles == null)
         {
             return(null);
         }        
 
-        return(allFiles.elements());
+        return(allFiles);
     }
 
     public void setOperation(int newOperation)
     {
-        operation=newOperation;
+        operation = newOperation;
     }
 
     public int getOperation()
@@ -99,21 +101,21 @@ public class ClipBoard extends Hashtable
 
     public void setMoveOperation()
     {
-        operation=OPERATION_MOVE;
+        operation = OPERATION_MOVE;
     }
 
     public boolean isMoveOperation()
     {
-        return(operation==OPERATION_MOVE);
+        return(operation == OPERATION_MOVE);
     }
     
     public void setCopyOperation()
     {
-        operation=OPERATION_COPY;
+        operation = OPERATION_COPY;
     }
 
     public boolean isCopyOperation()
     {
-        return(operation==OPERATION_COPY);
+        return(operation == OPERATION_COPY);
     }
 }

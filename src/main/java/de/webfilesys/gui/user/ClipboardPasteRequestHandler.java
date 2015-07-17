@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -138,7 +139,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 		output.println("</form>");
 
-		Enumeration clipFiles = clipBoard.getAllFiles();
+		ArrayList<String> clipFiles = clipBoard.getAllFiles();
 
 		if (clipFiles != null)
 		{
@@ -151,10 +152,8 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 			int copyFileCounter = 0;
 			
-			while (clipFiles.hasMoreElements())
+			for (String sourceFile : clipFiles) 
 			{
-				String sourceFile=(String) clipFiles.nextElement();
-                
 				int lastSepIdx=sourceFile.lastIndexOf(File.separatorChar);
                 
 				String destFile=destDir + sourceFile.substring(lastSepIdx+1);
@@ -276,7 +275,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 			}
 		}
 
-		Enumeration clipDirs = clipBoard.getAllDirs();
+		ArrayList<String> clipDirs = clipBoard.getAllDirs();
 
 		if (clipDirs != null)
 		{
@@ -287,10 +286,8 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 				destDir=destDir + File.separator;
 			}
 
-			while (clipDirs.hasMoreElements())
+			for (String sourceDir : clipDirs)
 			{
-				String sourceDir=(String) clipDirs.nextElement();
-
 				if (destDir.regionMatches(true,0,sourceDir,0,sourceDir.length()))
 				{
 					output.println("<script language=\"javascript\">");

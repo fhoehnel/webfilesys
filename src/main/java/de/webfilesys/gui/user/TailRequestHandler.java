@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import sun.io.MalformedInputException;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 
@@ -30,7 +29,7 @@ public class TailRequestHandler extends UserRequestHandler
     
 	private static final int BYTES_TO_CHECK = 2 * 1024 * 1024;
     
-    private ArrayList lineQueue = null;
+    private ArrayList<String> lineQueue = null;
     
     private int lineCount = NUMBER_OF_LINES_TO_PRINT;
     
@@ -43,7 +42,7 @@ public class TailRequestHandler extends UserRequestHandler
 	{
         super(req, resp, session, output, uid);
         
-        lineQueue = new ArrayList();
+        lineQueue = new ArrayList<String>();
 	}
 
 	protected void process()
@@ -188,7 +187,7 @@ public class TailRequestHandler extends UserRequestHandler
                         queueLine(line);
                     }
                 } 
-                catch (MalformedInputException miEx) {
+                catch (Exception miEx) {
                     Logger.getLogger(getClass()).warn("error during reading file for tail", miEx);
                     excCounter++;
                     queueLine(ENCODING_ERROR);

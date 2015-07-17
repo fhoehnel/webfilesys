@@ -6,16 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 
-import sun.io.MalformedInputException;
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.util.CommonUtils;
 
@@ -25,11 +24,20 @@ import de.webfilesys.util.CommonUtils;
  */
 public class LogViewHandler implements ViewHandler
 {
-	private Hashtable colorMap = new Hashtable(5);
+	private HashMap<String, String> colorMap;
 	
-	private Hashtable ignoreMap = new Hashtable(5);
+	private HashMap<String, Boolean> ignoreMap;
 	
-	private Vector keywordList = new Vector();
+	private ArrayList<String> keywordList;
+	
+	public LogViewHandler() 
+	{
+		colorMap = new HashMap<String, String>(5);
+		
+		ignoreMap = new HashMap<String, Boolean>(5);
+		
+		keywordList = new ArrayList<String>();
+	}
 	
     public void process(String filePath, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req, HttpServletResponse resp)
     {
@@ -142,7 +150,7 @@ public class LogViewHandler implements ViewHandler
                         
                         for (int i = 0; i < keywordList.size(); i ++)
                         {
-                            String keyword = (String) keywordList.elementAt(i);
+                            String keyword = (String) keywordList.get(i);
                             
                             if (line.indexOf(keyword) >= 0)
                             {
@@ -168,8 +176,8 @@ public class LogViewHandler implements ViewHandler
                         }
         	        }
         	    } 
-        	    catch (MalformedInputException miEx) {
-        	        Logger.getLogger(getClass()).warn("error during read of log file", miEx);
+        	    catch (Exception ex) {
+        	        Logger.getLogger(getClass()).warn("error during reading log file", ex);
         	        excCounter++;
         	    }
         	}

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.CSSManager;
 import de.webfilesys.util.XmlUtil;
@@ -46,45 +45,19 @@ public class XslLogonHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(loginElement, "localHost", WebFileSys.getInstance().getLocalHostName(), false);
 		XmlUtil.setChildText(loginElement, "operatingSystem", WebFileSys.getInstance().getOpSysName(), false);
 		XmlUtil.setChildText(loginElement, "version", WebFileSys.VERSION, false);
-
-		LanguageManager langMgr = LanguageManager.getInstance();
+		
+	    XmlUtil.setChildText(loginElement, "language", WebFileSys.getInstance().getPrimaryLanguage(), false);
 
 		if (authFailed)
 		{
-			addMsgResource("alert.invalidlogin", 
-						   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
-											   "alert.invalidlogin",
-											   "userid or password invalid"));
+			XmlUtil.setChildText(loginElement, "authFailed", "true", false);
 		}
-
-		addMsgResource("label.login.title", 
-		               langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
-                                           "label.login.title",
-                                           "WebFileSys Login"));
-		
-		addMsgResource("label.userid", 
-					   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
-										   "label.userid",
-										   "userid"));
-
-		addMsgResource("label.password", 
-					   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
-										   "label.password",
-										   "password"));
-
-		addMsgResource("label.logon", 
-					   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
-										   "label.logon",
-										   "Logon"));
 
 		if (WebFileSys.getInstance().isOpenRegistration())
 		{
-			addMsgResource("label.registerself", 
-						   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
-											   "label.registerself",
-											   "I am a new user"));
+			XmlUtil.setChildText(loginElement, "openRegistration", "true", false);
 		}
 
-		this.processResponse("login.xsl", false);
+		processResponse("login.xsl", false);
     }
 }

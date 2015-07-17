@@ -84,17 +84,13 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
         if ((File.separatorChar == '\\') && userMgr.getDocumentRoot(uid).equals("*:"))
         {
             XmlUtil.setChildText(menuBarElement, "queryDrives", "true", false);
-            addMsgResource("label.refreshDrives", getResource("label.refreshDrives","Check for added/removed drives"));
         }
 
         if (WebFileSys.getInstance().isEnableCalendar())
         {
             XmlUtil.setChildText(menuBarElement, "calendarEnabled", "true", false);
-    		addMsgResource("label.calendar", getResource("label.calendar","Calendar"));
         }
         
-		addMsgResource("alert.iframeSupport", getResource("alert.iframeSupport","Your browser does not support IFRAMEs.\\nYou cannot use the download function.\\nCheck your browser settings!"));
-
 		processResponse("menuBar.xsl", false);
     }
 }

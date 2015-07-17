@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import sun.io.MalformedInputException;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 
@@ -168,7 +167,7 @@ public class GrepRequestHandler extends UserRequestHandler
                         }
                     }
                 } 
-                catch (MalformedInputException miEx) {
+                catch (Exception miEx) {
                     Logger.getLogger(getClass()).warn("error during reading file for grep", miEx);
                     excCounter++;
                     output.println(ENCODING_ERROR);

@@ -153,44 +153,6 @@ function selectedFileFunction(unhighlight) {
     }
 }
 
-function licenseReminder()
-{
-     msgBox1 = document.getElementById("msg1");
-        
-     if (window.ActiveXObject !== undefined) 
-     {
-         windowWidth = document.body.clientWidth;
-         windowHeight = document.body.clientHeight;
-         yScrolled = document.body.scrollTop;
-         xScrolled = document.body.scrollLeft;
-     }
-     else
-     {
-         windowWidth = window.innerWidth;
-         windowHeight = window.innerHeight;
-         yScrolled = window.pageYOffset;
-         xScrolled = window.pageXOffset;
-     }
-        
-     msgXpos = 30 + xScrolled;
-        
-     msgBox1.style.left = msgXpos + 'px';
-
-     msgYpos = (windowHeight - 100) / 2 + yScrolled;
-     if (msgYpos < 10)
-     {
-         msgYpos = 10;
-     }
-
-     msgBox1.style.top = msgYpos + 'px';
-        
-     msgBox1.style.visibility = "visible";
-             
-     msgBox1.innerHTML = 'This copy of WebFileSys has not been registered.<br><br>Register for free by sending an e-mail to the author!';
-             
-     setTimeout("hideMsgBox()", 10000);
-}
-
 function showMsgCentered(message, boxWidth, boxHeight, duration)
 {
     var msgBox1 = document.getElementById("msg1");

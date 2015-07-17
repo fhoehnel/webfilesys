@@ -18,20 +18,20 @@ public class VersionInfoRequestHandler
 
     public void handleRequest()
     {
-		output.println("<HTML>");
-		output.println("<HEAD>");
-		output.println("<TITLE> WebFileSys Version Info </TITLE>");
+		output.println("<html>");
+		output.println("<head>");
+		output.println("<title> WebFileSys Version Info </title>");
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/fmweb.css\">");
 
-		output.println("</HEAD>");
-		output.println("<BODY>");
+		output.println("</head>");
+		output.println("<body style=\"background-color:#e0e0e0\">");
 		output.println("<table border=\"0\" width=\"100%\" cellpadding=\"14\">");
-		output.println("<tr><td class=\"story\" align=\"center\"> WebFileSys </td></tr>");
-		output.println("<tr><td class=\"value\" align=\"center\">" + WebFileSys.VERSION + "</td></tr>");
-		output.println("<tr><td align=\"center\"><a class=\"fn\" href=\"http://www.webfilesys.de\" target=\"_blank\">www.webfilesys.de</a></td></tr>");
-		output.println("<tr><td align=\"center\"><form><INPUT TYPE=\"button\" VALUE=\"Close\" onClick=\"self.close()\"></form></td></tr>");
+		output.println("<tr><td class=\"story\" style=\"text-align:center\"> WebFileSys </td></tr>");
+		output.println("<tr><td class=\"value\" style=\"text-align:center\">" + WebFileSys.VERSION + "</td></tr>");
+		output.println("<tr><td style=\"text-align:center\"><a class=\"fn\" href=\"http://www.webfilesys.de\" target=\"_blank\">www.webfilesys.de</a></td></tr>");
+		output.println("<tr><td style=\"text-align:center\"><form><input type=\"button\" value=\"Close\" onClick=\"self.close()\" /></form></td></tr>");
 		output.println("</table>");
 		output.println("</body></html>");
 		output.flush();

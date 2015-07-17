@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSessionListener;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.calendar.AppointmentManager;
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.UserManagerBase;
@@ -109,6 +110,8 @@ implements HttpSessionListener, ServletContextListener
         MetaInfManager.getInstance().interrupt();
         
         CategoryManager.getInstance().interrupt();
+
+        DecorationManager.getInstance().interrupt();
 
 		if (WebFileSys.getInstance().getDiskQuotaInspector() != null)
 		{

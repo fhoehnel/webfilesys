@@ -19,7 +19,7 @@ function setBundleResources(domNode)
                 {
                   	setNodeValue(domNode, resourceText);
                 }
-                else if ((tagName == "INPUT") && (domNode.getAttribute("type") == "button"))
+                else if ((tagName == "INPUT") && ((domNode.getAttribute("type") == "button") || (domNode.getAttribute("type") == "submit")))
                 {
                  	domNode.setAttribute("value", resourceText);
                 }

@@ -658,7 +658,7 @@
   <xsl:param name="trackNum"/>
   <h3>Track <xsl:value-of select="$trackNum" />: <xsl:value-of select="gpx:name" /></h3>
   
-  <div id="mapCont" style="width:720px;height:480px;border:1px solid black;"></div>
+  <div id="mapCont" style="width:1000px;height:600px;border:1px solid black;"></div>
   
   <xsl:variable name="startTime">
     <xsl:for-each select=".//gpx:trkpt/gpx:time">

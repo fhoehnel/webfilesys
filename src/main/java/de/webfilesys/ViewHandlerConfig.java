@@ -1,22 +1,22 @@
 package de.webfilesys;
 
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Vector;
 
 public class ViewHandlerConfig 
 {
 	private String handlerClass = null;
 	
-	private Vector filePatternList = null;
+	private ArrayList<String> filePatternList = null;
 	
-	private Hashtable parameterMap = null;
+	private HashMap<String, String> parameterMap = null;
 	
 	public ViewHandlerConfig()
 	{
-		filePatternList = new Vector();
+		filePatternList = new ArrayList<String>();
 		
-		parameterMap = new Hashtable(3);
+		parameterMap = new HashMap<String, String>(3);
 	}
 	
 	public void setHandlerClass(String newClass)
@@ -34,7 +34,7 @@ public class ViewHandlerConfig
 		filePatternList.add(newVal);
 	}
 	
-	public Iterator getFilePatterns()
+	public Iterator<String> getFilePatterns()
 	{
 		return(filePatternList.iterator());
 	}

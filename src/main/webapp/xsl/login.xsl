@@ -32,35 +32,36 @@
   <xsl:value-of select="/login/version"/>
 </title>
 
+<script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/login/language" /></xsl:attribute>
+</script>
+
 <script language="javascript">
 
-  function about()
-  {
-      infowindow = window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150');
+  function about() {
+      infowindow = window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=230,resizable=no,left=250,top=150,screenX=250,screenY=150');
       infowindow.focus();
   }
 
-  function setFocus()
-  {
+  function setFocus() {
       document.passwordform.userid.focus();
   }
 
-  <xsl:if test="/login/resources/msg[@key='alert.invalidlogin']">
-    alert('<xsl:value-of select="/login/resources/msg[@key='alert.invalidlogin']/@value" />');
+  <xsl:if test="/login/authFailed">
+    alert(resourceBundle["alert.invalidlogin"]);
   </xsl:if>
 
-  now=(new Date()).getTime();
-  exp=new Date(now +  60000);
-  document.cookie='CookieTest=1;';
-  idx=document.cookie.indexOf("CookieTest=") + 11;
-  cookieValue='';
-  if (idx >=0)
-  {
-    cookieValue=document.cookie.substring(idx,idx+1);
+  document.cookie = 'CookieTest=1;';
+  var idx = document.cookie.indexOf("CookieTest=") + 11;
+  var cookieValue = '';
+  if (idx >= 0) {
+      cookieValue = document.cookie.substring(idx, idx + 1);
   }
     
-  if ((document.cookie==null) || (cookieValue!='1'))
-  {
+  if (cookieValue != '1') {
       alert('Cookies must be enabled to login to this web site!');
   }
 
@@ -75,9 +76,8 @@
     <table border="0" cellpadding="5" cellspacing="0" width="100%">
       <tr>
         <td class="loginTitle" style="padding-left:10px">
-          <img src="/webfilesys/images/logo.gif" border="0" />
-          <div style="width:100%;padding-top:10px;padding-left:0px;">
-            <xsl:value-of select="/login/resources/msg[@key='label.login.title']/@value" />
+          <img src="/webfilesys/images/logo.gif" border="0" style="margin-top:20px" />
+          <div style="width:100%;padding-top:10px;padding-left:0px;" resource="label.login.title">
           </div>
         </td>
         
@@ -93,18 +93,18 @@
               </tr>
               <tr>
                 <td class="loginFormLabel">
-                  <xsl:value-of select="/login/resources/msg[@key='label.userid']/@value" />:
+                  <label for="userid" resource="label.userid" />:
                 </td>
                 <td class="value">
-                  <input type="text" name="userid" size="15" maxlength="64" style="width:100px;" required="required"/>
+                  <input type="text" id="userid" name="userid" maxlength="64" style="width:100px;" required="required"/>
                 </td>
               </tr>
               <tr>
                 <td class="loginFormLabel">
-                  <xsl:value-of select="/login/resources/msg[@key='label.password']/@value" />:
+                  <label for="password" resource="label.password" />:
                 </td>
                 <td class="value">
-                  <input type="password" name="password" size="15" maxlength="64" style="width:100px;" required="required"/>
+                  <input type="password" id="password" name="password" maxlength="64" style="width:100px;" required="required"/>
                 </td>
               </tr>
               <tr>
@@ -112,9 +112,7 @@
                   &#160;
                 </td>
                 <td>
-                  <input type="submit" name="logonbutton">
-                    <xsl:attribute name="value"><xsl:value-of select="/login/resources/msg[@key='label.logon']/@value" /></xsl:attribute>
-                  </input>
+                  <input type="submit" name="logonbutton" resource="label.logon" />
                 </td>
               </tr>
               <tr>
@@ -123,21 +121,15 @@
                 </td>
               </tr>
               <tr>
-                <td colspan="2" align="right">
-                  <xsl:if test="/login/resources/msg[@key='label.registerself']">
-                    <a class="dir" href="/webfilesys/servlet?command=registerSelf">
-                      <xsl:value-of select="/login/resources/msg[@key='label.registerself']/@value" />
-                    </a>
+                <td colspan="2" style="text-align:right;padding-right:10px;">
+                  <xsl:if test="/login/openRegistration">
+                    <a class="dir" href="/webfilesys/servlet?command=registerSelf" resource="label.registerself"></a>
                   </xsl:if>
-                  &#160;
                 </td>
               </tr>
               <tr>
-                <td colspan="2" align="right">
-                  <a class="dir" href="javascript:about()">
-                    About WebFileSys
-                    &#160;
-                  </a>
+                <td colspan="2" style="text-align:right;padding-right:10px;">
+                  <a class="dir" href="javascript:about()" resource="label.about"></a>
                 </td>
               </tr>
             </table>
@@ -149,6 +141,11 @@
 </div>
 
 </body>
+
+<script type="text/javascript">
+    setBundleResources();
+</script>
+
 </html>
 
 </xsl:template>
