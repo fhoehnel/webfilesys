@@ -216,7 +216,7 @@ public abstract class RequestHandler
 	protected boolean isBrowserXslEnabled()
 	{
 		return(((browserManufacturer == BROWSER_MSIE) ||
-                (browserManufacturer == BROWSER_GOOGLE) ||
+             // (browserManufacturer == BROWSER_GOOGLE) ||        Chromium Issue 512827 xsl fails to load properly in iframe
              // (browserManufacturer == BROWSER_SAFARI) ||
 		        (browserManufacturer == BROWSER_MOZILLA)) &&
 		       (browserVersion >= 6));
