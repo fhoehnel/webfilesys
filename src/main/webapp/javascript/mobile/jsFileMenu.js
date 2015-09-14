@@ -19,6 +19,12 @@ function zipFile(path)
     window.location.href="/webfilesys/servlet?command=zipFile&filePath=" + encodeURIComponent(path);
 }
 
+function openUrlFile(path) {
+    var urlWin = window.open("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(path),"_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
+    urlWin.focus();
+}
+
+
 function editMP3(path)
 {
     window.location.href = "/webfilesys/servlet?command=editMP3&path=" + encodeURIComponent(path);
@@ -49,6 +55,11 @@ function editRemote(fileName)
 {
     window.location.href = '/webfilesys/servlet?command=mobile&cmd=editFile&filename=' + encodeURIComponent(fileName) + '&screenHeight=' + screen.height;
 }
+
+function downloadFile(path) {
+    window.location.href = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(path) + "&disposition=download";
+}
+
 
 function viewFile(path)
 {

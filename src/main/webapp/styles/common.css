@@ -158,6 +158,12 @@ div.uploadStatusBar {
 	text-align: left;
 }
 
+div.driveUsageBar {
+    width: 200px;
+	height: 20px;
+	border: 1px solid blue;
+}
+
 td.loginTitle {
     font-size: 16px;
     color: navy;
@@ -415,6 +421,10 @@ td.jsmenu {
     border-bottom-style:solid;
     border-bottom-color:black;
     font-family: Arial,Helvetica,sans-serif;
+}
+
+td.jsmenu:hover {
+    cursor: pointer;
 }
 
 a.menuPlus {
@@ -1414,4 +1424,8 @@ td.compareImg {
     font-family: Arial,Helvetica,sans-serif;
     vertical-align: top;
     text-align: center;
+}
+
+span.newComment {
+    color: #ffffff;
 }

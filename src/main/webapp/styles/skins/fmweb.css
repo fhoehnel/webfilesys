@@ -68,6 +68,10 @@ td.jsmenu {
     background-color:#e0e0e0;
 }
 
+td.jsmenu:hover {
+    background-color:#f0f0f0;
+}
+
 td.fileListFunct, td.fileListFunctCont {
     background-color:#ffffe0;
 }

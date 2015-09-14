@@ -15,6 +15,8 @@ import de.webfilesys.FastPathManager;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.UpdateLinksAfterDirRenameThread;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.decoration.Decoration;
+import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -110,6 +112,8 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 				}
 				else
 				{
+					Decoration savedDeco = DecorationManager.getInstance().getDecoration(currentPath);
+					
 					if (!oldDir.renameTo(newDir))
 					{
 						errorCode = ERROR_RENAME_FAILED;
@@ -119,6 +123,10 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 					    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
 					    {
 	                        (new UpdateLinksAfterDirRenameThread(newPath, uid)).start();
+					    }
+					    
+					    if (savedDeco != null) {
+						    DecorationManager.getInstance().setDecoration(newPath, savedDeco);					    
 					    }
 					    
 					    String mobile = (String) session.getAttribute("mobile");

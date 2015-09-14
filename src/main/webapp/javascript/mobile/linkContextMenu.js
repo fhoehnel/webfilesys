@@ -31,7 +31,7 @@ function jsLinkMenu(linkName, realPath)
 	if (fileExt == ".URL")
 	{
             menuText = menuText 
-                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(realPath) + "&random=" + (new Date().getTime()),resourceBundle["menuView"],"_blank");
+                     + menuEntry("javascript:openUrlFile('" + scriptPreparedPath + "')",resourceBundle["menuView"],null);
 	}
 	else
 	{
@@ -53,7 +53,7 @@ function jsLinkMenu(linkName, realPath)
     }
 
     menuText = menuText 
-             + menuEntry("/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(realPath) + "&disposition=download",downloadLabel,null);
+             + menuEntry("javascript:downloadFile('" + scriptPreparedPath + "')",downloadLabel,null);
 
     if (readonly != 'true')
     {
@@ -173,8 +173,10 @@ function origDir(path)
 
 function emailLink(filePath)
 {
-    showPrompt('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 210);
+    showPrompt('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 240);
     
+	setBundleResources();
+   
     document.emailForm.receiver.focus();
     
     document.emailForm.receiver.select();

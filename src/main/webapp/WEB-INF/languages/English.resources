@@ -314,6 +314,8 @@ sunburst.parentFolderLink=parent folder
 label.driveinfo=Drive Properties
 label.drive=Drive
 label.drivelabel=Drive Label
+label.driveType=Drive Type
+label.diskTotalSpace=Total Bytes
 label.bytesfree=Bytes free
 
 # search window labels and buttons
@@ -551,6 +553,7 @@ label.allowcomments=allow visitors to add comments
 label.comments=Comments
 label.guestuser=Guest
 label.commentAuthor=your name
+comments.unread=new
 
 # send file as e-mail
 label.sendfilehead=Send file as e-mail

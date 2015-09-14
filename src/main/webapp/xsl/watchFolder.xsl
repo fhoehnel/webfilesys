@@ -24,35 +24,31 @@
       <tr>
         <td class="formParm1" colspan="2">
           <xsl:if test="/folderWatch/watched">
-            <xsl:value-of select="/folderWatch/resources/msg[@key='folderWatchStatusOn']/@value" />
+            <span resource="folderWatchStatusOn"></span>
           </xsl:if>
           <xsl:if test="not(/folderWatch/watched)">
-            <xsl:value-of select="/folderWatch/resources/msg[@key='folderWatchStatusOff']/@value" />
+            <span resource="folderWatchStatusOff"></span>
           </xsl:if>
         </td>
       </tr>
 
       <tr>
       
-        <td class="formButton" nowrap="nowrap">
+        <td class="formButton" nowrap="nowrap" style="text-align:left">
           <xsl:if test="/folderWatch/watched">
-            <input type="button">
+            <input type="button" resource="button.stopWatch">
               <xsl:attribute name="onclick">switchFolderWatch('<xsl:value-of select="/folderWatch/path" />')</xsl:attribute>
-              <xsl:attribute name="value"><xsl:value-of select="/folderWatch/resources/msg[@key='button.stopWatch']/@value" /></xsl:attribute>
             </input>
           </xsl:if>
           <xsl:if test="not(/folderWatch/watched)">
-            <input type="button">
+            <input type="button" resource="button.startWatch">
               <xsl:attribute name="onclick">switchFolderWatch('<xsl:value-of select="/folderWatch/path" />')</xsl:attribute>
-              <xsl:attribute name="value"><xsl:value-of select="/folderWatch/resources/msg[@key='button.startWatch']/@value" /></xsl:attribute>
             </input>
           </xsl:if>
         </td>
 
-        <td class="formButton" nowrap="nowrap">
-          <input type="button" onclick="hidePrompt()">
-            <xsl:attribute name="value"><xsl:value-of select="/folderWatch/resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
-          </input>
+        <td class="formButton" nowrap="nowrap" style="text-align:right">
+          <input type="button" onclick="hidePrompt()" resource="button.cancel" />
         </td>
         
       </tr>

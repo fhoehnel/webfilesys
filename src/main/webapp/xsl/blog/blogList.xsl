@@ -222,7 +222,12 @@
                 <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>
                 -->
                 <xsl:attribute name="href">javascript:blogComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>
-                (<xsl:value-of select="comments" /><xsl:text> </xsl:text><span resource="label.comments"></span>)
+                (<xsl:value-of select="comments" /><xsl:text> </xsl:text><span resource="label.comments"></span>
+                <xsl:if test="newComments">
+                  <xsl:text>, </xsl:text>
+                  <span class="newComment" resource="comments.unread"></span>
+                </xsl:if>
+                <xsl:text>)</xsl:text>
               </a>
           
               <br/>

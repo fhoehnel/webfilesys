@@ -313,7 +313,7 @@ public class MetaInfManager extends Thread
 
             if (metaInfRoot==null)
             {
-                Document doc = builder.newDocument();
+           		Document doc = builder.newDocument();
 
                 metaInfRoot = doc.createElement("metainfroot");
 
@@ -566,6 +566,60 @@ public class MetaInfManager extends Thread
     	}
     }
 
+    public void setCommentsSeenByOwner(String absoluteFileName, boolean newVal) {
+        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
+        setCommentsSeenByOwner(partsOfPath[0], partsOfPath[1], newVal);
+    }
+    
+    public void setCommentsSeenByOwner(String path, String fileName, boolean newVal) 
+    {
+        Element metaInfElement = getMetaInfElement(path, fileName);
+
+        if (metaInfElement == null)
+        {
+            return;
+        }
+
+        Element commentListElement = XmlUtil.getChildByTagName(metaInfElement,"comments");
+
+        if (commentListElement == null)
+        {
+            return;
+        }
+    	
+        commentListElement.setAttribute("seenByOwner", Boolean.toString(newVal));
+
+        cacheDirty.put(path, new Boolean(true));
+    }
+    
+    public boolean isCommentsSeenByOwner(String absoluteFileName) {
+        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
+        return isCommentsSeenByOwner(partsOfPath[0], partsOfPath[1]);
+    }
+
+    public boolean isCommentsSeenByOwner(String path, String fileName) 
+    {
+        Element metaInfElement = getMetaInfElement(path, fileName);
+
+        if (metaInfElement == null)
+        {
+            return false;
+        }
+
+        Element commentListElement = XmlUtil.getChildByTagName(metaInfElement,"comments");
+
+        if (commentListElement == null)
+        {
+            return false;
+        }
+        
+        String seenByOwner = commentListElement.getAttribute("seenByOwner");
+        if (seenByOwner == null) {
+        	return false;
+        }
+        return (seenByOwner.equals("true"));
+    }
+    
     public Vector<Comment> getListOfComments(String absoluteFileName) {
         String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
         return(getListOfComments(partsOfPath[0], partsOfPath[1]));

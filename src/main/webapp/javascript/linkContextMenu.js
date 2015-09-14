@@ -13,7 +13,7 @@ function menuEntry(href, label, target)
     }
 
     return('<tr>'
-             + '<td class="jsmenu">'
+             + '<td class="jsmenu" onclick="' + href + '">'
              + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
              + '</td>'
              + '</tr>');
@@ -52,7 +52,7 @@ function jsLinkMenu(linkName, realPath)
 	    if (fileExt == ".URL")
 	    {
             menuText = menuText 
-                     + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(realPath) + "&random=" + (new Date().getTime()),resourceBundle["label.view"],"_blank");
+                     + menuEntry("javascript:openUrlFile('" + scriptPreparedPath + "')",resourceBundle["label.view"],null);
 	    }
 	    else
 	    {
@@ -73,7 +73,7 @@ function jsLinkMenu(linkName, realPath)
 	    }
 
         menuText = menuText 
-                 + menuEntry("/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(realPath) + "&disposition=download",downloadLabel,null);
+                 + menuEntry("javascript:downloadFile('" + scriptPreparedPath + "')",downloadLabel,null);
     }
 
     if (parent.readonly != 'true')
@@ -102,7 +102,7 @@ function jsLinkMenu(linkName, realPath)
 		        if ((fileExt == ".EXE") || (fileExt == ".COM") || (fileExt == ".BAT") || (fileExt == ".CMD"))
                 {
                     menuText = menuText 
-                             + menuEntry("/webfilesys/servlet?command=execProgram&progname=" + encodeURIComponent(realPath), resourceBundle["label.run"], null);
+                             + menuEntry("javascript:execNativeProgram('" + scriptPreparedPath + "')",resourceBundle["label.run"],null);
                 }
                 else
                 {

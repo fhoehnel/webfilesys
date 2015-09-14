@@ -314,7 +314,9 @@ sunburst.parentFolderLink=Übergeordneter Ordner
 label.driveinfo=Datenträger-Infos
 label.drive=Datenträger
 label.drivelabel=Datenträger-Bezeichnung
-label.bytesfree=Bytes frei
+label.driveType=Laufwerks-Typ
+label.diskTotalSpace=Gesamtspeicherplatz (Bytes)
+label.bytesfree=Freier Speicherplatz (Bytes)
 
 # search window labels and buttons
 label.searchHead=Datei- und Volltextsuche
@@ -554,6 +556,7 @@ label.allowcomments=Besucher dürfen Kommentare hinzufügen
 label.comments=Kommentare
 label.guestuser=Gast
 label.commentAuthor=Dein Name
+comments.unread=neu
 
 # send file as e-mail
 label.sendfilehead=Datei als e-mail versenden

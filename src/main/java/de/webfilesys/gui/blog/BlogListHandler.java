@@ -289,6 +289,12 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		        				int commentCount = metaInfMgr.countComments(file.getAbsolutePath());
 
 		        				XmlUtil.setChildText(fileElement, "comments", Integer.toString(commentCount));
+
+		        				if (!readonly) {
+			        				if ((commentCount > 0) && (!metaInfMgr.isCommentsSeenByOwner(file.getAbsolutePath()))) {
+				        				XmlUtil.setChildText(fileElement, "newComments", "true");
+			        				}
+		        				}
 		        				
 		        				boolean imgFound = true;
 

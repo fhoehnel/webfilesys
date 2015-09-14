@@ -114,8 +114,6 @@ function editRemote(fileName)
 
 function viewFile(path)
 {
-    // window.open('/webfilesys/servlet?command=getFile&filePath=' + encodeURIComponent(path),"_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
-   
     var viewPath = "";
     
     if (path.charAt(0) == '/')
@@ -128,6 +126,19 @@ function viewFile(path)
     }
     
     window.open(viewPath,"_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
+}
+
+function downloadFile(path) {
+    window.location.href = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(path) + "&disposition=download";
+}
+
+function execNativeProgram(path) {
+    window.location.href = "/webfilesys/servlet?command=execProgram&progname=" + encodeURIComponent(path);
+}
+
+function openUrlFile(path) {
+    var urlWin = window.open("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(path),"_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
+    urlWin.focus();
 }
 
 function tail(path)

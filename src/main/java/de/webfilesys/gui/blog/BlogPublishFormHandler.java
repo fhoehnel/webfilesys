@@ -8,13 +8,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.LanguageManager;
-import de.webfilesys.gui.xsl.XslRequestHandlerBase;
+import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
 import de.webfilesys.util.XmlUtil;
 
-public class BlogPublishFormHandler extends XslRequestHandlerBase {
+public class BlogPublishFormHandler extends XmlRequestHandlerBase {
 	
 	public BlogPublishFormHandler(
 			HttpServletRequest req, 
@@ -31,10 +30,6 @@ public class BlogPublishFormHandler extends XslRequestHandlerBase {
 		Element blogElement = doc.createElement("blog");
 			
 		doc.appendChild(blogElement);
-			
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/blog/publishBlog.xsl\"");
-
-		doc.insertBefore(xslRef, blogElement);
 
 		XmlUtil.setChildText(blogElement, "css", userMgr.getCSS(uid), false);
         
@@ -50,7 +45,7 @@ public class BlogPublishFormHandler extends XslRequestHandlerBase {
 			languagesElement.appendChild(languageElement);
 		}
 		
-		processResponse("blog/publishBlog.xsl", true);
+		processResponse();
     }
 
 }

@@ -71,6 +71,10 @@ public class BlogAddCommentHandler extends XmlRequestHandlerBase {
 			
 			MetaInfManager.getInstance().addComment(currentPathOS, new Comment(commentAuthor, new Date(), newComment));
 			
+			if (readonly) {
+				MetaInfManager.getInstance().setCommentsSeenByOwner(filePath, false);
+			}
+			
 			commentCreated = true;
 		}
 		

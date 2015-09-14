@@ -15,14 +15,14 @@ import de.webfilesys.Comment;
 import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
-import de.webfilesys.gui.xsl.XslRequestHandlerBase;
+import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
 /**
  * @author Frank Hoehnel
  */
-public class BlogListCommentsHandler extends XslRequestHandlerBase
+public class BlogListCommentsHandler extends XmlRequestHandlerBase
 {
 	public BlogListCommentsHandler(
 			HttpServletRequest req, 
@@ -47,9 +47,9 @@ public class BlogListCommentsHandler extends XslRequestHandlerBase
 			
 		doc.appendChild(fileCommentsElement);
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/blog/comments.xsl\"");
+		// ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/blog/comments.xsl\"");
 
-		doc.insertBefore(xslRef, fileCommentsElement);
+		// doc.insertBefore(xslRef, fileCommentsElement);
 
 		XmlUtil.setChildText(fileCommentsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(fileCommentsElement, "path", actPath, false);
@@ -147,6 +147,8 @@ public class BlogListCommentsHandler extends XslRequestHandlerBase
 			}
 		}
 			
-		this.processResponse("blog/comments.xsl", false);
+		MetaInfManager.getInstance().setCommentsSeenByOwner(actPath, true);
+		
+		processResponse();
     }
 }

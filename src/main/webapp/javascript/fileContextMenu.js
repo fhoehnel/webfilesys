@@ -13,21 +13,10 @@ function menuEntry(href, label, target)
     }
 
     return('<tr>'
-             + '<td class="jsmenu">'
+             + '<td class="jsmenu" onclick="' + href + '">'
              + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
              + '</td>'
              + '</tr>');
-}
-
-function menuEntryPlus(href, label, plusRef, plusTitle) {
-    return('<tr>'
-            + '<td class="jsmenu">'
-            + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
-            + '<a href="' + plusRef + '" class="menuPlus" >'
-            + '<img src="/webfilesys/images/menuPlus.gif" title="' + plusTitle + '"/>'
-            + '</a>'
-            + '</td>'
-            + '</tr>');
 }
 
 function contextMenu(fileName)
@@ -83,7 +72,7 @@ function contextMenu(fileName)
                  + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceBundle["label.viewzip"],null);
     } else if (fileExt == ".URL") {
         menuText = menuText 
-                 + menuEntry("/webfilesys/servlet?command=openUrlFile&actPath=" + encodeURIComponent(fullPath) + "&random=" + (new Date().getTime()),resourceBundle["label.view"],"_blank");
+                 + menuEntry("javascript:openUrlFile('" + scriptPreparedPath + "')",resourceBundle["label.view"],null);
     } else {
          if ((fileExt == ".MP4") || (fileExt == ".OGG") || (fileExt == ".OGV")|| (fileExt == ".WEBM")) {
              menuText = menuText 
@@ -101,7 +90,7 @@ function contextMenu(fileName)
 	    }
 
         menuText = menuText 
-                 + menuEntry("/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(fullPath) + "&disposition=download",downloadLabel,null);
+                 + menuEntry("javascript:downloadFile('" + scriptPreparedPath + "')",downloadLabel,null);
     }
 
     if (parent.readonly != 'true')
@@ -112,26 +101,22 @@ function contextMenu(fileName)
         menuText = menuText 
                  + menuEntry("javascript:renameFile('" + scriptPreparedFile + "')",resourceBundle["label.renameFile"],null);
 
+        menuText = menuText 
+                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],null);
+
         if (addCopyAllowed) 
         {
             menuText = menuText 
-                     + menuEntryPlus("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],"javascript:addCopyToClipboard('" + scriptPreparedFile + "')",resourceBundle["title.addCopyToClip"]);
-        }
-        else
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],null);
+                     + menuEntry("javascript:addCopyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"] + " +",null);
         }
 
+        menuText = menuText 
+                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],null);
+       
         if (addMoveAllowed) 
         {
             menuText = menuText 
-                     + menuEntryPlus("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],"javascript:addMoveToClipboard('" + scriptPreparedFile + "')",resourceBundle["title.addMoveToClip"]);
-        }
-        else
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],null);
+                     + menuEntry("javascript:addMoveToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"] + " +",null);
         }
 
 	if (parent.localEditor == 'true')
@@ -290,7 +275,7 @@ function extendedFileMenu(shortFileName, path)
             if ((fileExt == ".EXE") || (fileExt == ".COM") || (fileExt == ".BAT") || (fileExt == ".CMD"))
             {
                 menuText = menuText 
-                         + menuEntry("/webfilesys/servlet?command=execProgram&progname=" + encodeURIComponent(fullPath),resourceBundle["label.run"],null);
+                         + menuEntry("javascript:execNativeProgram('" + scriptPreparedPath + "')",resourceBundle["label.run"],null);
             }
             else
             {

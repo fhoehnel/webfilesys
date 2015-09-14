@@ -13,7 +13,7 @@ function menuEntry(href, label, target)
     }
 
     return('<tr>'
-             + '<td class="jsmenu">'
+             + '<td class="jsmenu" onclick="' + href + '">'
              + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
              + '</td>'
              + '</tr>');

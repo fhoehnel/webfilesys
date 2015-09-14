@@ -63,16 +63,6 @@ public class XslWatchFolderHandler extends XmlRequestHandlerBase
 		{
 	        XmlUtil.setChildText(folderWatchElement, "watched", "true");
 		}
-        
-		addMsgResource("label.readWriteStatus", getResource("label.readWriteStatus", "Read/Write status"));
-
-		addMsgResource("folderWatchStatusOn", getResource("folderWatchStatusOn", "The content of the folder is being watched for changes."));
-        addMsgResource("folderWatchStatusOff", getResource("folderWatchStatusOff", "Watch this folder for changes and get notified by e-mail."));
-		
-        addMsgResource("button.startWatch", getResource("button.startWatch", "start watch"));
-        addMsgResource("button.stopWatch", getResource("button.stopWatch", "stop watch"));
-        
-		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
 
 		processResponse();
     }

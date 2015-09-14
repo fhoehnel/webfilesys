@@ -1,5 +1,6 @@
 package de.webfilesys.gui.user;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -91,16 +92,18 @@ public class DownloadFolderZipHandler extends UserRequestHandler
 
         resp.setHeader("Content-Disposition", "attachment; filename=" + dirName + ".zip");
 
-        OutputStream byteOut = null;
+        BufferedOutputStream buffOut = null;
         ZipOutputStream zipOut = null;
         
 		try
 		{
-			byteOut = resp.getOutputStream();
-
-			zipOut = new ZipOutputStream(byteOut);
+			buffOut = new BufferedOutputStream(resp.getOutputStream());
+			
+			zipOut =  new ZipOutputStream(buffOut);
 			
 			zipFolderTree(path, "", zipOut);
+			
+			buffOut.flush();
 		}
         catch (IOException ioEx)
         {
@@ -114,9 +117,9 @@ public class DownloadFolderZipHandler extends UserRequestHandler
                 {
                     zipOut.close();
                 }
-                if (byteOut != null) 
+                if (buffOut != null) 
                 {
-                    byteOut.close();
+                	buffOut.close();
                 }
             }
             catch (Exception ex)

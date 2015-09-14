@@ -209,7 +209,7 @@ import de.webfilesys.gui.user.unix.MultiTarArchiveHandler;
 import de.webfilesys.gui.user.unix.ProcessListRequestHandler;
 import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
-import de.webfilesys.gui.user.windows.DriveInfoRequestHandler;
+import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -1939,7 +1939,7 @@ public class WebFileSysServlet extends ServletBase
 
         if (command.equals("driveInfo"))
         {
-			(new DriveInfoRequestHandler(req, resp, session, output, userid)).handleRequest();
+			(new XslDriveInfoRequestHandler(req, resp, session, output, userid)).handleRequest();
 			
             return(true);
         }

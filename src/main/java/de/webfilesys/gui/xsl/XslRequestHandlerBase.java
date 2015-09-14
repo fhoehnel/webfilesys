@@ -46,7 +46,7 @@ public class XslRequestHandlerBase extends UserRequestHandler
 	
 	Element validationElement = null;
 	
-	HttpServletResponse resp = null;
+	protected HttpServletResponse resp = null;
 	
 	public XslRequestHandlerBase(
     		HttpServletRequest req, 

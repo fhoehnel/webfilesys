@@ -13,6 +13,8 @@ public class WinDriveManager extends Thread
 	
     private HashMap<Integer,String> driveLabels = null;
     
+    private HashMap<Integer,String> driveTypes = null;
+
     private FileSystemView fsView = null;     
     
 	private WinDriveManager() {
@@ -62,29 +64,40 @@ public class WinDriveManager extends Thread
     {
         HashMap<Integer, String> newDriveLabels = new HashMap<Integer, String>(30);
 
+        HashMap<Integer, String> newDriveTypes = new HashMap<Integer, String>(30);
+
         File fileSysRoots[]=File.listRoots();
 
         for (int i=0;i<fileSysRoots.length;i++)
         {
             String fileSysRootName=fileSysRoots[i].getAbsolutePath();
 
-            String label=null;
+            char driveLetter = fileSysRootName.charAt(0);
 
-            label = queryDriveLabel(fileSysRootName);
+            int driveNum = (driveLetter - 'A') + 1;
+
+            String label = queryDriveLabel(fileSysRootName);
 
             if (label == null)
             {
                 label = "";
             }
 
-            char driveLetter = fileSysRootName.charAt(0);
+            newDriveLabels.put(new Integer(driveNum), label);
 
-            int driveNum = (driveLetter - 'A') + 1;
+            String driveType = queryDriveType(fileSysRootName);
 
-            newDriveLabels.put(new Integer(driveNum),label);
+            if (driveType == null)
+            {
+            	driveType = "";
+            }
+
+            newDriveTypes.put(new Integer(driveNum), driveType);
         }
 
         driveLabels = newDriveLabels;
+        
+        driveTypes = newDriveTypes;
     } 
     
     private String queryDriveLabel(String driveString)
@@ -94,9 +107,21 @@ public class WinDriveManager extends Thread
     	return fsView.getSystemDisplayName(driveFile);
     }
 
+    private String queryDriveType(String driveString)
+    {
+    	File driveFile = new File(driveString);
+    	
+    	return fsView.getSystemTypeDescription(driveFile);
+    }
+    
     public String getDriveLabel(int drive)
     {
         return ((String) driveLabels.get(new Integer(drive)));
+    }
+
+    public String getDriveType(int drive)
+    {
+        return ((String) driveTypes.get(new Integer(drive)));
     }
 }
 

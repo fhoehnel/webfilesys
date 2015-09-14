@@ -13,7 +13,7 @@ function menuEntry(href, label, target)
     }
 
     return('<tr>'
-             + '<td class="jsmenu">'
+             + '<td class="jsmenu" onclick="' + href + '">'
              + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
              + '</td>'
              + '</tr>');
@@ -306,7 +306,7 @@ function extendedDirMenu(shortPath, path, domId)
 	((parent.serverOS == 'ix') && (path.length > 1)))
     {
         menuText = menuText 
-                   + menuEntry("/webfilesys/servlet?command=downloadFolder&path=" + encodeURIComponent(path),resourceBundle["label.downloadFolder"],null);
+                 + menuEntry("javascript:downloadFolder('" + scriptPreparedPath + "')",resourceBundle["label.downloadFolder"],null);
     }
 
     menuText = menuText + '</table>'; 

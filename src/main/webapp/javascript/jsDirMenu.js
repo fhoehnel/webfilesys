@@ -40,6 +40,11 @@ function zip(path)
     window.location.href="/webfilesys/servlet?command=zipDir&actPath=" + encodeURIComponent(path);
 }
 
+function downloadFolder(path)
+{
+    window.location.href="/webfilesys/servlet?command=downloadFolder&path=" + encodeURIComponent(path);
+}
+
 function paste(path)
 {
     window.location.href="/webfilesys/servlet?command=pasteFiles&actpath=" + encodeURIComponent(path) + "&random=" + (new Date().getTime());
@@ -161,8 +166,8 @@ function description(path)
 
 function driveInfo(path)
 {
-    propWin=window.open("/webfilesys/servlet?command=driveInfo&path=" + encodeURIComponent(path) + "&random=" + (new Date().getTime()),"propWin","status=no,toolbar=no,location=no,menu=no,width=400,height=200,resizable=yes,left=100,top=200,screenX=100,screenY=200");
-    propWin.focus();
+    showPrompt("/webfilesys/servlet?command=driveInfo&path=" + encodeURIComponent(path), "/webfilesys/xsl/driveInfo.xsl", 260, 400);
+    setBundleResources();
 }
 
 function refresh(path)
@@ -178,4 +183,5 @@ function rights(path)
 function watchFolder(path)
 {   
     showPrompt('/webfilesys/servlet?command=watchFolder&path=' + encodeURIComponent(path), '/webfilesys/xsl/watchFolder.xsl', 360);
+    setBundleResources();
 }

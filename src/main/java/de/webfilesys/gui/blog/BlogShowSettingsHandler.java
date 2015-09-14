@@ -8,16 +8,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.MetaInfManager;
-import de.webfilesys.gui.xsl.XslRequestHandlerBase;
+import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
 import de.webfilesys.util.XmlUtil;
 
 /**
  * @author Frank Hoehnel
  */
-public class BlogShowSettingsHandler extends XslRequestHandlerBase
+public class BlogShowSettingsHandler extends XmlRequestHandlerBase
 {
 	public BlogShowSettingsHandler(
 			HttpServletRequest req, 
@@ -39,10 +38,6 @@ public class BlogShowSettingsHandler extends XslRequestHandlerBase
 			
 		doc.appendChild(settingsElement);
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/blog/settings.xsl\"");
-
-		doc.insertBefore(xslRef, settingsElement);
-
 		String currentPath = userMgr.getDocumentRoot(uid).replace('/',  File.separatorChar);
 		
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
@@ -61,6 +56,6 @@ public class BlogShowSettingsHandler extends XslRequestHandlerBase
 		
 		XmlUtil.setChildText(settingsElement, "daysPerPage", Integer.toString(daysPerPage), false);
 			
-		this.processResponse("blog/settings.xsl", false);
+		processResponse();
     }
 }
