@@ -26,7 +26,14 @@ function mouseClickHandler(evt)
         rightMouseButton = true;
     }
 
-    document.getElementById('contextMenu').style.visibility = 'hidden';
+    if (stopMenuClose)
+    {
+        stopMenuClose = false;
+    } 
+    else
+    {
+        document.getElementById('contextMenu').style.visibility = 'hidden';
+    }    
     
     if (window.name == 'DirectoryPath')
     {
@@ -42,6 +49,7 @@ function mouseClickHandler(evt)
             parent.frames[1].document.getElementById('contextMenu').style.visibility = 'hidden';
         }
     }
+    
 }
 
 function positionMenuDiv(menuDiv, maxMenuHeight)

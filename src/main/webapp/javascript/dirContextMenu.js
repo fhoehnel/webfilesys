@@ -1,24 +1,3 @@
-function hideMenu()
-{
-    document.getElementById('contextMenu').style.visibility = 'hidden';
-}
-
-function menuEntry(href, label, target)
-{
-    targetText = "";
-
-    if (target != null)
-    {
-        targetText = 'target="' + target + '"'; 
-    }
-
-    return('<tr>'
-             + '<td class="jsmenu" onclick="' + href + '">'
-             + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
-             + '</td>'
-             + '</tr>');
-}
-
 function extractDirNameFromPath(path)
 {
     var pathLength = path.length;

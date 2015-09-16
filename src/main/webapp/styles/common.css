@@ -409,6 +409,11 @@ a.menuitem {
     font-weight:bold;
 }
 
+span.menuitem {
+    font-size:13px;
+    font-weight:bold;
+}
+
 td.jsmenu {
     padding-left:5px;
     padding-right:5px;

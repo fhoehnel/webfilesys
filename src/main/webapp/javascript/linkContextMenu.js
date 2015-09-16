@@ -1,24 +1,3 @@
-function hideMenu()
-{
-    document.getElementById('contextMenu').style.visibility = 'hidden';
-}
-
-function menuEntry(href, label, target)
-{
-    targetText = "";
-
-    if (target != null)
-    {
-        targetText = 'target="' + target + '"'; 
-    }
-
-    return('<tr>'
-             + '<td class="jsmenu" onclick="' + href + '">'
-             + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
-             + '</td>'
-             + '</tr>');
-}
-
 function jsLinkMenu(linkName, realPath)
 {
     menuDiv = document.getElementById('contextMenu');    
@@ -237,6 +216,8 @@ function origDir(path)
 function emailLink(filePath)
 {
     showPrompt('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 250);
+
+	setBundleResources();
     
     document.emailForm.receiver.focus();
     

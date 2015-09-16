@@ -33,6 +33,7 @@
 <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/graphicsLinkMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>

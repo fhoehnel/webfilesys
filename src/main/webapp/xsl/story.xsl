@@ -25,6 +25,7 @@
 <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="javascript/viewMode.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+<script src="javascript/contextMenuCommon.js" type="text/javascript"></script>
 <script src="javascript/graphicsContextMenu.js" type="text/javascript"></script>
 
 <script language="javascript">

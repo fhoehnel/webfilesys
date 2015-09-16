@@ -35,6 +35,7 @@
     <script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
+    <script language="JavaScript" src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/dirContextMenu.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/jsDirMenu.js" type="text/javascript"></script>

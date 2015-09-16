@@ -56,11 +56,13 @@ td.menu {
     background-color: #ffa000;
 }
 
-a.menuitem {
+a.menuitem,
+span.menuitem {
     color: maroon;
 }
 
-a.menuitem:hover {
+a.menuitem:hover,
+span.menuitem:hover {
     color: black;
 }
 

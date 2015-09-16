@@ -37,6 +37,7 @@
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/fileContextMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/linkContextMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>

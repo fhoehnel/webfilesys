@@ -1,24 +1,3 @@
-function hideMenu()
-{
-    document.getElementById('contextMenu').style.visibility = 'hidden';
-}
-
-function menuEntry(href, label, target)
-{
-    targetText = "";
-
-    if (target != null)
-    {
-        targetText = 'target="' + target + '"'; 
-    }
-
-    return('<tr>'
-             + '<td class="jsmenu" onclick="' + href + '">'
-             + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
-             + '</td>'
-             + '</tr>');
-}
-
 function jsContextMenu(fileName, imgType, domId)
 {
     menuDiv = document.getElementById('contextMenu');    
@@ -107,8 +86,6 @@ function jsContextMenu(fileName, imgType, domId)
             (imgType == '2') ||   // GIF
             (imgType == '3'))    // PNG
         {
-            // TODO: resource for rotate/flip
-        
             menuText = menuText 
                      + menuEntry("javascript:rotateFlipMenu('" + shortFileName + "', '" + scriptPreparedPath + "', '" + domId + "', '" + imgType + "')",resourceBundle["label.rotateFlip"] + ' >',null);
         }
