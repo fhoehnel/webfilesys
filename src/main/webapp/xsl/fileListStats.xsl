@@ -228,8 +228,8 @@
             </td>
 
             <td class="fileList sepBot" style="padding-right:5px">
-              <a class="fn">
-			    <xsl:attribute name="href">javascript:previewFile('<xsl:value-of select="/fileList/pathForScript"/>/<xsl:value-of select="@name" />')</xsl:attribute>
+              <a class="fn" href="javascript:void(0)">
+			    <xsl:attribute name="onclick">previewFile('<xsl:value-of select="/fileList/pathForScript"/>/<xsl:value-of select="@name" />')</xsl:attribute>
                 <xsl:if test="@displayName">
                   <xsl:value-of select="@displayName" />
                 </xsl:if>
