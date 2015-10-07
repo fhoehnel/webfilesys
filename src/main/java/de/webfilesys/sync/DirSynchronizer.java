@@ -36,6 +36,14 @@ public class DirSynchronizer
     
     private int modifiedFiles = 0;
     
+    private int modifiedSize = 0;
+    
+    private int modifiedTime = 0;
+    
+    private int modifiedSizeAndTime = 0;
+    
+    private int modifiedAccess = 0;
+    
     /** ignore differences of the modification date */
     private boolean ignoreDifferentDate = false;
 
@@ -221,15 +229,17 @@ public class DirSynchronizer
                         if (differentSize && differentDate)
                         {
                             syncItem.setDiffType(SyncItem.DIFF_TYPE_SIZE_TIME);
+                            modifiedSizeAndTime++;
                         }
                         else if (differentSize)
                         {
                             syncItem.setDiffType(SyncItem.DIFF_TYPE_SIZE);
+                            modifiedSize++;
                         }
                         else
                         {
-                            syncItem
-                                    .setDiffType(SyncItem.DIFF_TYPE_MODIFICATION_TIME);
+                            syncItem.setDiffType(SyncItem.DIFF_TYPE_MODIFICATION_TIME);
+                            modifiedTime++;
                         }
 
                         differencesList.add(syncItem);
@@ -270,6 +280,8 @@ public class DirSynchronizer
                                 differencesList.add(syncItem);
                                 
                                 modifiedFiles++;
+                                
+                                modifiedAccess++;
                             }
                         }
                     }
@@ -425,6 +437,22 @@ public class DirSynchronizer
     
     public int getModifiedFiles() {
         return modifiedFiles;
+    }
+    
+    public int getModifiedSize() {
+    	return modifiedSize;
+    }
+    
+    public int getModifiedTime() {
+    	return modifiedTime;
+    }
+
+    public int getModifiedSizeAndTime() {
+    	return modifiedSizeAndTime;
+    }
+    
+    public int getModifiedAccess() {
+    	return modifiedAccess;
     }
     
     public void decrMissingSourceFiles() {

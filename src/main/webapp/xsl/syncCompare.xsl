@@ -98,7 +98,7 @@
       </tr>
 
       <xsl:if test="/synchronize/differencesList/difference">
-        <xsl:if test="(/synchronize/differencesList/difference/diffType='1') or (/synchronize/differencesList/difference/diffType='3')">
+        <xsl:if test="(/synchronize/diffTypes/type1) or (/synchronize/diffTypes/type3)">
           <tr>
             <td colspan="2" class="formParm1">
               <input type="checkbox" class="cb3" name="createMissingTarget" />
@@ -107,7 +107,7 @@
           </tr>
         </xsl:if>
 
-        <xsl:if test="(/synchronize/differencesList/difference/diffType='2') or (/synchronize/differencesList/difference/diffType='4')">
+        <xsl:if test="(/synchronize/diffTypes/type2) or (/synchronize/diffTypes/type4)">
           <tr>
             <td colspan="2" class="formParm1">
               <input type="checkbox" class="cb3" name="createMissingSource" id="createMissingSource" onclick="checkExclusion(this,'removeExtraTarget')"/>
@@ -116,7 +116,7 @@
           </tr>
         </xsl:if>
 
-        <xsl:if test="(/synchronize/differencesList/difference/diffType='2') or (/synchronize/differencesList/difference/diffType='4')">
+        <xsl:if test="(/synchronize/diffTypes/type2) or (/synchronize/diffTypes/type4)">
           <tr>
             <td colspan="2" class="formParm1">
               <input type="checkbox" class="cb3" name="removeExtraTarget" id="removeExtraTarget" onclick="checkExclusion(this,'createMissingSource')"/>
@@ -125,7 +125,7 @@
           </tr>
         </xsl:if>
 
-        <xsl:if test="(/synchronize/differencesList/difference/diffType='6') or (/synchronize/differencesList/difference/diffType='7')">
+        <xsl:if test="(/synchronize/diffTypes/type6) or (/synchronize/diffTypes/type7)">
           <tr>
             <td colspan="2" class="formParm1">
               <input type="checkbox" class="cb3" name="copyNewerToTarget" />
@@ -146,7 +146,7 @@
           </tr>
         </xsl:if>
         
-        <xsl:if test="(/synchronize/differencesList/difference/diffType='5')">
+        <xsl:if test="(/synchronize/diffTypes/type5)">
           <tr>
             <td colspan="2" class="formParm1">
               <input type="checkbox" class="cb3" name="copySizeChangeToTarget" />
@@ -155,7 +155,7 @@
           </tr>
         </xsl:if>
 
-        <xsl:if test="(/synchronize/differencesList/difference/diffType='8')">
+        <xsl:if test="(/synchronize/diffTypes/type8)">
           <tr>
             <td colspan="2" class="formParm1">
               <input type="checkbox" class="cb3" name="copyAccessRights" />

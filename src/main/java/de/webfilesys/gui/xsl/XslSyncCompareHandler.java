@@ -111,7 +111,43 @@ public class XslSyncCompareHandler extends XslRequestHandlerBase
         
         session.setAttribute(SESSION_ATTRIB_SYNCHRONIZE_ITEMS, differences);
         
-        SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
+        Element diffTypesElement = doc.createElement("diffTypes");
+        
+        syncElement.appendChild(diffTypesElement);        	
+
+    	if (dirSync.getMissingTargetFiles() > 0) {
+    		XmlUtil.setChildText(diffTypesElement, "type1", Integer.toString(dirSync.getMissingTargetFiles()));
+        }
+    	
+    	if (dirSync.getMissingSourceFiles() > 0) {
+    		XmlUtil.setChildText(diffTypesElement, "type2", Integer.toString(dirSync.getMissingSourceFiles()));
+        }
+
+    	if (dirSync.getMissingTargetFolders() > 0) {
+    		XmlUtil.setChildText(diffTypesElement, "type3", Integer.toString(dirSync.getMissingTargetFolders()));
+        }
+
+    	if (dirSync.getMissingSourceFolders() > 0) {
+    		XmlUtil.setChildText(diffTypesElement, "type4", Integer.toString(dirSync.getMissingSourceFolders()));
+        }
+    	
+    	if (dirSync.getModifiedSize() > 0) {
+    		XmlUtil.setChildText(diffTypesElement, "type5", Integer.toString(dirSync.getModifiedSize()));
+        }
+    	
+    	if (dirSync.getModifiedTime() > 0) {
+    		XmlUtil.setChildText(diffTypesElement, "type6", Integer.toString(dirSync.getModifiedTime()));
+        }
+
+    	if (dirSync.getModifiedSizeAndTime() > 0) {
+    		XmlUtil.setChildText(diffTypesElement, "type7", Integer.toString(dirSync.getModifiedSizeAndTime()));
+        }
+
+    	if (dirSync.getModifiedAccess() > 0) {
+    		XmlUtil.setChildText(diffTypesElement, "type8", Integer.toString(dirSync.getModifiedAccess()));
+        }
+
+    	SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
         
         DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");
         
