@@ -2,6 +2,7 @@ package de.webfilesys.gui.blog;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,8 +11,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.InvitationManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
+import de.webfilesys.user.TransientUser;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
@@ -69,6 +72,7 @@ public class BlogSaveSettingsHandler extends XmlRequestHandlerBase
 				}
 				
 				userMgr.setPageSize(uid, pageSize);
+				setVirtualUserPageSize(pageSize);
 			} catch (NumberFormatException numEx) {
 		        Logger.getLogger(getClass()).error("invalid blog page size: " + daysPerPage);
 			}
@@ -79,29 +83,63 @@ public class BlogSaveSettingsHandler extends XmlRequestHandlerBase
         String newPassword = req.getParameter("newPassword");		
         String newPasswdConfirm = req.getParameter("newPasswdConfirm");
         
+        boolean passwordMismatch = false;
+        
         if (CommonUtils.isEmpty(newPassword)) {
-	        Logger.getLogger(getClass()).warn("missing parameter newPassword");
-        }
-        if (CommonUtils.isEmpty(newPasswdConfirm)) {
-	        Logger.getLogger(getClass()).warn("missing parameter newPasswdConfirm");
+        	if (!CommonUtils.isEmpty(newPasswdConfirm)) {
+        		passwordMismatch = true;
+        	}
+        } else {
+        	if (CommonUtils.isEmpty(newPasswdConfirm)) {
+        		passwordMismatch = true;
+        	} else {
+        		if (!newPassword.equals(newPasswdConfirm)) {
+            		passwordMismatch = true;
+        		} else {
+            	    userMgr.setPassword(uid, newPassword);
+        		}
+        	}
         }
         
-        if ((!CommonUtils.isEmpty(newPassword)) && (!CommonUtils.isEmpty(newPasswdConfirm))) {
-        	if (!newPassword.equals(newPasswdConfirm)) {
-	            Logger.getLogger(getClass()).warn("password and password confirmation do not match");
-            } else {
-        	    userMgr.setPassword(uid, newPassword);
-            }
-        }
-		
 		Element resultElement = doc.createElement("result");
 
-		XmlUtil.setChildText(resultElement, "success", "true");
+		XmlUtil.setChildText(resultElement, "success", Boolean.toString(!passwordMismatch));
 		XmlUtil.setChildText(resultElement, "pageSizeChanged", Boolean.toString(pageSizeChanged));
 		XmlUtil.setChildText(resultElement, "blogTitleChanged", Boolean.toString(blogTitleChanged));
 				
 		doc.appendChild(resultElement);
 		
 		this.processResponse();
+	}
+	
+	private void setVirtualUserPageSize(int newPageSize) {
+		String currentPath = userMgr.getDocumentRoot(uid).replace('/',  File.separatorChar);
+		
+		Vector publishCodes = InvitationManager.getInstance().getInvitationsByOwner(uid);
+
+        if (publishCodes != null) {
+			for (int i = 0; i < publishCodes.size(); i++) {
+				String accessCode= (String) publishCodes.elementAt(i);
+
+				String path = InvitationManager.getInstance().getInvitationPath(accessCode);
+
+				if (path != null) { // not expired
+				    if (path.equals(currentPath)) {
+				    	String virtualUserId = InvitationManager.getInstance().getVirtualUser(accessCode);
+				    	
+				    	if (virtualUserId != null) {
+					    	TransientUser virtualUser = userMgr.getUser(virtualUserId);
+					    	
+					    	if (virtualUser != null) {
+					    		userMgr.setPageSize(virtualUserId, newPageSize);
+					    		return;
+					    	}
+				    	}
+				    }
+				}
+			}
+        }
+
+        Logger.getLogger(getClass()).warn("failed to set new page size for virtual user " + uid);
 	}
 }
