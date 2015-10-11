@@ -137,6 +137,7 @@ import de.webfilesys.gui.user.AddCommentRequestHandler;
 import de.webfilesys.gui.user.CancelPublishRequestHandler;
 import de.webfilesys.gui.user.ClipboardPasteRequestHandler;
 import de.webfilesys.gui.user.CloneFileRequestHandler;
+import de.webfilesys.gui.user.CloneFolderRequestHandler;
 import de.webfilesys.gui.user.CompareImageRequestHandler;
 import de.webfilesys.gui.user.CopyLinkRequestHandler;
 import de.webfilesys.gui.user.CreateDirRequestHandler;
@@ -887,6 +888,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("cloneFile"))
         {
             (new CloneFileRequestHandler(req, resp, session, output, userid)).handleRequest();
+
+            return(true);
+        }
+
+        if (command.equals("cloneFolder"))
+        {
+            (new CloneFolderRequestHandler(req, resp, session, output, userid)).handleRequest();
 
             return(true);
         }

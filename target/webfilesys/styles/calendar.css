@@ -1,0 +1,313 @@
+a.calendarYearLink
+{
+    font-family: Arial,Helvetica;
+    font-weight: bold;
+    font-size: 12px;
+    color: #404040;
+    text-decoration: underline;
+    position: absolute;
+}
+
+a.calendarPrevYearLink 
+{
+    left: 30px;
+    top: 20px;
+}
+
+a.calendarNextYearLink 
+{
+    left: 30px;
+    bottom: 40px;
+}
+
+a.calendarPrevMonthLink 
+{
+    left: 30px;
+    top: 20px;
+}
+
+a.calendarNextMonthLink 
+{
+    left: 30px;
+    top: 40px;
+}
+  
+div.appointmentCont 
+{
+    position: absolute;
+    right: 30px;
+    top: 100px;
+    width: 150px;
+    height: 210px;
+    background-color: #e0e0ff;
+    color: #000000;
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+    border: 1px solid #a0a0a0;
+    padding: 10px;
+    visibility: hidden;
+    overflow-y: auto;
+}
+
+span.selectedDay
+{
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+}
+
+div.timeTable
+{
+    position: absolute;
+    left: 10px;
+    top: 50px;
+    width: 150px;
+    height: 620px;
+}
+
+div.timeTableHour 
+{
+    position: absolute;
+    left: 0px;
+    width: 145px;
+    height: 23px;
+    background-color: #ffffc0;
+    text-align: right;
+    padding-right: 5px;
+    color: #000000;
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+}
+
+div.timeTableAppointment
+{
+    position: absolute;
+    left: 0px;
+    width: 10px;
+    height: 23px;
+    background-color: #ffa0a0;
+    cursor: pointer;
+}
+
+form.appointmentDetailForm
+{
+    margin-top: 20px;
+}
+
+.appointmentForm
+{
+    color: #000000;
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+    width: 145px;
+    display: block;
+}
+
+.appointmentFormHead
+{
+    font-weight: bold;
+}
+
+div.appointmentTimeCont
+{
+}
+
+span.appointmentLabel
+{
+    font-weight: bold;
+    float: left;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+select.appointmentHour
+{
+    width: 50px;
+    float: left;
+    font-weight: bold;
+}
+
+select.appointmentMinute
+{
+    width: 50px;
+    float: left;
+    font-weight: bold;
+}
+
+span.appointmentTimeSep
+{
+    margin-left: 8px;
+    margin-right: 8px;
+    float: left;
+}
+
+div.appointmentRepeatPeriodCont 
+{
+}
+
+select.appointmentRepeatPeriod
+{
+    width: 120px;
+    float: left;
+    font-weight: bold;
+}
+
+div.appointmentSubjectCont
+{
+}
+
+input.appointmentSubject
+{
+    width: 140px;
+    float: left;
+    font-weight: bold;
+}
+
+div.appointmentDurationCont
+{
+}
+
+span.appointmentDuration
+{
+    color: #000000;
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+    display: block;
+    margin-top: 8px;
+    float: left;
+}
+
+div.appointmentFullDayCont
+{
+}
+
+input.appointmentFullDay
+{
+    float: left;
+    clear: left;
+    margin-top: 10px;
+}
+
+label.appointmentFullDay
+{
+    color: #000000;
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+    display: block;
+    margin-top: 8px;
+    float: left;
+    width: 120px;    
+}
+
+span.appointmentNumOfDayLabel 
+{
+    font-weight: bold;
+    float: left;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 4px;
+}
+
+input.appointmentNumOfDays
+{
+    width: 60px;
+    float: left;
+    font-weight: normal;
+    margin-left: 20px;
+}
+
+div.appointmentDescCont
+{
+}
+
+textarea.appointmentDescription
+{
+    width: 140px;
+    height: 80px;
+    float: left;
+}
+
+div.appointmentAlarmCont
+{
+}
+
+select.appointmentAlarm
+{
+    width: 120px;
+    float: left;
+    font-weight: bold;
+}
+
+div.appointmentButtonCont
+{
+    margin-top: 20px;
+    float: left;
+}
+
+button.appointmentButton
+{
+    width: 135px;
+    float: left;
+    font-weight: bold;
+    margin-bottom: 10px;
+    margin-left: 5px;
+}
+
+div.timeTableButtonCont
+{
+    position: absolute;
+    top: 660px;
+    left: 10px;
+    margin-left: 3px;
+}
+
+div.reminderMsgBox
+{
+    border: 3px ridge #a0a0a0;
+    width: 240px;
+    height: 140px;
+    background-color: #FF8080;
+    position: absolute;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+span.reminderHeadline 
+{
+    color: #000000;
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+    font-weight: bold;
+    display: block;
+    float: left;
+    width: 180px;    
+}
+
+span.reminderText 
+{
+    color: #000000;
+    font-family: Arial,Helvetica;
+    font-size: 12px;
+    display: block;
+    float: left;
+    width: 180px;   
+    margin-top: 8px; 
+}
+
+div.reminderButtonCont
+{
+    float: left;
+    width: 180px;
+    margin-top: 10px; 
+    margin-bottom: 6px; 
+}
+
+select.remindAgain
+{
+    float: left;
+    width: 180px;
+    margin-top: 8px;
+    background-color: #FFD0C0;
+    color: #000000;
+}

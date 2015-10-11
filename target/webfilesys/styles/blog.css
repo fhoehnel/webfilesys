@@ -1,0 +1,492 @@
+@font-face {
+  font-family: 'Kite One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Kite One'), local('KiteOne-Regular'), url(../fonts/GoogleKiteOne.woff) format('woff');
+}
+
+html.blog {
+    font-size: 15px;
+    font-family: "Kite One",Verdana,Arial,Helvetica,sans-serif;
+}
+
+body.blog {
+    font-family: "Kite One",Verdana,Arial,Helvetica,sans-serif;
+    background-color: #a0a0a0;
+    font-size: 1rem;
+    margin: 0 10px;
+}
+
+body.blog input[type="submit"], 
+body.blog input[type="button"],
+.blogPublishForm input[type="button"],
+.blogGeoMapFrame input[type="button"],
+.blogCommentForm input[type="button"],
+.blogSettingsForm input[type="button"],
+input.blogUploadFileSelButton {
+    height: 32px;
+    background: linear-gradient(#d0d0d0, #f0f0f0);
+    border-color: #404040;
+    border-width: 1px;
+    font-size: 1rem;
+}
+
+html.blog input, 
+html.blog select {
+    font-size: 1rem;
+}
+
+html.blog textarea {
+    font-size: 1.1rem; // min 16px to prevent font boosting in chrome on android
+}
+
+html.blog span,
+html.blog label {
+    font-size: 1rem;
+}
+
+html.blog div.promptHead {
+    font-size: 1rem;
+}
+
+body.blog div.headline {
+    font-size: 1rem;
+}
+
+html.blog div.promptHead {
+    font-family: "Kite One",Verdana,Arial,Helvetica,sans-serif;
+}
+
+div.blogHeadline {
+    color: #000060;
+    font-size: 1.364rem;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #000060;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+}
+
+div.blogCont {
+    margin: 0 auto;
+    max-width: 960px;
+    padding-top: 16px;
+}
+
+div.blogCalenderCont {
+    float: left;
+    margin-top: 16px;
+}
+
+div.blogDateRange {
+    float: left;
+    margin-top: 20px;
+    margin-left: 20px;
+    font-size: 1rem;
+    color: #ffff80
+}
+
+a.blogCalender,
+a.blogMenu {
+    text-decoration: none;
+}
+
+a.blogCalender:before,
+a.blogMenu:before {
+    color: #000060;
+    font-size: 2rem;
+}
+
+a.blogMenu {
+    float: left;
+    margin-top: 16px;
+}
+
+a.blogMenu:before {
+    margin-right: 20px;
+}
+
+div.blogEditHead {
+    border-top: 1px solid #000060;
+    border-bottom: 1px solid #000060;
+    color: #000060;
+    background-color: #ffffc0;
+    clear: both;
+    margin: 5px 0 10px 0;
+    padding: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+div.blogFormCont {
+    border: 1px solid #a0a0a0;
+    background-color: ivory;
+    padding: 20px;
+}
+
+div.dragDropHint {
+    border: 1px dashed #b0b0b0;
+    color: #808080;
+    font-family: Arial,Helvetica;
+    font-size: 16pt;
+    font-weight: bold;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+input.blogUploadFileSelButton {
+    min-width: 300px;
+    max-width: 400px;
+}
+
+#uploadFiles {
+    margin-top: 5px;
+}
+
+li.selectedForUpload {
+    font-size: 1rem;
+}
+
+div.blogSelectedPicCont {
+    margin-bottom: 20px;
+}
+
+div.blogTextSection {
+    margin-top: 20px;
+}
+
+div.blogButtonSection {
+    margin-top: 20px;
+}
+
+textarea.blogText {
+    width: 100%;
+    height: 200px;
+    font-size: 1rem;
+    font-weight: normal;
+}
+
+.rightAlignedButton {
+    float: right;
+}
+
+input.blogDate {
+    width: 100px;
+}
+
+div.blogDateSection {
+    margin-top: 20px;
+}
+
+.blogCalIcon {
+    vertical-align: middle;
+}
+
+img.uploadPreview {
+    height: 100px;
+    border: 2px ridge #808080;
+    margin: 4px;
+}
+
+li.selectedFile {
+    color: navy;
+    font-family: Arial,Helvetica;
+    font-size: 10pt;
+}
+
+div.blogDate {
+    border-top: 1px solid #000060;
+    border-bottom: 1px solid #000060;
+    color: #000060;
+    background-color: #ffffc0;
+    clear: both;
+    margin: 20px 0 20px 0;
+    padding: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    box-shadow: 5px 5px 5px #666666;
+}
+
+div.blogEntry {
+    clear: both;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    clear: both;
+    min-width: 590px;
+    max-height: 999999px; /* prevent font boosting on Android */
+}
+
+div.blogPagingCont {
+    width: 100%;
+    float: left;
+    clear: both;
+    margin: 10px 0;
+}
+
+.icon-blog-edit:before,
+.icon-blog-delete:before,
+.icon-blog-rotate:before,
+.icon-blog-move:before {
+	color: #000060;
+    font-size: 24px;
+}
+
+a.icon-blog-edit,
+a.icon-blog-move,
+a.icon-blog-delete,
+a.icon-blog-rotate {
+    text-decoration: none;
+}
+
+div.blogGeoDataSwitcher {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+div.blogGeoTagCont {
+    margin: 16px 0 0 30px;
+    display: none;
+}
+
+select[id^=geoLocSel-] {
+    display: none;
+}
+
+td.blogFormLabel {
+    color:black;
+    font-size:13px;
+    text-align:left;
+    vertical-align:top;
+    padding:8px;
+    padding-top:4px;
+    padding-bottom:4px;
+}
+
+td.blogFormValue {
+    color:navy;
+    font-size:13px;
+    vertical-align:top;
+    padding:8px;
+    padding-top:4px;
+    padding-bottom:4px;
+    text-align:left;
+}
+
+td.blogLatLong {
+    width: 120px;
+}
+
+.blogGeoTagHint {
+    width: 200px;
+    height: 40px;
+    vertical-align: top;
+}
+
+#zoomFactor {
+    width: 60px;
+}
+
+li.blogGeoTag {
+    padding-bottom: 16px;
+}
+
+div.blogGeoMapFrame {
+    width: 90%;
+    height: 90%;
+    max-width: 1024px;
+    max-height: 800px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    visibility: hidden;
+    background-color: #d0d0d0;
+    border: 2px ridge #808080;
+}
+
+div.blogGeoMap {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.blogGeoTagLink {
+    text-decoration: none;
+}
+
+.blogGeoTagLink span{
+    color: #000060;
+    font-size: 1rem;
+}
+
+.blogGeoTagLink span:hover {
+    color: #ffff80;
+}
+
+/*
+div.blogErrorMsg {
+    font-size: 13px;
+    color: #e00000;
+    margin: 8px 0;
+}
+*/
+
+div.blogPublishCont {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 2px ridge #808080;
+    background-color: #ffffe0;
+    visibility: hidden;
+}
+
+table.blogPublishForm {
+    margin-top: 16px;
+    width: 100%;
+}
+
+div.blogEmpty {
+    color: #ffff80;
+    font-size: 1rem;
+    margin-top: 60px;
+    clear: both;
+}
+
+div.blogCommentCont {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 2px ridge #808080;
+    background-color: #ffffe0;
+    visibility: hidden;
+}
+
+div.blogComments {
+}
+
+div.blogCommentList {
+    overflow-y: auto;
+    padding: 10px;
+    max-height: 400px;
+}
+
+table.blogCommentForm {
+    background-color: #ffffe0;
+}
+
+div.commentContHead,
+div.blogSettingsHead {
+    font-size: 1rem;
+    font-weight: bold;
+    background-color: lavender;  
+    border-bottom: 1px solid #808080;  
+    width: 100%;
+    text-align: center;
+    padding: 6px 0;
+}
+
+textarea.commentText {
+    width: 95%;
+}
+
+html.blog td.formParm1,
+html.blog td.formParm2 {
+    font-size: 1rem;
+}
+
+div.blogSettingsCont {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border: 2px ridge #808080;
+    background-color: #ffffe0;
+    visibility: hidden;
+}
+
+form.blogSettingsForm {
+    padding: 16px;
+}
+
+#calDiv {
+    background-color: ivory;
+    position: absolute;
+    layer-background-color: ivory;
+    visibility: hidden;
+}
+
+#calDiv .cpDayColumnHeader, 
+#calDiv .cpYearNavigation, 
+#calDiv .cpMonthNavigation, 
+#calDiv .cpCurrentMonthDate, 
+#calDiv .cpCurrentMonthDateDisabled, 
+#calDiv .cpOtherMonthDate, 
+#calDiv .cpOtherMonthDateDisabled, 
+#calDiv .cpCurrentDate, 
+#calDiv .cpCurrentDateDisabled, 
+#calDiv .cpTodayText, 
+#calDiv .cpTodayTextDisabled, 
+#calDiv .cpText {
+    font-family: "Kite One",Verdana,Arial,Helvetica,sans-serif;
+    font-size: 1.2rem;
+    padding: 4px;
+    white-space: nowrap;
+}
+
+#calDiv table table:first-child {
+    width: 100%;
+    border-bottom: 1px solid #000060;
+}
+
+#calDiv table table:last-child tr:last-child {
+    background-color: #ffffc0;
+}
+
+#calDiv table table:last-child tr:last-child td{
+    border-top: 1px solid #000060;
+}
+
+#calDiv table table:last-child tr:not(:last-child) td:first-child:not(.cpOtherMonthDate) a {
+    color: #c00000;
+}
+
+#calDiv table table:last-child tr:not(:last-child) td:last-child:not(.cpOtherMonthDate) a {
+    color: #b06060;
+}
+
+#calDiv .cpMonthNavigation,
+#calDiv .cpYearNavigation {
+    color: #000060;
+    background-color: #ffffc0;
+}
+
+#calDiv .cpMonthNavigation a:hover,
+#calDiv .cpTodayText a:hover {
+    color: #a00000;
+}
+
+#calDiv .cpDayColumnHeader {
+    font-weight: bold;
+}
+
+#calDiv a.cpTodayText {
+    color: #000060;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.poweredBy {
+    clear: both;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-top: 1px solid #000060;
+    padding-top: 8px;
+    color: #000060;
+    text-align: center;
+    font-style: italic;
+}
+
+.poweredBy a {
+    color: #000060;
+}
