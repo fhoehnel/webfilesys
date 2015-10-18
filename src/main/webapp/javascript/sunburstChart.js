@@ -254,7 +254,7 @@
 		   document.getElementById("svgChart").appendChild(pathElem);
 	   }
 	   
-	   function sectorLabel(startAngle, endAngle, innerRadius, outerRadius, textColor, text, textSize)
+	   function sectorLabel(startAngle, endAngle, innerRadius, outerRadius, textColor, text, textSize, reverse)
 	   {
 	       if (endAngle - startAngle < 2)
 		   {
@@ -271,7 +271,7 @@
 	       var labelTextNode = document.createTextNode(text);
 		   labelText.appendChild(labelTextNode);
 			  
-		   var textRadius = innerRadius + 10;
+		   var textRadius = innerRadius + 5;
 			  
 		   var textAngle = (startAngle + endAngle) / 2;
 		   
@@ -286,18 +286,23 @@
 		   var rotateTransform = "rotate(" + textAngle + "," + textStartPointX + "," + textStartPointY + ")";
 			  
 		   var moveTransform = " translate(0,5)";;
+
+		   var transform = rotateTransform;
 		   
-		   var reverseTransform = "";
-		   if ((textAngle > 90) && (textAngle < 270))
-		   {
-			   reverseTransform = " rotate(180," + textStartPointX + "," + textStartPointY + ")";
-			   moveTransform = " translate(" + (outerRadius - innerRadius - 20) + ",-5)";
+		   if (reverse) {
+		       var reverseTransform = "";
+		       if ((textAngle > 90) && (textAngle < 270))
+		       {
+			       reverseTransform = " rotate(180," + textStartPointX + "," + textStartPointY + ")";
+			       moveTransform = " translate(" + (outerRadius - innerRadius - 20) + ",-5)";
+		       }
+		   
+		       transform = transform + moveTransform + reverseTransform;
+		   } else {
+		       transform = transform + moveTransform;
 		   }
-		   else
-		   {
-			   moveTransform = " translate(0,5)";
-		   }
-		   labelText.setAttribute("transform", rotateTransform + moveTransform + reverseTransform);
+
+		   labelText.setAttribute("transform", transform);
 			  
 		   document.getElementById("svgChart").appendChild(labelText);
 	   }
@@ -344,3 +349,4 @@
 
 		   document.getElementById("svgChart").appendChild(textElem);
 	   }
+

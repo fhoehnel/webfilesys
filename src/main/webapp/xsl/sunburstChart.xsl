@@ -100,8 +100,12 @@
 	                textOnCircle(startAngle, endAngle,
        	                         innerCircleRadius - 20, 
 					             shortName,
-					             8, "12px");			
-                }
+					             8, "12px");	
+                <xsl:if test="not(folder)">								 
+                  } else if (endAngle - startAngle &gt; 5) {
+                      sectorLabel(startAngle, endAngle, innerCircleRadius, innerCircleRadius + shellWidth, "#000000", shortName, "12px");
+                </xsl:if>
+				}
 				
                 var legendEntry = document.createElement("div");
                 legendEntry.style.height = "18px";
@@ -148,7 +152,7 @@
        	                       innerCircleRadius - 20, 
 				               "files in root",
 					           5, "12px");			
-              }
+			  }
 			  
 	          <xsl:if test="/folderStats/parentFolder">
 	            document.getElementById("parentFolderLink").setAttribute("href", "/webfilesys/servlet?command=folderTreeStats&amp;path=" + encodeURIComponent('<xsl:value-of select="/folderStats/parentFolder" />') + "&amp;random=" + (new Date()).getTime());
@@ -226,8 +230,17 @@
 	    textOnCircle(shellStartAngle<xsl:value-of select="$level" />, shellSectorEndAngle,
        	             innerCircleRadius + (level * shellWidth) - 20, 
 					 '<xsl:value-of select="@shortName" />',
-					 5, "12px");			
+					 5, "12px");	
     }
+    <xsl:if test="not(folder)">								 
+      else if (shellSectorEndAngle - shellStartAngle<xsl:value-of select="$level" /> &gt; 3) {
+          sectorLabel(shellStartAngle<xsl:value-of select="$level" />, shellSectorEndAngle, 
+		              innerCircleRadius + (level * shellWidth), innerCircleRadius + ((level + 2) * shellWidth),
+					  "#000000", 
+					  '<xsl:value-of select="@shortName" />', 
+					  "12px");
+      }
+	</xsl:if>					 
 				
 	shellStartAngle<xsl:value-of select="$level" /> = shellSectorEndAngle;
 
