@@ -63,6 +63,8 @@ public class BlogAddCommentHandler extends XmlRequestHandlerBase {
 
 		boolean commentCreated = false;
 		
+		int newCommentCount = 0;
+		
 		if (!CommonUtils.isEmpty(newComment)) {
 			
 			newComment = CommonUtils.filterForbiddenChars(newComment);
@@ -70,6 +72,8 @@ public class BlogAddCommentHandler extends XmlRequestHandlerBase {
 			String currentPathOS = filePath.replace('/', File.separatorChar);
 			
 			MetaInfManager.getInstance().addComment(currentPathOS, new Comment(commentAuthor, new Date(), newComment));
+			
+			newCommentCount = MetaInfManager.getInstance().countComments(currentPathOS);
 			
 			if (readonly) {
 				MetaInfManager.getInstance().setCommentsSeenByOwner(filePath, false);
@@ -83,6 +87,8 @@ public class BlogAddCommentHandler extends XmlRequestHandlerBase {
         XmlUtil.setChildText(resultElement, "success", Boolean.toString(commentCreated));
         
         XmlUtil.setChildText(resultElement, "filePath", filePath);
+
+        XmlUtil.setChildText(resultElement, "newCommentCount", Integer.toString(newCommentCount));
         
         doc.appendChild(resultElement);
 		

@@ -352,6 +352,8 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		        					String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(file.getAbsolutePath()) + "&cached=true";
 		        					
 		        					XmlUtil.setChildText(fileElement, "imgPath", srcFileName);
+
+		        					XmlUtil.setChildText(fileElement, "pagePicCounter", Integer.toString(globalEntryCounter));
 		        					
 		        					String srcPathForScript = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(insertDoubleBackslash(file.getAbsolutePath())) + "&cached=true";
 

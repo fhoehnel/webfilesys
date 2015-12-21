@@ -936,7 +936,7 @@ function handleUnpublishResult() {
     }
 }
 
-function blogComments(filePath) {
+function blogComments(filePath, posInPage) {
 
     var commentCont = document.getElementById("commentCont");
     
@@ -946,6 +946,8 @@ function blogComments(filePath) {
 
     commentCont.innerHTML = browserXslt(xmlUrl, xslUrl);
     
+    document.getElementById("posInPage").value = posInPage;
+    
     setBundleResources();
     
     centerBox(commentCont);
@@ -954,6 +956,12 @@ function blogComments(filePath) {
 }
 
 function closeBlogComments() {
+    var posInPage = document.getElementById("posInPage").value;
+    var commentNewLabel = document.getElementById("newComment-" + posInPage);
+    if (commentNewLabel) {
+        commentNewLabel.style.display = 'none';
+    }
+
     var commentCont = document.getElementById("commentCont");
     commentCont.style.visibility = "hidden";
 }
@@ -977,11 +985,20 @@ function showPostCommentResult() {
             var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
 
             if (success == 'true') {
-                window.location.href = "/webfilesys/servlet?command=blog";
-                /*
-                var filePath = resultElem.getElementsByTagName("filePath")[0].firstChild.nodeValue;
-                blogComments(filePath);
-                */            
+                // var picSectionId = document.getElementById("picSectionId").value;
+                // window.location.href = "/webfilesys/servlet?command=blog&random=" + (new Date().getTime()) + "#" + picSectionId;
+
+                var newCommentCount = resultElem.getElementsByTagName("newCommentCount")[0].firstChild.nodeValue;
+                var posInPage = document.getElementById("posInPage").value;
+                document.getElementById("comment-" + posInPage).innerHTML = newCommentCount;
+                
+                var commentNewLabel = document.getElementById("newComment-" + posInPage);
+                if (commentNewLabel) {
+                    commentNewLabel.style.display = 'none';
+                }
+
+                var commentCont = document.getElementById("commentCont");
+                commentCont.style.visibility = "hidden";
             } else {
                 alert("failed to create comment");
             }
@@ -1018,7 +1035,16 @@ function confirmDelComments(filePath) {
     }
 
     if ((success != null) && (success == "true")) {
-        blogComments(filePath);            
+        var posInPage = document.getElementById("posInPage").value;
+        document.getElementById("comment-" + posInPage).innerHTML = "0";
+                
+        var commentNewLabel = document.getElementById("newComment-" + posInPage);
+        if (commentNewLabel) {
+            commentNewLabel.style.display = 'none';
+        }
+    
+        var commentCont = document.getElementById("commentCont");
+        commentCont.style.visibility = "hidden";
     } else {
         alert("failed to delete comments");
     }
@@ -1162,3 +1188,13 @@ function rotateBlogPic(imgName, direction) {
         }
     });   
 }
+
+function firefoxJumpToIdWorkaround() {
+   // Firefox bug 645075
+   if (browserFirefox) {
+       if (location.href.indexOf('#') > -1) {
+           location.href += '';
+       }        
+   }
+}
+ 

@@ -38,10 +38,12 @@
   
     <input type="hidden" name="command" value="blog" />
     <input type="hidden" name="cmd" value="addComment" />
-    
+
     <input type="hidden" name="filePath">
       <xsl:attribute name="value"><xsl:value-of select="/fileComments/path" /></xsl:attribute>
     </input>
+
+    <input id="posInPage" type="hidden" name="posInPage" value="" />
 
     <div class="blogCommentList">
 

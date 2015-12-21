@@ -94,10 +94,10 @@
 
     <body class="blog">
       <xsl:if test="not(/blog/readonly)">
-        <xsl:attribute name="onload">setCalendarStyles();queryPublicLink()</xsl:attribute>
+        <xsl:attribute name="onload">setCalendarStyles();queryPublicLink();firefoxJumpToIdWorkaround()</xsl:attribute>
       </xsl:if>
       <xsl:if test="/blog/readonly">
-        <xsl:attribute name="onload">setCalendarStyles();</xsl:attribute>
+        <xsl:attribute name="onload">setCalendarStyles();firefoxJumpToIdWorkaround()</xsl:attribute>
       </xsl:if>
       
       <div class="blogCont">
@@ -182,6 +182,7 @@
           <xsl:for-each select="dayEntries/file">
           
             <div>
+              <xsl:attribute name="id">entry-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
               <xsl:if test="align='left'">
                 <xsl:attribute name="class">blogEntry storyPictureLeft</xsl:attribute>
               </xsl:if>
@@ -221,11 +222,19 @@
                 <!--  
                 <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>
                 -->
-                <xsl:attribute name="href">javascript:blogComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>
-                (<xsl:value-of select="comments" /><xsl:text> </xsl:text><span resource="label.comments"></span>
+                <xsl:attribute name="href">javascript:blogComments('<xsl:value-of select="pathForScript" />', '<xsl:value-of select="pagePicCounter" />')</xsl:attribute>
+                <xsl:text>(</xsl:text>
+                <span>
+                  <xsl:attribute name="id">comment-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
+                  <xsl:value-of select="comments" />
+                </span>
+                <xsl:text> </xsl:text><span resource="label.comments"></span>
                 <xsl:if test="newComments">
-                  <xsl:text>, </xsl:text>
-                  <span class="newComment" resource="comments.unread"></span>
+                  <span>
+                    <xsl:attribute name="id">newComment-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
+                    <xsl:text>, </xsl:text>
+                    <span class="newComment" resource="comments.unread"></span>
+                  </span>
                 </xsl:if>
                 <xsl:text>)</xsl:text>
               </a>

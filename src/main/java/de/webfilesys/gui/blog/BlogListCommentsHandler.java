@@ -146,8 +146,11 @@ public class BlogListCommentsHandler extends XmlRequestHandlerBase
 				XmlUtil.setChildText(commentElement, "msg", comment.getMessage(), true);
 			}
 		}
-			
-		MetaInfManager.getInstance().setCommentsSeenByOwner(actPath, true);
+		
+		if (!userMgr.getUserType(uid).equals("virtual"))
+		{
+		    MetaInfManager.getInstance().setCommentsSeenByOwner(actPath, true);
+	    }
 		
 		processResponse();
     }
