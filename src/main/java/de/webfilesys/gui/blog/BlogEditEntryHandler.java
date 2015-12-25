@@ -45,6 +45,8 @@ public class BlogEditEntryHandler extends XslRequestHandlerBase {
 			return;
 		}
 		
+		String posInPage = req.getParameter("posInPage");
+		
 		String currentPath = userMgr.getDocumentRoot(uid).replace('/',  File.separatorChar);
 
 		File picFile = new File(currentPath, fileName);
@@ -138,6 +140,10 @@ public class BlogEditEntryHandler extends XslRequestHandlerBase {
 			}
 			
 			zoomLevelElem.appendChild(zoomFactorElement);
+		}
+		
+		if ((posInPage != null) && (!posInPage.isEmpty())) {
+			XmlUtil.setChildText(blogEntryElement, "posInPage", posInPage);
 		}
 		
 		processResponse("blog/blogEditEntry.xsl", true);

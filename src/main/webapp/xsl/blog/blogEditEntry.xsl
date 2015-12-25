@@ -94,6 +94,12 @@
           <input type="hidden" id="dateMonth" name="dateMonth" value="" />
           <input type="hidden" id="dateYear" name="dateYear" value="" />
           
+          <xsl:if test="/blog/blogEntry/posInPage">
+            <input type="hidden" id="posInPage" name="posInPage">
+              <xsl:attribute name="value"><xsl:value-of select="/blog/blogEntry/posInPage" /></xsl:attribute>
+            </input>
+          </xsl:if>
+          
           <div class="blogDateSection">
           
             <span resource="blog.selectDate"></span>:

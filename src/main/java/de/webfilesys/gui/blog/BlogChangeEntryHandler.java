@@ -64,7 +64,7 @@ public class BlogChangeEntryHandler extends UserRequestHandler {
         }
 
         String oldFilePath = oldFile.getAbsolutePath();
-        
+
         MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 		
         String newFileName = fileName;

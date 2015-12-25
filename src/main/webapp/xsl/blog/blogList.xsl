@@ -88,13 +88,21 @@
             window.location.href = "/webfilesys/servlet?command=blog&amp;beforeDay=" + beforeDay;
         }
 
+        <xsl:if test="not(/blog/readonly)">
+          function scrollToCurrentEntry() {
+              <xsl:if test="/blog/posInPage">
+                document.getElementById('entry-<xsl:value-of select="/blog/posInPage" />').scrollIntoView();
+              </xsl:if>
+          }
+        </xsl:if>
+
       </script>
       
     </head>
 
     <body class="blog">
       <xsl:if test="not(/blog/readonly)">
-        <xsl:attribute name="onload">setCalendarStyles();queryPublicLink();firefoxJumpToIdWorkaround()</xsl:attribute>
+        <xsl:attribute name="onload">setCalendarStyles();queryPublicLink();firefoxJumpToIdWorkaround();scrollToCurrentEntry()</xsl:attribute>
       </xsl:if>
       <xsl:if test="/blog/readonly">
         <xsl:attribute name="onload">setCalendarStyles();firefoxJumpToIdWorkaround()</xsl:attribute>
@@ -243,7 +251,7 @@
 
               <xsl:if test="not(/blog/readonly)">
                 <a class="icon-font icon-edit icon-blog-edit" titleResource="label.edit">
-                  <xsl:attribute name="href">javascript:editBlogEntry('<xsl:value-of select="@name" />')</xsl:attribute>
+                  <xsl:attribute name="href">javascript:editBlogEntry('<xsl:value-of select="@name" />', '<xsl:value-of select="pagePicCounter" />')</xsl:attribute>
                 </a>
           
                 &#160;
@@ -265,14 +273,14 @@
                 <xsl:if test="position() != 1">
                   &#160;
                   <a class="icon-font icon-arrow-up icon-blog-move" titleResource="blog.moveUp">
-                    <xsl:attribute name="href">javascript:moveBlogEntryUp('<xsl:value-of select="@name" />')</xsl:attribute>
+                    <xsl:attribute name="href">javascript:moveBlogEntryUp('<xsl:value-of select="@name" />', '<xsl:value-of select="pagePicCounter" />')</xsl:attribute>
                   </a>
                 </xsl:if>
 
                 <xsl:if test="position() != last()">
                   &#160;
                   <a class="icon-font icon-arrow-down icon-blog-move" titleResource="blog.moveDown">
-                    <xsl:attribute name="href">javascript:moveBlogEntryDown('<xsl:value-of select="@name" />')</xsl:attribute>
+                    <xsl:attribute name="href">javascript:moveBlogEntryDown('<xsl:value-of select="@name" />', '<xsl:value-of select="pagePicCounter" />')</xsl:attribute>
                   </a>
                 </xsl:if>
               

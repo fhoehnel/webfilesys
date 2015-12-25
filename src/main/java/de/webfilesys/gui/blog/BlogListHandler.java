@@ -75,6 +75,12 @@ public class BlogListHandler extends XslRequestHandlerBase {
 			XmlUtil.setChildText(blogElement, "readonly", "true", false);
 		}
 		
+        String posInPage = req.getParameter("posInPage");
+		
+        if ((posInPage != null) && (!posInPage.isEmpty())) {
+    		XmlUtil.setChildText(blogElement, "posInPage", posInPage, false);
+        }
+        
 		XmlUtil.setChildText(blogElement, "blogTitle", blogTitle, false);
 
 		Element blogEntriesElement = doc.createElement("blogEntries");

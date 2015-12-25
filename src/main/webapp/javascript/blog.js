@@ -474,8 +474,8 @@ function returnToList() {
     }
 }
 
-function editBlogEntry(fileName) {
-    window.location.href = "/webfilesys/servlet?command=blog&cmd=editEntry&fileName=" + encodeURIComponent(fileName);
+function editBlogEntry(fileName, posInPage) {
+    window.location.href = "/webfilesys/servlet?command=blog&cmd=editEntry&fileName=" + encodeURIComponent(fileName) + "&posInPage=" + posInPage;
 }
 
 function jsComments(path) {
@@ -513,15 +513,15 @@ function deleteBlogEntry(fileName) {
     }
 }
 
-function moveBlogEntryUp(fileName) {
-    moveBlogEntry(fileName, "up");
+function moveBlogEntryUp(fileName, posInPage) {
+    moveBlogEntry(fileName, "up", posInPage);
 }
 
-function moveBlogEntryDown(fileName) {
-    moveBlogEntry(fileName, "down");
+function moveBlogEntryDown(fileName, posInPage) {
+    moveBlogEntry(fileName, "down", posInPage);
 }
 
-function moveBlogEntry(fileName, direction) {
+function moveBlogEntry(fileName, direction, posInPage) {
 
     showHourGlass();
     
@@ -541,7 +541,11 @@ function moveBlogEntry(fileName, direction) {
     hideHourGlass();    
     
     if (success == "true") {
-        window.location.href = "/webfilesys/servlet?command=blog";
+        if ((direction == "up") && (posInPage > 1)) {
+            posInPage--;
+        }
+    
+        window.location.href = "/webfilesys/servlet?command=blog&random=" + (new Date().getTime()) + "#entry-" + posInPage;
     } else {
         alert(resourceBundle["blog.moveError"]);
     }
