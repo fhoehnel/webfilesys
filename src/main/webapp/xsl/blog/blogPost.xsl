@@ -58,7 +58,11 @@
             document.getElementById("dateMonth").value = LZ(now.getMonth() + 1);        
             document.getElementById("dateYear").value = now.getFullYear();        
             
-            document.getElementById("blogDate").value = now.toLocaleString().split(" ")[0];
+            var options = {year: 'numeric', month: '2-digit', day: '2-digit' };
+       
+            var language = (navigator.language || navigator.browserLanguage).split('-')[0];
+       
+            document.getElementById("blogDate").value = now.toLocaleDateString(language, options);
         }
 
       </script>

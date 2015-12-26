@@ -470,7 +470,16 @@ function uploadComplete(e) {
       
 function returnToList() {
     if (confirm(resourceBundle["blog.confirmCancel"])) {
-        window.location.href = '/webfilesys/servlet?command=blog&cmd=list';
+
+        var returnURL = '/webfilesys/servlet?command=blog&cmd=list';
+    
+        var posInPage = document.getElementById("posInPage");
+    
+        if (posInPage && (posInPage.value.length > 0)) {
+            returnURL = returnURL + "&random=" + ((new Date()).getTime()) + "#entry-" + posInPage.value;
+        }
+    
+        window.location.href = returnURL;
     }
 }
 
@@ -543,6 +552,8 @@ function moveBlogEntry(fileName, direction, posInPage) {
     if (success == "true") {
         if ((direction == "up") && (posInPage > 1)) {
             posInPage--;
+        } else if (direction == "down") {
+            posInPage++;
         }
     
         window.location.href = "/webfilesys/servlet?command=blog&random=" + (new Date().getTime()) + "#entry-" + posInPage;
@@ -1003,6 +1014,8 @@ function showPostCommentResult() {
 
                 var commentCont = document.getElementById("commentCont");
                 commentCont.style.visibility = "hidden";
+                
+                toast(resourceBundle["blog.commentAdded"], 2000);
             } else {
                 alert("failed to create comment");
             }
@@ -1164,7 +1177,11 @@ function setSelectedDate(y, m, d) {
         alert(resourceBundle["blog.dateInFuture"]);
     }
         
-    document.getElementById("blogDate").value = selectedDate.toLocaleString().split(" ")[0];
+    var options = {year: 'numeric', month: '2-digit', day: '2-digit' };
+       
+    var language = (navigator.language || navigator.browserLanguage).split('-')[0];
+       
+    document.getElementById("blogDate").value = selectedDate.toLocaleDateString(language, options);
 }
 
 function rotateBlogPic(imgName, direction) {
@@ -1197,7 +1214,13 @@ function firefoxJumpToIdWorkaround() {
    // Firefox bug 645075
    if (browserFirefox) {
        if (location.href.indexOf('#') > -1) {
-           location.href += '';
+           if (location.href.length > location.href.indexOf('#') + 1) {
+               var currentEntryId = location.href.substring(location.href.indexOf('#') + 1);
+               var currentEntry = document.getElementById(currentEntryId);
+               if (currentEntry) {
+                   currentEntry.scrollIntoView();
+               }
+           }
        }        
    }
 }

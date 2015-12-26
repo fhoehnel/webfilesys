@@ -199,7 +199,15 @@ function toast(message, duration) {
    	toastBox.setAttribute("class", "toastBox");
    	document.documentElement.appendChild(toastBox);
    	
-   	toastBox.style.top = (getWinHeight() / 2 - 75) + "px";
+    var yScrolled;
+        
+    if (window.ActiveXObject !== undefined) {
+        yScrolled = document.body.scrollTop;
+    } else {
+        yScrolled = window.pageYOffset;
+    }
+   	
+   	toastBox.style.top = yScrolled + (getWinHeight() / 2 - 75) + "px";
    	toastBox.style.left = (getWinWidth() / 2 - 125) + "px";
 
    	toastText = document.createElement("span");
