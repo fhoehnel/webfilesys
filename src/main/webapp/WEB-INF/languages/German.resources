@@ -438,6 +438,9 @@ label.origSize=Originalgrösse
 alt.delpicture=Bilddatei löschen
 alt.cameradata=Kamera-Informationen
 alt.printpict=Bild ausdrucken
+label.picDimensions=Bildgrösse
+label.geoLocation=geografische Lokation
+label.action=Aktion
 
 # picture manipulation
 label.resizetitle=Bilder skalieren/konvertieren

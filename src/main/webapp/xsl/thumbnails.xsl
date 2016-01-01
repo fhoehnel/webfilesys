@@ -79,8 +79,8 @@
   
   function showImage(imgPath, width, height)
   {
-      randNum = (new Date()).getTime();
-      picWin = window.open('/webfilesys/servlet?command=showImg&amp;imgname=' + encodeURIComponent(imgPath) + '&amp;screenWidth=' + screen.width + '&amp;screenHeight=' + screen.height + '&amp;random=' + randNum,'picWin' + randNum,'status=no,toolbar=no,location=no,menu=no,width=' + width + ',height=' + (height + 52) + ',resizable=yes,left=1,top=1,screenX=1,screenY=1');
+      var randNum = (new Date()).getTime();
+      picWin = window.open('/webfilesys/servlet?command=showImg&amp;imgname=' + encodeURIComponent(imgPath) + '&amp;random=' + randNum, 'picWin' + randNum, 'status=no,toolbar=no,location=no,menu=no,width=' + width + ',height=' + height + ',resizable=yes,left=1,top=1,screenX=1,screenY=1');
       picWin.focus();
   }
   
@@ -233,7 +233,7 @@
 
 </body>
 
-<div id="picturePopup" style="position:absolute;top:50px;left:150px;width:400px;height:400px;background-color:#c0c0c0;padding:0px;visibility:hidden;border-style:ridge;border-color:white;border-width:6px;z-index:2;"><img id="zoomPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/><div id="popupClose" style="position:absolute;top:5px;left:5px;width:16px;height:14px;padding:0px;visibility:hidden;border-style:none;z-index:3"><img src="images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupPicture()"/></div></div>
+<div id="picturePopup" style="position:absolute;top:50px;left:150px;width:400px;height:400px;background-color:#c0c0c0;padding:0px;visibility:hidden;border-style:ridge;border-color:white;border-width:6px;z-index:2;"><img id="zoomPic" class="zoomPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/><div id="popupClose" style="position:absolute;top:5px;left:5px;width:16px;height:14px;padding:0px;visibility:hidden;border-style:none;z-index:3"><img src="images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupPicture()"/></div></div>
 
 <script type="text/javascript">
   setBundleResources();

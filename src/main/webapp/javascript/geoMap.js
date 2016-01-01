@@ -21,6 +21,7 @@
         var mapType = mapSel.options[idx].value;
 
     	mapSel.selectedIndex = 0;
+    	
         mapSel.style.display = "none";
         document.getElementById("mapIcon").style.display = "inline";
 
@@ -71,7 +72,6 @@
         var mapType = mapSel.options[idx].value;
 
         mapSel.selectedIndex = 0;
-        mapSel.style.display = "none";
         
         var mapIcon;
         if (counter)
@@ -82,7 +82,11 @@
         {
             mapIcon = document.getElementById("mapIcon")
         }
-        mapIcon.style.display = "inline";
+        
+        if (mapIcon) {
+            mapSel.style.display = "none";
+            mapIcon.style.display = "inline";
+        }
 
         if (mapType == "1")
         {

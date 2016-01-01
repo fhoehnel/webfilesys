@@ -93,7 +93,7 @@
   
   function setFileListHeight()
   {
-      if (browserMSIE) 
+      if (browserMSIE)
       {
           setTimeout('setHeightInternal()', 200);
       }
@@ -107,14 +107,14 @@
   {
       var windowHeight;
 
-      if (!browserFirefox) 
+      if (browserFirefox || (browserChrome &amp;&amp; osAndroid)) 
       {
-          // windowHeight = document.body.clientHeight;
-          windowHeight = document.documentElement.clientHeight;
+          windowHeight = window.innerHeight;
       }
       else
       {
-          windowHeight = window.innerHeight;
+          // windowHeight = document.body.clientHeight;
+          windowHeight = document.documentElement.clientHeight;
       }
 
       <xsl:if test="/fileList/description">

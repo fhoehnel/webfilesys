@@ -15,7 +15,7 @@ function formatDecimalNumber(nStr)
 function getWinHeight() 
 {
     var h;
-    if (window.innerWidth) 
+    if (window.innerHeight) 
     {
         h = window.innerHeight; 
     } 

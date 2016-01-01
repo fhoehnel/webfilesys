@@ -717,8 +717,8 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 
 				try
 				{
-					// scaledImage = new ScaledImage(fullFileName,screenWidth-100,screenHeight-135);
-					scaledImage = new ScaledImage(fullFileName, screenWidth - 40, screenHeight - 175);
+					// scaledImage = new ScaledImage(fullFileName, screenWidth - 40, screenHeight - 177);
+					scaledImage = new ScaledImage(fullFileName, screenWidth - 20, screenHeight - 125);
 				}
 				catch (IOException io1)
 				{
@@ -746,16 +746,21 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 						thumbHeight = scaledImage.getRealHeight() * thumbnailSize / scaledImage.getRealWidth();
 					}
 					
-					// int fullScreenWidth = scaledImage.getScaledWidth() + 20;
-					int fullScreenWidth = scaledImage.getScaledWidth() + 8;
-					
-					if (fullScreenWidth < 600)
+					// int fullScreenWidth = scaledImage.getScaledWidth() + 8;
+					int fullScreenWidth = scaledImage.getScaledWidth();
+					if (fullScreenWidth < 400)
 					{
-						fullScreenWidth = 600;
+						fullScreenWidth = 400;
+					}
+
+					int fullScreenHeight = scaledImage.getScaledHeight();
+					if (fullScreenHeight < 300)
+					{
+						fullScreenHeight = 300;
 					}
 					
 					XmlUtil.setChildText(fileElement, "fullScreenWidth", Integer.toString(fullScreenWidth));
-					XmlUtil.setChildText(fileElement, "fullScreenHeight", Integer.toString(scaledImage.getScaledHeight()));
+					XmlUtil.setChildText(fileElement, "fullScreenHeight", Integer.toString(fullScreenHeight));
 					
 					String srcFileName = fullFileName;
 					

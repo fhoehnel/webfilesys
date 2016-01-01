@@ -436,6 +436,9 @@ label.origSize=Original Size
 alt.delpicture=delete image file
 alt.cameradata=camera data
 alt.printpict=print image
+label.picDimensions=picture dimensions
+label.geoLocation=geographic location
+label.action=action
 
 # picture manipulation 
 label.resizetitle=Resize/Convert Pictures

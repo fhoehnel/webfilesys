@@ -672,6 +672,14 @@ img.thumb {
     border-color:#808080;
 }
 
+img.picFullScreen,
+img.zoomPic,
+img.thumb,
+img.slideShow {
+    image-rendering: -webkit-optimize-contrast;
+    /* image-rendering: pixelated; */
+}
+
 td.mapIcon {
     text-align:right;
     width:1%;
@@ -1433,4 +1441,95 @@ td.compareImg {
 
 span.newComment {
     color: #ffffff;
+}
+
+body.picFullScreen {
+    margin: 0;
+    padding: 0;
+    background-color: #c0c0c0;
+}
+
+div.picFullScreenCont {
+    width: 100%;
+    text-align: center;
+    padding: 0;
+}
+
+img.picFullScreen {
+    visibility: hidden;
+    border: none;
+}
+
+div.fullScreenToolTip {
+    visibility:hidden;
+    position: absolute;
+    top: 200px;
+    left: 100px;
+    width: 200px;
+    height: 20px;
+    padding: 5px;
+    background-color: ivory;
+    border: 1px solid #000000;
+    border-radius: 6px;
+}
+
+div.picInfoMenu {
+    visibility: hidden;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 320px;
+    height: 230px;
+    border: 2px ridge #a0a0a0;
+    background-color: #d0d0d0;
+    padding: 26px 10px 10px 10px;
+}
+
+div.picInfoMenuIcon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: 1px solid navy;
+    padding: 2px 8px;
+    border-radius: 4px;    
+}
+
+div.picInfoMenuIcon:hover {
+    border: 1px solid #ffffa0;
+    cursor: pointer;
+}
+
+div.picInfoMenuIcon a {
+    font-size: 36px;
+    color: #ffffa0;
+}
+
+div.picInfoMenuIcon:hover a {
+    color: navy;
+}
+
+div.picInfoMenuClose {
+    position: absolute; 
+    right: 10px; 
+    top: 10px; 
+    width: 16px; 
+    height: 14px; 
+    padding: 0; 
+    z-index: 3;
+}
+
+div.picInfoMenu td {
+    font-size: 13px;
+    color: #000000;
+    padding: 0 8px 8px 0;
+}
+
+div.picInfoMenu a {
+    color: #000000;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+div.picInfoMenu a:hover {
+    color: navy;
 }

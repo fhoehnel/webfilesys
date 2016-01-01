@@ -87,108 +87,26 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(imgPath);
 		
 		XmlUtil.setChildText(imageDataElement, "imageSource", srcFileName, false);
-
-		int screenWidth = 0;
-		int screenHeight = 0;
 		
-		String screenWidthParam = getParameter("screenWidth");
-        
-		if (screenWidthParam != null)
-		{
-			try
-			{
-				screenWidth = Integer.parseInt(screenWidthParam);        	
-				session.setAttribute("screenWidth", new Integer(screenWidth));
-			}
-			catch (NumberFormatException nfe)
-			{
-				Logger.getLogger(getClass()).error(nfe);
-			}
-		}
-		
-		String screenHeightParam = getParameter("screenHeight");
-        
-		if (screenHeightParam != null)
-		{
-			try
-			{
-				screenHeight = Integer.parseInt(screenHeightParam);        	
-				session.setAttribute("screenHeight", new Integer(screenHeight));
-			}
-			catch (NumberFormatException nfe)
-			{
-				Logger.getLogger(getClass()).error(nfe);
-			}
-		}
-		
-		if (screenWidth == 0) {
-			Integer screenWidthSession = (Integer) session.getAttribute("screenWidth");
-			if (screenWidthSession != null)
-			{
-				screenWidth = screenWidthSession.intValue();
-			}
-			else
-			{
-				screenWidth = Constants.DEFAULT_SCREEN_WIDTH;
-			}
-		}
-		
-		if (screenHeight == 0) {
-			Integer screenHeightSession = (Integer) session.getAttribute("screenHeight");
-			
-			if (screenHeightSession != null)
-			{
-				screenHeight = screenHeightSession.intValue();
-			}
-			else
-			{
-				screenHeight = Constants.DEFAULT_SCREEN_HEIGHT;
-			}
-		}
-		
-		// int maxDisplayWidth = screenWidth-100;
-		int maxDisplayWidth = screenWidth-40;
-		
-		int maxDisplayHeight = screenHeight - 175;
-		
-		ScaledImage scaledImage=null;
+		ScaledImage scaledImage = null;
 
 		try
 		{
-			scaledImage = new ScaledImage(imgPath, maxDisplayWidth, maxDisplayHeight);
+			scaledImage = new ScaledImage(imgPath, 1000, 1000);
 		}
-		catch (IOException io1)
+		catch (IOException ioEx)
 		{
-			Logger.getLogger(getClass()).error(io1.toString());
-			this.processResponse("xsl/showImage.xsl", true);
+			Logger.getLogger(getClass()).error(ioEx.toString());
+			XmlUtil.setChildText(imageDataElement, "error", ioEx.toString(), false);
+			processResponse("xsl/showImage.xsl", true);
 			return;
 		}
 
 		XmlUtil.setChildText(imageDataElement, "imageType", Integer.toString(scaledImage.getImageType()), false);
 		
-		int xsize = scaledImage.getRealWidth();
-		int ysize = scaledImage.getRealHeight();
+		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(scaledImage.getRealWidth()), false);
+		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(scaledImage.getRealHeight()), false);
 
-		int xDisplay = xsize;
-		int yDisplay = ysize;
-
-		if ((xsize > maxDisplayWidth) || (ysize > maxDisplayHeight))
-		{
-			xDisplay = scaledImage.getScaledWidth();
-			yDisplay = scaledImage.getScaledHeight();
-		}
-		
-		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(xsize), false);
-		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(ysize), false);
-
-		XmlUtil.setChildText(imageDataElement, "displayWidth", Integer.toString(xDisplay), false);
-		XmlUtil.setChildText(imageDataElement, "displayHeight", Integer.toString(yDisplay), false);
-
-		if (xDisplay < scaledImage.getRealWidth())
-        {
-			XmlUtil.setChildText(imageDataElement, "scaled", "true", false);
-        }
-		
         PictureRating pictureRating = metaInfMgr.getPictureRating(imgPath);
         
         if (pictureRating != null)

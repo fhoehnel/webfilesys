@@ -117,6 +117,7 @@ img.albumPicture {
     box-shadow: 10px 10px 5px #666666;
     vertical-align: bottom;
     border: none;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 input.pictureAlbum, 
@@ -372,6 +373,7 @@ span.storyDescr {
 
 img.storyPicture {
     box-shadow: 10px 10px 5px #666666;
+    image-rendering: -webkit-optimize-contrast;    
 }
 
 div.bottomPagingForward {
@@ -407,6 +409,7 @@ div.albumDetailPicture {
 img.albumDetailPicture {
     box-shadow: 10px 10px 5px #666666;
     margin-bottom: 8px;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 div.albumDetailData {
@@ -536,6 +539,7 @@ div.slideShowImgCont {
 div.slideShowImgCont img {
     margin: 0 auto;
     display: block;
+    image-rendering: -webkit-optimize-contrast;
 }
 
 div.slideShowDescCont {

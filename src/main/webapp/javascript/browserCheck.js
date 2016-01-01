@@ -1,5 +1,3 @@
-// Firefox 2/3
-// var browserFirefox = /a/[-1]=='a';
 var browserFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 
 // MSIE 6/7/8:
@@ -23,4 +21,8 @@ if (window.opera)
 {
     browserOpera = true;
 }
+
+// var browserEdge = (navigator.userAgent.toLowerCase().indexOf('Edge/') > -1);
+
+var osAndroid = (navigator.userAgent.toLowerCase().indexOf('android') > -1);
 

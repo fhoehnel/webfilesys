@@ -372,7 +372,7 @@ public class PictureStoryRequestHandler extends UserRequestHandler
 			}
 
 			output.print("<a name=\"" + imgCounter + "\" href=\"#" + imgCounter + "\" onclick=\"window.open('/webfilesys/servlet?command=showImg&imgname=" + filenameForScript + "','" + newWindowName + "','status=no,toolbar=no,location=no,menu=no,width=" + (wDisplay + 20) + ",height=" + (hDisplay+52) + ",resizable=yes,left=1,top=1,screenX=1,screenY=1')\">");
-			output.println("<img src=\"" + srcFileName + "\" border=0 width=" + xDisplay + " height=" + yDisplay + " title=\"" + fullFileName + "\"></a></td>");
+			output.println("<img src=\"" + srcFileName + "\" class=\"thumb\" border=\"0\" width=" + xDisplay + " height=" + yDisplay + " title=\"" + fullFileName + "\" /></a></td>");
 
 			if (imgCounter % 2 == 0)
 			{

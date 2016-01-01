@@ -282,7 +282,7 @@
 
         <div class="slideShowImgCont">
 
-          <img id="currentImg" border="0">
+          <img id="currentImg" class="slideShow" border="0">
             <xsl:attribute name="src">/webfilesys/servlet?command=getFile&amp;filePath=<xsl:value-of select="/slideShow/encodedPath"/>&amp;cached=true</xsl:attribute>
             <xsl:attribute name="width"><xsl:value-of select="/slideShow/displayWidth"/></xsl:attribute>
             <xsl:attribute name="height"><xsl:value-of select="/slideShow/displayHeight"/></xsl:attribute>
