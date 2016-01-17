@@ -121,6 +121,7 @@ import de.webfilesys.gui.blog.BlogEditEntryHandler;
 import de.webfilesys.gui.blog.BlogGetPublicUrlHandler;
 import de.webfilesys.gui.blog.BlogListCommentsHandler;
 import de.webfilesys.gui.blog.BlogListHandler;
+import de.webfilesys.gui.blog.BlogListSubscribersHandler;
 import de.webfilesys.gui.blog.BlogMoveEntryHandler;
 import de.webfilesys.gui.blog.BlogPostHandler;
 import de.webfilesys.gui.blog.BlogPublishFormHandler;
@@ -129,7 +130,9 @@ import de.webfilesys.gui.blog.BlogRotateImgHandler;
 import de.webfilesys.gui.blog.BlogSaveSettingsHandler;
 import de.webfilesys.gui.blog.BlogSetDescrHandler;
 import de.webfilesys.gui.blog.BlogShowSettingsHandler;
+import de.webfilesys.gui.blog.BlogSubscribeHandler;
 import de.webfilesys.gui.blog.BlogUnpublishHandler;
+import de.webfilesys.gui.blog.BlogUnsubscribeHandler;
 import de.webfilesys.gui.google.GoogleEarthDirPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthFolderPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthSinglePlacemarkHandler;
@@ -622,7 +625,16 @@ public class WebFileSysServlet extends ServletBase
     		
     		return(true);
     	}
-    	
+
+        if (command.equals("blog"))
+    	{
+        	String cmd = req.getParameter("cmd");
+        	if ((cmd != null) && cmd.equals("unsubscribe")) {
+    			(new BlogUnsubscribeHandler(req, resp, req.getSession(true), output, null)).handleRequest(); 
+        		return(true);
+        	}
+    	}
+        
     	return(false);
     }
 
@@ -2340,6 +2352,24 @@ public class WebFileSysServlet extends ServletBase
            	else if (cmd.equals("saveSettings"))
             {
     			(new BlogSaveSettingsHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("subscribe"))
+            {
+    			(new BlogSubscribeHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("unsubscribe"))
+            {
+    			(new BlogUnsubscribeHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("listSubscribers"))
+            {
+    			(new BlogListSubscribersHandler(req, resp, session, output, userid)).handleRequest(); 
                 
                 return(true);
         	}

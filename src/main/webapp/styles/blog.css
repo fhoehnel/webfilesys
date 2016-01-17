@@ -23,7 +23,8 @@ body.blog input[type="button"],
 .blogGeoMapFrame input[type="button"],
 .blogCommentForm input[type="button"],
 .blogSettingsForm input[type="button"],
-input.blogUploadFileSelButton {
+input.blogUploadFileSelButton,
+#subscribeCont input[type="button"] {
     height: 32px;
     background: linear-gradient(#d0d0d0, #f0f0f0);
     border-color: #404040;
@@ -43,6 +44,10 @@ html.blog textarea {
 html.blog span,
 html.blog label {
     font-size: 1rem;
+}
+
+html.blog span.blogSmall {
+    font-size: 0.8rem;
 }
 
 html.blog div.promptHead {
@@ -87,12 +92,14 @@ div.blogDateRange {
 }
 
 a.blogCalender,
-a.blogMenu {
+a.blogMenu,
+a.blogSubscribe {
     text-decoration: none;
 }
 
 a.blogCalender:before,
-a.blogMenu:before {
+a.blogMenu:before,
+a.blogSubscribe {
     color: #000060;
     font-size: 2rem;
 }
@@ -325,13 +332,11 @@ div.blogGeoMap {
     color: #ffff80;
 }
 
-/*
-div.blogErrorMsg {
+span.blogErrorMsg {
     font-size: 13px;
-    color: #e00000;
+    color: #a00000;
     margin: 8px 0;
 }
-*/
 
 div.blogPublishCont {
     position: absolute;
@@ -407,6 +412,52 @@ div.blogSettingsCont {
 
 form.blogSettingsForm {
     padding: 16px;
+}
+
+div.blogSubscribeCont {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 300px;
+    height: 280px;
+    border: 2px ridge #808080;
+    background-color: #ffffe0;
+    visibility: hidden;
+}
+
+form.blogSubscribeForm {
+    padding: 10px;
+}
+
+form.blogSubscribeForm input[type=text] {
+    width: 260px;
+}
+
+ul.subscribeForm {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul.subscribeForm li {
+    padding: 5px;
+}
+
+div.subscriberList {
+    overflow-x: auto;
+    overflow-y: auto;
+    padding: 10px;
+    height: 180px;
+}
+
+div.subscriberList ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+div.subscriberList li {
+    margin: 5px 0;
 }
 
 #calDiv {

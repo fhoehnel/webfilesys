@@ -25,7 +25,9 @@
 
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+  <!--  
   <script src="javascript/titleToolTip.js" type="text/javascript" />
+  -->
   <script src="javascript/jsFileMenu.js" type="text/javascript" />
 
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -154,7 +156,9 @@
 
 <body class="picFullScreen" onload="scaleImage()">
 
+  <!--  
   <div id="toolTip" class="fullScreenToolTip"></div>
+  -->  
     
   <div class="picFullScreenCont">
     
@@ -163,8 +167,11 @@
       <xsl:attribute name="width">1</xsl:attribute>
       <xsl:attribute name="height">1</xsl:attribute>
       <xsl:if test="/imageData/description">
+        <xsl:attribute name="title"><xsl:value-of select="/imageData/description" /></xsl:attribute>
+        <!--  
         <xsl:attribute name="onMouseOver">showToolTip('<xsl:value-of select="/imageData/description" />')</xsl:attribute>
         <xsl:attribute name="onMouseOut">hideToolTip()</xsl:attribute>
+        -->
       </xsl:if>
     </img>
       

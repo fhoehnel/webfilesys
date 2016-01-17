@@ -1069,6 +1069,78 @@ function confirmDelComments(filePath) {
     hideHourGlass();   
 }
 
+function showSubscribers() {
+    var subscribeCont = document.getElementById("subscribeCont");
+
+    var xmlUrl = "/webfilesys/servlet?command=blog&cmd=listSubscribers";
+        
+    var xslUrl = "/webfilesys/xsl/blog/subscriberList.xsl";    
+        
+    subscribeCont.innerHTML = browserXslt(xmlUrl, xslUrl);
+    
+    setBundleResources();
+
+    subscribeCont.style.visibility = "visible";
+}
+
+function showSubscribeForm() {
+    var subscribeCont = document.getElementById("subscribeCont");
+    
+    var subscriberEmail = document.getElementById("subscriberEmail");
+    if (subscriberEmail) {
+        subscriberEmail.value = "";
+    }
+    
+    subscribeCont.style.visibility = "visible";
+}
+
+function hideSubscribeForm() {
+    var subscribeCont = document.getElementById("subscribeCont");
+    
+    subscribeCont.style.visibility = "hidden";
+}
+
+function submitSubscription() {
+    var subscriberEmail = document.getElementById("subscriberEmail");
+    
+    if (!validateEmail(subscriberEmail.value)) {
+        alert(resourceBundle["blog.invalidSubscriberEmail"]);
+        subscriberEmail.select();
+        subscriberEmail.focus();
+        return;
+    }
+    
+    var formData = getFormData(document.getElementById("subscribeForm"));
+	
+	xmlRequestPost("/webfilesys/servlet", formData, handleSubscribeResult)	    
+}
+
+function handleSubscribeResult() {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
+            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+
+            if (success == 'true') {
+                toast(resourceBundle["blog.subscribeSuccess"], 3000);
+            } else {
+                alert(resourceBundle["blog.subscribeError"]);
+            }
+            hideSubscribeForm();
+        }
+    }
+}
+
+function subscribeKeyPress(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        submitSubscription();
+        return false;
+    }
+    return true;
+}
+
+
 function showSettings() {
 
     var settingsCont = document.getElementById("settingsCont");

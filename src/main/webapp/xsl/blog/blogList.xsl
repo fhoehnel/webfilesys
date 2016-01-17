@@ -154,8 +154,12 @@
 
             <input type="button" resource="blog.buttonCreate" onclick="window.location.href='/webfilesys/servlet?command=blog&amp;cmd=post'" />
 
-            <input type="button" resource="blog.buttonlogout" onclick="window.location.href='/webfilesys/servlet?command=logout'" />
+            <input type="button" resource="blog.showSubscribers" onclick="showSubscribers()" />
 
+            <input type="button" resource="blog.buttonlogout" onclick="window.location.href='/webfilesys/servlet?command=logout'" />
+          </xsl:if>
+          <xsl:if test="/blog/readonly">
+            <a href="javascript:showSubscribeForm()" class="icon-font icon-watch blogSubscribe" titleResource="blog.subscribe" />
           </xsl:if>
         </div>   
     
@@ -359,6 +363,35 @@
     
     <xsl:if test="not(/blog/readonly)">
       <div id="settingsCont" class="blogSettingsCont"></div>
+    </xsl:if>    
+
+    <xsl:if test="not(/blog/readonly)">
+      <div id="subscribeCont" class="blogSubscribeCont">
+      </div>
+    </xsl:if>
+
+    <xsl:if test="/blog/readonly">
+      <div id="subscribeCont" class="blogSubscribeCont">
+        <form id="subscribeForm" action="/webfilesys/servlet" method="post" class="blogSubscribeForm">
+          <input type="hidden" name="command" value="blog" />
+          <input type="hidden" name="cmd" value="subscribe" />
+          <ul class="subscribeForm">
+            <li>
+              <label resource="blog.subscribePrompt"></label>
+            </li>
+            <li>
+              <input type="text" id="subscriberEmail" name="subscriberEmail" onkeypress="return subscribeKeyPress(event);" />
+            </li>
+            <li>
+              <input type="button" resource="blog.subscribeButton" onclick="submitSubscription()" />
+              <input type="button" resource="button.cancel" onclick="hideSubscribeForm() "/>
+            </li>
+            <li>
+              <span class="blogSmall" resource="blog.unsubscribeHint"></span>
+            </li>
+          </ul>
+        </form>
+      </div>
     </xsl:if>    
     
     <script type="text/javascript">

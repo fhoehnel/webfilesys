@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -60,7 +61,7 @@ public class PublishListRequestHandler extends UserRequestHandler
 
 		output.println("<br>");
 
-		Vector publishCodes = InvitationManager.getInstance().getInvitationsByOwner(uid);
+		ArrayList<String> publishCodes = InvitationManager.getInstance().getInvitationsByOwner(uid);
 
 		SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 
@@ -70,7 +71,7 @@ public class PublishListRequestHandler extends UserRequestHandler
         {
 			for (int i=0;i<publishCodes.size();i++)
 			{
-				String accessCode=(String) publishCodes.elementAt(i);
+				String accessCode=(String) publishCodes.get(i);
 
 				String path=InvitationManager.getInstance().getInvitationPath(accessCode);
 

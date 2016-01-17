@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.GeoTag;
+import de.webfilesys.InvitationManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.user.UserRequestHandler;
@@ -69,7 +70,9 @@ public class BlogSetDescrHandler extends UserRequestHandler
 		
 		String blogText = req.getParameter("blogText");
 		
-        Logger.getLogger(getClass()).debug("firstUploadFileName: " + firstUploadFileName + " blogText: " + blogText);
+		if (Logger.getLogger(getClass()).isDebugEnabled()) {
+	        Logger.getLogger(getClass()).debug("firstUploadFileName: " + firstUploadFileName + " blogText: " + blogText);
+		}
 		
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
@@ -136,6 +139,14 @@ public class BlogSetDescrHandler extends UserRequestHandler
 
 				metaInfMgr.setGeoTag(currentPath, firstUploadFileName, geoTag);
 			}
+		}
+		
+		String accessCode = InvitationManager.getInstance().getInvitationCode(uid, currentPath);
+		
+		if (accessCode != null) {
+			InvitationManager.getInstance().notifySubscribers(accessCode);
+		} else {
+	        Logger.getLogger(getClass()).warn("could not determine invitation code for subscription notification, uid=" + uid + " docRoot=" + currentPath);
 		}
 		
 		session.removeAttribute(BlogListHandler.SESSION_KEY_BEFORE_DAY);

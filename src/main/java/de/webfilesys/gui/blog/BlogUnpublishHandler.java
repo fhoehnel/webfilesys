@@ -2,6 +2,7 @@ package de.webfilesys.gui.blog;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,11 +39,11 @@ public class BlogUnpublishHandler extends XmlRequestHandlerBase {
 
 		boolean removed = false;
 		
-		Vector publishCodes = InvitationManager.getInstance().getInvitationsByOwner(uid);
+		ArrayList<String> publishCodes = InvitationManager.getInstance().getInvitationsByOwner(uid);
 
         if (publishCodes != null) {
 			for (int i = 0; (i < publishCodes.size()) && (!removed); i++) {
-				String accessCode= (String) publishCodes.elementAt(i);
+				String accessCode= (String) publishCodes.get(i);
 
 				String path = InvitationManager.getInstance().getInvitationPath(accessCode);
 
