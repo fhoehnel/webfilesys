@@ -181,7 +181,6 @@ import de.webfilesys.gui.user.OpenStreetMapFilesPOIHandler;
 import de.webfilesys.gui.user.OpenStreetMapPOIHandler;
 import de.webfilesys.gui.user.PasteAsLinkRequestHandler;
 import de.webfilesys.gui.user.PictureStoryRequestHandler;
-import de.webfilesys.gui.user.PublishListRequestHandler;
 import de.webfilesys.gui.user.PublishMailRequestHandler;
 import de.webfilesys.gui.user.PublishRequestHandler;
 import de.webfilesys.gui.user.RateVotingHandler;
@@ -249,6 +248,7 @@ import de.webfilesys.gui.xsl.XslOpenStreetMapFilesHandler;
 import de.webfilesys.gui.xsl.XslOpenStreetMapHandler;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
 import de.webfilesys.gui.xsl.XslPublishFileHandler;
+import de.webfilesys.gui.xsl.XslPublishListHandler;
 import de.webfilesys.gui.xsl.XslRenameDirHandler;
 import de.webfilesys.gui.xsl.XslRenameFilePromptHandler;
 import de.webfilesys.gui.xsl.XslRenameFolderPromptHandler;
@@ -1854,7 +1854,7 @@ public class WebFileSysServlet extends ServletBase
         
         if (command.equals("publishList"))
 		{
-		    (new PublishListRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+		    (new XslPublishListHandler(req, resp, session, output, userid)).handleRequest(); 
 
 		    return(true);
 		}

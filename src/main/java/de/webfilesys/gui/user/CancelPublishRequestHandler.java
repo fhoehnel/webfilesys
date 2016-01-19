@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.InvitationManager;
+import de.webfilesys.gui.xsl.XslPublishListHandler;
 
 /**
  * @author Frank Hoehnel
@@ -39,7 +40,7 @@ public class CancelPublishRequestHandler extends UserRequestHandler
 
         InvitationManager.getInstance().removeInvitation(accessCode);
 
-	    (new PublishListRequestHandler(req, resp, session, output, uid)).handleRequest(); 
+	    (new XslPublishListHandler(req, resp, session, output, uid)).handleRequest(); 
 	}
 
 }

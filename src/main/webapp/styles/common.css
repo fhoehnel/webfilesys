@@ -216,6 +216,24 @@ div.headline {
     margin-bottom:5px;
 }
   
+table.dataList {
+    border-collapse: collapse;
+}
+  
+table.dataList th,
+table.dataList td {
+    border: 1px solid #808080;
+    padding: 4px;
+    vertical-align: top;
+}  
+  
+table.dataList th {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: left;
+}
+  
 th.datahead {
     font-family: Arial,Helvetica,sans-serif;
     font-size: 13px;
@@ -530,6 +548,7 @@ span.searchPath
 }  
 
 input[type="submit"], input[type="button"], input.roundedButton {
+    height: 24px;
     color: black;
     font-size: 13px;
     border: 1px solid #a0a0a0;
@@ -1531,5 +1550,15 @@ div.picInfoMenu a {
 }
 
 div.picInfoMenu a:hover {
+    color: navy;
+}
+
+div.centeredButtonCont {
+    text-align: center;
+    margin: 10px;
+}
+
+span.publicUrl {
+    font-size: 11px;
     color: navy;
 }
