@@ -66,8 +66,21 @@
             </tr>
               
             <tr>
-              <td class="formParm2">
-                <xsl:value-of select="msg" />
+              <td class="formParm2" style="padding-left:20px;">
+              
+                <xsl:for-each select="msg/*">
+                  <xsl:if test="local-name(.) = 'emoji'">
+                    <xsl:text> </xsl:text>
+                    <img class="blogEmoticon">
+                      <xsl:attribute name="src">/webfilesys/emoticons/<xsl:value-of select="." />.png</xsl:attribute>
+                    </img>
+                    <xsl:text> </xsl:text>
+                  </xsl:if>
+                  <xsl:if test="local-name(.) = 'fragment'">
+                    <xsl:value-of select="." />
+                  </xsl:if>
+                </xsl:for-each>
+                
               </td>
             </tr>
    
@@ -78,16 +91,32 @@
         </xsl:if>
     
         <xsl:if test="/fileComments/modifyPermission">
-          <tr>
-            <td class="formParm1">
-              <span resource="label.addcomment"></span>:
-            </td>
-          </tr>
 
           <tr>
-            <td class="formParm2">
-              <textarea id="newComment" name="newComment" cols="100" rows="4" wrap="virtual" class="commentText" 
-                  onKeyup="limitCommentText()" onChange="limitCommentText()"></textarea>
+            <td>
+              <table style="width:100%">
+                <tr>
+                  <td>
+                    <table style="width:100%">
+                      <tr>
+                        <td class="formParm1">
+                          <span resource="label.addcomment"></span>:
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="formParm2">
+                          <textarea id="newComment" name="newComment" cols="100" rows="4" wrap="virtual" class="commentText" 
+                              onKeyup="limitCommentText()" onChange="limitCommentText()"></textarea>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+
+                  <td class="emojiSelCont">
+                    <div id="emojiSelCont" class="emojiSelCont emojSelComment"></div>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
 
@@ -100,6 +129,7 @@
               </td>
             </tr>
           </xsl:if>
+          
         </xsl:if>
 	  
         <tr>
@@ -125,6 +155,10 @@
               <input type="button" resource="button.closewin">
                 <xsl:attribute name="onclick">closeBlogComments()</xsl:attribute>
               </input>
+              
+              <xsl:if test="/fileComments/modifyPermission">
+                <a href="javascript:switchEmojiSelection('newComment')" class="icon-font icon-smiley blogEmojiSel" titleResource="blog.showEmojis"></a>
+              </xsl:if>              
 
 		    </div>
           </td>

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.StringTokenizer;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -287,9 +288,10 @@ public class BlogListHandler extends XslRequestHandlerBase {
 
 		   						description = metaInfMgr.getDescription(file.getAbsolutePath());
 
-		        				if ((description != null) && (description.trim().length() > 0))
-		        				{
-		        					XmlUtil.setChildText(fileElement, "description", description, true);
+		        				if ((description != null) && (description.trim().length() > 0)) {
+		        					Element descrElem = doc.createElement("description");
+                                    fileElement.appendChild(descrElem);
+                                    appendDescrFragments(description, descrElem);
 		        				}
 
 		        				int commentCount = metaInfMgr.countComments(file.getAbsolutePath());
@@ -419,6 +421,50 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		
 		processResponse("blog/blogList.xsl", true);
     }
+	
+	private void appendDescrFragments(String description, Element descrElem) {
+		StringTokenizer descrParser = new StringTokenizer(description, "{}", true);
+		
+		boolean emojiStarted = false;
+		String textFragment = null;
+		String emojiName = null;
+		
+		while (descrParser.hasMoreTokens()) {
+			String token = descrParser.nextToken();
+			if (token.equals("{")) {
+				if (!emojiStarted) {
+                    if (textFragment != null) {
+                    	Element fragmentElem = doc.createElement("fragment");
+                    	XmlUtil.setElementText(fragmentElem, textFragment);
+                    	descrElem.appendChild(fragmentElem);
+                    	textFragment = null;
+                    }
+					emojiStarted = true;
+				}
+			} else if (token.equals("}")) {
+				if (emojiStarted) {
+					if (emojiName != null) {
+                    	Element emojiElem = doc.createElement("emoji");
+                    	XmlUtil.setElementText(emojiElem, emojiName);
+                    	descrElem.appendChild(emojiElem);
+                    	emojiName = null;
+					}
+					emojiStarted = false;
+				}
+			} else {
+				if (emojiStarted) {
+					emojiName = token;
+				} else {
+					textFragment = token;
+				}
+			}
+		}
+        if (textFragment != null) {
+        	Element fragmentElem = doc.createElement("fragment");
+        	XmlUtil.setElementText(fragmentElem, textFragment);
+        	descrElem.appendChild(fragmentElem);
+        }
+	}
 	
 	private boolean isPictureFile(File file) {
 		String fileNameExt = CommonUtils.getFileExtension(file.getName());

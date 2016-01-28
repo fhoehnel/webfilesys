@@ -93,13 +93,15 @@ div.blogDateRange {
 
 a.blogCalender,
 a.blogMenu,
-a.blogSubscribe {
+a.blogSubscribe
+a.blogEmojiSel {
     text-decoration: none;
 }
 
 a.blogCalender:before,
 a.blogMenu:before,
-a.blogSubscribe {
+a.blogSubscribe,
+a.blogEmojiSel:before {
     color: #000060;
     font-size: 2rem;
 }
@@ -361,6 +363,7 @@ div.blogEmpty {
 
 div.blogCommentCont {
     position: absolute;
+    width: 600px;
     left: 0;
     top: 0;
     border: 2px ridge #808080;
@@ -393,7 +396,8 @@ div.blogSettingsHead {
 }
 
 textarea.commentText {
-    width: 95%;
+    width: 100%;
+    height: 75px;
 }
 
 html.blog td.formParm1,
@@ -541,4 +545,43 @@ div.subscriberList li {
 
 .poweredBy a {
     color: #000060;
+}
+
+a.blogEmojiSel {
+    float: right;
+    margin-right: 10px;
+}
+
+td.emojiSelCont {
+    vertical-align: top;
+}
+
+div.emojiSelCont {
+    width: 70px;
+    background-color: #ffffff;
+    border: 1px solid #808080;
+    border-radius: 5px;
+    overflow-x: auto;
+    overflow-y: auto;
+    display: none;
+}
+
+div.emojSelBlogEntry {
+    height: 200px;
+}
+
+div.emojSelComment {
+    height: 100px;
+}
+
+div.selectEmoji {
+    display: inline;
+    float: left;
+    margin: 4px;
+}
+
+img.blogEmoticon {
+    width: 36px;
+    height: 36px;
+    vertical-align: middle;
 }

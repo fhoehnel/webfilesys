@@ -101,6 +101,7 @@ import de.webfilesys.gui.ajax.XmlTouchFileHandler;
 import de.webfilesys.gui.ajax.XmlTransformImageHandler;
 import de.webfilesys.gui.ajax.XmlUploadStatusHandler;
 import de.webfilesys.gui.ajax.XmlWinCmdLineHandler;
+import de.webfilesys.gui.ajax.XmlEmojiListHandler;
 import de.webfilesys.gui.ajax.XslSwitchReadonlyHandler;
 import de.webfilesys.gui.ajax.XslWatchFolderHandler;
 import de.webfilesys.gui.ajax.calendar.XmlChangeAppointmentHandler;
@@ -2370,6 +2371,12 @@ public class WebFileSysServlet extends ServletBase
            	else if (cmd.equals("listSubscribers"))
             {
     			(new BlogListSubscribersHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("emojiList"))
+            {
+    			(new XmlEmojiListHandler(req, resp, session, output, userid)).handleRequest(); 
                 
                 return(true);
         	}

@@ -137,6 +137,10 @@ a.icon-font {
 	content: '\f0c9';
 }
 
+.icon-smiley:before {
+	content: '\f118';
+}
+
 .icon-page-prev:before {
 	content: '\f04a';
 }

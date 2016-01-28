@@ -222,7 +222,18 @@
             
               <span class="storyDescr">
                 <xsl:if test="description">
-                  <xsl:value-of select="description" />
+                  <xsl:for-each select="description/*">
+                    <xsl:if test="local-name(.) = 'emoji'">
+                      <xsl:text> </xsl:text>
+                      <img class="blogEmoticon">
+                        <xsl:attribute name="src">/webfilesys/emoticons/<xsl:value-of select="." />.png</xsl:attribute>
+                      </img>
+                      <xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:if test="local-name(.) = 'fragment'">
+                      <xsl:value-of select="." />
+                    </xsl:if>
+                  </xsl:for-each>
                 </xsl:if>
               </span>
 

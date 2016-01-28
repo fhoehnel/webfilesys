@@ -1102,6 +1102,8 @@ blog.subjectChangeNotification=Neue Einträge im Blog
 blog.showSubscribers=Abonnenten dieses Blogs
 blog.headlineSubscribers=Abonnenten
 blog.noSubscribers=Der Blog wurde noch nicht abonniert.
+blog.insertEmoji=diese Emoticon an der Cursorposition einfügen
+blog.showEmojis=show emoticons
 
 error.latitudeInvalid=geografische Breite muss zwischen -90 und 90 liegen
 error.longitudeInvalid=geografische Länge muss zwischen -180.0 und 180.0 liegen

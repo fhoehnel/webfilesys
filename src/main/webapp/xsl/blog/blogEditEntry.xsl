@@ -117,7 +117,16 @@
           </div>
           
           <div class="blogTextSection">
-            <textarea id="blogText" name="blogText" class="blogText"><xsl:value-of select="/blog/blogEntry/blogText" /></textarea>
+            <table style="width:100%">
+              <tr>
+                <td style="width:100%;padding-right:8px">
+                  <textarea id="blogText" name="blogText" class="blogText" maxlength="4096"><xsl:value-of select="/blog/blogEntry/blogText" /></textarea>
+                </td>
+                <td class="emojiSelCont">
+                  <div id="emojiSelCont" class="emojiSelCont emojSelBlogEntry"></div>
+                </td>
+              </tr>
+            </table>
           </div>
         
           <div class="blogGeoDataSwitcher">
@@ -127,6 +136,7 @@
               </xsl:if>
             </input>
             <label for="blogGeoDataSwitcher" resource="label.geoTag"></label>
+            <a href="javascript:switchEmojiSelection('blogText')" class="icon-font icon-smiley blogEmojiSel" titleResource="blog.showEmojis"></a>
           </div>
               
           <div id="blogGeoTagCont" class="blogGeoTagCont">

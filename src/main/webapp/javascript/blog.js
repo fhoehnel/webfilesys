@@ -1297,3 +1297,28 @@ function firefoxJumpToIdWorkaround() {
    }
 }
  
+function switchEmojiSelection(textareaId) {
+    var visible = (document.getElementById("emojiSelCont").style.display == "block");
+
+    if (visible) {
+        document.getElementById("emojiSelCont").style.display = "none";
+    } else {
+        var xmlUrl = "/webfilesys/servlet?command=blog&cmd=emojiList&textareaId=" + textareaId;
+    
+        var xslUrl = "/webfilesys/xsl/blog/emojiList.xsl";
+
+        document.getElementById("emojiSelCont").innerHTML = browserXslt(xmlUrl, xslUrl);
+        
+        setBundleResources();
+    
+        document.getElementById("emojiSelCont").style.display = "block";
+    }
+}
+
+function insertEmoji(textAreaId, emojiName) {
+    var textAreaField = document.getElementById(textAreaId);
+    if (textAreaField) {
+        var emojiPlaceHolder = " {" + emojiName + "} ";
+        insertAtCursor(textAreaField, emojiPlaceHolder);
+    }
+}

@@ -48,8 +48,6 @@ public class XslPublishListHandler extends XslRequestHandlerBase {
 	
 	protected void process() {
 		
-		Logger.getLogger(getClass()).debug("XslPublishListHandler start ");
-		
 		Element publishListElem = doc.createElement("publishList");
 			
 		doc.appendChild(publishListElem);

@@ -2,6 +2,7 @@ package de.webfilesys.gui.blog;
 
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.Comment;
 import de.webfilesys.InvitationManager;
@@ -91,7 +91,7 @@ public class BlogListCommentsHandler extends XmlRequestHandlerBase
 		
 		fileCommentsElement.appendChild(commentListElement);
 		
-		Vector listOfComments=MetaInfManager.getInstance().getListOfComments(actPath);
+		Vector listOfComments = MetaInfManager.getInstance().getListOfComments(actPath);
 
 		if ((listOfComments != null) && (listOfComments.size() > 0))
 		{
@@ -142,8 +142,10 @@ public class BlogListCommentsHandler extends XmlRequestHandlerBase
 				XmlUtil.setChildText(commentElement, "user", userString.toString(), false);
 
 				XmlUtil.setChildText(commentElement, "date", dateFormat.format(comment.getCreationDate()), false);
-
-				XmlUtil.setChildText(commentElement, "msg", comment.getMessage(), true);
+				
+				Element msgElem = doc.createElement("msg");
+				commentElement.appendChild(msgElem);
+				appendCommentFragments(comment.getMessage(), msgElem);
 			}
 		}
 		
@@ -154,4 +156,49 @@ public class BlogListCommentsHandler extends XmlRequestHandlerBase
 		
 		processResponse();
     }
+	
+	private void appendCommentFragments(String description, Element descrElem) {
+		StringTokenizer descrParser = new StringTokenizer(description, "{}", true);
+		
+		boolean emojiStarted = false;
+		String textFragment = null;
+		String emojiName = null;
+		
+		while (descrParser.hasMoreTokens()) {
+			String token = descrParser.nextToken();
+			if (token.equals("{")) {
+				if (!emojiStarted) {
+                    if (textFragment != null) {
+                    	Element fragmentElem = doc.createElement("fragment");
+                    	XmlUtil.setElementText(fragmentElem, textFragment);
+                    	descrElem.appendChild(fragmentElem);
+                    	textFragment = null;
+                    }
+					emojiStarted = true;
+				}
+			} else if (token.equals("}")) {
+				if (emojiStarted) {
+					if (emojiName != null) {
+                    	Element emojiElem = doc.createElement("emoji");
+                    	XmlUtil.setElementText(emojiElem, emojiName);
+                    	descrElem.appendChild(emojiElem);
+                    	emojiName = null;
+					}
+					emojiStarted = false;
+				}
+			} else {
+				if (emojiStarted) {
+					emojiName = token;
+				} else {
+					textFragment = token;
+				}
+			}
+		}
+        if (textFragment != null) {
+        	Element fragmentElem = doc.createElement("fragment");
+        	XmlUtil.setElementText(fragmentElem, textFragment);
+        	descrElem.appendChild(fragmentElem);
+        }
+	}
+	
 }

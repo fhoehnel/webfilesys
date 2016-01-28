@@ -1098,6 +1098,8 @@ blog.subjectChangeNotification=New entries in the Blog
 blog.showSubscribers=Subscribers
 blog.headlineSubscribers=Subscribers watching this Blog
 blog.noSubscribers=Your blog has no subscribers yet.
+blog.insertEmoji=insert this emoticon into the text at the cursor position
+blog.showEmojis=Emoticons einblenden
 
 error.latitudeInvalid=latitude must be a number between -90.0 and 90.0
 error.longitudeInvalid=longitude must be a number between -180.0 and 180.0

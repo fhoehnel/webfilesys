@@ -50,7 +50,7 @@
         }
   
         var cal1x = new CalendarPopup("calDiv");
-
+        
         function setInitialDate() {
             var now = new Date();
         
@@ -130,12 +130,22 @@
           </div>
           
           <div class="blogTextSection">
-            <textarea id="blogText" name="blogText" class="blogText" maxlength="4096"></textarea>
+            <table style="width:100%">
+              <tr>
+                <td style="width:100%;padding: 0px 8px 0px 0px;">
+                  <textarea id="blogText" name="blogText" class="blogText" maxlength="4096"></textarea>
+                </td>
+                <td class="emojiSelCont">
+                  <div id="emojiSelCont" class="emojiSelCont emojSelBlogEntry"></div>
+                </td>
+              </tr>
+            </table>
           </div>
         
           <div class="blogGeoDataSwitcher">
             <input type="checkbox" id="blogGeoDataSwitcher" name="geoDataSwitcher" onchange="toggleGeoData(this)" />
             <label for="blogGeoDataSwitcher" resource="label.geoTag"></label>
+            <a href="javascript:switchEmojiSelection('blogText')" class="icon-font icon-smiley blogEmojiSel" titleResource="blog.showEmojis"></a>
           </div>
               
           <div id="blogGeoTagCont" class="blogGeoTagCont">
