@@ -27,6 +27,31 @@ function selectAll() {
 	    }
 		document.getElementById("cb-setAll").checked = true;
     }	
+    
+    return (!allSelected);
+}
+
+function addDeselectHandler() {
+    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
+        if ((document.form1.elements[i].type == "checkbox") &&
+		    (document.form1.elements[i].name != "cb-confirm") &&
+            (document.form1.elements[i].name != "cb-setAll")) {
+			document.form1.elements[i].addEventListener ('click', handleCheckboxClick, true);
+	    } 
+    }
+}
+
+function handleCheckboxClick(evt) {
+    var clickEvent = evt;
+    if (!clickEvent) {
+	    clickEvent = window.event;
+    }
+    
+    var clickTarget = clickEvent.target;
+    
+    if (!clickTarget.checked) {
+        document.getElementById("cb-setAll").checked = false;
+    }
 }
 
 function multiDownload() {
@@ -256,11 +281,16 @@ function validateCloneFolderName() {
         if (!checkFileNameSyntax(newFolderName)) {
             alert(resourceBundle['alert.illegalCharInFilename']);
         } else {
-            if (newFolderName != '') {
+            if (newFolderName.trim().length == 0) {
+                alert(resourceBundle["alert.newFolderNameEmpty"]);
+            } else {
                 document.renameForm.submit();
             }
         }
     }
+
+    document.getElementById('renameForm').newFolderName.focus();
+    document.getElementById('renameForm').newFolderName.select();
 }
 
 function validateNewFolderName(errorMsg) {
@@ -283,16 +313,23 @@ function validateNewFolderName(errorMsg) {
 function validateBookmarkName(errorMsg) {
     var bookmarkName = document.bookmarkForm.bookmarkName.value;
 
-    if (bookmarkName != '') {
+    if (bookmarkName.trim().length == 0) {
+        alert(errorMsg);
+        document.bookmarkForm.bookmarkName.focus();
+        document.bookmarkForm.bookmarkName.select();
+    } else {
         var createBookmarkUrl = '/webfilesys/servlet?command=createBookmark&path=' + encodeURIComponent(document.bookmarkForm.currentPath.value) + '&bookmarkName=' + encodeURIComponent(document.bookmarkForm.bookmarkName.value);
-        xmlRequestSynchron(createBookmarkUrl);   
-        hidePrompt();
-        return;
+        xmlRequest(createBookmarkUrl, function() {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    toast(resourceBundle["alert.bookmarkCreated"], 2000);
+                } else {
+                    alert(resourceBundle["alert.communicationFailure"]);
+                }
+                hidePrompt();
+            }
+        });
     }
-    
-    alert(errorMsg);
-    document.bookmarkForm.bookmarkName.focus();
-    document.bookmarkForm.bookmarkName.select();
 }
 
 function validateCreateFileName(errorMsg) {
@@ -315,13 +352,17 @@ function submitSwitchReadWrite()
     document.swtichReadWriteForm.submit();
 }
 
-function switchFolderWatch(path)
-{
+function switchFolderWatch(path) {
     var url = "/webfilesys/servlet?command=switchFolderWatch&path=" + encodeURIComponent(path);
     
-    xmlRequestSynchron(url);    
-    
-    hidePrompt();
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status != 200) {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+            hidePrompt();
+        }
+    });
 }
 
 function enableDisablePatternInput()
@@ -342,20 +383,18 @@ function enableDisablePatternInput()
     }
 }
 
-function bookmark(path)
-{
-    if (path && (path.length > 0))
-    {
-        showPrompt('/webfilesys/servlet?command=addBookmark&path=' + encodeURIComponent(path), '/webfilesys/xsl/addBookmark.xsl', 320, 190);
+function bookmark(path) {
+    if (path && (path.length > 0)) {
+        centeredDialog('/webfilesys/servlet?command=addBookmark&path=' + encodeURIComponent(path), '/webfilesys/xsl/addBookmark.xsl', 320, 190, function() {
+            document.bookmarkForm.bookmarkName.focus();
+            document.bookmarkForm.bookmarkName.select();
+        });    
+    } else {
+        centeredDialog('/webfilesys/servlet?command=addBookmark', '/webfilesys/xsl/addBookmark.xsl', 320, 190, function() {
+            document.bookmarkForm.bookmarkName.focus();
+            document.bookmarkForm.bookmarkName.select();
+        });
     }
-    else
-    {
-        showPrompt('/webfilesys/servlet?command=addBookmark', '/webfilesys/xsl/addBookmark.xsl', 320, 190);
-    }
-    
-    document.bookmarkForm.bookmarkName.focus();
-    
-    document.bookmarkForm.bookmarkName.select();
 }
 
 function hidePrompt() {
@@ -369,7 +408,7 @@ function hidePrompt() {
      promptBox.style.width = "100px";
 }
 
-function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight) {
+function centeredDialog(xmlUrl, xslUrl, boxWidth, boxHeight, callback) {
     var promptBox = document.getElementById("prompt");
         
     if (!promptBox) {
@@ -379,29 +418,7 @@ function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight) {
         
     hideMenu();        
     
-    var windowWidth = getWinWidth();
-    var windowHeight = getWinHeight();
-    
-	var yScrolled;
-	var xScrolled;
-	
-    if (browserMSIE) {
-        yScrolled = (document.documentElement.scrollTop || document.body.scrollTop);
-        xScrolled =(document.documentElement.scrollLeft || document.body.scrollLeft);
-    } else {
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-        
-        if (yScrolled > 0) {
-            // scrollbar exists 
-            windowWidth = windowWidth - 20;
-        }
-    }
-        
     if (boxWidth) {
-        if (boxWidth > windowWidth - 10) {
-            boxWidth = windowWidth - 10;
-        }
         promptBox.style.width = boxWidth + 'px';
     }
 
@@ -409,114 +426,54 @@ function showPrompt(xmlUrl, xslUrl, boxWidth, boxHeight) {
         promptBox.style.height = boxHeight + 'px';
     }
         
-    promptBoxWidth = promptBox.offsetWidth;
-    
-    xoffset = (windowWidth - promptBoxWidth) / 2;
-    
-    if (xoffset < 2) {
-        xoffset = 2;
-    }
-        
-    var promptXpos = xoffset + xScrolled;
+    htmlFragmentByXslt(xmlUrl, xslUrl, promptBox, function() {
+        setBundleResources();
+        centerBox(promptBox);
+        promptBox.style.visibility = "visible";
 
-    promptBox.style.left = promptXpos + 'px';
-
-    if (!boxHeight) {
-        boxHeight = 100;
-    }
-
-    var promptYpos = (windowHeight - boxHeight) / 2 + yScrolled;
-    if (promptYpos < 10) {
-        promptYpos = 10;
-    }
-
-    promptBox.style.top = promptYpos + 'px';
-        
-    promptBox.innerHTML = browserXslt(xmlUrl, xslUrl)
-
-    promptBox.style.visibility = "visible";
+        if (callback) {
+            callback();
+        }
+    });
 }
 
-function showPromptDialog(htmlFragmentURL, boxWidth, boxHeight) {
+function showPromptDialog(htmlFragmentURL, boxWidth, callback) {
     var promptBox = document.getElementById("prompt");
         
     hideMenu();        
-    
-    if (!promptBox) {
-        alert('promptBox is not defined');
-        return;
-    }
-        
-    var windowWidth = getWinWidth();
-    var windowHeight = getWinHeight();
-		
-	var yScrolled;
-	var xScrolled;
-	
-    if (browserMSIE) {
-        yScrolled = (document.documentElement.scrollTop || document.body.scrollTop);
-        xScrolled =(document.documentElement.scrollLeft || document.body.scrollLeft);
-    } else {
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-        
-        if (yScrolled > 0) {
-            // scrollbar exists 
-            windowWidth = windowWidth - 20;
-        }
-    }
-        
-    if (boxWidth) {
+
+    if (boxWidth) {    
         promptBox.style.width = boxWidth + 'px';
     }
-
-    if (boxHeight) {
-        promptBox.style.height = boxHeight + 'px';
-    }
-        
-    var promptBoxWidth = promptBox.offsetWidth;
     
-    var xoffset = (windowWidth - promptBoxWidth) / 2;
-	
-    if (xoffset < 2) {
-        xoffset = 2;
-    }
-        
-    var promptXpos = xoffset + xScrolled;
-
-    promptBox.style.left = promptXpos + 'px';
-
-    if (!boxHeight) {
-        boxHeight = 100;
-    }
-
-    promptYpos = (windowHeight - boxHeight) / 2 + yScrolled;
-    if (promptYpos < 10) {
-        promptYpos = 10;
-    }
-
-    promptBox.style.top = promptYpos + 'px';
-        
-    promptBox.innerHTML = xmlRequestSynchron(htmlFragmentURL, true);
-        
-    setBundleResources(promptBox);
-        
-    promptBox.style.visibility = "visible";
-
-    return promptBox;
+    xmlRequest(htmlFragmentURL, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                promptBox.innerHTML = req.responseText;
+                setBundleResources(promptBox);
+                centerBox(promptBox);
+                promptBox.style.visibility = "visible";
+                if (callback) {
+                    callback();
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
 }
 
-function renameLink(linkName)
-{
-	var promptDialog = showPromptDialog("/webfilesys/html/renameLink.html", 360);	
+function renameLink(linkName) {
+	showPromptDialog("/webfilesys/html/renameLink.html", 360, function() {	
 	
-	document.getElementById("oldLinkName").value = linkName;
-	document.getElementById("oldLinkNameShort").innerHTML = shortText(linkName, 35);
+	    document.getElementById("oldLinkName").value = linkName;
+	    document.getElementById("oldLinkNameShort").innerHTML = shortText(linkName, 35);
 
-	var newLinkName = document.getElementById("newLinkName");
-	newLinkName.value = linkName;
-	newLinkName.focus();
-	newLinkName.select();
+	    var newLinkName = document.getElementById("newLinkName");
+	    newLinkName.value = linkName;
+	    newLinkName.focus();
+	    newLinkName.select();
+	});
 }
 
 function validateNewLinkName() {
@@ -563,3 +520,11 @@ function validateEmailList(addressList) {
     return true;
 }
 
+function checkGrepParamsAndSubmit() {
+    if (document.getElementById("grepFilter").value.length == 0) {
+        alert(resourceBundle["grepFilterMissing"]);
+    } else {
+        document.grepForm.submit();
+        setTimeout('hidePrompt()', 1000);
+    }
+}

@@ -1,4 +1,4 @@
-package de.webfilesys.gui.xsl;
+package de.webfilesys.gui.ajax;
 
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.stats.DirStatsByType;
 import de.webfilesys.stats.TypeCategory;
@@ -19,9 +18,9 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XslFileTypeStatsHandler extends XslRequestHandlerBase
+public class XmlFileTypeStatsHandler extends XmlRequestHandlerBase
 {
-	public XslFileTypeStatsHandler(
+	public XmlFileTypeStatsHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
@@ -42,10 +41,6 @@ public class XslFileTypeStatsHandler extends XslRequestHandlerBase
 		Element treeStatsElement = doc.createElement("treeStats");
 			
 		doc.appendChild(treeStatsElement);
-			
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/fileTypeTreeStats.xsl\"");
-
-		doc.insertBefore(xslRef, treeStatsElement);
 
 		XmlUtil.setChildText(treeStatsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(treeStatsElement, "currentPath", currentPath, false);
@@ -84,7 +79,7 @@ public class XslFileTypeStatsHandler extends XslRequestHandlerBase
             sizeStatsElem.appendChild(clusterElem);
         }
 		
-		this.processResponse("fileTypeTreeStats.xsl", false);
+        processResponse();
     }
 	
 }

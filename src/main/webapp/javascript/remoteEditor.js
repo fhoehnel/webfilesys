@@ -32,7 +32,12 @@ function handleCloseAfterSave() {
             var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
 
             if (success == 'true') {
-            	setTimeout("window.close()", 100);
+                var mobile = resultElem.getElementsByTagName("mobile")[0].firstChild.nodeValue;
+                if (mobile == "true") {
+                    window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList";
+                } else {
+            	    setTimeout("window.close()", 100);
+                }
             } else {
             	alert(resourceBundle["saveFailure"]);
             }

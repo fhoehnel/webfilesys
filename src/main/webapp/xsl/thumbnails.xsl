@@ -56,6 +56,7 @@
 
   var addCopyAllowed = false;
   var addMoveAllowed = false;
+  var pathForScript = '<xsl:value-of select="/fileList/pathForScript" />';
   
   <xsl:if test="not(/fileList/clipBoardEmpty)">
     <xsl:if test="/fileList/copyOperation">
@@ -96,39 +97,6 @@
       document.form2.command.value = 'pasteLinks';
       document.form2.submit();
   }
-  
-  <xsl:if test="/fileList/fileGroup">
-    function exportGeoData()
-    {
-       showHourGlass();
-       if (ajaxRPC("checkForGeoData", "") == 'true')
-       {
-           hideHourGlass();
-           window.location.href = "/webfilesys/servlet?command=googleEarthDirPlacemarks";
-       } 
-       else
-       {
-           hideHourGlass();
-           alert(resourceBundle["noFilesWithGeoData"]);
-       }
-    } 
-    
-    function filesOSMap()
-    {
-       showHourGlass();
-       if (ajaxRPC("checkForGeoData", "") == 'true')
-       {
-           hideHourGlass();
-           var mapWin = window.open('/webfilesys/servlet?command=osMapFiles&amp;path=' + encodeURIComponent('<xsl:value-of select="/fileList/pathForScript" />'),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
-           mapWin.focus();
-       } 
-       else
-       {
-           hideHourGlass();
-           alert(resourceBundle["noFilesWithGeoData"]);
-       }
-    }
-  </xsl:if>
 
   <xsl:if test="/fileList/linksExist">
     function copyLinks()

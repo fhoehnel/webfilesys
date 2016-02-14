@@ -226,37 +226,13 @@ public class TailRequestHandler extends UserRequestHandler
         
         output.println("<script src=\"/webfilesys/javascript/ajax.js\" type=\"text/javascript\"></script>");
         output.println("<script src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
+        output.println("<script src=\"/webfilesys/javascript/tail.js\" type=\"text/javascript\"></script>");
         
         output.println("<script type=\"text/javascript\">");
-        output.println("var pollTimeout;");        
-        output.println("var autoRefresh = " + (autoRefresh ? "true" : "false") + ";");        
-
-        output.println("function startAutoRefresh() {");
-        output.println("    if (autoRefresh) {");
-        output.println("        startPollForChanges(3000);");
-        output.println("    }");
-        output.println("}");
-
-        output.println("function startPollForChanges(startDelay) {");
-        output.println("    pollTimeout = setTimeout(pollForChange, startDelay);");
-        output.println("}");
-
-        output.println("function pollForChange() {");
-        output.println("    if (checkFileChange('" + insertDoubleBackslash(filePath) + "', '" + fileToSend.lastModified() + "', '" + fileToSend.length() + "')) {");
-        output.println("        document.getElementById('tailForm').submit();");
-        output.println("    } else {");
-        output.println("        pollTimeout = setTimeout(pollForChange, 3000);");
-        output.println("    }");
-        output.println("}");
-
-        output.println("function changeAutoRefresh() {");
-        output.println("    var autoRefreshCheckbox = document.getElementById('autoRefresh');");
-        output.println("    if (autoRefreshCheckbox.checked) {");
-        output.println("        startPollForChanges(500);");
-        output.println("    } else {");
-        output.println("        window.clearTimeout(pollTimeout);");
-        output.println("    }");
-        output.println("}");
+        output.println("var autoRefresh = " + (autoRefresh ? "true" : "false") + ";");    
+        output.println("var pathForScript = '" + insertDoubleBackslash(filePath) + "';");
+        output.println("var lastModified = '" + fileToSend.lastModified() + "';");
+        output.println("var fileSize = '" + fileToSend.length() + "';");
         
         output.println("</script>");
         

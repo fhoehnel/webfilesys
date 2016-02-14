@@ -23,19 +23,19 @@ function linkGraphicsMenu(linkName, realPath, imgType)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:jsDelImageLink('" + linkName + "')",resourceBundle["label.deleteLink"],null);
+                 + menuEntry("javascript:jsDelImageLink('" + linkName + "')",resourceBundle["label.deleteLink"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:renameLink('" + linkName + "')",resourceBundle["label.renameLink"],null);
+                 + menuEntry("javascript:renameLink('" + linkName + "')",resourceBundle["label.renameLink"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:jsDescription('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"],null);
+                 + menuEntry("javascript:jsDescription('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"]);
     }
     
     if (imgType == '1') // JPEG
     {
         menuText = menuText 
-                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceBundle["alt.cameradata"],null);
+                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceBundle["alt.cameradata"]);
     }
     
     /*
@@ -44,18 +44,18 @@ function linkGraphicsMenu(linkName, realPath, imgType)
          (imgType == '3')))     // PNG
     {
         menuText = menuText 
-                 + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceBundle["label.makethumb"],null);
+                 + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceBundle["label.makethumb"]);
     }
     */
 
     menuText = menuText 
-             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",resourceBundle["label.comments"],null);
+             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",resourceBundle["label.comments"]);
 
     if ((parent.readonly != 'true') && 
         (parent.mailEnabled == 'true'))
     {
         menuText = menuText 
-                 + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",resourceBundle["label.sendfile"],null);
+                 + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",resourceBundle["label.sendfile"]);
     }
 
     if (parent.serverOS == 'win')
@@ -79,7 +79,7 @@ function linkGraphicsMenu(linkName, realPath, imgType)
     }
 
     menuText = menuText 
-             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",resourceBundle["label.origDir"],null);
+             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",resourceBundle["label.origDir"]);
 
     menuText = menuText + '</table>'; 
 
@@ -116,15 +116,11 @@ function origDir(path)
     parent.parent.frames[1].location.href="/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(path) + "&fastPath=true";
 }
 
-function emailLink(filePath)
-{
-    showPrompt('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 250);
-    
-	setBundleResources();
-    
-    document.emailForm.receiver.focus();
-    
-    document.emailForm.receiver.select();
+function emailLink(filePath) {
+    centeredDialog('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 250, function() {
+        document.emailForm.receiver.focus();
+        document.emailForm.receiver.select();
+    });
 }
 
 

@@ -59,9 +59,14 @@
   
       var delDirStarted = false;
 
-      function scrollToCurrent()
-      {
-          scrollTo(0,<xsl:value-of select="/folderTree/scrollPos" />);
+      function scrollToCurrent() {
+          if (currentDirId != "") {
+              var currentFolder = document.getElementById(currentDirId);
+              if (currentFolder) {
+                  currentFolder.scrollIntoView();
+                  window.scrollBy(0, -40);
+              }
+          }
       }
 
       <xsl:if test="folderTree/loginEvent">

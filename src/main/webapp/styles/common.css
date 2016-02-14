@@ -170,6 +170,11 @@ td.loginTitle {
     font-weight: bold;
 }
 
+span.selfRegistrationSubTitle {
+    color: #808080;
+    font-size: 15px;
+}
+
 td.loginFormLabel {
     color:navy;
     font-size:13px;

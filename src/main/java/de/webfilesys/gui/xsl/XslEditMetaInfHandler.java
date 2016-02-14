@@ -281,13 +281,13 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		else
 		{
 			if (path.endsWith(".") && (colorChanged || iconChanged)) {
-				String encodedPath  = UTF8URLEncoder.encode(path.substring(0, path.length() - 1));
-	            output.println("if (window.opener) {window.opener.parent.frames[1].location.href='/webfilesys/servlet?command=exp&actPath=" + encodedPath + "&expand=" + encodedPath + "&fastPath=true'};");
+				String encodedPath  = UTF8URLEncoder.encode(path.substring(0, path.length() - 2));
+	            output.println("if (window.opener) {window.opener.parent.frames[1].location.href='/webfilesys/servlet?command=exp&expandPath=" + encodedPath + "&fastPath=true'};");
 		    } else {
 	            output.println("if (window.opener) {window.opener.parent.frames[2].location.href='/webfilesys/servlet?command=listFiles&keepListStatus=true'};");
 		    }
 		}
-		
+	    
 		output.println("setTimeout('self.close()',1000);");
 		output.println("</script>");
 		output.println("</head>");

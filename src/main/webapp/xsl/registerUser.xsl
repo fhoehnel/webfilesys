@@ -51,8 +51,8 @@
           <img src="/webfilesys/images/logo.gif" border="0" />
           <div style="width:100%;padding-top:10px;padding-left:0px;">
             WebFileSys
-            <br/>
-            <span style="font-style:italic">
+            <br/><br/>
+            <span class="selfRegistrationSubTitle">
               <xsl:value-of select="resources/msg[@key='label.regtitle']/@value" />
             </span>
             
@@ -280,6 +280,18 @@
                       </option>
                     </xsl:for-each>
                     
+                  </select>
+                </td>
+              </tr>
+              
+              <tr>
+                <td class="formParm1">
+                  <xsl:value-of select="resources/msg[@key='label.userRole']/@value" />
+                </td>
+                <td class="formParm2">
+                  <select name="userRole" size="1">
+                    <option value="webspace" selected="selected">webspace</option>
+                    <option value="blog">blog</option>
                   </select>
                 </td>
               </tr>

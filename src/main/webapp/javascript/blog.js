@@ -338,66 +338,62 @@ function singleFileBinaryUpload(file) {
       
     sizeOfCurrentFile = fileSize;
 	  
-    if (existUploadTargetFile(fileName))
-    {
-        if (!confirm(fileName + ': ' + resourceBundle["upload.file.exists"])) 
-        {
+	checkMultiUploadTargetExists(fileName, 
+	    function() {
             var nextFile = selectedForUpload.shift();
-            if (nextFile) 
-            {
+            if (nextFile) {
                 new singleFileBinaryUpload(nextFile)
             }
-
-            return;
-        }
-    }
+	    }, 
+	    function() {
+            lastUploadedFile = fileName;
       
-    lastUploadedFile = fileName;
-      
-    document.getElementById("currentFile").innerHTML = shortText(fileName, 50);
+            document.getElementById("currentFile").innerHTML = shortText(fileName, 50);
           
-    document.getElementById("statusText").innerHTML = "0 " + resourceBundle["label.of"] + " " + formatDecimalNumber(fileSize) + " bytes ( 0%)";
+            document.getElementById("statusText").innerHTML = "0 " + resourceBundle["label.of"] + " " + formatDecimalNumber(fileSize) + " bytes ( 0%)";
 
-    var statusWin = document.getElementById("uploadStatus");
-    statusWin.style.visibility = 'visible';
+            var statusWin = document.getElementById("uploadStatus");
+            statusWin.style.visibility = 'visible';
 
-    var now = new Date();
+            var now = new Date();
 
-    var serverFileName = document.getElementById("dateYear").value + "-" +
-                         document.getElementById("dateMonth").value + "-" +
-                         document.getElementById("dateDay").value + "-" +
-                         now.getTime() + "-" + currentFileNum + 
-                         getFileNameExt(fileName).toLowerCase();
+            var serverFileName = document.getElementById("dateYear").value + "-" +
+                                 document.getElementById("dateMonth").value + "-" +
+                                 document.getElementById("dateDay").value + "-" +
+                                 now.getTime() + "-" + currentFileNum + 
+                                 getFileNameExt(fileName).toLowerCase();
                          
-    var firstUploadServerFileName = document.getElementById("firstUploadFileName");
-    if (firstUploadServerFileName.value.length == 0) {
-        firstUploadServerFileName.value = serverFileName;
-    }
+            var firstUploadServerFileName = document.getElementById("firstUploadFileName");
+            if (firstUploadServerFileName.value.length == 0) {
+                firstUploadServerFileName.value = serverFileName;
+            }
 
-    var uploadUrl = "/webfilesys/upload/singleBinary/blog/" + serverFileName; 
+            var uploadUrl = "/webfilesys/upload/singleBinary/blog/" + serverFileName; 
 
-    xhr = new XMLHttpRequest();  
+            xhr = new XMLHttpRequest();  
 
-    xhr.onreadystatechange = handleUploadState;
-    xhr.upload.addEventListener("progress", updateProgress, false);
-    xhr.upload.addEventListener("load", uploadComplete, false);
+            xhr.onreadystatechange = handleUploadState;
+            xhr.upload.addEventListener("progress", updateProgress, false);
+            xhr.upload.addEventListener("load", uploadComplete, false);
 
-    xhr.open("POST", uploadUrl, true);  
+            xhr.open("POST", uploadUrl, true);  
 
-	if (!browserMSIE) {
-        xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');  
-	}
+	        if (!browserMSIE) {
+                xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');  
+	        }
          
-    if (firefoxDragDrop) {
-        try {
-            xhr.sendAsBinary(file.getAsBinary());    
-        } catch (ex) {
-            // Chrome has no file.getAsBinary() function
-            xhr.send(file);
-        }
-    } else {
-        xhr.send(file);
-    }    
+            if (firefoxDragDrop) {
+                try {
+                    xhr.sendAsBinary(file.getAsBinary());    
+                } catch (ex) {
+                    // Chrome has no file.getAsBinary() function
+                    xhr.send(file);
+                }
+            } else {
+                xhr.send(file);
+            }    
+	    }
+	);
 }
 
 function handleUploadState() {
@@ -493,7 +489,6 @@ function jsComments(path) {
 }
 
 function deleteBlogEntry(fileName) {
-
     if (!confirm(resourceBundle["blog.confirmDelete"])) {
         return;
     }
@@ -502,24 +497,30 @@ function deleteBlogEntry(fileName) {
     
     var url = "/webfilesys/servlet?command=blog&cmd=deleteEntry&fileName=" + encodeURIComponent(fileName);
     
-    var responseXml = xmlRequestSynchron(url);
-   
-    var success = null;
-   
-    if (responseXml) {
-        var successItem = responseXml.getElementsByTagName("success")[0];
-        if (successItem) {
-            success = successItem.firstChild.nodeValue;
-        }         
-    }
-
-    hideHourGlass();    
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var responseXml = req.responseXML;
     
-    if (success == "deleted") {
-        window.location.href = "/webfilesys/servlet?command=blog";
-    } else {
-        alert(resourceBundle["blog.deleteError"]);
-    }
+                var success = null;
+                var successItem = responseXml.getElementsByTagName("success")[0];
+                if (successItem) {
+                    success = successItem.firstChild.nodeValue;
+                }         
+    
+                hideHourGlass();    
+    
+                if (success == "deleted") {
+                    window.location.href = "/webfilesys/servlet?command=blog";
+                } else {
+                    alert(resourceBundle["blog.deleteError"]);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+                hideHourGlass();    
+            }
+        }
+    });
 }
 
 function moveBlogEntryUp(fileName, posInPage) {
@@ -536,30 +537,36 @@ function moveBlogEntry(fileName, direction, posInPage) {
     
     var url = "/webfilesys/servlet?command=blog&cmd=moveEntry&fileName=" + encodeURIComponent(fileName) + "&direction=" + direction;
     
-    var responseXml = xmlRequestSynchron(url);
-   
-    var success = null;
-   
-    if (responseXml) {
-        var successItem = responseXml.getElementsByTagName("success")[0];
-        if (successItem) {
-            success = successItem.firstChild.nodeValue;
-        }         
-    }
-
-    hideHourGlass();    
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var responseXml = req.responseXML;
     
-    if (success == "true") {
-        if ((direction == "up") && (posInPage > 1)) {
-            posInPage--;
-        } else if (direction == "down") {
-            posInPage++;
+                var success = null;
+                var successItem = responseXml.getElementsByTagName("success")[0];
+                if (successItem) {
+                    success = successItem.firstChild.nodeValue;
+                }         
+    
+                hideHourGlass();    
+    
+                if (success == "true") {
+                    if ((direction == "up") && (posInPage > 1)) {
+                        posInPage--;
+                    } else if (direction == "down") {
+                        posInPage++;
+                    }
+    
+                    window.location.href = "/webfilesys/servlet?command=blog&random=" + (new Date().getTime()) + "#entry-" + posInPage;
+                } else {
+                    alert(resourceBundle["blog.moveError"]);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+                hideHourGlass();    
+            }
         }
-    
-        window.location.href = "/webfilesys/servlet?command=blog&random=" + (new Date().getTime()) + "#entry-" + posInPage;
-    } else {
-        alert(resourceBundle["blog.moveError"]);
-    }
+    });
 }
 
 function loadGoogleMapsAPIScriptCode() {
@@ -685,85 +692,26 @@ function toggleGeoData(checkbox) {
 }
 
 function publishBlog() {
-    publishCont = document.getElementById("publishCont");
+    var publishCont = document.getElementById("publishCont");
         
     if (!publishCont) {
         alert('publishCont is not defined');
         return;
     }
         
-    var windowWidth = getWinWidth();
-    var windowHeight = getWinHeight();
-    
-    if (browserMSIE) 
-    {
-        yScrolled = (document.documentElement.scrollTop || document.body.scrollTop);
-        xScrolled =(document.documentElement.scrollLeft || document.body.scrollLeft);
-    }
-    else
-    {
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-        
-        if (yScrolled > 0)
-        {
-            // scrollbar exists 
-            windowWidth = windowWidth - 20;
-        }
-    }
-        
-    var boxWidth = 500;
-        
-    if (boxWidth > windowWidth - 10) {
-        boxWidth = windowWidth - 10;
-    }
-
-    publishCont.style.width = boxWidth + 'px';
-
-    var boxHeight = 250;
-
-    /*
-    if (boxHeight > windowHeight - 60) {
-        boxHeight = windowHeight - 60;
-    }
-    */
-
-    publishCont.style.height = boxHeight + 'px';
-        
-    publishContWidth = publishCont.offsetWidth;
-    
-    xoffset = (windowWidth - publishContWidth) / 2;
-    
-    if (xoffset < 2)
-    {
-        xoffset = 2;
-    }
-        
-    publishContXpos = xoffset + xScrolled;
-
-    publishCont.style.left = publishContXpos + 'px';
-
-    publishContYpos = (windowHeight - boxHeight) / 2 + yScrolled;
-    if (publishContYpos < 10)
-    {
-        publishContYpos = 10;
-    }
-
-    publishCont.style.top = publishContYpos + 'px';
-        
     var xmlUrl = "/webfilesys/servlet?command=blog&cmd=publishForm";
         
     var xslUrl = "/webfilesys/xsl/blog/publishBlog.xsl";    
         
-    publishCont.innerHTML = browserXslt(xmlUrl, xslUrl);
-    
-    setBundleResources();
-
-    publishCont.style.visibility = "visible";
+    htmlFragmentByXslt(xmlUrl, xslUrl, publishCont, function() {
+        setBundleResources();
+        centerBox(publishCont);
+        publishCont.style.visibility = "visible";
+    });
 }
 
 function hidePublishForm() {
-    publishCont = document.getElementById("publishCont");
+    var publishCont = document.getElementById("publishCont");
         
     if (!publishCont) {
         alert('publishCont is not defined');
@@ -817,7 +765,7 @@ function showPublishResult() {
 
                 var tableCell = document.createElement("td");
                 tableCell.setAttribute("class", "formParm1");
-                tableCell.innerHTML = resourceBundle["label.accesscode"];
+                tableCell.innerHTML = resourceBundle["blog.publicLink"] + ":";
                 tableRow.appendChild(tableCell);
 
                 tableRow = document.createElement("tr");
@@ -845,6 +793,8 @@ function showPublishResult() {
                 document.getElementById("publishBlogButton").style.display = "none";                    
                 document.getElementById("unpublishButton").style.display = "inline";
                 document.getElementById("publicURLButton").style.display = "inline";
+
+                centerBox(document.getElementById("publishCont"));
             }
         }
     }
@@ -884,18 +834,24 @@ function showPublicURL() {
         return;
     }
     
-    publishBlog();
+    publishCont.innerHTML = "";
     
-    publishCont.style.visibility = "hidden";
-
-    document.getElementById("publishTable").innerHTML = "";
-
+    var publishHead = document.createElement("div");
+    publishHead.setAttribute("class", "promptHead");    
+    publishHead.innerHTML = resourceBundle["blog.publishTitle"];
+    publishCont.appendChild(publishHead);
+    
+    var publishTable = document.createElement("table");
+    publishTable.id = "publishTable";
+    publishTable.setAttribute("class", "blogPublishForm");    
+    publishCont.appendChild(publishTable);
+    
     var tableRow = document.createElement("tr");
     document.getElementById("publishTable").appendChild(tableRow);
 
     var tableCell = document.createElement("td");
     tableCell.setAttribute("class", "formParm1");
-    tableCell.innerHTML = resourceBundle["label.accesscode"];
+    tableCell.innerHTML = resourceBundle["blog.publicLink"] + ":";
     tableRow.appendChild(tableCell);
 
     tableRow = document.createElement("tr");
@@ -918,7 +874,10 @@ function showPublicURL() {
     closeButton.setAttribute("type", "button");
     closeButton.setAttribute("value", resourceBundle["button.closewin"]);
     closeButton.setAttribute("onclick", "hidePublishForm()");
+    closeButton.style.marginBottom = "10px";
     tableCell.appendChild(closeButton);
+    
+    centerBox(publishCont);
     
     publishCont.style.visibility = "visible";
 }
@@ -959,15 +918,15 @@ function blogComments(filePath, posInPage) {
     
     var xslUrl = '/webfilesys/xsl/blog/comments.xsl';
 
-    commentCont.innerHTML = browserXslt(xmlUrl, xslUrl);
+    htmlFragmentByXslt(xmlUrl, xslUrl, commentCont, function() {
+        document.getElementById("posInPage").value = posInPage;
     
-    document.getElementById("posInPage").value = posInPage;
+        setBundleResources();
     
-    setBundleResources();
-    
-    centerBox(commentCont);
+        centerBox(commentCont);
 
-    commentCont.style.visibility = "visible";
+        commentCont.style.visibility = "visible";
+    });
 }
 
 function closeBlogComments() {
@@ -1039,34 +998,40 @@ function confirmDelComments(filePath) {
     showHourGlass();
     
     var url = "/webfilesys/servlet?command=blog&cmd=delComments&filePath=" + encodeURIComponent(filePath);
-
-    var responseXml = xmlRequestSynchron(url);
-   
-    var success = null;
-   
-    if (responseXml) {
-        var successItem = responseXml.getElementsByTagName("success")[0];
-        if (successItem) {
-            success = successItem.firstChild.nodeValue;
-        }         
-    }
-
-    if ((success != null) && (success == "true")) {
-        var posInPage = document.getElementById("posInPage").value;
-        document.getElementById("comment-" + posInPage).innerHTML = "0";
+    
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var responseXml = req.responseXML;
+    
+                var success = null;
+                var successItem = responseXml.getElementsByTagName("success")[0];
+                if (successItem) {
+                    success = successItem.firstChild.nodeValue;
+                }         
+    
+                if ((success != null) && (success == "true")) {
+                    var posInPage = document.getElementById("posInPage").value;
+                    document.getElementById("comment-" + posInPage).innerHTML = "0";
                 
-        var commentNewLabel = document.getElementById("newComment-" + posInPage);
-        if (commentNewLabel) {
-            commentNewLabel.style.display = 'none';
+                    var commentNewLabel = document.getElementById("newComment-" + posInPage);
+                    if (commentNewLabel) {
+                        commentNewLabel.style.display = 'none';
+                    }
+    
+                    var commentCont = document.getElementById("commentCont");
+                    commentCont.style.visibility = "hidden";
+                } else {
+                    alert("failed to delete comments");
+                }
+
+                hideHourGlass();    
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+                hideHourGlass();    
+            }
         }
-    
-        var commentCont = document.getElementById("commentCont");
-        commentCont.style.visibility = "hidden";
-    } else {
-        alert("failed to delete comments");
-    }
-    
-    hideHourGlass();   
+    });
 }
 
 function showSubscribers() {
@@ -1076,11 +1041,10 @@ function showSubscribers() {
         
     var xslUrl = "/webfilesys/xsl/blog/subscriberList.xsl";    
         
-    subscribeCont.innerHTML = browserXslt(xmlUrl, xslUrl);
-    
-    setBundleResources();
-
-    subscribeCont.style.visibility = "visible";
+    htmlFragmentByXslt(xmlUrl, xslUrl, subscribeCont, function() {
+        setBundleResources();
+        subscribeCont.style.visibility = "visible";
+    });
 }
 
 function showSubscribeForm() {
@@ -1140,7 +1104,6 @@ function subscribeKeyPress(e) {
     return true;
 }
 
-
 function showSettings() {
 
     var settingsCont = document.getElementById("settingsCont");
@@ -1149,13 +1112,11 @@ function showSettings() {
     
     var xslUrl = "/webfilesys/xsl/blog/settings.xsl";
 
-    settingsCont.innerHTML = browserXslt(xmlUrl, xslUrl);
-    
-    setBundleResources();
-    
-    centerBox(settingsCont);
-
-    settingsCont.style.visibility = "visible";
+    htmlFragmentByXslt(xmlUrl, xslUrl, settingsCont, function() {
+        setBundleResources();
+        centerBox(settingsCont);
+        settingsCont.style.visibility = "visible";
+    });
 }
 
 function hideSettings() {
@@ -1307,11 +1268,10 @@ function switchEmojiSelection(textareaId) {
     
         var xslUrl = "/webfilesys/xsl/blog/emojiList.xsl";
 
-        document.getElementById("emojiSelCont").innerHTML = browserXslt(xmlUrl, xslUrl);
-        
-        setBundleResources();
-    
-        document.getElementById("emojiSelCont").style.display = "block";
+        htmlFragmentByXslt(xmlUrl, xslUrl, document.getElementById("emojiSelCont"), function() {
+            setBundleResources();
+            document.getElementById("emojiSelCont").style.display = "block";
+        });
     }
 }
 

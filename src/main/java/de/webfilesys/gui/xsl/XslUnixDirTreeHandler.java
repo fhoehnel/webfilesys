@@ -107,26 +107,6 @@ public class XslUnixDirTreeHandler extends XslDirTreeHandler
 			XmlUtil.setChildText(folderTreeElement, "fastPath", insertDoubleBackslash(actPath));
 		}
 
-		int topOfScreenDir=0;
-
-		if (currentDirNum > 5)
-		{
-			topOfScreenDir=currentDirNum - 5;
-		}
-
-		int scrollPos;
-		
-		if (browserManufacturer == BROWSER_MSIE)
-		{
-			scrollPos = topOfScreenDir * 17;  // pixels per line
-		}
-		else
-		{
-			scrollPos = topOfScreenDir * 18;  // pixels per line
-		}
-
-		XmlUtil.setChildText(folderTreeElement, "scrollPos", "" + scrollPos);
-
-        this.processResponse("folderTree.xsl");
+        processResponse("folderTree.xsl");
 	}
 }

@@ -43,13 +43,13 @@ function jsContextMenu(fileName, imgType, domId)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:delImg('" + scriptPreparedFile + "')",resourceBundle["label.delete"],null);
+                 + menuEntry("javascript:delImg('" + scriptPreparedFile + "')",resourceBundle["label.delete"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:jsRenameImg('" + scriptPreparedPath + "')",resourceBundle["label.renameFile"],null);
+                 + menuEntry("javascript:jsRenameImg('" + scriptPreparedPath + "')",resourceBundle["label.renameFile"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"],null);
+                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"]);
 
         if (addCopyAllowed) 
         {
@@ -58,7 +58,7 @@ function jsContextMenu(fileName, imgType, domId)
         }
         
         menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"],null);
+                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"]);
 
         if (addMoveAllowed) 
         {
@@ -67,17 +67,17 @@ function jsContextMenu(fileName, imgType, domId)
         }
         
         menuText = menuText 
-                 + menuEntry("javascript:jsEditDesc('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"],null);
+                 + menuEntry("javascript:jsEditDesc('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:jsResizeParms('" + scriptPreparedPath + "')",resourceBundle["label.editPicture"],null);
+                 + menuEntry("javascript:jsResizeParms('" + scriptPreparedPath + "')",resourceBundle["label.editPicture"]);
 
     }
 
     if (imgType == '1') // JPEG
     {
         menuText = menuText 
-                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceBundle["alt.cameradata"],null);
+                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceBundle["alt.cameradata"]);
     }
 
     if (parent.readonly != 'true')
@@ -87,7 +87,7 @@ function jsContextMenu(fileName, imgType, domId)
             (imgType == '3'))    // PNG
         {
             menuText = menuText 
-                     + menuEntry("javascript:rotateFlipMenu('" + shortFileName + "', '" + scriptPreparedPath + "', '" + domId + "', '" + imgType + "')",resourceBundle["label.rotateFlip"] + ' >',null);
+                     + menuEntry("javascript:rotateFlipMenu('" + shortFileName + "', '" + scriptPreparedPath + "', '" + domId + "', '" + imgType + "')",resourceBundle["label.rotateFlip"] + ' >');
         }
 
         /*
@@ -95,32 +95,32 @@ function jsContextMenu(fileName, imgType, domId)
             (imgType == '3'))     // PNG
         {
             menuText = menuText 
-                     + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceBundle["label.makethumb"],null);
+                     + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceBundle["label.makethumb"]);
         }
         */
     }
 
     menuText = menuText 
-             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",resourceBundle["label.comments"],null);
+             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",resourceBundle["label.comments"]);
 
     if (parent.readonly != 'true')
     { 
         menuText = menuText 
-                 + menuEntry("javascript:categories('" + scriptPreparedPath + "')",resourceBundle["label.assignCategories"],null);
+                 + menuEntry("javascript:categories('" + scriptPreparedPath + "')",resourceBundle["label.assignCategories"]);
 
         if (parent.mailEnabled == 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:jsSendFile('" + scriptPreparedFile + "')",resourceBundle["label.sendfile"],null);
+                     + menuEntry("javascript:jsSendFile('" + scriptPreparedFile + "')",resourceBundle["label.sendfile"]);
         }
         
         menuText = menuText 
-                 + menuEntry("javascript:publishFile('" + scriptPreparedPath + "')",resourceBundle["label.publish"],null);
+                 + menuEntry("javascript:publishFile('" + scriptPreparedPath + "')",resourceBundle["label.publish"]);
         
     }
 
     menuText = menuText 
-             + menuEntry("javascript:startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')",resourceBundle["startSlideshowHere"],null);
+             + menuEntry("javascript:startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')",resourceBundle["startSlideshowHere"]);
         
     menuText = menuText + '</table>'; 
 
@@ -150,9 +150,10 @@ function jsDeleteImg(path)
     }
 }
 
-function delImg(fileName)
-{
-    showPrompt('/webfilesys/servlet?command=ajaxRPC&method=deleteFilePrompt&param1=' + encodeURIComponent(fileName), '/webfilesys/xsl/confirmDeleteFile.xsl', 320, 130);
+function delImg(fileName) {
+    centeredDialog('/webfilesys/servlet?command=ajaxRPC&method=deleteFilePrompt&param1=' + encodeURIComponent(fileName), 
+                   '/webfilesys/xsl/confirmDeleteFile.xsl', 
+                   320, 130);
 }
 
 function deleteFile(fileName)
@@ -160,13 +161,11 @@ function deleteFile(fileName)
     window.location.href = "/webfilesys/servlet?command=fmdelete&fileName=" + fileName + "&deleteRO=yes";
 }
 
-function jsRenameImg(path)
-{
-    showPrompt('/webfilesys/servlet?command=renameImagePrompt&imagePath=' + encodeURIComponent(path), '/webfilesys/xsl/renameImage.xsl', 360);
-
-    document.renameForm.newFileName.focus();
-    
-    document.renameForm.newFileName.select();
+function jsRenameImg(path) {
+    centeredDialog('/webfilesys/servlet?command=renameImagePrompt&imagePath=' + encodeURIComponent(path), '/webfilesys/xsl/renameImage.xsl', 360, 160, function() {
+        document.renameForm.newFileName.focus();
+        document.renameForm.newFileName.select();
+    });
 }
 
 function jsEditDesc(path)
@@ -199,16 +198,25 @@ function jsExifData(path)
     exifWin.focus();
 }
 
-function jsRotate(path, degrees, domId)
-{
-    if (checkLossless(path))
-    {
-        ajaxRotate(path, degrees, domId);
-    }
-    else
-    {
-        window.location.href = '/webfilesys/servlet?command=transformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(path);
-    }
+function jsRotate(path, degrees, domId) {
+    var xmlUrl = '/webfilesys/servlet?command=checkLossless&imgPath=' + encodeURIComponent(path);
+
+	xmlRequest(xmlUrl, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var responseXml = req.responseXML;
+    
+                var losslessItem = responseXml.getElementsByTagName("lossless")[0];            
+                var lossless = losslessItem.firstChild.nodeValue;
+                 
+                if (lossless == "true") {
+                    ajaxRotate(path, degrees, domId);
+                } else {
+                    window.location.href = '/webfilesys/servlet?command=transformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(path);
+                }
+            }
+        }
+    });    
 }
 
 function jsFlip(path, direction)
@@ -222,15 +230,11 @@ function jsComments(path)
     commentWin.focus();
 }
 
-function jsSendFile(fileName)
-{
-    showPrompt('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 250);
-    
-	setBundleResources();
-    
-    document.emailForm.receiver.focus();
-    
-    document.emailForm.receiver.select();
+function jsSendFile(fileName) {
+    centeredDialog('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 250, function() {
+        document.emailForm.receiver.focus();
+        document.emailForm.receiver.select();
+    });
 }
 
 function copyToClipboard(fileName)
@@ -288,22 +292,22 @@ function rotateFlipMenu(shortPath, path, domId, imgType)
                  + '</tr>';
 
     menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','90','" + domId + "')",resourceBundle["label.rotateright"],null);
+               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','90','" + domId + "')",resourceBundle["label.rotateright"]);
 
     menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','270','" + domId + "')",resourceBundle["label.rotateleft"],null);
+               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','270','" + domId + "')",resourceBundle["label.rotateleft"]);
 
     menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','180','" + domId + "')",resourceBundle["label.rotate180"],null);
+               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','180','" + domId + "')",resourceBundle["label.rotate180"]);
                
     if ((imgType == '1')  &&        // JPEG
         ((parent.serverOS == "win") || (jpegtranAvail == 'true')))
     {
         menuText = menuText 
-                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Horizontal')",resourceBundle["label.mirrorhoriz"],null);
+                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Horizontal')",resourceBundle["label.mirrorhoriz"]);
 
         menuText = menuText 
-                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Vertical')",resourceBundle["label.mirrorvert"],null);
+                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Vertical')",resourceBundle["label.mirrorvert"]);
     }
 
     menuText = menuText + '</table>'; 

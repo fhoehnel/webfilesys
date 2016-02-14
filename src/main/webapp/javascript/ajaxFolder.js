@@ -32,7 +32,7 @@ function checkLongRunningDelDir()
 {
     if (delDirStarted)
     {
-        showMessage(resourceBundle["msg.delDirStarted"]);
+        toast(resourceBundle["msg.delDirStarted"], 4000);
     }
 }
 
@@ -114,41 +114,10 @@ function showXmlResult()
              var message = item.firstChild.nodeValue;
              
              hideMenu();
-        
-             msgBox1 = document.getElementById("msg1");
-        
-             if (window.ActiveXObject !== undefined) 
-             {
-                 windowWidth = document.body.clientWidth;
-                 windowHeight = document.body.clientHeight;
-                 yScrolled = document.body.scrollTop;
-                 xScrolled = document.body.scrollLeft;
-             }
-             else
-             {
-                 windowWidth = window.innerWidth;
-                 windowHeight = window.innerHeight;
-                 yScrolled = window.pageYOffset;
-                 xScrolled = window.pageXOffset;
-             }
-        
-             msgXpos = 10 + xScrolled;
-        
-             msgBox1.style.left = msgXpos + 'px';
-
-             msgYpos = (windowHeight - 100) / 2 + yScrolled;
-             if (msgYpos < 10)
-             {
-                 msgYpos = 10;
-             }
-
-             msgBox1.style.top = msgYpos + 'px';
-        
-             msgBox1.style.visibility = "visible";
-             
-             msgBox1.innerHTML = message;
              
              clipboardEmpty = false;
+
+             toast(message, 2500);
              
              setTimeout("hideMsg()", 2000);
         }
@@ -348,7 +317,7 @@ function listFiles(id)
 
 function exp(parentDivId, lastInLevel)
 {
-    parentDiv = document.getElementById(parentDivId);
+    var parentDiv = document.getElementById(parentDivId);
    
     if (!parentDiv)
     {
@@ -393,43 +362,45 @@ function exp(parentDivId, lastInLevel)
     setTimeout('setTooltips()', 500);
 }
     
-function expMozilla(parentDiv, xmlUrl, xslUrl) { 
-    var xslStyleSheet = xmlRequestSynchron(xslUrl);
-   
-    if (!xslStyleSheet) {
-        window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-
-        return;
-    }
-
-	xmlRequest(xmlUrl, function() {
+function expMozilla(parentDiv, xmlUrl, xslUrl) {
+	xmlRequest(xslUrl, function() {
         if (req.readyState == 4) {
             if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
+			    var xslStyleSheet = req.responseXML;
+
+	            xmlRequest(xmlUrl, function() {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+			                var xmlDoc = req.responseXML;
 				
-				if (!xmlDoc) {
-                    window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-                    return;
-				}
+				            if (!xmlDoc) {
+                                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
+                                return;
+				            }
 				
-                var xsltProcessor = new XSLTProcessor();
+                            var xsltProcessor = new XSLTProcessor();
        
-                xsltProcessor.importStylesheet(xslStyleSheet);
+                            xsltProcessor.importStylesheet(xslStyleSheet);
 
-                var fragment = xsltProcessor.transformToFragment(xmlDoc, document);
+                            var fragment = xsltProcessor.transformToFragment(xmlDoc, document);
        
-                parentDiv.innerHTML = '';
+                            parentDiv.innerHTML = '';
 
-                currentDirId = fragment.childNodes[0].id;
+                            currentDirId = fragment.childNodes[0].id;
 
-                parentDiv.parentNode.replaceChild(fragment, parentDiv);
-            } else {
+                            parentDiv.parentNode.replaceChild(fragment, parentDiv);
+                        } else {
+                            window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
+                            return;
+			            }
+			        }
+		        });
+		    } else {
                 window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-                return;
-			}
+		    }
 		}
 	});
-}
+}    
 
 function expMSIE(parentDiv, xmlUrl, xslUrl)
 { 
@@ -456,39 +427,43 @@ function expMSIE(parentDiv, xmlUrl, xslUrl)
 }
 
 function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) { 
-    var xslStyleSheet = xmlRequestSynchron(xslUrl);
-   
-    if (!xslStyleSheet) {
-        window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
 
-        return;
-    }
-	
-	xmlRequest(xmlUrl, function() {
+	xmlRequest(xslUrl, function() {
         if (req.readyState == 4) {
             if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
+			    var xslStyleSheet = req.responseXML;
 
-				if (!xmlDoc) {
-                    window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-                    return;
-				}
+	            xmlRequest(xmlUrl, function() {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+			                var xmlDoc = req.responseXML;
 
-                var newId = xmlDoc.documentElement.getAttribute('id');
+				            if (!xmlDoc) {
+                                alert(resourceBundle["alert.communicationFailure"]);
+                                return;
+				            }
 
-                // browser-independend client-side XSL transformation with google ajaxslt 
+                            var newId = xmlDoc.documentElement.getAttribute('id');
+
+                            // browser-independend client-side XSL transformation with google ajaxslt 
        
-                var html = xsltProcess(xmlDoc, xslStyleSheet);
+                            var html = xsltProcess(xmlDoc, xslStyleSheet);
 
-                parentDiv.outerHTML = html;
+                            parentDiv.outerHTML = html;
     
-                currentDirId = newId;
+                            currentDirId = newId;
+                        } else {
+                            alert(resourceBundle["alert.communicationFailure"]);
+                            return;
+			            }
+                    }
+                });		
             } else {
+                alert(resourceBundle["alert.communicationFailure"]);
                 window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-                return;
-			}
+            }
         }
-    });		
+    });
 }
 
 function synchronize(path, domId)
@@ -523,47 +498,9 @@ function selectSyncFolderResult()
              item = req.responseXML.getElementsByTagName("message")[0];            
              var message = item.firstChild.nodeValue;
              
-             showMessage(message);
+             toast(message, 4000);
         }
     }
-}
-
-function showMessage(message)
-{
-    msgBox1 = document.getElementById("msg1");
-        
-    if (window.ActiveXObject !== undefined) 
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-        xScrolled = document.body.scrollLeft;
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-    }
-        
-    msgXpos = 10 + xScrolled;
-       
-    msgBox1.style.left = msgXpos + 'px';
-
-    msgYpos = (windowHeight - 100) / 2 + yScrolled;
-    if (msgYpos < 10)
-    {
-        msgYpos = 10;
-    }
-
-    msgBox1.style.top = msgYpos + 'px';
-        
-    msgBox1.style.visibility = "visible";
-             
-    msgBox1.innerHTML = message;
-             
-    setTimeout("hideMsg()", 4000);
 }
 
 function openSyncWindow()
@@ -600,19 +537,22 @@ function deselectSyncFolderResult()
     }
 }
 
-function cancelSynchronize()
-{
+function cancelSynchronize() {
     deselectFolder();
 
     url = "/webfilesys/servlet?command=selectSyncFolder&cmd=deselect";
 
-    xmlRequestSynchron(url);
-
-    parent.syncStarted = false;
-    
-    hideMenu();    
-    
-    stopMenuClose = true;
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                parent.syncStarted = false;
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+            hideMenu();    
+            stopMenuClose = true;
+        }
+    });
 }
 
 function compareFolders(path, domId)
@@ -633,13 +573,17 @@ function cancelCompare()
 
     url = "/webfilesys/servlet?command=selectCompFolder&cmd=deselect";
 
-    xmlRequestSynchron(url);
-
-    parent.compStarted = false;
-    
-    hideMenu();    
-    
-    stopMenuClose = true;
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                parent.compStarted = false;
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+            hideMenu();    
+            stopMenuClose = true;
+        }
+    });
 }
 
 function deselectCompFolders()
@@ -660,9 +604,8 @@ function deselectCompFolderResult()
     }
 }
 
-function compFolderParms()
-{
-    showPrompt('/webfilesys/servlet?command=compFolderParms', '/webfilesys/xsl/compFolderParms.xsl', 340, 325);
+function compFolderParms() {
+    centeredDialog('/webfilesys/servlet?command=compFolderParms', '/webfilesys/xsl/compFolderParms.xsl', 340, 325);
 }
 
 function openCompWindow()
@@ -700,7 +643,7 @@ function selectCompFolderResult()
              item = req.responseXML.getElementsByTagName("message")[0];            
              var message = item.firstChild.nodeValue;
              
-             showMessage(message);
+             toast(message, 4000);
         }
     }
 }

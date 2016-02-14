@@ -29,28 +29,29 @@ public class AjaxCheckFolderExistHandler extends XmlRequestHandlerBase {
 	protected void process() {
         String path = getParameter("param1");
         
+        boolean pathInvalid = false;
+        
         if (CommonUtils.isEmpty(path)) {
-            return;
+            pathInvalid = true;
+        } else {
+            if ((File.separatorChar == '\\') && (path.indexOf('/') >= 0)) {
+            	pathInvalid = true;
+            } else {
+                if (!accessAllowed(path)) {
+        			Logger.getLogger(getClass()).warn("unauthorized access to path " + path);
+                	pathInvalid = true;
+                } else {
+                    File fileToCheck = new File(path);
+                    if ((!fileToCheck.exists()) || (!fileToCheck.isDirectory()) || (!fileToCheck.canRead())) {
+                    	pathInvalid = true;
+                    }
+                }
+            }
         }
-        
-        boolean invalidPathSeparator = false;
-        
-        if ((File.separatorChar == '\\') && (path.indexOf('/') >= 0)) {
-        	invalidPathSeparator = true;
-        }
-        
-        if (!accessAllowed(path)) {
-			Logger.getLogger(getClass()).warn("unauthorized access to path " + path);
-			return;
-        }
-        
-        File fileToCheck = new File(path);
-        
+
         Element resultElement = doc.createElement("result");
         
-        boolean dirExists = (!invalidPathSeparator) && fileToCheck.exists() && fileToCheck.isDirectory() && fileToCheck.canRead();
-        
-        XmlUtil.setElementText(resultElement, Boolean.toString(dirExists));
+        XmlUtil.setElementText(resultElement, Boolean.toString(!pathInvalid));
         
         doc.appendChild(resultElement);
 		

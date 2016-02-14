@@ -212,6 +212,8 @@ public class MainFrameSetHandler extends UserRequestHandler
                 + WebFileSys.VERSION
                 + "</title>");
 
+        output.println("</head>");
+        
         // output.println("<frameset rows=\"32,*\" frameborder=\"0\" framespacing=\"0\" border=\"0\">");
         output.println("<frameset rows=\"35,*\">");
         output.println(
@@ -265,7 +267,6 @@ public class MainFrameSetHandler extends UserRequestHandler
 
         output.println("</frameset>");
 
-        output.println("</head>");
         output.println("</html>");
         output.flush();
         return;

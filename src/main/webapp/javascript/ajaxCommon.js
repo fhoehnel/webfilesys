@@ -41,167 +41,115 @@ function xmlRequest(url, callBackFunction) {
     } 
 }
 
-function xmlRequestSynchron(url, handleAsText) {
+function xmlRequestPost(url, params, callBackFunction) {
     req = createAjaxRequest();
-
-	if (!req) {
-	    return;
-	}
-
-    req.open("GET", url, false);
-    req.send(null);
-    
-    if (req.status != 200) {
-        alert('error code from XMLHttpRequest: ' + req.status);
-        return;
-    }
-    
-    if (handleAsText) {
-        return(req.responseText);    
-    }
-    
-    return(req.responseXML);    
-}
-
-function xmlRequestPost(url, params, callBackFunction)
-{
-    req = false;
-    
-    if (window.XMLHttpRequest) 
-    {
-    	try 
-    	{
-	    req = new XMLHttpRequest();
-        } 
-        catch (e) 
-        {
-	    req = false;
-        }
-    } 
-    else
-    {
-        // branch for IE/Windows ActiveX version
-        if (window.ActiveXObject) 
-        {
-       	    try 
-       	    {
-        	req = new ActiveXObject("Msxml2.XMLHTTP");
-      	    } 
-      	    catch (e) 
-      	    {
-        	try 
-        	{
-          	    req = new ActiveXObject("Microsoft.XMLHTTP");
-        	} 
-        	catch (e) 
-        	{
-          	    req = false;
-        	}
-	    }
-        }
-    }
         
-    if (req) 
-    {
+    if (req) {
 	    req.onreadystatechange = callBackFunction;
 	    req.open("POST", url, true);
 
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         
 	    req.send(params);
-    }
-    else
-    {
-        alert('Your browser does not support the XMLHttpRequest');
-    }
+    } 
 }
 
-function ajaxRPC(method, param1)
-{
-    var url = "/webfilesys/servlet?command=ajaxRPC&method=" + method + "&param1=" + param1;
-
-    var responseXml = xmlRequestSynchron(url);
-    
-    var resultItem = responseXml.getElementsByTagName("result")[0];            
-    
-    if (!resultItem)
-    {
-        return("");
-    }
-    
-    return(resultItem.firstChild.nodeValue);
-}
-
-function browserXslt(xmlUrl, xslUrl)
-{
-    if (window.ActiveXObject !== undefined) 
-    {
+function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback) {
+    if (window.ActiveXObject !== undefined) {
         // MSIE  
-        return(browserXsltMSIE(xmlUrl, xslUrl));
-    }
-    else
-    {
-        var browserIsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-        
-        if (browserIsFirefox)   
-        { 
-            // Firefox & Co
-
-            return(browserXsltMozilla(xmlUrl, xslUrl));
-        }
-        else
-        {
-            var browserIsChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
-
-            if (browserIsChrome)
-            {
-                return(browserXsltMozilla(xmlUrl, xslUrl));
-            }
-            else if (browserSafari) 
-            {
-                return(browserXsltMozilla(xmlUrl, xslUrl));
-            }
-            else 
-            {
+        htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback);
+    } else {
+        if (browserFirefox) { 
+            htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback);
+        } else {
+            if (browserChrome) {
+                htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback);
+            } else if (browserSafari) {
+                htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback);
+            } else {
                 // XSLT with Javascript (google ajaxslt)
-                return(browserXsltJavascript(xmlUrl, xslUrl));
+                htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback);
             }
         }
     }
+}
+
+function htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback) {
+
+	xmlRequest(xslUrl, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xslStyleSheet = req.responseXML;
+
+	            xmlRequest(xmlUrl, function() {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+			                var xmlDoc = req.responseXML;
+
+                            var xsltProcessor = new XSLTProcessor();
+       
+                            xsltProcessor.importStylesheet(xslStyleSheet);
+
+                            var result = xsltProcessor.transformToDocument(xmlDoc);
+  
+                            var xmlSerializer = new XMLSerializer();
+
+                            fragmentCont.innerHTML = xmlSerializer.serializeToString(result);
+                            
+                            if (callback) {
+                                callback();
+                            }
+                        } else {
+                            alert('cannot load xml from ' + xmlUrl);
+                        }
+                    }
+                });
+            } else {
+                alert('cannot load xsl stylesheet from ' + xslUrl);
+            }
+        }
+    });
+}
+
+function htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback) {
+    fragmentCont.innerHTML = browserXsltMSIE(xmlUrl, xslUrl);
+    
+    if (callback) {
+        callback();
+    }
+}
+
+function htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback) {
+
+	xmlRequest(xslUrl, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xslStyleSheet = req.responseXML;
+
+	            xmlRequest(xmlUrl, function() {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+			                var xmlDoc = req.responseXML;
+
+                            // browser-independend client-side XSL transformation with google ajaxslt 
+       
+                            fragmentCont.innerHTML = xsltProcess(xmlDoc, xslStyleSheet);
+                            
+                            if (callback) {
+                                callback();
+                            }
+                        } else {
+                            alert('cannot load xml from ' + xmlUrl);
+                        }
+                    }
+                });
+            } else {
+                alert('cannot load xsl stylesheet from ' + xslUrl);
+            }
+        }
+    });
 }
     
-function browserXsltMozilla(xmlUrl, xslUrl)
-{ 
-    var xslStyleSheet = xmlRequestSynchron(xslUrl);
-   
-    if (!xslStyleSheet)
-    {
-        alert('cannot load xsl stylesheet from ' + xslUrl);
-        return;
-    }
-
-    var xmlDoc = xmlRequestSynchron(xmlUrl);
-
-    if (!xmlDoc)
-    {
-        alert('cannot load xml from ' + xmlUrl);
-
-        return;
-    }
-
-    var html;
-
-    var xsltProcessor = new XSLTProcessor();
-       
-    xsltProcessor.importStylesheet(xslStyleSheet);
-
-    result = xsltProcessor.transformToDocument(xmlDoc);
-  
-    xmlSerializer = new XMLSerializer();
-
-    return(xmlSerializer.serializeToString(result));
-}
-
 function browserXsltMSIE(xmlUrl, xslUrl)
 { 
     var xsl = new ActiveXObject('MSXML2.FreeThreadedDOMDocument.3.0');
@@ -232,29 +180,6 @@ function browserXsltMSIE(xmlUrl, xslUrl)
     xslProcessor.transform();
     
     return(xslProcessor.output);
-}
-
-function browserXsltJavascript(xmlUrl, xslUrl)
-{ 
-    var xslStyleSheet = xmlRequestSynchron(xslUrl);
-   
-    if (!xslStyleSheet)
-    {
-        alert('cannot load xsl stylesheet from ' + xslUrl);
-        return;
-    }
-
-    var xmlDoc = xmlRequestSynchron(xmlUrl);
-   
-    if (!xmlDoc)
-    {
-        alert('cannot load xml from ' + xmlUrl);
-        return;
-    }
-    
-    // browser-independend client-side XSL transformation with google ajaxslt 
-       
-    return(xsltProcess(xmlDoc, xslStyleSheet));
 }
 
 function getFormData(formObj) 

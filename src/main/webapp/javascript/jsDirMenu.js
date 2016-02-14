@@ -1,14 +1,10 @@
-function mkdir(path)
-{  
+function mkdir(path) {  
     path = path.replace('`','\'');
 
-    showPrompt('/webfilesys/servlet?command=mkdirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFolder.xsl', 320, 190);
-
-    setBundleResources();
-	
-    document.mkdirForm.NewDirName.focus();
-    
-    document.mkdirForm.NewDirName.select();
+    centeredDialog('/webfilesys/servlet?command=mkdirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFolder.xsl', 320, 190, function() {
+        document.mkdirForm.NewDirName.focus();
+        document.mkdirForm.NewDirName.select();
+    });
 }
 
 function copyDir(path, domId)
@@ -19,20 +15,17 @@ function copyDir(path, domId)
     copyDirToClip(path);
 }
 
-function deleteDir(path, domId)
-{
-    showPrompt('/webfilesys/servlet?command=ajaxRPC&method=deleteDirPrompt&param1=' + encodeURIComponent(path), '/webfilesys/xsl/confirmDeleteDir.xsl', 320, 110);
+function deleteDir(path, domId) {
+    centeredDialog('/webfilesys/servlet?command=ajaxRPC&method=deleteDirPrompt&param1=' + encodeURIComponent(path), 
+                   '/webfilesys/xsl/confirmDeleteDir.xsl', 
+                   320, 110); 
 }
 
-function renameDir(path)
-{
-    showPrompt('/webfilesys/servlet?command=renDirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/renameDir.xsl', 320, 190);
-
-    setBundleResources();
-	
-    document.mkdirForm.NewDirName.focus();
-    
-    document.mkdirForm.NewDirName.select();
+function renameDir(path) {
+    centeredDialog('/webfilesys/servlet?command=renDirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/renameDir.xsl', 320, 190, function() {
+        document.mkdirForm.NewDirName.focus();
+        document.mkdirForm.NewDirName.select();
+    });
 }
 
 function zip(path)
@@ -127,15 +120,11 @@ function search(path)
     searchWin.opener=self;
 }
 
-function mkfile(path)
-{
-    showPrompt('/webfilesys/servlet?command=mkfilePrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFile.xsl', 320, 190);
-    
-    setBundleResources();
-	
-    document.mkfileForm.NewFileName.focus();
-    
-    document.mkfileForm.NewFileName.select();
+function mkfile(path) {
+    centeredDialog('/webfilesys/servlet?command=mkfilePrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFile.xsl', 320, 190, function() {
+        document.mkfileForm.NewFileName.focus();
+        document.mkfileForm.NewFileName.select();
+    });
 }
 
 function upload(path)
@@ -164,10 +153,8 @@ function description(path)
     // descWin.opener=parent.FileList;
 }
 
-function driveInfo(path)
-{
-    showPrompt("/webfilesys/servlet?command=driveInfo&path=" + encodeURIComponent(path), "/webfilesys/xsl/driveInfo.xsl", 260, 400);
-    setBundleResources();
+function driveInfo(path) {
+    centeredDialog("/webfilesys/servlet?command=driveInfo&path=" + encodeURIComponent(path), "/webfilesys/xsl/driveInfo.xsl", 260, 400);
 }
 
 function refresh(path)
@@ -180,22 +167,20 @@ function rights(path)
     window.location.href="/webfilesys/servlet?command=unixRights&actpath=" + encodeURIComponent(path) + "&isDirectory=true&random=" + (new Date()).getTime();
 }
 
-function watchFolder(path)
-{   
-    showPrompt('/webfilesys/servlet?command=watchFolder&path=' + encodeURIComponent(path), '/webfilesys/xsl/watchFolder.xsl', 360);
-    setBundleResources();
+function watchFolder(path) { 
+    centeredDialog('/webfilesys/servlet?command=watchFolder&path=' + encodeURIComponent(path), '/webfilesys/xsl/watchFolder.xsl', 360, 160);
 }
 
-function cloneFolder(path, folderName)
-{   
-	var promptDialog = showPromptDialog("/webfilesys/html/cloneFolder.html", 360);	
+function cloneFolder(path, folderName) {   
+	showPromptDialog("/webfilesys/html/cloneFolder.html", 360, function() {	
+	
+	    document.getElementById("sourceFolderPath").value = path;
+	    document.getElementById("sourceFolderName").value = folderName;
+	    document.getElementById("oldLinkNameShort").innerHTML = shortText(folderName, 35);
 
-	document.getElementById("sourceFolderPath").value = path;
-	document.getElementById("sourceFolderName").value = folderName;
-	document.getElementById("oldLinkNameShort").innerHTML = shortText(folderName, 35);
-
-	var newFolderName = document.getElementById("newFolderName");
-	newFolderName.value = folderName;
-	newFolderName.focus();
-	newFolderName.select();
+	    var newFolderName = document.getElementById("newFolderName");
+	    newFolderName.value = folderName;
+	    newFolderName.focus();
+	    newFolderName.select();
+	});
 }

@@ -23,18 +23,10 @@ function insertDoubleBackslash(source)
 }
 
 
-function menuEntry(href, label, target)
-{
-    targetText = "";
-
-    if (target != null)
-    {
-        targetText = 'target="' + target + '"'; 
-    }
-
+function menuEntry(href, label) {
     return('<tr>'
              + '<td class="jsmenu" onclick="' + href + '">'
-             + '<a class="menuitem" href="' + href + '" ' + targetText + '>' + label + '</a>'
+             + '<span class="menuitem">' + label + '</span>'
              + '</td>'
              + '</tr>');
 }

@@ -43,19 +43,19 @@ function contextMenu(fileName)
     if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR")
     {
         menuText = menuText 
-                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceBundle["menuViewZip"],null);
+                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceBundle["menuViewZip"]);
     }
     else
     {
 	if (fileExt == ".URL")
 	{
             menuText = menuText 
-                     + menuEntry("javascript:openUrlFile('" + scriptPreparedPath + "')",resourceBundle["menuView"],null);
+                     + menuEntry("javascript:openUrlFile('" + scriptPreparedPath + "')",resourceBundle["menuView"]);
 	}
 	else
 	{
             menuText = menuText 
-                     + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceBundle["menuView"],null);
+                     + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceBundle["menuView"]);
 	}
     }
         
@@ -69,57 +69,57 @@ function contextMenu(fileName)
     }
 
     menuText = menuText 
-             + menuEntry("javascript:downloadFile('" + scriptPreparedPath + "')",downloadLabel,null);
+             + menuEntry("javascript:downloadFile('" + scriptPreparedPath + "')",downloadLabel);
 
     if (readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:delFile('" + scriptPreparedFile + "')",resourceBundle["menuDelete"],null);
+                 + menuEntry("javascript:delFile('" + scriptPreparedFile + "')",resourceBundle["menuDelete"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:renameFile('" + scriptPreparedFile + "')",resourceBundle["menuRename"],null);
+                 + menuEntry("javascript:renameFile('" + scriptPreparedFile + "')",resourceBundle["menuRename"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["menuCopy"],null);
+                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["menuCopy"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["menuCut"],null);
+                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["menuCut"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:editRemote('" + scriptPreparedFile + "')",resourceBundle["menuEdit"],null);
+                 + menuEntry("javascript:editRemote('" + scriptPreparedFile + "')",resourceBundle["menuEdit"]);
 
 	if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR"))
 	{
             menuText = menuText 
-                     + menuEntry("javascript:zipFile('" + scriptPreparedPath + "')",resourceBundle["menuUnzip"],null);
+                     + menuEntry("javascript:zipFile('" + scriptPreparedPath + "')",resourceBundle["menuUnzip"]);
         }
         else
         {
             menuText = menuText 
-                     + menuEntry("javascript:zipFile('" + scriptPreparedPath + "')",resourceBundle["menuZip"],null);
+                     + menuEntry("javascript:zipFile('" + scriptPreparedPath + "')",resourceBundle["menuZip"]);
         }
         
         if (mailEnabled == 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:sendFile('" + scriptPreparedFile + "')",resourceBundle["menuSendFile"],null);
+                     + menuEntry("javascript:sendFile('" + scriptPreparedFile + "')",resourceBundle["menuSendFile"]);
         }
         
 	if (fileExt == ".MP3")
 	{
             menuText = menuText 
-                     + menuEntry("javascript:editMP3('" + scriptPreparedPath + "')",resourceBundle["menuEditMP3"],null);
+                     + menuEntry("javascript:editMP3('" + scriptPreparedPath + "')",resourceBundle["menuEditMP3"]);
 	}
         else
         {
             menuText = menuText 
-                     + menuEntry("javascript:editMetaInfo('" + scriptPreparedFile + "')",resourceBundle["menuEditDesc"],null);
+                     + menuEntry("javascript:editMetaInfo('" + scriptPreparedFile + "')",resourceBundle["menuEditDesc"]);
         }
         
     }
     
     menuText = menuText 
-             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",resourceBundle["menuComments"],null);
+             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",resourceBundle["menuComments"]);
         
     menuText = menuText + '</table>'; 
 

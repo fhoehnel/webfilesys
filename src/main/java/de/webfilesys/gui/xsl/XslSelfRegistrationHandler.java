@@ -130,6 +130,13 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 			this.addValidationError("language", langMgr.getResource(primaryLanguage, "error.missingLanguage","language is required"));
         }
 		
+        String userRole = getParameter("userRole");
+
+        if ((userRole == null) || ((!userRole.equals("webspace")) && (!userRole.equals("blog")))) {
+			Logger.getLogger(getClass()).error("invalid user role: " + userRole);
+			return;
+        }
+        
 		if (validationElement != null)
 		{
 			selfRegistrationForm(req, session);
@@ -169,7 +176,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		newUser.setDocumentRoot(docRoot);
 		newUser.setEmail(email);
 		newUser.setReadonly(false);
-        newUser.setRole("webspace");
+        newUser.setRole(userRole);
         newUser.setFirstName(getParameter("firstName"));
         newUser.setLastName(getParameter("lastName"));
         newUser.setPhone(getParameter("phone"));
@@ -329,79 +336,87 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		addRequestParameter("email");
 		addRequestParameter("phone");
 		
+		String primaryLanguage = WebFileSys.getInstance().getPrimaryLanguage();		
+		
 		addMsgResource("label.regtitle", 
-		               langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+		               langMgr.getResource(primaryLanguage,
                                            "label.regtitle",
                                            "new user registration"));
 		addMsgResource("label.login", 
-					   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+					   langMgr.getResource(primaryLanguage,
 										   "label.login",
 										   "userid/login"));
 
 		addMsgResource("label.password", 
-					   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+					   langMgr.getResource(primaryLanguage,
 										   "label.password",
 										   "password"));
 
 		addMsgResource("label.passwordconfirm", 
-					   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+					   langMgr.getResource(primaryLanguage,
 										   "label.passwordconfirm",
 										   "confirm password"));
 		
 		addMsgResource("label.ropassword", 
-				       langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				       langMgr.getResource(primaryLanguage,
 									   "label.ropassword",
 									   "read-only password"));
 
 		addMsgResource("label.ropwconfirm", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "label.ropwconfirm",
 									   "confirm read-only password"));
 
 		addMsgResource("label.firstname", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "label.firstname",
 									   "first name"));
 
 		addMsgResource("label.lastname", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "label.lastname",
 									   "last name"));
 		
 		addMsgResource("label.email", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "label.email",
 									   "e-mail address"));
 		
 		addMsgResource("label.phone", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "label.phone",
 									   "phone"));
 
 		addMsgResource("label.language", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "label.language",
 									   "language"));
 
 		addMsgResource("label.css", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "label.css",
 									   "layout"));
 
 		addMsgResource("button.register", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "button.register",
 									   "Register"));
 
 		addMsgResource("button.cancel", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "button.cancel",
 									   "Cancel"));
 
 		addMsgResource("label.selectLanguage", 
-				   langMgr.getResource(WebFileSys.getInstance().getPrimaryLanguage(),
+				   langMgr.getResource(primaryLanguage,
 									   "label.selectLanguage",
 									   "- select language -"));
+		
+		addMsgResource("label.userRole", 
+				   langMgr.getResource(primaryLanguage,
+									   "label.userRole",
+									   "user role"));
+		
 		
 		processResponse("registerUser.xsl", true);
     }

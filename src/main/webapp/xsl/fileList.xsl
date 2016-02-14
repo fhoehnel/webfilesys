@@ -172,7 +172,7 @@
 
 </head>
 
-<body onload="setFileListHeight()">
+<body onload="setFileListHeight();addDeselectHandler();">
 
 <xsl:apply-templates />
 
@@ -367,7 +367,7 @@
       
         <tr>
           <th class="fileList fileListSelector">
-            <input type="checkbox" class="cb4" id="cb-setAll" name="cb-setAll" onClick="javascript:setAllFilesSelected();" />
+            <input type="checkbox" class="cb4" id="cb-setAll" name="cb-setAll" onClick="setAllFilesSelected(this)" />
           </th>
           <th class="fileList fileListIcon">
             <img border="0" width="16" height="16">

@@ -205,17 +205,21 @@ function diffSelectResult()
     }
 }
 
-function cancelDiff()
-{
-    url = "/webfilesys/servlet?command=diffSelect&cmd=deselect";
+function cancelDiff() {
+    var url = "/webfilesys/servlet?command=diffSelect&cmd=deselect";
 
-    xmlRequestSynchron(url);
-
-    parent.diffStarted = false;
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status != 200) {
+                alert(resourceBundle["alert.communicationFailure"]);
+            } else {
+                parent.diffStarted = false;
+            }
     
-    hideMenu();    
-    
-    stopMenuClose = true;
+            hideMenu();    
+            stopMenuClose = true;
+        }
+    });
 }
 
 function openDiffWindow()
@@ -256,25 +260,9 @@ function showTouchResult()
              item = req.responseXML.getElementsByTagName("message")[0];            
              var message = item.firstChild.nodeValue;
 
-             showMsgCentered(message, 260, 60, 3000);
+             toast(message, 3000);
         }
     }
-}
-
-function checkFileChange(filePath, lastModifiedOld, sizeOld)
-{
-    var url = "/webfilesys/servlet?command=checkFileChange&filePath=" + encodeURIComponent(filePath) + "&lastModified=" + lastModifiedOld + "&size=" + sizeOld;
-
-    var responseXml = xmlRequestSynchron(url);
-    
-    var resultItem = responseXml.getElementsByTagName("result")[0];            
-    
-    if (!resultItem)
-    {
-        return("");
-    }
-    
-    return(resultItem.firstChild.nodeValue == "true");
 }
 
 function sendFileViaEmail() 
@@ -294,7 +282,7 @@ function showEmailResult()
              item = req.responseXML.getElementsByTagName("message")[0];            
              var message = item.firstChild.nodeValue;
 
-             showMsgCentered(message, 260, 60, 3000);
+             toast(message, 3000);
         }
         else 
         {

@@ -21,7 +21,7 @@ function folderContextMenu(path, folderName)
     if (readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceBundle["menuCreateDir"],null);
+                 + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceBundle["menuCreateDir"]);
     }
 
     if (((serverOS == 'win') && 
@@ -31,26 +31,26 @@ function folderContextMenu(path, folderName)
         if (readonly != 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:copyDirToClip('" + scriptPreparedPath + "')",resourceBundle["menuCopyDir"],null);
+                     + menuEntry("javascript:copyDirToClip('" + scriptPreparedPath + "')",resourceBundle["menuCopyDir"]);
 
             menuText = menuText 
-                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "')",resourceBundle["menuMoveDir"],null);
+                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "')",resourceBundle["menuMoveDir"]);
 
             menuText = menuText 
-                     + menuEntry("javascript:deleteDir('" + scriptPreparedPath + "', '')",resourceBundle["menuDelDir"],null);
+                     + menuEntry("javascript:deleteDir('" + scriptPreparedPath + "', '')",resourceBundle["menuDelDir"]);
 
             menuText = menuText 
-                     + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceBundle["menuRenameDir"],null);
+                     + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceBundle["menuRenameDir"]);
         }
     }
 
     menuText = menuText 
-             + menuEntry("javascript:search('" + scriptPreparedPath + "')",resourceBundle["menuSearch"],null);
+             + menuEntry("javascript:search('" + scriptPreparedPath + "')",resourceBundle["menuSearch"]);
 
     if (readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:mkfile('" + scriptPreparedPath + "')",resourceBundle["menuCreateFile"],null);
+                 + menuEntry("javascript:mkfile('" + scriptPreparedPath + "')",resourceBundle["menuCreateFile"]);
     }
 
     if (((serverOS == 'win') && 
@@ -60,7 +60,7 @@ function folderContextMenu(path, folderName)
         if (readonly != 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["menuZipDir"],null);
+                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["menuZipDir"]);
 
             lastPathChar = path.charAt(path.length - 1);
     
@@ -81,7 +81,7 @@ function folderContextMenu(path, folderName)
 	    }
 
             menuText = menuText 
-                     + menuEntry("javascript:description('" + insertDoubleBackslash(descriptionPath) + "')",resourceBundle["menuEditDesc"],null);
+                     + menuEntry("javascript:description('" + insertDoubleBackslash(descriptionPath) + "')",resourceBundle["menuEditDesc"]);
 	}
     }
 

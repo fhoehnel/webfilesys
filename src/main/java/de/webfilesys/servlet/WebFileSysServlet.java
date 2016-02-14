@@ -84,6 +84,9 @@ import de.webfilesys.gui.ajax.XmlCreateThumbsHandler;
 import de.webfilesys.gui.ajax.XmlCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlDeleteDirHandler;
 import de.webfilesys.gui.ajax.XmlDirStatsHandler;
+import de.webfilesys.gui.ajax.XmlFileAgeStatsHandler;
+import de.webfilesys.gui.ajax.XmlFileSizeStatsHandler;
+import de.webfilesys.gui.ajax.XmlFileTypeStatsHandler;
 import de.webfilesys.gui.ajax.XmlLocalEditorHandler;
 import de.webfilesys.gui.ajax.XmlMoveDirHandler;
 import de.webfilesys.gui.ajax.XmlMultiCutCopyHandler;
@@ -231,12 +234,9 @@ import de.webfilesys.gui.xsl.XslEditMetaInfHandler;
 import de.webfilesys.gui.xsl.XslEmailFilePromptHandler;
 import de.webfilesys.gui.xsl.XslExifDataHandler;
 import de.webfilesys.gui.xsl.XslFastPathHandler;
-import de.webfilesys.gui.xsl.XslFileAgeStatsHandler;
 import de.webfilesys.gui.xsl.XslFileListHandler;
 import de.webfilesys.gui.xsl.XslFileListStatsHandler;
-import de.webfilesys.gui.xsl.XslFileSizeStatsHandler;
 import de.webfilesys.gui.xsl.XslFileSysBookmarkHandler;
-import de.webfilesys.gui.xsl.XslFileTypeStatsHandler;
 import de.webfilesys.gui.xsl.XslFindFileHandler;
 import de.webfilesys.gui.xsl.XslFolderDiffTreeHandler;
 import de.webfilesys.gui.xsl.XslFolderWatchListHandler;
@@ -1518,21 +1518,21 @@ public class WebFileSysServlet extends ServletBase
 
                 if (cmd.equals("sizeStats"))
                 {
-                    (new XslFileSizeStatsHandler(req, resp, session, output, userid)).handleRequest(); 
+                    (new XmlFileSizeStatsHandler(req, resp, session, output, userid)).handleRequest(); 
                     
                     return(true);
                 }
 
                 if (cmd.equals("typeStats"))
                 {
-                    (new XslFileTypeStatsHandler(req, resp, session, output, userid)).handleRequest(); 
+                    (new XmlFileTypeStatsHandler(req, resp, session, output, userid)).handleRequest(); 
                     
                     return(true);
                 }
 
                 if (cmd.equals("ageStats"))
                 {
-                    (new XslFileAgeStatsHandler(req, resp, session, output, userid)).handleRequest(); 
+                    (new XmlFileAgeStatsHandler(req, resp, session, output, userid)).handleRequest(); 
                     
                     return(true);
                 }

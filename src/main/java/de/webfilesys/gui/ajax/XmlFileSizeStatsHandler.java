@@ -1,4 +1,4 @@
-package de.webfilesys.gui.xsl;
+package de.webfilesys.gui.ajax;
 
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.stats.DirStatsBySize;
 import de.webfilesys.stats.SizeCategory;
@@ -19,13 +18,13 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XslFileSizeStatsHandler extends XslRequestHandlerBase
+public class XmlFileSizeStatsHandler extends XmlRequestHandlerBase
 {
     private static final long KB = 1024;
     private static final long MB = 1024 * KB;
     private static final long GB = 1024 * MB;
     
-	public XslFileSizeStatsHandler(
+	public XmlFileSizeStatsHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
@@ -46,10 +45,6 @@ public class XslFileSizeStatsHandler extends XslRequestHandlerBase
 		Element treeStatsElement = doc.createElement("treeStats");
 			
 		doc.appendChild(treeStatsElement);
-			
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/fileSizeTreeStats.xsl\"");
-
-		doc.insertBefore(xslRef, treeStatsElement);
 
 		XmlUtil.setChildText(treeStatsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(treeStatsElement, "currentPath", currentPath, false);
@@ -89,7 +84,7 @@ public class XslFileSizeStatsHandler extends XslRequestHandlerBase
             sizeStatsElem.appendChild(clusterElem);
         }
 		
-		this.processResponse("fileSizeTreeStats.xsl", false);
+		processResponse();
     }
 	
     private String formatSize(long sizeVal) 

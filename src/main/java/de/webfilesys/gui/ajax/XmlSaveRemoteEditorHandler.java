@@ -146,6 +146,8 @@ public class XmlSaveRemoteEditorHandler extends XmlRequestHandlerBase {
 			resultMsg = "editor content saved successfully";
 			XmlUtil.setChildText(resultElement, "message", resultMsg);
 			XmlUtil.setChildText(resultElement, "success", "true");
+			
+    		XmlUtil.setChildText(resultElement, "mobile", Boolean.toString(session.getAttribute("mobile") != null));
 		}
 			
 		doc.appendChild(resultElement);

@@ -231,13 +231,19 @@
         loadImage();
     }
 
-    function terminate()
-    {
+    function terminate() {
         var url = '/webfilesys/servlet?command=coBrowsingExit';
 
-        xmlRequestSynchron(url);
-
-        window.location.href = '/webfilesys/servlet?command=logout';
+        xmlRequest(url, function() {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    var responseXml = req.responseXML;
+                    window.location.href = '/webfilesys/servlet?command=logout';
+                } else {
+                    alert("communication failure");
+                }
+            }
+        });          
     }
   </script>  
 

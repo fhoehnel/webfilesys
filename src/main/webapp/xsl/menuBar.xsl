@@ -127,10 +127,19 @@
   </xsl:if>
   
   <xsl:if test="/menubar/queryDrives">
-    function refreshDriveList()
-    {
-        ajaxRPC("refreshDriveList", "");
-        parent.location.href = '/webfilesys/servlet';    
+    function refreshDriveList() {
+        var url = "/webfilesys/servlet?command=ajaxRPC&amp;method=refreshDriveList";
+    
+	    xmlRequest(url, function() {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    var result = req.responseXML;
+                    setTimeout("parent.location.href = '/webfilesys/servlet'", 200);    
+                } else {
+                    alert(resourceBundle["alert.communicationFailure"]);
+                }
+            }
+        });
     }
   </xsl:if>
   

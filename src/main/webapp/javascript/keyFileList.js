@@ -293,9 +293,11 @@ function selectTableRow(tableRow)
     }
 }
 
-function setAllFilesSelected()
+function setAllFilesSelected(clickTarget)
 {
-    selectAll();
+    if (!selectAll()) {
+        clickTarget.checked = false;
+    }
 
     var fileListTable = document.getElementById("tableFileList");
     if (!fileListTable)

@@ -1,15 +1,8 @@
-function menuEntry(href, label, target)
+function menuEntry(href, label)
 {
-    targetText = "";
-
-    if (target != null)
-    {
-        targetText = 'target="' + target + '"'; 
-    }
-
     return('<tr>'
              + '<td class="jsmenu" onclick="' + href + '">'
-             + '<span class="menuitem">' + label + '</a>'
+             + '<span class="menuitem">' + label + '</span>'
              + '</td>'
              + '</tr>');
 }

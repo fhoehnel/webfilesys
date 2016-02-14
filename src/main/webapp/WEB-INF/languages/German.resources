@@ -363,6 +363,7 @@ button.clone=Klon erzeugen
 error.renameFailed=konnte nicht umbenannt werden zu
 alert.destEqualsSource=der neue Dateiname muss vom alten verschieden sein
 alert.destFolderEqualsSource=der neue Ordner-Name muss vom alten verschieden sein
+alert.newFolderNameEmpty=Der neue Order-Name fehlt!
 alert.newLinkNameEmpty=Neuer Name für die Verknüpfung fehlt!
 alert.missingDestDir=Neuer Name für Folder fehlt!
 msg.delDirStarted=Lösch-Operation für Directory wurde gestartet.
@@ -649,6 +650,7 @@ label.oldpassword=Altes Passwort
 label.newpassword=Neues Passwort
 label.css=Layout
 label.selectLanguage=- bitte auswählen -
+label.userRole=Nutzer-Rolle
 button.register=Anmelden
 error.missinglogin=Der Login-Name muss mindestens 3 Zeichen lang sein
 error.spacesinlogin=Der Login-Name darf keine Leerzeichen enthalten
@@ -860,6 +862,7 @@ grepNotAllowed=Diese Datei scheint eine Binär-Datei zu sein. grep ist nur für Te
 grepPrompt=nur Zeilen anzeigen, die diesen Text enthalten
 button.startGrep=grep starten
 grepResultEmpty=keine Zeilen gefunden mit
+grepFilterMissing=Bitte geben Sie einen Filter-Wert ein!
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version
@@ -954,6 +957,7 @@ alert.cloneFailed=Klon-Operation fehlgeschlagen!
 alert.cloneFolderFailed=Klon-Operation fehlgeschlagen!
 alert.touchFailed=Setzen des Änderungsdatums fehlgeschlagen!
 alert.enablePopups=Diese Funktion erfordert die Freischaltung von Popup-Windows in den Browser-Einstellungen! 
+alert.communicationFailure=Kommunikationsfehler
 
 # confirmation messages
 confirm.deldir=Soll dieser Ordner wirklich gelöscht werden:
@@ -1071,6 +1075,7 @@ blog.deleteError=Fehler beim Löschen eines Blog-Eintrages
 blog.confirmDelete=Soll der Blog-Eintrag wirklich gelöscht werden?
 blog.textTooLong=Der Text dieses Blog-Eintrages ist zu lang!
 blog.publishTitle=Blog publizieren
+blog.publicLink=Öffentlicher Link
 blog.daysPerPage=Tage je Seite
 blog.invalidDaysPerPageValue=Der Wert für Tage je Seite ist ungültig!
 blog.invalidExpirationDays=Der Wert für Gültigkeit ist ungültig!

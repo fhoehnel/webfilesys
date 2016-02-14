@@ -70,7 +70,7 @@ function dirContextMenu(domId)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceBundle["label.mkdir"],null);
+                 + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceBundle["label.mkdir"]);
     }
 
     if (((parent.serverOS == 'win') && (path.length > 3)) ||
@@ -79,16 +79,16 @@ function dirContextMenu(domId)
         if (parent.readonly != 'true')
 	{
             menuText = menuText 
-                     + menuEntry("javascript:copyDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.copydir"],null);
+                     + menuEntry("javascript:copyDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.copydir"]);
 
             menuText = menuText 
-                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.movedir"],null);
+                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.movedir"]);
 
             menuText = menuText 
-                     + menuEntry("javascript:deleteDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.deldir"],null);
+                     + menuEntry("javascript:deleteDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.deldir"]);
 
             menuText = menuText 
-                     + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceBundle["label.renamedir"],null);
+                     + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceBundle["label.renamedir"]);
 	}
     }
 
@@ -97,30 +97,30 @@ function dirContextMenu(domId)
         if (parent.readonly != 'true')
 	{
             menuText = menuText 
-                     + menuEntry("javascript:paste('" + scriptPreparedPath + "')",resourceBundle["label.pastedir"],null);
+                     + menuEntry("javascript:paste('" + scriptPreparedPath + "')",resourceBundle["label.pastedir"]);
 	}
     }
 
     menuText = menuText 
-             + menuEntry("javascript:statisticsMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "')",resourceBundle["label.statistics"] + ' >',null);
+             + menuEntry("javascript:statisticsMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "')",resourceBundle["label.statistics"] + ' >');
 
     menuText = menuText 
-             + menuEntry("javascript:search('" + scriptPreparedPath + "')",resourceBundle["label.search"],null);
+             + menuEntry("javascript:search('" + scriptPreparedPath + "')",resourceBundle["label.search"]);
 
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:mkfile('" + scriptPreparedPath + "')",resourceBundle["label.createfile"],null);
+                 + menuEntry("javascript:mkfile('" + scriptPreparedPath + "')",resourceBundle["label.createfile"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:upload('" + scriptPreparedPath + "')",resourceBundle["label.upload"],null);
+                 + menuEntry("javascript:upload('" + scriptPreparedPath + "')",resourceBundle["label.upload"]);
     }
 
     if ((parent.serverOS == 'ix')  && (parent.readonly != 'true') &&
         ((parent.webspaceUser != 'true') || (parent.chmodAllowed == 'true')))
     {
         menuText = menuText 
-                 + menuEntry("javascript:rights('" + scriptPreparedPath + "')",resourceBundle["label.accessrights"],null);
+                 + menuEntry("javascript:rights('" + scriptPreparedPath + "')",resourceBundle["label.accessrights"]);
     }
 
     if (((parent.serverOS == 'win') && (path.length > 3)) ||
@@ -129,7 +129,7 @@ function dirContextMenu(domId)
         if (parent.readonly != 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["label.zipdir"],null);
+                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["label.zipdir"]);
 	}
     }
 
@@ -154,28 +154,28 @@ function dirContextMenu(domId)
 	}
 
         menuText = menuText 
-                 + menuEntry("javascript:description('" + insertDoubleBackslash(descriptionPath) + "')",resourceBundle["label.editMetaInfo"],null);
+                 + menuEntry("javascript:description('" + insertDoubleBackslash(descriptionPath) + "')",resourceBundle["label.editMetaInfo"]);
     }
 
     if ((parent.clientIsLocal == 'true') && (parent.readonly != 'true') && (parent.serverOS == 'win'))
     {
         menuText = menuText 
-                 + menuEntry("javascript:winCmdLine('" + scriptPreparedPath + "')",resourceBundle["label.winCmdLine"],null);
+                 + menuEntry("javascript:winCmdLine('" + scriptPreparedPath + "')",resourceBundle["label.winCmdLine"]);
     }
 
     menuText = menuText 
-             + menuEntry("javascript:refresh('" + scriptPreparedPath + "')",resourceBundle["label.refresh"],null);
+             + menuEntry("javascript:refresh('" + scriptPreparedPath + "')",resourceBundle["label.refresh"]);
 
     if ((parent.serverOS == 'win') && (path.length <= 3))
     {
         menuText = menuText 
-                 + menuEntry("javascript:driveInfo('" + scriptPreparedPath + "')",resourceBundle["label.driveinfo"],null);
+                 + menuEntry("javascript:driveInfo('" + scriptPreparedPath + "')",resourceBundle["label.driveinfo"]);
     }
         
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:extendedDirMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuMore"],null);
+                 + menuEntry("javascript:extendedDirMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuMore"]);
     }
 
     menuText = menuText + '</table>'; 
@@ -247,39 +247,39 @@ function extendedDirMenu(shortPath, path, domId)
         if (parent.mailEnabled == 'true')
         {
             menuText = menuText 
-                     + menuEntry("javascript:publish('" + scriptPreparedPath + "', true)",resourceBundle["label.publish"],null);
+                     + menuEntry("javascript:publish('" + scriptPreparedPath + "', true)",resourceBundle["label.publish"]);
         }
         else
         {
             menuText = menuText 
-                     + menuEntry("javascript:publish('" + scriptPreparedPath + "', false)",resourceBundle["label.publish"],null);
+                     + menuEntry("javascript:publish('" + scriptPreparedPath + "', false)",resourceBundle["label.publish"]);
         }
     }
 
     if ((parent.readonly != 'true') && (parent.autoCreateThumbs != 'true'))
     {
         menuText = menuText 
-                 + menuEntry("javascript:createThumbs('" + scriptPreparedPath + "')",resourceBundle["label.createthumbs"],null);
+                 + menuEntry("javascript:createThumbs('" + scriptPreparedPath + "')",resourceBundle["label.createthumbs"]);
     }
 
     if ((parent.adminUser == 'true') && (parent.autoCreateThumbs != 'true'))
     {
         menuText = menuText 
-                 + menuEntry("javascript:clearThumbs('" + scriptPreparedPath + "')",resourceBundle["label.clearthumbs"],null);
+                 + menuEntry("javascript:clearThumbs('" + scriptPreparedPath + "')",resourceBundle["label.clearthumbs"]);
     }
     
     menuText = menuText 
-               + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.compSource"],null);
+               + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.compSource"]);
 
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:synchronize('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuSynchronize"],null);
+                 + menuEntry("javascript:synchronize('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuSynchronize"]);
 
         if (parent.watchEnabled)
         {
             menuText = menuText 
-                     + menuEntry("javascript:watchFolder('" + scriptPreparedPath + "')",resourceBundle["label.watchFolder"],null);
+                     + menuEntry("javascript:watchFolder('" + scriptPreparedPath + "')",resourceBundle["label.watchFolder"]);
         }
     }
 
@@ -287,13 +287,13 @@ function extendedDirMenu(shortPath, path, domId)
 	((parent.serverOS == 'ix') && (path.length > 1)))
     {
         menuText = menuText 
-                 + menuEntry("javascript:downloadFolder('" + scriptPreparedPath + "')",resourceBundle["label.downloadFolder"],null);
+                 + menuEntry("javascript:downloadFolder('" + scriptPreparedPath + "')",resourceBundle["label.downloadFolder"]);
     }
 
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:cloneFolder('" + scriptPreparedPath + "', '" + folderName + "')",resourceBundle["label.cloneFolder"],null);
+                 + menuEntry("javascript:cloneFolder('" + scriptPreparedPath + "', '" + folderName + "')",resourceBundle["label.cloneFolder"]);
     }
 
     menuText = menuText + '</table>'; 
@@ -319,10 +319,10 @@ function syncSelectTarget(path, shortPath, scriptPreparedPath)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:synchronize('" + scriptPreparedPath + "')",resourceBundle["label.menuSynchronize"],null);
+                 + menuEntry("javascript:synchronize('" + scriptPreparedPath + "')",resourceBundle["label.menuSynchronize"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:cancelSynchronize('" + scriptPreparedPath + "')",resourceBundle["label.menuCancelSync"],null);
+                 + menuEntry("javascript:cancelSynchronize('" + scriptPreparedPath + "')",resourceBundle["label.menuCancelSync"]);
     }
 
     menuText = menuText + '</table>'; 
@@ -350,10 +350,10 @@ function compSelectTarget(path, shortPath, scriptPreparedPath)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "')",resourceBundle["label.compTarget"],null);
+                 + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "')",resourceBundle["label.compTarget"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:cancelCompare('" + scriptPreparedPath + "')",resourceBundle["label.cancelComp"],null);
+                 + menuEntry("javascript:cancelCompare('" + scriptPreparedPath + "')",resourceBundle["label.cancelComp"]);
     }
 
     menuText = menuText + '</table>'; 
@@ -383,19 +383,19 @@ function statisticsMenu(shortPath, path)
                  + '</tr>';
 
     menuText = menuText 
-             + menuEntry("javascript:statistics('" + scriptPreparedPath + "')",resourceBundle["label.subdirStats"],null);
+             + menuEntry("javascript:statistics('" + scriptPreparedPath + "')",resourceBundle["label.subdirStats"]);
 
     menuText = menuText 
-             + menuEntry("javascript:statSunburst('" + scriptPreparedPath + "')",resourceBundle["label.statSunburst"],null);
+             + menuEntry("javascript:statSunburst('" + scriptPreparedPath + "')",resourceBundle["label.statSunburst"]);
 
     menuText = menuText 
-             + menuEntry("javascript:fileSizeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.sizeStats"],null);
+             + menuEntry("javascript:fileSizeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.sizeStats"]);
 
     menuText = menuText 
-             + menuEntry("javascript:fileTypeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.typeStats"],null);
+             + menuEntry("javascript:fileTypeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.typeStats"]);
 
     menuText = menuText 
-             + menuEntry("javascript:fileAgeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.ageStats"],null);
+             + menuEntry("javascript:fileAgeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.ageStats"]);
 
     menuText = menuText + '</table>'; 
 

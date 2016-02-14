@@ -80,25 +80,20 @@
                 return;
             }
             
-            if (existUploadTargetFile(targetFileName))
-            {
-                if (!confirm(targetFileName + ': <xsl:value-of select="resources/msg[@key='upload.file.exists']/@value" />')) 
-                {
-                    return;
-                }
-            }
-            document.form1.destFileName.value = targetFileName;
-            document.form1.description.value = replaceNewline(document.form1.desc.value);
-            document.form1.serverFileName.disabled = true;
-            document.form1.desc.disabled = true;
-            document.getElementById('uploadButton').style.visibility ='hidden';
+            checkUploadTargetExists(targetFileName, function() {
+                document.form1.destFileName.value = targetFileName;
+                document.form1.description.value = replaceNewline(document.form1.desc.value);
+                document.form1.serverFileName.disabled = true;
+                document.form1.desc.disabled = true;
+                document.getElementById('uploadButton').style.visibility ='hidden';
             
-            var statusBox = document.getElementById('uploadStatus');
-            centerBox(statusBox);
-            statusBox.style.visibility='visible';
+                var statusBox = document.getElementById('uploadStatus');
+                centerBox(statusBox);
+                statusBox.style.visibility='visible';
             
-            document.form1.submit();
-            window.setTimeout("getUploadStatus()", 1000);
+                document.form1.submit();
+                window.setTimeout("getUploadStatus()", 1000);
+            });
         }
     }
 

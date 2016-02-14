@@ -177,3 +177,55 @@ function setAllSelected() {
     }	
 }
 
+function checkGeoDataExist(callbackExist, callbackNotExist) {
+    showHourGlass();
+       
+    var url = "/webfilesys/servlet?command=ajaxRPC&method=checkForGeoData";
+    
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var responseXml = req.responseXML;
+                var resultItem = responseXml.getElementsByTagName("result")[0];
+                var result = resultItem.firstChild.nodeValue;  
+                
+                if (result && (result == "true")) {
+                    callbackExist();
+                } else {
+                    callbackNotExist();
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });          
+} 
+
+function exportGeoData() {
+    checkGeoDataExist(
+        function() {
+            hideHourGlass();
+            window.location.href = "/webfilesys/servlet?command=googleEarthDirPlacemarks";
+        },
+        function() {
+            hideHourGlass();
+            alert(resourceBundle["noFilesWithGeoData"]);
+        }
+    );
+} 
+
+
+function filesOSMap() {
+    checkGeoDataExist(
+        function() {
+            hideHourGlass();
+            var mapWin = window.open('/webfilesys/servlet?command=osMapFiles&path=' + encodeURIComponent(pathForScript),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
+            mapWin.focus();
+        },
+        function() {
+            hideHourGlass();
+            alert(resourceBundle["noFilesWithGeoData"]);
+        }
+    );
+}
+

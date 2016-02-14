@@ -1,4 +1,4 @@
-package de.webfilesys.gui.xsl;
+package de.webfilesys.gui.ajax;
 
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.stats.AgeCategory;
 import de.webfilesys.stats.DirStatsByAge;
@@ -19,14 +18,14 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XslFileAgeStatsHandler extends XslRequestHandlerBase
+public class XmlFileAgeStatsHandler extends XmlRequestHandlerBase
 {
     private static final long MILLIS_DAY = 24L * 60L * 60L * 1000L;
     private static final long MILLIS_WEEK = 7L * MILLIS_DAY;
     private static final long MILLIS_YEAR = 365L * MILLIS_DAY;
     
     
-	public XslFileAgeStatsHandler(
+	public XmlFileAgeStatsHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
@@ -59,10 +58,6 @@ public class XslFileAgeStatsHandler extends XslRequestHandlerBase
 		Element treeStatsElement = doc.createElement("treeStats");
 			
 		doc.appendChild(treeStatsElement);
-			
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/fileAgeTreeStats.xsl\"");
-
-		doc.insertBefore(xslRef, treeStatsElement);
 
 		XmlUtil.setChildText(treeStatsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(treeStatsElement, "currentPath", currentPath, false);
@@ -101,7 +96,7 @@ public class XslFileAgeStatsHandler extends XslRequestHandlerBase
             sizeStatsElem.appendChild(clusterElem);
         }
 		
-		this.processResponse("fileAgeTreeStats.xsl", false);
+		processResponse();
     }
 	
 }	

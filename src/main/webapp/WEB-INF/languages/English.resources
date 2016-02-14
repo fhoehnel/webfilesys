@@ -363,6 +363,7 @@ button.rename=Rename
 error.renameFailed=could not be renamed to
 alert.destEqualsSource=new file name must be different
 alert.destFolderEqualsSource=new folder name must be different
+alert.newFolderNameEmpty=Enter the new folder name!
 alert.newLinkNameEmpty=Enter the new link name!
 alert.missingDestDir=new directory name missing
 msg.delDirStarted=Delete operation for folder started.
@@ -618,7 +619,7 @@ label.bookmarkName=bookmark name
 alert.bookmarkMissingName=The bookmark name may not be empty!
 button.bookmark=Bookmark
 title.bookmarkButton=Create bookmark for the current folder
-alert.bookmarkCreated=New Bookmark created for directory
+alert.bookmarkCreated=new Bookmark created for directory
 
 # diff labels
 title.diff=Compare Files (diff)
@@ -646,6 +647,7 @@ label.oldpassword=current password
 label.newpassword=new password
 label.css=layout
 label.selectLanguage=- select language -
+label.userRole=user role
 button.register=Register
 error.missinglogin=the minimum length of the login name is 3 characters
 error.spacesinlogin=the login name must not contain spaces
@@ -857,6 +859,7 @@ grepNotAllowed=This file seems to be a binary file. The grep function is only al
 grepPrompt=show only lines containing this text
 button.startGrep=start grep
 grepResultEmpty=no lines found containing
+grepFilterMissing=please enter a grep filter value
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version
@@ -896,7 +899,7 @@ alert.invalidlogin=userid or password invalid
 alert.confirm.delete=Confirm deletion by checking the checkbox!
 alert.delete.failed=cannot delete file
 alert.dircopied=has been selected for copy operation
-alert.dirmoved=has been selected for move opeartion
+alert.dirmoved=has been selected for move operation
 alert.nofileselected=You did not select a file
 alert.nopictures=no picture files (JPG,GIF,PNG,BMP)
 alert.noPicturesInAlbum=This album does not contain any pictures.
@@ -950,6 +953,7 @@ alert.cloneFailed=Failed to clone file.
 alert.cloneFolderFailed=Failed to clone folder.
 alert.touchFailed=Failed to set new modification time for file!
 alert.enablePopups=This function requires that you allow popup windows in your browser settings! 
+alert.communicationFailure=communication failure
 
 # confirmation messages
 confirm.deldir=Are you sure you want to delete the directory
@@ -1067,6 +1071,7 @@ blog.deleteError=failed to delete blog entry
 blog.confirmDelete=Are you sure you want to delete this blog entry?
 blog.textTooLong=The text of this blog entry ist too long.
 blog.publishTitle=Publish Blog
+blog.publicLink=public link
 blog.daysPerPage=days per page
 blog.invalidDaysPerPageValue=The value for day per page is invalid!
 blog.invalidExpirationDays=The value for the expiration days is invalid!

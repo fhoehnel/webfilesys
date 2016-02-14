@@ -347,6 +347,7 @@ div.blogPublishCont {
     border: 2px ridge #808080;
     background-color: #ffffe0;
     visibility: hidden;
+    max-width: 480px;
 }
 
 table.blogPublishForm {
@@ -403,7 +404,7 @@ textarea.commentText {
 html.blog td.formParm1,
 html.blog td.formParm2 {
     font-size: 1rem;
-    padding: 0 8px;
+    padding: 4px 8px;
 }
 
 div.blogSettingsCont {

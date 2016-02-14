@@ -164,51 +164,22 @@ public class SearchRequestHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
-		output.println("<script language=\"JavaScript\" src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
-		output.println("<script language=\"JavaScript\" src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");
+		output.println("<script src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
+		output.println("<script src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");
 
         output.println("<script language=\"javascript\">"); 
 
         output.println("window.resizeTo(700, 600);");
+
+		String mobile = (String) session.getAttribute("mobile");
+       	output.println("var mobile = " + Boolean.toString(mobile != null) + ";");
+       	output.println("var searchResultDir = '" + UTF8URLEncoder.encode(searchResultDir) + "';");
+        output.println("</script>"); 
         
         if (!readonly)
         {
-			output.println("var keepSearchResults = false;");
-			output.println("var resultsDiscarded = false;");
-
-			String mobile = (String) session.getAttribute("mobile");
-            
-			output.println("function showResults() {"); 
-			output.println("keepSearchResults = true;");
-            if (mobile != null) 
-            {
-                output.println("window.opener.location.href='/webfilesys/servlet?command=mobile&cmd=folderFileList&absPath=" + UTF8URLEncoder.encode(searchResultDir)+ "';"); 
-            }
-            else
-            {
-                output.println("window.opener.parent.DirectoryPath.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(searchResultDir) + "&fastPath=true';"); 
-            }
-			output.println("setTimeout(\"self.close()\", 1000);"); 
-			output.println("}");
-			
-			output.println("function discardSearchResults() {");
-			output.println("if (keepSearchResults || resultsDiscarded) {");
-			output.println("return;");
-			output.println("}");
-			output.println("var discardURL = '/webfilesys/servlet?command=discardSearchResults&resultDir=" + UTF8URLEncoder.encode(searchResultDir) + "';");
-			output.println("xmlRequestSynchron(discardURL);");
-			output.println("resultsDiscarded = true;");
-			output.println("}");
-
-			output.println("function discardAndClose() {");
-			output.println("discardSearchResults();");
-			output.println("setTimeout(\"self.close()\", 1000);"); 
-			output.println("}");
-			
-			output.println("window.onbeforeunload = discardSearchResults");
+    		output.println("<script src=\"/webfilesys/javascript/search.js\" type=\"text/javascript\"></script>");
         }
-
-        output.println("</script>"); 
 		
 		output.println("</head>");
 		

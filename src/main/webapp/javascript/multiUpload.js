@@ -236,51 +236,47 @@
       
 	      sizeOfCurrentFile = fileSize;
 	  
-          if (existUploadTargetFile(fileName))
-          {
-              if (!confirm(fileName + ': ' + confirmOverwriteText)) 
-              {
+	      checkMultiUploadTargetExists(fileName, 
+	          function() {
                   var nextFile = selectedForUpload.pop();
-                  if (nextFile) 
-                  {
+                  if (nextFile) {
                       new singleFileBinaryUpload(nextFile)
                   }
-
-                  return;
-              }
-          }
+	          }, 
+	          function() {
+                  lastUploadedFile = fileName;
       
-          lastUploadedFile = fileName;
-      
-          document.getElementById("currentFile").innerHTML = shortText(fileName, 50);
+                  document.getElementById("currentFile").innerHTML = shortText(fileName, 50);
           
-          document.getElementById("statusText").innerHTML = "0 " + resourceOf + " " + formatDecimalNumber(fileSize) + " bytes ( 0%)";
+                  document.getElementById("statusText").innerHTML = "0 " + resourceOf + " " + formatDecimalNumber(fileSize) + " bytes ( 0%)";
 
-          var statusWin = document.getElementById("uploadStatus");
-          statusWin.style.visibility = 'visible';
+                  var statusWin = document.getElementById("uploadStatus");
+                  statusWin.style.visibility = 'visible';
 
-          xhr = new XMLHttpRequest();  
+                  xhr = new XMLHttpRequest();  
 
-          xhr.onreadystatechange = handleUploadState;
-          xhr.upload.addEventListener("progress", updateProgress, false);
-          xhr.upload.addEventListener("load", uploadComplete, false);
+                  xhr.onreadystatechange = handleUploadState;
+                  xhr.upload.addEventListener("progress", updateProgress, false);
+                  xhr.upload.addEventListener("load", uploadComplete, false);
 
-          xhr.open("POST", "/webfilesys/upload/singleBinary/" + encodeURIComponent(fileName), true);  
+                  xhr.open("POST", "/webfilesys/upload/singleBinary/" + encodeURIComponent(fileName), true);  
 
-		  if (!browserMSIE) {
-              xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');  
-	      }
+		          if (!browserMSIE) {
+                      xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');  
+	              }
          
-          if (firefoxDragDrop) {
-              try {
-                  xhr.sendAsBinary(file.getAsBinary());    
-              } catch (ex) {
-                  // Chrome has no file.getAsBinary() function
-                  xhr.send(file);
-              }
-          } else {
-              xhr.send(file);
-          }    
+                  if (firefoxDragDrop) {
+                      try {
+                          xhr.sendAsBinary(file.getAsBinary());    
+                      } catch (ex) {
+                          // Chrome has no file.getAsBinary() function
+                          xhr.send(file);
+                      }
+                  } else {
+                      xhr.send(file);
+                  }    
+	          }
+	      );
       }
 
       function handleUploadState() {

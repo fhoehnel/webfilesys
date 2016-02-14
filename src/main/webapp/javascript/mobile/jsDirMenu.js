@@ -1,12 +1,8 @@
-function mkdir(path)
-{  
-    showPrompt('/webfilesys/servlet?command=mkdirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFolder.xsl', 320, 190);
-
-    setBundleResources();
-    
-    document.mkdirForm.NewDirName.focus();
-    
-    document.mkdirForm.NewDirName.select();
+function mkdir(path) {  
+    centeredDialog('/webfilesys/servlet?command=mkdirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFolder.xsl', 320, 190, function() {
+        document.mkdirForm.NewDirName.focus();
+        document.mkdirForm.NewDirName.select();
+    });
 }
 
 function deleteDir(path, domId)
@@ -14,15 +10,11 @@ function deleteDir(path, domId)
     deleteFolder(path, 'false');
 }
 
-function renameDir(path)
-{
-    showPrompt('/webfilesys/servlet?command=renDirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/renameDir.xsl', 320, 190);
-
-    setBundleResources();
-
-    document.mkdirForm.NewDirName.focus();
-    
-    document.mkdirForm.NewDirName.select();
+function renameDir(path) {
+    centeredDialog('/webfilesys/servlet?command=renDirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/renameDir.xsl', 320, 190, function() {
+        document.mkdirForm.NewDirName.focus();
+        document.mkdirForm.NewDirName.select();
+    });
 }
 
 function zip(path)
@@ -48,15 +40,11 @@ function search(path)
     searchWin.opener=self;
 }
 
-function mkfile(path)
-{
-    showPrompt('/webfilesys/servlet?command=mkfilePrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFile.xsl', 320, 190);
-    
-    setBundleResources();
-    
-    document.mkfileForm.NewFileName.focus();
-    
-    document.mkfileForm.NewFileName.select();
+function mkfile(path) {
+    centeredDialog('/webfilesys/servlet?command=mkfilePrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFile.xsl', 320, 190, function() {
+        document.mkfileForm.NewFileName.focus();
+        document.mkfileForm.NewFileName.select();
+    });
 }
 
 function upload(path)
@@ -100,49 +88,41 @@ function rights(path)
     window.location.href="/webfilesys/servlet?command=unixRights&actpath=" + encodeURIComponent(path) + "&isDirectory=true&random=" + (new Date()).getTime();
 }
 
-function deleteFolder(path, confirmed)
-{
-    url = "/webfilesys/servlet?command=deleteDir&path=" + encodeURIComponent(path) + "&confirmed=" + confirmed;
+function deleteFolder(path, confirmed) {
+    var url = "/webfilesys/servlet?command=deleteDir&path=" + encodeURIComponent(path) + "&confirmed=" + confirmed;
 
-    var responseXml = xmlRequestSynchron(url);
-   
-    if (!responseXml)
-    {
-        window.parent.parent.location.href = '/webfilesys/servlet?command=mobile&cmd=folderFileList';
-
-        return;
-    }
-    
-    hideMenu();
-
-    var successItem = responseXml.getElementsByTagName("success")[0];            
-    var success = successItem.firstChild.nodeValue;
-                 
-    var messageItem = responseXml.getElementsByTagName("message")[0];            
-    var message = "";
+    xmlRequest(url, function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var responseXml = req.responseXML;
+                
+                var successItem = responseXml.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
              
-    if (messageItem.firstChild)
-    {
-        message = messageItem.firstChild.nodeValue;
-    }
+                var messageItem = responseXml.getElementsByTagName("message")[0];            
+                var message = "";
              
-    if (success == "notEmpty")
-    {
-        if (confirm(message))
-        {
-            deleteFolder(path, "true");
+                if (messageItem.firstChild) {
+                    message = messageItem.firstChild.nodeValue;
+                }
+             
+                if (success == "notEmpty") {
+                    if (confirm(message)) {
+                        deleteFolder(path, "true");
+                    }
+                } else {
+                    if (success == "deleted") {
+                        window.location.href = '/webfilesys/servlet?command=mobile&cmd=folderFileList';
+                    } else {
+                        alert(path + '\n' + message);
+                    }
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+                window.parent.parent.location.href = '/webfilesys/servlet?command=mobile&cmd=folderFileList';
+            }
+            hideMenu();
         }
-    }
-    else
-    {
-        if (success == "deleted")
-        {
-            window.location.href = '/webfilesys/servlet?command=mobile&cmd=folderFileList';
-        }       
-        else
-        {
-            alert(path + '\n' + message);
-        }
-    }
+    });
 }
 
