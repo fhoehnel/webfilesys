@@ -80,7 +80,7 @@
         xmlRequest(url, showImage);
     }
 
-    function showImage()
+    function showImage(req)
     {
         if (req.readyState == 4)
         {
@@ -249,7 +249,7 @@
         xmlRequest(url, showImageNoPrefetch);
     }
     
-    function showImageNoPrefetch()
+    function showImageNoPrefetch(req)
     {
         if (req.readyState == 4)
         {

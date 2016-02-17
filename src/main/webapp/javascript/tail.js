@@ -22,7 +22,7 @@ function changeAutoRefresh() {
 function pollForChange() {
     var url = "/webfilesys/servlet?command=checkFileChange&filePath=" + encodeURIComponent(pathForScript) + "&lastModified=" + lastModified + "&size=" + fileSize;
 
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 var responseXml = req.responseXML;

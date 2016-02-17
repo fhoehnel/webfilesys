@@ -2,7 +2,7 @@ function getUploadStatus() {
 
     var url = "/webfilesys/servlet?command=uploadStatus";
 
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 var responseXml = req.responseXML;
@@ -38,7 +38,7 @@ function getUploadStatus() {
 function checkUploadTargetExists(targetFileName, callback) {
     var url = "/webfilesys/servlet?command=ajaxRPC&method=existFile&param1=" + encodeURIComponent(targetFileName);
     
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 var responseXml = req.responseXML;
@@ -64,7 +64,7 @@ function checkUploadTargetExists(targetFileName, callback) {
 function checkMultiUploadTargetExists(targetFileName, callbackRejected, callbackOk) {
     var url = "/webfilesys/servlet?command=ajaxRPC&method=existFile&param1=" + encodeURIComponent(targetFileName);
     
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
             

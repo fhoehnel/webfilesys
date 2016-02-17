@@ -141,7 +141,7 @@ function tail(path)
 function grep(path, fileName) {
     var url = "/webfilesys/servlet?command=ajaxRPC&method=grepAllowed&param1=" + encodeURIComponent(path);
 
-	xmlRequest(url, function() {
+	xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 var responseXml = req.responseXML;
@@ -229,7 +229,7 @@ function decrypt(fileName) {
     });
 }
 
-function startProgramResult() {
+function startProgramResult(req) {
     if (req.readyState == 4)
     {
         if (req.status == 200)

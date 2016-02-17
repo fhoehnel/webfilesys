@@ -31,7 +31,7 @@ function autoImgRotate()
     var responseXml = xmlRequest(xmlUrl, autoImgRotateResult);
 }
 
-function autoImgRotateResult()
+function autoImgRotateResult(req)
 {
     if (req.readyState == 4)
     {

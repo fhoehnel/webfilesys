@@ -89,7 +89,7 @@ function loadImage() {
     xmlRequest(url, showImage);
 }
 
-function showImage() {
+function showImage(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var item = req.responseXML.getElementsByTagName("imagePath")[0];            
@@ -220,7 +220,7 @@ function loadImageIgnorePrefetch() {
     xmlRequest(url, showImageNoPrefetch);
 }
     
-function showImageNoPrefetch() {
+function showImageNoPrefetch(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var item = req.responseXML.getElementsByTagName("imagePath")[0];            

@@ -1,51 +1,21 @@
+// TODO: replace this global var by local var
 var req;
 
-function createAjaxRequest() {
-    ajaxReq = false;
-    
-    if (window.XMLHttpRequest) {
-    	try {
-	        ajaxReq = new XMLHttpRequest();
-        } catch (e) {
-	        ajaxReq = false;
-        }
-    } else {
-        // MSIE ActiveX
-        if (window.ActiveXObject !== undefined) {
-       	    try {
-        	    ajaxReq = new ActiveXObject("Msxml2.XMLHTTP");
-      	    } catch (e) {
-        	    try {
-          	        ajaxReq = new ActiveXObject("Microsoft.XMLHTTP");
-        	    } catch (e) {
-          	        ajaxReq = false;
-        	    }
-	        }
-        }
-    }
-        
-    if (!ajaxReq) {
-        alert('Your browser does not support Ajax communication');
-    }
-	
-	return ajaxReq;
-}
-
 function xmlRequest(url, callBackFunction) {
-    req = createAjaxRequest();
+    var req = new XMLHttpRequest();
         
     if (req) {
-	    req.onreadystatechange = callBackFunction;
+        req.onreadystatechange = function() {callBackFunction(req)};
 	    req.open("GET", url, true);
 	    req.send("");
     } 
 }
 
 function xmlRequestPost(url, params, callBackFunction) {
-    req = createAjaxRequest();
+    var req = new XMLHttpRequest();
         
     if (req) {
-	    req.onreadystatechange = callBackFunction;
+        req.onreadystatechange = function() {callBackFunction(req)};
 	    req.open("POST", url, true);
 
         req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -76,12 +46,12 @@ function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback) {
 
 function htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback) {
 
-	xmlRequest(xslUrl, function() {
+	xmlRequest(xslUrl, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var xslStyleSheet = req.responseXML;
 
-	            xmlRequest(xmlUrl, function() {
+	            xmlRequest(xmlUrl, function(req) {
                     if (req.readyState == 4) {
                         if (req.status == 200) {
 			                var xmlDoc = req.responseXML;
@@ -121,12 +91,12 @@ function htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback) {
 
 function htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback) {
 
-	xmlRequest(xslUrl, function() {
+	xmlRequest(xslUrl, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var xslStyleSheet = req.responseXML;
 
-	            xmlRequest(xmlUrl, function() {
+	            xmlRequest(xmlUrl, function(req) {
                     if (req.readyState == 4) {
                         if (req.status == 200) {
 			                var xmlDoc = req.responseXML;

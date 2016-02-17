@@ -36,7 +36,7 @@ function checkLongRunningDelDir()
     }
 }
 
-function handleDirRemoved()
+function handleDirRemoved(req)
 {
     if (req.readyState == 4)
     {
@@ -104,7 +104,7 @@ function winCmdLine(path)
     xmlRequest(url, handleCmdLineResult);
 }
 
-function showXmlResult()
+function showXmlResult(req)
 {
     if (req.readyState == 4)
     {
@@ -130,18 +130,18 @@ function hideMsg()
      msgBox1.style.visibility = "hidden";
 }
 
-function handleSearchCanceled()
+function handleSearchCanceled(req)
 {
     if (req.readyState == 4)
     {
-        if (req.status == 200)
+        if (req.status != 200)
         {
-             // alert('search canceled');
+             alert("communication failure");
         }
     }
 }
 
-function handleCmdLineResult()
+function handleCmdLineResult(req)
 {
     if (req.readyState == 4)
     {
@@ -363,12 +363,12 @@ function exp(parentDivId, lastInLevel)
 }
     
 function expMozilla(parentDiv, xmlUrl, xslUrl) {
-	xmlRequest(xslUrl, function() {
+	xmlRequest(xslUrl, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var xslStyleSheet = req.responseXML;
 
-	            xmlRequest(xmlUrl, function() {
+	            xmlRequest(xmlUrl, function(req) {
                     if (req.readyState == 4) {
                         if (req.status == 200) {
 			                var xmlDoc = req.responseXML;
@@ -428,12 +428,12 @@ function expMSIE(parentDiv, xmlUrl, xslUrl)
 
 function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) { 
 
-	xmlRequest(xslUrl, function() {
+	xmlRequest(xslUrl, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var xslStyleSheet = req.responseXML;
 
-	            xmlRequest(xmlUrl, function() {
+	            xmlRequest(xmlUrl, function(req) {
                     if (req.readyState == 4) {
                         if (req.status == 200) {
 			                var xmlDoc = req.responseXML;
@@ -478,7 +478,7 @@ function synchronize(path, domId)
     xmlRequest(url, selectSyncFolderResult);
 }
 
-function selectSyncFolderResult()
+function selectSyncFolderResult(req)
 {
     if (req.readyState == 4)
     {
@@ -526,7 +526,7 @@ function deselectSyncFolders()
     xmlRequest(url, deselectSyncFolderResult);
 }
 
-function deselectSyncFolderResult()
+function deselectSyncFolderResult(req)
 {
     if (req.readyState == 4)
     {
@@ -542,7 +542,7 @@ function cancelSynchronize() {
 
     url = "/webfilesys/servlet?command=selectSyncFolder&cmd=deselect";
 
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 parent.syncStarted = false;
@@ -573,7 +573,7 @@ function cancelCompare()
 
     url = "/webfilesys/servlet?command=selectCompFolder&cmd=deselect";
 
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 parent.compStarted = false;
@@ -593,7 +593,7 @@ function deselectCompFolders()
     xmlRequest(url, deselectCompFolderResult);
 }
 
-function deselectCompFolderResult()
+function deselectCompFolderResult(req)
 {
     if (req.readyState == 4)
     {

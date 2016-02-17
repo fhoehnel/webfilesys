@@ -20,7 +20,7 @@ function discardSearchResults() {
 
     var discardURL = "/webfilesys/servlet?command=discardSearchResults&resultDir=" + searchResultDir;
     
-	xmlRequest(discardURL, function() {
+	xmlRequest(discardURL, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 resultsDiscarded = true;

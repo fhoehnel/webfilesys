@@ -88,8 +88,8 @@ public class TailRequestHandler extends UserRequestHandler
 			
 	        if (!isTextFile(filePath, WebFileSys.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK))
 	        {
-	            resp.setStatus(404);
-	            output.println("This file seems not to be a text file: " + getHeadlinePath(filePath));
+	            resp.setContentType("text/plain");
+	            output.println(getResource("label.resizetitle", "This file seems not to be a text file") + ": " + getHeadlinePath(filePath));
 	            output.flush();
 	            return;
 	        }
@@ -137,7 +137,7 @@ public class TailRequestHandler extends UserRequestHandler
 
         if (error)
         {
-            resp.setStatus(404);
+            resp.setContentType("text/plain");
 
             output.println("File not found or not readable: " + filePath);
             

@@ -319,7 +319,7 @@ function validateBookmarkName(errorMsg) {
         document.bookmarkForm.bookmarkName.select();
     } else {
         var createBookmarkUrl = '/webfilesys/servlet?command=createBookmark&path=' + encodeURIComponent(document.bookmarkForm.currentPath.value) + '&bookmarkName=' + encodeURIComponent(document.bookmarkForm.bookmarkName.value);
-        xmlRequest(createBookmarkUrl, function() {
+        xmlRequest(createBookmarkUrl, function(req) {
             if (req.readyState == 4) {
                 if (req.status == 200) {
                     toast(resourceBundle["alert.bookmarkCreated"], 2000);
@@ -355,7 +355,7 @@ function submitSwitchReadWrite()
 function switchFolderWatch(path) {
     var url = "/webfilesys/servlet?command=switchFolderWatch&path=" + encodeURIComponent(path);
     
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status != 200) {
                 alert(resourceBundle["alert.communicationFailure"]);
@@ -446,7 +446,7 @@ function showPromptDialog(htmlFragmentURL, boxWidth, callback) {
         promptBox.style.width = boxWidth + 'px';
     }
     
-    xmlRequest(htmlFragmentURL, function() {
+    xmlRequest(htmlFragmentURL, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 promptBox.innerHTML = req.responseText;

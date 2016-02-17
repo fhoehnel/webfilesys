@@ -20,7 +20,7 @@ function editLocalLink(filePath)
     xmlRequest(url, ignoreResult);
 }
 
-function showCopyResult()
+function showCopyResult(req)
 {
     if (req.readyState == 4)
     {
@@ -115,7 +115,7 @@ function showCopyResult()
     }
 }
 
-function ignoreResult()
+function ignoreResult(req)
 {
     hideMenu();
 }
@@ -140,7 +140,7 @@ function diffSelect(path)
     xmlRequest(url, diffSelectResult);
 }
 
-function diffSelectResult()
+function diffSelectResult(req)
 {
     if (req.readyState == 4)
     {
@@ -208,7 +208,7 @@ function diffSelectResult()
 function cancelDiff() {
     var url = "/webfilesys/servlet?command=diffSelect&cmd=deselect";
 
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status != 200) {
                 alert(resourceBundle["alert.communicationFailure"]);
@@ -240,7 +240,7 @@ function touch(fileName)
     xmlRequest(url, showTouchResult);
 }
 
-function showTouchResult()
+function showTouchResult(req)
 {
     if (req.readyState == 4)
     {
@@ -270,7 +270,7 @@ function sendFileViaEmail()
     xmlRequestPost("/webfilesys/servlet", getFormData(document.emailForm), showEmailResult);
 }
 
-function showEmailResult()
+function showEmailResult(req)
 {
     if (req.readyState == 4)
     {

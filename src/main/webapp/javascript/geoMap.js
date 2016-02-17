@@ -90,7 +90,7 @@
 
         if (mapType == "1")
         {
-            var mapWin = window.open('/webfilesys/servlet?command=osMap&path=' + encodeURIComponent(filePath),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
+            var mapWin = window.open('/webfilesys/servlet?command=osMap&path=' + encodeURIComponent(filePath),'_blank','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
             if (!mapWin) 
             {
             	alert(resourceBundle["alert.enablePopups"]);
@@ -102,7 +102,7 @@
         } 
         else if (mapType == "2")
         {
-            var mapWin = window.open('/webfilesys/servlet?command=googleMap&path=' + encodeURIComponent(filePath),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
+            var mapWin = window.open('/webfilesys/servlet?command=googleMap&path=' + encodeURIComponent(filePath),'_blank','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
             if (!mapWin) 
             {
             	alert(resourceBundle["alert.enablePopups"]);

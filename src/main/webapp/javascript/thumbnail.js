@@ -182,7 +182,7 @@ function checkGeoDataExist(callbackExist, callbackNotExist) {
        
     var url = "/webfilesys/servlet?command=ajaxRPC&method=checkForGeoData";
     
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 var responseXml = req.responseXML;

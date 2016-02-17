@@ -497,7 +497,7 @@ function deleteBlogEntry(fileName) {
     
     var url = "/webfilesys/servlet?command=blog&cmd=deleteEntry&fileName=" + encodeURIComponent(fileName);
     
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var responseXml = req.responseXML;
@@ -537,7 +537,7 @@ function moveBlogEntry(fileName, direction, posInPage) {
     
     var url = "/webfilesys/servlet?command=blog&cmd=moveEntry&fileName=" + encodeURIComponent(fileName) + "&direction=" + direction;
     
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var responseXml = req.responseXML;
@@ -749,7 +749,7 @@ function validatePublishFormAndSubmit() {
 	xmlRequestPost("/webfilesys/servlet", formData, showPublishResult);	
 }
 
-function showPublishResult() {
+function showPublishResult(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            
@@ -806,7 +806,7 @@ function queryPublicLink() {
     xmlRequest(url, handleQueryPublicLinkResult);
 }
 
-function handleQueryPublicLinkResult() {
+function handleQueryPublicLinkResult(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            
@@ -892,7 +892,7 @@ function unpublish() {
     xmlRequest(url, handleUnpublishResult);
 }
 
-function handleUnpublishResult() {
+function handleUnpublishResult(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            
@@ -952,7 +952,7 @@ function submitComment() {
     xmlRequestPost("/webfilesys/servlet", getFormData(document.getElementById("blogCommentForm")), showPostCommentResult);
 }
 
-function showPostCommentResult() {
+function showPostCommentResult(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            
@@ -999,7 +999,7 @@ function confirmDelComments(filePath) {
     
     var url = "/webfilesys/servlet?command=blog&cmd=delComments&filePath=" + encodeURIComponent(filePath);
     
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var responseXml = req.responseXML;
@@ -1079,7 +1079,7 @@ function submitSubscription() {
 	xmlRequestPost("/webfilesys/servlet", formData, handleSubscribeResult)	    
 }
 
-function handleSubscribeResult() {
+function handleSubscribeResult(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            
@@ -1155,7 +1155,7 @@ function validateSettingsForm() {
     xmlRequestPost("/webfilesys/servlet", getFormData(document.getElementById("blogSettingsForm")), showSaveSettingsResult);
 }
 
-function showSaveSettingsResult() {
+function showSaveSettingsResult(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            
@@ -1223,7 +1223,7 @@ function rotateBlogPic(imgName, direction) {
 
     var xmlUrl = "/webfilesys/servlet?command=blog&cmd=rotate&imgName=" + imgName + "&direction=" + direction;
 
-	xmlRequest(xmlUrl, function() {
+	xmlRequest(xmlUrl, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 var successItem = req.responseXML.getElementsByTagName("success")[0];            

@@ -201,7 +201,7 @@ function jsExifData(path)
 function jsRotate(path, degrees, domId) {
     var xmlUrl = '/webfilesys/servlet?command=checkLossless&imgPath=' + encodeURIComponent(path);
 
-	xmlRequest(xmlUrl, function() {
+	xmlRequest(xmlUrl, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var responseXml = req.responseXML;

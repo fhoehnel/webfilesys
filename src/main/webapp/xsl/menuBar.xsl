@@ -130,7 +130,7 @@
     function refreshDriveList() {
         var url = "/webfilesys/servlet?command=ajaxRPC&amp;method=refreshDriveList";
     
-	    xmlRequest(url, function() {
+	    xmlRequest(url, function(req) {
             if (req.readyState == 4) {
                 if (req.status == 200) {
                     var result = req.responseXML;
@@ -149,7 +149,7 @@
       xmlRequest(url, dummyCallback);
   }
   
-  function dummyCallback()
+  function dummyCallback(req)
   {
   }
   

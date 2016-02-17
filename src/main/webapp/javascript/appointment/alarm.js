@@ -4,7 +4,7 @@ function checkAlarm()
 	xmlRequest(url, handleAlarmResult);
 }
 
-function handleAlarmResult() 
+function handleAlarmResult(req) 
 {
     if (req.readyState == 4)
     {
@@ -151,7 +151,7 @@ function delayOrCloseReminder(eventId)
 	xmlRequest(url, handleDelayResult);
 }
 
-function handleDelayResult()
+function handleDelayResult(req)
 {
     if (req.readyState == 4)
     {

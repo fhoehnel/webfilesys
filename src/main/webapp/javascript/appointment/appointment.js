@@ -654,7 +654,7 @@ function deleteAppointment(eventId)
 	xmlRequest(url, showDeleteResult);
 }
 
-function showDeleteResult()
+function showDeleteResult(req)
 {
     if (req.readyState == 4)
     {
@@ -693,7 +693,7 @@ function moveAppointment(eventId)
 	xmlRequest(url, showMoveResult);
 }
 
-function showMoveResult()
+function showMoveResult(req)
 {
     if (req.readyState == 4)
     {
@@ -717,7 +717,7 @@ function pasteAppointment(year, month, dayOfMonth)
 	xmlRequest(url, showPasteResult);
 }
 
-function showPasteResult()
+function showPasteResult(req)
 {
     if (req.readyState == 4)
     {
@@ -749,7 +749,7 @@ function changeAppointment()
 	xmlRequestPost("/webfilesys/servlet", formData, showChangeResult)	
 }
 
-function showChangeResult()
+function showChangeResult(req)
 {
     if (req.readyState == 4)
     {
@@ -815,7 +815,7 @@ function createAppointment()
 	xmlRequestPost("/webfilesys/servlet", formData, showCreateResult)	
 }
 
-function showCreateResult()
+function showCreateResult(req)
 {
     if (req.readyState == 4)
     {

@@ -64,7 +64,7 @@
       xmlRequest(url, handleStatsResult);
   }
   
-  function handleStatsResult()
+  function handleStatsResult(req)
   {
       if (req.readyState == 4)
       {

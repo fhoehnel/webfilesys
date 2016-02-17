@@ -10,7 +10,7 @@ function saveEditorContent(closeAfterSave) {
 	}
 }
 
-function handleSaveResult() {
+function handleSaveResult(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            
@@ -25,7 +25,7 @@ function handleSaveResult() {
     }
 }
 
-function handleCloseAfterSave() {
+function handleCloseAfterSave(req) {
     if (req.readyState == 4) {
         if (req.status == 200) {
             var resultElem = req.responseXML.getElementsByTagName("result")[0];            

@@ -91,7 +91,7 @@ function rights(path)
 function deleteFolder(path, confirmed) {
     var url = "/webfilesys/servlet?command=deleteDir&path=" + encodeURIComponent(path) + "&confirmed=" + confirmed;
 
-    xmlRequest(url, function() {
+    xmlRequest(url, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 var responseXml = req.responseXML;

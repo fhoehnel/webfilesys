@@ -102,7 +102,7 @@
         xmlRequest(url, showImage);
     }
 
-    function showImage()
+    function showImage(req)
     {
         if (req.readyState == 4)
         {
@@ -234,7 +234,7 @@
     function terminate() {
         var url = '/webfilesys/servlet?command=coBrowsingExit';
 
-        xmlRequest(url, function() {
+        xmlRequest(url, function(req) {
             if (req.readyState == 4) {
                 if (req.status == 200) {
                     var responseXml = req.responseXML;

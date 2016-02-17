@@ -134,7 +134,7 @@
         xmlRequest(url, showImage);
     }
 
-    function showImage()
+    function showImage(req)
     {
         if (req.readyState == 4)
         {

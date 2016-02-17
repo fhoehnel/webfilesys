@@ -5,7 +5,7 @@ function submitCmd()
     xmlRequestPost(ajaxUrl, getFormData(document.form1), showCmdOutput);
 }
 
-function showCmdOutput()
+function showCmdOutput(req)
 {
     if (req.readyState == 4)
     {
