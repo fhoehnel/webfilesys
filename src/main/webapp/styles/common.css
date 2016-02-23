@@ -105,6 +105,11 @@ div.promptBox {
     visibility: hidden;
 }
 
+div.promptBox p {
+    text-align: left;
+    font-weight: normal;
+}
+
 div.promptHead {
     background-color:lavender;
     border-bottom-style:solid;

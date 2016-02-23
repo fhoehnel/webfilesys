@@ -84,6 +84,7 @@ import de.webfilesys.gui.ajax.XmlCreateThumbsHandler;
 import de.webfilesys.gui.ajax.XmlCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlDeleteDirHandler;
 import de.webfilesys.gui.ajax.XmlDirStatsHandler;
+import de.webfilesys.gui.ajax.XmlEmojiListHandler;
 import de.webfilesys.gui.ajax.XmlFileAgeStatsHandler;
 import de.webfilesys.gui.ajax.XmlFileSizeStatsHandler;
 import de.webfilesys.gui.ajax.XmlFileTypeStatsHandler;
@@ -92,6 +93,7 @@ import de.webfilesys.gui.ajax.XmlMoveDirHandler;
 import de.webfilesys.gui.ajax.XmlMultiCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlMultiImageCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlRemoveDirHandler;
+import de.webfilesys.gui.ajax.XmlRotateImagePromptHandler;
 import de.webfilesys.gui.ajax.XmlRunUnixCmdHandler;
 import de.webfilesys.gui.ajax.XmlSaveRemoteEditorHandler;
 import de.webfilesys.gui.ajax.XmlSelectCompFolderHandler;
@@ -104,7 +106,6 @@ import de.webfilesys.gui.ajax.XmlTouchFileHandler;
 import de.webfilesys.gui.ajax.XmlTransformImageHandler;
 import de.webfilesys.gui.ajax.XmlUploadStatusHandler;
 import de.webfilesys.gui.ajax.XmlWinCmdLineHandler;
-import de.webfilesys.gui.ajax.XmlEmojiListHandler;
 import de.webfilesys.gui.ajax.XslSwitchReadonlyHandler;
 import de.webfilesys.gui.ajax.XslWatchFolderHandler;
 import de.webfilesys.gui.ajax.calendar.XmlChangeAppointmentHandler;
@@ -1137,7 +1138,12 @@ public class WebFileSysServlet extends ServletBase
 
             return(true);
         }
+        if (command.equals("rotateImagePrompt"))
+        {
+		    (new XmlRotateImagePromptHandler(req, resp, session, output, userid)).handleRequest(); 
 
+            return(true);
+        }
         if (command.equals("autoImgRotate"))
         {
 		    (new AutoImageRotateHandler(req, resp, session, output, userid)).handleRequest(); 

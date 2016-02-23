@@ -168,6 +168,12 @@ function jsRenameImg(path) {
     });
 }
 
+function rotateFreeAngle(path) {
+    centeredDialog('/webfilesys/servlet?command=rotateImagePrompt&imagePath=' + encodeURIComponent(path), '/webfilesys/xsl/rotateImage.xsl', 360, 170, function() {
+        document.getElementById("rotationDegrees").focus();
+    });
+}
+
 function jsEditDesc(path)
 {
     var windowWidth = 600;
@@ -310,6 +316,13 @@ function rotateFlipMenu(shortPath, path, domId, imgType)
                    + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Vertical')",resourceBundle["label.mirrorvert"]);
     }
 
+
+    if ((imgType == '1') || (imgType == '3')) // JPEG or PNG
+    {
+        menuText = menuText 
+                   + menuEntry("javascript:rotateFreeAngle('" + scriptPreparedPath + "')", resourceBundle["label.rotateFreeAngle"]);
+    }
+
     menuText = menuText + '</table>'; 
 
     menuDiv.innerHTML = menuText;
@@ -320,4 +333,33 @@ function rotateFlipMenu(shortPath, path, domId, imgType)
 function startSlideshowHere(startPath, startFileName) 
 {
     window.location.href = '/webfilesys/servlet?command=slideShowParms&cmd=getParms&startPath=' + encodeURIComponent(startPath) + '&startFile=' + encodeURIComponent(startFileName) + '&screenWidth=' + screen.width + '&amp;screenHeight=' + screen.height;
+}
+
+function validateRotationDegrees() {
+    var degrees = document.getElementById("rotationDegrees").value;
+    
+    try {
+        var numericDegrees = parseInt(degrees);
+        if (isNaN(numericDegrees)) {
+            alert(resourceBundle["invalidRotationDegrees"]);
+        } else {
+            if ((numericDegrees < (-179)) || (numericDegrees > 179)) {
+                alert(resourceBundle["invalidRotationDegrees"]);
+                return;
+            }
+        
+            if (numericDegrees < 0) {
+                document.getElementById("rotationDegrees").value = 360 + numericDegrees;
+            }
+        
+            showHourGlass();
+
+            document.getElementById("prompt").style.visibility = "hidden";
+        
+            document.getElementById("rotateForm").submit();
+        }
+        
+    } catch (err) {
+        alert(resourceBundle["invalidRotationDegrees"]);
+    }
 }
