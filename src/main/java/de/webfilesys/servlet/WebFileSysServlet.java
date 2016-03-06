@@ -134,9 +134,11 @@ import de.webfilesys.gui.blog.BlogPublishHandler;
 import de.webfilesys.gui.blog.BlogRotateImgHandler;
 import de.webfilesys.gui.blog.BlogSaveSettingsHandler;
 import de.webfilesys.gui.blog.BlogSetDescrHandler;
+import de.webfilesys.gui.blog.BlogSetTitlePicHandler;
 import de.webfilesys.gui.blog.BlogShowSettingsHandler;
 import de.webfilesys.gui.blog.BlogSubscribeHandler;
 import de.webfilesys.gui.blog.BlogUnpublishHandler;
+import de.webfilesys.gui.blog.BlogUnsetTitlePicHandler;
 import de.webfilesys.gui.blog.BlogUnsubscribeHandler;
 import de.webfilesys.gui.google.GoogleEarthDirPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthFolderPlacemarkHandler;
@@ -2383,6 +2385,18 @@ public class WebFileSysServlet extends ServletBase
            	else if (cmd.equals("emojiList"))
             {
     			(new XmlEmojiListHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("setTitlePic"))
+            {
+    			(new BlogSetTitlePicHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("unsetTitlePic"))
+            {
+    			(new BlogUnsetTitlePicHandler(req, resp, session, output, userid)).handleRequest(); 
                 
                 return(true);
         	}

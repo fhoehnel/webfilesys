@@ -70,12 +70,23 @@ div.blogHeadline {
     border-bottom: 1px solid #000060;
     padding-bottom: 4px;
     margin-bottom: 10px;
+    margin-top: 16px;
 }
 
 div.blogCont {
     margin: 0 auto;
     max-width: 960px;
-    padding-top: 16px;
+}
+
+div.blogTitlePic {
+    width: 960px;
+    height: 160px;
+    background-position: center;
+    box-shadow: 5px 5px 5px #666666;
+}
+
+div.blogTitlePointer {
+    cursor: pointer;
 }
 
 div.blogCalenderCont {
@@ -236,7 +247,8 @@ div.blogPagingCont {
 .icon-blog-edit:before,
 .icon-blog-delete:before,
 .icon-blog-rotate:before,
-.icon-blog-move:before {
+.icon-blog-move:before,
+.icon-blog-titlePic:before {
 	color: #000060;
     font-size: 24px;
 }

@@ -417,6 +417,48 @@ public class MetaInfManager extends Thread
     	}
     }
 
+    public void setTitlePic(String path, String titlePicFileName) {
+    	synchronized(this) {
+            Element metaInfElement = getMetaInfElement(path, ".");
+            
+            if (metaInfElement == null) {
+                metaInfElement = createMetaInfElement(path, ".");
+            }
+
+            XmlUtil.setChildText(metaInfElement, "titlePic", titlePicFileName);
+            
+            cacheDirty.put(path, new Boolean(true));
+    	}
+    }
+    
+    public String getTitlePic(String path) {
+        Element metaInfElement = getMetaInfElement(path, ".");
+
+        if (metaInfElement == null) {
+            return null;
+        }
+
+        return XmlUtil.getChildText(metaInfElement,"titlePic");
+    }
+
+    public void unsetTitlePic(String path) {
+    	synchronized(this) {
+            Element metaInfElement = getMetaInfElement(path, ".");
+            
+            if (metaInfElement == null) {
+                return;
+            }
+
+            Element titlePicElem = XmlUtil.getChildByTagName(metaInfElement, "titlePic");
+            if (titlePicElem != null) {
+            	metaInfElement.removeChild(titlePicElem);
+            }
+            
+            cacheDirty.put(path, new Boolean(true));
+    	}
+    }
+    
+    
     public boolean moveMetaInf(String currentPath, String srcFileName, String destFileName) {
     	synchronized(this) {
             Element destMetaInfElement = getMetaInfElement(currentPath, destFileName);

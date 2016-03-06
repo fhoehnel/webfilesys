@@ -105,6 +105,10 @@ a.icon-font {
 	content: '\f01e';
 }
 
+.icon-heart:before {
+	content: '\f08a';
+}
+
 .icon-help:before {
 	content: '\f059';
 }

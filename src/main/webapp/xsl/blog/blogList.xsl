@@ -110,6 +110,20 @@
       
       <div class="blogCont">
       
+        <xsl:if test="/blog/blogTitlePic">
+          <div>
+            <xsl:attribute name="style">background-image:url('<xsl:value-of select="/blog/blogTitlePic" />');</xsl:attribute>
+            <xsl:if test="/blog/readonly">
+              <xsl:attribute name="class">blogTitlePic</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="not(/blog/readonly)">
+              <xsl:attribute name="class">blogTitlePic blogTitlePointer</xsl:attribute>
+              <xsl:attribute name="onclick">unsetTitlePic()</xsl:attribute>
+              <xsl:attribute name="titleResource">blog.unsetTitlePic</xsl:attribute>
+            </xsl:if>
+          </div>
+        </xsl:if>
+      
         <div class="blogHeadline">
           <!-- 
           <span resource="blog.listHeadline"></span>: 
@@ -298,6 +312,12 @@
                     <xsl:attribute name="href">javascript:moveBlogEntryDown('<xsl:value-of select="@name" />', '<xsl:value-of select="pagePicCounter" />')</xsl:attribute>
                   </a>
                 </xsl:if>
+
+                &#160;
+
+                <a href="#" id="titlePicIcon" class="icon-font icon-heart icon-blog-titlePic" titleResource="blog.makeTitlePic">
+                  <xsl:attribute name="onClick">setTitlePic('<xsl:value-of select="@name" />')</xsl:attribute>
+                </a>
               
               </xsl:if>
               

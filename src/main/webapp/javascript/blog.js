@@ -1243,6 +1243,63 @@ function rotateBlogPic(imgName, direction) {
     });   
 }
 
+function setTitlePic(imgName) {
+    if (!confirm(resourceBundle["blog.confirmSetTitlePic"])) {
+        return;
+    }
+     
+    showHourGlass();
+
+    var xmlUrl = "/webfilesys/servlet?command=blog&cmd=setTitlePic&imgName=" + imgName;
+
+	xmlRequest(xmlUrl, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var successItem = req.responseXML.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
+             
+                if (success == 'true') {
+                    window.location.href = "/webfilesys/servlet?command=blog";
+                } else {
+                    alert(resourceBundle["blog.setTitlePicError"]);
+                }
+                hideHourGlass();
+            } else {
+                hideHourGlass();
+                alert(resourceBundle["blog.setTitlePicError"]);
+            }
+        }
+    });   
+}
+
+function unsetTitlePic() {
+    if (!confirm(resourceBundle["blog.confirmUnsetTitlePic"])) {
+        return;
+    }
+    showHourGlass();
+
+    var xmlUrl = "/webfilesys/servlet?command=blog&cmd=unsetTitlePic";
+
+	xmlRequest(xmlUrl, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var successItem = req.responseXML.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
+             
+                if (success == 'true') {
+                    window.location.href = "/webfilesys/servlet?command=blog";
+                } else {
+                    alert(resourceBundle["blog.setTitlePicError"]);
+                }
+                hideHourGlass();
+            } else {
+                hideHourGlass();
+                alert(resourceBundle["blog.setTitlePicError"]);
+            }
+        }
+    });   
+}
+
 function firefoxJumpToIdWorkaround() {
    // Firefox bug 645075
    if (browserFirefox) {

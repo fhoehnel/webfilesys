@@ -83,6 +83,22 @@ public class BlogListHandler extends XslRequestHandlerBase {
         }
         
 		XmlUtil.setChildText(blogElement, "blogTitle", blogTitle, false);
+		
+		String blogTitlePic = metaInfMgr.getTitlePic(currentPath);
+		
+		if (!CommonUtils.isEmpty(blogTitlePic)) {
+			
+			String titlePicPath;
+			if (currentPath.endsWith(File.separator)) {
+				titlePicPath = currentPath + blogTitlePic;
+			} else {
+				titlePicPath = currentPath + File.separator + blogTitlePic;
+			}
+			
+			String titlePicSrc = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(titlePicPath) + "&cached=true";
+			
+			XmlUtil.setChildText(blogElement, "blogTitlePic", titlePicSrc, false);
+		}
 
 		Element blogEntriesElement = doc.createElement("blogEntries");
 		
