@@ -622,7 +622,7 @@ function openCompWindow()
     compWin.focus();
 }
 
-function selectCompFolderResult()
+function selectCompFolderResult(req)
 {
     if (req.readyState == 4)
     {

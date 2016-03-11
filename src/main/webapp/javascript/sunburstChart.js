@@ -3,8 +3,17 @@
 	   var centerX = 390;
 	   var centerY = 335;
 	
-	   var chartColors = ["#f44", "#4f4", "#66f", "#f4f", "#4ff", "#ff4", "#ffaa00", "#00ffaa", "#aa00ff", "#aaff00", "#00aaff", "#ff00aa", "#ffccaa", "#aaffcc", "#ccaaff" , "#aaccff", "#ffaacc", "#ccffaa"];
-
+	   var COLOR_NUM = 256;
+	
+	   var chartColors = Array(COLOR_NUM);
+	   
+	   for (var i = 0; i < COLOR_NUM; i++) {
+		   var red = 128 + parseInt(Math.random() * 127);
+		   var green = 255 - parseInt(Math.random() * 127);
+		   var blue = 128 + parseInt(Math.random() * 127);
+		   chartColors[i] = "#" + red.toString(16) + green.toString(16) + blue.toString(16);
+	   }
+	   
 	   var ROOT_FILES_COLOR = "#b0b0b0";
 	   
        function showDirName(titleText, sectorColor, mouseXPos, mouseYPos)	
