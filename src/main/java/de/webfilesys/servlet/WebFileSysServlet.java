@@ -124,6 +124,7 @@ import de.webfilesys.gui.blog.BlogDeleteCommentsHandler;
 import de.webfilesys.gui.blog.BlogDeleteEntryHandler;
 import de.webfilesys.gui.blog.BlogEditEntryHandler;
 import de.webfilesys.gui.blog.BlogGetPublicUrlHandler;
+import de.webfilesys.gui.blog.BlogLikeHandler;
 import de.webfilesys.gui.blog.BlogListCommentsHandler;
 import de.webfilesys.gui.blog.BlogListHandler;
 import de.webfilesys.gui.blog.BlogListSubscribersHandler;
@@ -2397,6 +2398,12 @@ public class WebFileSysServlet extends ServletBase
            	else if (cmd.equals("unsetTitlePic"))
             {
     			(new BlogUnsetTitlePicHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("like"))
+            {
+    			(new BlogLikeHandler(req, resp, session, output, userid)).handleRequest(); 
                 
                 return(true);
         	}

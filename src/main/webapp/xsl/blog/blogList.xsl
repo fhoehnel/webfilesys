@@ -318,8 +318,44 @@
                 <a href="#" id="titlePicIcon" class="icon-font icon-heart icon-blog-titlePic" titleResource="blog.makeTitlePic">
                   <xsl:attribute name="onClick">setTitlePic('<xsl:value-of select="@name" />')</xsl:attribute>
                 </a>
-              
+
+                
               </xsl:if>
+              
+              <xsl:if test="not(/blog/readonly) or not(ratingAllowed)">
+
+                <xsl:if test="voteCount != 0">
+                  &#160;
+
+                  <a id="likeIcon" class="icon-font icon-like icon-blog-like" titleResource="blog.likeTitle"></a>
+              
+                  <xsl:text> </xsl:text>
+              
+                  <span titleResource="blog.likeTitle">
+                    <xsl:attribute name="id">voteCount-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
+                    <xsl:value-of select="voteCount" />
+                  </span>
+                </xsl:if>
+
+              </xsl:if>
+              
+              
+              <xsl:if test="/blog/readonly and ratingAllowed">
+                &#160;
+
+                <a href="javascript:void(0)" class="icon-font icon-like icon-blog-like" titleResource="blog.like">
+                  <xsl:attribute name="id">likeLink-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
+                  <xsl:attribute name="onClick">like('<xsl:value-of select="@name" />', '<xsl:value-of select="pagePicCounter" />')</xsl:attribute>
+                </a>
+              
+                (
+                <span titleResource="blog.likeTitle">
+                  <xsl:attribute name="id">voteCount-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
+                  <xsl:value-of select="voteCount" />
+                </span>
+                )
+              </xsl:if>
+              
               
               <xsl:if test="geoTag">
  

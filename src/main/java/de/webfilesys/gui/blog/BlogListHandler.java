@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -25,6 +26,7 @@ import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
+import de.webfilesys.servlet.VisitorServlet;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -320,6 +322,10 @@ public class BlogListHandler extends XslRequestHandlerBase {
 			        				}
 		        				}
 		        				
+		        				int voteCount = metaInfMgr.getVisitorRatingCount(file.getAbsolutePath());
+
+		        				XmlUtil.setChildText(fileElement, "voteCount", Integer.toString(voteCount));
+		        				
 		        				boolean imgFound = true;
 
 		        				ScaledImage scaledImage = null;
@@ -408,6 +414,31 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		                                }
 		                                
 		                                XmlUtil.setChildText(geoTagElement, "zoomFactor", Integer.toString(zoomFactor), false);
+		            				}
+		            				
+		            				if (readonly) {
+		            					boolean alreadyRated = false;
+		            					
+		            					Hashtable<String, Boolean> ratedPictures = (Hashtable<String, Boolean>) session.getAttribute("ratedPictures");
+		            					
+		            					if (ratedPictures != null) {
+		            						if (ratedPictures.get(file.getAbsolutePath()) != null) {
+		            							alreadyRated = true;
+		            						}
+		            					}
+
+		            					if (!alreadyRated) {
+			            					String visitorId = (String) session.getAttribute(VisitorServlet.SESSION_ATTRIB_VISITOR_ID);
+			            					if (visitorId != null) {
+			            					    if (metaInfMgr.getIdentifiedVisitorRating(visitorId, file.getAbsolutePath()) > 0) {
+				            						alreadyRated = true;
+				            					}
+			            					}
+		            					}
+		            		        
+		            					if (!alreadyRated) {
+		            						XmlUtil.setChildText(fileElement, "ratingAllowed", "true");
+		            					}
 		            				}
 		      				    }
 		                    	

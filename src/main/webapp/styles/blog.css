@@ -248,7 +248,8 @@ div.blogPagingCont {
 .icon-blog-delete:before,
 .icon-blog-rotate:before,
 .icon-blog-move:before,
-.icon-blog-titlePic:before {
+.icon-blog-titlePic:before,
+.icon-blog-like:before {
 	color: #000060;
     font-size: 24px;
 }

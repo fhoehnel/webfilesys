@@ -109,6 +109,10 @@ a.icon-font {
 	content: '\f08a';
 }
 
+.icon-like:before {
+	content: '\f087';
+}
+
 .icon-help:before {
 	content: '\f059';
 }

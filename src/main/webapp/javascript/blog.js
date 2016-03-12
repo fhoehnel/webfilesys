@@ -1243,6 +1243,38 @@ function rotateBlogPic(imgName, direction) {
     });   
 }
 
+function like(imgName, posInPage) {
+    if (!confirm(resourceBundle["blog.confirmLike"])) {
+        return;
+    }
+     
+    showHourGlass();
+
+    var xmlUrl = "/webfilesys/servlet?command=blog&cmd=like&imgName=" + imgName;
+
+	xmlRequest(xmlUrl, function(req) {
+        if (req.readyState == 4) {
+            hideHourGlass();
+            if (req.status == 200) {
+                var resultElem = req.responseXML.getElementsByTagName("result")[0];            
+                var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+
+                if (success == 'true') {
+                    var newVoteCount = resultElem.getElementsByTagName("newVoteCount")[0].firstChild.nodeValue;
+                    document.getElementById("voteCount-" + posInPage).innerHTML = newVoteCount;
+
+                    document.getElementById("likeLink-" + posInPage).onclick = function() {javascript:void(0)};
+                    document.getElementById("likeLink-" + posInPage).title = "";
+                
+                    toast(resourceBundle["blog.likeAdded"], 2000);
+                } else {
+                    alert("failed to like blog post");
+                }
+            }
+        }
+    });
+}
+
 function setTitlePic(imgName) {
     if (!confirm(resourceBundle["blog.confirmSetTitlePic"])) {
         return;
