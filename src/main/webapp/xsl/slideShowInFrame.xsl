@@ -195,7 +195,7 @@
 
 </head>
 
-<body>
+<body class="fileList">
   <xsl:if test="not(/slideShow/imageCount = 0)">
     <xsl:if test="/slideShow/crossfade">
       <xsl:attribute name="onload">fadeIn(); setTimeout('preload()', 200)</xsl:attribute>

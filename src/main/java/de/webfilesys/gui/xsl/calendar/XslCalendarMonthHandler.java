@@ -382,7 +382,7 @@ public class XslCalendarMonthHandler extends XslCalendarHandlerBase
 
         		if ((appointment.getSubject() != null) && (appointment.getSubject().length() > 0))
         		{
-            		XmlUtil.setChildText(appointmentElem, "subject", appointment.getSubject(), true);
+            		XmlUtil.setChildText(appointmentElem, "subject", appointment.getSubject().replaceAll("'", "´"), true);
         		}
 
         		XmlUtil.setChildText(appointmentElem, "repeatPeriod", Integer.toString(appointment.getRepeatPeriod()));
@@ -418,12 +418,11 @@ public class XslCalendarMonthHandler extends XslCalendarHandlerBase
 	
 	private String replaceLineBreak(String origText)
 	{
-		if ((origText.indexOf('\n') < 0) && (origText.indexOf('\r') < 0)) 
+		if (origText == null) 
 		{
-			return origText;
+			return null;
 		}
-		
-		return (origText.replaceAll("\n", " ").replaceAll("\r", " "));
+		return (origText.replaceAll("\n", " ").replaceAll("\r", " ").replaceAll("'", "´"));
 	}
 	
 	private int getFullDayNumInCurrentMonth(Appointment appointment) 

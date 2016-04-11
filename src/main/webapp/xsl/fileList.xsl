@@ -172,7 +172,7 @@
 
 </head>
 
-<body onload="setFileListHeight();addDeselectHandler();">
+<body class="fileList" onload="setFileListHeight();addDeselectHandler();">
 
 <xsl:apply-templates />
 

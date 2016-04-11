@@ -189,7 +189,7 @@
 
 </head>
 
-<body>
+<body class="fileList">
 
   <xsl:apply-templates />
 

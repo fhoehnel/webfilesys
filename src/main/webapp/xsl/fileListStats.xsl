@@ -87,7 +87,7 @@
 
 </head>
 
-<body onload="setBundleResources();setFileListHeight()">
+<body class="fileList" onload="setBundleResources();setFileListHeight()">
 
   <xsl:call-template name="fileList" />
 

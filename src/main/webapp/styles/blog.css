@@ -79,7 +79,8 @@ div.blogCont {
 }
 
 div.blogTitlePic {
-    width: 960px;
+    width: 100%;
+    max-width: 960px;
     height: 160px;
     background-position: center;
     box-shadow: 5px 5px 5px #666666;
@@ -233,8 +234,13 @@ div.blogEntry {
     margin-top: 10px;
     margin-bottom: 25px;
     clear: both;
-    min-width: 590px;
     max-height: 999999px; /* prevent font boosting on Android */
+}
+
+@media (min-width: 620px) {
+    div.blogEntry {
+        min-width: 590px;
+    }
 }
 
 div.blogPagingCont {
@@ -599,3 +605,36 @@ img.blogEmoticon {
     height: 36px;
     vertical-align: middle;
 }
+
+@media (max-width: 800px) {
+    div.rightAlignedButton input[type=button] {
+        margin-bottom: 5px;
+    }
+}
+
+.blogEntry img.storyPicture.alignLeft {
+    float: left;
+    margin-right: 10px;
+}
+
+.blogEntry img.storyPicture.alignRight {
+    float: right;
+    margin-left: 10px;
+}
+
+@media (max-width: 500px) {
+    div.blogEntry.storyPictureRight {
+        float: left;
+    }
+
+    .blogEntry img.storyPicture.alignRight {
+        float: left;
+        margin-left: 0;
+    }
+    
+    .blogEntry img.storyPicture {
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
+}
+

@@ -14,10 +14,10 @@
 
       <meta http-equiv="expires" content="0" />
 
-      <meta name="viewport" content="width=800, initial-scale=1.0, user-scalable=yes" />
       <!--        
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+      <meta name="viewport" content="width=800, initial-scale=1.0, user-scalable=yes" />
       -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 
       <title>WebFileSys Blog</title>
 
@@ -219,17 +219,15 @@
               <a>
                 <xsl:attribute name="href">javascript:showPicturePopup('<xsl:value-of select="imgPathForScript" />', <xsl:value-of select="xpix" />, <xsl:value-of select="ypix" />)</xsl:attribute>
 
-                <img class="storyPicture" border="0" titleResource="blog.showFullSize">
+                <img border="0" titleResource="blog.showFullSize">
                   <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
                   <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
                   <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
                   <xsl:if test="align='right'">
-                    <xsl:attribute name="align">right</xsl:attribute>
-                    <xsl:attribute name="style">margin-left:10px</xsl:attribute>
+                    <xsl:attribute name="class">storyPicture alignRight</xsl:attribute>  
                   </xsl:if>
                   <xsl:if test="align='left'">
-                    <xsl:attribute name="align">left</xsl:attribute>
-                    <xsl:attribute name="style">margin-right:10px</xsl:attribute>
+                    <xsl:attribute name="class">storyPicture alignLeft</xsl:attribute>  
                   </xsl:if>
                 </img>
               </a>

@@ -17,7 +17,11 @@ body.dirTree {
     margin-right:5px;
     font-size:13px;
     font-family: Arial,Helvetica,sans-serif;
-    background-color:#ffffff;
+    background-color:#f0f0f0;
+}
+  
+body.fileList {
+    background-color:#f0f0f0;
 }
   
 body.story {
@@ -341,8 +345,8 @@ a.dir {
 }
 
 a.dirtree:hover {
-    color:green;
-    text-decoration:underline;
+    color: navy;
+    text-decoration: underline;
 }
 
 a.dir:hover {
@@ -418,7 +422,7 @@ td.story {
 }
   
 td.story2 {
-    background-color:ivory;
+    background-color: #c0c0c0;
     font-size:12pt;
     color:#306048;
     font-weight:bold;
@@ -490,7 +494,7 @@ td.fileListData {
 }
 
 td.thumbData {
-    background-color:ivory;
+    background-color: #c0c0c0;
     color:black;
     font-size:8pt;
     vertical-align:bottom;
@@ -699,6 +703,7 @@ img.thumb {
     border-style:groove;
     border-width:2px;
     border-color:#808080;
+    box-shadow: 5px 5px 5px #808080;
 }
 
 img.picFullScreen,
@@ -726,6 +731,7 @@ div.more {
 }
 
 div.last {
+    background-color: #f0f0f0;
     padding-left:12px;
     padding-top:0px;
     padding-right:0px;
