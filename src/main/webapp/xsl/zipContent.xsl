@@ -28,7 +28,7 @@
 
 </head>
 
-<body>
+<body class="zipContent">
 
 <xsl:apply-templates />
 

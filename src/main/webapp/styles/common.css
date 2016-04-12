@@ -2,6 +2,10 @@ html {
     font-family: Arial,Helvetica,sans-serif;
 }
 
+frameset > frameset > frame+frame {
+    background-color: #f0f0f0;
+}
+
 body {
     margin-top: 5px;
     margin-left: 10px;
@@ -20,8 +24,9 @@ body.dirTree {
     background-color:#f0f0f0;
 }
   
-body.fileList {
-    background-color:#f0f0f0;
+body.fileList,
+body.zipContent {
+    background-color: #f0f0f0;
 }
   
 body.story {
