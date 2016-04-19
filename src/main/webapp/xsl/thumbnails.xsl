@@ -512,7 +512,7 @@
                       <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
                       <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
                     </xsl:attribute>
-                    <img src="images/star.gif" border="0" />
+                    <img src="images/star.gif" border="0" style="vertical-align:bottom" />
                     <xsl:if test="ownerRating">
                       <xsl:value-of select="ownerRating" />
                       <xsl:if test="visitorRating">/</xsl:if>

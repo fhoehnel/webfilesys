@@ -245,6 +245,7 @@ import de.webfilesys.gui.xsl.XslFindFileHandler;
 import de.webfilesys.gui.xsl.XslFolderDiffTreeHandler;
 import de.webfilesys.gui.xsl.XslFolderWatchListHandler;
 import de.webfilesys.gui.xsl.XslGoogleMapHandler;
+import de.webfilesys.gui.xsl.XslGoogleMapMultiHandler;
 import de.webfilesys.gui.xsl.XslListCommentsHandler;
 import de.webfilesys.gui.xsl.XslLogonHandler;
 import de.webfilesys.gui.xsl.XslMenuBarHandler;
@@ -1802,6 +1803,13 @@ public class WebFileSysServlet extends ServletBase
 		if (command.equals("googleMap"))
         {
 		    (new XslGoogleMapHandler(req, resp, session, output, userid)).handleRequest(); 
+        	
+            return(true);
+        }
+
+		if (command.equals("googleMapMulti"))
+        {
+		    (new XslGoogleMapMultiHandler(req, resp, session, output, userid)).handleRequest(); 
         	
             return(true);
         }

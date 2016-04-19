@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
-    doctype-public="html" />
+<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
 
 <xsl:strip-space elements="blog" />
 
@@ -11,6 +10,7 @@
 
   <html class="blog">
     <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
 
       <meta http-equiv="expires" content="0" />
 
@@ -102,10 +102,10 @@
 
     <body class="blog">
       <xsl:if test="not(/blog/readonly)">
-        <xsl:attribute name="onload">setCalendarStyles();queryPublicLink();firefoxJumpToIdWorkaround();scrollToCurrentEntry()</xsl:attribute>
+        <xsl:attribute name="onload">setCalendarStyles();queryPublicLink();firefoxJumpToIdWorkaround();scrollToCurrentEntry();queryGeoData()</xsl:attribute>
       </xsl:if>
       <xsl:if test="/blog/readonly">
-        <xsl:attribute name="onload">setCalendarStyles();firefoxJumpToIdWorkaround()</xsl:attribute>
+        <xsl:attribute name="onload">setCalendarStyles();firefoxJumpToIdWorkaround();queryGeoData()</xsl:attribute>
       </xsl:if>
       
       <div class="blogCont">
@@ -170,9 +170,12 @@
 
             <input type="button" resource="blog.showSubscribers" onclick="showSubscribers()" />
 
+            <input type="button" id="mapAllLink" resource="blog.buttonMapAll" onclick="googleMapAll()" style="display:none" />
+
             <input type="button" resource="blog.buttonlogout" onclick="window.location.href='/webfilesys/servlet?command=logout'" />
           </xsl:if>
           <xsl:if test="/blog/readonly">
+            <a href="javascript:googleMapAll()" id="mapAllLink" class="icon-font icon-globe blogMapAll" style="display:none;" titleResource="blog.mapAll" />
             <a href="javascript:showSubscribeForm()" class="icon-font icon-watch blogSubscribe" titleResource="blog.subscribe" />
           </xsl:if>
         </div>   

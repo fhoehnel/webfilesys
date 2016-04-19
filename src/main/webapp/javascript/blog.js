@@ -648,8 +648,8 @@ function showMap(selectLocation) {
 
     var markerPos = new google.maps.LatLng(latitude, longitude);
 
-    posMarker = new google.maps.Marker({
-        position: markerPos,
+    var posMarker = new google.maps.Marker({
+        position: markerPos
     });
 
     posMarker.setMap(map);
@@ -1369,5 +1369,39 @@ function insertEmoji(textAreaId, emojiName) {
     if (textAreaField) {
         var emojiPlaceHolder = " {" + emojiName + "} ";
         insertAtCursor(textAreaField, emojiPlaceHolder);
+    }
+}
+
+function queryGeoData() {
+	setTimeout(function() {
+	        var url = "/webfilesys/servlet?command=ajaxRPC&method=checkForGeoData";
+	    
+	        xmlRequest(url, function(req) {
+	            if (req.readyState == 4) {
+	                if (req.status == 200) {
+	                    var responseXml = req.responseXML;
+	                    var resultItem = responseXml.getElementsByTagName("result")[0];
+	                    var result = resultItem.firstChild.nodeValue;  
+	                
+	                    if (result && (result == "true")) {
+	                        document.getElementById("mapAllLink").style.display = "inline";
+	                    } 
+	                }
+	            }
+	        });          
+		
+	    }, 500);
+}
+
+function googleMapAll() {
+	var mapWinWidth =  screen.availWidth - 20;
+	var mapWinHeight = screen.availHeight - 80;
+	
+    var mapWin = window.open('/webfilesys/servlet?command=googleMapMulti', 'mapWin', 'status=no,toolbar=no,location=no,menu=no,width=' + mapWinWidth + ',height=' + mapWinHeight + ',resizable=yes,left=2,top=2,screenX=2,screenY=2');
+
+    if (!mapWin) {
+        alert(resourceBundle["alert.enablePopups"]);
+    } else {
+        mapWin.focus();
     }
 }

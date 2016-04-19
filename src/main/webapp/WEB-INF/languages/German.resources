@@ -1124,6 +1124,8 @@ blog.headlineSubscribers=Abonnenten
 blog.noSubscribers=Der Blog wurde noch nicht abonniert.
 blog.insertEmoji=diese Emoticon an der Cursorposition einfügen
 blog.showEmojis=show emoticons
+blog.mapAll=alle Orte auf Landkarte anzeigen
+blog.buttonMapAll=Landkarte
 
 error.latitudeInvalid=geografische Breite muss zwischen -90 und 90 liegen
 error.longitudeInvalid=geografische Länge muss zwischen -180.0 und 180.0 liegen

@@ -220,7 +220,7 @@ public class SearchRequestHandler extends UserRequestHandler
 			output.println(getResource("label.searcharg","search argument") + ":");
 			output.println("</td>");
 			output.println("<td colspan=\"2\" class=\"formParm2\">");
-			output.println(search_arg);
+			output.println(CommonUtils.escapeHTML(search_arg));
 			output.println("</td></tr>");
 		}
 

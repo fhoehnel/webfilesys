@@ -105,7 +105,8 @@ div.blogDateRange {
 
 a.blogCalender,
 a.blogMenu,
-a.blogSubscribe
+a.blogSubscribe,
+a.blogMapAll,
 a.blogEmojiSel {
     text-decoration: none;
 }
@@ -113,9 +114,14 @@ a.blogEmojiSel {
 a.blogCalender:before,
 a.blogMenu:before,
 a.blogSubscribe,
+a.blogMapAll,
 a.blogEmojiSel:before {
     color: #000060;
     font-size: 2rem;
+}
+
+a.blogMapAll {
+	margin-right: 10px;
 }
 
 a.blogMenu {

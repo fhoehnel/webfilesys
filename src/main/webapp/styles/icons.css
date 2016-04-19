@@ -72,6 +72,14 @@ a.icon-font {
 	content: '\f06e';
 }
 
+.icon-map-marker:before {
+	content: '\f041';
+}
+
+.icon-globe:before {
+	content: '\f0ac';
+}
+
 .icon-folderOpen:before {
 	content: '\f115';
 }
