@@ -25,17 +25,23 @@
   </title>
 
   <script type="text/javascript" src="/webfilesys/javascript/geoMap.js"></script>
+  
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/geoData/language" /></xsl:attribute>
+  </script>
 
   <script language="javascript">
+
+    var infoWindowList = [];
+    
+    var map;
   
-    function handleGoogleMapsApiReady()
-    {
-        // var latitude = '<xsl:value-of select="/geoTag/latitude" />';
-        // var longitude = '<xsl:value-of select="/geoTag/longitude" />';
+    function handleGoogleMapsApiReady() {
         var zoomFactor = <xsl:value-of select="/geoData/mapData/zoomLevel" />;
 
-        // var infoText = '<xsl:value-of select="/geoTag/infoText" />';
-  
         var centerLatitude = <xsl:value-of select="/geoData/markers/marker[1]/latitude" />;
         var centerLongitude = <xsl:value-of select="/geoData/markers/marker[1]/longitude" />;
   
@@ -47,7 +53,7 @@
             mapTypeId: google.maps.MapTypeId.HYBRID
         }
       
-        var map = new google.maps.Map(document.getElementById("map"), myOptions);      
+        map = new google.maps.Map(document.getElementById("map"), myOptions);      
     
 	    var markerPos;
 	    var marker;
@@ -68,16 +74,21 @@
 		    infoText = '<xsl:value-of select="infoText" />';
 			
             infoWindow = new google.maps.InfoWindow({
-                // content: '<div style="width:120px;height:40px;overflow-x:auto;overflow-y:auto">' + infoText + '</div>'
                 content: infoText,
                 maxWidth: 120,
                 maxHeight: 40
             });
 
             infoWindow.open(map, marker);
+            
+            infoWindowList.push(infoWindow);
 		  </xsl:if>
 		  
         </xsl:for-each>
+        
+        if (infoWindowList.length == 0) {
+            document.getElementById("hideInfoButton").style.display = "none";
+        }
 	
     }  
     
@@ -88,6 +99,21 @@
         document.body.appendChild(script);
     }
     
+    function hideMapInfoWindows() {
+        for (var i = 0; i &lt; infoWindowList.length; i++) {
+            infoWindowList[i].setMap(null);
+        }
+        document.getElementById("hideInfoButton").style.display = "none";
+        document.getElementById("showInfoButton").style.display = "inline";
+    }
+    
+    function showMapInfoWindows() {
+        for (var i = 0; i &lt; infoWindowList.length; i++) {
+            infoWindowList[i].setMap(map);
+        }
+        document.getElementById("hideInfoButton").style.display = "inline";
+        document.getElementById("showInfoButton").style.display = "none";
+    }
   </script>
 
 </head>
@@ -95,6 +121,25 @@
 <body onload="loadGoogleMapsAPIScriptCode()" style="margin:0px;height:100%;">
 
   <div id="map" style="width:100%;height:100%;"></div>
+  
+  <div style="position:absolute;top:10px;right:10px;"> 
+
+    <form>
+        <input id="hideInfoButton" type="button" resource="button.hideMapInfo" onclick="hideMapInfoWindows()" 
+            style="font-size:13px;font-weight:bold;color:black;"/>
+
+        <input id="showInfoButton" type="button" resource="button.showMapInfo" onclick="showMapInfoWindows()" 
+            style="font-size:13px;font-weight:bold;color:black;display:none;"/>
+
+        <input type="button" resource="button.closeMap" onclick="setTimeout('self.close()', 100)" 
+            style="font-size:13px;font-weight:bold;color:black;"/>
+    </form>
+      
+  </div>
+
+  <script type="text/javascript">
+    setBundleResources();
+  </script>
 
 </body>
 

@@ -771,6 +771,8 @@ button.preview=Vorschau Karte
 button.selectFromMap=auf Karte auswählen
 label.hintGoogleMapSelect=Klick wählt geografische Lokation aus
 noFilesWithGeoData=Dieser Ordner enthält keine Bilder mit geografischen Koordinaten!
+button.hideMapInfo=Info-Text ausblenden
+button.showMapInfo=Info-Text einblenden
 
 # folder synchronization
 label.selectSyncSourceResult=Navigieren Sie zum Ziel-Ordner der Synchronisation und wählen Sie Synchronisieren im Kontext-Menü!
