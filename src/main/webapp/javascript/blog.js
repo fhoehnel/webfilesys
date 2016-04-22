@@ -648,7 +648,7 @@ function showMap(selectLocation) {
 
     var markerPos = new google.maps.LatLng(latitude, longitude);
 
-    var posMarker = new google.maps.Marker({
+    posMarker = new google.maps.Marker({
         position: markerPos
     });
 
