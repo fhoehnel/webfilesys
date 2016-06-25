@@ -1,0 +1,40 @@
+<resources>
+    <string name="app_name">WebFileSys Blog</string>
+    <string name="appVersion" translatable="false">version 0.3.2 (20 June 2016)</string>
+    <string name="appAuthor" translatable="false">by Frank Hoehnel</string>
+    <string name="appHomepage" translatable="false">www.webfilesys.de</string>
+    <string name="buttonClose">Close</string>
+    <string name="action_settings">Settings</string>
+    <string name="buttonPickImage">Pick Image from Gallery</string>
+    <string name="buttonSendPost">Send</string>
+    <string name="noImageSelected">no image selected</string>
+
+    <string name="optionMenuAbout">About</string>
+    <string name="optionMenuExit">Exit</string>
+    <string name="optionMenuSettings">Settings</string>
+
+    <string name="buttonSaveSettings">Continue</string>
+
+    <string name="labelServerUrl">WebFileSys server URL:</string>
+    <string name="labelUserid">WebFileSys userid:</string>
+    <string name="labelPassword">WebFileSys password:</string>
+
+    <string name="missingParameters">Please enter required parameters!</string>
+
+    <string name="hintDescription">enter description text</string>
+    <string name="missingDescription">Please enter a description text!</string>
+
+    <string name="postSuccess">Post was successful</string>
+    <string name="postFailed">Post has failed!</string>
+
+    <string name="buttonSelectGeoLocation">Select geo location on map</string>
+    <string name="buttonChangeGeoLocation">Change location</string>
+    <string name="buttonClearGeoLocation">Clear</string>
+
+    <string name="offline">You are offline!</string>
+
+    <string name="selectedLocation">selected location:</string>
+
+    <string name="buttonMapSelectionOk">OK</string>
+
+</resources>

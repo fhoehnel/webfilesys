@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WebFileSys Blog</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="buttonClose">Schliessen</string>
+    <string name="buttonPickImage">Bild wählen</string>
+    <string name="buttonSaveSettings">Weiter</string>
+    <string name="buttonSendPost">Senden</string>
+    <string name="noImageSelected">kein Bild ausgewählt</string>
+
+    <string name="labelPassword">WebFileSys Passwort:</string>
+    <string name="labelServerUrl">WebFileSys Server URL</string>
+    <string name="labelUserid">WebFileSys Userid:</string>
+    <string name="optionMenuAbout">Über WebFileSys Blog App</string>
+    <string name="optionMenuExit">Beenden</string>
+    <string name="optionMenuSettings">Einstellungen</string>
+
+    <string name="missingParameters">Bitte füllen Sie die Pflichtfelder aus!</string>
+
+    <string name="hintDescription">Beschreibungstext eingeben</string>
+    <string name="missingDescription">Bitte geben Sie einen Beschreibungstext ein!</string>
+
+    <string name="postSuccess">erfolgreich gesendet</string>
+    <string name="postFailed">Senden ist fehlgeschlagen!</string>
+
+    <string name="buttonSelectGeoLocation">Lokation auf Karte auswählen</string>
+    <string name="buttonChangeGeoLocation">Lokation ändern</string>
+    <string name="buttonClearGeoLocation">rücksetzen</string>
+
+    <string name="offline">Sie sind offline!</string>
+
+    <string name="selectedLocation">Geo-Lokation:</string>
+
+    <string name="buttonMapSelectionOk">OK</string>
+
+</resources>

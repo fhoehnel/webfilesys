@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/border">
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#408040"
+        android:textSize="24sp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/app_name" />
+
+    <TextView
+        android:id="@+id/appVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#804040"
+        android:textSize="18sp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/appVersion" />
+
+    <TextView
+        android:id="@+id/appAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#404080"
+        android:textSize="18sp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/appAuthor" />
+
+    <TextView
+        android:id="@+id/appHomepage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#604060"
+        android:textSize="20sp"
+        android:autoLink="web"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/appHomepage" />
+
+    <Button
+        android:id="@+id/aboutCloseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="32sp"
+        android:textColor="#202020"
+        android:textSize="16sp"
+        android:background="@drawable/button_border"
+        android:layout_marginTop="50px"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/buttonClose" />
+
+</LinearLayout>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/optionSettings"
+        android:enabled="true"
+        android:visible="true"
+        android:titleCondensed="About"
+        android:alphabeticShortcut="a"
+        android:menuCategory="system"
+        android:title="@string/optionMenuSettings"
+        yourapp:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_settings" />
+
+    <item
+        android:id="@+id/optionAbout"
+        android:enabled="true"
+        android:visible="true"
+        android:titleCondensed="About"
+        android:alphabeticShortcut="a"
+        android:menuCategory="system"
+        android:title="@string/optionMenuAbout"
+        yourapp:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_about" />
+
+    <item
+        android:id="@+id/optionExit"
+        android:enabled="true"
+        android:visible="true"
+        android:titleCondensed="Exit"
+        android:alphabeticShortcut="e"
+        android:menuCategory="system"
+        android:title="@string/optionMenuExit"
+        android:icon="@drawable/ic_action_cancel" />
+
+</menu>
