@@ -860,7 +860,7 @@ error.invalidSecretKey=The decryption key is incorrect!
 # tail
 tail.lineCount=number of lines from end of file
 tail.autoRefresh=automatic refresh
-label.resizetitle=This file seems not to be a text file
+tail.noTextFile=This file seems not to be a text file
 
 # grep
 grepNotAllowed=This file seems to be a binary file. The grep function is only allowed for text files.

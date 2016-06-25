@@ -124,13 +124,17 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 			
 			for (i = 0; i < fileFilter.length; i++)
 			{
-				if (lowerCaseMask.endsWith(fileFilter[i].toLowerCase()))
+				if (lowerCaseMask.endsWith(fileFilter[i].substring(1).toLowerCase()))
 				{
 					maskFilter[i] = mask;
 				}
                 else
-                {				
-					maskFilter[i] = mask + fileFilter[i].substring(1);
+                {			
+                	if (mask.endsWith(".*")) {
+    					maskFilter[i] = mask.substring(0, mask.length() - 2) + fileFilter[i].substring(1);
+                	} else {
+    					maskFilter[i] = mask + fileFilter[i].substring(1);
+                	}
                 }
 			}
 			

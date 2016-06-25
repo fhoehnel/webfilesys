@@ -89,7 +89,7 @@ public class TailRequestHandler extends UserRequestHandler
 	        if (!isTextFile(filePath, WebFileSys.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK))
 	        {
 	            resp.setContentType("text/plain");
-	            output.println(getResource("label.resizetitle", "This file seems not to be a text file") + ": " + getHeadlinePath(filePath));
+	            output.println(getResource("tail.noTextFile", "This file seems not to be a text file") + ": " + getHeadlinePath(filePath));
 	            output.flush();
 	            return;
 	        }

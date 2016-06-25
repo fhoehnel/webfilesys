@@ -216,9 +216,11 @@ function handleFiles(files) {
 function submitPost() {
     var blogText = document.getElementById("blogText").value;
 
-    if ((selectedForUpload.length == 0) && (trim(blogText).length == 0)) {
-        alert(resourceBundle["blog.emptyPost"]);
-        return;
+    if (trim(blogText).length == 0) {
+        if ((document.getElementById("blogForm").cmd.value != "changeEntry") && (selectedForUpload.length == 0)) {
+            alert(resourceBundle["blog.emptyPost"]);
+            return;
+        }
     }
     
     if (trim(blogText).length == 0) {

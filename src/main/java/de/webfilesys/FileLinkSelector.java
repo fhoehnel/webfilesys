@@ -287,11 +287,11 @@ public class FileLinkSelector
 							selectedFiles.addElement(fileCont);
 
 							selectedFileNumber++;
+
+							if (!fileCont.isLink()) {
+								fileSizeSum += fileCont.getRealFile().length();
+							}
 						}
-					}
-					
-					if (!fileCont.isLink()) {
-						fileSizeSum += fileCont.getRealFile().length();
 					}
 				}
 				else

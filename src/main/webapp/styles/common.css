@@ -197,6 +197,10 @@ td.loginFormLabel {
     vertical-align:middle;
 }
   
+input.loginButton {
+    margin-bottom: 30px;
+}
+  
 div.centerHoriz {
     position:absolute;
     top:0;
@@ -1582,4 +1586,26 @@ div.centeredButtonCont {
 span.publicUrl {
     font-size: 11px;
     color: navy;
+}
+
+@media (max-width: 400px) {
+    div.centerBox {
+        position: static;
+        width: 100%
+    }
+    
+    div.loginBox {
+        position: static;
+        margin: auto auto;
+        width: 250px;
+        height: 200px;
+    }
+    
+    td.loginTitle {
+        display: none;
+    }
+    
+    input.loginButton {
+        margin-bottom: 0;
+    }
 }

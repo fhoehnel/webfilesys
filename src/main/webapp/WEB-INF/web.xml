@@ -53,8 +53,12 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     <servlet-name>visitorServlet</servlet-name>
     <servlet-class>de.webfilesys.servlet.VisitorServlet</servlet-class>
   </servlet>
+  
+  <servlet>
+    <servlet-name>blogPostServlet</servlet-name>
+    <servlet-class>de.webfilesys.servlet.BlogPostServlet</servlet-class>
+  </servlet>
 
-  <!-- Action Servlet Mapping -->
   <servlet-mapping>
     <servlet-name>webfilesys</servlet-name>
     <url-pattern>/servlet/*</url-pattern>
@@ -68,6 +72,11 @@ PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
   <servlet-mapping>
     <servlet-name>visitorServlet</servlet-name>
     <url-pattern>/visitor/*</url-pattern>
+  </servlet-mapping>
+
+  <servlet-mapping>
+    <servlet-name>blogPostServlet</servlet-name>
+    <url-pattern>/blogpost/*</url-pattern>
   </servlet-mapping>
 
   <session-config>

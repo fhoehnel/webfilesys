@@ -863,7 +863,7 @@ error.invalidSecretKey=Der geheime Schlüssel ist falsch!
 # tail
 tail.lineCount=Zeilenzahl vom Dateiende
 tail.autoRefresh=automatisch neu laden
-label.resizetitle=Diese Datei scheint keine Text-Datei zu sein
+tail.noTextFile=Diese Datei scheint keine Text-Datei zu sein
 
 # grep
 grepNotAllowed=Diese Datei scheint eine Binär-Datei zu sein. grep ist nur für Text-Dateien erlaubt.

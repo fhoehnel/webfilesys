@@ -114,12 +114,7 @@
                   &#160;
                 </td>
                 <td>
-                  <input type="submit" name="logonbutton" resource="label.logon" />
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  &#160;
+                  <input type="submit" name="logonbutton" resource="label.logon" class="loginButton" />
                 </td>
               </tr>
               <tr>
