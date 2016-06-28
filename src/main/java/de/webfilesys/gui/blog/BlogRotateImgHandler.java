@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import de.webfilesys.MetaInfManager;
+import de.webfilesys.graphics.BlogThumbnailHandler;
 import de.webfilesys.graphics.ImageTransform;
 import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
@@ -72,15 +73,31 @@ public class BlogRotateImgHandler extends XmlRequestHandlerBase {
 		ImageTransform imgTrans = new ImageTransform(imgFile.getAbsolutePath(), "rotate", degrees);
 
 		String resultImageName = imgTrans.execute(false);
+		
+		boolean success = false;
 
-		MetaInfManager.getInstance().moveMetaInf(currentPath, imgName, resultImageName);
-		
-		boolean success = true;
-		
-		if (imgFile.exists()) {
-			success = imgFile.delete();
+		if (resultImageName != null) {
+			MetaInfManager.getInstance().moveMetaInf(currentPath, imgName, resultImageName);
+			
+			// TODO: test which method results in better image quality:
+			// - rotate (lossy) the existing thumbnail image
+			// - create a new thumbnail from the (losslessly) rotated big image
+			
+			// BlogThumbnailHandler.getInstance().rotateThumbnail(imgFile.getAbsolutePath(), degrees);		
+ 
+			BlogThumbnailHandler.getInstance().deleteThumbnail(imgFile.getAbsolutePath());
+
+			File resultImgFile = new File(currentPath, resultImageName);
+			
+			BlogThumbnailHandler.getInstance().createBlogThumbnail(resultImgFile.getAbsolutePath());
+			
+			success = true;
+			
+			if (imgFile.exists()) {
+				success = imgFile.delete();
+			}
 		}
-		
+
 		Element resultElement = doc.createElement("result");
         
         XmlUtil.setChildText(resultElement, "success", Boolean.toString(success));

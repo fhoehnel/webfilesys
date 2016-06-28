@@ -15,6 +15,7 @@ import org.w3c.dom.Element;
 
 import de.webfilesys.FileComparator;
 import de.webfilesys.MetaInfManager;
+import de.webfilesys.graphics.BlogThumbnailHandler;
 import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
@@ -157,6 +158,8 @@ public class BlogMoveEntryHandler extends XmlRequestHandlerBase {
     	}
 
     	MetaInfManager.getInstance().moveMetaInf(currentPath, fileToMove, newFileName);
+    	
+    	BlogThumbnailHandler.getInstance().renameThumbnail(sourceFile.getAbsolutePath(), newFileName);
     	
     	return true;
     }

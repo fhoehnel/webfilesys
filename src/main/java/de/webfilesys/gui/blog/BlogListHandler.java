@@ -24,6 +24,7 @@ import de.webfilesys.Constants;
 import de.webfilesys.FileComparator;
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
+import de.webfilesys.graphics.BlogThumbnailHandler;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.servlet.VisitorServlet;
@@ -345,26 +346,37 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		                     
 		        					int thumbWidth = 0;
 		        					int thumbHeight = 0;
-
-		                            if ((scaledImage.getRealWidth() <= thumbnailSize) &&
-		                                (scaledImage.getRealHeight() <= thumbnailSize))
-		                            {
-		        						thumbHeight = scaledImage.getRealHeight();
-		        						thumbWidth = scaledImage.getRealWidth();
-		                            }
-		                            else
-		                            {
-		        						if (scaledImage.getRealHeight() > scaledImage.getRealWidth())
-		        						{
-		        							thumbHeight = thumbnailSize;
-		        							thumbWidth = scaledImage.getRealWidth() * thumbnailSize / scaledImage.getRealHeight();
+		        					
+		        					String imgPath = BlogThumbnailHandler.getInstance().getPathOfExistingThumbnail(file.getAbsolutePath());
+		        					
+		        					if (imgPath == null) {
+		        						imgPath = file.getAbsolutePath();
+			                            if ((scaledImage.getRealWidth() <= thumbnailSize) &&
+				                            (scaledImage.getRealHeight() <= thumbnailSize))
+			                            {
+			        						thumbHeight = scaledImage.getRealHeight();
+			        						thumbWidth = scaledImage.getRealWidth();
+			                            }
+			                            else
+			                            {
+			        						if (scaledImage.getRealHeight() > scaledImage.getRealWidth())
+			        						{
+			        							thumbHeight = thumbnailSize;
+			        							thumbWidth = scaledImage.getRealWidth() * thumbnailSize / scaledImage.getRealHeight();
+			        						}
+			        						else
+			        						{
+			        							thumbWidth = thumbnailSize;
+			        							thumbHeight = scaledImage.getRealHeight() * thumbnailSize / scaledImage.getRealWidth();
+			        						}
+			                            }
+		        					} else {
+		        						ScaledImage thumbnailDimensions = BlogThumbnailHandler.getInstance().getThumbnailDimensions(file.getAbsolutePath());
+		        						if (thumbnailDimensions != null) {
+			        						thumbWidth = thumbnailDimensions.getRealWidth();
+			        						thumbHeight = thumbnailDimensions.getRealHeight();
 		        						}
-		        						else
-		        						{
-		        							thumbWidth = thumbnailSize;
-		        							thumbHeight = scaledImage.getRealHeight() * thumbnailSize / scaledImage.getRealWidth();
-		        						}
-		                            }
+		        					}
 		        					
 		        					XmlUtil.setChildText(fileElement, "thumbnailWidth", Integer.toString(thumbWidth));
 		        					XmlUtil.setChildText(fileElement, "thumbnailHeight", Integer.toString(thumbHeight));
@@ -379,9 +391,10 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		        					XmlUtil.setChildText(fileElement, "fullScreenWidth", Integer.toString(fullScreenWidth));
 		        					XmlUtil.setChildText(fileElement, "fullScreenHeight", Integer.toString(scaledImage.getScaledHeight()));
 		        					
-		        					String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(file.getAbsolutePath()) + "&cached=true";
+
+		        					String imgSrcUrl = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(imgPath) + "&cached=true";
 		        					
-		        					XmlUtil.setChildText(fileElement, "imgPath", srcFileName);
+		        					XmlUtil.setChildText(fileElement, "imgPath", imgSrcUrl);
 
 		        					XmlUtil.setChildText(fileElement, "pagePicCounter", Integer.toString(globalEntryCounter));
 		        					

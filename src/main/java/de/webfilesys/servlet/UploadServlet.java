@@ -21,6 +21,7 @@ import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
+import de.webfilesys.graphics.BlogThumbnailHandler;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ImageTransformUtil;
 import de.webfilesys.gui.user.ZipFileRequestHandler;
@@ -35,7 +36,7 @@ import de.webfilesys.util.UTF8URLDecoder;
 public class UploadServlet extends WebFileSysServlet
 {
 	private static final long serialVersionUID = 1L;
-
+	
 	public void doPost ( HttpServletRequest req, HttpServletResponse resp )
     throws ServletException, java.io.IOException
     {
@@ -683,6 +684,9 @@ public class UploadServlet extends WebFileSysServlet
 
 			// TODO: image size from blog settings
 			if (ImageTransformUtil.createScaledImage(origImgPath, scaledImgPath, 1280, 1280)) {
+
+				BlogThumbnailHandler.getInstance().createBlogThumbnail(origImgPath);
+				
 				File origImgFile = new File(origImgPath);
 				if (!origImgFile.delete()) {
 		            Logger.getLogger(getClass()).error("failed to delete original image after scaling: " + origImgPath);
@@ -693,7 +697,7 @@ public class UploadServlet extends WebFileSysServlet
 					}
 				}
 			}
-
+			
 			if (geoTag != null) {
 				MetaInfManager.getInstance().setGeoTag(origImgPath, geoTag);
             }

@@ -18,6 +18,7 @@ import de.webfilesys.InvitationManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
+import de.webfilesys.graphics.BlogThumbnailHandler;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ImageTransformUtil;
 import de.webfilesys.util.CommonUtils;
@@ -272,6 +273,8 @@ public class BlogPostServlet extends WebFileSysServlet {
 			MetaInfManager.getInstance().setGeoTag(origImgPath, geoTag);
         }
         
+		BlogThumbnailHandler.getInstance().createBlogThumbnail(origImgPath);
+
         if (WebFileSys.getInstance().isAutoCreateThumbs()) {
             String ext = CommonUtils.getFileExtension(fileName);
             

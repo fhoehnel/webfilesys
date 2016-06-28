@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import de.webfilesys.Comment;
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
+import de.webfilesys.graphics.BlogThumbnailHandler;
 import de.webfilesys.gui.user.UserRequestHandler;
 import de.webfilesys.util.CommonUtils;
 
@@ -82,6 +83,8 @@ public class BlogChangeEntryHandler extends UserRequestHandler {
 	        if (!oldFile.renameTo(newFile)) {
 		        Logger.getLogger(getClass()).error("failed to rename blog file " + fileName + " to " + newFile.getName());
 		        return;
+	        } else {
+	        	BlogThumbnailHandler.getInstance().renameThumbnail(oldFilePath, newFileName);
 	        }
 
 	        metaInfMgr.removeDescription(oldFilePath);
