@@ -60,7 +60,7 @@ function handleDirRemoved(req)
                 var pathItem = req.responseXML.getElementsByTagName("parentPath")[0];            
                 var parentPath = pathItem.firstChild.nodeValue;
 
-                window.location.href = "/webfilesys/servlet?command=exp&actPath=" + parentPath + "&expand=" + parentPath + "&fastPath=true";
+                window.location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(parentPath) + "&expand=" + encodeURIComponent(parentPath) + "&fastPath=true";
             }       
             else
             {

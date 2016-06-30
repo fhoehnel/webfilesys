@@ -47,7 +47,7 @@ public class AjaxCheckForGeoDataHandler extends XmlRequestHandlerBase
         
         FileLinkSelector fileSelector = new FileLinkSelector(path, FileComparator.SORT_BY_FILENAME, true);
 
-        FileSelectionStatus selectionStatus = fileSelector.selectFiles(Constants.JPEG_FILE_MASKS, -1, MAX_FILE_NUM, 0);
+        FileSelectionStatus selectionStatus = fileSelector.selectFiles(Constants.imgFileMasks, -1, MAX_FILE_NUM, 0);
 
         Vector selectedFiles = selectionStatus.getSelectedFiles();
         

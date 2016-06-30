@@ -443,6 +443,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 		
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{
+		    Logger.getLogger(getClass()).warn("folder is not a readable directory: " + actPath);
 			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
 			processResponse("xsl/folderTree.xsl");
 			return; 

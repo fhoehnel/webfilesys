@@ -757,6 +757,7 @@ mapTypeGoogleMap=Google Maps
 mapTypeGoogleEarth=Google Earth
 label.googleEarthAllFiles=Show geographic location of all pictures in Google Earth
 label.OSMapAllFiles=Show geographic location of all pictures in Open Street Map
+label.googleMapAllFiles=Show geographic location of all pictures in Google Maps
 label.geoTag=Geo-Tag Data
 label.latitude=latitude in decimal degrees (example: 51.05 for Dresden)
 label.longitude=longitude in decimal degrees (example: 13.75 for Dresden)

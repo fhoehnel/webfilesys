@@ -700,6 +700,11 @@
                       <xsl:attribute name="onclick">javascript:filesOSMap()</xsl:attribute>
                       <xsl:attribute name="value">OSMap</xsl:attribute>
                     </input> 
+
+                    <input type="button" titleResource="label.googleMapAllFiles">
+                      <xsl:attribute name="onclick">javascript:googleMapAllPics()</xsl:attribute>
+                      <xsl:attribute name="value">Google Maps</xsl:attribute>
+                    </input> 
                   </xsl:if>
                   
                 </div>

@@ -35,24 +35,3 @@ function switchCopyRightFields()
     }
 }
 
-function prepareCropAreaParms()
-{
-    var picture = document.getElementById('editPicture');
-    var picturePos = findPos(picture);
-
-    var pictureXpos = picturePos[0];
-    var pictureYpos = picturePos[1];
-
-    var selectorLeft = parseInt(areaSelector.style.left);
-    var selectorTop = parseInt(areaSelector.style.top);
-
-    var pictureLeft = selectorLeft - pictureXpos;
-    var pictureTop = selectorTop - pictureYpos + 1;
-    var pictureWidth = parseInt(areaSelector.style.width) + 2;   
-    var pictureHeight = parseInt(areaSelector.style.height) + 3;
-
-    document.form1.cropAreaLeft.value = pictureLeft;
-    document.form1.cropAreaTop.value = pictureTop;
-    document.form1.cropAreaWidth.value = pictureWidth;
-    document.form1.cropAreaHeight.value = pictureHeight;
-}

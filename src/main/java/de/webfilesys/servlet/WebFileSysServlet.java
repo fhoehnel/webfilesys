@@ -199,7 +199,6 @@ import de.webfilesys.gui.user.RenameLinkRequestHandler;
 import de.webfilesys.gui.user.RenameToExifDateHandler;
 import de.webfilesys.gui.user.ResetStatisticsRequestHandler;
 import de.webfilesys.gui.user.ResizeImageRequestHandler;
-import de.webfilesys.gui.user.ResizeParmsRequestHandler;
 import de.webfilesys.gui.user.ReturnToPrevDirHandler;
 import de.webfilesys.gui.user.RotatedExifThumbHandler;
 import de.webfilesys.gui.user.SearchRequestHandler;
@@ -259,6 +258,7 @@ import de.webfilesys.gui.xsl.XslRenameDirHandler;
 import de.webfilesys.gui.xsl.XslRenameFilePromptHandler;
 import de.webfilesys.gui.xsl.XslRenameFolderPromptHandler;
 import de.webfilesys.gui.xsl.XslRenameImagePromptHandler;
+import de.webfilesys.gui.xsl.XslResizeParmsHandler;
 import de.webfilesys.gui.xsl.XslSearchParmsHandler;
 import de.webfilesys.gui.xsl.XslSelfRegistrationHandler;
 import de.webfilesys.gui.xsl.XslShowImageHandler;
@@ -1124,11 +1124,11 @@ public class WebFileSysServlet extends ServletBase
 
         if (command.equals("resizeParms"))
         {
-		    (new ResizeParmsRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+		    (new XslResizeParmsHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }
-        
+
         if (command.equals("resizeImages"))
         {
 		    (new ResizeImageRequestHandler(req, resp, session, output, userid)).handleRequest(); 

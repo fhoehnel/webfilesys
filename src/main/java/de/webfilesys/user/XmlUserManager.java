@@ -30,7 +30,8 @@ public class XmlUserManager extends UserManagerBase
 {
     public static final String USER_FILE_NAME = "users.xml";
 
-    private static final String ENCRYPTION_METHOD = "MD5";
+    private static final String ENCRYPTION_METHOD_MD5 = "MD5";
+    private static final String ENCRYPTION_METHOD_SHA256 = "SHA-256";
     
     private Document doc;
 
@@ -894,9 +895,9 @@ public class XmlUserManager extends UserManagerBase
         return(documentRoot);
     }
 
-    private String encryptPassword(String cleartextPassword) {
+    private String encryptPassword(String cleartextPassword, String encryptionMethod) {
     	try {
-            MessageDigest md=MessageDigest.getInstance(ENCRYPTION_METHOD);
+            MessageDigest md=MessageDigest.getInstance(encryptionMethod);
 
             byte[] encryptedPassword = md.digest(cleartextPassword.getBytes());
 
@@ -916,11 +917,11 @@ public class XmlUserManager extends UserManagerBase
             return;
         }
 
-        XmlUtil.setChildText(userElement, "password", encryptPassword(newPassword));
+        XmlUtil.setChildText(userElement, "password", encryptPassword(newPassword, ENCRYPTION_METHOD_SHA256));
 
         Element passwordElement = XmlUtil.getChildByTagName(userElement, "password");
 
-        passwordElement.setAttribute("encryption", ENCRYPTION_METHOD);
+        passwordElement.setAttribute("encryption", ENCRYPTION_METHOD_SHA256);
     }
 
     public boolean checkPassword(String userId,String password)
@@ -953,7 +954,7 @@ public class XmlUserManager extends UserManagerBase
             return(password.equals(storedPassword));
         }
 
-        String encryptedPassword = encryptPassword(password);
+        String encryptedPassword = encryptPassword(password, encryptionMethod);
 
         return(encryptedPassword.equals(storedPassword));
     }
@@ -985,7 +986,7 @@ public class XmlUserManager extends UserManagerBase
             return(password.equals(storedPassword));
         }
 
-        String encryptedPassword = encryptPassword(password);
+        String encryptedPassword = encryptPassword(password, encryptionMethod);
 
         return(encryptedPassword.equals(storedPassword));
     }
@@ -999,13 +1000,11 @@ public class XmlUserManager extends UserManagerBase
             return;
         }
 
-        String encryptionMethod = "MD5";
-
-        XmlUtil.setChildText(userElement, "read-password", encryptPassword(newPassword));
+        XmlUtil.setChildText(userElement, "read-password", encryptPassword(newPassword, ENCRYPTION_METHOD_SHA256));
 
         Element passwordElement=XmlUtil.getChildByTagName(userElement, "read-password");
 
-        passwordElement.setAttribute("encryption", encryptionMethod);
+        passwordElement.setAttribute("encryption", ENCRYPTION_METHOD_SHA256);
     }
 
     public void setLastLoginTime(String userId,Date newVal)
