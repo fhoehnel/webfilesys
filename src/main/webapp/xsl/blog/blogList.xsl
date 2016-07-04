@@ -91,7 +91,6 @@
 
         function scrollToCurrentEntry() {
             <xsl:if test="/blog/posInPage">
-              console.log("scrolling to entry-<xsl:value-of select="/blog/posInPage" />");
               document.getElementById('entry-<xsl:value-of select="/blog/posInPage" />').scrollIntoView();
             </xsl:if>
         }
