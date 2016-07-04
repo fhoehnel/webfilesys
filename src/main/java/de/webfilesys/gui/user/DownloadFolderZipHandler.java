@@ -1,5 +1,6 @@
 package de.webfilesys.gui.user;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -139,6 +140,8 @@ public class DownloadFolderZipHandler extends UserRequestHandler
             return;
         }
 
+        byte buff[] = new byte[4096];
+
         for (int i = 0; i < fileList.length; i++)
         {
             File tempFile = new File(actPath + File.separator + fileList[i]);
@@ -160,15 +163,14 @@ public class DownloadFolderZipHandler extends UserRequestHandler
 
                     zipOut.putNextEntry(newZipEntry);
 
-                    FileInputStream inStream = null;
+                    BufferedInputStream inStream = null;
 
                     try
                     {
                         File originalFile = new File(fullFileName);
 
-                        inStream = new FileInputStream(originalFile);
+                        inStream = new BufferedInputStream(new FileInputStream(originalFile));
 
-                        byte buff[] = new byte[4096];
                         int count;
 
                         while ((count = inStream.read(buff)) >= 0)

@@ -24,7 +24,9 @@ body.blog input[type="button"],
 .blogCommentForm input[type="button"],
 .blogSettingsForm input[type="button"],
 input.blogUploadFileSelButton,
-#subscribeCont input[type="button"] {
+#subscribeCont input[type="button"],
+#searchResultCont input[type="button"],
+#searchFormCont input[type="button"] {
     height: 32px;
     background: linear-gradient(#d0d0d0, #f0f0f0);
     border-color: #404040;
@@ -107,6 +109,7 @@ a.blogCalender,
 a.blogMenu,
 a.blogSubscribe,
 a.blogMapAll,
+a.blogSearch,
 a.blogEmojiSel {
     text-decoration: none;
 }
@@ -115,6 +118,7 @@ a.blogCalender:before,
 a.blogMenu:before,
 a.blogSubscribe,
 a.blogMapAll,
+a.blogSearch,
 a.blogEmojiSel:before {
     color: #000060;
     font-size: 2rem;
@@ -122,6 +126,10 @@ a.blogEmojiSel:before {
 
 a.blogMapAll {
 	margin-right: 10px;
+}
+
+a.blogSearch {
+	margin-left: 10px;
 }
 
 a.blogMenu {
@@ -491,6 +499,84 @@ div.subscriberList li {
     margin: 5px 0;
 }
 
+div.blogSearchFormCont {
+    position: absolute;
+    right: 10px;
+    top: 100px;
+    width: 300px;
+    height: 140px;
+    border: 2px ridge #808080;
+    background-color: #ffffe0;
+    visibility: hidden;
+}
+
+div.searchResultCont {
+    position: absolute;
+    right: 10px;
+    top: 100px;
+    width: 480px;
+    height: 300px;
+    border: 2px ridge #808080;
+    background-color: #ffffe0;
+    padding: 10px;
+    visibility: hidden;
+}
+
+label.searchResultHitCount {
+	float: right;
+}
+
+div.searchResultScrollPane {
+	overflow-x: auto;
+	overflow-y: auto;
+	height: 220px;
+	width: 100%;
+	margin: 10px 0;
+}
+
+div.searchResultButtonCont {
+}
+
+input.searchResultCloseButton {
+	float: right;
+}
+
+a.searchHitLink {
+	color: navy;
+	text-decoration: none;
+}
+
+a.searchHitLink:hover {
+	text-decoration: underline;
+}
+
+ul.searchHitDayList {
+	padding-left: 0;
+	margin: 0;
+}
+
+ul.searchHitDayList > li {
+	list-style-type: none;
+	margin-bottom: 16px;
+}
+
+ul.searchHitDayList > li > span {
+	font-weight: bold;
+}
+
+ul.searchHitsList {
+	padding-left: 20px;
+	margin: 0;
+}
+
+ul.searchHitsList li {
+	list-style-type: none;
+}
+
+span.searchHit {
+	font-weight: bold;
+}
+
 #calDiv {
     background-color: ivory;
     position: absolute;
@@ -644,3 +730,9 @@ img.blogEmoticon {
     }
 }
 
+@media (max-width: 400px) {
+    div.searchResultCont {
+        width: 340px;
+        right: 0;
+    }
+}

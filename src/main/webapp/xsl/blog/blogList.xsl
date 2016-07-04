@@ -34,6 +34,7 @@
       
       <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
       <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+      <script src="/webfilesys/javascript/xmlUtil.js" type="text/javascript"></script>
       <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
       <script src="/webfilesys/javascript/ajaxUpload.js" type="text/javascript"></script>
       <script src="/webfilesys/javascript/popupPicture.js" type="text/javascript"></script>
@@ -88,13 +89,12 @@
             window.location.href = "/webfilesys/servlet?command=blog&amp;beforeDay=" + beforeDay;
         }
 
-        <xsl:if test="not(/blog/readonly)">
-          function scrollToCurrentEntry() {
-              <xsl:if test="/blog/posInPage">
-                document.getElementById('entry-<xsl:value-of select="/blog/posInPage" />').scrollIntoView();
-              </xsl:if>
-          }
-        </xsl:if>
+        function scrollToCurrentEntry() {
+            <xsl:if test="/blog/posInPage">
+              console.log("scrolling to entry-<xsl:value-of select="/blog/posInPage" />");
+              document.getElementById('entry-<xsl:value-of select="/blog/posInPage" />').scrollIntoView();
+            </xsl:if>
+        }
 
       </script>
       
@@ -105,7 +105,7 @@
         <xsl:attribute name="onload">setCalendarStyles();queryPublicLink();firefoxJumpToIdWorkaround();scrollToCurrentEntry();queryGeoData()</xsl:attribute>
       </xsl:if>
       <xsl:if test="/blog/readonly">
-        <xsl:attribute name="onload">setCalendarStyles();firefoxJumpToIdWorkaround();queryGeoData()</xsl:attribute>
+        <xsl:attribute name="onload">setCalendarStyles();firefoxJumpToIdWorkaround();scrollToCurrentEntry();queryGeoData()</xsl:attribute>
       </xsl:if>
       
       <div class="blogCont">
@@ -135,6 +135,7 @@
           <a href="#" class="icon-font icon-menu blogMenu" titleResource="blog.settingsHeadline">
             <xsl:attribute name="onClick">showSettings()</xsl:attribute>
           </a>
+          <a href="javascript:showSearchForm()" class="icon-font icon-search blogMenu" titleResource="blog.search" />
         </xsl:if>
 
         <div class="blogCalenderCont">
@@ -177,6 +178,7 @@
           <xsl:if test="/blog/readonly">
             <a href="javascript:googleMapAll()" id="mapAllLink" class="icon-font icon-globe blogMapAll" style="display:none;" titleResource="blog.mapAll" />
             <a href="javascript:showSubscribeForm()" class="icon-font icon-watch blogSubscribe" titleResource="blog.subscribe" />
+            <a href="javascript:showSearchForm()" class="icon-font icon-search blogSearch" titleResource="blog.search" />
           </xsl:if>
         </div>   
     
@@ -461,6 +463,25 @@
         </form>
       </div>
     </xsl:if>    
+    
+    <div id="searchFormCont" class="blogSearchFormCont">
+      <form id="searchForm" action="/webfilesys/servlet" method="post" class="blogSubscribeForm">
+          <input type="hidden" name="command" value="blog" />
+          <input type="hidden" name="cmd" value="search" />
+          <ul class="subscribeForm">
+            <li>
+              <label resource="blog.labelSearchArg"></label>
+            </li>
+            <li>
+              <input type="text" id="searchArg" name="searchArg" onkeypress="return searchKeyPress(event);" />
+            </li>
+            <li>
+              <input type="button" resource="blog.searchButton" onclick="submitSearch()" />
+              <input type="button" resource="button.cancel" onclick="hideSearchForm()" style="float: right" />
+            </li>
+          </ul>
+        </form>
+    </div>
     
     <script type="text/javascript">
       setBundleResources();

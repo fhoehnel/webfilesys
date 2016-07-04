@@ -1106,6 +1106,192 @@ function subscribeKeyPress(e) {
     return true;
 }
 
+function showSearchForm() {
+    var searchFormCont = document.getElementById("searchFormCont");
+    
+    searchFormCont.style.visibility = "visible";
+    
+    var searchArgInput = document.getElementById("searchArg");
+    searchArgInput.focus();
+    if (searchArgInput.value.length > 0) {
+    	searchArgInput.select();
+    }
+}
+
+function hideSearchForm() {
+    var searchFormCont = document.getElementById("searchFormCont");
+    searchFormCont.style.visibility = "hidden";
+}
+
+function submitSearch() {
+    var searchArg = document.getElementById("searchArg");
+    
+    if (searchArg.value.length < 2) {
+        alert(resourceBundle["blog.searchArgMinLength"]);
+        document.getElementById("searchArg").focus();
+        return;
+    }
+    
+    var formData = getFormData(document.getElementById("searchForm"));
+	
+	xmlRequestPost("/webfilesys/servlet", formData, handleSearchResult)	    
+}
+
+function handleSearchResult(req) {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+
+        	var resultElem = req.responseXML.getElementsByTagName("result")[0];            
+            // var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+            hideSearchForm();
+        	
+           	var searchResultCont = document.createElement("div");
+           	searchResultCont.id = "searchResultCont";
+           	searchResultCont.setAttribute("class", "searchResultCont");
+           	document.documentElement.appendChild(searchResultCont);
+           	
+           	var searchArgLabel= document.createElement("label");
+           	searchArgLabel.id = "searchArgLabel";
+           	searchArgLabel.setAttribute("class", "searchResultSearchArg");
+           	searchResultCont.appendChild(searchArgLabel); 
+
+           	var searchArg = resultElem.getElementsByTagName("searchArg")[0].firstChild.nodeValue;
+           	
+           	var searchArgText = resourceBundle["blog.searchResultArg"] + ": " + searchArg;
+           	searchArgLabel.innerHTML = searchArgText;
+
+           	/*
+           	var brElem= document.createElement("br");
+           	searchResultCont.appendChild(brElem); 
+           	*/
+           	
+           	var hitCountLabel= document.createElement("label");
+           	hitCountLabel.id = "hitCountLabel";
+           	hitCountLabel.setAttribute("class", "searchResultHitCount");
+           	searchResultCont.appendChild(hitCountLabel); 
+           	
+           	var hitCountText = resourceBundle["blog.searchHitCount"] + ": " + resultElem.getElementsByTagName("hitCount")[0].firstChild.nodeValue;
+           	hitCountLabel.innerHTML = hitCountText;
+           	
+           	var searchResultScrollPane= document.createElement("div");
+           	searchResultScrollPane.id = "searchResultScrollPane";
+           	searchResultScrollPane.setAttribute("class", "searchResultScrollPane");
+           	searchResultCont.appendChild(searchResultScrollPane);
+           	
+           	var buttonCont= document.createElement("div");
+           	buttonCont.setAttribute("class", "searchResultButtonCont");
+           	searchResultCont.appendChild(buttonCont); 
+           	
+        	var searchAgainButton = document.createElement("input");
+        	searchAgainButton.setAttribute("type", "button");
+        	searchAgainButton.onclick = searchAgain;
+        	searchAgainButton.value = resourceBundle["blog.searchAgain"];
+        	buttonCont.appendChild(searchAgainButton);
+
+        	var closeButton = document.createElement("input");
+        	closeButton.setAttribute("type", "button");
+        	closeButton.onclick = closeSearchResults;
+        	closeButton.setAttribute("class", "searchResultCloseButton");
+        	closeButton.value = resourceBundle["button.closewin"];
+        	buttonCont.appendChild(closeButton);
+
+           	var blogDayList = document.createElement("ul");
+           	blogDayList.id = "blogDayList";
+           	blogDayList.setAttribute("class", "searchHitDayList");
+           	searchResultScrollPane.appendChild(blogDayList);
+        	
+        	var searchResults = resultElem.getElementsByTagName("searchResults")[0];
+
+        	var daysWithSearchHits = getChildElementsByTagName(searchResults, "blogDay");
+        	
+        	for (var k = 0; k < daysWithSearchHits.length; k++) {
+        		var blogDayListEntry = document.createElement("li");
+        		blogDayListEntry.setAttribute("class", "searchHit");
+        		blogDayList.appendChild(blogDayListEntry);
+
+        		var blogLinkDate = getChildValueByTagName(daysWithSearchHits[k], "linkDate");
+        		var blogDisplayDate = getChildValueByTagName(daysWithSearchHits[k], "displayDate");
+ 
+        		var dateElem = document.createElement("span");
+               	dateElem.setAttribute("class", "searchHitDate");
+               	dateElem.innerHTML = blogDisplayDate;
+               	blogDayListEntry.appendChild(dateElem);
+        		
+               	var searchHitsList = document.createElement("ul");
+               	// searchHitsList.id = "searchHitsList";
+               	searchHitsList.setAttribute("class", "searchHitsList");
+               	blogDayListEntry.appendChild(searchHitsList);
+
+            	var searchHits = getChildElementsByTagName(daysWithSearchHits[k], "searchHit");
+            	
+            	for (var i = 0; i < searchHits.length; i++) {
+            			
+               	    var beforeContext;
+                   	var afterContext;
+                   	
+                   	var searchHitListEntry = document.createElement("li");
+                   	searchHitListEntry.setAttribute("class", "searchHit");
+                   	searchHitsList.appendChild(searchHitListEntry);
+
+                   	var fileName = getChildValueByTagName(searchHits[i], "fileName");
+
+                   	var searchLinkElem = document.createElement("a");
+                   	searchLinkElem.setAttribute("class", "searchHitLink");
+                   	searchLinkElem.setAttribute("href", "/webfilesys/servlet?command=blog&beforeDay=" + blogLinkDate + "&positionToFile=" + fileName);
+                   	searchHitListEntry.appendChild(searchLinkElem);
+                   	
+                   	var beforeContext = getChildValueByTagName(searchHits[i], "beforeContext");
+                   	if (beforeContext) {
+                       	var beforeContextElem = document.createElement("span");
+                       	beforeContextElem.setAttribute("class", "searchHitContext");
+                       	beforeContextElem.innerHTML = beforeContext;
+                       	searchLinkElem.appendChild(beforeContextElem);
+                   	}
+
+                   	var matchingText = getChildValueByTagName(searchHits[i], "matchingText");
+                   	var searchArgElem = document.createElement("span");
+                   	searchArgElem.setAttribute("class", "searchHit");
+                   	searchArgElem.innerHTML = matchingText;
+                   	searchLinkElem.appendChild(searchArgElem);
+                   	    
+                   	var afterContext = getChildValueByTagName(searchHits[i], "afterContext");
+                   	if (afterContext) {
+                       	var afterContextElem = document.createElement("span");
+                       	afterContextElem.setAttribute("class", "searchHitContext");
+                       	afterContextElem.innerHTML = afterContext;
+                       	searchLinkElem.appendChild(afterContextElem);
+                   	}
+            	}
+        	}
+        	
+           	searchResultCont.style.visibility = "visible"
+        	
+        } else {
+        	alert("search error");
+            hideSearchForm();
+        }
+    }
+}
+
+function closeSearchResults() {
+	var searchResultCont = document.getElementById("searchResultCont");
+	document.documentElement.removeChild(searchResultCont);
+}
+
+function searchAgain() {
+	closeSearchResults();
+	showSearchForm();
+}
+
+function searchKeyPress(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        submitSearch();
+        return false;
+    }
+    return true;
+}
+
 function showSettings() {
 
     var settingsCont = document.getElementById("settingsCont");

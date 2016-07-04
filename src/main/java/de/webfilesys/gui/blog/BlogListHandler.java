@@ -85,6 +85,8 @@ public class BlogListHandler extends XslRequestHandlerBase {
     		XmlUtil.setChildText(blogElement, "posInPage", posInPage, false);
         }
         
+        String positionToFile = req.getParameter("positionToFile");
+        
 		XmlUtil.setChildText(blogElement, "blogTitle", blogTitle, false);
 		
 		String blogTitlePic = metaInfMgr.getTitlePic(currentPath);
@@ -296,6 +298,12 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		        				fileElement.setAttribute("name", actFilename);
 
 		        				fileElement.setAttribute("id", Integer.toString(i));
+		        				
+		        				if (positionToFile != null) {
+		        					if (actFilename.equals(positionToFile)) {
+		        			    		XmlUtil.setChildText(blogElement, "posInPage", Integer.toString(globalEntryCounter), false);
+		        					}
+		        				}
 		        				
 		        				if (globalEntryCounter % 2 == 0) {
 			        				XmlUtil.setChildText(fileElement, "align", "right");
@@ -532,65 +540,4 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		return fileNameExt.equals(".jpg") || fileNameExt.equals(".jpeg") || fileNameExt.equals(".png") || fileNameExt.equals(".gif");
 	}
 	
-	String formatBlogDate(Date day) {
-        StringBuffer buff = new StringBuffer();
-		
-		int weekday = day.getDay();
-		
-		switch (weekday) {
-		    case 0: buff.append(getResource("calendar.sunday", "sunday"));
-		            break;
-		    case 1: buff.append(getResource("calendar.monday", "monday"));
-                    break;
-		    case 2: buff.append(getResource("calendar.tuesday", "tuesday"));
-                    break;
-		    case 3: buff.append(getResource("calendar.wednesday", "wednesday"));
-                    break;
-		    case 4: buff.append(getResource("calendar.thursday", "thursday"));
-                    break;
-		    case 5: buff.append(getResource("calendar.friday", "friday"));
-                    break;
-		    case 6: buff.append(getResource("calendar.saturday", "saturday"));
-		}
-		
-		buff.append(", ");
-		
-		buff.append(day.getDate());
-		
-		buff.append(' ');
-
-		int month = day.getMonth();
-
-		switch (month) {
-	        case 0: buff.append(getResource("calendar.january", "january"));
-                    break;
-	        case 1: buff.append(getResource("calendar.february", "february"));
-                    break;
-	        case 2: buff.append(getResource("calendar.march", "march"));
-                    break;
-	        case 3: buff.append(getResource("calendar.april", "april"));
-                    break;
-	        case 4: buff.append(getResource("calendar.may", "may"));
-                    break;
-	        case 5: buff.append(getResource("calendar.june", "june"));
-                    break;
-	        case 6: buff.append(getResource("calendar.july", "july"));
-                    break;
-	        case 7: buff.append(getResource("calendar.august", "august"));
-                    break;
-	        case 8: buff.append(getResource("calendar.september", "september"));
-                    break;
-	        case 9: buff.append(getResource("calendar.october", "october"));
-                    break;
-	        case 10: buff.append(getResource("calendar.november", "november"));
-                     break;
-	        case 11: buff.append(getResource("calendar.december", "december"));
-	    }
-		
-		buff.append(' ');
-
-		buff.append(day.getYear() + 1900);
-		
-		return buff.toString();
-	}
 }
