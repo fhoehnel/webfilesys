@@ -1235,8 +1235,14 @@ function handleSearchResult(req) {
 
                    	var fileName = getChildValueByTagName(searchHits[i], "fileName");
 
+                   	var isComment = getChildValueByTagName(searchHits[i], "isComment");
+                   	
                    	var searchLinkElem = document.createElement("a");
-                   	searchLinkElem.setAttribute("class", "searchHitLink");
+                   	if (isComment) {
+                       	searchLinkElem.setAttribute("class", "searchHitLink searchHitComment");
+                   	} else {
+                       	searchLinkElem.setAttribute("class", "searchHitLink");
+                   	}
                    	searchLinkElem.setAttribute("href", "/webfilesys/servlet?command=blog&beforeDay=" + blogLinkDate + "&positionToFile=" + fileName);
                    	searchHitListEntry.appendChild(searchLinkElem);
                    	

@@ -1136,6 +1136,7 @@ blog.searchArgMinLength=Bitte geben Sie mindestens 2 Zeichen als Suchbegriff ein
 blog.searchHitCount=Anzahl Suchtreffer
 blog.searchResultArg=Suchbegriff
 blog.searchAgain=neue Suche
+blog.searchIncludeComments=auch Kommentare durchsuchen
 
 error.latitudeInvalid=geografische Breite muss zwischen -90 und 90 liegen
 error.longitudeInvalid=geografische Länge muss zwischen -180.0 und 180.0 liegen

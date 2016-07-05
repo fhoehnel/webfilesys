@@ -504,7 +504,7 @@ div.blogSearchFormCont {
     right: 10px;
     top: 100px;
     width: 300px;
-    height: 140px;
+    height: 160px;
     border: 2px ridge #808080;
     background-color: #ffffe0;
     visibility: hidden;
@@ -544,6 +544,10 @@ input.searchResultCloseButton {
 a.searchHitLink {
 	color: navy;
 	text-decoration: none;
+}
+
+a.searchHitLink.searchHitComment {
+	color: maroon;
 }
 
 a.searchHitLink:hover {

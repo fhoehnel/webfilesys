@@ -475,6 +475,10 @@
               <input type="text" id="searchArg" name="searchArg" onkeypress="return searchKeyPress(event);" />
             </li>
             <li>
+              <input type="checkbox" id="searchComments" name="searchComments" />
+              <span resource="blog.searchIncludeComments"></span>
+            </li>
+            <li>
               <input type="button" resource="blog.searchButton" onclick="submitSearch()" />
               <input type="button" resource="button.cancel" onclick="hideSearchForm()" style="float: right" />
             </li>

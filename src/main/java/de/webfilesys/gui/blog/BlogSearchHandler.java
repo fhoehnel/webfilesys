@@ -6,6 +6,7 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.Comment;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
@@ -47,6 +49,10 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
             return;
 		}
 
+		String searchCommentsParam = getParameter("searchComments");
+		
+		boolean searchComments = (searchCommentsParam != null) && (!searchCommentsParam.isEmpty());
+		
         Element resultElem = doc.createElement("result");
         
 		XmlUtil.setChildText(resultElem, "success", "true");
@@ -61,7 +67,7 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
 
         int hitCount = 0;
         
-        TreeMap<String, ArrayList<SearchResultData>> searchResultMap = searchBlog(searchArg);
+        TreeMap<String, ArrayList<SearchResultData>> searchResultMap = searchBlog(searchArg, searchComments);
         
         for (String dateKey : searchResultMap.keySet()) {
         	
@@ -89,6 +95,10 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
                 	}
                 	
                 	XmlUtil.setChildText(searchHitElement, "fileName", searchHit.getFileName());
+                	
+                	if (searchHit.getIsComment()) {
+                    	XmlUtil.setChildText(searchHitElement, "isComment", "true");
+                	}
 
                 	blogDayElem.appendChild(searchHitElement);
                 	
@@ -102,7 +112,7 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
 		processResponse();
 	}
 	
-	private TreeMap<String, ArrayList<SearchResultData>> searchBlog(String searchArg) {
+	private TreeMap<String, ArrayList<SearchResultData>> searchBlog(String searchArg, boolean searchComments) {
 		TreeMap<String, ArrayList<SearchResultData>> resultMap = new TreeMap<String, ArrayList<SearchResultData>>();
 
 		String currentPath = userMgr.getDocumentRoot(uid).replace('/',  File.separatorChar);
@@ -113,14 +123,18 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
 		
 		SimpleDateFormat linkDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
-		// TODO: localized
-		SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-		
 		for (int i = 0; i < blogFiles.length; i++) {
 			if (blogFiles[i].isFile()) {
 				String blogText = MetaInfManager.getInstance().getDescription(currentPath, blogFiles[i].getName());
 				if (blogText != null) {
 					ArrayList<SearchResultData> hitList = searchInBlogText(blogText, searchArg);
+					
+					if (searchComments) {
+						ArrayList<SearchResultData> commentHitList = searchInComments(currentPath, blogFiles[i].getName(), searchArg);
+						if (commentHitList.size() > 0) {
+							hitList.addAll(commentHitList);
+						}
+					}
 					
 					String blogDateStr = blogFiles[i].getName().substring(0,10);
 					
@@ -165,9 +179,7 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
         int hitCount = 0;
 		
 		do {
-			Logger.getLogger(getClass()).debug("search loop idx=" + idx);
 			hitIdx = lowerCaseBlogText.indexOf(lowerCaseSearchArg, idx);
-			Logger.getLogger(getClass()).debug("search loop hitIdx=" + hitIdx);
 			if (hitIdx >= 0) {
 				SearchResultData searchResult = new SearchResultData();
 				searchResult.setMatchingText(blogText.substring(hitIdx, hitIdx + searchArg.length()));
@@ -198,6 +210,26 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
 		return resultList;
 	}
 	
+	public ArrayList<SearchResultData> searchInComments(String currentPath, String fileName, String searchArg) {
+		ArrayList<SearchResultData> resultList = new ArrayList<SearchResultData>();
+
+		Vector<Comment> comments = MetaInfManager.getInstance().getListOfComments(currentPath, fileName);
+		if (comments != null) {
+			for (Comment comment : comments) {
+				if (comment.getMessage() != null) {
+					ArrayList<SearchResultData> matchesInComment = searchInBlogText(comment.getMessage(), searchArg);
+					if (matchesInComment.size() > 0) {
+						for (SearchResultData matchInComment : matchesInComment) {
+							matchInComment.setIsComment(true);
+						}
+						resultList.addAll(matchesInComment);
+					}
+				}
+			}
+		}
+		return resultList;
+	}
+	
 	public class SearchResultData {
 		private String beforeContext;
 		private String afterContext;
@@ -205,6 +237,7 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
 		private String linkDate;
 		private Date displayDate;
 		private String fileName;
+		private boolean isComment;
 		
 		public void setBeforeContext(String newVal) {
 			beforeContext = newVal;
@@ -252,6 +285,14 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
 		
 		public String getFileName() {
 			return fileName;
+		}
+		
+		public void setIsComment(boolean newVal) {
+			isComment = newVal;
+		}
+		
+		public boolean getIsComment() {
+			return isComment;
 		}
 	}
 }
