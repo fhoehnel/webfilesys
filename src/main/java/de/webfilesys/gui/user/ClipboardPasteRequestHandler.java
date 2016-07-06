@@ -186,7 +186,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 				
 				output.flush();
 
-				boolean copyOk = copy_file(sourceFile, destFile, false);
+				boolean copyOk = copyFile(sourceFile, destFile);
 
 				if (copyOk)
 				{
@@ -346,7 +346,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 					}
 				}
 
-				boolean copyOK = copy_dir(sourceDir, destSubdir, ignoreExist);
+				boolean copyOK = copyFolderTree(sourceDir, destSubdir, ignoreExist);
                 
                 if (!copyOK)
                 {

@@ -141,7 +141,7 @@ public class CloneFolderRequestHandler extends UserRequestHandler
 			}
 			else 
 			{
-				if (!copy_dir(sourceFolderPath, newFolderPath, false))
+				if (!copyFolderTree(sourceFolderPath, newFolderPath, false))
 			    {
 	                errorMsg = getResource("alert.cloneFolderFailed", "Failed to clone folder.");
 			    }

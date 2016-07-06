@@ -109,7 +109,7 @@ public class XmlSaveRemoteEditorHandler extends XmlRequestHandlerBase {
 
 				fout.close();
 
-				if (!copy_file(tmpFileName, fileName, false)) {
+				if (!copyFile(tmpFileName, fileName)) {
 					String logMsg = "cannot copy temporary file to edited file " + fileName;
 					Logger.getLogger(getClass()).error(logMsg);
 					writeError = true;

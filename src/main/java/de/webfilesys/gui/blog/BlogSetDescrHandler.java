@@ -65,7 +65,7 @@ public class BlogSetDescrHandler extends UserRequestHandler
 			
 	        Logger.getLogger(getClass()).debug("copying dummy pic file from " + placeholderPicSourcePath);
 
-	        copy_file(placeholderPicSourcePath, placeholderPicDestPath, false);
+	        copyFile(placeholderPicSourcePath, placeholderPicDestPath);
 		}
 		
 		String blogText = req.getParameter("blogText");

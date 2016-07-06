@@ -1,8 +1,9 @@
 package de.webfilesys.gui.user;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,66 +30,55 @@ import de.webfilesys.util.UTF8URLEncoder;
  * Zip a file or unzip a zip archive.
  * @author Frank Hoehnel
  */
-public class ZipFileRequestHandler extends UserRequestHandler
-{
-	public ZipFileRequestHandler(
+public class ZipFileRequestHandler extends UserRequestHandler {
+    private static final Logger LOG = Logger.getLogger(ZipFileRequestHandler.class);
+
+    public ZipFileRequestHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 
 		String filePath = getParameter("filePath");
 
-		if (filePath == null)
-		{
+		if (filePath == null) {
 			// we come from UploadServlet
 			
 			filePath = (String) req.getAttribute("filePath");
 		}
 		
-		if (!checkAccess(filePath))
-		{
+		if (!checkAccess(filePath)) {
 			return;
 		}
 
-		String zipFileName = "";
-		ZipOutputStream zipOut;
-
-		output.println("<HTML>");
-		output.println("<HEAD>");
+		output.println("<html>");
+		output.println("<head>");
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
-		output.println("</HEAD><BODY>");
+		output.println("</head><body>");
 
         String file_ext = CommonUtils.getFileExtension(filePath);
 
-	    if (isZipFile(file_ext))
-		{
+	    if (isZipFile(file_ext)) {
 			headLine(getResource("label.unziphead","Unzip file"));
 
-			ZipFile zipFile=null;
-			ZipEntry zipEntry=null;
+			ZipFile zipFile = null;
+			ZipEntry zipEntry = null;
 
-			try
-			{
+			try {
 				zipFile = new ZipFile(filePath);
-			}
-			catch (IOException ioex)
-			{
-				Logger.getLogger(getClass()).error("ZIP file format error: " + ioex);
+			} catch (IOException ioex) {
+				LOG.error("ZIP file format error: " + ioex);
 				javascriptAlert(getResource("alert.zipformat","ZIP file format error") + "\\n" + ioex);
 
 				output.println("<script language=\"javascript\">");
@@ -141,8 +131,8 @@ public class ZipFileRequestHandler extends UserRequestHandler
 			output.println("</tr>");
 			
 			Enumeration entries = zipFile.entries();
-
-			boolean unzip_okay=true;
+			
+			boolean unzipOk=true;
 
 			boolean dirCreated=false;
 
@@ -150,40 +140,28 @@ public class ZipFileRequestHandler extends UserRequestHandler
 
 			byte buffer[] = new byte[4096];
 
-			while (entries.hasMoreElements())
-			{
-				zipEntry=(ZipEntry) entries.nextElement();
+			while (entries.hasMoreElements()) {
+				zipEntry = (ZipEntry) entries.nextElement();
 
 				boolean showStatus = false;
 				
-                if (unzipNum < 100)
-                {
+                if (unzipNum < 100) {
                     showStatus = true;
-                }
-                else if (unzipNum < 1000)
-                {
-                    if (unzipNum % 10 == 0)
-                    {
+                } else if (unzipNum < 1000) {
+                    if (unzipNum % 10 == 0) {
                         showStatus = true;
                     }
-                } 
-                else if (unzipNum < 5000)
-                {
-                    if (unzipNum % 50 == 0)
-                    {
+                } else if (unzipNum < 5000) {
+                    if (unzipNum % 50 == 0) {
                         showStatus = true;
                     }
-                }
-                else
-                {
-                    if (unzipNum % 100 == 0)
-                    {
+                } else {
+                    if (unzipNum % 100 == 0) {
                         showStatus = true;
                     }
                 }
                     
-                if (showStatus)
-                {
+                if (showStatus) {
                     output.println("<script language=\"javascript\">");
                     output.println("document.getElementById('currentFile').innerHTML='" + CommonUtils.shortName(zipEntry.getName(),45) + " (" + zipEntry.getSize() + " bytes)';");
                     output.println("document.getElementById('extractCount').innerHTML='" + unzipNum +  "';");
@@ -193,108 +171,70 @@ public class ZipFileRequestHandler extends UserRequestHandler
 
                 String zipEntryPath = zipEntry.getName();
 
-                if ((zipEntryPath.indexOf("..") >= 0) || (zipEntryPath.charAt(0) == '/'))
-                {
-                	Logger.getLogger(getClass()).warn("the ZIP archive " + filePath + " contains illegal entry " + zipEntryPath);
-                }
-                else
-                {
+                if ((zipEntryPath.indexOf("..") >= 0) || (zipEntryPath.charAt(0) == '/')) {
+                	LOG.warn("the ZIP archive " + filePath + " contains illegal entry " + zipEntryPath);
+                } else {
 					File zipOutFile = createUnzipFile(zipEntryPath);
 
-					if (!(zipOutFile.isDirectory()))
-					{
-						FileOutputStream destination = null;
+					if (!(zipOutFile.isDirectory())) {
+						BufferedOutputStream fout = null;
 
-						try
-						{
+						try {
 							InputStream zipInFile = zipFile.getInputStream(zipEntry);
 
-							destination = new FileOutputStream(zipOutFile);
-
-							boolean done = false;
-							while (!done)
-							{
-								int bytesRead = zipInFile.read(buffer);
-
-								if (bytesRead == -1)
-								{
-									done=true;
-								}
-								else
-								{
-									destination.write(buffer, 0, bytesRead);
-								}
+							fout = new BufferedOutputStream(new FileOutputStream(zipOutFile));
+							
+							int bytesRead;
+							while ((bytesRead = zipInFile.read(buffer)) >= 0) {
+								fout.write(buffer, 0, bytesRead);
 							}
 
+							zipInFile.close();
+							
 							unzipNum++;
-						}
-						catch (IOException ioex4)
-						{
-							Logger.getLogger(getClass()).error("unzip error in file " + zipOutFile + ": " + ioex4);
+						} catch (Exception ioex4) {
+							LOG.error("unzip error in file " + zipOutFile.getAbsolutePath() + ": " + ioex4);
 
 							output.println("<font class=\"error\">");
-							output.println(getResource("label.unzipError", "Error in unzip of file") + ": " + zipEntryPath);
+							output.println(getResource("label.unzipError", "failed to unzip file") + ": " + zipEntryPath);
 							output.println("</font><br><br>");
-							unzip_okay=false; 
-						}
-						catch (NullPointerException nullEx)
-						{
-							Logger.getLogger(getClass()).error("unzip error in file " + zipOutFile + ": " + nullEx);
-
-							output.println("<font class=\"error\">");
-							output.println(getResource("label.unzipError", "Error in unzip of file") + ": " + zipEntryPath);
-							output.println("</font><br><br>");
-							unzip_okay=false; 
-						}
-						finally
-						{
-                            if (destination != null)
-                            {
-                                try
-                                {
-									destination.close();
+							unzipOk = false; 
+						} finally {
+                            if (fout != null) {
+                                try {
+									fout.close();
 									
-									if (!unzip_okay)
-									{
-										if (zipOutFile.delete())
-										{
-											Logger.getLogger(getClass()).debug("deleted incomplete unzipped file " + zipOutFile);
+									if (!unzipOk) {
+										if (zipOutFile.delete()) {
+											LOG.debug("deleted incomplete unzipped file " + zipOutFile);
 										}
 									}
-                                }
-                                catch (Exception ex)
-                                {
-                                	Logger.getLogger(getClass()).warn(ex);
+                                } catch (Exception ex) {
+                                	LOG.warn(ex);
                                 }
                             }
-
 						}
 					}
 				
-					if (zipEntry.getName().indexOf('/') >= 0)
-					{
+					if (zipEntry.getName().indexOf('/') >= 0) {
 						dirCreated=true;
 					}
                 }
 			}
 
-			try
-			{
-				zipFile.close();
-			}
-			catch (IOException ioex2)
-			{
-				System.out.println(ioex2);
+			if (zipFile != null) {
+			    try {
+				    zipFile.close();
+			    } catch (Exception ex) {
+			    }
 			}
 
-			if (dirCreated)
-			{
+			if (dirCreated) {
 		        TestSubDirThread subDirThread = new TestSubDirThread(getCwd());
-
 		        subDirThread.start();
 			}
 
-			String fn_only=filePath.substring(filePath.lastIndexOf(File.separator)+1);
+			String zipFileName = filePath.substring(filePath.lastIndexOf(File.separator)+1);
 
 			output.println("<script language=\"javascript\">");
 			output.println("document.getElementById('extractCount').innerHTML='" + unzipNum +  "';");
@@ -302,55 +242,43 @@ public class ZipFileRequestHandler extends UserRequestHandler
 			output.flush();
             
 			String returnUrl = null;
-
             
-			if (!unzip_okay)
-			{
+			if (!unzipOk) {
                 output.println("<tr>");
                 output.println("<td colspan=\"2\" class=\"formButton\">");
 				returnUrl="/webfilesys/servlet?command=listFiles";
 				output.println("<input type=\"button\" value=\"" + getResource("button.return","Return") + "\" onclick=\"window.location.href='" + returnUrl + "'\">");
                 output.println("</td>");
                 output.println("</tr>");
-            }
-			else
-			{
+            } else {
 				String deleteZipFile = getParameter("delZipFile");
 				
-				if (deleteZipFile == null)
-				{
+				if (deleteZipFile == null) {
 					// maybe we come from the UploadServlet
 					
 					deleteZipFile = (String) req.getAttribute("delZipFile");
 				}
 				
-				if (deleteZipFile != null)
-				{
+				if (deleteZipFile != null) {
 					// do not ask what to do with the ZIP file
                     output.println("</table>");
 					output.println("<script language=\"javascript\">");
-					output.println("window.location.href='/webfilesys/servlet?command=fmdelete&fileName=" + UTF8URLEncoder.encode(fn_only) + "&deleteRO=no';");
+					output.println("window.location.href='/webfilesys/servlet?command=fmdelete&fileName=" + UTF8URLEncoder.encode(zipFileName) + "&deleteRO=no';");
 					output.println("</script>");
-				}
-				else
-				{
+				} else {
                     output.println("<tr>");
                     output.println("<td class=\"formButton\">");
                     
                     String mobile = (String) session.getAttribute("mobile");
                     
-                    if (mobile != null)
-                    {
+                    if (mobile != null) {
                         returnUrl = "/webfilesys/servlet?command=mobile&cmd=folderFileList&keepListStatus=true";
-                    }
-                    else
-                    {
+                    } else {
                         returnUrl = "/webfilesys/servlet?command=listFiles&keepListStatus=true";
                     }
 					output.print("<input type=\"button\" value=\"" + getResource("button.keepzip","keep ZIP file") + "\" onclick=\"");
 					
-					if ((mobile == null) && (dirCreated))
-                    {
+					if ((mobile == null) && (dirCreated)) {
                         output.print("window.parent.DirectoryPath.location.href='/webfilesys/servlet?command=refresh&path=" + URLEncoder.encode(getCwd()) + "';");
 					}
 					output.println("window.location.href='" + returnUrl + "'\">");
@@ -359,11 +287,10 @@ public class ZipFileRequestHandler extends UserRequestHandler
                     
                     output.println("<td class=\"formButton\" style=\"text-align:right\">");
 
-					returnUrl = "/webfilesys/servlet?command=fmdelete&fileName=" + UTF8URLEncoder.encode(fn_only) + "&deleteRO=no";
+					returnUrl = "/webfilesys/servlet?command=fmdelete&fileName=" + UTF8URLEncoder.encode(zipFileName) + "&deleteRO=no";
 					output.print("<input type=\"button\" value=\"" + getResource("button.delzip","delete ZIP file") + "\" onclick=\"");
 					
-					if ((mobile == null) && (dirCreated))
-					{
+					if ((mobile == null) && (dirCreated)) {
 						output.print("window.parent.DirectoryPath.location.href='/webfilesys/servlet?command=refresh&path=" + UTF8URLEncoder.encode(getCwd()) + "';");
 					}
 					
@@ -373,14 +300,10 @@ public class ZipFileRequestHandler extends UserRequestHandler
                     output.println("</tr>");
 				}
 
-				if (WebFileSys.getInstance().isAutoCreateThumbs())
-				{
-					if (dirCreated)
-					{
+				if (WebFileSys.getInstance().isAutoCreateThumbs()) {
+					if (dirCreated) {
 						AutoThumbnailCreator.getInstance().queuePath(getCwd(), AutoThumbnailCreator.SCOPE_TREE);
-					}
-					else
-					{
+					} else {
 						AutoThumbnailCreator.getInstance().queuePath(getCwd(), AutoThumbnailCreator.SCOPE_DIR);
 					}
 				}
@@ -394,26 +317,15 @@ public class ZipFileRequestHandler extends UserRequestHandler
 		{
 			headLine(getResource("label.ziphead","create ZIP archive"));
 
-			if (filePath.lastIndexOf('.')<0)
-			{
-				zipFileName = filePath + ".zip";
-			}
-			else
-			{
-				zipFileName = filePath.substring(0,filePath.lastIndexOf('.')) + ".zip";
+			String zipFilePath = "";
+
+			if (filePath.lastIndexOf('.') < 0) {
+				zipFilePath = filePath + ".zip";
+			} else {
+				zipFilePath = filePath.substring(0, filePath.lastIndexOf('.')) + ".zip";
 			}
 
-			try
-			{
-				zipOut = new ZipOutputStream(new FileOutputStream(zipFileName));
-			}
-			catch (FileNotFoundException fnfEx)
-			{
-				Logger.getLogger(getClass()).error("cannot create ZIP file " + zipFileName + " : " + fnfEx);
-				return;
-			}
-
-			output.println("<br>");
+			output.println("<br/>");
             output.println("<form>");
 
             output.println("<table class=\"dataForm\" width=\"100%\">");
@@ -430,56 +342,51 @@ public class ZipFileRequestHandler extends UserRequestHandler
 
 			output.flush();
 
-			String fn_only=filePath.substring(filePath.lastIndexOf(File.separator)+1,filePath.length());
+			String zipFileName = filePath.substring(filePath.lastIndexOf(File.separator) + 1, filePath.length());
+			
+			ZipOutputStream zipOut = null;
+			BufferedInputStream fin = null;
 
-			try
-			{
-				zipOut.putNextEntry(new ZipEntry(fn_only));
-			}
-			catch (IOException ioEx)
-			{
-				Logger.getLogger(getClass()).error("Cannot write ZIP entry " + fn_only + " : " + ioEx);
-				return;
-			}
+			try {
+				zipOut = new ZipOutputStream(new FileOutputStream(zipFilePath));
 
-			try
-			{
-				FileInputStream fin = new FileInputStream(filePath);
+				zipOut.putNextEntry(new ZipEntry(zipFileName));
+
+				fin = new BufferedInputStream(new FileInputStream(filePath));
 
 				int count;
 				
 				byte [] buff = new byte[4096];
 
-				while (( count = fin.read(buff)) >= 0 )
-				{
+				while ((count = fin.read(buff)) >= 0) {
 					zipOut.write(buff, 0, count);
 				}
-
-				fin.close();
-			}
-			catch (Exception zipEx)
-			{
-				Logger.getLogger(getClass()).error("Cannot write ZIP entry " + fn_only + " : " + zipEx);
+				
+				zipOut.closeEntry();
+			} catch (Exception ex) {
+				LOG.error("failed to create ZIP file " + zipFilePath, ex);
 				return;
-			}
-
-			try
-			{
-				zipOut.close();
-			}
-			catch (IOException ioEx)
-			{
-				Logger.getLogger(getClass()).error("Cannot close ZIP file " + zipFileName + " : " + ioEx);
-				return;
+			} finally {
+				if (zipOut != null) {
+					try {
+						zipOut.close();
+					} catch (Exception ioEx) {
+					}
+				}
+				if (fin != null) {
+					try {
+						fin.close();
+					} catch (Exception ioEx) {
+					}
+				}
 			}
 
 			File sourceFile = new File(filePath);
-			File zipFile = new File(zipFileName);
+			File zipFile = new File(zipFilePath);
 
-			long sourceLength=sourceFile.length();
+			long sourceLength = sourceFile.length();
 
-			if (sourceLength > 0L)  // prevent division by zero
-			{
+			if (sourceLength > 0L) {  // prevent division by zero
                 output.println("<tr>");
                 output.println("<td colspan=\"2\" class=\"formParm1\">");
 				output.println(getResource("label.zipratio","compression ratio (% of original size)") + ":");
@@ -503,7 +410,7 @@ public class ZipFileRequestHandler extends UserRequestHandler
 
             output.println("<td class=\"formButton\" style=\"text-align:right;\">");
 
-            output.print("<input type=\"button\" onclick=\"window.location.href='/webfilesys/servlet?command=fmdelete&fileName=" + UTF8URLEncoder.encode(fn_only) + "&deleteRO=no'\""); 
+            output.print("<input type=\"button\" onclick=\"window.location.href='/webfilesys/servlet?command=fmdelete&fileName=" + UTF8URLEncoder.encode(zipFileName) + "&deleteRO=no'\""); 
             output.println(" value=\"" + getResource("button.delsource","Delete Source File") + "\" />");
             
             output.println("</td>");
@@ -520,31 +427,29 @@ public class ZipFileRequestHandler extends UserRequestHandler
 		output.flush();
 	}
 	
-	private boolean isZipFile(String ext) 
-	{
-        return (ext.equals(".zip") ||
-                ext.equals(".gzip") || 
-                ext.equals(".jar") || 
-                ext.equals(".ear") || 
-                ext.equals(".war"));
-	    
+	private boolean isZipFile(String ext) {
+        return ext.equals(".zip") ||
+               ext.equals(".gzip") || 
+               ext.equals(".jar") || 
+               ext.equals(".ear") || 
+               ext.equals(".war");
 	}
 	
-	protected File createUnzipFile(String zip_fn)
-	{
-		File zipOutFile = new File(getCwd(),zip_fn);
+	protected File createUnzipFile(String zip_fn) {
+		File zipOutFile = new File(getCwd(), zip_fn);
 
-		if (zip_fn.indexOf('/')>=0)
-		{
-			String dir_name=zip_fn.substring(0,zip_fn.lastIndexOf('/'));
+		if (zip_fn.indexOf('/') >= 0) {
+			String dir_name = zip_fn.substring(0, zip_fn.lastIndexOf('/'));
 
-			File dir=new File(getCwd(),dir_name);
+			File dir = new File(getCwd(), dir_name);
 
-			if (dir.exists())
+			if (dir.exists()) {
 				return(zipOutFile);
+			}
 
-			if (!dir.mkdirs())
-				System.out.println("Cannot create output directory " + dir);
+			if (!dir.mkdirs()) {
+				LOG.error("Cannot create output directory " + dir);
+			}
 			return(zipOutFile);
 		}
 

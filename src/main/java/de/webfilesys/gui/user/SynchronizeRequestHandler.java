@@ -167,7 +167,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
                 if (createDirIfMissing(syncItem.getTarget().getPath(), false)) {
                 	foldersCreatedTarget++;
                 }
-                if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
+                if (copySyncFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
                 {
                 	copiedToTarget++;
                 }
@@ -191,7 +191,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
                 {
                 	foldersCreatedSource++;
                 }
-                if (copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath())) 
+                if (copySyncFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath())) 
                 {
                 	copiedToSource++;
                 }
@@ -222,7 +222,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         {
             if (copySizeChangeToTarget)
             {
-                if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
+                if (copySyncFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
                 {
                 	copiedToTarget++;
                 }
@@ -234,7 +234,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
             {
                 if (copyNewerToTarget || copyDateChangeToTarget)
                 {
-                    if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
+                    if (copySyncFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath())) 
                     {
                     	copiedToTarget++;
                     }
@@ -244,14 +244,14 @@ public class SynchronizeRequestHandler extends UserRequestHandler
             {
                 if (copyNewerToSource)
                 {
-                    if (copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath()))
+                    if (copySyncFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath()))
                     {
                     	copiedToSource++;
                     }
                 }                
                 else if (copyDateChangeToTarget)
                 {
-                    if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
+                    if (copySyncFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
                     {
                     	copiedToTarget++;
                     }
@@ -262,7 +262,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         {
             if (copySizeChangeToTarget)
             {
-                if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
+                if (copySyncFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
                 {
                 	copiedToTarget++;
                 }
@@ -273,7 +273,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
                 {
                     if (copyNewerToTarget || copyDateChangeToTarget)
                     {
-                        if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
+                        if (copySyncFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
                         {
                         	copiedToTarget++;
                         }
@@ -283,14 +283,14 @@ public class SynchronizeRequestHandler extends UserRequestHandler
                 {
                     if (copyNewerToSource)
                     {
-                        if (copyFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath()))
+                        if (copySyncFile(syncItem.getTarget().getPath(), syncItem.getSource().getPath()))
                         {
                         	copiedToSource++;
                         }
                     }   
                     else if (copyDateChangeToTarget)
                     {
-                        if (copyFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
+                        if (copySyncFile(syncItem.getSource().getPath(), syncItem.getTarget().getPath()))
                         {
                         	copiedToTarget++;
                         }
@@ -347,7 +347,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         return false;
     }
     
-    private boolean copyFile(String sourceFileName, String targetFileName)
+    private boolean copySyncFile(String sourceFileName, String targetFileName)
     {
         File sourceFile = new File(sourceFileName);
         

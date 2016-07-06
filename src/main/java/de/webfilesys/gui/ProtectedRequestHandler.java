@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -25,8 +24,9 @@ import de.webfilesys.util.HTTPUtils;
 /**
  * @author Frank Hoehnel
  */
-public class ProtectedRequestHandler extends RequestHandler
-{  
+public class ProtectedRequestHandler extends RequestHandler {  
+    private static final Logger LOG = Logger.getLogger(ProtectedRequestHandler.class);
+	
     public String uid = null;
      
     protected long treeFileSize = 0L;
@@ -130,7 +130,7 @@ public class ProtectedRequestHandler extends RequestHandler
 			return(true);
 		}
 
-		Logger.getLogger(getClass()).warn("user " + uid + " tried to access file outside of the document root: " + fileName);
+		LOG.warn("user " + uid + " tried to access file outside of the document root: " + fileName);
 
 		if (output == null)
 		{
@@ -158,125 +158,111 @@ public class ProtectedRequestHandler extends RequestHandler
 		return(false);
 	}
 	
-	public boolean copy_file(String source_filename,String dest_filename,boolean display_result)
-	{
-		if (source_filename.equals(dest_filename))
-		{
-			Logger.getLogger(getClass()).warn("copy_file: copy source equals destination: " + source_filename); 
+	public boolean copyFile(String sourceFilePath, String destFilePath) {
+		if ((sourceFilePath == null) || (destFilePath == null)) {
+			throw new IllegalArgumentException("source or target file for copy opertaion is null");
+		}
+		
+		if (sourceFilePath.equals(destFilePath)) {
+			LOG.warn("copy source equals destination: " + sourceFilePath); 
 			return(false);
 		}
 
-		BufferedInputStream f_in;
-		BufferedOutputStream f_out;
-		int count;
-		int copy_sum;
-		boolean copy_failed;
-		byte [] buff = new byte[4096];
+		File sourceFile = new File(sourceFilePath);
+		long lastChangeDate = sourceFile.lastModified();
 
-		long lastChangeDate=(new Date()).getTime();
+		boolean copyFailed = false;
 
-		File sourceFile=new File(source_filename);
-		lastChangeDate=sourceFile.lastModified();
+		BufferedInputStream fin = null;
+		BufferedOutputStream fout = null;
 
-		copy_failed=false;
-		copy_sum=0;
+		try {
+			fin = new BufferedInputStream(new FileInputStream(sourceFilePath));
+			fout = new BufferedOutputStream(new FileOutputStream(destFilePath));
 
-		try
-		{
-			f_in = new BufferedInputStream(new FileInputStream(source_filename));
-			f_out = new BufferedOutputStream(new FileOutputStream(dest_filename));
+			byte [] buff = new byte[4096];
+			int count;
 
-			while (( count = f_in.read(buff))>=0 )
-			{
-				f_out.write(buff,0,count);
-				copy_sum+=count;
+			while ((count = fin.read(buff)) >= 0) {
+				fout.write(buff, 0, count);
 			}
-
-			f_in.close();
-			f_out.close();
+		} catch (Exception e) {
+			LOG.error("failed to copy file " + sourceFilePath + " to " + destFilePath, e);
+			copyFailed = true;
+		} finally {
+			if (fin != null) {
+				try {
+					fin.close();
+				} catch (Exception ex) {
+				}
+			}
+			if (fout != null) {
+				try {
+					fout.close();
+				} catch (Exception ex) {
+				}
+			}
 		}
-		catch (Exception e)
-		{
-			Logger.getLogger(getClass()).error("failed to copy file", e);
-			copy_failed=true;
-		}
 
-		if (!copy_failed)
-		{
-			File destFile=new File(dest_filename);
+		if (!copyFailed) {
+			File destFile = new File(destFilePath);
 			destFile.setLastModified(lastChangeDate);
 		}
-
-		if (display_result)
-		{
-			if (copy_failed)
-			{
-				output.println("*** cannot copy " + source_filename + " to " + dest_filename + "<br>");
-			}
-			else
-			{
-				output.println("<nobr>" + source_filename + " successfully copied</nobr><br>");
-			}
-
-			output.flush();
-		}
 		
-		return(!copy_failed);
+		return(!copyFailed);
 	}
 	
-	public int zipTree(String actPath,String relativePath,ZipOutputStream zipOut,int fileCount)
-	{
-		int zipFileNum=fileCount;
+	public int zipTree(String currentPath, String relativePath, ZipOutputStream zipOut, int fileCount) {
+		int zipFileNum = fileCount;
 
-		File actDir=new File(actPath);
+		File currentDir = new File(currentPath);
 
-		String fileList[]=actDir.list();
+		String fileList[] = currentDir.list();
 
-		if (fileList.length==0)
-		{
+		if (fileList.length == 0) {
+			try {
+	            zipOut.putNextEntry(new ZipEntry(relativePath + File.separator));
+	            zipOut.closeEntry();
+			} catch (IOException ex) {
+				LOG.error("failed to ad zip entry for empty directory " + currentPath);
+			}
 			return(zipFileNum);
 		}
 
-		for (int i=0;i<fileList.length;i++)
-		{
-			File tempFile=new File(actPath + File.separator + fileList[i]);
+		byte buff[] = new byte[4096];
 
-			if (tempFile.isDirectory())
-			{
-				zipFileNum=zipTree(actPath + File.separator + fileList[i],
-								   relativePath + fileList[i] + "/",
-								   zipOut,zipFileNum);
-			}
-			else
-			{
-				String fullFileName = actPath + File.separator + fileList[i];
+		for (int i = 0; i < fileList.length; i++) {
+			File sourceFile = new File(currentPath, fileList[i]);
+
+			if (sourceFile.isDirectory()) {
+				zipFileNum = zipTree(currentPath + File.separator + fileList[i],
+								     relativePath + fileList[i] + "/",
+								     zipOut, zipFileNum);
+			} else {
+				String fullFileName = currentPath + File.separator + fileList[i];
 				String relativeFileName = relativePath + fileList[i];
 
-				try
-				{
-					ZipEntry newZipEntry=new ZipEntry(relativeFileName);
+				try {
+					ZipEntry newZipEntry = new ZipEntry(relativeFileName);
 
 					zipOut.putNextEntry(newZipEntry);
 
-					FileInputStream inStream=null;
+					FileInputStream inStream = null;
 
-					try
-					{
-						File originalFile=new File(fullFileName);
+					try {
+						inStream = new FileInputStream(sourceFile);
 
-						inStream=new FileInputStream(originalFile);
-
-						byte buff[]=new byte[4096];
 						int count;
 
-						while ((count=inStream.read(buff)) >= 0)
-						{
-							zipOut.write(buff,0,count);
+						while ((count = inStream.read(buff)) >= 0) {
+							zipOut.write(buff, 0, count);
 						}
 
-						long originalSize=originalFile.length();
+						zipOut.closeEntry();
+						
+						long originalSize = sourceFile.length();
 
-						treeFileSize+=originalSize;
+						treeFileSize += originalSize;
 
 						zipFileNum++;
 
@@ -284,53 +270,43 @@ public class ProtectedRequestHandler extends RequestHandler
 
 		                boolean showStatus = false;
 		                
-		                if (zipFileNum < 100)
-		                {
+		                if (zipFileNum < 100) {
 		                    showStatus = true;
-		                }
-		                else if (zipFileNum < 1000)
-		                {
-		                    if (zipFileNum % 10 == 0)
-		                    {
+		                } else if (zipFileNum < 1000) {
+		                    if (zipFileNum % 10 == 0) {
 		                        showStatus = true;
 		                    }
-		                } 
-		                else if (zipFileNum < 5000)
-		                {
-		                    if (zipFileNum % 50 == 0)
-		                    {
+		                } else if (zipFileNum < 5000) {
+		                    if (zipFileNum % 50 == 0) {
 		                        showStatus = true;
 		                    }
-		                }
-		                else
-		                {
-		                    if (zipFileNum % 100 == 0)
-		                    {
+		                } else {
+		                    if (zipFileNum % 100 == 0) {
 		                        showStatus = true;
 		                    }
 		                }
 
-		                if (showStatus)
-						{
+		                if (showStatus) {
 	                        output.println("<script language=\"javascript\">");
 	                        output.println("document.getElementById('currentDir').innerHTML=\"" + insertDoubleBackslash(CommonUtils.shortName(relativeFileName, 50)) + "\";");
                             output.println("document.getElementById('compressCount').innerHTML=\"" + zipFileNum + "\";");
 	                        output.println("</script>");
 	                        output.flush();
 						}
-					}
-					catch (Exception zioe)
-					{
-						Logger.getLogger(getClass()).error("failed to zip file " + fullFileName, zioe);
+					} catch (Exception zioe) {
+						LOG.error("failed to zip file " + fullFileName, zioe);
 						output.println("<font color=\"red\">failed to zip file " + fullFileName + "</font><br/>");
 						output.flush();
+					} finally {
+                        if (inStream != null) {
+                        	try {
+            					inStream.close();
+                        	} catch (Exception ex) {
+                        	}
+                        }
 					}
-
-					inStream.close();
-				}
-				catch (IOException ioex)
-				{
-                    Logger.getLogger(getClass()).error("error during zipping file " + fullFileName, ioex);
+				} catch (IOException ioex) {
+                    LOG.error("error during zipping file " + fullFileName, ioex);
 					output.println("<font color=\"red\">failed to zip file " + fullFileName + "</font><br/>");
 				}
 			}

@@ -75,7 +75,7 @@ public class CloneFileRequestHandler extends UserRequestHandler
 		}
 		else
 		{
-		    if (!copy_file(oldFilePath, newFilePath, false))
+		    if (!copyFile(oldFilePath, newFilePath))
 		    {
                 errorMsg = getResource("alert.cloneFailed", "Failed to clone file.");
 		    }

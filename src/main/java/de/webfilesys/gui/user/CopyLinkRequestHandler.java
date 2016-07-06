@@ -111,7 +111,7 @@ public class CopyLinkRequestHandler extends UserRequestHandler
 						targetPath = actPath + File.separatorChar + linkName;
 					}
 					
-					if (copy_file(fileCont.getRealFile().getAbsolutePath(), targetPath, false))
+					if (copyFile(fileCont.getRealFile().getAbsolutePath(), targetPath))
 					{
 						metaInfMgr.removeLink(actPath, linkName);
 						Logger.getLogger(getClass()).debug("link " + linkName + " replaced by a copy of original file " + fileCont.getRealFile().getAbsolutePath());

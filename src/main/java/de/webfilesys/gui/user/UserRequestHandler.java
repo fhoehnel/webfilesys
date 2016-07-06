@@ -136,42 +136,6 @@ public class UserRequestHandler extends ProtectedRequestHandler
         return (headlinePath);
     }
 
-    public void menuItem(String displayText, String link, String target)
-    {
-        StringBuffer buff = new StringBuffer();
-
-        buff.append("<tr>\n");
-        buff.append("<td class=\"menu\">&nbsp;\n");
-        buff.append("<a class=\"menuitem\" href=\"");
-        buff.append(link);
-        buff.append("\"");
-        if (target != null)
-        {
-            buff.append(" target=\"");
-            buff.append(target);
-            buff.append("\"");
-        }
-        buff.append(">");
-        buff.append(displayText);
-        buff.append("</a>\n");
-        buff.append("</td>\n");
-        buff.append("</tr>\n");
-
-        output.println(buff.toString());
-    }
-
-    public void menuSpace()
-    {
-        output.println(
-            "<tr><td class=\"menu\"><img src=\"images/space.gif\" width=\"1\" height=\"3\"></td></tr>");
-    }
-
-    public void menuSeparator()
-    {
-        output.println(
-            "<tr><td class=\"menu\"><img src=\"images/menusep.gif\" width=\"100%\" height=\"8\"></td></tr>");
-    }
-
     public boolean checkWriteAccess()
     {
     	boolean sessionReadonly = false;
@@ -234,96 +198,69 @@ public class UserRequestHandler extends ProtectedRequestHandler
         }
     }
 
-    public boolean copy_dir(
-        String source_path,
-        String dest_path,
-        boolean ignore_existing)
-    {
+    public boolean copyFolderTree(String sourcePath, String destPath, boolean ignoreExistingDir) {
         boolean copyError = false;
         
-        File source_dir_file = new File(source_path);
+        File sourceFolderFile = new File(sourcePath);
         
-        String file_list[] = source_dir_file.list();
+        File fileList[] = sourceFolderFile.listFiles();
 
-        if (file_list != null)
-        {
-            for (int i = 0; i < file_list.length; i++)
-            {
-                String sourceFileName =
-                    source_path + File.separator + file_list[i];
-                String destFileName = dest_path + File.separator + file_list[i];
+        if (fileList != null) {
+            for (int i = 0; i < fileList.length; i++) {
+            	
+                File sourceFile = fileList[i];
 
-                File source_file = new File(sourceFileName);
-                if (source_file.isFile())
-                {
-                    if ((fileCopyCounter <= 100) ||
-                        ((fileCopyCounter < 300) && (fileCopyCounter % 5 == 0)) ||
-                        ((fileCopyCounter < 1000) && (fileCopyCounter % 10 == 0)) ||
-                        (fileCopyCounter % 50 == 0)) 
-                    {
-                        output.println("<script language=\"javascript\">");
-                        output.println("document.getElementById('currentFile').innerHTML='" + insertDoubleBackslash(CommonUtils.shortName(getHeadlinePath(sourceFileName), 40)) + "';");
-                        output.println("</script>");
-                        output.flush();
-                    }                    
+            	if (sourceFile.canRead()) {
+                    String destFileName = destPath + File.separator + sourceFile.getName();
 
-                    if (copy_file(sourceFileName, destFileName, false))
-                    {
-                        fileCopyCounter++;
-                        
+                    if (sourceFile.isFile()) {
                         if ((fileCopyCounter <= 100) ||
                             ((fileCopyCounter < 300) && (fileCopyCounter % 5 == 0)) ||
                             ((fileCopyCounter < 1000) && (fileCopyCounter % 10 == 0)) ||
-                            (fileCopyCounter % 50 == 0)) 
-                        {
+                            (fileCopyCounter % 50 == 0)) {
                             output.println("<script language=\"javascript\">");
-                            output.println("document.getElementById('fileCount').innerHTML='" + fileCopyCounter +  "';");
+                            output.println("document.getElementById('currentFile').innerHTML='" + insertDoubleBackslash(CommonUtils.shortName(getHeadlinePath(sourceFile.getAbsolutePath()), 40)) + "';");
                             output.println("</script>");
-                        }
-                    }
-                    else
-                    {
-                        copyError = true;
-                    }
-                }
-                else
-                {
-                    if (source_file.isDirectory())
-                    {
-                        String sourceDirDescription = MetaInfManager.getInstance().getDescription(sourceFileName, ".");
-                        
-                        File new_dir = new File(destFileName);
+                            output.flush();
+                        }                    
 
-                        if ((!new_dir.mkdir()) && (!ignore_existing))
-                        {
-                            javascriptAlert(
-                                getResource(
-                                    "alert.mkdirfail",
-                                    "cannot create directory")
-                                    + "\\n"
-                                    + insertDoubleBackslash(destFileName));
-                            
-                            copyError = true;
-                        }
-                        else
-                        {
-                            if ((sourceDirDescription != null) && (sourceDirDescription.trim().length() > 0)) {
-                                MetaInfManager.getInstance().setDescription(destFileName, ".", sourceDirDescription);
+                        if (copyFile(sourceFile.getAbsolutePath(), destFileName)) {
+                            fileCopyCounter++;
+                                    
+                            if ((fileCopyCounter <= 100) ||
+                                ((fileCopyCounter < 300) && (fileCopyCounter % 5 == 0)) ||
+                                ((fileCopyCounter < 1000) && (fileCopyCounter % 10 == 0)) ||
+                                (fileCopyCounter % 50 == 0)) {
+                                    	
+                                output.println("<script language=\"javascript\">");
+                                output.println("document.getElementById('fileCount').innerHTML='" + fileCopyCounter +  "';");
+                                output.println("</script>");
                             }
                             
-                            if (!copy_dir(source_path + File.separator + file_list[i],
-                                          dest_path + File.separator + file_list[i],
-                                          ignore_existing))
-                            {
+                            if (sourceFile.getName().equals(MetaInfManager.METAINF_FILE)) {
+                            	MetaInfManager.getInstance().releaseMetaInf(destPath);
+                            }
+                        } else {
+                            copyError = true;
+                        }
+                    } else if (sourceFile.isDirectory()) {
+                        File newDir = new File(destFileName);
+
+                        if ((!newDir.mkdir()) && (!ignoreExistingDir)) {
+                            javascriptAlert(getResource("alert.mkdirfail", "cannot create directory")
+                                            + "\\n"
+                                            + insertDoubleBackslash(destFileName));
+                            copyError = true;
+                        } else {
+                            if (!copyFolderTree(sourceFile.getAbsolutePath(), destFileName, ignoreExistingDir)) {
                                 copyError = true;
                             }
                         }
                     }
-                }
+            	}
             }
             
-            if (fileCopyCounter > 100)
-            {
+            if (fileCopyCounter > 100) {
                 output.println("<script language=\"javascript\">");
                 output.println("document.getElementById('fileCount').innerHTML='" + fileCopyCounter +  "';");
                 output.println("</script>");
