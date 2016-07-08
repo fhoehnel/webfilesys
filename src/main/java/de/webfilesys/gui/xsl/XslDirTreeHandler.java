@@ -215,17 +215,11 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 			{
 				dirCounter++;
 				
-				boolean hasSubdirs = true;
-
 				Integer subdirExist = SubdirExistCache.getInstance().existsSubdir(subdirPath);
 
 				if (subdirExist == null)
 				{
 			        (new TestSubDirThread(subdirPath)).start();
-				}
-				else
-				{
-					hasSubdirs = (subdirExist.intValue()==1);
 				}
 
                 folderElement = doc.createElement("folder");
@@ -250,9 +244,10 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 
 				folderElement.setAttribute("menuPath", insertDoubleBackslash(subdirPath));  
 				
-				if (!hasSubdirs)
-				{
-					folderElement.setAttribute("leaf","true");    
+				if (subdirExist == null) {
+					folderElement.setAttribute("leaf", "unknown");    
+				} else if (subdirExist.intValue() != 1) {
+					folderElement.setAttribute("leaf", "true");    
 				}
 
 				if (subdirPath.equals(actPath))

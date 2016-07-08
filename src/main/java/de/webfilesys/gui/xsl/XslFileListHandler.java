@@ -207,7 +207,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		{
 		    Logger.getLogger(getClass()).warn("folder is not a readable directory: " + actPath);
 			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
-			this.processResponse("xsl/folderTree.xsl");
+			processResponse("fileList.xsl");
 			return; 
 		}
  

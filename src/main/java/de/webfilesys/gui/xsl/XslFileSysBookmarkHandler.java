@@ -66,6 +66,8 @@ public class XslFileSysBookmarkHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(bookmarkListElement, "currentPath", this.getCwd(), false);
 		
+	    XmlUtil.setChildText(bookmarkListElement, "language", language, false);
+		
 		String mobile = (String) session.getAttribute("mobile");
 		
 		if (mobile != null) {
@@ -76,14 +78,6 @@ public class XslFileSysBookmarkHandler extends XslRequestHandlerBase
         {
         	XmlUtil.setChildText(bookmarkListElement, "readonly", "true", false);
         }
-        else
-        {
-    		addMsgResource("label.deleteBookmark", getResource("label.deleteBookmark","Delete Bookmark"));
-        }
-
-		addMsgResource("label.bookmarks", getResource("label.bookmarks","Bookmarked Folders"));
-		addMsgResource("label.noBookmarksDefined", getResource("label.noBookmarksDefined","No bookmarks have been defined"));
-		addMsgResource("button.return", getResource("button.return", "Return"));
 		
 		Vector userBookmarks = bookmarkMgr.getListOfBookmarks(uid, true);
         

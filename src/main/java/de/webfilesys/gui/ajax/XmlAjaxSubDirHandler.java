@@ -277,17 +277,11 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 
 			Element folderElement = null;
 
-			hasSubdirs = true;
-
 			subdirExist = SubdirExistCache.getInstance().existsSubdir(subdirPath);
 
 			if (subdirExist == null)
 			{
 		        (new TestSubDirThread(subdirPath)).start();
-			}
-			else
-			{
-				hasSubdirs = (subdirExist.intValue()==1);
 			}
 
             folderElement = doc.createElement("folder");
@@ -310,8 +304,9 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 
 			folderElement.setAttribute("path", encodedPath);      
 
-            if (!hasSubdirs)
-			{
+			if (subdirExist == null) {
+				folderElement.setAttribute("leaf", "unknown");    
+			} else if (subdirExist.intValue() != 1) {
 				folderElement.setAttribute("leaf", "true");    
 			}
 			

@@ -358,8 +358,6 @@ function exp(parentDivId, lastInLevel)
             expJavascriptXslt(parentDiv, xmlUrl, xslUrl)
         }
     }
-    
-    setTimeout('setTooltips()', 500);
 }
     
 function expMozilla(parentDiv, xmlUrl, xslUrl) {
@@ -389,6 +387,10 @@ function expMozilla(parentDiv, xmlUrl, xslUrl) {
                             currentDirId = fragment.childNodes[0].id;
 
                             parentDiv.parentNode.replaceChild(fragment, parentDiv);
+                            
+                            setTimeout('setTooltips()', 500);
+                            
+                            querySubdirs();
                         } else {
                             window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
                             return;
@@ -424,6 +426,10 @@ function expMSIE(parentDiv, xmlUrl, xslUrl)
     parentDiv.outerHTML = xslProcessor.output;
     
     currentDirId = newId;
+
+    setTimeout('setTooltips()', 500);
+    
+    querySubdirs();
 }
 
 function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) { 
@@ -452,6 +458,10 @@ function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) {
                             parentDiv.outerHTML = html;
     
                             currentDirId = newId;
+
+                            setTimeout('setTooltips()', 500);
+                            
+                            querySubdirs();
                         } else {
                             alert(resourceBundle["alert.communicationFailure"]);
                             return;
@@ -464,6 +474,51 @@ function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) {
             }
         }
     });
+}
+
+function querySubdirs() {
+	querySubdirQueue = new Array();
+	
+    $("div[subdirStatusUnknown]").each(function() {
+    	querySubdirQueue.push({"path": $(this).attr("path"), "id": $(this).attr("id")});
+    	$(this).removeAttr("subdirStatusUnknown");
+    });	
+    
+    querySubdirStatus();
+}
+
+function querySubdirStatus() {
+	if (querySubdirQueue.length > 0) {
+		var queueElem = querySubdirQueue.pop();
+        var ajaxUrl = "/webfilesys/servlet?command=testSubdirExist&path=" + queueElem.path;
+        
+    	xmlRequest(ajaxUrl, function(req) {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    var subdirExists = req.responseXML.getElementsByTagName("result")[0].firstChild.nodeValue;        
+                    if (subdirExists == "false") {
+                    	var folderDiv = document.getElementById(queueElem.id);
+                    	if (folderDiv) {
+                    		var linkElem = getChildElementsByTagName(folderDiv, "A")[0];
+                    		if (linkElem) {
+                        		var expColImg = getChildElementsByTagName(linkElem, "IMG")[0];
+                        		if (expColImg) {
+                        			if (expColImg.src.endsWith("plusMore.gif")) {
+                            			expColImg.src = "/webfilesys/images/branch.gif";
+                        			} else {
+                        				expColImg.src = "/webfilesys/images/branchLast.gif";
+                        			}
+                        		}
+                    		}
+                    	}
+                    }
+                    querySubdirStatus();
+                } else {
+                    alert(resourceBundle["alert.communicationFailure"]);
+	            }
+            }
+    	});
+	}
 }
 
 function synchronize(path, domId)
@@ -646,6 +701,34 @@ function selectCompFolderResult(req)
              toast(message, 4000);
         }
     }
+}
+
+function gotoBookmarkedFolder(encodedPath, mobile) {
+	
+    var url = "/webfilesys/servlet?command=ajaxRPC&method=existFolder&param1=" + encodedPath;
+    
+    xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var responseXml = req.responseXML;
+                var resultItem = responseXml.getElementsByTagName("result")[0];
+                var result = resultItem.firstChild.nodeValue;            
+                if (result == "true") {
+                	var bookmarkUrl; 
+                	if (mobile) {
+                		bookmarkUrl = "/webfilesys/servlet?command=mobile&cmd=folderFileList&absPath=" + encodedPath;
+                	} else {
+                		bookmarkUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodedPath + "&mask=*&fastPath=true";
+                	}
+                	window.location.href = bookmarkUrl;
+                } else {
+                	toast(resourceBundle["bookmark.destFolderMissing"], 3000);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
 }
 
 function getPageYScrolled()

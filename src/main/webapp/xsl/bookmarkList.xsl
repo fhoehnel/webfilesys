@@ -6,19 +6,31 @@
 
 <xsl:strip-space elements="bookmarkList bookmark" />
 
+<xsl:include href="util.xsl" />
+
 <!-- root node-->
 <xsl:template match="/">
 
 <html>
 <head>
 
-<meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="0" />
 
-<link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
-<link rel="stylesheet" type="text/css">
-  <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/bookmarkList/css" />.css</xsl:attribute>
-</link>
+  <link rel="stylesheet" type="text/css">
+    <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/bookmarkList/css" />.css</xsl:attribute>
+  </link>
+
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/bookmarkList/language" /></xsl:attribute>
+  </script>
 
 </head>
 
@@ -27,6 +39,11 @@
 <xsl:apply-templates />
 
 </body>
+
+  <script type="text/javascript">
+    setBundleResources();
+  </script>
+
 </html>
 
 </xsl:template>
@@ -34,13 +51,7 @@
 
 <xsl:template match="bookmarkList">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="resources/msg[@key='label.bookmarks']/@value" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline" resource="label.bookmarks" />
 
   <form accept-charset="utf-8" name="bookmarkForm" method="get" action="/webfilesys/servlet">
     <input type="hidden" name="command" value="exp" />
@@ -53,6 +64,9 @@
       <table border="0" cellpadding="2" cellspacing="0">
 
         <xsl:for-each select="bookmark">
+        
+          <xsl:variable name="pathForScript"><xsl:call-template name="insDoubleBackslash"><xsl:with-param name="string"><xsl:value-of select="encodedPath" /></xsl:with-param></xsl:call-template></xsl:variable>
+        
           <tr>
             <td>
               <img border="0">
@@ -71,10 +85,10 @@
                   <xsl:attribute name="style">color:<xsl:value-of select="textColor" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="/bookmarkList/mobile">
-                  <xsl:attribute name="href">/webfilesys/servlet?command=mobile&amp;cmd=folderFileList&amp;absPath=<xsl:value-of select="encodedPath" /></xsl:attribute>
+                  <xsl:attribute name="href">javascript:gotoBookmarkedFolder('<xsl:value-of select="$pathForScript" />', true)</xsl:attribute>
                 </xsl:if>
                 <xsl:if test="not(/bookmarkList/mobile)">
-                  <xsl:attribute name="href">/webfilesys/servlet?command=exp&amp;expandPath=<xsl:value-of select="encodedPath" />&amp;mask=*&amp;fastPath=true</xsl:attribute>
+                  <xsl:attribute name="href">javascript:gotoBookmarkedFolder('<xsl:value-of select="$pathForScript" />', false)</xsl:attribute>
                 </xsl:if>
                 <xsl:attribute name="title"><xsl:value-of select="path" /></xsl:attribute>
     
@@ -86,9 +100,8 @@
               <td style="width:30px;">&#160;</td>
               
               <td>
-                <a>
+                <a titleResource="label.deleteBookmark">
                   <xsl:attribute name="href">/webfilesys/servlet?command=bookmarks&amp;cmd=delete&amp;id=<xsl:value-of select="@id" /></xsl:attribute>
-                  <xsl:attribute name="title"><xsl:value-of select="/bookmarkList/resources/msg[@key='label.deleteBookmark']/@value" /></xsl:attribute>
                   <img src="/webfilesys/images/trash.gif" border="0" />
                 </a>
               </td>
@@ -103,7 +116,7 @@
     
     <xsl:if test="not(bookmark)">
       <br/>
-      <xsl:value-of select="resources/msg[@key='label.noBookmarksDefined']/@value" />
+      <span resource="label.noBookmarksDefined"></span>
       <br/>
     </xsl:if>
 
@@ -116,7 +129,7 @@
       <xsl:if test="not(/bookmarkList/mobile)">
         <xsl:attribute name="href">javascript:document.bookmarkForm.submit()</xsl:attribute>
       </xsl:if>
-      <span><xsl:value-of select="resources/msg[@key='button.return']/@value" /></span>
+      <span resource="button.return"></span>
     </a>              
 
   </form>

@@ -69,6 +69,7 @@ import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
+import de.webfilesys.gui.ajax.TestSubdirExistHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
 import de.webfilesys.gui.ajax.XmlAssociatedProgramHandler;
 import de.webfilesys.gui.ajax.XmlCancelSearchHandler;
@@ -875,6 +876,13 @@ public class WebFileSysServlet extends ServletBase
             
             return(true);
         }
+        
+    	if (command.equals("testSubdirExist"))
+    	{
+			(new TestSubdirExistHandler(req, resp, session, output, userid)).handleRequest();
+
+			return(true);
+    	}
         
         if (command.equals("fmdelete"))
         {

@@ -625,6 +625,7 @@ alert.bookmarkMissingName=The bookmark name may not be empty!
 button.bookmark=Bookmark
 title.bookmarkButton=Create bookmark for the current folder
 alert.bookmarkCreated=new Bookmark created for directory
+bookmark.destFolderMissing=The bookmarked folder does not exist anymore.
 
 # diff labels
 title.diff=Compare Files (diff)

@@ -23,24 +23,27 @@
     </link>
 
     <xsl:if test="not(folderTree/browserXslEnabled)">
-      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-      <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
+      <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+      <script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+      <script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+      <script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+      <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
     </xsl:if>
 
-    <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/tooltips.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/dirContextMenu.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/jsDirMenu.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/keyDirTree.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/tooltips.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/dirContextMenu.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/jsDirMenu.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/keyDirTree.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/xmlUtil.js" type="text/javascript"></script>
+    
+    <script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
 
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -58,6 +61,8 @@
       var currentDirId = '';
   
       var delDirStarted = false;
+      
+      var querySubdirQueue = new Array();
 
       function scrollToCurrent() {
           if (currentDirId != "") {
@@ -99,7 +104,7 @@
 
   <body>
     <xsl:attribute name="class">dirTree</xsl:attribute>
-    <xsl:attribute name="onLoad">setBundleResources();setTimeout('scrollToCurrent()', 100);setTimeout('setTooltips()', 500);</xsl:attribute>
+    <xsl:attribute name="onLoad">setBundleResources();setTimeout('scrollToCurrent()', 100);querySubdirs();setTimeout('setTooltips()', 500);</xsl:attribute>
 
     <xsl:apply-templates />
 
@@ -160,134 +165,139 @@
 
      <xsl:attribute name="path"><xsl:value-of select="@path" /></xsl:attribute>
 
-      <xsl:if test="folder">
-        <a>
-          <xsl:attribute name="href">javascript:col('<xsl:value-of select="@id" />')</xsl:attribute>
+     <xsl:if test="@leaf='unknown'">
+       <xsl:attribute name="subdirStatusUnknown">true</xsl:attribute>
+     </xsl:if>
 
-          <xsl:if test="position()=last()">
-            <img src="/webfilesys/images/minusLast.gif" class="expCol" />
-          </xsl:if>
-          <xsl:if test="position()!=last()">
-            <img src="/webfilesys/images/minusMore.gif" class="expCol" />
-          </xsl:if>
-        </a>
-      </xsl:if>
+     <xsl:if test="folder">
+       <a>
+         <xsl:attribute name="href">javascript:col('<xsl:value-of select="@id" />')</xsl:attribute>
+
+         <xsl:if test="position()=last()">
+           <img src="/webfilesys/images/minusLast.gif" class="expCol" />
+         </xsl:if>
+         <xsl:if test="position()!=last()">
+           <img src="/webfilesys/images/minusMore.gif" class="expCol" />
+         </xsl:if>
+       </a>
+     </xsl:if>
       
-      <xsl:if test="not(folder)">
-        <xsl:if test="not(@leaf)">
-
-          <a>
-            <xsl:attribute name="href">javascript:exp('<xsl:value-of select="@id" />', '<xsl:value-of select="position()=last()" />')</xsl:attribute>
-
-            <xsl:if test="position()=last()">
-              <img src="/webfilesys/images/plusLast.gif" class="expCol" />
-            </xsl:if>
-            <xsl:if test="position()!=last()">
-              <img src="/webfilesys/images/plusMore.gif" class="expCol" />
-            </xsl:if>
-          </a>
-
-        </xsl:if>
-        <xsl:if test="@leaf">
-          <xsl:if test="position()=last()">
-            <img src="/webfilesys/images/branchLast.gif" class="expCol" />
-          </xsl:if>
-          <xsl:if test="position()!=last()">
-            <img src="/webfilesys/images/branch.gif" class="expCol" />
-          </xsl:if>
-        </xsl:if>
-      </xsl:if>
-
-    <a>
-
-      <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />')</xsl:attribute>
+     <xsl:if test="not(folder)">
       
-      <xsl:if test="@type='drive'">
-        <img src="/webfilesys/images/miniDisk.gif" border="0" width="17" height="14">
-          <xsl:if test="@label">
-            <xsl:attribute name="title"><xsl:value-of select="@label" /></xsl:attribute>
-          </xsl:if>
-        </img>
-      </xsl:if>
+       <xsl:if test="not(@leaf) or (@leaf='unknown')">
 
-      <xsl:if test="@type='floppy'">
-        <img src="/webfilesys/images/miniFloppy.gif" border="0" width="18" height="16">
-          <xsl:if test="@label">
-            <xsl:attribute name="title"><xsl:value-of select="@label" /></xsl:attribute>
-          </xsl:if>
-        </img>
-      </xsl:if>
+         <a>
+           <xsl:attribute name="href">javascript:exp('<xsl:value-of select="@id" />', '<xsl:value-of select="position()=last()" />')</xsl:attribute>
 
-      <xsl:if test="not(@type)">
-        <xsl:if test="@current">
-          <xsl:if test="@icon">
-            <img class="icon">
-              <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
-            </img>
-          </xsl:if>
-          <xsl:if test="not(@icon)">
-            <img src="/webfilesys/images/folder1.gif" class="folder" />
-          </xsl:if>
-          <script language="javascript">
-            currentDirId = '<xsl:value-of select="@id" />';
-          </script>
-        </xsl:if>
-        <xsl:if test="not(@current)">
-          <xsl:if test="@icon">
-            <img class="icon">
-              <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
-            </img>
-          </xsl:if>
-          <xsl:if test="not(@icon)">
-            <img src="/webfilesys/images/folder.gif" class="folder" />
-          </xsl:if>
-        </xsl:if>
-      </xsl:if>
-    </a>
+           <xsl:if test="position()=last()">
+             <img src="/webfilesys/images/plusLast.gif" class="expCol" />
+           </xsl:if>
+           <xsl:if test="position()!=last()">
+             <img src="/webfilesys/images/plusMore.gif" class="expCol" />
+           </xsl:if>
+         </a>
 
-    <a>
-      <xsl:attribute name="href">javascript:listFiles('<xsl:value-of select="@id"/>')</xsl:attribute>
-      <xsl:attribute name="oncontextmenu">dirContextMenu('<xsl:value-of select="@id" />');return false;</xsl:attribute>
+       </xsl:if>
+       <xsl:if test="@leaf='true'">
+         <xsl:if test="position()=last()">
+           <img src="/webfilesys/images/branchLast.gif" class="expCol" />
+         </xsl:if>
+         <xsl:if test="position()!=last()">
+           <img src="/webfilesys/images/branch.gif" class="expCol" />
+         </xsl:if>
+       </xsl:if>
+     </xsl:if>
 
-      <xsl:if test="@link">
-        <xsl:attribute name="class">link dirSpacer</xsl:attribute>
+     <a>
 
-        <xsl:attribute name="title">
-          <xsl:value-of select="'--&gt; '"/>
-          <xsl:value-of select="@linkDir"/>
-        </xsl:attribute>
-      </xsl:if>
+       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />')</xsl:attribute>
+      
+       <xsl:if test="@type='drive'">
+         <img src="/webfilesys/images/miniDisk.gif" border="0" width="17" height="14">
+           <xsl:if test="@label">
+             <xsl:attribute name="title"><xsl:value-of select="@label" /></xsl:attribute>
+           </xsl:if>
+         </img>
+       </xsl:if>
 
-      <xsl:if test="not(@link)">
-        <xsl:attribute name="class">dirtree dirSpacer</xsl:attribute>
-        <xsl:if test="@textColor">
-          <xsl:attribute name="style">color:<xsl:value-of select="@textColor" /></xsl:attribute>
-        </xsl:if>
-      </xsl:if>
+       <xsl:if test="@type='floppy'">
+         <img src="/webfilesys/images/miniFloppy.gif" border="0" width="18" height="16">
+           <xsl:if test="@label">
+             <xsl:attribute name="title"><xsl:value-of select="@label" /></xsl:attribute>
+           </xsl:if>
+         </img>
+       </xsl:if>
+
+       <xsl:if test="not(@type)">
+         <xsl:if test="@current">
+           <xsl:if test="@icon">
+             <img class="icon">
+               <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
+             </img>
+           </xsl:if>
+           <xsl:if test="not(@icon)">
+             <img src="/webfilesys/images/folder1.gif" class="folder" />
+           </xsl:if>
+           <script language="javascript">
+             currentDirId = '<xsl:value-of select="@id" />';
+           </script>
+         </xsl:if>
+         <xsl:if test="not(@current)">
+           <xsl:if test="@icon">
+             <img class="icon">
+               <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
+             </img>
+           </xsl:if>
+           <xsl:if test="not(@icon)">
+             <img src="/webfilesys/images/folder.gif" class="folder" />
+           </xsl:if>
+         </xsl:if>
+       </xsl:if>
+     </a>
+
+     <a>
+       <xsl:attribute name="href">javascript:listFiles('<xsl:value-of select="@id"/>')</xsl:attribute>
+       <xsl:attribute name="oncontextmenu">dirContextMenu('<xsl:value-of select="@id" />');return false;</xsl:attribute>
+
+       <xsl:if test="@link">
+         <xsl:attribute name="class">link dirSpacer</xsl:attribute>
+
+         <xsl:attribute name="title">
+           <xsl:value-of select="'--&gt; '"/>
+           <xsl:value-of select="@linkDir"/>
+         </xsl:attribute>
+       </xsl:if>
+
+       <xsl:if test="not(@link)">
+         <xsl:attribute name="class">dirtree dirSpacer</xsl:attribute>
+         <xsl:if test="@textColor">
+           <xsl:attribute name="style">color:<xsl:value-of select="@textColor" /></xsl:attribute>
+         </xsl:if>
+       </xsl:if>
     
-      <xsl:if test="(@type='drive') and @label and (@label!='')">
-        <xsl:value-of select="@label" />
-      </xsl:if>
-      <xsl:if test="not(@type='drive') or not(@label) or (@label='')">
-        <xsl:value-of select="@name" />
-      </xsl:if>
-    </a>
+       <xsl:if test="(@type='drive') and @label and (@label!='')">
+         <xsl:value-of select="@label" />
+       </xsl:if>
+       <xsl:if test="not(@type='drive') or not(@label) or (@label='')">
+         <xsl:value-of select="@name" />
+       </xsl:if>
+     </a>
 
-    <xsl:if test="folder">
-      <xsl:if test="position()=last()">
-        <div class="indent">
-          <xsl:apply-templates />
-        </div>
-      </xsl:if>
+     <xsl:if test="folder">
+       <xsl:if test="position()=last()">
+         <div class="indent">
+           <xsl:apply-templates />
+         </div>
+       </xsl:if>
 
-      <xsl:if test="position()!=last()">
-        <div class="indent">
-          <div class="more">
-            <xsl:apply-templates />
-          </div>
-        </div>
-      </xsl:if>
-    </xsl:if>
+       <xsl:if test="position()!=last()">
+         <div class="indent">
+           <div class="more">
+             <xsl:apply-templates />
+           </div>
+         </div>
+       </xsl:if>
+     </xsl:if>
 
   </div>
   

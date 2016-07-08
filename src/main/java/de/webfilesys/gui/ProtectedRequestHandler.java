@@ -218,6 +218,11 @@ public class ProtectedRequestHandler extends RequestHandler {
 		File currentDir = new File(currentPath);
 
 		String fileList[] = currentDir.list();
+		
+		if (fileList == null) {
+			LOG.warn("could not get dir entries for " + currentPath);
+			return zipFileNum;
+		}
 
 		if (fileList.length == 0) {
 			try {
@@ -226,7 +231,7 @@ public class ProtectedRequestHandler extends RequestHandler {
 			} catch (IOException ex) {
 				LOG.error("failed to ad zip entry for empty directory " + currentPath);
 			}
-			return(zipFileNum);
+			return zipFileNum;
 		}
 
 		byte buff[] = new byte[4096];

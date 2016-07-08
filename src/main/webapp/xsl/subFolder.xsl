@@ -44,7 +44,7 @@
       </xsl:if>
       
       <xsl:if test="not(folder)">
-        <xsl:if test="not(@leaf)">
+        <xsl:if test="not(@leaf) or (@leaf='unknown')">
 
           <a>
             <xsl:attribute name="href">javascript:exp('<xsl:value-of select="@id" />', '<xsl:value-of select="@lastInLevel='true'" />')</xsl:attribute>
@@ -168,7 +168,11 @@
 
     <xsl:variable name="pathForScript"><xsl:call-template name="insDoubleBackslash"><xsl:with-param name="string"><xsl:value-of select="@path" /></xsl:with-param></xsl:call-template></xsl:variable>
       
-    <xsl:if test="not(@leaf)">
+    <xsl:if test="@leaf='unknown'">
+      <xsl:attribute name="subdirStatusUnknown">true</xsl:attribute>
+    </xsl:if>
+      
+    <xsl:if test="not(@leaf) or (@leaf='unknown')">
 
       <a>
          <xsl:attribute name="href">javascript:exp('<xsl:value-of select="@id" />', '<xsl:value-of select="@lastInLevel='true'" />')</xsl:attribute>
@@ -183,7 +187,7 @@
 
     </xsl:if>
       
-    <xsl:if test="@leaf">
+    <xsl:if test="@leaf='true'">
       <xsl:if test="position()=last()">
         <img src="/webfilesys/images/branchLast.gif" class="expCol" />
       </xsl:if>

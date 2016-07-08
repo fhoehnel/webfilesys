@@ -135,7 +135,7 @@ public class DownloadFolderZipHandler extends UserRequestHandler
 
         String fileList[]=actDir.list();
 
-        if (fileList.length==0)
+        if ((fileList == null) || (fileList.length == 0))
         {
             return;
         }

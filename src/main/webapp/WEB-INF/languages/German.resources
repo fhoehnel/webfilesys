@@ -628,6 +628,7 @@ alert.bookmarkMissingName=Der Bookmark-Name darf nicht leer sein!
 button.bookmark=Bookmark
 title.bookmarkButton=Lesezeichen für aktuellen Ordner hinzufügen
 alert.bookmarkCreated=Lesezeichen wurde hinzugefügt für Ordner
+bookmark.destFolderMissing=Der Ziel-Ordner des Bookmarks existiert nicht mehr.
 
 # diff labels
 title.diff=Textdateien vergleichen (diff)
