@@ -73,16 +73,19 @@
     </head>
 
     <body class="blog">
-      <xsl:attribute name="onload">setCalendarStyles();setInitialDate();loadGoogleMapsAPIScriptCode();<xsl:if test="/blog/blogEntry/geoTag">toggleGeoData(document.getElementById('blogGeoDataSwitcher'));</xsl:if></xsl:attribute>
+      <xsl:attribute name="onload">setCalendarStyles();setInitialDate();loadGoogleMapsAPIScriptCode();replaceEditThumbnail();<xsl:if test="/blog/blogEntry/geoTag">toggleGeoData(document.getElementById('blogGeoDataSwitcher'));</xsl:if></xsl:attribute>
       
       <div class="blogEditHead" resource="blog.editPostHeadline"></div>    
       
       <div class="blogFormCont">
       
         <div class="blogPicCont">
-          <img>
+          <img id="blogPic">
             <xsl:attribute name="src"><xsl:value-of select="/blog/blogEntry/imgPath" /></xsl:attribute>
             <xsl:attribute name="style">width:<xsl:value-of select="/blog/blogEntry/thumbnailWidth" />px;height:<xsl:value-of select="/blog/blogEntry/thumbnailHeight" />px</xsl:attribute>
+            <xsl:if test="/blog/blogEntry/origImgPath">
+              <xsl:attribute name="origImgPath"><xsl:value-of select="/blog/blogEntry/origImgPath" /></xsl:attribute>
+            </xsl:if>
           </img>
         </div>
       

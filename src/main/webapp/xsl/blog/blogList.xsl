@@ -52,6 +52,7 @@
       </script>
       
       <script type="text/javascript">
+      
         function setCalendarStyles() 
         {
             if (browserFirefox) 
@@ -94,17 +95,17 @@
               document.getElementById('entry-<xsl:value-of select="/blog/posInPage" />').scrollIntoView();
             </xsl:if>
         }
-
+     
       </script>
       
     </head>
 
     <body class="blog">
       <xsl:if test="not(/blog/readonly)">
-        <xsl:attribute name="onload">setCalendarStyles();queryPublicLink();firefoxJumpToIdWorkaround();scrollToCurrentEntry();queryGeoData()</xsl:attribute>
+        <xsl:attribute name="onload">setCalendarStyles();queryPublicLink();firefoxJumpToIdWorkaround();scrollToCurrentEntry();queryGeoData();attachScrollHandler();</xsl:attribute>
       </xsl:if>
       <xsl:if test="/blog/readonly">
-        <xsl:attribute name="onload">setCalendarStyles();firefoxJumpToIdWorkaround();scrollToCurrentEntry();queryGeoData()</xsl:attribute>
+        <xsl:attribute name="onload">setCalendarStyles();firefoxJumpToIdWorkaround();scrollToCurrentEntry();queryGeoData();attachScrollHandler();</xsl:attribute>
       </xsl:if>
       
       <div class="blogCont">
@@ -224,9 +225,13 @@
                 <xsl:attribute name="href">javascript:showPicturePopup('<xsl:value-of select="imgPathForScript" />', <xsl:value-of select="xpix" />, <xsl:value-of select="ypix" />)</xsl:attribute>
 
                 <img border="0" titleResource="blog.showFullSize">
+                  <xsl:attribute name="id">pic-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
                   <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
                   <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
                   <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
+                  <xsl:if test="origImgPath">
+                    <xsl:attribute name="origImgPath"><xsl:value-of select="origImgPath" /></xsl:attribute>
+                  </xsl:if>
                   <xsl:if test="align='right'">
                     <xsl:attribute name="class">storyPicture alignRight</xsl:attribute>  
                   </xsl:if>
@@ -419,6 +424,18 @@
         powered by WebFileSys
         <a href="http://www.webfilesys.de" target="_blank"> (www.webfilesys.de)</a>
       </div>
+    
+      <script type="text/javascript">
+        var thumbnails = new Array();
+        
+        <xsl:for-each select="/blog/blogEntries/blogDate">
+          <xsl:for-each select="dayEntries/file">
+            <xsl:if test="thumbnail">
+              thumbnails.push("pic-<xsl:value-of select="pagePicCounter" />");
+            </xsl:if>
+          </xsl:for-each>
+        </xsl:for-each>          
+      </script>    
     
     </body>
     

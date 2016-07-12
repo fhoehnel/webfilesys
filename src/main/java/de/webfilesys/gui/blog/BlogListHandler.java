@@ -355,6 +355,7 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		        					int thumbWidth = 0;
 		        					int thumbHeight = 0;
 		        					
+		        					String origImgPath = null;
 		        					String imgPath = BlogThumbnailHandler.getInstance().getPathOfExistingThumbnail(file.getAbsolutePath());
 		        					
 		        					if (imgPath == null) {
@@ -383,6 +384,11 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		        						if (thumbnailDimensions != null) {
 			        						thumbWidth = thumbnailDimensions.getRealWidth();
 			        						thumbHeight = thumbnailDimensions.getRealHeight();
+
+			        						XmlUtil.setChildText(fileElement, "thumbnail", "true");
+
+			        						String origImgSrcUrl = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(file.getAbsolutePath()) + "&cached=true";
+			        						XmlUtil.setChildText(fileElement, "origImgPath", origImgSrcUrl);
 		        						}
 		        					}
 		        					
@@ -398,7 +404,6 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		        					
 		        					XmlUtil.setChildText(fileElement, "fullScreenWidth", Integer.toString(fullScreenWidth));
 		        					XmlUtil.setChildText(fileElement, "fullScreenHeight", Integer.toString(scaledImage.getScaledHeight()));
-		        					
 
 		        					String imgSrcUrl = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(imgPath) + "&cached=true";
 		        					

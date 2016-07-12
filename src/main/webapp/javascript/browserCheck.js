@@ -15,7 +15,7 @@ if (document.all && document.addEventListener) {
 var browserChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 
 // var browserSafari = /a/.__proto__=='//';
-var browserSafari = navigator.vendor.indexOf("Apple")==0 && /\sSafari\//.test(navigator.userAgent);
+var browserSafari = navigator.vendor && navigator.vendor.indexOf("Apple")==0 && /\sSafari\//.test(navigator.userAgent);
 
 var browserOpera = false;
 if (window.opera)

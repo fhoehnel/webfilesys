@@ -3,6 +3,8 @@ var selectedForUpload = new Array();
 var MAX_PICTURE_SIZE_SUM = 40000000;
 
 var MAX_BLOG_TEXT_LENGTH = 4096;
+
+var THUMB_SUBDIR_NAME = "_thumbnails400";
       
 var xhr;
       
@@ -25,6 +27,8 @@ var SINGLE_FILE_MAX_SIZE;
 var uploadStartedByButton = false;
 
 var publicUrl = null;
+
+var lastScrollPos = 0;
       
 if (browserFirefox)
 {
@@ -1598,4 +1602,77 @@ function googleMapAll() {
     } else {
         mapWin.focus();
     }
+}
+
+function attachScrollHandler() {
+    window.onscroll = function() {
+		var scrollPosDiff = window.pageYOffset - lastScrollPos;
+
+		if ((scrollPosDiff > 20) || (scrollPosDiff < (-20))) {
+			lastScrollPos = window.pageYOffset;
+			checkThumbnailsToReplace(true);
+		}
+	};
+	
+	// replace initially visible thumbnails
+	setTimeout(checkThumbnailsToReplace, 500);
+}
+
+function checkThumbnailsToReplace(breakOnFirstReplaced) {
+	var replacedImages = new Array();
+	
+	for (var i = 0; i < thumbnails.length; i++) {
+        var pic = document.getElementById(thumbnails[i]);
+        if (pic) {
+        	if (isScrolledIntoView(pic)) {
+        		var originalImgSrc = pic.getAttribute("origImgPath");
+        		if (originalImgSrc) {
+                    replaceTumbnail(pic, originalImgSrc);
+
+                    pic.removeAttribute("origImgPath");
+                    replacedImages.push(i);
+            		if (breakOnFirstReplaced) {
+            			break;
+            		}
+        		}
+        	}
+        }
+	}
+	
+	for (var i = replacedImages.length - 1; i >= 0; i--) {
+        thumbnails.splice(replacedImages[i], 1);
+	}
+	
+	replacedImages = null;
+}
+
+function replaceTumbnail(pic, originalImgSrc) {
+	
+	var prefetchImg = new Image();    
+    
+	prefetchImg.onload = function() {
+		pic.src = originalImgSrc;
+		prefetchImg = null;
+	};
+	
+	prefetchImg.src = originalImgSrc;
+}
+
+function replaceEditThumbnail() {
+    var pic = document.getElementById("blogPic");
+    if (pic) {
+		var originalImgSrc = pic.getAttribute("origImgPath");
+		if (originalImgSrc) {
+            replaceTumbnail(pic, originalImgSrc);
+            pic.removeAttribute("origImgPath");
+		}
+    }
+}
+
+function isScrolledIntoView(el) {
+    var elemTop = el.getBoundingClientRect().top;
+    var elemBottom = el.getBoundingClientRect().bottom;
+
+    var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
+    return isVisible;
 }

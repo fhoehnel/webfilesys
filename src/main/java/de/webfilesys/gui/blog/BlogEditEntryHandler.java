@@ -14,6 +14,7 @@ import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
+import de.webfilesys.graphics.BlogThumbnailHandler;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
@@ -72,9 +73,22 @@ public class BlogEditEntryHandler extends XslRequestHandlerBase {
 		
 		XmlUtil.setChildText(blogEntryElement, "fileName", fileName);
 
-		String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(picFile.getAbsolutePath()) + "&cached=true";
+		String origImgPath = null;
+		String imgPath = BlogThumbnailHandler.getInstance().getPathOfExistingThumbnail(picFile.getAbsolutePath());
 		
+		if (imgPath == null) {
+			imgPath = picFile.getAbsolutePath();
+		} else {
+			origImgPath = picFile.getAbsolutePath();
+		}
+		
+		String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(imgPath) + "&cached=true";
 		XmlUtil.setChildText(blogEntryElement, "imgPath", srcFileName);
+		
+		if (origImgPath != null) {
+			String origImgSrc = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(origImgPath) + "&cached=true";
+			XmlUtil.setChildText(blogEntryElement, "origImgPath", origImgSrc);
+		}
 		
 		// TODO: make configurable
 		int thumbnailSize = 400;
@@ -85,7 +99,7 @@ public class BlogEditEntryHandler extends XslRequestHandlerBase {
 		ScaledImage scaledImage = null;
 
 		try {
-			scaledImage = new ScaledImage(picFile.getAbsolutePath(), thumbnailSize, thumbnailSize);
+			scaledImage = new ScaledImage(imgPath, thumbnailSize, thumbnailSize);
 			
 			thumbWidth = scaledImage.getScaledWidth();
 			thumbHeight = scaledImage.getScaledHeight();
