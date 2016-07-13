@@ -678,6 +678,8 @@ public class UploadServlet extends WebFileSysServlet
                 }
             }
 			
+			BlogThumbnailHandler.getInstance().createBlogThumbnail(origImgPath);
+			
 			int lastSepIdx = origImgPath.lastIndexOf(File.separatorChar);
 			
 			String scaledImgPath = origImgPath.substring(0, lastSepIdx + 1) + "scaled-" + origImgPath.substring(lastSepIdx + 1);
@@ -685,8 +687,6 @@ public class UploadServlet extends WebFileSysServlet
 			// TODO: image size from blog settings
 			if (ImageTransformUtil.createScaledImage(origImgPath, scaledImgPath, 1280, 1280)) {
 
-				BlogThumbnailHandler.getInstance().createBlogThumbnail(origImgPath);
-				
 				File origImgFile = new File(origImgPath);
 				if (!origImgFile.delete()) {
 		            Logger.getLogger(getClass()).error("failed to delete original image after scaling: " + origImgPath);
