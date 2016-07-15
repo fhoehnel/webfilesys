@@ -23,7 +23,7 @@ if (window.opera)
     browserOpera = true;
 }
 
-// var browserEdge = (navigator.userAgent.toLowerCase().indexOf('Edge/') > -1);
+var browserEdge = (navigator.userAgent.toLowerCase().indexOf('edge/') > -1);
 
 var osAndroid = (navigator.userAgent.toLowerCase().indexOf('android') > -1);
 

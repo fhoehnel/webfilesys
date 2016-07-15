@@ -222,6 +222,7 @@ import de.webfilesys.gui.user.unix.ProcessListRequestHandler;
 import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
 import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
+import de.webfilesys.gui.xsl.CompareImageSliderHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -1256,6 +1257,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("compareImg"))
         {
 		    (new CompareImageRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+
+        if (command.equals("compareImgSlider"))
+        {
+		    (new CompareImageSliderHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }

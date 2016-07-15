@@ -35,29 +35,40 @@ function resetSelected() {
 }
 
 function compare() {
-    if (checkSelected()) {
-	    compareWin = window.open('/webfilesys/servlet?command=blank','compareWin','scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
-        
-        if (!compareWin) {
-            alert(resourceBundle["alert.enablePopups"]);
-            return;
-        }
-        
-        compareWin.focus();
-        document.form2.command.value = 'compareImg';
-        document.form2.target = 'compareWin';
-        
-        if (document.form2.screenWidth) {
-            document.form2.screenWidth.value = screen.width;
-        }
+	var numChecked = getSelectedCheckboxCount();
 
-        if (document.form2.screenHeight) {
-            document.form2.screenHeight.value = screen.height;
-        }
-        
-	    document.form2.submit();
-        document.form2.target = '';
+    if (numChecked < 2) {
+        alert(selectTwoPic + '!');
+        return;
     }
+
+    var cmdUrl;
+    if (numChecked == 2) {
+        document.form2.command.value = 'compareImgSlider';
+    } else {
+        document.form2.command.value = 'compareImg';
+    }
+    
+    var compareWin = window.open('/webfilesys/servlet?command=blank','compareWin','scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
+    
+    if (!compareWin) {
+        alert(resourceBundle["alert.enablePopups"]);
+        return;
+    }
+    
+    compareWin.focus();
+    document.form2.target = 'compareWin';
+    
+    if (document.form2.screenWidth) {
+        document.form2.screenWidth.value = screen.width;
+    }
+
+    if (document.form2.screenHeight) {
+        document.form2.screenHeight.value = screen.height;
+    }
+    
+    document.form2.submit();
+    document.form2.target = '';
 }
 
 function anySelected() {
@@ -70,7 +81,7 @@ function anySelected() {
     return(false);
 }
 
-function checkSelected() {
+function getSelectedCheckboxCount() {
     var numChecked = 0;
     
     for (var i = document.form2.elements.length - 1; i >= 0; i--) {
@@ -79,12 +90,7 @@ function checkSelected() {
          }
     }
     
-    if (numChecked < 2) {
-        alert(selectTwoPic + '!');
-	    return(false);
-    }
-    
-    return(true);
+    return numChecked;
 }
 
 function rotate(degree) {

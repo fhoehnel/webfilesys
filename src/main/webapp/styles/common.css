@@ -1588,6 +1588,27 @@ span.publicUrl {
     color: navy;
 }
 
+div.deleteFromCompareIcon1,
+div.deleteFromCompareIcon2 {
+    position: absolute;
+    z-index: 100;
+}
+
+div.deleteFromCompareIcon1 {
+    left: 10px;
+    top: 10px;
+}
+
+div.deleteFromCompareIcon2 {
+    right: 10px;
+    top: 10px;
+}
+
+a.deleteFromCompareIcon:before {
+	color: #000000;
+    font-size: 28px;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

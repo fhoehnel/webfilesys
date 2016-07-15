@@ -239,3 +239,9 @@ function insertAtCursor(myField, myValue) {
         myField.value += myValue;
     }
 }
+
+function resizeViewPort(width, height) {
+    if (window.outerWidth) {
+        window.resizeTo(width + (window.outerWidth - window.innerWidth), height + (window.outerHeight - window.innerHeight));
+    }
+}
