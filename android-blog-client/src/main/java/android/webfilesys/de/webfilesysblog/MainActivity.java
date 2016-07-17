@@ -1,16 +1,13 @@
 package android.webfilesys.de.webfilesysblog;
 
 import android.Manifest;
-import android.app.Activity;
 import android.location.Location;
-import android.support.v4.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -20,8 +17,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Base64;
@@ -32,13 +27,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewManager;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -48,8 +39,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -72,17 +61,13 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MainActivity extends ActionBarActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
@@ -113,9 +98,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     private static final int POPUP_ABOUT_WIDTH = 280;
     private static final int POPUP_ABOUT_HEIGHT = 220;
 
-    private static final String ROTATED_TEMP_IMAGE_FILENAME = "webfilesysTempRotatedImage.bmp";
-
-    private Button mPickImageButton;
     private Button sendPostButton;
     private Button geoLocationButton;
     private Button changeLocationButton;
@@ -149,6 +131,9 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     private GoogleApiClient googleApiClient;
 
     private Location lastLocation;
+
+    float latitudeFromExif;
+    float longitudeFromExif;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -250,11 +235,11 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         if (viewJustCreated) {
             blogPicImageView = (ImageView) findViewById(R.id.image);
-            mPickImageButton = (Button) findViewById(R.id.pick_image_button);
 
-            mPickImageButton.setOnClickListener(mButtonListener);
+            Button pickImageButton = (Button) findViewById(R.id.pick_image_button);
+            pickImageButton.setOnClickListener(mButtonListener);
+
             sendPostButton = (Button) findViewById(R.id.send_post_button);
-
             sendPostButton.setOnClickListener(mButtonListener);
             sendPostButton.setVisibility(View.GONE);
 
@@ -287,40 +272,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                         Toast.makeText(getApplicationContext(), R.string.offline, Toast.LENGTH_LONG).show();
                     }
                     break;
-                /*
-                case R.id.pick_crop_image_button:
-                    if (checkNetworkConnection()) {
-                        String status = Environment.getExternalStorageState();
-                        if (status.equals(Environment.MEDIA_MOUNTED)) {
-                            File tempFile = new File(Environment.getExternalStorageDirectory() + "/" + PICTURE_TEMP_FILE_NAME);
-                            Uri tempUri = Uri.fromFile(tempFile);
-                            Intent pickCropImageIntent = new Intent(
-                                    Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                            pickCropImageIntent.setType("image/*");
-                            pickCropImageIntent.putExtra("crop", "true");
-                            pickCropImageIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempUri);
-                            pickCropImageIntent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-
-                            // pickCropImageIntent.putExtra("outputX", MAX_IMG_SIZE);
-                            pickCropImageIntent.putExtra("max-width", MAX_IMG_SIZE);
-                            pickCropImageIntent.putExtra("max-height", MAX_IMG_SIZE);
-
-                            // pickCropImageIntent.putExtra("aspectX", 0);
-                            // pickCropImageIntent.putExtra("aspectY", 0);
-                            pickCropImageIntent.putExtra("scale", true);
-
-                            // pickCropImageIntent.putExtra("outputY", MAX_IMG_SIZE);
-
-                            startActivityForResult(pickCropImageIntent, REQUEST_PICK_CROP_IMAGE);
-                        }else{
-                            // TODO
-                        }
-                    } else {
-                        Log.e("webfilesysblog", "not connected to the internet");
-                        Toast.makeText(getApplicationContext(), R.string.offline, Toast.LENGTH_LONG).show();
-                    }
-                    break;
-                */
                 case R.id.send_post_button:
                     EditText descrText = (EditText) findViewById(R.id.description);
                     if (descrText.getText().length() == 0) {
@@ -441,22 +392,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         pictureLayout.setVisibility(View.GONE);
     }
 
-    private Bitmap getResizedBitmap(Bitmap image, int maxSize) {
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        float bitmapRatio = (float) width / (float) height;
-        if (bitmapRatio > 1) {
-            width = maxSize;
-            height = (int) (width / bitmapRatio);
-        } else {
-            height = maxSize;
-            width = (int) (height * bitmapRatio);
-        }
-
-        return Bitmap.createScaledBitmap(image, width, height, true);
-    }
-
     private void saveScaledImage(Bitmap scaledBitmap) {
 
         picturePath = Environment.getExternalStorageDirectory() + "/" + PICTURE_TEMP_FILE_NAME;
@@ -533,13 +468,43 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                         // blogPicImageView.setImageBitmap(bitmap);
 
-                        Bitmap scaledBitmap = getResizedBitmap(bitmap, MAX_IMG_SIZE);
+                        Bitmap scaledBitmap = PictureUtils.getResizedBitmap(bitmap, MAX_IMG_SIZE);
 
                         bitmap.recycle();
 
                         blogPicImageView.setImageBitmap(scaledBitmap);
 
                         saveScaledImage(scaledBitmap);
+
+                        String origImgPath = CommonUtils.getFilePathByUri(this, pictureUri);
+
+                        // Log.d("webfilesysblog", "orig img file path: " + origImgPath);
+
+                        ExifData exifData = new ExifData(origImgPath);
+                        LatLng gpsFromExif = exifData.getGpsLocation();
+
+                        if (gpsFromExif != null) {
+                            Button selectLocationButton = (Button) findViewById(R.id.select_geo_location);
+                            selectLocationButton.setVisibility(View.GONE);
+
+                            TextView latitudeText = (TextView) findViewById(R.id.selectedLocLatitude);
+                            latitudeText.setText(latLongFormat.format(gpsFromExif.latitude));
+
+                            TextView longitudeText = (TextView) findViewById(R.id.selectedLocLongitude);
+                            longitudeText.setText(latLongFormat.format(gpsFromExif.longitude));
+
+                            View selectedLocationView = (View) findViewById(R.id.selectedLocation);
+                            selectedLocationView.setVisibility(View.VISIBLE);
+
+                            changeLocationButton = (Button) findViewById(R.id.change_geo_location);
+                            changeLocationButton.setOnClickListener(mButtonListener);
+
+                            clearLocationButton = (Button) findViewById(R.id.clear_geo_location);
+                            clearLocationButton.setOnClickListener(mButtonListener);
+
+                            selectedLocation = gpsFromExif;
+                        }
+
                         pictureUri = null;
                     } catch (FileNotFoundException e) {
                         Log.e("webfilesysblog", "failed to read image data of selected picture", e);
@@ -548,6 +513,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                     }
 
                     showPictureLayout();
+
                     sendPostButton.setVisibility(View.VISIBLE);
                 }
                 break;
@@ -585,46 +551,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
-
-    private Bitmap lowMemoryRotation(Bitmap bitmap) {
-        final int height = bitmap.getHeight();
-        final int width = bitmap.getWidth();
-        try {
-            final DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(openFileOutput(ROTATED_TEMP_IMAGE_FILENAME, Context.MODE_PRIVATE)));
-            for (int x = 0; x < width; x++) {
-                for (int y = height - 1; y >= 0; y--) {
-                    final int pixel = bitmap.getPixel(x, y);
-                    outputStream.writeInt(pixel);
-                }
-            }
-
-            outputStream.flush();
-            outputStream.close();
-
-            bitmap.recycle();
-
-            final int newWidth = height;
-            final int newHeight = width;
-            bitmap = Bitmap.createBitmap(newWidth, newHeight, bitmap.getConfig());
-            final DataInputStream inputStream = new DataInputStream(new BufferedInputStream(openFileInput(ROTATED_TEMP_IMAGE_FILENAME)));
-            for (int y = 0; y < newHeight; y++) {
-                for (int x = 0; x < newWidth; x++) {
-                    final int pixel = inputStream.readInt();
-                    bitmap.setPixel(x, y, pixel);
-                }
-            }
-            inputStream.close();
-
-            new File(getFilesDir(), ROTATED_TEMP_IMAGE_FILENAME).delete();
-            // saveBitmapToFile(bitmap); //for checking the output
-
-            return bitmap;
-        } catch (final IOException e) {
-            Log.e("webfilesysblog", "low memory rotation failed", e);
-        }
-
-        return null;
     }
 
     private void showAboutInfo() {
