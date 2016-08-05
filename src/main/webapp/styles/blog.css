@@ -380,7 +380,7 @@ div.blogPublishCont {
     border: 2px ridge #808080;
     background-color: #ffffe0;
     visibility: hidden;
-    max-width: 480px;
+    width: 488px;
 }
 
 table.blogPublishForm {
@@ -700,6 +700,11 @@ img.blogEmoticon {
     width: 36px;
     height: 36px;
     vertical-align: middle;
+}
+
+textarea.publicLinkCopyField {
+    width: 100%;
+    height: 40px;
 }
 
 @media (max-width: 800px) {

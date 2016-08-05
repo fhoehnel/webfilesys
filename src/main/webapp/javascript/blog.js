@@ -779,8 +779,16 @@ function showPublishResult(req) {
 
                 tableCell = document.createElement("td");
                 tableCell.setAttribute("class", "formParm2");
-                tableCell.innerHTML = publicUrl;
                 tableRow.appendChild(tableCell);
+                
+                var urlInput = document.createElement("textarea");
+                urlInput.setAttribute("class", "publicLinkCopyField");
+                urlInput.setAttribute("readonly", "readonly");
+                urlInput.value = publicUrl;
+                tableCell.appendChild(urlInput);
+                
+                urlInput.focus();
+                urlInput.select();
 
                 tableRow = document.createElement("tr");
                 document.getElementById("publishTable").appendChild(tableRow);
@@ -865,9 +873,14 @@ function showPublicURL() {
 
     tableCell = document.createElement("td");
     tableCell.setAttribute("class", "formParm2");
-    tableCell.innerHTML = publicUrl;
     tableRow.appendChild(tableCell);
-
+    
+    var urlInput = document.createElement("textarea");
+    urlInput.setAttribute("class", "publicLinkCopyField");
+    urlInput.setAttribute("readonly", "readonly");
+    urlInput.value = publicUrl;
+    tableCell.appendChild(urlInput);
+                
     tableRow = document.createElement("tr");
     document.getElementById("publishTable").appendChild(tableRow);
 
@@ -886,6 +899,9 @@ function showPublicURL() {
     centerBox(publishCont);
     
     publishCont.style.visibility = "visible";
+
+    urlInput.focus();
+    urlInput.select();
 }
 
 function unpublish() {
