@@ -159,6 +159,11 @@ public class BlogMoveEntryHandler extends XmlRequestHandlerBase {
 
     	MetaInfManager.getInstance().moveMetaInf(currentPath, fileToMove, newFileName);
     	
+    	String titlePic = MetaInfManager.getInstance().getTitlePic(currentPath);
+    	if ((titlePic != null) && titlePic.equals(fileToMove)) {
+    		MetaInfManager.getInstance().setTitlePic(currentPath, newFileName);
+    	}
+    	
     	BlogThumbnailHandler.getInstance().renameThumbnail(sourceFile.getAbsolutePath(), newFileName);
     	
     	return true;
