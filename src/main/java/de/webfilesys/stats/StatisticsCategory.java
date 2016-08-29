@@ -33,7 +33,11 @@ public abstract class StatisticsCategory {
 	}
 	
 	public void setSizePercent(long treeFileSize) {
-		sizePercent = (int) ((sizeSum * 100L) / treeFileSize);
+		if (treeFileSize == 0) {
+			sizePercent = 0;
+		} else {
+			sizePercent = (int) ((sizeSum * 100L) / treeFileSize);
+		}
 	}
 	
 	public int getSizePercent() {

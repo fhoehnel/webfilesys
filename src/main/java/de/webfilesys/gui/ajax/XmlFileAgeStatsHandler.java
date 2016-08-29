@@ -91,8 +91,22 @@ public class XmlFileAgeStatsHandler extends XmlRequestHandlerBase
             XmlUtil.setChildText(clusterElem, "sizeSum", numFormat.format(ageCat.getSizeSum()));
             XmlUtil.setChildText(clusterElem, "numberPercent", Integer.toString(ageCat.getFileNumPercent()));
             XmlUtil.setChildText(clusterElem, "sizePercent", Integer.toString(ageCat.getSizePercent()));
-            XmlUtil.setChildText(clusterElem, "fileNumPercentOfMax", Long.toString((ageCat.getFileNum() * 100L) / fileNumCategoryMax));
-            XmlUtil.setChildText(clusterElem, "sizeSumPercentOfMax", Long.toString((ageCat.getSizeSum() * 100L) / sizeSumCategoryMax));
+            
+            long fileNumPercentOfMax;
+            if (fileNumCategoryMax == 0) {
+            	fileNumPercentOfMax = 0;
+            } else {
+            	fileNumPercentOfMax = (ageCat.getFileNum() * 100L) / fileNumCategoryMax;
+            }
+            XmlUtil.setChildText(clusterElem, "fileNumPercentOfMax", Long.toString(fileNumPercentOfMax));
+            
+            long sizeSumPercentOfMax = 0;
+            if (sizeSumCategoryMax == 0) {
+            	sizeSumPercentOfMax = 0;
+            } else {
+            	sizeSumPercentOfMax = (ageCat.getSizeSum() * 100L) / sizeSumCategoryMax;
+            }
+            XmlUtil.setChildText(clusterElem, "sizeSumPercentOfMax", Long.toString(sizeSumPercentOfMax));
             sizeStatsElem.appendChild(clusterElem);
         }
 		

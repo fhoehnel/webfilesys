@@ -73,11 +73,11 @@ function fileSizeStatistics(path)
     
     if (browserSafari || browserOpera) 
     {
-        statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=sizeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=700,height=500");
+        statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=sizeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=780,height=500");
     }
     else 
     {
-        statWin=open("/webfilesys/html/waitFileSizeStats.html?command=fileStatistics&cmd=sizeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=700,height=500");
+        statWin=open("/webfilesys/html/waitFileSizeStats.html?command=fileStatistics&cmd=sizeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=780,height=500");
     }
     statWin.focus();
 }
@@ -88,11 +88,11 @@ function fileTypeStatistics(path)
     
     if (browserSafari || browserOpera) 
     {
-        statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=typeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=700,height=500");
+        statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=typeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=780,height=500");
     }
     else 
     {
-        statWin=open("/webfilesys/html/waitFileTypeStats.html?command=fileStatistics&cmd=typeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=700,height=500");
+        statWin=open("/webfilesys/html/waitFileTypeStats.html?command=fileStatistics&cmd=typeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=780,height=500");
     }
 
     statWin.focus();
@@ -104,11 +104,11 @@ function fileAgeStatistics(path)
     
     if (browserSafari || browserOpera) 
     {
-        statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=ageStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=700,height=500");
+        statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=ageStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=780,height=500");
     }
     else 
     {
-        statWin=open("/webfilesys/html/waitFileAgeStats.html?command=fileStatistics&cmd=ageStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=700,height=500");
+        statWin=open("/webfilesys/html/waitFileAgeStats.html?command=fileStatistics&cmd=ageStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=780,height=500");
     }
     statWin.focus();
 }

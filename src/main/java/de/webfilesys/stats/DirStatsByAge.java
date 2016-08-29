@@ -83,7 +83,12 @@ public class DirStatsByAge {
     private void calculatePercentage() {
         for (int i = 0; i < ageCategories.size(); i++) {
             AgeCategory ageCat = (AgeCategory) ageCategories.get(i);
-            ageCat.setFileNumPercent((int) (ageCat.getFileNum() * 100L / filesInTree));
+            
+            if (filesInTree == 0) {
+            	ageCat.setFileNumPercent(0);
+            } else {
+                ageCat.setFileNumPercent((int) (ageCat.getFileNum() * 100L / filesInTree));
+            }
             ageCat.setSizePercent(treeFileSize);
             
             if (ageCat.getFileNum() > fileNumCategoryMax) {

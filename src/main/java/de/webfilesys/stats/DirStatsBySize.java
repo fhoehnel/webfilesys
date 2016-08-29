@@ -84,7 +84,12 @@ public class DirStatsBySize {
 	private void calculatePercentage() {
 		for (int i = 0; i < sizeCategories.size(); i++) {
 			SizeCategory sizeCat = (SizeCategory) sizeCategories.get(i);
-			sizeCat.setFileNumPercent((int) (sizeCat.getFileNum() * 100L / filesInTree));
+			
+			if (filesInTree == 0) {
+				sizeCat.setFileNumPercent(0);
+			} else {
+				sizeCat.setFileNumPercent((int) (sizeCat.getFileNum() * 100L / filesInTree));
+			}
 			
 			sizeCat.setSizePercent(treeFileSize);
 		}
