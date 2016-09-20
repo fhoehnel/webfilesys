@@ -83,12 +83,21 @@ public class BlogPostServlet extends WebFileSysServlet {
             receiveDescription(req, resp, currentPath, fileName);  
             
     		String path = currentPath.replace('/',  File.separatorChar);
-            
-    		String accessCode = InvitationManager.getInstance().getInvitationCode(userid, path);
-    		if (accessCode != null) {
-    			InvitationManager.getInstance().notifySubscribers(accessCode);
-    		} else {
-    	        Logger.getLogger(getClass()).warn("could not determine invitation code for subscription notification, uid=" + userid + " docRoot=" + path);
+
+    		if (!MetaInfManager.getInstance().isStagedPublication(path)) {
+                
+        		String accessCode = InvitationManager.getInstance().getInvitationCode(userid, path);
+        		if (accessCode != null) {
+        			InvitationManager.getInstance().notifySubscribers(accessCode);
+        		} else {
+        	        Logger.getLogger(getClass()).warn("could not determine invitation code for subscription notification, uid=" + userid + " docRoot=" + path);
+        		}
+    		}            
+        } else if (command.equals("publish")) {
+            receivePublishParams(req, resp);  
+    		String path = currentPath.replace('/',  File.separatorChar);
+    		if (MetaInfManager.getInstance().isStagedPublication(path)) {
+    			MetaInfManager.getInstance().setStatus(path, fileName, MetaInfManager.STATUS_BLOG_PUBLISHED);
     		}
         } else {
         	LOG.warn("invalid command in call to BlogPostServlet: " + command + ", request: " + requestPath);
@@ -273,6 +282,12 @@ public class BlogPostServlet extends WebFileSysServlet {
 			MetaInfManager.getInstance().setGeoTag(origImgPath, geoTag);
         }
         
+		String path = currentPath.replace('/',  File.separatorChar);
+
+		if (MetaInfManager.getInstance().isStagedPublication(path)) {
+			MetaInfManager.getInstance().setStatus(origImgPath, MetaInfManager.STATUS_BLOG_EDIT);
+		}
+		
 		BlogThumbnailHandler.getInstance().createBlogThumbnail(origImgPath);
 
         if (WebFileSys.getInstance().isAutoCreateThumbs()) {
@@ -281,6 +296,34 @@ public class BlogPostServlet extends WebFileSysServlet {
             if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png"))) {
                 AutoThumbnailCreator.getInstance().queuePath(outFile.getAbsolutePath(), AutoThumbnailCreator.SCOPE_FILE);
             }
+        }
+	}
+
+	private void receivePublishParams(HttpServletRequest req, HttpServletResponse resp) {
+        InputStreamReader isr = null;
+        BufferedReader bufferedIn = null;
+        
+        try {
+            isr = new InputStreamReader(req.getInputStream(), "UTF-8");
+            bufferedIn = new BufferedReader(isr);
+            
+            // currently there are no parameters processed
+            bufferedIn.readLine();
+        } catch (IOException ex) {
+        	LOG.error("failed to read publish params", ex);
+        } finally {
+        	if (bufferedIn != null) {
+                try {
+                	bufferedIn.close();
+                } catch (Exception closeEx) {
+                }
+        	}
+        	if (isr != null) {
+                try {
+                	isr.close();
+                } catch (Exception closeEx) {
+                }
+        	}
         }
 	}
 	

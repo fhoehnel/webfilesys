@@ -1381,13 +1381,16 @@ function showSaveSettingsResult(req) {
 
             var pageSizeChanged = resultElem.getElementsByTagName("pageSizeChanged")[0].firstChild.nodeValue;
             var blogTitleChanged = resultElem.getElementsByTagName("blogTitleChanged")[0].firstChild.nodeValue;
+            var stagingChanged = resultElem.getElementsByTagName("stagingChanged")[0].firstChild.nodeValue;
 
             var settingsCont = document.getElementById("settingsCont");
             settingsCont.style.visibility = "hidden";
             
             hideHourGlass();
 
-            if ((pageSizeChanged && (pageSizeChanged == "true")) || (blogTitleChanged && (blogTitleChanged == "true"))) {
+            if ((pageSizeChanged && (pageSizeChanged == "true")) || 
+                (blogTitleChanged && (blogTitleChanged == "true")) ||
+                (stagingChanged && (stagingChanged == "true"))) {
                 window.location.href = "/webfilesys/servlet?command=blog";
             }
         }
@@ -1691,4 +1694,12 @@ function isScrolledIntoView(el) {
 
     var isVisible = (elemTop >= 0) && (elemBottom <= window.innerHeight);
     return isVisible;
+}
+
+function publishNewEntries() {
+    if (!confirm(resourceBundle["blog.confirmPublishNewEntries"])) {
+        return;
+    }
+    
+    window.location.href = "/webfilesys/servlet?command=blog&cmd=publishNewEntries";
 }

@@ -117,6 +117,10 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
 
 		String currentPath = userMgr.getDocumentRoot(uid).replace('/',  File.separatorChar);
 
+		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
+		
+		boolean stagedPublication = metaInfMgr.isStagedPublication(currentPath);
+		
 		File blogFolder = new File(currentPath);
 		
 		File[] blogFiles = blogFolder.listFiles();
@@ -125,43 +129,47 @@ public class BlogSearchHandler extends XmlRequestHandlerBase {
 		
 		for (int i = 0; i < blogFiles.length; i++) {
 			if (blogFiles[i].isFile()) {
-				String blogText = MetaInfManager.getInstance().getDescription(currentPath, blogFiles[i].getName());
-				if (blogText != null) {
-					ArrayList<SearchResultData> hitList = searchInBlogText(blogText, searchArg);
-					
-					if (searchComments) {
-						ArrayList<SearchResultData> commentHitList = searchInComments(currentPath, blogFiles[i].getName(), searchArg);
-						if (commentHitList.size() > 0) {
-							hitList.addAll(commentHitList);
-						}
-					}
-					
-					String blogDateStr = blogFiles[i].getName().substring(0,10);
-					
-					Date blogDate;
-					try {
-						blogDate = linkDateFormat.parse(blogDateStr);
+				
+            	if ((!readonly) || (!stagedPublication) || (metaInfMgr.getStatus(blogFiles[i].getAbsolutePath()) != MetaInfManager.STATUS_BLOG_EDIT)) {
+            		
+    				String blogText = metaInfMgr.getDescription(currentPath, blogFiles[i].getName());
+    				if (blogText != null) {
+    					ArrayList<SearchResultData> hitList = searchInBlogText(blogText, searchArg);
+    					
+    					if (searchComments) {
+    						ArrayList<SearchResultData> commentHitList = searchInComments(currentPath, blogFiles[i].getName(), searchArg);
+    						if (commentHitList.size() > 0) {
+    							hitList.addAll(commentHitList);
+    						}
+    					}
+    					
+    					String blogDateStr = blogFiles[i].getName().substring(0,10);
+    					
+    					Date blogDate;
+    					try {
+    						blogDate = linkDateFormat.parse(blogDateStr);
 
-						Date linkDate = new Date(blogDate.getTime() + (24l * 60l * 60l * 1000l));
-						
-					    String linkDateStr = linkDateFormat.format(linkDate);
-					    
-						for (SearchResultData searchHit : hitList) {
-							searchHit.setLinkDate(linkDateStr); 
-							searchHit.setDisplayDate(blogDate);
-							searchHit.setFileName(blogFiles[i].getName());
-						}
-						
-						ArrayList<SearchResultData> existingList = resultMap.get(linkDateStr);
-						if (existingList != null) {
-							existingList.addAll(hitList);
-						} else {
-							resultMap.put(linkDateStr, hitList);
-						}
-					} catch (Exception ex) {
-			            Logger.getLogger(getClass()).error("invalid blog date format: " + blogDateStr , ex);
-					}
-				}
+    						Date linkDate = new Date(blogDate.getTime() + (24l * 60l * 60l * 1000l));
+    						
+    					    String linkDateStr = linkDateFormat.format(linkDate);
+    					    
+    						for (SearchResultData searchHit : hitList) {
+    							searchHit.setLinkDate(linkDateStr); 
+    							searchHit.setDisplayDate(blogDate);
+    							searchHit.setFileName(blogFiles[i].getName());
+    						}
+    						
+    						ArrayList<SearchResultData> existingList = resultMap.get(linkDateStr);
+    						if (existingList != null) {
+    							existingList.addAll(hitList);
+    						} else {
+    							resultMap.put(linkDateStr, hitList);
+    						}
+    					} catch (Exception ex) {
+    			            Logger.getLogger(getClass()).error("invalid blog date format: " + blogDateStr , ex);
+    					}
+    				}
+            	}				
 			}
 		}
 		return resultMap;

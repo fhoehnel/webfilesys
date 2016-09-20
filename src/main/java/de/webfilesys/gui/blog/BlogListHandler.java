@@ -111,6 +111,8 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		
 		TreeMap<String, ArrayList<File>> blogDays = new TreeMap<String, ArrayList<File>>(new BlogDateComparator());
 		
+		boolean stagedPublication = metaInfMgr.isStagedPublication(currentPath);
+		
 		File blogDir = new File(currentPath);
 		
 		File[] filesInDir = blogDir.listFiles();
@@ -120,17 +122,20 @@ public class BlogListHandler extends XslRequestHandlerBase {
 	            
 	            if (isPictureFile(filesInDir[i])) {
 					
-					String fileName = filesInDir[i].getName();
-					if (fileName.length() >= 10) {
-						String blogDate = fileName.substring(0, 10);
-						
-						ArrayList<File> entriesOfDay = blogDays.get(blogDate);
-						if (entriesOfDay == null) {
-							entriesOfDay = new ArrayList<File>();
-							blogDays.put(blogDate, entriesOfDay);
+	            	if ((!readonly) || (!stagedPublication) || (metaInfMgr.getStatus(filesInDir[i].getAbsolutePath()) != MetaInfManager.STATUS_BLOG_EDIT)) {
+	            		
+						String fileName = filesInDir[i].getName();
+						if (fileName.length() >= 10) {
+							String blogDate = fileName.substring(0, 10);
+							
+							ArrayList<File> entriesOfDay = blogDays.get(blogDate);
+							if (entriesOfDay == null) {
+								entriesOfDay = new ArrayList<File>();
+								blogDays.put(blogDate, entriesOfDay);
+							}
+							entriesOfDay.add(filesInDir[i]);
 						}
-						entriesOfDay.add(filesInDir[i]);
-					}
+	            	}
 				}
 			}
 		}
@@ -466,6 +471,10 @@ public class BlogListHandler extends XslRequestHandlerBase {
 		            						XmlUtil.setChildText(fileElement, "ratingAllowed", "true");
 		            					}
 		            				}
+		            				
+		        	            	if (stagedPublication && (!readonly) && (metaInfMgr.getStatus(file.getAbsolutePath()) == MetaInfManager.STATUS_BLOG_EDIT)) {
+	            						XmlUtil.setChildText(fileElement, "staged", "true");
+		        	            	}
 		      				    }
 		                    	
 		                    	i++;

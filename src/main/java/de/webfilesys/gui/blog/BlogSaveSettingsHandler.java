@@ -3,8 +3,6 @@ package de.webfilesys.gui.blog;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -41,6 +39,8 @@ public class BlogSaveSettingsHandler extends XmlRequestHandlerBase
 		{
 			return;
 		}
+
+		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 		
     	boolean blogTitleChanged = false;
 
@@ -48,8 +48,6 @@ public class BlogSaveSettingsHandler extends XmlRequestHandlerBase
 		
 		if (!CommonUtils.isEmpty(newBlogTitle)) {
 			String currentPath = userMgr.getDocumentRoot(uid).replace('/',  File.separatorChar);
-			
-			MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 			
 			String oldBlogTitle = metaInfMgr.getDescription(currentPath, ".");
 
@@ -81,6 +79,37 @@ public class BlogSaveSettingsHandler extends XmlRequestHandlerBase
 	        Logger.getLogger(getClass()).warn("missing parameter blog page size");
 		}
 		
+		String currentPath = userMgr.getDocumentRoot(uid).replace('/',  File.separatorChar);
+		
+		boolean stagingChanged = false;
+		
+		String stagedPublication = req.getParameter("stagedPublication");
+		
+		if (stagedPublication == null) {
+			if (metaInfMgr.isStagedPublication(currentPath)) {
+				
+				File blogDir = new File(currentPath);
+				
+				File[] filesInDir = blogDir.listFiles();
+				
+				for (int i = 0; i < filesInDir.length; i++) {
+					if (filesInDir[i].isFile() && filesInDir[i].canRead()) {
+			            if (metaInfMgr.getStatus(filesInDir[i].getAbsolutePath()) == MetaInfManager.STATUS_BLOG_EDIT) {
+			            	metaInfMgr.setStatus(filesInDir[i].getAbsolutePath(), MetaInfManager.STATUS_BLOG_PUBLISHED);
+			            }
+					}
+				}
+				stagingChanged = true;
+			}
+
+			metaInfMgr.setStagedPublication(currentPath, false);
+		} else {
+			if (!metaInfMgr.isStagedPublication(currentPath)) {
+				metaInfMgr.setStagedPublication(currentPath, true);
+				stagingChanged = true;
+			}
+		}
+		
         String newPassword = req.getParameter("newPassword");		
         String newPasswdConfirm = req.getParameter("newPasswdConfirm");
         
@@ -107,6 +136,7 @@ public class BlogSaveSettingsHandler extends XmlRequestHandlerBase
 		XmlUtil.setChildText(resultElement, "success", Boolean.toString(!passwordMismatch));
 		XmlUtil.setChildText(resultElement, "pageSizeChanged", Boolean.toString(pageSizeChanged));
 		XmlUtil.setChildText(resultElement, "blogTitleChanged", Boolean.toString(blogTitleChanged));
+		XmlUtil.setChildText(resultElement, "stagingChanged", Boolean.toString(stagingChanged));
 				
 		doc.appendChild(resultElement);
 		

@@ -701,6 +701,10 @@ public class UploadServlet extends WebFileSysServlet
 			if (geoTag != null) {
 				MetaInfManager.getInstance().setGeoTag(origImgPath, geoTag);
             }
+			
+			if (MetaInfManager.getInstance().isStagedPublication(currentPath)) {
+				MetaInfManager.getInstance().setStatus(origImgPath, MetaInfManager.STATUS_BLOG_EDIT);
+			}
 		}
         
         if (WebFileSys.getInstance().isAutoCreateThumbs())

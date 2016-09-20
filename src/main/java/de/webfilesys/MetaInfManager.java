@@ -41,12 +41,16 @@ public class MetaInfManager extends Thread
 
 	/** maximum length of description meta info text */
 	public static final int MAX_DESCRIPTION_LENGTH = 1024;
+	
+	public static final int STATUS_NONE = 0;
+	public static final int STATUS_BLOG_EDIT = 1;
+	public static final int STATUS_BLOG_PUBLISHED = 2;
 
     private static MetaInfManager metaInfMgr=null;
 
-    private Hashtable dirList=null;
+    private Hashtable<String, Element> dirList = null;
 
-    private Hashtable cacheDirty=null;
+    private Hashtable<String, Boolean> cacheDirty = null;
 
     DocumentBuilder builder;
 
@@ -64,9 +68,9 @@ public class MetaInfManager extends Thread
            Logger.getLogger(getClass()).error(pcex);
        }
 
-       dirList=new Hashtable();
+       dirList = new Hashtable<String, Element>();
 
-       cacheDirty=new Hashtable();
+       cacheDirty = new Hashtable<String, Boolean>();
 
        this.start();
     }
@@ -2278,7 +2282,96 @@ public class MetaInfManager extends Thread
     		cacheDirty.put(path,new Boolean(true));
     	}
     }
+    
+    public boolean isStagedPublication(String path) {
+    	
+		Element metaInfElement = getMetaInfElement(path, ".");
 
+		if (metaInfElement == null) {
+			return false;
+		}
+
+		String temp = XmlUtil.getChildText(metaInfElement, "stagedPublication");
+		
+		if (temp == null) {
+			return false;
+		}
+		
+    	return Boolean.valueOf(temp);
+    }
+
+	public void setStagedPublication(String path, boolean publicateStaged) {
+    	synchronized(this) {
+    		Element metaInfElement = getMetaInfElement(path, ".");
+            
+    		if (metaInfElement == null) {
+    			metaInfElement = createMetaInfElement(path, ".");
+    		}
+
+    		Document doc = metaInfElement.getOwnerDocument();
+
+    		Element stagedPublicationElement = XmlUtil.getChildByTagName(metaInfElement, "stagedPublication");
+
+    		if (stagedPublicationElement == null) {
+    			stagedPublicationElement = doc.createElement("stagedPublication");
+    			metaInfElement.appendChild(stagedPublicationElement);
+    		}
+
+    		XmlUtil.setElementText(stagedPublicationElement, Boolean.toString(publicateStaged));
+            
+    		cacheDirty.put(path, new Boolean(true));
+    	}
+	}
+    
+	public int getStatus(String absoluteFileName) {
+		Element metaInfElement = getMetaInfElement(absoluteFileName);
+
+		if (metaInfElement == null) {
+			return STATUS_NONE;
+		}
+
+        int status = STATUS_NONE;
+        
+		String temp = XmlUtil.getChildText(metaInfElement, "status");
+		
+		if (temp != null) {
+			try {
+				status = Integer.parseInt(temp);
+			} catch (NumberFormatException nfex) {
+			}
+		}
+		
+		return(status);
+	}
+	
+	public void setStatus(String path, int newStatus) {
+        String[] partsOfPath = CommonUtils.splitPath(path);
+        setStatus(partsOfPath[0], partsOfPath[1], newStatus);
+	}
+
+	public void setStatus(String path, String fileName, int newStatus) {
+    	synchronized(this) {
+    		Element metaInfElement = getMetaInfElement(path, fileName);
+            
+    		if (metaInfElement == null) {
+    			metaInfElement = createMetaInfElement(path, fileName);
+    		}
+
+    		Document doc = metaInfElement.getOwnerDocument();
+
+    		Element statusElement = XmlUtil.getChildByTagName(metaInfElement, "status");
+
+    		if (statusElement == null) {
+    			statusElement = doc.createElement("status");
+    			metaInfElement.appendChild(statusElement);
+    		}
+
+    		XmlUtil.setElementText(statusElement, Integer.toString(newStatus));
+            
+    		cacheDirty.put(path, new Boolean(true));
+    	}
+	}
+	
     /**
      * Explicitly remove the meta information of a directory from the cache.
      * Used in the search function which can cause hundreds of meta info files to get loaded.

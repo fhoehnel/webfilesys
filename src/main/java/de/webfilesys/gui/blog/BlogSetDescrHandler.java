@@ -141,12 +141,14 @@ public class BlogSetDescrHandler extends UserRequestHandler
 			}
 		}
 		
-		String accessCode = InvitationManager.getInstance().getInvitationCode(uid, currentPath);
-		
-		if (accessCode != null) {
-			InvitationManager.getInstance().notifySubscribers(accessCode);
-		} else {
-	        Logger.getLogger(getClass()).warn("could not determine invitation code for subscription notification, uid=" + uid + " docRoot=" + currentPath);
+		if (!metaInfMgr.isStagedPublication(currentPath)) {
+			String accessCode = InvitationManager.getInstance().getInvitationCode(uid, currentPath);
+			
+			if (accessCode != null) {
+				InvitationManager.getInstance().notifySubscribers(accessCode);
+			} else {
+		        Logger.getLogger(getClass()).warn("could not determine invitation code for subscription notification, uid=" + uid + " docRoot=" + currentPath);
+			}
 		}
 		
 		session.removeAttribute(BlogListHandler.SESSION_KEY_BEFORE_DAY);

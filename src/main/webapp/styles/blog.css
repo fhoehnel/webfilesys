@@ -124,6 +124,14 @@ a.blogEmojiSel:before {
     font-size: 2rem;
 }
 
+div.blogButtonCont {
+    margin-top: 6px;
+}
+
+div.blogButtonCont > input[type=button] {
+    margin-top: 10px;
+}
+
 a.blogMapAll {
 	margin-right: 10px;
 }
@@ -393,6 +401,11 @@ div.blogEmpty {
     font-size: 1rem;
     margin-top: 60px;
     clear: both;
+}
+
+span.unpublished {
+    color: #ffffff;
+    font-style: italic;
 }
 
 div.blogCommentCont {

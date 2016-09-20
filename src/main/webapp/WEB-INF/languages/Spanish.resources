@@ -1135,3 +1135,8 @@ blog.searchHitCount=número de resultados de búsqueda
 blog.searchResultArg=término de búsqueda
 blog.searchAgain=nueva búsqueda
 blog.searchIncludeComments=incluir comentarios en la búsqueda
+blog.stagedPublication=publicar nuevas entradas explícitamente
+blog.entryUnpublished=(todavia no publicado)
+blog.publishNewEntries=Publicar nuevas entradas
+blog.confirmPublishNewEntries=¿Seguro que quieres publicar las nuevas entradas?
+

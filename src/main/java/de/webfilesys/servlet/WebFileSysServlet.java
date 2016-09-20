@@ -133,6 +133,7 @@ import de.webfilesys.gui.blog.BlogMoveEntryHandler;
 import de.webfilesys.gui.blog.BlogPostHandler;
 import de.webfilesys.gui.blog.BlogPublishFormHandler;
 import de.webfilesys.gui.blog.BlogPublishHandler;
+import de.webfilesys.gui.blog.BlogPublishNewEntriesHandler;
 import de.webfilesys.gui.blog.BlogRotateImgHandler;
 import de.webfilesys.gui.blog.BlogSaveSettingsHandler;
 import de.webfilesys.gui.blog.BlogSearchHandler;
@@ -2435,6 +2436,12 @@ public class WebFileSysServlet extends ServletBase
            	else if (cmd.equals("search"))
             {
     			(new BlogSearchHandler(req, resp, session, output, userid)).handleRequest(); 
+                
+                return(true);
+        	}
+           	else if (cmd.equals("publishNewEntries"))
+            {
+    			(new BlogPublishNewEntriesHandler(req, resp, session, output, userid)).handleRequest(); 
                 
                 return(true);
         	}

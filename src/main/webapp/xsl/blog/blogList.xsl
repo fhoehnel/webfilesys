@@ -157,7 +157,7 @@
           </xsl:if>
         </div>
       
-        <div class="rightAlignedButton" style="margin-top:16px">
+        <div class="rightAlignedButton blogButtonCont">
           <xsl:if test="not(/blog/readonly)">
           
             <xsl:if test="/blog/blogEntries/blogDate">
@@ -172,6 +172,10 @@
             <input type="button" resource="blog.showSubscribers" onclick="showSubscribers()" />
 
             <input type="button" id="mapAllLink" resource="blog.buttonMapAll" onclick="googleMapAll()" style="display:none" />
+
+            <xsl:if test="/blog/blogEntries/blogDate/dayEntries/file/staged">
+              <input type="button" resource="blog.publishNewEntries" onclick="publishNewEntries()" />
+            </xsl:if>
 
             <input type="button" resource="blog.buttonlogout" onclick="window.location.href='/webfilesys/servlet?command=logout'" />
           </xsl:if>
@@ -262,26 +266,31 @@
                 <br/>
               </xsl:if>
 
-              <a class="pictureBookComent" titleResource="label.comments">
-                <!--  
-                <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>
-                -->
-                <xsl:attribute name="href">javascript:blogComments('<xsl:value-of select="pathForScript" />', '<xsl:value-of select="pagePicCounter" />')</xsl:attribute>
-                <xsl:text>(</xsl:text>
-                <span>
-                  <xsl:attribute name="id">comment-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
-                  <xsl:value-of select="comments" />
-                </span>
-                <xsl:text> </xsl:text><span resource="label.comments"></span>
-                <xsl:if test="newComments">
+              <xsl:if test="staged">
+                <span class="unpublished" resource="blog.entryUnpublished"></span>
+              </xsl:if>
+              <xsl:if test="not(staged)">
+                <a class="pictureBookComent" titleResource="label.comments">
+                  <!--  
+                  <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="pathForScript" />')</xsl:attribute>
+                  -->
+                  <xsl:attribute name="href">javascript:blogComments('<xsl:value-of select="pathForScript" />', '<xsl:value-of select="pagePicCounter" />')</xsl:attribute>
+                  <xsl:text>(</xsl:text>
                   <span>
-                    <xsl:attribute name="id">newComment-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
-                    <xsl:text>, </xsl:text>
-                    <span class="newComment" resource="comments.unread"></span>
+                    <xsl:attribute name="id">comment-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
+                    <xsl:value-of select="comments" />
                   </span>
-                </xsl:if>
-                <xsl:text>)</xsl:text>
-              </a>
+                  <xsl:text> </xsl:text><span resource="label.comments"></span>
+                  <xsl:if test="newComments">
+                    <span>
+                      <xsl:attribute name="id">newComment-<xsl:value-of select="pagePicCounter" /></xsl:attribute>
+                      <xsl:text>, </xsl:text>
+                      <span class="newComment" resource="comments.unread"></span>
+                    </span>
+                  </xsl:if>
+                  <xsl:text>)</xsl:text>
+                </a>
+              </xsl:if>
           
               <br/>
 
@@ -320,16 +329,16 @@
                   </a>
                 </xsl:if>
 
-                &#160;
-
-                <a href="#" id="titlePicIcon" class="icon-font icon-heart icon-blog-titlePic" titleResource="blog.makeTitlePic">
-                  <xsl:attribute name="onClick">setTitlePic('<xsl:value-of select="@name" />')</xsl:attribute>
-                </a>
-
+                <xsl:if test="not(staged)">
+                  &#160;
+                  <a href="#" id="titlePicIcon" class="icon-font icon-heart icon-blog-titlePic" titleResource="blog.makeTitlePic">
+                    <xsl:attribute name="onClick">setTitlePic('<xsl:value-of select="@name" />')</xsl:attribute>
+                  </a>
+                </xsl:if>
                 
               </xsl:if>
               
-              <xsl:if test="not(/blog/readonly) or not(ratingAllowed)">
+              <xsl:if test="(not(/blog/readonly) and not(staged)) or (/blog/readonly and not(ratingAllowed))">
 
                 <xsl:if test="voteCount != 0">
                   &#160;

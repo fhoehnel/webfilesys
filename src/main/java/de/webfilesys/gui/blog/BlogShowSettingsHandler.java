@@ -55,7 +55,13 @@ public class BlogShowSettingsHandler extends XmlRequestHandlerBase
 		}
 		
 		XmlUtil.setChildText(settingsElement, "daysPerPage", Integer.toString(daysPerPage), false);
-			
+
+		boolean stagedPublication = metaInfMgr.isStagedPublication(currentPath);
+		
+		if (stagedPublication) {
+			XmlUtil.setChildText(settingsElement, "stagedPublication", "true", false);
+		}
+		
 		processResponse();
     }
 }

@@ -51,6 +51,17 @@
       </tr>
 
       <tr>
+        <td class="formParm1" colspan="2" nowrap="nowrap">
+	      <input type="checkbox" id="stagedPublication" name="stagedPublication">
+	        <xsl:if test="/settings/stagedPublication">
+	          <xsl:attribute name="checked">checked</xsl:attribute>
+	        </xsl:if>
+	      </input>
+	      <label for="stagedPublish" resource="blog.stagedPublication" />
+        </td>
+      </tr>
+
+      <tr>
         <td class="formParm1">
           <label for="password" resource="blog.newPassword" />:
         </td>
