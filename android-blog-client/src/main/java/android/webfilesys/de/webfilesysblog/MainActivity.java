@@ -99,6 +99,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
     private static final int POPUP_ABOUT_HEIGHT = 220;
 
     private Button sendPostButton;
+    private Button sendPublishButton;
     private Button geoLocationButton;
     private Button changeLocationButton;
     private Button clearLocationButton;
@@ -243,6 +244,10 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             sendPostButton.setOnClickListener(mButtonListener);
             sendPostButton.setVisibility(View.GONE);
 
+            sendPublishButton = (Button) findViewById(R.id.send_publish_button);
+            sendPublishButton.setOnClickListener(mButtonListener);
+            sendPublishButton.setVisibility(View.GONE);
+
             geoLocationButton = (Button) findViewById(R.id.select_geo_location);
             geoLocationButton.setOnClickListener(mButtonListener);
 
@@ -272,14 +277,18 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                         Toast.makeText(getApplicationContext(), R.string.offline, Toast.LENGTH_LONG).show();
                     }
                     break;
+                case R.id.send_publish_button:
                 case R.id.send_post_button:
                     EditText descrText = (EditText) findViewById(R.id.description);
                     if (descrText.getText().length() == 0) {
                         Toast.makeText(getApplicationContext(), R.string.missingDescription, Toast.LENGTH_LONG).show();
                     } else {
-                        new PostToBlogTask(v).execute();
+                        if (v.getId() == R.id.send_publish_button) {
+                            new PostToBlogTask(v, true).execute();
+                        } else {
+                            new PostToBlogTask(v, false).execute();
+                        }
                     }
-
                     break;
                 case R.id.select_geo_location:
                     if ((ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) ||
@@ -515,6 +524,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                     showPictureLayout();
 
                     sendPostButton.setVisibility(View.VISIBLE);
+                    sendPublishButton.setVisibility(View.VISIBLE);
                 }
                 break;
         }
@@ -654,10 +664,13 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
         private boolean success = false;
 
+        private boolean publishImmediately;
+
         private View view;
 
-        public PostToBlogTask(View v) {
+        public PostToBlogTask(View v, boolean publishImmediately) {
             view = v;
+            this.publishImmediately = publishImmediately;
         }
 
         @Override
@@ -665,6 +678,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
             sendPostButton.setVisibility(View.GONE);
+            sendPublishButton.setVisibility(View.GONE);
         }
 
         protected String doInBackground(String... params) {
@@ -675,7 +689,13 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
             if (sendPicture(destFileName)) {
                 if (sendDescription(destFileName)) {
-                    success = true;
+                    if (publishImmediately) {
+                        if (sendPublishRequest(destFileName)) {
+                            success = true;
+                        }
+                    } else {
+                        success = true;
+                    }
                 }
             }
 
@@ -700,6 +720,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             } else {
                 Toast.makeText(view.getContext(), R.string.postFailed, Toast.LENGTH_LONG).show();
                 sendPostButton.setVisibility(View.VISIBLE);
+                sendPublishButton.setVisibility(View.VISIBLE);
             }
         }
 
@@ -825,6 +846,59 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                 }
             } catch (Exception e) {
                 Log.e("webfilesysblog", "failed to send picture via HTTP Post", e);
+            }
+            return false;
+        }
+
+        private boolean sendPublishRequest(String destFileName) {
+            String response = "";
+            try {
+                HttpURLConnection conn = prepareUrlConnection(serverUrl + "/webfilesys/blogpost/publish/" + destFileName);
+
+                OutputStream os = null;
+                BufferedWriter out = null;
+                PrintWriter pout = null;
+                try {
+                    os = conn.getOutputStream();
+
+                    out = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                    pout = new PrintWriter(out);
+
+                    pout.println("publish immediately");
+
+                    os.flush();
+
+                } catch (Exception ioex) {
+                    Log.e("webfilesysblog", "failed to post publish request", ioex);
+                } finally {
+                    if (pout != null) {
+                        try {
+                            pout.close();
+                        } catch (Exception closeEx) {
+                        }
+                    }
+                    if (os != null) {
+                        try {
+                            os.close();
+                        } catch (Exception closeEx) {
+                        }
+                    }
+                }
+
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String line;
+                    BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    while ((line = br.readLine()) != null) {
+                        response += line;
+                    }
+                    return true;
+                }  else {
+                    response = "";
+                }
+            } catch (Exception e) {
+                Log.e("webfilesysblog", "failed to post publish request", e);
             }
             return false;
         }

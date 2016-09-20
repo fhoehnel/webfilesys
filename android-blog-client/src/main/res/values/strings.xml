@@ -1,12 +1,13 @@
 <resources>
     <string name="app_name">WebFileSys Blog</string>
-    <string name="appVersion" translatable="false">version 0.4.1 (17 July 2016)</string>
+    <string name="appVersion" translatable="false">version 0.4.2 (18 Sep 2016)</string>
     <string name="appAuthor" translatable="false">by Frank Hoehnel</string>
     <string name="appHomepage" translatable="false">www.webfilesys.de</string>
     <string name="buttonClose">Close</string>
     <string name="action_settings">Settings</string>
     <string name="buttonPickImage">Pick Image from Gallery</string>
     <string name="buttonSendPost">Send</string>
+    <string name="buttonSendPublish">Send &amp; Publish</string>
     <string name="noImageSelected">no image selected</string>
 
     <string name="optionMenuAbout">About</string>

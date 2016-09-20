@@ -178,15 +178,34 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/send_post_button"
+            <LinearLayout
+                android:id="@+id/sendButtonCont"
+                android:drawingCacheQuality="low"
+                android:orientation="horizontal"
                 android:layout_width="wrap_content"
-                android:layout_height="32sp"
-                android:textColor="#202020"
-                android:textSize="16sp"
-                android:background="@drawable/button_border"
-                android:layout_marginTop="20px"
-                android:text="@string/buttonSendPost" />
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/send_post_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32sp"
+                    android:textColor="#202020"
+                    android:textSize="16sp"
+                    android:background="@drawable/button_border"
+                    android:layout_marginTop="20px"
+                    android:text="@string/buttonSendPost" />
+
+                <Button
+                    android:id="@+id/send_publish_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32sp"
+                    android:textColor="#202020"
+                    android:textSize="16sp"
+                    android:background="@drawable/button_border"
+                    android:layout_marginTop="20px"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/buttonSendPublish" />
+            </LinearLayout>
 
         </LinearLayout>
 

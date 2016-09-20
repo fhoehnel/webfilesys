@@ -6,6 +6,7 @@
     <string name="buttonPickImage">Bild wählen</string>
     <string name="buttonSaveSettings">Weiter</string>
     <string name="buttonSendPost">Senden</string>
+    <string name="buttonSendPublish">Senden &amp; Publizieren</string>
     <string name="noImageSelected">kein Bild ausgewählt</string>
 
     <string name="labelPassword">WebFileSys Passwort:</string>
