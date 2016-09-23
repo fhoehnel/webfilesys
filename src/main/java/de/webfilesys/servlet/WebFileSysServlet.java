@@ -68,6 +68,7 @@ import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
 import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
+import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
@@ -1390,6 +1391,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("switchFileAgeColoring"))
         {
             (new SwitchFileAgeColoringHandler(req, resp, session, output, userid)).handleRequest(); 
+            
+            return(true);
+        }
+
+        if (command.equals("getFileDesc"))
+        {
+            (new GetFileDescriptionHandler(req, resp, session, output, userid)).handleRequest(); 
             
             return(true);
         }

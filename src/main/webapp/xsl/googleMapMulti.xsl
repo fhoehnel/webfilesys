@@ -27,6 +27,7 @@
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 
   <script type="text/javascript" src="/webfilesys/javascript/geoMap.js"></script>
+  <script type="text/javascript" src="/webfilesys/javascript/ajaxCommon.js"></script>
   <script type="text/javascript" src="/webfilesys/javascript/util.js"></script>
   
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>

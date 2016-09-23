@@ -136,6 +136,7 @@
 	    picElem.onload = resizeAndShowPic;
     	picElem.setAttribute("class", "picOnMap");
         picElem.setAttribute("src", "/webfilesys/servlet?command=getFile&fileName=" + encodeURIComponent(picFileName));
+        picElem.setAttribute("picFileName", picFileName);
         picContElem.appendChild(picElem);
         
 	    centerBox(picContElem);
@@ -149,7 +150,6 @@
     	var thumbDimensions = calculateAspectRatioFit(picOnMapElem.width, picOnMapElem.height, 400, 400);
     	picOnMapElem.style.width = thumbDimensions.width + "px";
     	picOnMapElem.style.height = thumbDimensions.height + "px";
-    	picOnMapElem.style.display = 'inline';
     	
     	if (thumbDimensions.height < 399) {
         	var picContElem = document.getElementById("picOnMapCont");
@@ -159,6 +159,26 @@
         	var picContElem = document.getElementById("picOnMapCont");
         	picContElem.style.width = thumbDimensions.width + "px";
     	}
+    	
+    	picOnMapElem.style.display = 'inline';
+    	
+    	
+    	var picFileName = picOnMapElem.getAttribute("picFileName");
+    	
+        var ajaxUrl = "/webfilesys/servlet?command=getFileDesc&fileName=" + encodeURIComponent(picFileName);
+        
+    	xmlRequest(ajaxUrl, function(req) {
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    var fileDescription = req.responseXML.getElementsByTagName("result")[0].firstChild.nodeValue;        
+                    if (fileDescription && (fileDescription.length > 0)) {
+                        picOnMapElem.setAttribute("title", fileDescription);
+                    }
+                } else {
+                    alert(resourceBundle["alert.communicationFailure"]);
+	            }
+            }
+    	});
     }
     
     function removeImageFromMap() {
