@@ -28,6 +28,7 @@ import de.webfilesys.LanguageManager;
 import de.webfilesys.MP3ExtractorThread;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.gui.user.SwitchFileAgeColoringHandler;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -35,6 +36,12 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslFileListHandler extends XslFileListHandlerBase
 {
+	private static final long MILLISECONDS_HOUR = 60l * 60l * 1000;
+	private static final long MILLISECONDS_DAY = MILLISECONDS_HOUR * 24l;
+	private static final long MILLISECONDS_WEEK = MILLISECONDS_DAY * 7l;
+	private static final long MILLISECONDS_MONTH = MILLISECONDS_DAY * 30l;
+	private static final long MILLISECONDS_YEAR = MILLISECONDS_DAY * 365l;
+	
 	protected boolean initial = false;
 	
 	public XslFileListHandler(
@@ -322,6 +329,14 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		
 		if (selectedFiles != null)
 		{
+			long now = System.currentTimeMillis();
+			
+			Boolean fileAgeColoringActive = (Boolean) session.getAttribute(SwitchFileAgeColoringHandler.SESSION_KEY_FILE_AGE_COLORING);
+			
+			if (fileAgeColoringActive != null) {
+				XmlUtil.setChildText(fileListElement, "fileAgeColoring", "true", false);
+			}
+			
 			SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 
 			for (i = 0; i < selectedFiles.size(); i++)
@@ -417,8 +432,24 @@ public class XslFileListHandler extends XslFileListHandlerBase
 					}
 				}
 
-				fileElement.setAttribute("lastModified", dateFormat.format(new Date(tempFile.lastModified())));
+				long lastModified = tempFile.lastModified();
+				
+				fileElement.setAttribute("lastModified", dateFormat.format(new Date(lastModified)));
 
+				if (fileAgeColoringActive != null) {
+					if (now - lastModified < MILLISECONDS_HOUR) {
+						XmlUtil.setChildText(fileElement, "age", "hour");
+					} else if (now - lastModified < MILLISECONDS_DAY) {
+						XmlUtil.setChildText(fileElement, "age", "day");
+					} else if (now - lastModified < MILLISECONDS_WEEK) {
+						XmlUtil.setChildText(fileElement, "age", "week");
+					} else if (now - lastModified < MILLISECONDS_MONTH) {
+						XmlUtil.setChildText(fileElement, "age", "month");
+					} else if (now - lastModified < MILLISECONDS_YEAR) {
+						XmlUtil.setChildText(fileElement, "age", "year");
+					} 
+				}
+				
 				fileElement.setAttribute("size", numFormat.format(tempFile.length()));
 
 				if (fileCont.isLink() || (dirHasMetaInf))

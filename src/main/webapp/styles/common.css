@@ -1112,7 +1112,6 @@ th.fileListName {
 th.fileListModified {
     width:160px;
     min-width:160px;
-    padding-right:20px;
     white-space:nowrap;
     text-align:right;
 }
@@ -1607,6 +1606,20 @@ div.deleteFromCompareIcon2 {
 a.deleteFromCompareIcon:before {
 	color: #000000;
     font-size: 28px;
+}
+
+div.picOnMap {
+	position: absolute;
+	border: 1px solid black;
+	background-color: #d0d0d0;
+	width: 400px;
+	height: 430px;
+	padding: 10px;
+}
+
+img.picOnMap {
+	margin-top: 10px;
+	display: none;
 }
 
 @media (max-width: 400px) {

@@ -39,6 +39,20 @@ public class GetFileRequestHandler extends UserRequestHandler
 	{
 		String filePath = getParameter("filePath");
 
+		if (filePath == null) {
+			String fileName = getParameter("fileName");
+			if (fileName != null) {
+				String cwdPath = getCwd();
+				if (cwdPath != null) {
+					if (cwdPath.endsWith(File.separator)) {
+						filePath = cwdPath + fileName;
+					} else {
+						filePath = cwdPath + File.separatorChar + fileName;
+					}
+				}
+			}
+		}
+		
 		if (!this.checkAccess(filePath))
 		{
 		    return;	

@@ -117,3 +117,53 @@
             window.location.href = "/webfilesys/servlet?command=googleEarthPlacemark&path=" + filePath;
         }
     }  
+
+    function showImageOnMap(picFileName) {
+        removeImageFromMap();
+    
+    	var picContElem = document.createElement("div");
+    	picContElem.id = "picOnMapCont";
+    	picContElem.setAttribute("class", "picOnMap");
+	    document.documentElement.appendChild(picContElem);
+	    
+	    var closeIconElem = document.createElement("img");
+	    closeIconElem.setAttribute("src", "/webfilesys/images/winClose.gif");
+        closeIconElem.setAttribute("style", "float:right");
+        picContElem.appendChild(closeIconElem);
+	    
+        var picElem = document.createElement("img");
+        picElem.id = "picOnMap";
+	    picElem.onload = resizeAndShowPic;
+    	picElem.setAttribute("class", "picOnMap");
+        picElem.setAttribute("src", "/webfilesys/servlet?command=getFile&fileName=" + encodeURIComponent(picFileName));
+        picContElem.appendChild(picElem);
+        
+	    centerBox(picContElem);
+	    
+	    picContElem.onclick = removeImageFromMap;
+    }
+    
+    function resizeAndShowPic() {
+    	var picOnMapElem = document.getElementById("picOnMap");
+    	
+    	var thumbDimensions = calculateAspectRatioFit(picOnMapElem.width, picOnMapElem.height, 400, 400);
+    	picOnMapElem.style.width = thumbDimensions.width + "px";
+    	picOnMapElem.style.height = thumbDimensions.height + "px";
+    	picOnMapElem.style.display = 'inline';
+    	
+    	if (thumbDimensions.height < 399) {
+        	var picContElem = document.getElementById("picOnMapCont");
+        	picContElem.style.height = (thumbDimensions.height + 30) + "px";
+    	}
+    	if (thumbDimensions.width < 399) {
+        	var picContElem = document.getElementById("picOnMapCont");
+        	picContElem.style.width = thumbDimensions.width + "px";
+    	}
+    }
+    
+    function removeImageFromMap() {
+    	var picContElem = document.getElementById("picOnMapCont");
+    	if (picContElem) {
+        	document.documentElement.removeChild(picContElem);
+    	}
+    }

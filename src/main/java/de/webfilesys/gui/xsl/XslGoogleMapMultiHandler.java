@@ -88,7 +88,7 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 		GeoTag geoTag = metaInfMgr.getGeoTag(metaInfPath);
 
 		if (geoTag != null) {
-	        addMarker(markersElement, geoTag.getLatitude(), geoTag.getLongitude(), geoTag.getInfoText());	        
+	        addMarker(markersElement, geoTag.getLatitude(), geoTag.getLongitude(), geoTag.getInfoText(), null);	        
 		}
 
 		File[] fileList = folderFile.listFiles();
@@ -111,7 +111,7 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
                 }
                 */
 				
-		        addMarker(markersElement, geoTag.getLatitude(), geoTag.getLongitude(), infoText);	        
+		        addMarker(markersElement, geoTag.getLatitude(), geoTag.getLongitude(), infoText, file.getName());	        
 			} else {
 	            String fileExt = CommonUtils.getFileExtension(path);
 	            
@@ -151,7 +151,7 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 	        		        addMarker(markersElement, gpsLatitude, gpsLongitude, infoText);	    
 	        		        */
 	                        
-	        		        addMarker(markersElement, gpsLatitude, gpsLongitude, null);	        
+	        		        addMarker(markersElement, gpsLatitude, gpsLongitude, null, file.getName());	        
 	                    }
 	                }
 	            }
@@ -165,7 +165,7 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 		processResponse("googleMapMulti.xsl");
     }
 	
-	private void addMarker(Element markersElement, float latitude, float longitude, String infoText) {
+	private void addMarker(Element markersElement, float latitude, float longitude, String infoText, String fileName) {
 		Element markerElement = doc.createElement("marker");
 
 		markersElement.appendChild(markerElement);
@@ -175,6 +175,10 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 
 	    if ((infoText != null) && (!infoText.isEmpty())) {
 	        XmlUtil.setChildText(markerElement, "infoText", infoText, false);
+	    }
+
+	    if (fileName != null) {
+		    XmlUtil.setChildText(markerElement, "fileName", fileName, false);
 	    }
 	}
 	

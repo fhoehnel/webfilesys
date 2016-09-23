@@ -185,6 +185,7 @@ label.selectedFiles=selected files
 action.diff=compare (diff)
 selectTwoFilesForDiff=Select two files to compare!
 confirm.deleteFiles=Delete selected files?
+switchfileAgeColoring=show/hide file age coloring
 
 # file list checkboxes
 checkbox.selectall=Select all
@@ -1138,6 +1139,7 @@ blog.stagedPublication=staged publication of new entries
 blog.entryUnpublished=(unpublished)
 blog.publishNewEntries=Publish new entries
 blog.confirmPublishNewEntries=Are you sure you want to publish the new entries?
+blog.mapMarkerTitle=Show picture associated with this location
 
 error.latitudeInvalid=latitude must be a number between -90.0 and 90.0
 error.longitudeInvalid=longitude must be a number between -180.0 and 180.0

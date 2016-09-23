@@ -24,10 +24,11 @@
     WebFileSys google map
   </title>
 
-  <script type="text/javascript" src="/webfilesys/javascript/geoMap.js"></script>
-  
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 
+  <script type="text/javascript" src="/webfilesys/javascript/geoMap.js"></script>
+  <script type="text/javascript" src="/webfilesys/javascript/util.js"></script>
+  
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
   <script type="text/javascript">
     <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/geoData/language" /></xsl:attribute>
@@ -65,7 +66,8 @@
 		  markerPos = new google.maps.LatLng(<xsl:value-of select="latitude" />, <xsl:value-of select="longitude" />);
 		
           marker = new google.maps.Marker({
-              position: markerPos
+              position: markerPos,
+              title: resourceBundle["blog.mapMarkerTitle"]
           });
 
           marker.setMap(map);   
@@ -82,6 +84,12 @@
             infoWindow.open(map, marker);
             
             infoWindowList.push(infoWindow);
+		  </xsl:if>
+		  
+		  <xsl:if test="fileName">
+		    window.google.maps.event.addListener(marker, 'click', function () {
+                showImageOnMap('<xsl:value-of select="fileName"/>')
+            });
 		  </xsl:if>
 		  
         </xsl:for-each>

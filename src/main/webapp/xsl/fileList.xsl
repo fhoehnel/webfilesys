@@ -390,6 +390,16 @@
             <xsl:if test="/fileList/sortBy!='5'">
               <a class="listHead" href="javascript:setSortField('5')" resource="label.lastModified" />
             </xsl:if>
+            <a href="/webfilesys/servlet?command=switchFileAgeColoring">
+              <img border="0" width="13" height="13" style="vertical-align:middle;margin-left:8px" titleResource="switchfileAgeColoring">
+                <xsl:if test="/fileList/fileAgeColoring">
+                  <xsl:attribute name="src">/webfilesys/images/minusSmall.gif</xsl:attribute>
+                </xsl:if>
+                <xsl:if test="not(/fileList/fileAgeColoring)">
+                  <xsl:attribute name="src">/webfilesys/images/menuPlus.gif</xsl:attribute>
+                </xsl:if>
+              </img>
+            </a>
           </th>
           <th class="fileList fileListSize">
             <xsl:if test="/fileList/sortBy='4'">
@@ -472,7 +482,31 @@
             <td>
               <xsl:attribute name="class">fileList fileListModified <xsl:if test="not(description)">sepBot</xsl:if></xsl:attribute>
               <font class="fixed">
-                <xsl:value-of select="@lastModified" />
+                <xsl:if test="age">
+                  <span>
+                    <xsl:choose>
+                      <xsl:when test="age='hour'">
+                        <xsl:attribute name="class">fileAgeHour</xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="age='day'">
+                        <xsl:attribute name="class">fileAgeDay</xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="age='week'">
+                        <xsl:attribute name="class">fileAgeWeek</xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="age='month'">
+                        <xsl:attribute name="class">fileAgeMonth</xsl:attribute>
+                      </xsl:when>
+                      <xsl:when test="age='year'">
+                        <xsl:attribute name="class">fileAgeYear</xsl:attribute>
+                      </xsl:when>
+                    </xsl:choose>
+                    <xsl:value-of select="@lastModified" />
+                  </span>
+                </xsl:if>
+                <xsl:if test="not(age)">
+                  <xsl:value-of select="@lastModified" />
+                </xsl:if>
               </font>
             </td>
             

@@ -147,3 +147,23 @@ table.contextMenu th {
 .icon-button a:before {
 	color: #8080e0;
 }
+
+span.fileAgeHour {
+	background-color: #c0ffff;
+}
+
+span.fileAgeDay {
+	background-color: #ffe080;
+}
+
+span.fileAgeWeek {
+	background-color: #ffe0e0;
+}
+
+span.fileAgeMonth {
+	background-color: #e0ffe0;
+}
+
+span.fileAgeYear {
+	background-color: #e0e0ff;
+}

@@ -207,6 +207,7 @@ import de.webfilesys.gui.user.RotatedExifThumbHandler;
 import de.webfilesys.gui.user.SearchRequestHandler;
 import de.webfilesys.gui.user.SelfChangeUserRequestHandler;
 import de.webfilesys.gui.user.SelfEditUserRequestHandler;
+import de.webfilesys.gui.user.SwitchFileAgeColoringHandler;
 import de.webfilesys.gui.user.SynchronizeRequestHandler;
 import de.webfilesys.gui.user.TailRequestHandler;
 import de.webfilesys.gui.user.TransformImageRequestHandler;
@@ -1382,6 +1383,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("checkFileChange"))
         {
             (new AjaxCheckFileChangeHandler(req, resp, session, output, userid)).handleRequest(); 
+            
+            return(true);
+        }
+        
+        if (command.equals("switchFileAgeColoring"))
+        {
+            (new SwitchFileAgeColoringHandler(req, resp, session, output, userid)).handleRequest(); 
             
             return(true);
         }

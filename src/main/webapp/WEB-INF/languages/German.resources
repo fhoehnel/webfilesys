@@ -185,6 +185,7 @@ label.selectedFiles=ausgewählte Dateien
 action.diff=Vergleichen (diff)
 selectTwoFilesForDiff=Zum Vergleichen müssen 2 Dateien ausgewählt werden!
 confirm.deleteFiles=Ausgewählte Dateien wirklich löschen?
+switchfileAgeColoring=Farben entsprechend Datei-Alter zeigen/ausblenden
 
 # file list checkboxes
 checkbox.selectall=alle
@@ -1142,6 +1143,7 @@ blog.stagedPublication=neue Einträge explizit freigeben
 blog.entryUnpublished=(nicht freigegeben)
 blog.publishNewEntries=neue Einträge freigeben
 blog.confirmPublishNewEntries=Sollen die neuen Einträge wirklich freigegeben werden?
+blog.mapMarkerTitle=Bild zu dieser geografischen Lokation anzeigen
 
 error.latitudeInvalid=geografische Breite muss zwischen -90 und 90 liegen
 error.longitudeInvalid=geografische Länge muss zwischen -180.0 und 180.0 liegen

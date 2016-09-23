@@ -185,6 +185,7 @@ label.selectedFiles=archivos seleccionados
 action.diff=comparar (diff)
 selectTwoFilesForDiff=¡Seleccione dos archivos para comparar!
 confirm.deleteFiles=¿Borrar los archivos seleccionados?
+switchfileAgeColoring=Mostrar/ocultar colores differentes de acuerdo con la edad del archivo
 
 # file list checkboxes
 checkbox.selectall=Seleccionar todo
@@ -1139,4 +1140,5 @@ blog.stagedPublication=publicar nuevas entradas explícitamente
 blog.entryUnpublished=(todavia no publicado)
 blog.publishNewEntries=Publicar nuevas entradas
 blog.confirmPublishNewEntries=¿Seguro que quieres publicar las nuevas entradas?
+blog.mapMarkerTitle=Ver imagen asociada con esta localización geográfica
 
