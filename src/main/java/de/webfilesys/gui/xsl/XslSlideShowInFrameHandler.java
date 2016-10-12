@@ -174,6 +174,8 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
 
         boolean crossfade = (!CommonUtils.isEmpty(req.getParameter("crossfade")));
 
+        boolean randomize = (!CommonUtils.isEmpty(getParameter("randomize")));
+        
         String role = userMgr.getRole(uid);
         
         if ((role != null) && role.equals("album"))
@@ -186,7 +188,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
         if (imageIdx < 0)
         {
             session.removeAttribute(SLIDESHOW_BUFFER);
-            getImageTree(actPath, recurse);
+            getImageTree(actPath, recurse, randomize);
 
             String startFilePath = getParameter("startFilePath");
 			if (startFilePath == null) {
@@ -203,7 +205,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
             if ((imageFiles == null) || (imageIdx>=imageFiles.size()))
             {
                 session.removeAttribute(SLIDESHOW_BUFFER);
-                getImageTree(actPath,recurse);
+                getImageTree(actPath, recurse, randomize);
                 imageIdx=0;
             }
         }
@@ -316,7 +318,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
 		processResponse("slideShowInFrame.xsl", false);
 	}
 
-    public void getImageTree(String actPath,boolean recurse)
+    public void getImageTree(String actPath, boolean recurse, boolean randomize)
     {
         int i;
 
@@ -341,7 +343,12 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
 
         FileSelectionStatus selectionStatus=fileSelector.selectFiles(Constants.imgFileMasks,4096,null,null);
 
-        Vector imageFiles=selectionStatus.getSelectedFiles();
+        Vector imageFiles = null;
+        if (randomize) {
+            imageFiles = selectionStatus.getRandomizedFiles();
+        } else {
+            imageFiles = selectionStatus.getSelectedFiles();
+        }
 
         if (imageFiles!=null)
         {
@@ -383,7 +390,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
                 {
                     subDir = pathWithSlash + fileList[i];
 
-                    getImageTree(subDir,recurse);
+                    getImageTree(subDir, recurse, randomize);
                 }
             }
         }

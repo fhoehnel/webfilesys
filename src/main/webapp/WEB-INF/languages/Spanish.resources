@@ -488,6 +488,7 @@ label.recurse=incluir subcarpetas
 label.autoForward=pasar automáticamente
 label.fullScreen=pantalla completa
 label.crossfade=transición
+label.randomize=orden aleatorio
 button.startshow=comenzar diapositivas
 alt.exitslideshow=parar diapositivas
 alt.pause=pausar diapositivas

@@ -490,6 +490,7 @@ label.recurse=Unterordner einbeziehen
 label.autoForward=automatisch blättern
 label.fullScreen=ganzer Bildschirm
 label.crossfade=Überblend-Effekt
+label.randomize=zufällige Reihenfolge
 button.startshow=Diashow starten
 alt.exitslideshow=Diashow beenden
 alt.pause=Stoppen (Pause)

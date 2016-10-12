@@ -488,6 +488,7 @@ label.recurse=include subdirectories
 label.autoForward=automatic forward
 label.fullScreen=fullscreen
 label.crossfade=crossfade
+label.randomize=random order
 button.startshow=start slideshow
 alt.exitslideshow=exit slideshow
 alt.pause=pause slideshow

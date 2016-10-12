@@ -73,7 +73,8 @@ public class XslSlideshowParmsHandler extends XslRequestHandlerBase
 		addMsgResource("label.fullScreen", getResource("label.fullScreen", "fullscreen"));
 		
         addMsgResource("label.crossfade", getResource("label.crossfade", "crossfade"));
-		
+        addMsgResource("label.randomize", getResource("label.randomize", "random order"));
+        
 		addMsgResource("button.startshow", getResource("button.startshow","start slideshow"));
 		addMsgResource("button.cancel", getResource("button.cancel", "cancel"));
 			

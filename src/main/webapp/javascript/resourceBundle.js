@@ -88,7 +88,7 @@ function setNodeValue(domNode, text)
     {      
         var child = domNode.firstChild;
         
-        while (child)
+        if (child)
         {        
             if (child.nodeType === 3) // text node
             {          

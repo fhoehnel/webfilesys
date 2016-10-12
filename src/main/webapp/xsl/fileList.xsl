@@ -385,7 +385,7 @@
           
           <th class="fileList fileListModified">
             <xsl:if test="/fileList/sortBy='5'">
-              <xsl:attribute name="resource">label.lastModified</xsl:attribute>
+              <span resource="label.lastModified"></span>
             </xsl:if>
             <xsl:if test="/fileList/sortBy!='5'">
               <a class="listHead" href="javascript:setSortField('5')" resource="label.lastModified" />

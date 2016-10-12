@@ -30,7 +30,8 @@
                                document.form1.delay.options[document.form1.delay.selectedIndex].value + 
                                '&amp;recurse=' + document.form1.recurse.checked + 
                                '&amp;autoForward=' + document.form1.autoForward.checked +
-                               '&amp;fadeInOut=' + document.form1.fadeInOut.checked;
+                               '&amp;fadeInOut=' + document.form1.fadeInOut.checked +
+                               '&amp;randomize=' + document.form1.randomize.checked;
 
             <xsl:if test="startPath">
               slideshowURL = slideshowURL + '&amp;startFilePath=' + encodeURIComponent('<xsl:value-of select="encodedStartPath"/>');
@@ -176,6 +177,14 @@
           <input id="crossfade" type="checkbox" class="cb3" name="fadeInOut" disabled="true" />
           &#160;
           <xsl:value-of select="resources/msg[@key='label.crossfade']/@value" />
+        </td>
+      </tr>
+
+      <tr>
+        <td colspan="2" class="formParm1">
+          <input id="randomize" type="checkbox" class="cb3" name="randomize" />
+          &#160;
+          <xsl:value-of select="resources/msg[@key='label.randomize']/@value" />
         </td>
       </tr>
      

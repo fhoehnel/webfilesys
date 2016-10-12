@@ -17,6 +17,7 @@ import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -56,9 +57,12 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		String delayString = getParameter("delay");
 		String autoForwardParm = getParameter("autoForward");
 		String startFilePath = getParameter("startFilePath");
+		
+		boolean autoForward = ((autoForwardParm != null) && autoForwardParm.equalsIgnoreCase("true"));
 
-		boolean autoForward=((autoForwardParm!=null) && autoForwardParm.equalsIgnoreCase("true"));
-
+        String randomizeParm = getParameter("randomize");
+		boolean randomize = ((randomizeParm != null) && randomizeParm.equalsIgnoreCase("true"));
+		
 		int delay = WebFileSys.getInstance().getSlideShowDelay();
 		int imageIdx=0;
 		try
@@ -78,7 +82,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		if (imageIdx<=0)
 		{
 			session.removeAttribute(SLIDESHOW_BUFFER);
-			getImageTree(actPath,recurse);
+			getImageTree(actPath, recurse, randomize);
 			if (startFilePath == null) {
 				imageIdx=0;
 			} 
@@ -93,7 +97,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 			if ((imageFiles==null) || (imageIdx>=imageFiles.size()))
 			{
 				session.removeAttribute(SLIDESHOW_BUFFER);
-				getImageTree(actPath,recurse);
+				getImageTree(actPath, recurse, randomize);
 				imageIdx=0;
 			}
 		}
@@ -165,7 +169,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		return 0;
     }
 	
-	public void getImageTree(String actPath,boolean recurse)
+	public void getImageTree(String actPath, boolean recurse, boolean randomize)
 	{
 		int i;
 
@@ -189,8 +193,13 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		FileLinkSelector fileSelector=new FileLinkSelector(actPath,FileComparator.SORT_BY_FILENAME);
 
 		FileSelectionStatus selectionStatus=fileSelector.selectFiles(imgFileMasks,4096,null,null);
-
-		Vector imageFiles=selectionStatus.getSelectedFiles();
+ 
+		Vector imageFiles = null;
+		if (randomize) {
+			imageFiles = selectionStatus.getRandomizedFiles();
+		} else {
+			imageFiles = selectionStatus.getSelectedFiles();
+		}
 
 		if (imageFiles!=null)
 		{
@@ -232,7 +241,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 				{
 					subDir = pathWithSlash + fileList[i];
 
-					getImageTree(subDir,recurse);
+					getImageTree(subDir, recurse, randomize);
 				}
             }
 		}

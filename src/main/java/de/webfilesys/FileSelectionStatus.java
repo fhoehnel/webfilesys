@@ -44,6 +44,25 @@ public class FileSelectionStatus
         return(selectedFiles);
     }
 
+    public Vector getRandomizedFiles() {
+    	
+    	Vector randomizedList = new Vector();
+    	
+    	while (selectedFiles.size() > 0) {
+    		int randomIdx = randomInt(selectedFiles.size());
+    		
+    		randomizedList.add(selectedFiles.get(randomIdx));
+    		selectedFiles.remove(randomIdx);
+    	}
+    	
+    	selectedFiles = randomizedList;
+    	return selectedFiles;
+    }
+    
+    private int randomInt(int maxVal) {
+    	return (int) Math.round((Math.random() * ((double) (maxVal - 1))));
+    }
+    
     public void setBeginIndex(int beginIndex)
     { 
         this.beginIndex=beginIndex;
