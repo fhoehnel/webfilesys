@@ -142,17 +142,17 @@
     <xsl:if test="not(@link)">
       function cm<xsl:value-of select="@id" />()
       {
-          jsContextMenu('<xsl:value-of select="@name" />','<xsl:value-of select="imgType" />','<xsl:value-of select="@id" />');
+          jsContextMenu('<xsl:value-of select="@nameForScript" />','<xsl:value-of select="imgType" />','<xsl:value-of select="@id" />');
       }
 
       function si<xsl:value-of select="@id" />()
       {
-          showImage('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@name" />',<xsl:value-of select="fullScreenWidth" />,<xsl:value-of select="fullScreenHeight" />);
+          showImage('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />',<xsl:value-of select="fullScreenWidth" />,<xsl:value-of select="fullScreenHeight" />);
       }
 
       function zoom<xsl:value-of select="@id" />()
       {
-          showPicturePopup('/webfilesys/servlet?command=getFile&amp;filePath=' + encodeURIComponent('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@name" />'),<xsl:value-of select="xpix" />,<xsl:value-of select="ypix" />);
+          showPicturePopup('/webfilesys/servlet?command=getFile&amp;filePath=' + encodeURIComponent('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />'),<xsl:value-of select="xpix" />,<xsl:value-of select="ypix" />);
       }
 
       <!--

@@ -41,7 +41,7 @@
     <tr>
       <td colspan="2">
         <a class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:validateNewFileName('<xsl:value-of select="/renameFile/oldFileName" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.destEqualsSource']/@value" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
+          <xsl:attribute name="href">javascript:validateNewFileName('<xsl:value-of select="/renameFile/oldFileNameForScript" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.destEqualsSource']/@value" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
           <span><xsl:value-of select="/renameFile/resources/msg[@key='button.rename']/@value" /></span>
         </a>              
 

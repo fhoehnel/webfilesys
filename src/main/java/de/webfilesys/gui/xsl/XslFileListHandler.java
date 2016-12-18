@@ -347,9 +347,10 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
 				
-				String fileName = fileCont.getName().replace('\'', '`');
+				String fileName = fileCont.getName();
 
                 fileElement.setAttribute("name", fileName);
+                fileElement.setAttribute("nameForScript", escapeForJavascript(fileName));
 
 				tempFile = fileCont.getRealFile();
 

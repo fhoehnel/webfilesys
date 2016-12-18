@@ -324,6 +324,10 @@
               <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=album';</xsl:attribute>
             </xsl:if>
           </input> 
+          
+          <input type="button" resource="label.download" style="margin-left:20px;">
+            <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=getFile&amp;fileName=<xsl:value-of select="encodedName" />&amp;disposition=download';</xsl:attribute>
+          </input>
         </div>
                   
       </form>

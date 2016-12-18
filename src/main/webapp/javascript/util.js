@@ -142,7 +142,7 @@ function getFileNameExt(fileName)
 
 function insertDoubleBackslash(source)
 {
-    return(source.replace(/\\/g,"\\\\"));
+    return(source.replace(/\\/g,"\\\\").replace(/'/g, "\\'"));
 }
 
 function trim(str) 
@@ -249,4 +249,8 @@ function resizeViewPort(width, height) {
 function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
    var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
    return {width: srcWidth * ratio, height: srcHeight * ratio};
+}
+
+function escapeParam(origText) {
+	return origText.replace(/'/g, "\\'");	
 }

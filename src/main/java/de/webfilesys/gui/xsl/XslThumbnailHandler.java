@@ -478,10 +478,10 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 
 		XmlUtil.setChildText(fileListElement, "currentPath", actPath, false);
 
-		XmlUtil.setChildText(fileListElement, "menuPath", insertDoubleBackslash(actPath), false);
+		XmlUtil.setChildText(fileListElement, "menuPath", escapeForJavascript(actPath), false);
 
-		XmlUtil.setChildText(fileListElement, "pathForScript", insertDoubleBackslash(pathWithSlash), false);
-
+		XmlUtil.setChildText(fileListElement, "pathForScript", escapeForJavascript(pathWithSlash), false);
+ 
 		XmlUtil.setChildText(fileListElement, "filter", mask, false);
 
 		XmlUtil.setChildText(fileListElement, "sortBy", Integer.toString(sortBy), false);
@@ -603,6 +603,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 				String actFilename = fileCont.getName();
 
 				fileElement.setAttribute("name", actFilename);
+				fileElement.setAttribute("nameForScript", escapeForJavascript(actFilename));
 
 				fileElement.setAttribute("id", Integer.toString(i));
 				
@@ -612,7 +613,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 				{
 					fileElement.setAttribute("link" , "true");
 					XmlUtil.setChildText(fileElement, "realPath", fileCont.getRealFile().getAbsolutePath(), false);
-					XmlUtil.setChildText(fileElement, "realPathForScript", insertDoubleBackslash(fileCont.getRealFile().getAbsolutePath()), false);
+					XmlUtil.setChildText(fileElement, "realPathForScript", escapeForJavascript(fileCont.getRealFile().getAbsolutePath()), false);
 
 					if (!this.accessAllowed(fileCont.getRealFile().getAbsolutePath()))
 					{	
@@ -659,7 +660,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase
 				{
 					if (this.accessAllowed(fileCont.getRealFile().getAbsolutePath()))
 					{
-						fileElement.setAttribute("linkMenuPath", insertDoubleBackslash(fileCont.getRealFile().getAbsolutePath()));
+						fileElement.setAttribute("linkMenuPath", escapeForJavascript(fileCont.getRealFile().getAbsolutePath()));
 					}
 					else
 					{	

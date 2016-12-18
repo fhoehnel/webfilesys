@@ -179,7 +179,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 					
 	                output.println("<script language=\"javascript\">");
 
-	                output.println("document.getElementById('currentFile').innerHTML='" + insertDoubleBackslash(CommonUtils.shortName(getHeadlinePath(sourceFile), 40)) + "';");
+	                output.println("document.getElementById('currentFile').innerHTML='" + escapeForJavascript(CommonUtils.shortName(getHeadlinePath(sourceFile), 40)) + "';");
 	                
 	                output.println("</script>");
 				}

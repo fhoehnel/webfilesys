@@ -163,7 +163,7 @@ public class ZipFileRequestHandler extends UserRequestHandler {
                     
                 if (showStatus) {
                     output.println("<script language=\"javascript\">");
-                    output.println("document.getElementById('currentFile').innerHTML='" + CommonUtils.shortName(zipEntry.getName(),45) + " (" + zipEntry.getSize() + " bytes)';");
+                    output.println("document.getElementById('currentFile').innerHTML='" + escapeForJavascript(CommonUtils.shortName(zipEntry.getName(),45)) + " (" + zipEntry.getSize() + " bytes)';");
                     output.println("document.getElementById('extractCount').innerHTML='" + unzipNum +  "';");
                     output.println("</script>");
                     output.flush();

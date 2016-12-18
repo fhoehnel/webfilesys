@@ -186,6 +186,7 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(imageDataElement, "imagePath", imgPath, false);
 		XmlUtil.setChildText(imageDataElement, "imageName", imgName, false);
 		XmlUtil.setChildText(imageDataElement, "encodedPath", UTF8URLEncoder.encode(imgPath), false);
+		XmlUtil.setChildText(imageDataElement, "encodedName", UTF8URLEncoder.encode(imgName), false);
 		XmlUtil.setChildText(imageDataElement, "pathForScript", insertDoubleBackslash(imgPath), false);
 		XmlUtil.setChildText(imageDataElement, "relativePath", this.getHeadlinePath(imgPath), false);
 		XmlUtil.setChildText(imageDataElement, "userid", uid, false);

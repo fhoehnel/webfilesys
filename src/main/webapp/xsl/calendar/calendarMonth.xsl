@@ -433,7 +433,7 @@
        	        clickAction);
        	        
     sectorLabel(shellSectorStartAngle, shellSectorEndAngle, 
-	            weekDayInnerRadius - 6, innerCircleRadius + shellWidth + 6,
+	            weekDayInnerRadius, innerCircleRadius + shellWidth + 6,
 	            "#000000", 
 	            weekDayShortMap[<xsl:value-of select="@dayOfWeek" />], "12px");
 

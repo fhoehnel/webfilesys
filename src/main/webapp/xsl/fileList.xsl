@@ -80,13 +80,13 @@
     <xsl:if test="@link">
       function lm<xsl:value-of select="position()" />()
       {
-          jsLinkMenu('<xsl:value-of select="@name" />','<xsl:value-of select="@linkMenuPath" />');     
+          jsLinkMenu('<xsl:value-of select="@nameForScript" />','<xsl:value-of select="@linkMenuPath" />');     
       }
     </xsl:if>
     <xsl:if test="not(@link)">
       function cm<xsl:value-of select="position()" />()
       {
-          contextMenu('<xsl:value-of select="@name" />');     
+          contextMenu('<xsl:value-of select="@nameForScript" />');     
       }
     </xsl:if>
   </xsl:for-each>  

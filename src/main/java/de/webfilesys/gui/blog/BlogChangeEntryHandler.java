@@ -72,9 +72,13 @@ public class BlogChangeEntryHandler extends UserRequestHandler {
         
 		String fileNamePrefixFromDate = getFileNamePrefixFromDate();
 		
+		int savedStatus = (-1);
+		
 		if (!fileNamePrefixFromDate.equals(fileName.substring(0, 10))) {
 	        Logger.getLogger(getClass()).debug("date has changed");
 
+	        savedStatus = metaInfMgr.getStatus(oldFilePath);	        
+	        
 	        // newFileName = fileNamePrefixFromDate + fileName.substring(10);
 	        newFileName = fileNamePrefixFromDate + "-" + System.currentTimeMillis() + CommonUtils.getFileExtension(fileName);
 	        
@@ -110,6 +114,10 @@ public class BlogChangeEntryHandler extends UserRequestHandler {
 			metaInfMgr.setDescription(currentPath, newFileName, "");
 		}
 
+		if (savedStatus == MetaInfManager.STATUS_BLOG_EDIT) {
+			metaInfMgr.setStatus(currentPath, newFileName, MetaInfManager.STATUS_BLOG_EDIT);
+		}
+		
 		String geoDataSwitcher = req.getParameter("geoDataSwitcher");
 		
 		if (geoDataSwitcher != null) {

@@ -66,6 +66,7 @@ public class XslRenameImagePromptHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(renameFileElement, "imagePath", imagePath, false);
 
 		XmlUtil.setChildText(renameFileElement, "oldFileName", oldFileName, false);
+		XmlUtil.setChildText(renameFileElement, "oldFileNameForScript", escapeForJavascript(oldFileName), false);
 
 		XmlUtil.setChildText(renameFileElement, "shortFileName", CommonUtils.shortName(oldFileName, 36), false);
 		

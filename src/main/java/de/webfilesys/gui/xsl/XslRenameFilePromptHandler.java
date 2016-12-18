@@ -54,6 +54,7 @@ public class XslRenameFilePromptHandler extends XslRequestHandlerBase
 		doc.insertBefore(xslRef, renameFileElement);
 
 		XmlUtil.setChildText(renameFileElement, "oldFileName", oldFileName, false);
+		XmlUtil.setChildText(renameFileElement, "oldFileNameForScript", escapeForJavascript(oldFileName), false);
 
 		XmlUtil.setChildText(renameFileElement, "shortFileName", CommonUtils.shortName(oldFileName, 36), false);
 		

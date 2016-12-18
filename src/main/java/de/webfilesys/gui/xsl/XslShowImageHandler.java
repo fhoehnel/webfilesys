@@ -61,8 +61,8 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		
 		XmlUtil.setChildText(imageDataElement, "imagePath", imgPath, false);
 		XmlUtil.setChildText(imageDataElement, "encodedPath", UTF8URLEncoder.encode(imgPath), false);
-		XmlUtil.setChildText(imageDataElement, "pathForScript", insertDoubleBackslash(imgPath), false);
-		XmlUtil.setChildText(imageDataElement, "relativePath", this.getHeadlinePath(imgPath), false);
+		XmlUtil.setChildText(imageDataElement, "pathForScript", escapeForJavascript(imgPath), false);
+		XmlUtil.setChildText(imageDataElement, "relativePath", getHeadlinePath(imgPath), false);
 		
 		if (readonly)
 		{
