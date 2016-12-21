@@ -35,7 +35,22 @@ public class BlogPostServlet extends WebFileSysServlet {
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp)
 		    throws ServletException, java.io.IOException {
-	    LOG.error("method GET not supported by BlogPostServlet");
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("GET request");
+		}
+
+		resp.setDateHeader("expires", 0l); 
+    	
+		String userid = authenticateUser(req, resp);
+		
+		if (userid == null) {
+            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            resp.setHeader(BASIC_HTTP_AUTH_PROMPT, "Basic realm=\"webfilesys\"");
+		} else {
+			if (LOG.isDebugEnabled()) {
+				LOG.debug("successful authentication by blog client");
+			}
+		}
 	}
 		
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -53,20 +68,9 @@ public class BlogPostServlet extends WebFileSysServlet {
             return;
 		}
 
-        String currentPath = WebFileSys.getInstance().getUserMgr().getDocumentRoot(userid);
-        
-        if (currentPath == null) {
-            LOG.error("current working directory unknown");
-            throw new ServletException("current working directory unknown");
-        }
-        
         String requestPath = req.getRequestURI();
 
         int lastPathDelimiterIdx = requestPath.lastIndexOf('/');
-        
-        String fileName = UTF8URLDecoder.decode(requestPath.substring(lastPathDelimiterIdx + 1));
-
-        fileName = replaceIllegalChars(fileName);
         
         int delIdx = requestPath.substring(0, lastPathDelimiterIdx).lastIndexOf('/');
         
@@ -74,8 +78,25 @@ public class BlogPostServlet extends WebFileSysServlet {
             LOG.error("invalid parameters for BlogPostServlet: " + requestPath);
             throw new ServletException("invalid parameters for BlogPostServlet");
         }
-        
+
         String command = requestPath.substring(delIdx + 1, lastPathDelimiterIdx);
+
+        /*
+        if (command.equals("authenticate")) {
+        	return;
+        }
+        */
+        
+        String currentPath = WebFileSys.getInstance().getUserMgr().getDocumentRoot(userid);
+        
+        if (currentPath == null) {
+            LOG.error("current working directory unknown");
+            throw new ServletException("current working directory unknown");
+        }
+
+        String fileName = UTF8URLDecoder.decode(requestPath.substring(lastPathDelimiterIdx + 1));
+
+        fileName = replaceIllegalChars(fileName);
         
         if (command.equals("picture")) {
             reveicePicture(req, resp, userid, currentPath, fileName);        
@@ -356,7 +377,7 @@ public class BlogPostServlet extends WebFileSysServlet {
         }
         
         if (!WebFileSys.getInstance().getUserMgr().checkPassword(userid, password)) {
-        	LOG.warn("invalid credentials");
+        	LOG.warn("invalid credentials in BlogPostServlet");
             return null;
         }
         

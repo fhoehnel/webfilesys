@@ -73,14 +73,41 @@
             android:layout_width="match_parent"
             android:layout_height="10sp"/>
 
-        <Button
-            android:id="@+id/save_settings_button"
-            android:layout_width="wrap_content"
-            android:layout_height="32sp"
-            android:textColor="#202020"
-            android:textSize="16sp"
-            android:background="@drawable/button_border"
-            android:text="@string/buttonSaveSettings" />
+        <LinearLayout
+            android:id="@+id/saveSettings_layout"
+            android:drawingCacheQuality="low"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/save_settings_button"
+                android:layout_width="wrap_content"
+                android:layout_height="32sp"
+                android:textColor="#202020"
+                android:textSize="16sp"
+                android:background="@drawable/button_border"
+                android:text="@string/buttonSaveSettings" />
+
+            <TextView
+                android:id="@+id/connecting_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="32sp"
+                android:paddingTop="6sp"
+                android:text="@string/connecting"
+                android:visibility="gone" />
+
+            <ProgressBar
+                android:id="@+id/authProgressBar"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
+                android:indeterminate="true"
+                android:progress="1"
+                android:visibility="gone" />
+        </LinearLayout>
 
     </LinearLayout>
 

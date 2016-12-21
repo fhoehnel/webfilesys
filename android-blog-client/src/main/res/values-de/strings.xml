@@ -34,4 +34,8 @@
 
     <string name="buttonMapSelectionOk">OK</string>
 
+    <string name="authenticationFailed">Das Login am Server ist fehlgeschlagen wegen ungültigem Nutzer oder Passwort.</string>
+    <string name="communicationFailure">Das Login am Server ist fehlgeschlagen wegen Kommunikations-Problemen. Bitte überprüfen Sie die URL des WebFileSys Servers!</string>
+    <string name="connecting">verbinde zum Server ...</string>
+
 </resources>

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">WebFileSys Blog</string>
-    <string name="appVersion" translatable="false">version 0.4.2 (18 Sep 2016)</string>
+    <string name="appVersion" translatable="false">version 0.4.3 (18 Dec 2016)</string>
     <string name="appAuthor" translatable="false">by Frank Hoehnel</string>
     <string name="appHomepage" translatable="false">www.webfilesys.de</string>
     <string name="buttonClose">Close</string>
@@ -37,5 +37,9 @@
     <string name="selectedLocation">selected location:</string>
 
     <string name="buttonMapSelectionOk">OK</string>
+
+    <string name="authenticationFailed">The authentication with the server has failed due to invalid userid or password.</string>
+    <string name="communicationFailure">The authentication with the server has failed due to communication problems. Please check the URL of the WebFileSys server!</string>
+    <string name="connecting">connecting to server ...</string>
 
 </resources>

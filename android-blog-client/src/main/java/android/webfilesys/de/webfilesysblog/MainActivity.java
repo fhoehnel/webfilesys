@@ -274,14 +274,18 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                         startActivityForResult(pickImageIntent, REQUEST_PICK_IMAGE);
                     } else {
                         Log.e("webfilesysblog", "not connected to the internet");
-                        Toast.makeText(getApplicationContext(), R.string.offline, Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(getApplicationContext(), R.string.offline, Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     }
                     break;
                 case R.id.send_publish_button:
                 case R.id.send_post_button:
                     EditText descrText = (EditText) findViewById(R.id.description);
                     if (descrText.getText().length() == 0) {
-                        Toast.makeText(getApplicationContext(), R.string.missingDescription, Toast.LENGTH_LONG).show();
+                        Toast toast = Toast.makeText(getApplicationContext(), R.string.missingDescription, Toast.LENGTH_LONG);
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
                     } else {
                         if (v.getId() == R.id.send_publish_button) {
                             new PostToBlogTask(v, true).execute();
@@ -598,6 +602,12 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         serverUrl = prefs.getString(PREF_SERVER_URL, SERVER_URL_DEFAULT);
         userid = prefs.getString(PREF_USERID, null);
 
+        ProgressBar authProgressBar = (ProgressBar) findViewById(R.id.authProgressBar);
+        authProgressBar.setVisibility(View.GONE);
+
+        TextView connectingMsg = (TextView) findViewById(R.id.connecting_msg);
+        connectingMsg.setVisibility(View.GONE);
+
         EditText serverUrlInput = (EditText) findViewById(R.id.server_url);
         if (serverUrl != null) {
             serverUrlInput.setText(serverUrl, TextView.BufferType.EDITABLE);
@@ -614,6 +624,7 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
         }
 
         Button saveSettingsButton = (Button) findViewById(R.id.save_settings_button);
+        saveSettingsButton.setVisibility(View.VISIBLE);
 
         saveSettingsButton.setOnClickListener(new View.OnClickListener() {
 
@@ -622,7 +633,6 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
                 switch (v.getId()) {
                     case R.id.save_settings_button:
-                        Log.d("webfilesysblog", "save button clicked");
 
                         EditText serverUrlInput = (EditText) findViewById(R.id.server_url);
                         serverUrl = serverUrlInput.getText().toString();
@@ -641,21 +651,94 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                                 serverUrl = serverUrl.substring(0, serverUrl.length() - 1);
                             }
 
+                            v.setVisibility(View.GONE);
+
+                            TextView connectingMsg = (TextView) findViewById(R.id.connecting_msg);
+                            connectingMsg.setVisibility(View.VISIBLE);
+
+                            ProgressBar authProgressBar = (ProgressBar) findViewById(R.id.authProgressBar);
+                            authProgressBar.setVisibility(View.VISIBLE);
+
                             SharedPreferences.Editor prefEditor = prefs.edit();
                             prefEditor.putString(PREF_SERVER_URL, serverUrl);
                             prefEditor.putString(PREF_USERID, userid);
 
                             prefEditor.commit();
 
-                            showBlogForm();
+                            new TestAuthenticationTask(v).execute();
+
                         } else {
-                            Toast.makeText(getApplicationContext(), R.string.missingParameters, Toast.LENGTH_LONG).show();
+                            Toast toast = Toast.makeText(getApplicationContext(), R.string.missingParameters, Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
                         }
 
                         break;
                 }
             }
         });
+    }
+
+    class TestAuthenticationTask extends AsyncTask<String, Void, String> {
+        int authResult;
+
+        private View view;
+
+        public TestAuthenticationTask(View v) {
+            view = v;
+        }
+
+        protected String doInBackground(String... params) {
+            authResult = checkAuthentication();
+
+            return "";
+        }
+
+        protected void onPostExecute(String result) {
+            if (authResult == 1) {
+                showBlogForm();
+            } else if (authResult == 0) {
+                Toast toast = Toast.makeText(view.getContext(), R.string.authenticationFailed, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                showSettings();
+            } else if (authResult == (-1)) {
+                Toast toast = Toast.makeText(view.getContext(), R.string.communicationFailure, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+                showSettings();
+            }
+        }
+
+        private int checkAuthentication() {
+            String encodedAuthToken = createBasicAuthToken();
+
+            try {
+                URL url = new URL(serverUrl + "/webfilesys/blogpost/authenticate");
+
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setReadTimeout(15000);
+                conn.setConnectTimeout(15000);
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Authorization", encodedAuthToken);
+
+                int responseCode = conn.getResponseCode();
+
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    return 1;
+                } else if (responseCode == HttpURLConnection.HTTP_UNAUTHORIZED){
+                    return 0;
+                }
+                return (-1);
+            } catch (MalformedURLException urlEx) {
+                Log.w("webfilesysblog", "invalid server URL in authentication check", urlEx);
+                return (-1);
+            } catch (IOException ioEx) {
+                Log.w("webfilesysblog", "communication failure in authentication check", ioEx);
+                return (-1);
+            }
+        }
+
     }
 
     class PostToBlogTask extends AsyncTask<String, Void, String> {
@@ -706,7 +789,9 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
             progressBar.setVisibility(View.INVISIBLE);
 
             if (success) {
-                Toast.makeText(view.getContext(), R.string.postSuccess, Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(view.getContext(), R.string.postSuccess, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
                 EditText descriptionInput = (EditText) findViewById(R.id.description);
                 descriptionInput.getText().clear();
                 blogPicImageView.setImageDrawable(null);
@@ -718,7 +803,9 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
                 View selectedLocationView = (View) findViewById(R.id.selectedLocation);
                 selectedLocationView.setVisibility(View.GONE);
             } else {
-                Toast.makeText(view.getContext(), R.string.postFailed, Toast.LENGTH_LONG).show();
+                Toast toast = Toast.makeText(view.getContext(), R.string.postFailed, Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
                 sendPostButton.setVisibility(View.VISIBLE);
                 sendPublishButton.setVisibility(View.VISIBLE);
             }
@@ -920,14 +1007,13 @@ public class MainActivity extends ActionBarActivity implements OnMapReadyCallbac
 
             return conn;
         }
+    }
 
-        private String createBasicAuthToken() {
-            String authToken = userid + ":" + password;
-            String encodedToken = Base64.encodeToString(authToken.getBytes(), Base64.DEFAULT).replaceAll("\n", "");
-            String encodedAuthToken = "Basic " + encodedToken;
+    private String createBasicAuthToken() {
+        String authToken = userid + ":" + password;
+        String encodedToken = Base64.encodeToString(authToken.getBytes(), Base64.DEFAULT).replaceAll("\n", "");
+        String encodedAuthToken = "Basic " + encodedToken;
 
-            return encodedAuthToken;
-        }
-
+        return encodedAuthToken;
     }
 }
