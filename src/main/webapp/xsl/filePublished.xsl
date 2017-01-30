@@ -20,13 +20,15 @@
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/publishFile/css" />.css</xsl:attribute>
 </link>
 
+<script src="/webfilesys/javascript/publish.js" type="text/javascript"></script>
+
 <title>
   <xsl:value-of select="/publishFile/resources/msg[@key='label.publishFile']/@value" />
 </title>
 
 </head>
 
-<body>
+<body onload="selectPublicLink()">
 
   <table border="0" width="100%" cellpadding="2" cellspacing="0">
     <tr>
@@ -71,7 +73,7 @@
 
     <tr>
       <td colspan="2" class="formParm2">
-        <xsl:value-of select="/publishFile/secretURL" />
+        <textarea id="publicLinkCont" readonly="readonly" style="height:50px;width:100%"><xsl:value-of select="/publishFile/secretURL" /></textarea>
       </td>
     </tr>
     

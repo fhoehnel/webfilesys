@@ -14,11 +14,9 @@
             
                 <xsl:if test="paging/currentPage &gt; 1">
                   <td class="fileListFunct" valign="center" nowrap="true">
-                    <a href="/webfilesys/servlet?command=thumbnail&amp;startIdx=0"><img src="/webfilesys/images/first.gif" border="0" /></a>
-                    &#160;
-                    <a>
+                    <a href="/webfilesys/servlet?command=thumbnail&amp;startIdx=0" class="icon-font icon-paging icon-page-first" style="margin-right:12px;"></a>
+                    <a class="icon-font icon-paging icon-page-prev">
                       <xsl:attribute name="href">/webfilesys/servlet?command=thumbnail&amp;startIdx=<xsl:value-of select="paging/prevStartIdx" /></xsl:attribute>
-                      <img src="/webfilesys/images/previous.gif" border="0" />
                     </a>
                   </td>
                 </xsl:if>
@@ -58,14 +56,11 @@
                   <xsl:if test="paging/nextStartIdx">
               
                     <td class="fileListFunct" align="right" valign="center" nowrap="true">
-                      <a>
-                        <xsl:attribute name="href">/webfilesys/servlet?command=thumbnail&amp;startIdx=<xsl:value-of select="paging/nextStartIdx" /></xsl:attribute>
-                        <img src="/webfilesys/images/next.gif" border="0" />
-                      </a>
-                      &#160;
-                      <a>
+                      <a class="icon-font icon-paging icon-page-last">
                         <xsl:attribute name="href">/webfilesys/servlet?command=thumbnail&amp;startIdx=<xsl:value-of select="paging/lastStartIdx" /></xsl:attribute>
-                        <img src="/webfilesys/images/last.gif" border="0" />
+                      </a>
+                      <a class="icon-font icon-paging icon-page-next" style="margin-right:12px;">
+                        <xsl:attribute name="href">/webfilesys/servlet?command=thumbnail&amp;startIdx=<xsl:value-of select="paging/nextStartIdx" /></xsl:attribute>
                       </a>
                     </td>
                   </xsl:if>

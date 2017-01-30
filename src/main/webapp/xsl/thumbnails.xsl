@@ -19,6 +19,7 @@
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
 </link>
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
 <xsl:if test="not(/fileList/browserXslEnabled)">
   <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
@@ -333,7 +334,7 @@
               <xsl:if test="/fileList/fileGroup">
   
                 <td class="fileListFunct" align="right" nowrap="true" style="vertical-align:middle;padding-right:20px;">
-                  <label resource="label.listPageSize"></label>:
+                  <label resource="albumPageSize"></label>:
                   <input type="text" name="pageSize" maxlength="4" style="width:35px;">
                     <xsl:attribute name="value">
                       <xsl:value-of select="paging/pageSize" />

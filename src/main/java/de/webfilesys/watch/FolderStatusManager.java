@@ -24,7 +24,7 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailCreatorBase;
 import de.webfilesys.util.XmlUtil;
 
-public class FolderStatusManager extends Thread
+public class FolderStatusManager
 {
     private static FolderStatusManager statusMgr = null;
 

@@ -157,6 +157,10 @@ a.icon-font {
 	content: '\f118';
 }
 
+.icon-page-first:before {
+	content: '\f048';
+}
+
 .icon-page-prev:before {
 	content: '\f04a';
 }
@@ -165,7 +169,12 @@ a.icon-font {
 	content: '\f04e';
 }
 
-.icon-page-next {
+.icon-page-last:before {
+	content: '\f051';
+}
+
+.icon-page-next,
+.icon-page-last {
     float: right;
 }
 

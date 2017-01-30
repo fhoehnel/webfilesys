@@ -113,7 +113,11 @@ implements HttpSessionListener, ServletContextListener
 
         DecorationManager.getInstance().interrupt();
 
-		if (WebFileSys.getInstance().getDiskQuotaInspector() != null)
+        InvitationManager.getInstance().interrupt();
+
+        FileSysBookmarkManager.getInstance().interrupt();
+        
+        if (WebFileSys.getInstance().getDiskQuotaInspector() != null)
 		{
 			WebFileSys.getInstance().getDiskQuotaInspector().interrupt();
 		}

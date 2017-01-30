@@ -334,8 +334,10 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
+		output.println("<script src=\"/webfilesys/javascript/publish.js\" type=\"text/javascript\"></script>");
+		
 		output.println("</head>"); 
-		output.println("<body>");
+		output.println("<body onload=\"selectPublicLink()\">");
 
 		headLine(getResource("label.published","Folder has been published"));
 
@@ -362,20 +364,20 @@ public class PublishMailRequestHandler extends UserRequestHandler
         output.println("<tr>");
         output.println("<td colspan=\"2\" class=\"formParm2\">");
 
-		if (!invitationType.equals(InvitationManager.INVITATION_TYPE_TREE))
-		{
+		if (!invitationType.equals(InvitationManager.INVITATION_TYPE_TREE)) {
 			output.println("<a href=\"" + secretURL.toString() + "\" target=\"_blank\">");
-		}
 
-		output.println("<font class=\"small\">");
+			output.println("<font class=\"small\">");
 
-		output.println(secretURL.toString());
+			output.println(secretURL.toString());
 
-		output.println("</font>");
+			output.println("</font>");
 
-		if (!invitationType.equals(InvitationManager.INVITATION_TYPE_TREE))
-		{
 			output.println("</a>");
+		} else {
+			output.print("<textarea id=\"publicLinkCont\" readonly=\"readonly\" style=\"height:40px;width:100%\">");
+			output.print(secretURL.toString());
+			output.println("</textarea>");
 		}
 
         output.println("</td>");

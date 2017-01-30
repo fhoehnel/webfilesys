@@ -237,7 +237,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 		addMsgResource("label.modeSlideshow", getResource("label.modeSlideshow","slideshow"));
 		addMsgResource("label.fileStats", getResource("label.fileStats","statistics"));
 		
-		addMsgResource("label.listPageSize", getResource("label.listPageSize","files per page"));
+		addMsgResource("albumPageSize", getResource("albumPageSize","pictures/page"));
 		addMsgResource("label.files", getResource("label.files","files"));
 		addMsgResource("label.of", getResource("label.of","of"));
 		addMsgResource("label.page", getResource("label.page","page"));

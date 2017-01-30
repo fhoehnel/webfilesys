@@ -163,3 +163,9 @@ span.fileAgeMonth {
 span.fileAgeYear {
 	background-color: #e0e0ff;
 }
+
+td.fileListFunctCont a.icon-paging:before,
+td.fileListFunct a.icon-paging:before {
+    color: #d05000;
+}
+

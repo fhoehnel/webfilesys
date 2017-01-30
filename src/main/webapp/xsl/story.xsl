@@ -15,6 +15,7 @@
 <meta http-equiv="expires" content="0" />
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
@@ -188,26 +189,22 @@
             
                 <xsl:if test="paging/currentPage &gt; 1">
                   <td class="fileListFunct" valign="center" nowrap="true">
-                    <a href="/webfilesys/servlet?command=storyInFrame&amp;startIdx=0"><img src="/webfilesys/images/first.gif" border="0" /></a>
-                    &#160;
-                    <a>
-                      <xsl:attribute name="href">
-                        <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',paging/prevStartIdx)"/>
-                      </xsl:attribute>
-                      <img src="/webfilesys/images/previous.gif" border="0" />
+                    <a href="/webfilesys/servlet?command=storyInFrame&amp;startIdx=0" class="icon-font icon-paging icon-page-first" style="margin-right:12px"></a>
+                    <a class="icon-font icon-paging icon-page-prev">
+                      <xsl:attribute name="href">/webfilesys/servlet?command=storyInFrame&amp;startIdx=<xsl:value-of select="paging/prevStartIdx"/></xsl:attribute>
                     </a>
                   </td>
                 </xsl:if>
             
                 <td class="fileListFunct" valign="center" nowrap="true">
                   <xsl:value-of select="resources/msg[@key='label.files']/@value" /> 
-                  &#160;
+                  <xsl:text> </xsl:text>
                   <xsl:value-of select="paging/firstOnPage" />
                   ...
                   <xsl:value-of select="paging/lastOnPage" />
-                  &#160;
+                  <xsl:text> </xsl:text>
                   <xsl:value-of select="resources/msg[@key='label.of']/@value" /> 
-                  &#160;
+                  <xsl:text> </xsl:text>
                   <xsl:value-of select="fileNumber" />
                 </td>
               
@@ -217,7 +214,7 @@
                     <xsl:value-of select="resources/msg[@key='label.page']/@value" /> 
 
                     <xsl:for-each select="paging/page">
-                      <span class="pagingPage">
+                      <span>
                         <xsl:if test="@num=../currentPage">
                           <div class="pagingPage pagingPageCurrent">
                             <xsl:value-of select="@num" />
@@ -234,18 +231,15 @@
                   </td>
                 </xsl:if>
 
-                <td class="fileListFunct" align="right" valign="center" nowrap="true">
-                  <input type="text" name="pageSize" maxlength="4" style="width:35px;">
+                <td class="fileListFunct" align="right" nowrap="true">
+                  <input type="text" name="pageSize" maxlength="4" style="width:36px;">
                     <xsl:attribute name="value">
                       <xsl:value-of select="paging/pageSize" />
                     </xsl:attribute>
                   </input>
-                </td>
-                  
-                <td class="fileListFunct" valign="center" nowrap="true">
-                  <input type="button">
+                  <input type="button" style="margin-left:4px">
                     <xsl:attribute name="onclick">javascript:document.sortform.submit()</xsl:attribute>
-                    <xsl:attribute name="value"><xsl:value-of select="/fileList/resources/msg[@key='label.listPageSize']/@value" /></xsl:attribute>
+                    <xsl:attribute name="value"><xsl:value-of select="/fileList/resources/msg[@key='albumPageSize']/@value" /></xsl:attribute>
                   </input> 
                 </td>
 
@@ -254,20 +248,17 @@
                     <img src="/webfilesys/images/space.gif" border="0" width="16" />
                   </td>
               
-                  <td class="fileListFunct" align="right" valign="center" nowrap="true">
-                    <a>
-                      <xsl:attribute name="href">
-                        <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',paging/nextStartIdx)"/>
-                      </xsl:attribute>
-                      <img src="/webfilesys/images/next.gif" border="0" />
-                    </a>
-                    &#160;
-                    <a>
-                      <xsl:attribute name="href">
-                        <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',paging/lastStartIdx)"/>
-                      </xsl:attribute>
-                      <img src="/webfilesys/images/last.gif" border="0" />
-                    </a>
+                  <td class="fileListFunct" align="right" valign="center">
+                    <div>
+                      <a class="icon-font icon-paging icon-page-last">
+                        <xsl:attribute name="href">/webfilesys/servlet?command=storyInFrame&amp;startIdx=<xsl:value-of select="paging/lastStartIdx" /></xsl:attribute>
+                      </a>
+                      <a class="icon-font icon-paging icon-page-next" style="margin-right:12px">
+                        <xsl:attribute name="href">
+                          <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',paging/nextStartIdx)"/>
+                        </xsl:attribute>
+                      </a>
+                    </div>
                   </td>
                 
                 </xsl:if>
@@ -382,13 +373,9 @@
       <tr>
         <xsl:if test="paging/currentPage &gt; 1">
           <td class="fileListFunct" valign="center" nowrap="true">
-            <a href="/webfilesys/servlet?command=storyInFrame&amp;startIdx=0"><img src="/webfilesys/images/first.gif" border="0" /></a>
-              &#160;
-            <a>
-              <xsl:attribute name="href">
-                <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',paging/prevStartIdx)"/>
-              </xsl:attribute>
-              <img src="/webfilesys/images/previous.gif" border="0" />
+            <a href="/webfilesys/servlet?command=storyInFrame&amp;startIdx=0" class="icon-font icon-paging icon-page-first" style="margin-right:12px;"></a>
+            <a class="icon-font icon-paging icon-page-prev">
+              <xsl:attribute name="href">/webfilesys/servlet?command=storyInFrame&amp;startIdx=<xsl:value-of select="paging/prevStartIdx" /></xsl:attribute>
             </a>
           </td>
         </xsl:if>
@@ -399,18 +386,11 @@
           </td>
               
           <td class="fileListFunct" align="right" valign="center" nowrap="true">
-            <a>
-              <xsl:attribute name="href">
-                <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',paging/nextStartIdx)"/>
-              </xsl:attribute>
-              <img src="/webfilesys/images/next.gif" border="0" />
+            <a class="icon-font icon-paging icon-page-last">
+              <xsl:attribute name="href">/webfilesys/servlet?command=storyInFrame&amp;startIdx=<xsl:value-of select="paging/lastStartIdx" /></xsl:attribute>
             </a>
-            &#160;
-            <a>
-              <xsl:attribute name="href">
-                <xsl:value-of select="concat('/webfilesys/servlet?command=storyInFrame&amp;startIdx=',paging/lastStartIdx)"/>
-              </xsl:attribute>
-              <img src="/webfilesys/images/last.gif" border="0" />
+            <a class="icon-font icon-paging icon-page-next" style="margin-right:12px;">
+              <xsl:attribute name="href">/webfilesys/servlet?command=storyInFrame&amp;startIdx=<xsl:value-of select="paging/nextStartIdx" /></xsl:attribute>
             </a>
           </td>
         </xsl:if>

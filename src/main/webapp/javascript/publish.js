@@ -35,3 +35,9 @@ function switchInviteFlag()
     }
 }
 
+function selectPublicLink() {
+    var publicLinkCont = document.getElementById("publicLinkCont");
+    if (publicLinkCont) {
+    	publicLinkCont.select();
+    }
+}
