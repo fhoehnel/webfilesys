@@ -33,6 +33,7 @@
     <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/tooltips.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>

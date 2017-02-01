@@ -651,7 +651,7 @@
                     </input> 
                                  
                     <input type="button" resource="button.paste" id="pasteButton">
-                      <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=pasteFiles';</xsl:attribute>
+                      <xsl:attribute name="onclick">checkPasteOverwrite()</xsl:attribute>
                       <xsl:if test="/fileList/clipBoardEmpty">
                         <xsl:attribute name="style">display:none</xsl:attribute>
                       </xsl:if>

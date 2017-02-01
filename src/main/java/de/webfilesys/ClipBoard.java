@@ -8,6 +8,8 @@ public class ClipBoard extends Hashtable<String, Integer>
 {
 	private static final long serialVersionUID = 1L;
 	
+	public static final String SESSION_KEY = "clipBoard";
+	
 	private final int CONTENT_TYPE_DIR =  1;
     private final int CONTENT_TYPE_FILE = 2;
 

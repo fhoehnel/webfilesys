@@ -292,3 +292,49 @@ function showEmailResult(req)
         hideHourGlass();
     }
 }
+
+function checkPasteOverwrite(path) {
+    var url = "/webfilesys/servlet?command=checkPasteOverwrite";
+    
+    if (path) {
+        url = url + "&path=" + encodeURIComponent(path);
+    }
+    	
+    xmlRequest(url, checkPasteOverwriteResult);
+}
+
+function checkPasteOverwriteResult(req) {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
+
+        	var pasteUrl = "/webfilesys/servlet?command=pasteFiles";
+        	
+            var pathElems = req.responseXML.getElementsByTagName("path");
+            if (pathElems && (pathElems.length == 1)) {
+            	var path = pathElems[0].firstChild.nodeValue;
+            	pasteUrl = pasteUrl + "&actpath=" + encodeURIComponent(path);
+            }
+        	
+            var conflicts = req.responseXML.getElementsByTagName("conflict");            
+
+            if (conflicts.length > 0) {
+                var msg = resourceBundle["pasteConflictHead"] + ":\n";
+            	 
+                for (var i = 0; i < conflicts.length; i++) {
+                	msg = msg + "\n" + conflicts[i].firstChild.nodeValue;
+                }
+
+                msg = msg + "\n\n" + resourceBundle["pasteOverwrite"];
+                 
+                if (confirm(msg)) {
+                    window.location.href = pasteUrl;
+                }
+            } else {
+                window.location.href = pasteUrl;
+            }
+        } else {
+            alert(resourceBundle["alert.communicationFailure"]);
+        }
+    }
+}
+

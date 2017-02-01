@@ -404,7 +404,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		}
 		else
 		{
-			output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
+			output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "&fastPath=true';");
 		}
 		output.println("</script>");
 

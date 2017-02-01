@@ -95,10 +95,10 @@ function dirContextMenu(domId)
     if (!clipboardEmpty)
     {
         if (parent.readonly != 'true')
-	{
+	    {
             menuText = menuText 
-                     + menuEntry("javascript:paste('" + scriptPreparedPath + "')",resourceBundle["label.pastedir"]);
-	}
+                     + menuEntry("javascript:checkPasteOverwrite('" + scriptPreparedPath + "')",resourceBundle["label.pastedir"]);
+	    }
     }
 
     menuText = menuText 

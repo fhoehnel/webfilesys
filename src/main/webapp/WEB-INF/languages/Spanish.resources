@@ -388,6 +388,9 @@ label.currentcopy=procesando archivo
 label.copyfromclip=Copiando archivos
 label.movefromclip=Moviendo archivos
 label.copyresult=archivos copiados
+morePasteConflicts=... mas
+pasteConflictHead=Los archivos siguientes existen en la carpeta de destino
+pasteOverwrite=Exagerar?
 
 # remote editor labels
 saveSuccess=datos del editor guardado correctamente

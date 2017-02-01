@@ -67,6 +67,7 @@ import de.webfilesys.gui.ajax.AjaxDeleteFilePromptHandler;
 import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
 import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
+import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
@@ -1460,7 +1461,14 @@ public class WebFileSysServlet extends ServletBase
 			
             return(true);
         }
-        
+
+        if (command.equals("checkPasteOverwrite"))
+        {
+            (new CheckPasteOverwriteHandler(req, resp, session, output, userid)).handleRequest();
+
+            return(true);
+        }
+                
         if (command.equals("pasteFiles"))
         {
             (new ClipboardPasteRequestHandler(req, resp, session, output, userid)).handleRequest();

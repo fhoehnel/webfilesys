@@ -388,6 +388,9 @@ label.currentcopy=processing file
 label.copyfromclip=Copying files
 label.movefromclip=Moving files
 label.copyresult=files copied
+morePasteConflicts=... more
+pasteConflictHead=The following files already exist in the destination folder
+pasteOverwrite=Overwrite?
 
 # remote editor labels
 saveSuccess=editor data saved successfully
