@@ -449,6 +449,7 @@ alt.printpict=print image
 label.picDimensions=picture dimensions
 label.geoLocation=geographic location
 label.action=action
+pictureMenuIconTitle=Picture Info/Actions
 
 # picture manipulation 
 label.resizetitle=Resize/Convert Pictures

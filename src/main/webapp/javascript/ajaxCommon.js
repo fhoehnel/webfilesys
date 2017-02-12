@@ -24,27 +24,27 @@ function xmlRequestPost(url, params, callBackFunction) {
     } 
 }
 
-function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback) {
+function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
     if (window.ActiveXObject !== undefined) {
         // MSIE  
-        htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback);
+        htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
     } else {
         if (browserFirefox) { 
-            htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback);
+            htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
         } else {
             if (browserChrome) {
-                htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback);
+                htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
             } else if (browserSafari) {
-                htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback);
+                htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
             } else {
                 // XSLT with Javascript (google ajaxslt)
-                htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback);
+                htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
             }
         }
     }
 }
 
-function htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback) {
+function htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
 
 	xmlRequest(xslUrl, function(req) {
         if (req.readyState == 4) {
@@ -64,7 +64,13 @@ function htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback) {
   
                             var xmlSerializer = new XMLSerializer();
 
-                            fragmentCont.innerHTML = xmlSerializer.serializeToString(result);
+                            var newDomFragment = xmlSerializer.serializeToString(result);
+
+                            if (replaceCont) {
+                                fragmentCont.outerHTML = newDomFragment;
+                            } else {
+                                fragmentCont.innerHTML = newDomFragment;
+                            }
                             
                             if (callback) {
                                 callback();
@@ -81,15 +87,21 @@ function htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback) {
     });
 }
 
-function htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback) {
-    fragmentCont.innerHTML = browserXsltMSIE(xmlUrl, xslUrl);
+function htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
+    var newDomFragment = browserXsltMSIE(xmlUrl, xslUrl);
+
+    if (replaceCont) {
+        fragmentCont.outerHTML = newDomFragment;
+    } else {
+        fragmentCont.innerHTML = newDomFragment;
+    }
     
     if (callback) {
         callback();
     }
 }
 
-function htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback) {
+function htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
 
 	xmlRequest(xslUrl, function(req) {
         if (req.readyState == 4) {
@@ -102,8 +114,14 @@ function htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback) {
 			                var xmlDoc = req.responseXML;
 
                             // browser-independend client-side XSL transformation with google ajaxslt 
-       
-                            fragmentCont.innerHTML = xsltProcess(xmlDoc, xslStyleSheet);
+
+                            var newDomFragment = xsltProcess(xmlDoc, xslStyleSheet);
+
+                            if (replaceCont) {
+                                fragmentCont.outerHTML = newDomFragment;
+                            } else {
+                                fragmentCont.innerHTML = newDomFragment;
+                            }
                             
                             if (callback) {
                                 callback();

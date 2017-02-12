@@ -66,6 +66,7 @@ public class AjaxDeleteFilePromptHandler extends XmlRequestHandlerBase
             else
             {
                 deletePromptMsg = getResource("confirm.forcefiledel", "This file is write-protected. Delete it anyway ?");
+                XmlUtil.setChildText(resultElement, "writeProtected", "true");
             }
         }
         else
@@ -76,7 +77,8 @@ public class AjaxDeleteFilePromptHandler extends XmlRequestHandlerBase
         
         // XmlUtil.setChildText(resultElement, "fileName", UTF8URLEncoder.encode(fileName));
         XmlUtil.setChildText(resultElement, "fileName", fileName);
-        XmlUtil.setChildText(resultElement, "filePath", CommonUtils.shortName(getHeadlinePath(delPath), 40));
+        XmlUtil.setChildText(resultElement, "headlinePath", CommonUtils.shortName(getHeadlinePath(delPath), 40));
+        XmlUtil.setChildText(resultElement, "pathForScript", escapeForJavascript(delPath));
         XmlUtil.setChildText(resultElement, "deletePromptMsg", deletePromptMsg);
         
         doc.appendChild(resultElement);

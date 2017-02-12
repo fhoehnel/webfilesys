@@ -1,20 +1,15 @@
-function ajaxRotate(path, degrees, domId)
-{
+function ajaxRotate(fileName, degrees, domId) {
     hideMenu();
 
-    var xmlUrl = '/webfilesys/servlet?command=xformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(path) + '&domId=' + domId;
+    var xmlUrl = '/webfilesys/servlet?command=xformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(fileName) + "&domId=" + domId;
 
-    var xslUrl = "/webfilesys/xsl/transformImageResult.xsl";
+    var xslUrl = "/webfilesys/xsl/xformImageResult.xsl";
 
-    var tdElement = document.getElementById(domId);
+    var thumbCont = document.getElementById("thumbCont-" + fileName);
         
-    if (!tdElement)
-    {
-        alert('td element with DOM id ' + domId + ' not found');
-        return;
+    if (thumbCont) {
+        htmlFragmentByXslt(xmlUrl, xslUrl, thumbCont, null, true);
     }
-    
-    htmlFragmentByXslt(xmlUrl, xslUrl, tdElement);
 }
 
 function autoImgRotate()

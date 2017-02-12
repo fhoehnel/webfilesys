@@ -54,7 +54,7 @@ public class MimeTypeMap
         }
     }
 
-    public static MimeTypeMap getInstance()
+    public static synchronized MimeTypeMap getInstance()
     {
         if (mimeMap == null)
         {

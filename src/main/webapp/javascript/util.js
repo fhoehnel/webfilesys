@@ -126,6 +126,16 @@ function shortText(origText, maxLength)
 	return (origText.substring(0, maxLength - 4) + " ...");
 }
 
+function abbrevText(origText, maxLength)
+{
+	if (origText.length <= maxLength)
+	{
+		return origText;
+	}
+	
+	return (origText.substring(0, maxLength / 2) + " ... " + origText.substring(origText.length - (maxLength / 2) + 5));
+}
+
 function getFileNameExt(fileName)
 {
     fileExt="";
@@ -222,6 +232,48 @@ function hideToast() {
 	document.documentElement.removeChild(toastBox);
 }
 
+function customAlert(alertText, buttonText) {
+   	var mouseShield = document.createElement("div");
+   	mouseShield.id = "mouseClickShield";
+   	mouseShield.setAttribute("class", "mouseClickShield");
+    document.body.appendChild(mouseShield);
+    mouseShield.setAttribute("onclick", "javascript:void(0);");
+	
+    mouseShield.style.height = document.body.clientHeight + "px";   
+    
+    var alertCont = document.createElement("div");
+    alertCont.setAttribute("class", "alertCont");
+   	mouseShield.appendChild(alertCont);
+
+    var alertTextElem = document.createElement("span");
+    alertTextElem.setAttribute("class", "alertText");
+    alertTextElem.innerHTML = alertText;
+    alertCont.appendChild(alertTextElem);
+    
+    var buttonContElem = document.createElement("div");
+    buttonContElem.setAttribute("class", "alertButtonCont");
+    alertCont.appendChild(buttonContElem);
+    
+    var confirmButtonElem = document.createElement("button");
+    confirmButtonElem.setAttribute("class", "alertConfirmButton");
+    confirmButtonElem.setAttribute("onclick", "closeAlert()");
+    if (buttonText) {
+        confirmButtonElem.innerHTML = buttonText;
+    } else {
+        confirmButtonElem.innerHTML = "OK";
+    }
+    buttonContElem.appendChild(confirmButtonElem);
+
+    centerBox(alertCont);
+}
+
+function closeAlert() {
+	var clickShield = document.getElementById("mouseClickShield");
+	if (clickShield) {
+		document.body.removeChild(clickShield);
+	}
+}
+
 function insertAtCursor(myField, myValue) {
     if (document.selection) {  // MSIE
         myField.focus();
@@ -253,4 +305,8 @@ function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
 
 function escapeParam(origText) {
 	return origText.replace(/'/g, "\\'");	
+}
+
+function escapeForId(origValue) {
+    return origValue.replace(/ /g, "_"); 
 }

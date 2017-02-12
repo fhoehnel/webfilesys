@@ -6,18 +6,11 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead">
-  <xsl:value-of select="/result/filePath" />
-</div>
+  <div class="promptHead">
+    <xsl:value-of select="/result/headlinePath" />
+  </div>
     
-<form name="delForm" accept-charset="utf-8" style="display:inline;" method="post" action="/webfilesys/servlet">
-  <input type="hidden" name="command" value="fmdelete" />
-  <input type="hidden" name="deleteRO" value="yes" />
-  <input type="hidden" name="fileName">
-    <xsl:attribute name="value"><xsl:value-of select="/result/fileName" /></xsl:attribute>
-  </input>
-  
-  <table border="0" width="100%" cellpadding="10">
+  <table border="0" width="100%" cellpadding="10" style="margin-top:20px">
   
     <tr>
       <td colspan="2" class="formParm1">
@@ -39,13 +32,18 @@
     <xsl:if test="not(/result/error)">
       <tr>
         <td>
-          <a class="button" onclick="this.blur();"> 
-            <xsl:attribute name="href">javascript:document.delForm.submit()</xsl:attribute>
+          <a class="button" href="javascript:void(0)"> 
+            <xsl:if test="/result/writeProtected">
+              <xsl:attribute  name="onclick">delFileAjax('<xsl:value-of select="/result/pathForScript" />', true)</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="not(/result/writeProtected)">
+              <xsl:attribute  name="onclick">delFileAjax('<xsl:value-of select="/result/pathForScript" />')</xsl:attribute>
+            </xsl:if>
             <span><xsl:value-of select="/result/resources/msg[@key='button.delete']/@value" /></span>
           </a>              
 
-          <a class="button" onclick="this.blur();" style="float:right"> 
-            <xsl:attribute name="href">javascript:hidePrompt()</xsl:attribute>
+          <a class="button" href="javascript:void(0)" style="float:right"> 
+            <xsl:attribute name="onclick">hidePrompt()</xsl:attribute>
             <span><xsl:value-of select="/result/resources/msg[@key='button.cancel']/@value" /></span>
           </a>              
         </td>
@@ -54,8 +52,6 @@
 
   </table>
   
-</form>
-
 </xsl:template>
 
 </xsl:stylesheet>

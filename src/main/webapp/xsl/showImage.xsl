@@ -25,10 +25,10 @@
 
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
-  <!--  
-  <script src="javascript/titleToolTip.js" type="text/javascript" />
-  -->
+  <script src="/webfilesys/javascript/showImage.js" type="text/javascript"></script>
   <script src="javascript/jsFileMenu.js" type="text/javascript" />
+  <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
 
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
   <script type="text/javascript">
@@ -40,22 +40,6 @@
   </xsl:if>
 
   <script language="JavaScript">
-    function deleteSelf()
-    {
-        if (confirm(resourceBundle["confirm.delfile"]))
-        {
-            location.href='/webfilesys/servlet?command=delImage&amp;imgName=<xsl:value-of select="/imageData/encodedPath" />';
-        }
-    }
-
-    function printPage() 
-    {
-        if (confirm(resourceBundle["confirm.print"]))
-        {
-            window.print();
-        }
-    }
-    
     function exifData()
     {
         exifWin=window.open('/webfilesys/servlet?command=exifData&amp;imgFile=<xsl:value-of select="/imageData/encodedPath" />','exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=400,height=480,left=200,top=100,screenX=200,screenY=100,resizable=no');
@@ -68,11 +52,6 @@
         scaleWin.focus();
     }
     
-    function rate()
-    {
-        document.form1.submit();
-    }
-    
     function actionSelected() {
         var imgAction = document.getElementById("imgAction");
         
@@ -81,7 +60,7 @@
         if (selectedAction == '5') {
             comments('<xsl:value-of select="/imageData/pathForScript" />');
         } else if (selectedAction == '1') {
-            deleteSelf();
+            deleteSelf('<xsl:value-of select="/imageData/pathForScript" />');
         } else if (selectedAction == '3') {
             exifData();
         } else if (selectedAction == '2') {
@@ -96,65 +75,12 @@
         imgAction.selectedIndex = 0;
     }
     
-    function showPicInfoMenu() {
-        document.getElementById("picInfoMenuCont").style.visibility = "visible";
-    }
-    
-    function hidePicInfoMenu() {
-        document.getElementById("picInfoMenuCont").style.visibility = "hidden";
-    }
-    
-    function scaleImage() {
-        var windowInnerWidth = getWinWidth();
-        var windowInnerHeight = getWinHeight();
-        
-        var maxWidth = windowInnerWidth - 1;
-        var maxHeight = windowInnerHeight - 1;
-    
-        var picRealWidth = <xsl:value-of select="/imageData/imageWidth" />;
-        var picRealHeight = <xsl:value-of select="/imageData/imageHeight" />;
-    
-        var scaledWidth = 100;
-        var scaledHeight = 100;
-    
-        if ((picRealHeight &lt;= maxHeight) &amp;&amp; (picRealWidth &lt;= maxWidth)) {
-            scaledWidth = picRealWidth;
-            scaledHeight = picRealHeight;
-        } else {
-            var xscale = 100000;
-            var yscale = 100000;
-
-            if (picRealHeight > maxHeight) {
-                yscale = maxHeight * 100000 / picRealHeight;
-            }
-        
-            if (picRealWidth > maxWidth) {
-                xscale = maxWidth * 100000 / picRealWidth;
-            }
-
-            if (yscale &lt; xscale) {
-                scaledWidth = picRealWidth * yscale / 100000 + 1;
-                scaledHeight = maxHeight;
-            } else {
-                scaledWidth = maxWidth;
-                scaledHeight = picRealHeight * xscale / 100000 + 1;
-            }
-        }
-        
-        var pic = document.getElementById("picFullScreen");
-        pic.style.width = scaledWidth + "px";
-        pic.style.height = scaledHeight + "px";
-        pic.style.visibility = "visible";
-        
-        if ((scaledWidth &lt; picRealWidth) || (scaledHeight &lt; picRealHeight)) {
-            document.getElementById("origSizeOption").style.display = "inline";
-        }
-    }
   </script>
 
 </head>
 
-<body class="picFullScreen" onload="scaleImage()">
+<body class="picFullScreen">
+  <xsl:attribute name="onload">scaleImage(<xsl:value-of select="/imageData/imageWidth" />, <xsl:value-of select="/imageData/imageHeight" />)</xsl:attribute>
 
   <!--  
   <div id="toolTip" class="fullScreenToolTip"></div>
@@ -177,7 +103,7 @@
       
   </div>
   
-  <div class="picInfoMenuIcon" onclick="showPicInfoMenu()">
+  <div class="picInfoMenuIcon" onclick="showPicInfoMenu()" titleResource="pictureMenuIconTitle">
     <a href="javascript:showPicInfoMenu()" class="icon-font icon-menu" />
   </div>
 

@@ -1,10 +1,10 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -28,9 +28,6 @@ import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.PictureRating;
 import de.webfilesys.WebFileSys;
-import de.webfilesys.graphics.CameraExifData;
-import de.webfilesys.graphics.ScaledImage;
-import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -38,922 +35,389 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XslThumbnailHandler extends XslFileListHandlerBase
-{
-	private static int COLUMNS_NO_ZOOM = 4;
-	private static int COLUMNS_ZOOM = 2;
-
-	private boolean clientIsLocal = false;
-    
-	public XslThumbnailHandler(
-			HttpServletRequest req, 
-    		HttpServletResponse resp,
-            HttpSession session,
-            PrintWriter output, 
-            String uid,
-            boolean clientIsLocal)
-	{
-        super(req, resp, session, output, uid);
-		
-		this.clientIsLocal = clientIsLocal;
+public class XslThumbnailHandler extends XslFileListHandlerBase {
+	public XslThumbnailHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
+			PrintWriter output, String uid, boolean clientIsLocal) {
+		super(req, resp, session, output, uid);
 	}
-	  
-	protected void process()
-	{
-		int i;
-		File tempFile;
 
+	protected void process() {
 		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_THUMBS));
 
-		MetaInfManager metaInfMgr=MetaInfManager.getInstance();
+		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-		String actPath = getParameter("actPath");
-		if ((actPath == null) || (actPath.length() == 0))
-		{
-			actPath = getParameter("actpath");
-			if ((actPath == null) || (actPath.length() == 0))
-			{
-				actPath = (String) session.getAttribute("cwd");
+		String currentPath = getParameter("actPath");
+		if ((currentPath == null) || (currentPath.length() == 0)) {
+			currentPath = getParameter("actpath");
+			if ((currentPath == null) || (currentPath.length() == 0)) {
+				currentPath = getCwd();
 			}
 		}
 
-		session.setAttribute("cwd", actPath);
-		
-        boolean maskChanged = false;
+		session.setAttribute("cwd", currentPath);
+
+		boolean maskChanged = false;
 
 		String mask = getParameter("mask");
-			
-        if (mask != null)
-        {
+
+		if (mask != null) {
 			String oldMask = (String) session.getAttribute("mask");
 
-			if ((oldMask != null) && (!oldMask.equals(mask)))
-			{
+			if ((oldMask != null) && (!oldMask.equals(mask))) {
 				maskChanged = true;
 			}
-        }
-		
-		if ((mask != null) && (mask.length()>0))
-		{
-			session.setAttribute("mask", mask);
 		}
-		else
-		{
-			if (mask == null)
-			{
+
+		if ((mask != null) && (mask.length() > 0)) {
+			session.setAttribute("mask", mask);
+		} else {
+			if (mask == null) {
 				mask = (String) session.getAttribute("mask");
-			}
-			else
-			{
+			} else {
 				session.removeAttribute("mask");
 			}
 		}
-		
-		if ((mask == null) || (mask.length() == 0))
-		{
+
+		if ((mask == null) || (mask.length() == 0)) {
 			mask = "*";
 		}
-		
+
 		String fileFilter[] = Constants.imgFileMasks;
-		
-		if (!mask.equals("*"))
-		{
+
+		if (!mask.equals("*")) {
 			String maskFilter[] = new String[fileFilter.length];
-			
+
 			String lowerCaseMask = mask.toLowerCase();
-			
-			for (i = 0; i < fileFilter.length; i++)
-			{
-				if (lowerCaseMask.endsWith(fileFilter[i].substring(1).toLowerCase()))
-				{
+
+			for (int i = 0; i < fileFilter.length; i++) {
+				if (lowerCaseMask.endsWith(fileFilter[i].substring(1).toLowerCase())) {
 					maskFilter[i] = mask;
+				} else {
+					if (mask.endsWith(".*")) {
+						maskFilter[i] = mask.substring(0, mask.length() - 2) + fileFilter[i].substring(1);
+					} else {
+						maskFilter[i] = mask + fileFilter[i].substring(1);
+					}
 				}
-                else
-                {			
-                	if (mask.endsWith(".*")) {
-    					maskFilter[i] = mask.substring(0, mask.length() - 2) + fileFilter[i].substring(1);
-                	} else {
-    					maskFilter[i] = mask + fileFilter[i].substring(1);
-                	}
-                }
 			}
-			
+
 			fileFilter = maskFilter;
 		}
-		
-        String path_no_slash = null;
-        String pathWithSlash = null;
 
-		if (actPath.endsWith(File.separator))
-		{
-			path_no_slash=actPath.substring(0,actPath.length()-1);
-			pathWithSlash = actPath;
-		}
-		else
-		{
-			path_no_slash = actPath;
-			pathWithSlash = actPath + File.separator;
+		String pathWithoutSlash = null;
+		String pathWithSlash = null;
+
+		if (currentPath.endsWith(File.separator)) {
+			pathWithoutSlash = currentPath.substring(0, currentPath.length() - 1);
+			pathWithSlash = currentPath;
+		} else {
+			pathWithoutSlash = currentPath;
+			pathWithSlash = currentPath + File.separator;
 		}
 
-		boolean dirHasMetaInf=metaInfMgr.dirHasMetaInf(actPath);
+		boolean dirHasMetaInf = metaInfMgr.dirHasMetaInf(currentPath);
 
-		String screenWidthParm = getParameter("screenWidth");
-		String screenHeightParm = getParameter("screenHeight");
+		int sortBy = FileComparator.SORT_BY_FILENAME;
 
-		if (screenWidthParm!=null)
-		{
-			try
-			{
-				int newScreenWidth = Integer.parseInt(screenWidthParm);
-
-				session.setAttribute("screenWidth", new Integer(newScreenWidth));
+		String temp = getParameter("sortBy");
+		if ((temp != null) && (temp.length() > 0)) {
+			try {
+				sortBy = Integer.parseInt(temp);
+				session.setAttribute("sortField", new Integer(sortBy));
+			} catch (NumberFormatException nfe) {
 			}
-			catch (NumberFormatException nfex)
-			{
-			}
-		}
+		} else {
+			Integer sessionSortField = (Integer) session.getAttribute("sortField");
 
-		if (screenHeightParm!=null)
-		{
-			try
-			{
-				int newScreenHeight = Integer.parseInt(screenHeightParm);
-
-				session.setAttribute("screenHeight", new Integer(newScreenHeight));
-			}
-			catch (NumberFormatException nfex)
-			{
-			}
-		}
-
-		int screenWidth = Constants.DEFAULT_SCREEN_WIDTH;
-		int screenHeight = Constants.DEFAULT_SCREEN_HEIGHT;
-
-		Integer widthScreen = (Integer) session.getAttribute("screenWidth");
-		
-		if (widthScreen != null)
-		{
-			screenWidth = widthScreen.intValue();
-		}
-
-		Integer heightScreen = (Integer) session.getAttribute("screenHeight");
-		
-		if (heightScreen != null)
-		{
-			screenHeight = heightScreen.intValue();
-		}
-
-		String zoomString = getParameter("zoom");
-
-		if (zoomString != null)
-		{
-			session.setAttribute("thumbnailZoom", new Boolean(zoomString.equalsIgnoreCase("yes")));
-		}
-
-		boolean zoom = false;
-		
-		Boolean sessionZoom = (Boolean) session.getAttribute("thumbnailZoom");
-		
-		if (sessionZoom != null)
-		{
-			zoom = sessionZoom.booleanValue();
-		}
-		
-		int columns = COLUMNS_NO_ZOOM;
-
-		int thumbnailSize = Constants.THUMBNAIL_SIZE;
-
-		if (zoom)
-		{
-			columns = COLUMNS_ZOOM;
-			thumbnailSize=200;
-		}
-
-        boolean pageSizeChanged = false;
-        
-        int pageSize = WebFileSys.getInstance().getThumbnailsPerPage();
-
-        String pageSizeParm = getParameter("pageSize");
-        if ((pageSizeParm != null) && (pageSizeParm.trim().length() > 0))
-        {
-            try
-            {
-                pageSize = Integer.parseInt(pageSizeParm);
-
-                Integer sessionThumbPageSize = (Integer) session.getAttribute("thumbPageSize");
-                
-                if ((sessionThumbPageSize != null) && (sessionThumbPageSize.intValue() != pageSize))
-                {
-                    pageSizeChanged = true;
-                }
-                
-                if ((sessionThumbPageSize == null) || (sessionThumbPageSize.intValue() != pageSize))
-                {
-                    session.setAttribute("thumbPageSize", new Integer(pageSize));
-
-                    if (!readonly)
-                    {
-                        userMgr.setPageSize(uid, pageSize);
-                    }
-                }
-            }
-            catch (NumberFormatException nfex)
-            {
-            }
-        }
-        else
-        {
-            Integer sessionThumbPageSize = (Integer) session.getAttribute("thumbPageSize");
-            
-            if ((sessionThumbPageSize != null) && (sessionThumbPageSize.intValue() != 0))
-            {
-                pageSize = sessionThumbPageSize.intValue();
-            }
-            else
-            {
-                pageSize = userMgr.getPageSize(uid);
-                session.setAttribute("thumbPageSize", new Integer(pageSize));
-            }
-        }
-		
-        boolean sortByChanged = false;
-        
-        int sortBy = FileComparator.SORT_BY_FILENAME;
-
-        String temp = getParameter("sortBy");
-        if ((temp != null) && (temp.length() > 0))
-        {
-            try
-            {
-                sortBy=Integer.parseInt(temp);
-
-                Integer oldSortBy = (Integer) session.getAttribute("sortField");
-                
-                if ((oldSortBy == null) || (oldSortBy != sortBy)) 
-                {
-                    sortByChanged = true;
-                }
-                
-                session.setAttribute("sortField", new Integer(sortBy));
-            }
-            catch (NumberFormatException nfe)
-            {
-            }
-        }
-        else
-        {
-            Integer sessionSortField = (Integer) session.getAttribute("sortField");
-            
-            if (sessionSortField != null)
-            {
-                sortBy = sessionSortField.intValue();
-                if (sortBy > 7)
-                {
-                    sortBy = FileComparator.SORT_BY_FILENAME;
-                }
-            }
-        }
-        
-		int startIdx = (-1);
-
-		String initial = getParameter("initial");
-
-		if ((initial != null) && (initial.equalsIgnoreCase("true")))
-		{
-			session.removeAttribute("startIdx");
-			
-			session.removeAttribute("rating");
-		}
-
-        if (maskChanged || pageSizeChanged || sortByChanged)
-        {
-        	startIdx = 0;
-        	
-			session.setAttribute("startIdx", new Integer(startIdx));
-        }
-        else
-        {
-			String startIdxParm = getParameter("startIdx");
-
-			if ((startIdxParm != null) && (startIdxParm.trim().length() > 0))
-			{
-				try
-				{
-					startIdx = Integer.parseInt(startIdxParm);
-
-					session.setAttribute("startIdx",new Integer(startIdx));
-				}
-				catch (NumberFormatException nfex)
-				{
+			if (sessionSortField != null) {
+				sortBy = sessionSortField.intValue();
+				if (sortBy > 7) {
+					sortBy = FileComparator.SORT_BY_FILENAME;
 				}
 			}
-		
-			if (startIdx < 0)
-			{
-				Integer startIdxFromSession = (Integer) session.getAttribute("startIdx");
-			
-				if (startIdxFromSession != null)
-				{
-					startIdx = startIdxFromSession.intValue();
-				}
-			}
-		
-			if (startIdx < 0)
-			{
-				startIdx = 0;
-			}
-        }
+		}
 
-        int rating = (-1); 
+		int rating = (-1);
 
 		temp = getParameter("rating");
 
-        if (temp != null)
-        {
-        	try
-        	{
-        		rating = Integer.parseInt(temp);  
-        		
-        		session.setAttribute("rating", new Integer(rating));      
-        	}
-        	catch (NumberFormatException nfe)
-        	{
-        	}
-        }
-        else
-        {
-        	Integer sessionRating = (Integer) session.getAttribute("rating");
-        	
-        	if (sessionRating != null)
-        	{
-			    rating = sessionRating.intValue();  
-        	}
-        }
+		if (temp != null) {
+			try {
+				rating = Integer.parseInt(temp);
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/thumbnails.xsl\"");
+				session.setAttribute("rating", new Integer(rating));
+			} catch (NumberFormatException nfe) {
+			}
+		} else {
+			Integer sessionRating = (Integer) session.getAttribute("rating");
+
+			if (sessionRating != null) {
+				rating = sessionRating.intValue();
+			}
+		}
+
+		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/thumbnailOnePage.xsl\"");
 
 		Element fileListElement = doc.createElement("fileList");
-			
+
 		doc.appendChild(fileListElement);
-			
+
 		doc.insertBefore(xslRef, fileListElement);
 
 		String errorMsg = getParameter("errorMsg");
-		
-		if (errorMsg != null)
-		{
-		    XmlUtil.setChildText(fileListElement, "errorMsg", errorMsg, false);
+
+		if (errorMsg != null) {
+			XmlUtil.setChildText(fileListElement, "errorMsg", errorMsg, false);
 		}
-        
+
 		ClipBoard clipBoard = (ClipBoard) session.getAttribute("clipBoard");
-		
-		if (readonly)
-		{
+
+		if (readonly) {
 			XmlUtil.setChildText(fileListElement, "readonly", "true", false);
 		}
 
-		if (!WebFileSys.getInstance().isLicensed())
-		{
-			requestCounter++;
-
-			if (requestCounter % LIC_REMINDER_INTERVAL == 0)
-			{
-				XmlUtil.setChildText(fileListElement, "unlicensed", "true", false);
-			}
-		}
-		
-		if (WebFileSys.getInstance().isMaintananceMode())
-		{
-			if (!isAdminUser(false))
-			{
+		if (WebFileSys.getInstance().isMaintananceMode()) {
+			if (!isAdminUser(false)) {
 				XmlUtil.setChildText(fileListElement, "maintananceMode", "true", false);
 			}
 		}
 
 		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
-		
-	    XmlUtil.setChildText(fileListElement, "language", language, false);
-		
-		if (this.isBrowserXslEnabled())
-		{
+
+		XmlUtil.setChildText(fileListElement, "language", language, false);
+
+		if (isBrowserXslEnabled()) {
 			XmlUtil.setChildText(fileListElement, "browserXslEnabled", "true", false);
 		}
-		
-		File dirFile = new File(actPath);
-		
-		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
-		{
-		    Logger.getLogger(getClass()).warn("folder is not a readable directory: " + actPath);
+
+		File dirFile = new File(currentPath);
+
+		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {
+			Logger.getLogger(getClass()).warn("folder is not a readable directory: " + currentPath);
 			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
 			processResponse("xsl/folderTree.xsl");
-			return; 
+			return;
 		}
 
-		// TODO: remove this historic relict
-		XmlUtil.setChildText(fileListElement, "jpegtran", "true");
-        
-		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(actPath), false);
+		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(currentPath), false);
 
-		String description = metaInfMgr.getDescription(actPath,".");
+		String description = metaInfMgr.getDescription(currentPath, ".");
 
-		if ((description!=null) && (description.trim().length()>0))
-		{
+		if ((description != null) && (description.trim().length() > 0)) {
 			XmlUtil.setChildText(fileListElement, "description", description, true);
 		}
 
-		FileLinkSelector fileSelector = new FileLinkSelector(actPath, sortBy, true);
+		FileLinkSelector fileSelector = new FileLinkSelector(currentPath, sortBy, true);
 
-		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileFilter, rating, pageSize, startIdx);
+		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileFilter, rating, 4096, 0);
+
+		filterLinksOutsideDocRoot(selectionStatus);
 
 		Vector selectedFiles = selectionStatus.getSelectedFiles();
 
 		int fileNum = 0;
 
-		if (selectedFiles != null)
-		{
-			fileNum=selectionStatus.getNumberOfFiles();
+		if (selectedFiles != null) {
+			fileNum = selectionStatus.getNumberOfFiles();
 		}
-		
+
 		XmlUtil.setChildText(fileListElement, "fileNumber", Integer.toString(fileNum), false);
 
-		XmlUtil.setChildText(fileListElement, "currentPath", actPath, false);
+		XmlUtil.setChildText(fileListElement, "currentPath", currentPath, false);
 
-		XmlUtil.setChildText(fileListElement, "menuPath", escapeForJavascript(actPath), false);
+		XmlUtil.setChildText(fileListElement, "menuPath", escapeForJavascript(currentPath), false);
 
 		XmlUtil.setChildText(fileListElement, "pathForScript", escapeForJavascript(pathWithSlash), false);
- 
+
 		XmlUtil.setChildText(fileListElement, "filter", mask, false);
 
 		XmlUtil.setChildText(fileListElement, "sortBy", Integer.toString(sortBy), false);
 
 		XmlUtil.setChildText(fileListElement, "rating", Integer.toString(rating), false);
 
-		if (fileNum > 0)
-		{
-			Element pagingElement = doc.createElement("paging");
-        
-			fileListElement.appendChild(pagingElement);
-        
-			XmlUtil.setChildText(pagingElement, "pageSize", Integer.toString(pageSize));
-
-			XmlUtil.setChildText(pagingElement, "firstOnPage" , Integer.toString(selectionStatus.getBeginIndex()+1), false);
-			XmlUtil.setChildText(pagingElement, "lastOnPage" , Integer.toString(selectionStatus.getEndIndex()+1), false);
-
-			if (selectionStatus.getBeginIndex() > 0)
-			{
-				XmlUtil.setChildText(pagingElement, "prevStartIdx" , Integer.toString(selectionStatus.getBeginIndex() - pageSize), false);
-			}
-			
-			if (!selectionStatus.getIsLastPage())
-			{
-				XmlUtil.setChildText(pagingElement, "nextStartIdx" , Integer.toString(selectionStatus.getBeginIndex() + pageSize), false);
-				XmlUtil.setChildText(pagingElement, "lastStartIdx" , Integer.toString(selectionStatus.getLastPageStartIdx()), false);
-			}
-
-			XmlUtil.setChildText(pagingElement, "currentPage", Integer.toString(selectionStatus.getCurrentPage() + 1), false);
-
-			if (fileNum > pageSize)
-			{
-				int numPages = fileNum / pageSize;
-                
-				int pageStep = numPages / 8;
-                
-				if (pageStep == 0)
-				{
-					pageStep = 1;
-				}
-            
-				int currentPage = selectionStatus.getCurrentPage();
-            
-				boolean currentPrinted = false;
-            
-				Vector pageStartIndices = selectionStatus.getPageStartIndices();
-            
-				for (int pageCounter = 0; pageCounter < pageStartIndices.size();)
-				{
-					if (pageCounter == currentPage)
-					{
-                        // the current page is accidentally a index step page
-	                    Element pageElement = doc.createElement("page");
-						pagingElement.appendChild(pageElement);
-						pageElement.setAttribute("num", Integer.toString(pageCounter + 1));
-
-						currentPrinted = true;
-					}
-					else
-					{
-						if (!currentPrinted)
-						{
-							if (pageCounter > currentPage)
-							{
-							    // we stepped over the current page, time to show it now!
-
-		                        Element pageElement = doc.createElement("page");
-								pagingElement.appendChild(pageElement);
-								pageElement.setAttribute("num", Integer.toString(currentPage + 1));
-
-								currentPrinted = true;
-							}
-						}
-						
-						Integer pageStartIdx = (Integer) pageStartIndices.elementAt(pageCounter);
-						
-						Element pageElement = doc.createElement("page");
-						pagingElement.appendChild(pageElement);
-						pageElement.setAttribute("num", Integer.toString(pageCounter + 1));
-						pageElement.setAttribute("startIdx", Integer.toString(pageStartIdx.intValue()));
-					}
-					
-					if ((pageCounter < pageStartIndices.size() - 1) &&
-						(pageCounter + pageStep >= pageStartIndices.size())) {
-						// show the last page even if it is not a multiple of the page step
-						pageCounter = pageStartIndices.size() - 1;
-					} else {
-						pageCounter += pageStep;
-					}
-				}
-			}
-		}
-
 		boolean linkFound = false;
-		
-		if (selectedFiles != null)
-		{
-			SimpleDateFormat dateFormat=LanguageManager.getInstance().getDateFormat(language);
+
+		if (selectedFiles != null) {
+			SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 
 			// DecimalFormat numFormat=new DecimalFormat("0,000,000,000,000");
-			DecimalFormat numFormat=new DecimalFormat("#,###,###,###,###");
+			DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");
 
-            Element fileGroupElement = null;
+			long sizeSum = 0l;
+			
+			for (int i = 0; i < selectedFiles.size(); i++) {
 
-			for (i=0;i<selectedFiles.size();i++)
-			{
-				if (i % columns == 0)
-				{
-					fileGroupElement = doc.createElement("fileGroup");
-					fileListElement.appendChild(fileGroupElement);
-				}
-				
 				Element fileElement = doc.createElement("file");
-                
-				fileGroupElement.appendChild(fileElement);
+
+				fileListElement.appendChild(fileElement);
 
 				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
-				
-				String actFilename = fileCont.getName();
 
-				fileElement.setAttribute("name", actFilename);
-				fileElement.setAttribute("nameForScript", escapeForJavascript(actFilename));
+				String picFilename = fileCont.getName();
+
+				fileElement.setAttribute("name", picFilename);
+				fileElement.setAttribute("nameForScript", escapeForJavascript(picFilename));
+				fileElement.setAttribute("nameForId", picFilename.replace(' ',  '_'));
 
 				fileElement.setAttribute("id", Integer.toString(i));
-				
-				tempFile = fileCont.getRealFile();
 
-				if (fileCont.isLink())
-				{
-					fileElement.setAttribute("link" , "true");
+				File pictureFile = fileCont.getRealFile();
+
+				if (fileCont.isLink()) {
+					fileElement.setAttribute("link", "true");
 					XmlUtil.setChildText(fileElement, "realPath", fileCont.getRealFile().getAbsolutePath(), false);
 					XmlUtil.setChildText(fileElement, "realPathForScript", escapeForJavascript(fileCont.getRealFile().getAbsolutePath()), false);
 
-					if (!this.accessAllowed(fileCont.getRealFile().getAbsolutePath()))
-					{	
-						fileElement.setAttribute("outsideDocRoot", "true");
-					}
-					
 					linkFound = true;
 				}
 
 				description = null;
 
-				if (fileCont.isLink())
-				{
+				if (fileCont.isLink()) {
 					description = metaInfMgr.getDescription(fileCont.getRealFile().getAbsolutePath());
-				}
-				else
-				{
-					if (dirHasMetaInf)
-					{
-						description = metaInfMgr.getDescription(path_no_slash,actFilename);
+				} else {
+					if (dirHasMetaInf) {
+						description = metaInfMgr.getDescription(pathWithoutSlash, picFilename);
 					}
 				}
 
-				if ((description!=null) && (description.trim().length()>0))
-				{
+				if (!CommonUtils.isEmpty(description)) {
 					XmlUtil.setChildText(fileElement, "description", description, true);
 				}
 
-
-				String displayName = actFilename;
-            
-				if (zoom)
-				{
-					displayName = CommonUtils.shortName(actFilename,40);
-				}
-				else
-				{
-					displayName = CommonUtils.shortName(actFilename,20);
-				}
+				String displayName = CommonUtils.shortName(picFilename, 22);
 
 				XmlUtil.setChildText(fileElement, "displayName", displayName);
 
-				if (fileCont.isLink())
-				{
-					if (this.accessAllowed(fileCont.getRealFile().getAbsolutePath()))
-					{
-						fileElement.setAttribute("linkMenuPath", escapeForJavascript(fileCont.getRealFile().getAbsolutePath()));
-					}
-					else
-					{	
-						fileElement.setAttribute("outsideDocRoot", "true");
-					}
+				if (fileCont.isLink()) {
+					fileElement.setAttribute("linkMenuPath", escapeForJavascript(fileCont.getRealFile().getAbsolutePath()));
 				}
 
-				fileElement.setAttribute("lastModified", dateFormat.format(new Date(tempFile.lastModified())));
+				fileElement.setAttribute("lastModified", dateFormat.format(new Date(pictureFile.lastModified())));
 
-				long kBytes = 0L; 
+				long kBytes = 0L;
 
-				long fileSize = tempFile.length();
-            
-				if (fileSize > 0L)
-				{
+				long fileSize = pictureFile.length();
+
+				if (fileSize > 0L) {
 					kBytes = fileSize / 1024L;
-            	
-					if (kBytes == 0L)
-					{
-						kBytes = 1; 
+					if (kBytes == 0L) {
+						kBytes = 1;
 					}
 				}
 
 				fileElement.setAttribute("size", numFormat.format(kBytes));
 
-				String realPath = tempFile.getParent();
-                
-				String realFileName = tempFile.getName();
+				if (!fileCont.isLink()) {
+				    sizeSum += fileSize;
+				}				
+				
+				String realPath = pictureFile.getParent();
+
+				String realFileName = pictureFile.getName();
 
 				int commentCount = metaInfMgr.countComments(realPath, realFileName);
 
 				XmlUtil.setChildText(fileElement, "comments", Integer.toString(commentCount));
-				
-                PictureRating pictureRating = metaInfMgr.getPictureRating(realPath, realFileName);
-                
-                if (pictureRating != null) 
-                {
-                    if (pictureRating.getNumberOfVotes() > 0) 
-                    {
-                        XmlUtil.setChildText(fileElement, "visitorRating", Integer.toString(pictureRating.getAverageVisitorRating()));
-                        XmlUtil.setChildText(fileElement, "numberOfVotes", Integer.toString(pictureRating.getNumberOfVotes()));
-                    }
-                }
-				
-				if (!readonly)
-				{
-					int ownerRating = metaInfMgr.getOwnerRating(tempFile.getAbsolutePath());
 
-					if (ownerRating > (-1))
-					{
+				PictureRating pictureRating = metaInfMgr.getPictureRating(realPath, realFileName);
+
+				if (pictureRating != null) {
+					if (pictureRating.getNumberOfVotes() > 0) {
+						XmlUtil.setChildText(fileElement, "visitorRating",
+								Integer.toString(pictureRating.getAverageVisitorRating()));
+						XmlUtil.setChildText(fileElement, "numberOfVotes",
+								Integer.toString(pictureRating.getNumberOfVotes()));
+					}
+				}
+
+				if (!readonly) {
+					int ownerRating = metaInfMgr.getOwnerRating(pictureFile.getAbsolutePath());
+
+					if (ownerRating > (-1)) {
 						XmlUtil.setChildText(fileElement, "ownerRating", Integer.toString(ownerRating));
 					}
 				}
-				
-				String fullFileName = tempFile.getAbsolutePath();
 
-				boolean imgFound=true;
+				String imgSrcPath = "/webfilesys/servlet?command=picThumb&imgFile=" + UTF8URLEncoder.encode(fileCont.getName());
 
-				ScaledImage scaledImage=null;
-
-				try
-				{
-					// scaledImage = new ScaledImage(fullFileName, screenWidth - 40, screenHeight - 177);
-					scaledImage = new ScaledImage(fullFileName, screenWidth - 20, screenHeight - 125);
+				if (fileCont.isLink()) {
+					imgSrcPath += "&link=true";
 				}
-				catch (IOException io1)
-				{
-					Logger.getLogger(getClass()).error("failed to create scaled image " + fullFileName, io1);
-					imgFound=false;                 
-				}
-				
-				if (imgFound)
-				{
-					XmlUtil.setChildText(fileElement, "imgType", Integer.toString(scaledImage.getImageType()));
-					XmlUtil.setChildText(fileElement, "xpix", Integer.toString(scaledImage.getRealWidth()));
-					XmlUtil.setChildText(fileElement, "ypix", Integer.toString(scaledImage.getRealHeight()));
-             
-					int thumbWidth = 0;
-					int thumbHeight = 0;
 
-					if (scaledImage.getRealHeight() > scaledImage.getRealWidth())
-					{
-						thumbHeight = thumbnailSize;
-						thumbWidth = scaledImage.getRealWidth() * thumbnailSize / scaledImage.getRealHeight();
-					}
-					else
-					{
-						thumbWidth = thumbnailSize;
-						thumbHeight = scaledImage.getRealHeight() * thumbnailSize / scaledImage.getRealWidth();
-					}
-					
-					// int fullScreenWidth = scaledImage.getScaledWidth() + 8;
-					int fullScreenWidth = scaledImage.getScaledWidth();
-					if (fullScreenWidth < 400)
-					{
-						fullScreenWidth = 400;
-					}
-
-					int fullScreenHeight = scaledImage.getScaledHeight();
-					if (fullScreenHeight < 300)
-					{
-						fullScreenHeight = 300;
-					}
-					
-					XmlUtil.setChildText(fileElement, "fullScreenWidth", Integer.toString(fullScreenWidth));
-					XmlUtil.setChildText(fileElement, "fullScreenHeight", Integer.toString(fullScreenHeight));
-					
-					String srcFileName = fullFileName;
-					
-					boolean useThumb = false;
-					boolean useExif = false;
-
-					CameraExifData exifData=null;
-
-					if (!zoom)
-					{
-						String thumbFileName = ThumbnailThread.getThumbnailPath(fullFileName);
-
-						File thumbnailFile = new File(thumbFileName);
-						if (thumbnailFile.exists())
-						{
-                            srcFileName="/webfilesys/servlet?command=getThumb&imgFile=" + UTF8URLEncoder.encode(fullFileName);
-                            useThumb = true;
-                            
-                            try
-                            {
-                                ScaledImage thumbImage = new ScaledImage(thumbFileName, 100, 100);
-                                thumbWidth = thumbImage.getRealWidth();
-                                thumbHeight = thumbImage.getRealHeight();
-                            }
-                            catch (IOException ioex)
-                            {
-                                Logger.getLogger(getClass()).error(ioex);
-                            }
-						}
-						else
-						{
-							int sizeBorder=500;
-
-							if (clientIsLocal)
-							{
-								sizeBorder=640;
-							}
-
-							if ((scaledImage.getImageType()==ScaledImage.IMG_TYPE_JPEG) && 
-								((scaledImage.getRealWidth() > sizeBorder) ||
-								 (scaledImage.getRealHeight() > sizeBorder)))
-							{
-								exifData = new CameraExifData(fullFileName);
-
-								if (exifData.getThumbnailLength() > 0)
-								{
-                                    useExif = true;
-                                    
-                                    boolean orientationMissmatch = false;
-
-                                    if (scaledImage.getRealWidth() < scaledImage.getRealHeight())
-									{
-                                        // portrait orientation
-                                        
-										if (exifData.getThumbOrientation() != CameraExifData.ORIENTATION_PORTRAIT)
-										{
-	                    					orientationMissmatch = true;
-										}
-									}
-                                    else if (scaledImage.getRealWidth() > scaledImage.getRealHeight())
-                                    {
-                                        // landscape orientation
-                                        
-                                        if (exifData.getThumbOrientation() != CameraExifData.ORIENTATION_LANDSCAPE)
-                                        {
-                                            orientationMissmatch = true;
-                                        }
-                                    }
-
-                                    if (orientationMissmatch) {
-                                        
-                                        if (exifData.getOrientation() == 1) {
-                                            // orientation value of exif data suggests that no rotation is required
-                                            // but orientation of exif thumbnail does not match orientation of
-                                            // the JPEG picture
-                                            // some camera models that have no orientation sensor 
-                                            // set the orientation value to 1
-                                            useExif = false;
-                                        }
-                                    }
-                                    
-                                    if (useExif) {
-                                        int exifThumbWidth;
-                                        int exifThumbHeight;
-
-                                        if (orientationMissmatch)
-                                        {
-                                            exifThumbWidth = exifData.getThumbHeight();
-                                            exifThumbHeight = exifData.getThumbWidth();
-                                            srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(fullFileName) + "&rotate=true";
-                                        }
-                                        else
-                                        {
-                                            exifThumbWidth = exifData.getThumbWidth();
-                                            exifThumbHeight = exifData.getThumbHeight();
-                                            srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(fullFileName);
-                                        }
-                                            
-                                        if (exifThumbHeight > exifThumbWidth)
-                                        {
-                                            thumbHeight = thumbnailSize;
-                                            thumbWidth = exifThumbWidth * thumbnailSize / exifThumbHeight;
-                                        }
-                                        else
-                                        {
-                                            thumbWidth = thumbnailSize;
-                                            thumbHeight = exifThumbHeight * thumbnailSize / exifThumbWidth;
-                                        }
-                                        
-                                        useThumb = true;
-                                    }
-								}
-							}
-						}
-					}
-
-					XmlUtil.setChildText(fileElement, "thumbnailWidth", Integer.toString(thumbWidth));
-					XmlUtil.setChildText(fileElement, "thumbnailHeight", Integer.toString(thumbHeight));
-
-					if (!useThumb)
-					{
-						srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(srcFileName);
-					}
-					
-					XmlUtil.setChildText(fileElement, "imgPath", srcFileName);
-				}
+				XmlUtil.setChildText(fileElement, "imgPath", imgSrcPath);
 			}
 			
-			if (fileGroupElement != null) 
-			{
-				// fill the rest of the table row
-				
-				while (i % columns > 0)
-				{
-					Element dummyElement = doc.createElement("dummy");
-				
-					fileGroupElement.appendChild(dummyElement);
-					
-					i++;
-				}
+			long kBytes = 0L;
+			if (sizeSum > 0L) {
+			    kBytes = sizeSum / 1024L;
+			    if (kBytes == 0L) {
+				    kBytes = 1;
+		     	}
 			}
+
+			XmlUtil.setChildText(fileListElement, "sizeSum", numFormat.format(kBytes));
 		}
 
-		if (!readonly)
-		{
-			if ((clipBoard == null) || clipBoard.isEmpty())
-			{
+		if (!readonly) {
+			if ((clipBoard == null) || clipBoard.isEmpty()) {
 				XmlUtil.setChildText(fileListElement, "clipBoardEmpty", "true");
-			}
-			else
-			{
-				if (clipBoard.isCopyOperation())
-				{
+			} else {
+				if (clipBoard.isCopyOperation()) {
 					XmlUtil.setChildText(fileListElement, "copyOperation", "true");
 				}
 			}
-			
-			if (WebFileSys.getInstance().isAutoCreateThumbs())
-			{
+
+			if (WebFileSys.getInstance().isAutoCreateThumbs()) {
 				XmlUtil.setChildText(fileListElement, "autoCreateThumbs", "true");
 			}
-			
-			if (WebFileSys.getInstance().getMailHost() !=null)
-			{
-                XmlUtil.setChildText(fileListElement, "mailEnabled", "true");
+
+			if (WebFileSys.getInstance().getMailHost() != null) {
+				XmlUtil.setChildText(fileListElement, "mailEnabled", "true");
 			}
 
-			if (linkFound)
-	        {
+			if (linkFound) {
 				XmlUtil.setChildText(fileListElement, "linksExist", "true");
-	        }
+			}
 		}
 
-		GeoTag geoTag = metaInfMgr.getGeoTag(actPath, ".");
-		
-		if (geoTag != null)
-		{
+		GeoTag geoTag = metaInfMgr.getGeoTag(currentPath, ".");
+
+		if (geoTag != null) {
 			XmlUtil.setChildText(fileListElement, "geoTag", "true", false);
 
-	        // the reason for this is historic: previous google maps api version required an API key
+			// the reason for this is historic: previous google maps api version
+			// required an API key
 			XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
 		}
-		
-		addCurrentTrail(fileListElement, actPath, userMgr.getDocumentRoot(uid), mask);		
-		
-		this.processResponse("thumbnails.xsl", true);
 
-		FastPathManager.getInstance().queuePath(uid,actPath);
+		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
+
+		processResponse("thumbnailOnePage.xsl", true);
+
+		FastPathManager.getInstance().queuePath(uid, currentPath);
 	}
+
+	private void filterLinksOutsideDocRoot(FileSelectionStatus selectionStatus) {
+		ArrayList<FileContainer> filteredOutList = new ArrayList<FileContainer>();
+
+		Vector selectedFiles = selectionStatus.getSelectedFiles();
+
+		if (selectedFiles != null) {
+			for (int i = 0; i < selectedFiles.size(); i++) {
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
+				if (fileCont.isLink()) {
+					if (!accessAllowed(fileCont.getRealFile().getAbsolutePath())) {
+						filteredOutList.add(fileCont);
+					}
+				}
+			}
+
+			if (filteredOutList.size() > 0) {
+				selectionStatus.setNumberOfFiles(selectionStatus.getNumberOfFiles() - filteredOutList.size());
+				selectionStatus.getSelectedFiles().removeAll(filteredOutList);
+			}
+		}
+	}
+
 }

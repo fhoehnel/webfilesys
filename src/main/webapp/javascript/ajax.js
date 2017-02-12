@@ -338,3 +338,39 @@ function checkPasteOverwriteResult(req) {
     }
 }
 
+function delFileAjax(path, deleteWriteProtected) {
+    
+    var url = "/webfilesys/servlet?command=delFile&filePath=" + encodeURIComponent(path);
+    
+    if (deleteWriteProtected) {
+        url = url + "&deleteWriteProtected=true";
+    }
+    
+    xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var responseXml = req.responseXML;
+                var successItem = responseXml.getElementsByTagName("success")[0];
+                var success = successItem.firstChild.nodeValue;  
+                
+                if (success == "true") {
+                    var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
+                    var deletedFile = deletedFileItem.firstChild.nodeValue; 
+                
+                    var viewModeItem = responseXml.getElementsByTagName("viewMode")[0];
+                    if ((viewModeItem) && (viewModeItem.firstChild.nodeValue == 2)) {
+                        removeDeletedFile(deletedFile);
+                        hidePrompt();
+                        return;
+                    }                    
+                } else {
+                    alert(resourceBundle["alert.delFileError"]);
+                }
+                
+                window.location.href = "/webfilesys/servlet?command=listFiles";                
+            } else {
+                customAlert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });          
+}

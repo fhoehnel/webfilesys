@@ -1,7 +1,6 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,23 +36,13 @@ public class XslRenameImagePromptHandler extends XslRequestHandlerBase
 			return;
 		}
 
-		String imagePath = req.getParameter("imagePath");
+		String imageFile = req.getParameter("imageFile");
 		
-		if ((imagePath == null) || (imagePath.trim().length() == 0))
+		if (CommonUtils.isEmpty(imageFile))
 		{
-			Logger.getLogger(getClass()).error("required parameter imagePath missing");
-			
+			Logger.getLogger(getClass()).error("required parameter imageFile missing");
 			return;
 		}
-		
-		int lastSepIdx = imagePath.lastIndexOf(File.separatorChar);
-		
-		if ((lastSepIdx < 0) || (lastSepIdx == (imagePath.length() - 1)))
-		{
-			return;
-		}
-		
-		String oldFileName = imagePath.substring(lastSepIdx + 1);
 		
 		Element renameFileElement = doc.createElement("renameFile");
 			
@@ -63,12 +52,10 @@ public class XslRenameImagePromptHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, renameFileElement);
 
-		XmlUtil.setChildText(renameFileElement, "imagePath", imagePath, false);
+		XmlUtil.setChildText(renameFileElement, "oldFileName", imageFile, false);
+		XmlUtil.setChildText(renameFileElement, "oldFileNameForScript", escapeForJavascript(imageFile), false);
 
-		XmlUtil.setChildText(renameFileElement, "oldFileName", oldFileName, false);
-		XmlUtil.setChildText(renameFileElement, "oldFileNameForScript", escapeForJavascript(oldFileName), false);
-
-		XmlUtil.setChildText(renameFileElement, "shortFileName", CommonUtils.shortName(oldFileName, 36), false);
+		XmlUtil.setChildText(renameFileElement, "shortFileName", CommonUtils.shortName(imageFile, 36), false);
 		
 		addMsgResource("label.renameImage", getResource("label.renameImage","Rename Picture File"));
 		addMsgResource("label.oldName", getResource("label.oldName","current name"));

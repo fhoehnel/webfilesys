@@ -233,7 +233,7 @@ function checkFileNameSyntax(str)
        
         if ((c == '\'') || (c == '\"') || (c == '*') || (c == '/') || (c == '\\') ||
             (c == '%') || (c == ':') || (c == '+')  || (c == '#') || (c == ';') ||
-            (c == ',') || (c == '§') || (c == '&') || (c == '?') || (c == '@'))
+            (c == ',') || (c == 'ï¿½') || (c == '&') || (c == '?') || (c == '@'))
         {
             return(false);
         } 
@@ -406,6 +406,7 @@ function hidePrompt() {
 
      promptBox.style.visibility = "hidden";
      promptBox.style.width = "100px";
+     promptBox.style.height = "140px";
 }
 
 function centeredDialog(xmlUrl, xslUrl, boxWidth, boxHeight, callback) {

@@ -1926,6 +1926,57 @@ public class MetaInfManager extends Thread
 		return(listOfLinks);
 	}
 
+	public FileLink getLink(String path, String linkName) {
+		Element metaInfElement=getMetaInfElement(path,".");
+
+		if (metaInfElement==null) {
+			return(null);
+		}
+
+		Element linkListElement=XmlUtil.getChildByTagName(metaInfElement,"links");
+
+		if (linkListElement==null) {
+			return(null);
+		}
+        
+		NodeList linkList = linkListElement.getElementsByTagName("link");
+
+		if (linkList==null) {
+			return(null);
+		}
+
+		int listLength = linkList.getLength();
+
+		if (listLength==0) {
+			return(null);
+		}
+
+		for (int i = 0; i < listLength; i++) {
+			Element linkElement = (Element) linkList.item(i);
+
+			String name = XmlUtil.getChildText(linkElement, "name");
+			
+			if ((name != null) && name.equals(linkName)) {
+				String creator = XmlUtil.getChildText(linkElement,"creator");
+				String destPath = XmlUtil.getChildText(linkElement,"destPath");
+
+				String tmp = XmlUtil.getChildText(linkElement,"creationTime");
+
+				long creationTime = 0L;
+
+				try {
+					creationTime = Long.parseLong(tmp);
+				} catch (NumberFormatException nfex) {
+					Logger.getLogger(getClass()).warn("invalid creation time: " + tmp);
+				}
+
+	            FileLink link = new FileLink(name, destPath, creator, new Date(creationTime));
+			    return link;
+			}
+		}
+		return null;
+	}
+	
 	public boolean removeLink(String path, String linkToRemove)
 	{
     	synchronized(this) {

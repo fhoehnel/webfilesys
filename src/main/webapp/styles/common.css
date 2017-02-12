@@ -50,6 +50,10 @@ body.compareImg {
     overflow: hidden;
 }
 
+body.diffTree {
+    background-color: #f0f0f0;
+}
+
 h1 {
     font-size:14pt;
     color:navy;
@@ -1381,6 +1385,18 @@ table.contextMenu th {
     border-bottom: 1px solid black;
 }
 
+div.contextMenuCont {
+    background-color: #c0c0c0;
+    position: absolute;
+    top: 300px;
+    left: 250px;
+    width: 180px;
+    border-style: ridge;
+    border-width: 3px;
+    border-color: #c0c0c0;
+    visibility: hidden;	
+}
+
 div.selectedFolder {
     border: 1px solid maroon;
 }
@@ -1532,23 +1548,24 @@ div.picInfoMenuIcon {
     position: absolute;
     top: 20px;
     right: 20px;
-    border: 1px solid navy;
+    border: 1px solid #000000;
     padding: 2px 8px;
-    border-radius: 4px;    
+    border-radius: 4px;   
+    background-color: #c0c0c0;
 }
 
 div.picInfoMenuIcon:hover {
-    border: 1px solid #ffffa0;
+    border-color: #ffffff;
     cursor: pointer;
 }
 
 div.picInfoMenuIcon a {
     font-size: 36px;
-    color: #ffffa0;
+    color: #ffffff;
 }
 
 div.picInfoMenuIcon:hover a {
-    color: navy;
+    color: #000000;
 }
 
 div.picInfoMenuClose {
@@ -1620,6 +1637,86 @@ div.picOnMap {
 img.picOnMap {
 	margin-top: 10px;
 	display: none;
+}
+
+div.pictureScrollCont {
+	overflow-y: auto;
+	height: 200px;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	padding-left: 10px;
+	background-color: #d0d0d0;
+}
+
+div.thumbnailCont {
+	display: inline-block;
+	width: 180px;
+	height: 80px;
+	margin-top: 10px;
+    color: black;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 12px;	
+}
+
+div.picturePopup {
+    position: absolute;
+    top: 50px;
+    left: 150px;
+    width: 400px;
+    height: 400px;
+    padding: 0px;
+    visibility: hidden;
+    border: 1px solid #ffffff;
+    z-index:2;
+}
+
+div.picturePopup div.popupClose {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 16px;
+    height: 14px;
+    padding: 0px;
+    visibility: hidden;
+    border-style: none;
+    z-index:3;
+} 
+
+div.mouseClickShield {
+    height: 768px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+div.alertCont {
+	width: 300px;
+	height: 120px;
+	margin: auto;
+	margin-top: 200px;
+	background-color: ivory;
+	border: 3px ridge #808080;
+	text-align: center;
+	padding: 20px;
+}
+
+span.alertText {
+	font-size: 15px;
+}
+
+div.alertButtonCont {
+    margin-top: 40px;
+}
+
+button.alertConfirmButton {
+	width: 120px;
+	height: 30px;
+	font-size: 16px;
+	font-weight: bold;
+	border: 1px solid #404040;
+	border-radius: 8px;
 }
 
 @media (max-width: 400px) {

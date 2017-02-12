@@ -907,8 +907,6 @@ function validateFormData()
 	var endMinuteInput = document.getElementById("endMinute");
 	var endMinute = Number(endMinuteInput.options[endMinuteInput.selectedIndex].value);
 	
-	console.log("startHour=" + startHour + " endHour=" + endHour + " startMinute=" + startMinute + " endMinute=" + endMinute);
-	
 	if (endHour < startHour)
 	{
 		return false;

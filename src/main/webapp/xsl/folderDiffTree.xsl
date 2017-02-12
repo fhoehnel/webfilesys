@@ -72,7 +72,7 @@
 
 </head>
 
-<body onload="setBundleResources()">
+<body onload="setBundleResources()" class="diffTree">
    
   <xsl:for-each select="/folderDiff/differenceTree">
     <xsl:call-template name="differenceTree" />

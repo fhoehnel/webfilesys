@@ -68,10 +68,14 @@ import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
 import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
+import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
+import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
+import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
+import de.webfilesys.gui.ajax.XformImageHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
 import de.webfilesys.gui.ajax.XmlAssociatedProgramHandler;
 import de.webfilesys.gui.ajax.XmlCancelSearchHandler;
@@ -106,7 +110,6 @@ import de.webfilesys.gui.ajax.XmlSetScreenSizeHandler;
 import de.webfilesys.gui.ajax.XmlSlideShowImageHandler;
 import de.webfilesys.gui.ajax.XmlSwitchWatchFolderHandler;
 import de.webfilesys.gui.ajax.XmlTouchFileHandler;
-import de.webfilesys.gui.ajax.XmlTransformImageHandler;
 import de.webfilesys.gui.ajax.XmlUploadStatusHandler;
 import de.webfilesys.gui.ajax.XmlWinCmdLineHandler;
 import de.webfilesys.gui.ajax.XslSwitchReadonlyHandler;
@@ -159,11 +162,9 @@ import de.webfilesys.gui.user.CopyLinkRequestHandler;
 import de.webfilesys.gui.user.CreateDirRequestHandler;
 import de.webfilesys.gui.user.CreateFileRequestHandler;
 import de.webfilesys.gui.user.DecryptFileRequestHandler;
-import de.webfilesys.gui.user.DelImageFromThumbHandler;
 import de.webfilesys.gui.user.DeleteCommentsRequestHandler;
 import de.webfilesys.gui.user.DeleteFileRequestHandler;
 import de.webfilesys.gui.user.DeleteImageLinkHandler;
-import de.webfilesys.gui.user.DeleteImageRequestHandler;
 import de.webfilesys.gui.user.DeleteLinkRequestHandler;
 import de.webfilesys.gui.user.DiffCompareHandler;
 import de.webfilesys.gui.user.DiffFromTreeHandler;
@@ -212,6 +213,7 @@ import de.webfilesys.gui.user.SelfEditUserRequestHandler;
 import de.webfilesys.gui.user.SwitchFileAgeColoringHandler;
 import de.webfilesys.gui.user.SynchronizeRequestHandler;
 import de.webfilesys.gui.user.TailRequestHandler;
+import de.webfilesys.gui.user.ThumbnailRequestHandler;
 import de.webfilesys.gui.user.TransformImageRequestHandler;
 import de.webfilesys.gui.user.URLFileRequestHandler;
 import de.webfilesys.gui.user.UntarRequestHandler;
@@ -442,7 +444,7 @@ public class WebFileSysServlet extends ServletBase
 		}
 
 		if ((command == null) || 
-		    ((!command.equals("exifThumb")) && (!command.equals("getFile")) &&
+		    ((!command.equals("exifThumb")) && (!command.equals("getFile")) && (!command.equals("picThumb")) &&
 		     (!command.equals("getThumb")) && (!command.equals("multiDownload")) &&
 		     (!command.equals("getZipContentFile")) && (!command.equals("visitorFile")) &&
 		     (!command.equals("mp3Thumb")) && (!command.equals("downloadFolder"))))
@@ -775,7 +777,7 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("thumbnail"))
         {
 		    (new XslThumbnailHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
-
+		    
             return(true);
         }
     	
@@ -810,6 +812,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("getThumb"))
         {
   		    (new GetThumbRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+		    
+		    return(true);
+        }
+ 
+        if (command.equals("picThumb"))
+        {
+  		    (new ThumbnailRequestHandler(req, resp, session, output, userid)).handleRequest(); 
 		    
 		    return(true);
         }
@@ -946,7 +955,14 @@ public class WebFileSysServlet extends ServletBase
 
 		    return(true);
     	}
-    	
+
+    	if (command.equals("getPicDimensions"))
+    	{
+		    (new GetPictureDimensionsHandler(req, resp, session, output, userid)).handleRequest(); 
+
+		    return(true);
+    	}
+
     	if (command.equals("bookPicture"))
     	{
 		    (new XslAlbumPictureHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -1108,23 +1124,24 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
-        if (command.equals("delImageFromThumb"))
+        if (command.equals("delFile"))
         {
-		    (new DelImageFromThumbHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+            (new DeleteFileHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }
-
-        if (command.equals("delImage"))
-        {
-		    (new DeleteImageRequestHandler(req, resp, session, output, userid)).handleRequest(); 
-
-            return(true);
-        }
-
+        
+        /*
         if (command.equals("renameImage"))
         {
 		    (new RenameImageRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+        */
+        if (command.equals("renamePicture"))
+        {
+		    (new RenamePictureHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }
@@ -1171,7 +1188,7 @@ public class WebFileSysServlet extends ServletBase
 
         if (command.equals("xformImage"))
         {
-		    (new XmlTransformImageHandler(req, resp, session, output, userid)).handleRequest(); 
+		    (new XformImageHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }

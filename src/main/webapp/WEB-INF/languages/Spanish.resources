@@ -449,6 +449,7 @@ alt.printpict=imprimir imagen
 label.picDimensions=dimensiones de la imagen
 label.geoLocation=ubicación geográfica
 label.action=operación
+pictureMenuIconTitle=Informaciónes sobre la imágen/Operaciónes
 
 # picture manipulation
 label.resizetitle=Editar imagenes

@@ -1,3 +1,5 @@
+var thumbLoadRunning = false;
+
 function multiFileFunction() {
     var idx = document.form2.cmd.selectedIndex;
 
@@ -38,7 +40,7 @@ function compare() {
 	var numChecked = getSelectedCheckboxCount();
 
     if (numChecked < 2) {
-        alert(selectTwoPic + '!');
+        customAlert(resourceBundle["error.compselect"] + "!");
         return;
     }
 
@@ -52,7 +54,7 @@ function compare() {
     var compareWin = window.open('/webfilesys/servlet?command=blank','compareWin','scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
     
     if (!compareWin) {
-        alert(resourceBundle["alert.enablePopups"]);
+    	customAlert(resourceBundle["alert.enablePopups"]);
         return;
     }
     
@@ -99,7 +101,7 @@ function rotate(degree) {
 	    document.form2.degrees.value = degree;
         document.form2.submit();
     } else {
-        alert(selectOnePic + '!');
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
 }
 
@@ -108,7 +110,7 @@ function resize() {
 	    document.form2.command.value = 'resizeParms';
         document.form2.submit();
     } else {   
-        alert(selectOnePic + '!');
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
 }
 
@@ -118,7 +120,7 @@ function multiImageCopyMove() {
         xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), showCopyResult);
 	    document.form2.command.value = 'compareImg';
     } else {   
-        alert(selectOnePic + '!');
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
 }
 
@@ -130,7 +132,7 @@ function multiImageDelete() {
 	    }
         document.form2.command.value = 'compareImg';
     } else {   
-        alert(selectOnePic + '!');
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
 }
 
@@ -140,7 +142,7 @@ function renameToExifDate() {
         document.form2.submit();
 	    document.form2.command.value = 'compareImg';
     } else {   
-        alert(selectOnePic + '!');
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
 }
 
@@ -149,7 +151,7 @@ function multiImageDownload() {
         document.form2.command.value = 'multiImgDownload';
         document.form2.submit();
     } else {   
-        alert(selectOnePic + '!');
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
 }
 
@@ -247,3 +249,317 @@ function googleMapAllPics() {
         mapWin.focus();
     }
 }
+
+function attachScrollHandler() {
+    var scrollAreaCont = document.getElementById("scrollAreaCont");
+
+    scrollAreaCont.onscroll = function() {
+	  	 var scrollPosDiff = scrollAreaCont.scrollTop - lastScrollPos;
+
+		 if ((scrollPosDiff > 20) || (scrollPosDiff < (-20))) {
+			 lastScrollPos = scrollAreaCont.scrollTop;
+			 
+			 if (!thumbLoadRunning) {
+				 checkThumbnailsToLoad();
+			 }
+	  	 }
+	};
+	
+	// load initially visible thumbnails
+	setTimeout(checkThumbnailsToLoad, 10);
+}
+
+function checkThumbnailsToLoad() {
+
+	if (thumbnails.length == 0) {
+		return;
+	}
+	
+	thumbLoadRunning = true;
+
+    var scrollAreaCont = document.getElementById("scrollAreaCont");
+	
+	for (var i = 0; i < thumbnails.length; i++) {
+	    var pic = document.getElementById("pic-" + thumbnails[i]);
+	    if (pic) {
+			var imgPath = pic.getAttribute("imgPath");
+			if (imgPath) {
+	        	if (isScrolledIntoView(pic, scrollAreaCont)) {
+		    		thumbnails.splice(i, 1);
+		    		
+		    		loadThumbnail(pic, imgPath);
+	    
+	                setPictureDimensions(pic.id);
+	                
+	                thumbLoadRunning = false;
+	                
+	                return;
+	    		}
+	    	}
+	    }
+	}
+
+    thumbLoadRunning = false;
+}
+
+function setPictureDimensions(picId) { 
+
+    var pixDim = document.getElementById("pixDim-" + picId.substring(4));
+    if (!pixDim) {
+        return;
+    }
+
+    var picFileName = pixDim.getAttribute("picFileName");
+
+    var url = "/webfilesys/servlet?command=getPicDimensions&fileName=" +  encodeURIComponent(picFileName);
+
+    var picIsLink = pixDim.getAttribute("picIsLink");
+    if (picIsLink) {
+    	url = url + "&link=true";
+    }
+    
+	xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+			    
+			    var picWidth = null;
+			    var picHeight = null;
+                var imageType = null;
+			    
+                var item = xmlDoc.getElementsByTagName("xpix")[0];            
+                if (item) {
+                    picWidth = item.firstChild.nodeValue;
+                }
+             
+                item = xmlDoc.getElementsByTagName("ypix")[0];            
+                if (item) {
+                    picHeight = item.firstChild.nodeValue;
+                }
+			    
+                item = xmlDoc.getElementsByTagName("imageType")[0];            
+                if (item) {
+                	imageType = item.firstChild.nodeValue;
+                }
+			    
+			    if ((picWidth != null) && (picHeight != null)) {
+			        pixDim.innerHTML = picWidth + " x " + picHeight + "pix";
+			        
+			        var pic = document.getElementById(picId);
+			        if (pic) {
+			        	pic.setAttribute("origWidth", picWidth);
+			        	pic.setAttribute("origHeight", picHeight);
+			        	if (imageType) {
+			        		pic.setAttribute("imgType", imageType);
+			        	}
+			        } 
+			    }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
+}
+
+function isScrolledIntoView(el, view) {
+	var contScrollPos = view.scrollTop;
+
+	var contOffset = view.getBoundingClientRect().top;
+
+	var elemTop = el.getBoundingClientRect().top - contOffset + contScrollPos;
+    var elemBottom = el.getBoundingClientRect().bottom - contOffset + contScrollPos;
+	
+    return (elemTop >= contScrollPos) && (elemBottom <= contScrollPos + view.clientHeight + 20);
+}
+
+function loadThumbnail(pic, thumbFileSrc) {
+
+	pic.onload = function() {
+		
+		var picOrigWidth = pic.naturalWidth;
+		var picOrigHeight = pic.naturalHeight;
+		
+		if (picOrigWidth > picOrigHeight) {
+			pic.width = 160;
+			pic.height = picOrigHeight * 160 / picOrigWidth;
+		} else {
+			pic.height = 160;
+			pic.width = picOrigWidth * 160 / picOrigHeight;
+		}
+
+		pic.style.visibility = "visible";
+		
+        pic.removeAttribute("imgPath");
+
+        checkThumbnailsToLoad();
+	};
+
+	pic.src = thumbFileSrc;
+}
+
+function setThumbContHeight() {
+    if (browserMSIE) {
+        setTimeout('setThumbContHeightInternal()', 200);
+    } else {
+    	setThumbContHeightInternal();
+    }
+}
+
+function setThumbContHeightInternal() {
+    var windowHeight;
+
+    if (browserFirefox || (browserChrome && osAndroid)) {
+        windowHeight = window.innerHeight;
+    } else {
+        windowHeight = document.documentElement.clientHeight;
+    }
+
+    var offset = 200;
+    
+    var folderMetaInfElem = document.getElementById("folderMetaInf");
+    if (folderMetaInfElem) {
+    	offset += folderMetaInfElem.offsetHeight;
+    }
+    
+    document.getElementById("scrollAreaCont").style.height = (windowHeight - offset) + 'px';
+}
+
+function picturePopupInFrame(filePath, picIdx) {
+    var pic = document.getElementById("pic-" + picIdx);
+    if (pic) {
+    	var origWidth = pic.getAttribute("origWidth");
+    	var origHeight = pic.getAttribute("origHeight");
+        showPicturePopup('/webfilesys/servlet?command=getFile&filePath=' + encodeURIComponent(filePath), origWidth, origHeight);
+    }
+}
+
+function picContextMenu(fileName, picIdx) {
+    var pic = document.getElementById("pic-" + picIdx);
+    if (pic) {
+    	var imageType = pic.getAttribute("imgType");
+    	if (imageType) {
+    	    jsContextMenu(fileName, imageType, picIdx);
+    	}
+    }
+}
+
+function picLinkMenu(fileName, realPathForScript, picIdx) {
+    var pic = document.getElementById("pic-" + picIdx);
+    if (pic) {
+    	var imageType = pic.getAttribute("imgType");
+    	if (imageType) {
+	        linkGraphicsMenu(fileName, realPathForScript, imageType);
+    	}
+    }
+}
+
+function removeDeletedFile(fileName) {
+    var normalizedFileName = escapeForId(fileName);
+    
+    var thumbContToRemove = document.getElementById("thumbCont-" + normalizedFileName);
+    if (thumbContToRemove) {
+        thumbContToRemove.parentNode.removeChild(thumbContToRemove);
+        
+        checkThumbnailsToLoad();
+        
+        updateFileCount();        
+    }
+}
+
+function updateFileCount() {
+    var fileNumberElem = document.getElementById("fileNumber");
+    if (fileNumberElem) {
+        var oldFileCountAttr = fileNumberElem.getAttribute("fileNumber");
+        if (oldFileCountAttr) {
+            var oldFileCount = parseInt(oldFileCountAttr);
+            if (oldFileCount != NaN) {
+                var newFileCount = oldFileCount - 1;
+                if (newFileCount >= 0) {
+                    fileNumberElem.innerHTML = newFileCount;
+                    fileNumberElem.setAttribute("fileNumber", newFileCount);
+                    
+                    var sizeSumElem = document.getElementById("sizeSum");
+                    if (sizeSumElem) {
+                        sizeSumElem.innerHTML = "";
+                    }
+                }
+            }
+        }
+    }
+}
+
+function handleRenameKeyPress(e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        // catch Enter key
+        return false;
+    }
+    return true;
+}
+
+function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
+	var renameForm = document.getElementById('renameForm');
+	
+    var newFileName = renameForm.newFileName.value;
+
+    if (newFileName == oldFileName) {
+        customAlert(errorMsg1);
+        return;
+    }
+    if (!checkFileNameSyntax(newFileName)) {
+        customAlert(errorMsg2);
+        return;
+    } 
+    if (trim(newFileName).length == 0) {
+    	return
+    }
+    
+    var domId = renameForm.domId.value;
+    
+	var formData = getFormData(renameForm);
+	
+	xmlRequestPost("/webfilesys/servlet", formData, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+			    
+	            var successItem = req.responseXML.getElementsByTagName("success")[0];            
+	            var success = successItem.firstChild.nodeValue;
+			    
+                if (success == 'true') {
+                	var fileNameElem = document.getElementById("fileName-" + domId);
+                	if (fileNameElem) {
+                		fileNameElem.innerHTML = abbrevText(newFileName, 23);
+                	}
+
+                	var newFilePathItem = req.responseXML.getElementsByTagName("filePath")[0];
+                	var newFilePath = newFilePathItem.firstChild.nodeValue;
+                	
+                	var thumbLink = document.getElementById("thumb-" + domId);
+                	if (thumbLink) {
+                		thumbLink.setAttribute("href", "javascript:showImage('" + insertDoubleBackslash(newFilePath) + "');hidePopupPicture()");
+                	    thumbLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
+                	}
+                	
+                	var contextMenuLink = document.getElementById("fileName-" + domId);
+                    if (contextMenuLink) {
+                    	contextMenuLink.setAttribute("href", "javascript:picContextMenu('" + newFileName + "', '" + domId + "');");
+                    	contextMenuLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
+                    }
+                	
+                	var thumbContElem = document.getElementById("thumbCont-" + oldFileName);
+                	if (thumbContElem) {
+                	    thumbContElem.id = "thumbCont-" + newFileName;
+                	}
+                	
+                	// window.location.href = "/webfilesys/servlet?command=thumbnail#thumb-" + domId;
+                }			    
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+        
+        document.getElementById("prompt").style.visibility = "hidden";
+    });
+}
+

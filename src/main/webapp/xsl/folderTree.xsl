@@ -111,7 +111,7 @@
 
   </body>
 
-  <div id="contextMenu" style="position:absolute;top:0px;left:0px;background-color:#c0c0c0;border-style:ridge;border-width:3;border-color:#c0c0c0;visibility:hidden"></div>
+  <div id="contextMenu" class="contextMenuCont" ></div>
 
   <div id="msg1" class="msgBox" style="visibility:hidden" />
 

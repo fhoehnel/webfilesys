@@ -451,6 +451,7 @@ alt.printpict=Bild ausdrucken
 label.picDimensions=Bildgrösse
 label.geoLocation=geografische Lokation
 label.action=Aktion
+pictureMenuIconTitle=Bildinformationen/Aktionen
 
 # picture manipulation
 label.resizetitle=Bilder skalieren/konvertieren
