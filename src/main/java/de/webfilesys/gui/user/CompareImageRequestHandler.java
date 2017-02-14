@@ -53,13 +53,18 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
         output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
+        output.println("<script src=\"/webfilesys/javascript/browserCheck.js\" type=\"text/javascript\"></script>");
+        output.println("<script src=\"/webfilesys/javascript/util.js\" type=\"text/javascript\"></script>");
+        output.println("<script src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
+        output.println("<script src=\"/webfilesys/javascript/ajax.js\" type=\"text/javascript\"></script>");
+        output.println("<script src=\"/webfilesys/javascript/showImage.js\" type=\"text/javascript\"></script>");
+        
+        output.println("<script src=\"/webfilesys/javascript/resourceBundle.js\" type=\"text/javascript\"></script>");
+        output.println("<script src=\"/webfilesys/servlet?command=getResourceBundle&amp;lang=" + language + "\" type=\"text/javascript\"></script>");
+
         output.println("<script type=\"text/javascript\">");
-        output.println("function confirmDelImg(imgFileName)");
-        output.println("{");
-        output.println("if (confirm('" + getResource("confirm.delfile", "Are you sure you want to delete this file?") + "'))");
-        output.println("{");
-        output.println("window.location.href = '/webfilesys/servlet?command=fmdelete&fileName=' + encodeURIComponent(imgFileName) + '&closeWin=true&deleteRO=yes';");
-        output.println("}");
+        output.println("function confirmDelImg(imgFileName) {");
+        output.println("deleteSelf(null, imgFileName);");
         output.println("}");
         output.println("</script>");
 

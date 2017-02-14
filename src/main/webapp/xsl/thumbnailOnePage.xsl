@@ -371,7 +371,7 @@
 
     <input type="hidden" name="degrees" value="90" />
 
-    <div id="scrollAreaCont" class="pictureScrollCont">
+    <div id="scrollAreaCont" class="pictureScrollCont sepTop">
 
       <xsl:if test="/fileList/file">
 

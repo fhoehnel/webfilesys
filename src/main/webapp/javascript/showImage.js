@@ -56,12 +56,25 @@
         }
     }
 
-function deleteSelf(imgPath) {
-    if (!confirm(resourceBundle["confirm.delfile"])) {
+function deleteSelf(imgPath, imgName) {
+	
+	var fileName;
+	if (imgName) {
+		fileName = imgName;
+	} else {
+		fileName = extractFileName(imgPath)
+	}
+	
+    if (!confirm(resourceBundle["confirm.delfile"]  + '\n' + fileName)) {
         return;
     }
     
-    var url = "/webfilesys/servlet?command=delFile&filePath=" + encodeURIComponent(imgPath);
+    var url;
+    if (imgName) {
+        url = "/webfilesys/servlet?command=delFile&fileName=" + encodeURIComponent(imgName);
+    } else {
+        url = "/webfilesys/servlet?command=delFile&filePath=" + encodeURIComponent(imgPath);
+    }
     
     xmlRequest(url, function(req) {
         if (req.readyState == 4) {

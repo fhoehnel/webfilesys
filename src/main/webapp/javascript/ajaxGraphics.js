@@ -9,6 +9,11 @@ function ajaxRotate(fileName, degrees, domId) {
         
     if (thumbCont) {
         htmlFragmentByXslt(xmlUrl, xslUrl, thumbCont, null, true);
+        
+        var sizeSumElem = document.getElementById("sizeSum");
+        if (sizeSumElem) {
+            sizeSumElem.innerHTML = "";
+        }
     }
 }
 

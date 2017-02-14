@@ -136,6 +136,17 @@ function abbrevText(origText, maxLength)
 	return (origText.substring(0, maxLength / 2) + " ... " + origText.substring(origText.length - (maxLength / 2) + 5));
 }
 
+function extractFileName(filePath) {
+	var lastSepIdx = filePath.lastIndexOf("\\");
+	if (lastSepIdx < 0) {
+		lastSepIdx = filePath.lastIndexOf("/");
+	}
+	if ((lastSepIdx < 1) || (lastSepIdx == filePath.length - 1)) {
+		return filePath;
+	}
+	return filePath.substring(lastSepIdx + 1);
+}
+
 function getFileNameExt(fileName)
 {
     fileExt="";

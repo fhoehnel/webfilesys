@@ -24,6 +24,9 @@
 
     <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/showImage.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
 
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -42,9 +45,7 @@
         window.moveTo(screen.availWidth / 2 - (newWinWidth / 2), 1);
         
         function confirmDelImg(imgFileName) {
-            if (confirm(resourceBundle["confirm.delfile"] + '\n' + imgFileName)) {
-                window.location.href = '/webfilesys/servlet?command=fmdelete&amp;fileName=' + encodeURIComponent(imgFileName) + '&amp;closeWin=true&amp;deleteRO=yes';
-            }
+            deleteSelf(null, imgFileName);
         }          
     </script>
 

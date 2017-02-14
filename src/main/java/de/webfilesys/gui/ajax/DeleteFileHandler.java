@@ -14,6 +14,7 @@ import de.webfilesys.Constants;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -32,13 +33,26 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
 
         String filePath = getParameter("filePath");
 
-        if (!accessAllowed(filePath)) {
-            Logger.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's document root: " + filePath);
-            return;
-        }
-
-        if (File.separatorChar == '\\') {
-            filePath = filePath.replace('/', '\\');
+        if (filePath == null) {
+        	String fileName = getParameter("fileName");
+        	if (CommonUtils.isEmpty(fileName)) {
+        		Logger.getLogger(getClass()).warn("missing parameter filePath or fileName");
+        		return;
+        	}
+        	filePath = getCwd();
+        	if (filePath.endsWith(File.separator)) {
+        		filePath = filePath + fileName;
+        	} else {
+        		filePath = filePath + File.separator + fileName;
+        	}
+        } else {
+            if (!accessAllowed(filePath)) {
+                Logger.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's document root: " + filePath);
+                return;
+            }
+            if (File.separatorChar == '\\') {
+                filePath = filePath.replace('/', '\\');
+            }
         }
 
         String deleteWriteProtected = getParameter("deleteWriteProtected");
