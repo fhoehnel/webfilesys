@@ -133,7 +133,7 @@
 
 <body class="fileList">
   <xsl:if test="/fileList/file">  
-    <xsl:attribute name="onload">setThumbContHeight();attachScrollHandler();</xsl:attribute>
+    <xsl:attribute name="onload">setThumbContHeight();initialLoadPictures();attachScrollHandler();</xsl:attribute>
   </xsl:if>
   <xsl:if test="not(/fileList/file)">  
     <xsl:attribute name="onload">setThumbContHeight();</xsl:attribute>

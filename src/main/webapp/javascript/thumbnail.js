@@ -250,6 +250,31 @@ function googleMapAllPics() {
     }
 }
 
+function initialLoadPictures() {
+
+    var scrollAreaCont = document.getElementById("scrollAreaCont");
+
+    var counter = 0;
+
+	for (var i = 0; (counter < 10) && (i < thumbnails.length); i++) {
+	    var pic = document.getElementById("pic-" + thumbnails[i]);
+	    if (pic) {
+			var imgPath = pic.getAttribute("imgPath");
+			if (imgPath) {
+	        	if (isScrolledIntoView(pic, scrollAreaCont)) {
+		  		    thumbnails.splice(i, 1);
+		    		
+		   		    loadThumbnail(pic, imgPath);
+	    
+	                setPictureDimensions(pic.id);
+	                
+	                counter++;
+	        	}
+	        }
+	    }
+	}
+}
+
 function attachScrollHandler() {
     var scrollAreaCont = document.getElementById("scrollAreaCont");
 
