@@ -669,6 +669,7 @@
   
     <script type="text/javascript">
       var thumbnails = new Array();
+      var loadedThumbs = new Array();
         
       <xsl:for-each select="/fileList/file">
         thumbnails.push("<xsl:value-of select="@id" />");

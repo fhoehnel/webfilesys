@@ -1717,6 +1717,7 @@ button.alertConfirmButton {
 	font-weight: bold;
 	border: 1px solid #404040;
 	border-radius: 8px;
+	cursor: pointer;
 }
 
 @media (max-width: 400px) {

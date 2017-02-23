@@ -285,6 +285,59 @@ function closeAlert() {
 	}
 }
 
+function customConfirm(confirmText, cancelButtonText, continueButtonText, continueCallback, cancelCallback) {
+   	var mouseShield = document.createElement("div");
+   	mouseShield.id = "mouseClickShield";
+   	mouseShield.setAttribute("class", "mouseClickShield");
+    document.body.appendChild(mouseShield);
+    mouseShield.setAttribute("onclick", "javascript:void(0);");
+	
+    mouseShield.style.height = document.body.clientHeight + "px";   
+    
+    var alertCont = document.createElement("div");
+    alertCont.setAttribute("class", "alertCont");
+   	mouseShield.appendChild(alertCont);
+
+    var alertTextElem = document.createElement("span");
+    alertTextElem.setAttribute("class", "alertText");
+    alertTextElem.innerHTML = confirmText;
+    alertCont.appendChild(alertTextElem);
+    
+    var buttonContElem = document.createElement("div");
+    buttonContElem.setAttribute("class", "alertButtonCont");
+    alertCont.appendChild(buttonContElem);
+    
+    var cancelButtonElem = document.createElement("button");
+    cancelButtonElem.setAttribute("class", "alertConfirmButton");
+    if (cancelCallback) {
+    	cancelButtonElem.onclick = cancelCallback;
+    } else {
+        cancelButtonElem.setAttribute("onclick", "closeAlert()");
+    }
+    cancelButtonElem.style.marginRight = "20px";
+    if (cancelButtonText) {
+    	cancelButtonElem.innerHTML = cancelButtonText;
+    } else {
+    	cancelButtonElem.innerHTML = "No";
+    }
+    buttonContElem.appendChild(cancelButtonElem);
+
+    var confirmButtonElem = document.createElement("button");
+    confirmButtonElem.setAttribute("class", "alertConfirmButton");
+    confirmButtonElem.onclick = function() {
+    	closeAlert();
+    	continueCallback();
+    };
+    if (continueButtonText) {
+    	confirmButtonElem.innerHTML = continueButtonText;
+    } else {
+    	confirmButtonElem.innerHTML = "Yes";
+    }
+    buttonContElem.appendChild(confirmButtonElem);
+    
+    centerBox(alertCont);
+}
+
 function insertAtCursor(myField, myValue) {
     if (document.selection) {  // MSIE
         myField.focus();

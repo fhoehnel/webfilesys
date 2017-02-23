@@ -266,7 +266,7 @@ function initialLoadPictures() {
 		    		
 		   		    loadThumbnail(pic, imgPath);
 	    
-	                setPictureDimensions(pic.id);
+	                setPictureDimensions(pic);
 	                
 	                counter++;
 	        	}
@@ -294,9 +294,26 @@ function attachScrollHandler() {
 	setTimeout(checkThumbnailsToLoad, 10);
 }
 
+function releaseInvisibleThumbnails() {
+	
+	for (var i = loadedThumbs.length - 1; i >= 0; i--) {
+	    var pic = loadedThumbs[i];
+	    
+	    if ((pic.naturalWidth > 400) || (pic.naturalHeight > 400)) {
+	       	if (isScrolledOutOfView(pic, scrollAreaCont)) {
+	       	    pic.setAttribute("imgPath", pic.src);
+	       	    pic.src = "";
+		        loadedThumbs.splice(i, 1);
+	       	    thumbnails.push(pic.id.substring(4));
+	       	}
+	    }
+	}
+}
+
 function checkThumbnailsToLoad() {
 
 	if (thumbnails.length == 0) {
+	    releaseInvisibleThumbnails();
 		return;
 	}
 	
@@ -305,16 +322,16 @@ function checkThumbnailsToLoad() {
     var scrollAreaCont = document.getElementById("scrollAreaCont");
 	
 	for (var i = 0; i < thumbnails.length; i++) {
-	    var pic = document.getElementById("pic-" + thumbnails[i]);
+		var pic = document.getElementById("pic-" + thumbnails[i]);
 	    if (pic) {
 			var imgPath = pic.getAttribute("imgPath");
 			if (imgPath) {
 	        	if (isScrolledIntoView(pic, scrollAreaCont)) {
-		    		thumbnails.splice(i, 1);
+	        		thumbnails.splice(i, 1);
 		    		
 		    		loadThumbnail(pic, imgPath);
 	    
-	                setPictureDimensions(pic.id);
+	                setPictureDimensions(pic);
 	                
 	                thumbLoadRunning = false;
 	                
@@ -325,9 +342,17 @@ function checkThumbnailsToLoad() {
 	}
 
     thumbLoadRunning = false;
+    
+    releaseInvisibleThumbnails();
 }
 
-function setPictureDimensions(picId) { 
+function setPictureDimensions(pic) { 
+
+    if (pic.getAttribute("origWidth")) {
+        return;
+    }
+
+    var picId = pic.id;
 
     var pixDim = document.getElementById("pixDim-" + picId.substring(4));
     if (!pixDim) {
@@ -394,7 +419,18 @@ function isScrolledIntoView(el, view) {
 	var elemTop = el.getBoundingClientRect().top - contOffset + contScrollPos;
     var elemBottom = el.getBoundingClientRect().bottom - contOffset + contScrollPos;
 	
-    return (elemTop >= contScrollPos) && (elemBottom <= contScrollPos + view.clientHeight + 20);
+    return (elemBottom >= contScrollPos) && (elemTop <= contScrollPos + view.clientHeight);
+}
+
+function isScrolledOutOfView(el, view) {
+	var contScrollPos = view.scrollTop;
+
+	var contOffset = view.getBoundingClientRect().top;
+
+	var elemTop = el.getBoundingClientRect().top - contOffset + contScrollPos;
+    var elemBottom = el.getBoundingClientRect().bottom - contOffset + contScrollPos;
+
+    return (elemBottom < contScrollPos - 80) || (elemTop > contScrollPos + view.clientHeight + 80);
 }
 
 function loadThumbnail(pic, thumbFileSrc) {
@@ -403,6 +439,17 @@ function loadThumbnail(pic, thumbFileSrc) {
 		
 		var picOrigWidth = pic.naturalWidth;
 		var picOrigHeight = pic.naturalHeight;
+		
+		if ((picOrigWidth == 0) || (picOrigHeight == 0)) {
+            // workaround for MSIE
+            var origWidthAttrib = pic.getAttribute("origWidth");
+            var origHeightAttrib = pic.getAttribute("origHeight");
+            
+            if (origWidthAttrib && origHeightAttrib) {
+		        picOrigWidth = parseInt(origWidthAttrib);
+		        picOrigHeight = parseInt(origHeightAttrib);
+            }
+		}
 		
 		if (picOrigWidth > picOrigHeight) {
 			pic.width = 160;
@@ -415,6 +462,8 @@ function loadThumbnail(pic, thumbFileSrc) {
 		pic.style.visibility = "visible";
 		
         pic.removeAttribute("imgPath");
+        
+        loadedThumbs.push(pic);
 
         checkThumbnailsToLoad();
 	};
@@ -576,8 +625,6 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                 	if (thumbContElem) {
                 	    thumbContElem.id = "thumbCont-" + newFileName;
                 	}
-                	
-                	// window.location.href = "/webfilesys/servlet?command=thumbnail#thumb-" + domId;
                 }			    
             } else {
                 alert(resourceBundle["alert.communicationFailure"]);

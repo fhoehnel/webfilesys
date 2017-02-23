@@ -17,40 +17,33 @@ function ajaxRotate(fileName, degrees, domId) {
     }
 }
 
-function autoImgRotate()
-{
-    if (!confirm(resourceBundle["confirm.rotateByExif"]))
-    {
-        return;
-    }
-
-    showHourGlass();
-
-    var xmlUrl = '/webfilesys/servlet?command=autoImgRotate';
-
-    var responseXml = xmlRequest(xmlUrl, autoImgRotateResult);
+function autoImgRotate() {
+	
+	customConfirm(resourceBundle["confirm.rotateByExif"], resourceBundle["button.cancel"], resourceBundle["botton.ok"], 
+			function() {
+                showHourGlass();
+                var xmlUrl = '/webfilesys/servlet?command=autoImgRotate';
+                var responseXml = xmlRequest(xmlUrl, autoImgRotateResult);
+	});
 }
 
-function autoImgRotateResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
+function autoImgRotateResult(req) {
+    if (req.readyState == 4) {
+        if (req.status == 200) {
              var anyRotatedItem = req.responseXML.getElementsByTagName("anyImageRotated")[0];            
              var anyRotated = anyRotatedItem.firstChild.nodeValue;
                 
              hideHourGlass();
                           
-             if (anyRotated == "true")
-             {
+             if (anyRotated == "true") {
                  window.location.href = '/webfilesys/servlet?command=thumbnail';
                  return
              }
              
              alert(resourceBundle["rotateByExif.noop"]);
+        } else {
+            alert(resourceBundle["alert.communicationFailure"]);
         }
     }
 }
-
 
