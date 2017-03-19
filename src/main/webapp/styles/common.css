@@ -1693,7 +1693,7 @@ div.mouseClickShield {
 
 div.alertCont {
 	width: 300px;
-	height: 120px;
+	min-height: 120px;
 	margin: auto;
 	margin-top: 200px;
 	background-color: ivory;

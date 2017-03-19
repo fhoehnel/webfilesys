@@ -19,7 +19,7 @@ function ajaxRotate(fileName, degrees, domId) {
 
 function autoImgRotate() {
 	
-	customConfirm(resourceBundle["confirm.rotateByExif"], resourceBundle["button.cancel"], resourceBundle["botton.ok"], 
+	customConfirm(resourceBundle["confirm.rotateByExif"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
 			function() {
                 showHourGlass();
                 var xmlUrl = '/webfilesys/servlet?command=autoImgRotate';
