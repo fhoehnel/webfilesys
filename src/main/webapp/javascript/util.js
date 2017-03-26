@@ -374,3 +374,25 @@ function escapeParam(origText) {
 function escapeForId(origValue) {
     return origValue.replace(/ /g, "_"); 
 }
+
+function getPrevSiblingElement(element) {
+    var prevSibling = element.previousSibling;
+    while (prevSibling) {
+    	if (prevSibling.nodeType == 1) {
+    		return prevSibling;
+    	}
+    	prevSibling = prevSibling.previousSibling;
+    }
+	return null;
+}
+
+function getNextSiblingElement(element) {
+    var nextSib = element.nextSibling;
+    while (nextSib) {
+    	if (nextSib.nodeType == 1) {
+    		return nextSib;
+    	}
+    	nextSib = nextSib.nextSibling;
+    }
+	return null;
+}

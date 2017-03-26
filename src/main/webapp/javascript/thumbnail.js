@@ -635,3 +635,95 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
     });
 }
 
+function handleThumbRangeSelection(evt) {
+    var clickTarget;
+    if (!evt) {
+        evt = window.event;
+    }
+    if (evt.target) {
+        clickTarget = evt.target;
+    } else if (evt.srcElement) {
+        clickTarget = evt.srcElement;
+    } else {
+        return;
+    }
+    
+    if (!clickTarget.checked) {
+    	return;
+    }
+
+    if (!evt.shiftKey) {
+    	return;
+    }
+    
+    var clickedThumbnailCont = clickTarget.parentNode;
+    
+    var currentThumbnailCont = getPrevSiblingElement(clickedThumbnailCont);
+    
+    var stop = false;
+    while (currentThumbnailCont && (!stop)) {
+		var checkbox = getThumbnailCheckbox(currentThumbnailCont);
+        if (checkbox.checked) {
+        	stop = true;
+        }
+        
+        if (!stop) {
+            currentThumbnailCont = getPrevSiblingElement(currentThumbnailCont);
+        }
+    }
+    
+    if (stop) {
+    	while (currentThumbnailCont != clickedThumbnailCont) {
+    		currentThumbnailCont = getNextSiblingElement(currentThumbnailCont);
+    		
+    		var checkbox = getThumbnailCheckbox(currentThumbnailCont);
+    		if (checkbox) {
+    			if (!checkbox.disabled) {
+        			checkbox.checked = true;
+    			}
+    		}
+    	}
+    	return;
+    } 
+
+    currentThumbnailCont = getNextSiblingElement(clickedThumbnailCont);
+    
+    stop = false;
+    while (currentThumbnailCont && (!stop)) {
+		var checkbox = getThumbnailCheckbox(currentThumbnailCont);
+        if (checkbox.checked) {
+        	stop = true;
+        }
+        
+        if (!stop) {
+            currentThumbnailCont = getNextSiblingElement(currentThumbnailCont);
+        }
+    }
+    
+    if (stop) {
+    	while (currentThumbnailCont != clickedThumbnailCont) {
+    		currentThumbnailCont = getPrevSiblingElement(currentThumbnailCont);
+    		
+    		var checkbox = getThumbnailCheckbox(currentThumbnailCont);
+    		if (checkbox) {
+    			if (!checkbox.disabled) {
+        			checkbox.checked = true;
+    			}
+    		}
+    	}
+    } 
+}
+
+function getThumbnailCheckbox(thumbnailCont) {
+    var children = thumbnailCont.childNodes;
+    
+    for (i = 0; i < children.length; i++) {
+    	if (children[i].nodeType == 1) {
+            if (children[i].nodeName.toLowerCase()  == 'input') {
+            	return children[i];
+            }
+    	}
+    }
+    
+    return null;
+}
