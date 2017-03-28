@@ -36,65 +36,56 @@
   
     var uploadStatus=0;
     
-    function openStatusWindow()
-    {  
-        if (checkFileSelected())
-        {  
-            var targetFileName = document.form1.serverFileName.value;
+    function openStatusWindow() {  
+        if (document.form1.uploadfile.value.length == 0) {
+            customAlert('<xsl:value-of select="resources/msg[@key='alert.nofileselected']/@value" />');
+            return;
+        }    
+    
+        var targetFileName = document.form1.serverFileName.value;
             
-            if (targetFileName == "") 
-            {
-                targetFileName = document.form1.uploadfile.value;
-                if (targetFileName.indexOf('\\') >= 0) 
-				{
-                    // MSIE gives absolute path
-                    targetFileName = targetFileName.substring(targetFileName.lastIndexOf('\\') + 1);
-                } 
-				else if (targetFileName.indexOf('/') >= 0)
-				{
-                    targetFileName = targetFileName.substring(targetFileName.lastIndexOf('/') + 1);
-				}
-            }
-            else 
-            {
-                var extIdx = targetFileName.lastIndexOf('.');
-                if ((extIdx &lt; 0) || (extIdx &lt; targetFileName.length - 5))
-                {
-                    var sourceFileName = document.form1.uploadfile.value;
-                    var dotIdx = sourceFileName.lastIndexOf('.');
-                    if ((dotIdx > 0) &amp;&amp; (dotIdx > sourceFileName.length - 5) &amp;&amp; 
-                        (dotIdx &lt; sourceFileName.length - 1))
-                    {
-                         if (!confirm('<xsl:value-of select="resources/msg[@key='uploadTargetFileNameExt']/@value" />'))
-                         {
-                             // targetFileName = targetFileName + "." + sourceFileName.substring(dotIdx + 1);
-                             return;
-                         }
-                    }
+        if (targetFileName == "") {
+            targetFileName = document.form1.uploadfile.value;
+            if (targetFileName.indexOf('\\') >= 0) {
+                // MSIE gives absolute path
+                targetFileName = targetFileName.substring(targetFileName.lastIndexOf('\\') + 1);
+            } else if (targetFileName.indexOf('/') >= 0) {
+                targetFileName = targetFileName.substring(targetFileName.lastIndexOf('/') + 1);
+	        }
+        } else {
+            var extIdx = targetFileName.lastIndexOf('.');
+            if ((extIdx &lt; 0) || (extIdx &lt; targetFileName.length - 5)) {
+                var sourceFileName = document.form1.uploadfile.value;
+                var dotIdx = sourceFileName.lastIndexOf('.');
+                if ((dotIdx > 0) &amp;&amp; (dotIdx > sourceFileName.length - 5) &amp;&amp; 
+                    (dotIdx &lt; sourceFileName.length - 1)) {
+                     if (!confirm('<xsl:value-of select="resources/msg[@key='uploadTargetFileNameExt']/@value" />')) {
+                         // targetFileName = targetFileName + "." + sourceFileName.substring(dotIdx + 1);
+                         return;
+                     }
                 }
             }
-            
-            if (!checkFileNameSyntax(targetFileName))
-            {
-                alert('<xsl:value-of select="resources/msg[@key='alert.illegalCharInFilename']/@value" />');
-                return;
-            }
-            
-            checkUploadTargetExists(targetFileName, function() {
-                document.form1.destFileName.value = targetFileName;
-                document.form1.description.value = replaceNewline(document.form1.desc.value);
-                document.form1.serverFileName.disabled = true;
-                document.form1.desc.disabled = true;
-                document.getElementById('uploadButton').style.visibility ='hidden';
-            
-                var statusBox = document.getElementById('uploadStatus');
-                centerBox(statusBox);
-                statusBox.style.visibility='visible';
-            
-                document.form1.submit();
-                window.setTimeout("getUploadStatus()", 1000);
-            });
         }
+            
+        if (!checkFileNameSyntax(targetFileName)) {
+            alert('<xsl:value-of select="resources/msg[@key='alert.illegalCharInFilename']/@value" />');
+            return;
+        }
+            
+        checkUploadTargetExists(targetFileName, function() {
+            document.form1.destFileName.value = targetFileName;
+            document.form1.description.value = replaceNewline(document.form1.desc.value);
+            document.form1.serverFileName.disabled = true;
+            document.form1.desc.disabled = true;
+            document.getElementById('uploadButton').style.visibility ='hidden';
+            
+            var statusBox = document.getElementById('uploadStatus');
+            centerBox(statusBox);
+            statusBox.style.visibility='visible';
+            
+            document.form1.submit();
+            window.setTimeout("getUploadStatus()", 1000);
+        });
     }
 
     function replaceNewline(text) 
@@ -123,17 +114,6 @@
         {
             uploadStatus.close();
         }
-    }
-    
-    function checkFileSelected()
-    {  
-        if (document.form1.uploadfile.value.length==0)
-        {  
-            alert('<xsl:value-of select="resources/msg[@key='alert.nofileselected']/@value" />');
-            return(false);
-        }
-   
-        return(true);
     }
     
     function showHideZipParms()

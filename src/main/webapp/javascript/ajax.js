@@ -318,17 +318,19 @@ function checkPasteOverwriteResult(req) {
             var conflicts = req.responseXML.getElementsByTagName("conflict");            
 
             if (conflicts.length > 0) {
-                var msg = resourceBundle["pasteConflictHead"] + ":\n";
+                var msg = resourceBundle["pasteConflictHead"] + "<br/>";
             	 
                 for (var i = 0; i < conflicts.length; i++) {
-                	msg = msg + "\n" + conflicts[i].firstChild.nodeValue;
+                	msg = msg + "<br/>" + conflicts[i].firstChild.nodeValue;
                 }
 
-                msg = msg + "\n\n" + resourceBundle["pasteOverwrite"];
+                msg = msg + "<br/><br/>" + resourceBundle["pasteOverwrite"];
                  
-                if (confirm(msg)) {
-                    window.location.href = pasteUrl;
-                }
+            	customConfirm(msg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+            			function() {
+                            window.location.href = pasteUrl;
+            	        }
+            	);
             } else {
                 window.location.href = pasteUrl;
             }

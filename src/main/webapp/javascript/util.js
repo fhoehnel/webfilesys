@@ -281,7 +281,8 @@ function customAlert(alertText, buttonText) {
 function closeAlert() {
 	var clickShield = document.getElementById("mouseClickShield");
 	if (clickShield) {
-		document.body.removeChild(clickShield);
+		// document.body.removeChild(clickShield);
+		document.getElementsByTagName("BODY")[0].removeChild(clickShield);	
 	}
 }
 
@@ -289,41 +290,34 @@ function customConfirm(confirmText, cancelButtonText, continueButtonText, contin
    	var mouseShield = document.createElement("div");
    	mouseShield.id = "mouseClickShield";
    	mouseShield.setAttribute("class", "mouseClickShield");
-    document.body.appendChild(mouseShield);
+    
+   	var bodyElem = document.getElementsByTagName("BODY")[0];
+    bodyElem.appendChild(mouseShield);
+    
     mouseShield.setAttribute("onclick", "javascript:void(0);");
 	
-    mouseShield.style.height = document.body.clientHeight + "px";   
+    mouseShield.style.height = window.innerHeight + "px";
     
     var alertCont = document.createElement("div");
     alertCont.setAttribute("class", "alertCont");
    	mouseShield.appendChild(alertCont);
 
+    var alertTextCont = document.createElement("div");
+    alertTextCont.setAttribute("class", "alertTextCont");
+    alertCont.appendChild(alertTextCont);
+   	
     var alertTextElem = document.createElement("span");
     alertTextElem.setAttribute("class", "alertText");
     alertTextElem.innerHTML = confirmText;
-    alertCont.appendChild(alertTextElem);
+    alertTextCont.appendChild(alertTextElem);
     
     var buttonContElem = document.createElement("div");
     buttonContElem.setAttribute("class", "alertButtonCont");
     alertCont.appendChild(buttonContElem);
     
-    var cancelButtonElem = document.createElement("button");
-    cancelButtonElem.setAttribute("class", "alertConfirmButton");
-    if (cancelCallback) {
-    	cancelButtonElem.onclick = cancelCallback;
-    } else {
-        cancelButtonElem.setAttribute("onclick", "closeAlert()");
-    }
-    cancelButtonElem.style.marginRight = "20px";
-    if (cancelButtonText) {
-    	cancelButtonElem.innerHTML = cancelButtonText;
-    } else {
-    	cancelButtonElem.innerHTML = "No";
-    }
-    buttonContElem.appendChild(cancelButtonElem);
-
     var confirmButtonElem = document.createElement("button");
     confirmButtonElem.setAttribute("class", "alertConfirmButton");
+    confirmButtonElem.style.marginRight = "40px";
     confirmButtonElem.onclick = function() {
     	closeAlert();
     	continueCallback();
@@ -335,6 +329,20 @@ function customConfirm(confirmText, cancelButtonText, continueButtonText, contin
     }
     buttonContElem.appendChild(confirmButtonElem);
     
+    var cancelButtonElem = document.createElement("button");
+    cancelButtonElem.setAttribute("class", "alertConfirmButton");
+    if (cancelCallback) {
+    	cancelButtonElem.onclick = cancelCallback;
+    } else {
+        cancelButtonElem.setAttribute("onclick", "closeAlert()");
+    }
+    if (cancelButtonText) {
+    	cancelButtonElem.innerHTML = cancelButtonText;
+    } else {
+    	cancelButtonElem.innerHTML = "No";
+    }
+    buttonContElem.appendChild(cancelButtonElem);
+
     centerBox(alertCont);
 }
 

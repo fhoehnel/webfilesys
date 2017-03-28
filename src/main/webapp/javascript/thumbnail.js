@@ -17,6 +17,7 @@ function multiFileFunction() {
         multiImageCopyMove();
     } else if (cmd == 'delete') {
         multiImageDelete();
+        return;
     } else if (cmd == 'download') {
         multiImageDownload();
     } else if (cmd == 'exifRename') {
@@ -126,11 +127,18 @@ function multiImageCopyMove() {
 
 function multiImageDelete() {
     if (anySelected()) {
-        if (confirm(resourceBundle["confirm.deleteImages"])) {
-	        document.form2.command.value = 'multiImageDelete';
-            document.form2.submit();
-	    }
-        document.form2.command.value = 'compareImg';
+    	customConfirm(resourceBundle["confirm.deleteImages"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+    			function() {
+	                document.form2.command.value = 'multiImageDelete';
+                    document.form2.submit();
+    	        },
+    			function() {
+    	            document.form2.command.value = 'compareImg';
+    	            document.form2.cmd.selectedIndex = 0;
+    	            resetSelected();
+    	            closeAlert();
+    	        }
+    	);
     } else {   
         customAlert(resourceBundle["alert.nofileselected"] + "!");
     }

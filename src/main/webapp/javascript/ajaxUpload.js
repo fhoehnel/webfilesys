@@ -45,15 +45,17 @@ function checkUploadTargetExists(targetFileName, callback) {
                 var resultItem = responseXml.getElementsByTagName("result")[0];
                 var result = resultItem.firstChild.nodeValue;  
                 
-                var cancelUpload = false;
                 if (result && (result == "true")) {
-                    if (!confirm(targetFileName + " - " + resourceBundle["upload.file.exists"])) {
-                        cancelUpload = true;
-                    }
+                    var confirmMsg = targetFileName + " - " + resourceBundle["upload.file.exists"];
+                	customConfirm(confirmMsg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+                			function() {
+                                callback();
+                	        }
+                	);
+                    return;
                 }
-                if (!cancelUpload) {
-                    callback();
-                }
+
+                callback();
             } else {
                 alert(resourceBundle["alert.communicationFailure"]);
             }
@@ -72,16 +74,19 @@ function checkMultiUploadTargetExists(targetFileName, callbackRejected, callback
                 var resultItem = responseXml.getElementsByTagName("result")[0];
                 var result = resultItem.firstChild.nodeValue;  
                 
-                var uploadRejected = false;
                 if (result && (result == "true")) {
-                    if (!confirm(targetFileName + " - " + resourceBundle["upload.file.exists"])) {
-                        uploadRejected = true;
-                        callbackRejected();
-                    }
+                    var confirmMsg = targetFileName + " - " + resourceBundle["upload.file.exists"];
+                	customConfirm(confirmMsg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+                			function() {
+                		        callbackOk();
+                	        },
+                			function() {
+                	        	callbackRejected();
+                	        }
+                	);
+                    return;
                 }
-                if (!uploadRejected) {
-                    callbackOk();
-                }
+                callbackOk();
             } else {
                 alert(resourceBundle["alert.communicationFailure"]);
             }

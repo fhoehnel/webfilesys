@@ -11,9 +11,11 @@
     }
     
     function printPage() {
-        if (confirm(resourceBundle["confirm.print"])) {
-            window.print();
-        }
+    	customConfirm(resourceBundle["confirm.print"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+    			function() {
+                    window.print();
+    	        }
+    	);
     }
 
     function scaleImage(picRealWidth, picRealHeight) {
@@ -65,38 +67,38 @@ function deleteSelf(imgPath, imgName) {
 		fileName = extractFileName(imgPath)
 	}
 	
-    if (!confirm(resourceBundle["confirm.delfile"]  + '\n' + fileName)) {
-        return;
-    }
-    
-    var url;
-    if (imgName) {
-        url = "/webfilesys/servlet?command=delFile&fileName=" + encodeURIComponent(imgName);
-    } else {
-        url = "/webfilesys/servlet?command=delFile&filePath=" + encodeURIComponent(imgPath);
-    }
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                var successItem = responseXml.getElementsByTagName("success")[0];
-                var success = successItem.firstChild.nodeValue;  
-                
-                if (success == "true") {
-                    var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
-                    var deletedFile = deletedFileItem.firstChild.nodeValue; 
-                    
-                    window.opener.removeDeletedFile(deletedFile);
-                    
-                    setTimeout("self.close()", 300);
-                } else {
-                    customAlert(resourceBundle["alert.delFileError"]);
-                }
-            } else {
-                customAlert(resourceBundle["alert.communicationFailure"]);
-            }
-        }
-    });          
+	customConfirm(resourceBundle["confirm.delfile"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+			function() {
+	            var url;
+	            if (imgName) {
+	                url = "/webfilesys/servlet?command=delFile&fileName=" + encodeURIComponent(imgName);
+	            } else {
+	                url = "/webfilesys/servlet?command=delFile&filePath=" + encodeURIComponent(imgPath);
+	            }
+	    
+	            xmlRequest(url, function(req) {
+	                if (req.readyState == 4) {
+	                    if (req.status == 200) {
+	                        var responseXml = req.responseXML;
+	                        var successItem = responseXml.getElementsByTagName("success")[0];
+	                        var success = successItem.firstChild.nodeValue;  
+	                
+	                        if (success == "true") {
+	                            var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
+	                            var deletedFile = deletedFileItem.firstChild.nodeValue; 
+	                    
+	                            window.opener.removeDeletedFile(deletedFile);
+	                    
+	                            setTimeout("self.close()", 300);
+	                        } else {
+	                            customAlert(resourceBundle["alert.delFileError"]);
+	                        }
+	                    } else {
+	                        customAlert(resourceBundle["alert.communicationFailure"]);
+	                    }
+	                }
+	            });          
+	        }
+	);
 } 
     

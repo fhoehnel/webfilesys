@@ -147,12 +147,17 @@ function selectedFileFunction(unhighlight) {
     var cmd = document.form1.cmd.options[idx].value;
 
     if (cmd == 'delete') {
-        var delConfirmMsg = resourceBundle["confirm.deleteFiles"];
-        
-        if (confirm(delConfirmMsg)) {
-            document.form1.submit();
-            return;
-        }
+    	customConfirm(resourceBundle["confirm.deleteFiles"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+    			function() {
+                    document.form1.submit();
+    	        },
+    			function() {
+    	        	resetMultifileSelection(unhighlight);
+    	        	closeAlert();
+    	        }
+    	);
+    	
+    	return;
     }
 
     if ((cmd == 'zip') || (cmd == 'tar')) {
@@ -168,6 +173,10 @@ function selectedFileFunction(unhighlight) {
 	    diffCompare();
     }
      
+    resetMultifileSelection(unhighlight);
+}
+
+function resetMultifileSelection(unhighlight) {
     document.form1.command.value = 'multiFileOp';
     document.form1.cmd.selectedIndex = 0;
 		

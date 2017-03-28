@@ -1692,14 +1692,20 @@ div.mouseClickShield {
 }
 
 div.alertCont {
+	position: absolute;
 	width: 300px;
 	min-height: 120px;
 	margin: auto;
-	margin-top: 200px;
-	background-color: ivory;
+	background-color: #f0f0f0;
 	border: 3px ridge #808080;
 	text-align: center;
 	padding: 20px;
+}
+
+div.alertTextCont {
+	max-height: 300px;
+	overflow-y: auto;
+	text-align: left;
 }
 
 span.alertText {
