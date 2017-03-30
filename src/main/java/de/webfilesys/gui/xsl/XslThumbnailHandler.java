@@ -348,15 +348,9 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 				XmlUtil.setChildText(fileElement, "imgPath", imgSrcPath);
 			}
 			
-			long kBytes = 0L;
-			if (sizeSum > 0L) {
-			    kBytes = sizeSum / 1024L;
-			    if (kBytes == 0L) {
-				    kBytes = 1;
-		     	}
+			if (selectedFiles.size() > 0) {
+				addFormattedSizeSum(sizeSum, fileListElement);		
 			}
-
-			XmlUtil.setChildText(fileListElement, "sizeSum", numFormat.format(kBytes));
 		}
 
 		if (!readonly) {

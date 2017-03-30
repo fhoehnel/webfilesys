@@ -2,6 +2,7 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.w3c.dom.Element;
 
 import de.webfilesys.util.UTF8URLEncoder;
+import de.webfilesys.util.XmlUtil;
 
 public class XslFileListHandlerBase extends XslRequestHandlerBase {
 
@@ -117,4 +119,42 @@ public class XslFileListHandlerBase extends XslRequestHandlerBase {
 		}
 	}
 
+	
+	protected void addFormattedSizeSum(long fileSizeSum, Element fileListElement) {
+		long sizeSumIntegerPart;
+		long sizeSumFractionalPart;
+		String sizeSumUnit = null;
+		
+		if (fileSizeSum >= 1024 * 1024 * 1024)
+		{
+			sizeSumIntegerPart = fileSizeSum / (1024 * 1024 * 1024);
+			sizeSumFractionalPart = (fileSizeSum % (1024 * 1024 * 1024)) * 1000 / (1024 * 1024 * 1024) / 10;
+			sizeSumUnit = getResource("sizeUnit.gigabyte", "GB");
+		}
+		else if (fileSizeSum >= 1024 * 1024)
+		{
+			sizeSumIntegerPart = fileSizeSum / (1024 * 1024);
+			sizeSumFractionalPart = (fileSizeSum % (1024 * 1024)) * 1000 / (1024 * 1024) / 10;
+			sizeSumUnit = getResource("sizeUnit.megabyte", "MB");
+		}
+		else if (fileSizeSum >= 1024)
+		{
+			sizeSumIntegerPart = fileSizeSum / 1024;
+			sizeSumFractionalPart = (fileSizeSum % 1024) * 1000 / 1024 / 10;
+			sizeSumUnit = getResource("sizeUnit.kilobyte", "KB");
+		}
+		else
+		{
+			sizeSumIntegerPart = fileSizeSum;
+			sizeSumFractionalPart = 0;
+			sizeSumUnit = getResource("sizeUnit.byte", "bytes");
+		}
+
+		XmlUtil.setChildText(fileListElement, "sizeSumInt", Long.toString(sizeSumIntegerPart), false);
+		if (sizeSumFractionalPart > 0) 
+		{
+			XmlUtil.setChildText(fileListElement, "sizeSumFract", Long.toString(sizeSumFractionalPart), false);
+		}
+		XmlUtil.setChildText(fileListElement, "sizeSumUnit", sizeSumUnit, false);
+	}
 }

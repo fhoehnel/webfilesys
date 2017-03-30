@@ -291,9 +291,15 @@
                     </span>
                     <xsl:text> </xsl:text>
                     <label resource="label.pictures"></label>
-                    <xsl:if test="sizeSum">
-                      <xsl:text> </xsl:text>
-                      <span id="sizeSum"><xsl:value-of select="sizeSum" /> KB</span>
+                    
+                    <xsl:if test="sizeSumInt">
+                      &#160;
+                      <xsl:value-of select="sizeSumInt" />
+                      <xsl:if test="sizeSumFract">
+                        <label resource="decimalFractPoint"></label>
+                        <xsl:value-of select="sizeSumFract" />
+                      </xsl:if>
+                      <label style="margin-left:5px"><xsl:value-of select="sizeSumUnit" /></label>
                     </xsl:if>
                   </td>
 	              
