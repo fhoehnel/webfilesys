@@ -1700,6 +1700,7 @@ div.alertCont {
 	border: 3px ridge #808080;
 	text-align: center;
 	padding: 20px;
+    box-sizing: content-box;
 }
 
 div.alertTextCont {
