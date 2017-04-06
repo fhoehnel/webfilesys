@@ -40,7 +40,7 @@ function autoImgRotateResult(req) {
                  return
              }
              
-             alert(resourceBundle["rotateByExif.noop"]);
+             customAlert(resourceBundle["rotateByExif.noop"]);
         } else {
             alert(resourceBundle["alert.communicationFailure"]);
         }

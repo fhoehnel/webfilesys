@@ -5,7 +5,7 @@ function validateAndSubmitCrypto(invalidKeyMsg)
 
     if (!checkCryptoKeySyntax(secretKey))
     {
-        alert(invalidKeyMsg);
+        customAlert(invalidKeyMsg);
         return;
     }
 

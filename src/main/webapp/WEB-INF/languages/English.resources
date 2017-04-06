@@ -876,6 +876,7 @@ grepPrompt=show only lines containing this text
 button.startGrep=start grep
 grepResultEmpty=no lines found containing
 grepFilterMissing=please enter a grep filter value
+grepReadError=some lines of the file could not be read
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version

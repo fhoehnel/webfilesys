@@ -149,9 +149,11 @@ function grep(path, fileName) {
                 if (resultItem) {
                     var checkResult = resultItem.firstChild.nodeValue;
                     if (checkResult == 'true') {
-                        centeredDialog('/webfilesys/servlet?command=ajaxRPC&method=grepParams&param1=' + encodeURIComponent(fileName), '/webfilesys/xsl/grepParams.xsl', 320, 130);
+                        centeredDialog('/webfilesys/servlet?command=ajaxRPC&method=grepParams&param1=' + encodeURIComponent(fileName), '/webfilesys/xsl/grepParams.xsl', 320, 130, function() {
+                            document.getElementById("grepFilter").focus();
+                        });
                     } else {
-                        alert(checkResult);
+                        customAlert(checkResult);
                     }
                 }
             } else {

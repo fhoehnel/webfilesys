@@ -137,8 +137,8 @@ function checkTwoFilesSelected() {
 
 function selectedFileFunction(unhighlight) {
     if (!anySelected()) {
-        alert(noFileSelected + '!');
         document.form1.cmd.selectedIndex = 0;
+        customAlert(noFileSelected + '!');
         return;
     }
 
@@ -532,7 +532,7 @@ function validateEmailList(addressList) {
 
 function checkGrepParamsAndSubmit() {
     if (document.getElementById("grepFilter").value.length == 0) {
-        alert(resourceBundle["grepFilterMissing"]);
+        customAlert(resourceBundle["grepFilterMissing"]);
     } else {
         document.grepForm.submit();
         setTimeout('hidePrompt()', 1000);

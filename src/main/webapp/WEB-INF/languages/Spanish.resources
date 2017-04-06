@@ -877,6 +877,7 @@ grepPrompt=mostrar sólo las líneas que contienen este texto
 button.startGrep=comenzar grep
 grepResultEmpty=no hay líneas que contienen la palabra
 grepFilterMissing=Introduce un valor para el filtro de grep
+grepReadError=unas líneas del archivo no son legible
 
 # mobile version
 label.mobileWindowTitle=WebFileSys version móvil

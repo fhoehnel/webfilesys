@@ -26,6 +26,8 @@ public class GrepRequestHandler extends UserRequestHandler
     private static final String ENCODING_ERROR = "#### failed to read line due to charcater encoding problems";
     
 	private static final int BYTES_TO_CHECK = 2 * 1024 * 1024;
+	
+	private static final int MAX_READ_EXCEPTION = 5;
     
 	public GrepRequestHandler(
     		HttpServletRequest req, 
@@ -116,6 +118,8 @@ public class GrepRequestHandler extends UserRequestHandler
         BufferedReader fin = null;
         FileInputStream fis = null;
         
+        int excCounter = 0;
+        
         try
         {
             if (fileEncoding == null) 
@@ -136,11 +140,9 @@ public class GrepRequestHandler extends UserRequestHandler
             
             boolean eof = false;
             
-            int excCounter = 0;
-            
             int lineCounter = 0;
             
-            while ((!eof) && (excCounter < 5))
+            while ((!eof) && (excCounter < MAX_READ_EXCEPTION))
             {
                 try 
                 {
@@ -177,6 +179,7 @@ public class GrepRequestHandler extends UserRequestHandler
         catch (IOException ioex)
         {
             Logger.getLogger(getClass()).error("failed to read file for grep", ioex);
+            excCounter++;
         }
         finally
         {
@@ -198,7 +201,14 @@ public class GrepRequestHandler extends UserRequestHandler
         
         output.println("</pre>");
 
-        if (!anyMatchFound) 
+        if (excCounter > 0) {
+            output.print("<span style=\"color:red;\">");
+            output.print(getResource("grepReadError", "some lines of the file could not be read"));
+            output.print("</span>");
+            output.print("<br/>");
+        }
+        
+        if ((!anyMatchFound) && (excCounter == 0))
         {
         	output.print("<span style=\"color:red;\">");
         	output.print(getResource("grepResultEmpty", "no lines found containing") + " \"" + filter + "\"");

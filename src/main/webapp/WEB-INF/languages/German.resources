@@ -879,6 +879,7 @@ grepPrompt=nur Zeilen anzeigen, die diesen Text enthalten
 button.startGrep=grep starten
 grepResultEmpty=keine Zeilen gefunden mit
 grepFilterMissing=Bitte geben Sie einen Filter-Wert ein!
+grepReadError=einige Zeilen der Datei konnten nicht gelesen werden
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version
