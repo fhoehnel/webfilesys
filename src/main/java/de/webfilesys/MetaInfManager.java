@@ -43,8 +43,6 @@ public class MetaInfManager extends Thread
 	public static final int MAX_DESCRIPTION_LENGTH = 1024;
 	
 	public static final int STATUS_NONE = 0;
-	public static final int STATUS_BLOG_EDIT = 1;
-	public static final int STATUS_BLOG_PUBLISHED = 2;
 
     private static MetaInfManager metaInfMgr=null;
 

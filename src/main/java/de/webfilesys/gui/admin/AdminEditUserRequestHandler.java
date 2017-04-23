@@ -372,15 +372,6 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
             output.println("<option>webspace</option>");
         }
         
-        if ((role != null) && role.equals("blog"))
-		{
-			output.println("<option selected>blog</option>");
-		}
-		else
-		{
-			output.println("<option>blog</option>");
-		}
-        
 		output.println("</select></td>");
         output.println("</tr>");
         

@@ -44,17 +44,15 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 
         String shortPath = null;
 		
-        if (!userMgr.getRole(uid).equals("blog")) {
-    		String headLinePath = getHeadlinePath(actPath);
+        String headLinePath = getHeadlinePath(actPath);
 
-    		shortPath = headLinePath;
+        shortPath = headLinePath;
 
-    		int pathLength = headLinePath.length();
+        int pathLength = headLinePath.length();
 
-    		if (pathLength > 50)
-    		{
-    			shortPath = headLinePath.substring(0,15) + "..." + headLinePath.substring(pathLength - 31);
-    		}
+        if (pathLength > 50)
+        {
+            shortPath = headLinePath.substring(0,15) + "..." + headLinePath.substring(pathLength - 31);
         }
         
 		Element fileCommentsElement = doc.createElement("fileComments");

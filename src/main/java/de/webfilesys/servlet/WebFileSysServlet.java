@@ -124,31 +124,6 @@ import de.webfilesys.gui.ajax.calendar.XmlPasteAppointmentHandler;
 import de.webfilesys.gui.anonymous.BlankPageRequestHandler;
 import de.webfilesys.gui.anonymous.VersionInfoRequestHandler;
 import de.webfilesys.gui.anonymous.VisitorFileRequestHandler;
-import de.webfilesys.gui.blog.BlogAddCommentHandler;
-import de.webfilesys.gui.blog.BlogChangeEntryHandler;
-import de.webfilesys.gui.blog.BlogDeleteCommentsHandler;
-import de.webfilesys.gui.blog.BlogDeleteEntryHandler;
-import de.webfilesys.gui.blog.BlogEditEntryHandler;
-import de.webfilesys.gui.blog.BlogGetPublicUrlHandler;
-import de.webfilesys.gui.blog.BlogLikeHandler;
-import de.webfilesys.gui.blog.BlogListCommentsHandler;
-import de.webfilesys.gui.blog.BlogListHandler;
-import de.webfilesys.gui.blog.BlogListSubscribersHandler;
-import de.webfilesys.gui.blog.BlogMoveEntryHandler;
-import de.webfilesys.gui.blog.BlogPostHandler;
-import de.webfilesys.gui.blog.BlogPublishFormHandler;
-import de.webfilesys.gui.blog.BlogPublishHandler;
-import de.webfilesys.gui.blog.BlogPublishNewEntriesHandler;
-import de.webfilesys.gui.blog.BlogRotateImgHandler;
-import de.webfilesys.gui.blog.BlogSaveSettingsHandler;
-import de.webfilesys.gui.blog.BlogSearchHandler;
-import de.webfilesys.gui.blog.BlogSetDescrHandler;
-import de.webfilesys.gui.blog.BlogSetTitlePicHandler;
-import de.webfilesys.gui.blog.BlogShowSettingsHandler;
-import de.webfilesys.gui.blog.BlogSubscribeHandler;
-import de.webfilesys.gui.blog.BlogUnpublishHandler;
-import de.webfilesys.gui.blog.BlogUnsetTitlePicHandler;
-import de.webfilesys.gui.blog.BlogUnsubscribeHandler;
 import de.webfilesys.gui.google.GoogleEarthDirPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthFolderPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthSinglePlacemarkHandler;
@@ -640,15 +615,6 @@ public class WebFileSysServlet extends ServletBase
     		
     		return(true);
     	}
-
-        if (command.equals("blog"))
-    	{
-        	String cmd = req.getParameter("cmd");
-        	if ((cmd != null) && cmd.equals("unsubscribe")) {
-    			(new BlogUnsubscribeHandler(req, resp, req.getSession(true), output, null)).handleRequest(); 
-        		return(true);
-        	}
-    	}
         
     	return(false);
     }
@@ -661,16 +627,7 @@ public class WebFileSysServlet extends ServletBase
     {
     	if (command == null)
     	{
-    		UserManager userMgr = WebFileSys.getInstance().getUserMgr();
-
-    		String role = userMgr.getRole(userid);
-    		
-    		if ((role != null) && role.equals("blog")) {
-    			(new BlogListHandler(req, resp, session, output, userid)).handleRequest(); 
-    		} else {
-    		    (new MainFrameSetHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
-    		}
-    		
+   		    (new MainFrameSetHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
     		return(true);
     	}
     	
@@ -2319,174 +2276,6 @@ public class WebFileSysServlet extends ServletBase
                 return(true);
         	}
         }
-        
-        if (command.equals("blog"))
-        {
-        	String cmd = req.getParameter("cmd");
-        	
-        	if (cmd == null)
-        	{
-        		cmd = "list";
-        	}
-        	
-        	if (cmd.equals("list"))
-        	{
-    			(new BlogListHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-        	else if (cmd.equals("post"))
-        	{
-    			(new BlogPostHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-        	
-        	else if (cmd.equals("editEntry"))
-        	{
-    			(new BlogEditEntryHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-        	else if (cmd.equals("changeEntry"))
-        	{
-    			(new BlogChangeEntryHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-        	else if (cmd.equals("setDescr"))
-        	{
-    			(new BlogSetDescrHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-        	else if (cmd.equals("deleteEntry"))
-        	{
-    			(new BlogDeleteEntryHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-        	else if (cmd.equals("moveEntry"))
-        	{
-    			(new BlogMoveEntryHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-        	else if (cmd.equals("publishForm"))
-        	{
-    			(new BlogPublishFormHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("publish"))
-            {
-    			(new BlogPublishHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("getPublicURL"))
-            {
-    			(new BlogGetPublicUrlHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("unpublish"))
-            {
-    			(new BlogUnpublishHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("listComments"))
-            {
-    			(new BlogListCommentsHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("addComment"))
-            {
-    			(new BlogAddCommentHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("delComments"))
-            {
-    			(new BlogDeleteCommentsHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("rotate"))
-            {
-    			(new BlogRotateImgHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("showSettings"))
-            {
-    			(new BlogShowSettingsHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("saveSettings"))
-            {
-    			(new BlogSaveSettingsHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("subscribe"))
-            {
-    			(new BlogSubscribeHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("unsubscribe"))
-            {
-    			(new BlogUnsubscribeHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("listSubscribers"))
-            {
-    			(new BlogListSubscribersHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("emojiList"))
-            {
-    			(new XmlEmojiListHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("setTitlePic"))
-            {
-    			(new BlogSetTitlePicHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("unsetTitlePic"))
-            {
-    			(new BlogUnsetTitlePicHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("like"))
-            {
-    			(new BlogLikeHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("search"))
-            {
-    			(new BlogSearchHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-           	else if (cmd.equals("publishNewEntries"))
-            {
-    			(new BlogPublishNewEntriesHandler(req, resp, session, output, userid)).handleRequest(); 
-                
-                return(true);
-        	}
-        }
         	
         if (command.equals("start"))
         {
@@ -2611,15 +2400,6 @@ public class WebFileSysServlet extends ServletBase
         		{
         			(new XslPictureAlbumHandler(req, resp, session, output, userid)).handleRequest();
         			
-        		}
-        		else if ((role != null) && role.equals("blog"))
-        		{
-        			try {
-            			resp.sendRedirect("/webfilesys/servlet?command=blog");
-        			} catch (IOException ex) {
-                		Logger.getLogger(getClass()).debug("failed to redirect to blog handler", ex);
-        			}
-        			// (new BlogListHandler(req, resp, session, output, userid)).handleRequest();
         		}
         		else
         		{

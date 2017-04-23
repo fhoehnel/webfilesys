@@ -98,7 +98,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
         }
         else
         {
-            if ((!isWebspaceUser()) && (!userMgr.getRole(uid).equals("blog")))
+            if (!isWebspaceUser())
             {
                 return (fullPath);
             }
@@ -563,65 +563,4 @@ public class UserRequestHandler extends ProtectedRequestHandler
     	return (!seemsToBeBinary);
     }
     
-	protected String formatBlogDate(Date day) {
-        StringBuffer buff = new StringBuffer();
-		
-		int weekday = day.getDay();
-		
-		switch (weekday) {
-		    case 0: buff.append(getResource("calendar.sunday", "sunday"));
-		            break;
-		    case 1: buff.append(getResource("calendar.monday", "monday"));
-                    break;
-		    case 2: buff.append(getResource("calendar.tuesday", "tuesday"));
-                    break;
-		    case 3: buff.append(getResource("calendar.wednesday", "wednesday"));
-                    break;
-		    case 4: buff.append(getResource("calendar.thursday", "thursday"));
-                    break;
-		    case 5: buff.append(getResource("calendar.friday", "friday"));
-                    break;
-		    case 6: buff.append(getResource("calendar.saturday", "saturday"));
-		}
-		
-		buff.append(", ");
-		
-		buff.append(day.getDate());
-		
-		buff.append(' ');
-
-		int month = day.getMonth();
-
-		switch (month) {
-	        case 0: buff.append(getResource("calendar.january", "january"));
-                    break;
-	        case 1: buff.append(getResource("calendar.february", "february"));
-                    break;
-	        case 2: buff.append(getResource("calendar.march", "march"));
-                    break;
-	        case 3: buff.append(getResource("calendar.april", "april"));
-                    break;
-	        case 4: buff.append(getResource("calendar.may", "may"));
-                    break;
-	        case 5: buff.append(getResource("calendar.june", "june"));
-                    break;
-	        case 6: buff.append(getResource("calendar.july", "july"));
-                    break;
-	        case 7: buff.append(getResource("calendar.august", "august"));
-                    break;
-	        case 8: buff.append(getResource("calendar.september", "september"));
-                    break;
-	        case 9: buff.append(getResource("calendar.october", "october"));
-                    break;
-	        case 10: buff.append(getResource("calendar.november", "november"));
-                     break;
-	        case 11: buff.append(getResource("calendar.december", "december"));
-	    }
-		
-		buff.append(' ');
-
-		buff.append(day.getYear() + 1900);
-		
-		return buff.toString();
-	}
 }

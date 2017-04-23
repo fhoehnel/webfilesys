@@ -132,7 +132,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		
         String userRole = getParameter("userRole");
 
-        if ((userRole == null) || ((!userRole.equals("webspace")) && (!userRole.equals("blog")))) {
+        if ((userRole == null) || (!userRole.equals("webspace"))) {
 			Logger.getLogger(getClass()).error("invalid user role: " + userRole);
 			return;
         }

@@ -16,14 +16,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.Constants;
-import de.webfilesys.GeoTag;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
-import de.webfilesys.graphics.BlogThumbnailHandler;
-import de.webfilesys.graphics.CameraExifData;
-import de.webfilesys.graphics.ImageTransformUtil;
 import de.webfilesys.gui.user.ZipFileRequestHandler;
 import de.webfilesys.gui.xsl.XslFileListHandler;
 import de.webfilesys.gui.xsl.XslLogonHandler;
@@ -643,69 +639,6 @@ public class UploadServlet extends WebFileSysServlet
                 }
             }
         }
-
-        
-		if (requestPath.indexOf("/blog/") > 0) {
-			String origImgPath = outFile.getAbsolutePath();
-			
-        	GeoTag geoTag = null;
-
-        	CameraExifData exifData = new CameraExifData(origImgPath);
-
-            if (exifData.hasExifData()) {
-                float gpsLatitude = exifData.getGpsLatitude();
-                float gpsLongitude = exifData.getGpsLongitude();
-                
-                if ((gpsLatitude >= 0.0f) && (gpsLongitude >= 0.0f)) {
-                	
-                    String latitudeRef = exifData.getGpsLatitudeRef();
-                    
-                    if ((latitudeRef != null) && latitudeRef.equalsIgnoreCase("S")) 
-                    {
-                        gpsLatitude = (-gpsLatitude);
-                    }
-                    
-                    String longitudeRef = exifData.getGpsLongitudeRef();
-
-                    if ((longitudeRef != null) && longitudeRef.equalsIgnoreCase("W")) 
-                    {
-                        gpsLongitude = (-gpsLongitude);
-                    } 
-                	
-                	geoTag = new GeoTag();
-                	geoTag.setLatitude(gpsLatitude);
-                	geoTag.setLongitude(gpsLongitude);
-                }
-            }
-			
-			BlogThumbnailHandler.getInstance().createBlogThumbnail(origImgPath);
-			
-			int lastSepIdx = origImgPath.lastIndexOf(File.separatorChar);
-			
-			String scaledImgPath = origImgPath.substring(0, lastSepIdx + 1) + "scaled-" + origImgPath.substring(lastSepIdx + 1);
-
-			// TODO: image size from blog settings
-			if (ImageTransformUtil.createScaledImage(origImgPath, scaledImgPath, 1280, 1280)) {
-
-				File origImgFile = new File(origImgPath);
-				if (!origImgFile.delete()) {
-		            Logger.getLogger(getClass()).error("failed to delete original image after scaling: " + origImgPath);
-				} else {
-					File scaledImgFile = new File(scaledImgPath);
-					if (!scaledImgFile.renameTo(origImgFile)) {
-			            Logger.getLogger(getClass()).error("failed to rename scaled image file " + scaledImgPath + " to " + origImgPath);
-					}
-				}
-			}
-			
-			if (geoTag != null) {
-				MetaInfManager.getInstance().setGeoTag(origImgPath, geoTag);
-            }
-			
-			if (MetaInfManager.getInstance().isStagedPublication(currentPath)) {
-				MetaInfManager.getInstance().setStatus(origImgPath, MetaInfManager.STATUS_BLOG_EDIT);
-			}
-		}
         
         if (WebFileSys.getInstance().isAutoCreateThumbs())
         {

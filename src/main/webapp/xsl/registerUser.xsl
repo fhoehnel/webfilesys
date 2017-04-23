@@ -21,7 +21,7 @@
 </link>
 
 <style type="text/css">
-  div.registrationBox {width:520px;height:460px;position:relative;top:-230px;left:-260px;background-color:#ffffe0;border-style:solid;border-width:1px;border-color:black;padding-top:20px;}
+  div.registrationBox {width:520px;height:420px;position:relative;top:-230px;left:-260px;background-color:#ffffe0;border-style:solid;border-width:1px;border-color:black;padding-top:20px;}
 
   td.formError {background-color:#ffffe0;color:#b00000;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding:8px;padding-top:4px;padding-bottom:4px;}
 
@@ -80,6 +80,7 @@
           <form accept-charset="utf-8" name="form1" method="POST" action="/webfilesys/servlet" style="margin:0px">
 
             <input type="hidden" name="command" value="registerSelf" />
+            <input type="hidden" name="userRole" value="webspace" />
 
             <table border="0">
             
@@ -280,18 +281,6 @@
                       </option>
                     </xsl:for-each>
                     
-                  </select>
-                </td>
-              </tr>
-              
-              <tr>
-                <td class="formParm1">
-                  <xsl:value-of select="resources/msg[@key='label.userRole']/@value" />
-                </td>
-                <td class="formParm2">
-                  <select name="userRole" size="1">
-                    <option value="webspace" selected="selected">webspace</option>
-                    <option value="blog">blog</option>
                   </select>
                 </td>
               </tr>

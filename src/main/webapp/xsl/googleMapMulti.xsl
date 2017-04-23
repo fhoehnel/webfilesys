@@ -68,7 +68,7 @@
 		
           marker = new google.maps.Marker({
               position: markerPos,
-              title: resourceBundle["blog.mapMarkerTitle"]
+              title: resourceBundle["mapMarkerTitle"]
           });
 
           marker.setMap(map);   

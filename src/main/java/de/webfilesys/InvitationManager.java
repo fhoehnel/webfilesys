@@ -42,10 +42,6 @@ public class InvitationManager extends Thread
     public static final String INVITATION_TYPE_TREE    = "tree";
 	public static final String INVITATION_TYPE_FILE    = "file";
 
-	private static final long MIN_SUBSCRIBER_NOTIFICATION_INTERVAL = 8 * 60 * 60 * 1000;
-	
-	private static final long NOTIFIY_DELAY_AFTER_CHANGE = 60 * 60 * 1000;
-	
     private static InvitationManager invMgr=null;
 
     private boolean changed=false;
@@ -736,117 +732,6 @@ public class InvitationManager extends Thread
        	changed = true;
     }
     
-    private void checkSubscriberNotifications() {
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
-        	Logger.getLogger(getClass()).debug("checking subscriber notifications");
-        }
-    	
-        NodeList invitationList = invitationRoot.getElementsByTagName("invitation");
-
-        if (invitationList == null) {
-            return;
-        }
-
-        int listLength = invitationList.getLength();
-
-        for (int i = 0;i < listLength; i++) {
-            Element invitationElem = (Element) invitationList.item(i);
-
-            Element notifyElem = XmlUtil.getChildByTagName(invitationElem, "notifySubscribers");
-            if (notifyElem != null) {
-            	Element changedElem = XmlUtil.getChildByTagName(notifyElem, "changed");
-            	
-            	if (changedElem != null) {
-            		long lastChangeTime = 0;
-        			try {
-        				lastChangeTime = Long.parseLong(XmlUtil.getElementText(changedElem));
-        			} catch (NumberFormatException numEx) {
-                		Logger.getLogger(getClass()).error("invalid change time", numEx);
-        			}
-
-        			if (System.currentTimeMillis() - lastChangeTime > NOTIFIY_DELAY_AFTER_CHANGE) {
-        				// wait some time after blog change until subscribers are notified, in case more entries will be created soon
-                		long lastNotified = 0;
-                		String lastNotificationTime = XmlUtil.getChildText(notifyElem, "lastNotified");
-                		if (!CommonUtils.isEmpty(lastNotificationTime)) {
-                			try {
-                				lastNotified = Long.parseLong(lastNotificationTime);
-                			} catch (NumberFormatException numEx) {
-                        		Logger.getLogger(getClass()).error("invalid lastNotified time: " + lastNotificationTime);
-                			}
-                		}
-                		
-                		if (System.currentTimeMillis() - lastNotified > MIN_SUBSCRIBER_NOTIFICATION_INTERVAL) {
-                            Element subscriberListElem = XmlUtil.getChildByTagName(invitationElem, "subscriberList");
-                        	if (subscriberListElem != null) {
-                                NodeList subscriberList = subscriberListElem.getElementsByTagName("subscriber");
-
-                                if (subscriberList != null) {
-                                    String blogPath = XmlUtil.getChildText(invitationElem, "path");
-                                    
-                                    String virtualUser = XmlUtil.getChildText(invitationElem, "virtualUser");
-
-                                    String blogTitle = MetaInfManager.getInstance().getDescription(blogPath, ".");
-                                    if (CommonUtils.isEmpty(blogTitle)) {
-                                    	blogTitle = virtualUser;
-                                    }
-                                    
-                                    String blogAccessCode = invitationElem.getAttribute("accessCode");
-                                    
-                                    int subscriberListLength = subscriberList.getLength();
-                                    
-                                    for (int k = 0; k < subscriberListLength; k++) {
-                                        Element subscriberElement = (Element) subscriberList.item(k);
-                                        String email = XmlUtil.getChildText(subscriberElement, "email");
-                                        String code = XmlUtil.getChildText(subscriberElement, "code");
-                                        sendSubscriberNotification(email, code, blogTitle, virtualUser, blogAccessCode);
-                                    }
-                                }
-                        	}
-                        	
-                        	notifyElem.removeChild(changedElem);
-                        	XmlUtil.setChildText(notifyElem, "lastNotified", Long.toString(System.currentTimeMillis()));
-                        	
-                        	changed = true;
-                		}
-        			}
-            	}
-            }
-        }
-    }
-    
-    private void sendSubscriberNotification(String email, String code, String blogTitle, String virtualUser, String blogAccessCode) {
-    	
-        String userLanguage = WebFileSys.getInstance().getUserMgr().getLanguage(virtualUser);
-    	
-        try {
-        	String templateFilePath = WebFileSys.getInstance().getConfigBaseDir() + "/languages/blogChangeNotification_" + userLanguage + ".template";
-        	
-            MailTemplate notificationTemplate = new MailTemplate(templateFilePath);
-
-            notificationTemplate.setVarValue("BLOGTITLE", blogTitle);
-
-            String blogURL = WebFileSys.getInstance().getClientUrl() + "/visitor/" + virtualUser + "/" + blogAccessCode;
-            notificationTemplate.setVarValue("BLOGURL", blogURL);
-            
-            String unsubscribeURL = WebFileSys.getInstance().getClientUrl() 
-            		              + "/servlet?command=blog&cmd=unsubscribe&virtualUser=" + UTF8URLEncoder.encode(virtualUser) 
-            		              + "&email=" + UTF8URLEncoder.encode(email) + "&code=" + code;
-            notificationTemplate.setVarValue("UNSUBSCRIBEURL", unsubscribeURL);
-
-            String mailText = notificationTemplate.getText();
-            
-            String subject = LanguageManager.getInstance().getResource(userLanguage, "blog.subjectChangeNotification", "New entries in the Blog");
-
-            (new SmtpEmail(email, subject, mailText)).send();
-        	
-    		Logger.getLogger(getClass()).info("blog subscriber notification mail sent to " + email + " for blog " + blogTitle);
-            
-        } catch (IllegalArgumentException iaex) {
-            System.out.println(iaex);
-        }
-    }
-    
     public String getInvitationCode(String userid, String docRoot) {
         String publicAccessCode = null;
 
@@ -957,10 +842,6 @@ public class InvitationManager extends Thread
                     saveToFile();
 
                     changed=false;
-                }
-
-                if (counter % 30 == 0) {
-                    checkSubscriberNotifications();	
                 }
 
                 if (++counter == (sleepHours * 60))

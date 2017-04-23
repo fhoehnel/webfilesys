@@ -267,15 +267,6 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
 		{
 			output.println("<option>admin</option>");
 		}
-
-		if ((errorMsg != null) && getParameter("role").equals("blog"))
-		{
-			output.println("<option selected>blog</option>");
-		}
-		else
-		{
-			output.println("<option>blog</option>");
-		}
 		
 		output.println("</select></td>");
         output.println("</tr>");

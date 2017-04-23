@@ -17,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.WebFileSys;
-import de.webfilesys.gui.blog.BlogListHandler;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumSlideShowHandler;
 import de.webfilesys.gui.xsl.album.XslPictureAlbumHandler;
@@ -148,9 +147,7 @@ public class VisitorServlet extends WebFileSysServlet {
             
             PrintWriter output = new PrintWriter(new OutputStreamWriter(resp.getOutputStream(), "UTF-8"));            
             
-            if (userMgr.getRole(visitorUserId).equals("blog")) {
-    			(new BlogListHandler(req, resp, session, output, visitorUserId)).handleRequest(); 
-            } else if ((viewType != null) && viewType.equals("slideshow")) {
+            if ((viewType != null) && viewType.equals("slideshow")) {
                 (new XslAlbumSlideShowHandler(req, resp, session, output, visitorUserId)).handleRequest();
             } else if ((viewType != null) && viewType.equals("story")) {
             	req.setAttribute("mode", "pictureBook");
