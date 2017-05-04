@@ -22,6 +22,8 @@
 <title resource="label.searchTitle"></title>
 
 <script src="javascript/browserCheck.js" type="text/javascript"></script>
+<script src="javascript/ajaxCommon.js" type="text/javascript"></script>
+<script src="javascript/util.js" type="text/javascript"></script>
 <script src="javascript/calendar/CalendarPopup.js" type="text/javascript"></script>
 <script src="javascript/calendar/AnchorPosition.js" type="text/javascript"></script>
 <script src="javascript/calendar/date.js" type="text/javascript"></script>
@@ -131,6 +133,8 @@
           alert(resourceBundle["label.searchDateConflict"]);
           return;
       }
+      
+      showHourGlass();
       
       document.getElementById("searchButton").disabled = true;
       document.getElementById("cancelButton").disabled = true;
