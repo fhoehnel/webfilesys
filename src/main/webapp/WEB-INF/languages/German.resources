@@ -629,6 +629,7 @@ label.noBookmarksDefined=Es wurden noch keine Bookmarks angelegt!
 label.bookmarks=Ordner-Lesezeichen (Bookmarks)
 label.deleteBookmark=Ordner-Lesezeichen (Bookmark) löschen
 label.addBookmark=Lesezeichen (Bookmark) speichern
+mobile.addBookmark=Lesezeichen setzen
 label.bookmarkName=Bookmark-Name
 alert.bookmarkMissingName=Der Bookmark-Name darf nicht leer sein!
 button.bookmark=Bookmark
@@ -912,6 +913,9 @@ menuSearch=Suche
 menuCreateFile=neue Datei anlegen
 menuZipDir=Ordner in ZIP-Archiv
 folderIsEmpty=Ordner enthält keine Dateien oder Unterordner, die dem Filter entsprechen
+mobileFolderMenuHint=Menü für aktuellen Ordner
+mobileMainMenuHint=Hauptmenü
+showSortMenu=Sortiermenü anzeigen
 
 # alert messages
 alert.regsuccess=Der neue Nutzer wurde erfolgreich registriert.

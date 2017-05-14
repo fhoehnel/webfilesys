@@ -626,6 +626,7 @@ label.noBookmarksDefined=No bookmarks have been defined!
 label.bookmarks=Bookmarked Folders
 label.deleteBookmark=Delete Bookmark
 label.addBookmark=bookmark this folder
+mobile.addBookmark=add bookmark
 label.bookmarkName=bookmark name
 alert.bookmarkMissingName=The bookmark name may not be empty!
 button.bookmark=Bookmark
@@ -909,6 +910,9 @@ menuSearch=search
 menuCreateFile=create new file
 menuZipDir=create ZIP archive
 folderIsEmpty=no files or subfolders in this directory matching the filter criteria
+mobileFolderMenuHint=current folder menu
+mobileMainMenuHint=main menu
+showSortMenu=show sort menu
 
 # alert messages
 alert.regsuccess=New user has been registered successfully.

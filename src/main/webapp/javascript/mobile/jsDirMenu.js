@@ -126,3 +126,14 @@ function deleteFolder(path, confirmed) {
     });
 }
 
+function pasteFromClipboard() {
+	window.location.href = "/webfilesys/servlet?command=pasteFiles";
+}
+
+function pasteAsLink() {
+	window.location.href = "/webfilesys/servlet?command=pasteLinks";	
+}
+
+function uploadParams() {
+	window.location.href = "/webfilesys/servlet?command=uploadParms";	
+}

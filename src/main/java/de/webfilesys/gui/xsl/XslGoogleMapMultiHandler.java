@@ -113,13 +113,15 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 				
 		        addMarker(markersElement, geoTag.getLatitude(), geoTag.getLongitude(), infoText, file.getName());	        
 			} else {
-	            String fileExt = CommonUtils.getFileExtension(path);
+	            String fileExt = CommonUtils.getFileExtension(file.getName());
 	            
 	            if (fileExt.equals(".jpg") || fileExt.equals(".jpeg")) {
 	                // use GPS coordinates from Exif data if present in the JPEG file
-	                CameraExifData exifData = new CameraExifData(path);
+                    
+                    CameraExifData exifData = new CameraExifData(file.getAbsolutePath());
 
 	                if (exifData.hasExifData()) {
+
 	                    float gpsLatitude = exifData.getGpsLatitude();
 	                    float gpsLongitude = exifData.getGpsLongitude();
 	                    
@@ -156,6 +158,17 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 	                }
 	            }
 			}
+		}
+		
+        String googleMapsAPIKey = null;
+		if (req.getScheme().equalsIgnoreCase("https")) {
+			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+		} else {
+			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+		}
+		
+		if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
+		    XmlUtil.setChildText(geoDataElement, "googleMapsAPIKey", googleMapsAPIKey, false);
 		}
 		
 		// when XSLT processing is done by the browser, the Firefox browser and MSIE 7.0 hang up forever

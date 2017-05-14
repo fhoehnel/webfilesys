@@ -528,6 +528,17 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			}
 		}
 	    
+        String googleMapsAPIKey = null;
+		if (req.getScheme().equalsIgnoreCase("https")) {
+			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+		} else {
+			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+		}
+		
+		if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
+		    XmlUtil.setChildText(metaInfElement, "googleMapsAPIKey", googleMapsAPIKey, false);
+		}
+		
 		// when XSLT processing is done by the browser, the Firefox browser and MSIE 7.0 hang up forever
 		// when loading the Google maps API Javascript functions from the Google server
 		// so we have to do the XSLT processing always on server side

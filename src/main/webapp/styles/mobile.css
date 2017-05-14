@@ -1,14 +1,36 @@
   body.mobile {margin:0px;font-size:12pt;font-family:Arial,Helvetica;background-color:#ffffff;}
-  div.albumPath {padding:0;padding-left:2px;text-align:left;}
-  a.currentPath {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+  
+  div.albumPath {
+      padding: 4px;
+      text-align:left;
+  }
+  
+  a.currentPath {
+      font-size: 20px;
+      color: black;
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      text-decoration: none;
+      vertical-align: middle;
+  }
+  
+  #currentPathScrollCont {
+      overflow-x: hidden;
+  }
+  
+  #currentPath {
+      white-space: nowrap;
+  }
+  
   a.currentPath:hover {color:green;text-decoration:underline;}
   a.currentPathSep {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+  
   span.currentPathSep {
-      font-size:12pt;
-      color:black;
-      font-family:Arial,Helvetica;
-      font-weight:bold;
-      margin:0 4px 0 4px;
+      font-size: 20px;
+      color: black;
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      margin: 0 4px 0 4px;
       vertical-align: middle;
   }
 
@@ -21,19 +43,52 @@
   a.pageNum {color:black;font-weight:bold;text-decoration:none;}
   a.pageNum:hover {color:green;text-decoration:underline;}
 
-  a.subFolder {font-size:12pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;vertical-align:middle;}
+  a.subFolder {
+      font-size: 24px;
+      color: maroon;
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      text-decoration: none;
+      vertical-align: middle;
+  }
+  
   a.subFolder:hover {color:green;text-decoration:underline;}
 
-  a.fn {font-size:12pt;color:navy;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.fn {
+      font-size: 24px;
+      color: navy;
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      text-decoration: none;
+  }
+  
   a.fn:hover {color:green;text-decoration:underline;}
 
-  a.link {font-size:12pt;color:maroon;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
+  a.link {
+      font-size: 24px;
+      color: maroon;
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      text-decoration: none;
+  }
+  
   a.link:hover {color:blue;}
 
   td.subFolderList {background-color:ivory;padding:0px;margin:0px;border-right-width:1px;border-right-style:solid;border-right-color:#b0b0b0;}
   td.fileList {background-color:ivory;padding:0px;margin:0px;}
 
-  td.fileListFunct {background-color:#ffffe0;font-size:10pt;font-family:Arial,Helvetica;color:black;padding-left:2px;padding-right:2px;padding-top:2px;padding-bottom:2px;}
+  td.fileListFunct {
+      background-color: #ffffe0;
+      border-color: #ffffe0;
+      font-size: 16px;
+      font-family: Arial,Helvetica;
+      color: black;
+      padding-left: 2px;
+      padding-right: 2px;
+      padding-top: 2px;
+      padding-bottom: 2px;
+  }
+  
   td.fileListFunct2 {background-color:#ffffe0;padding:0;margin:0;}
 
   .sepBottom {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#b0b0b0;}
@@ -50,7 +105,7 @@
   
 a.menuitem,
 span.menuitem {
-    font-size: 13pt;
+    font-size: 20px;
     color: #000080;
     font-family: Arial;
     text-decoration: none;
@@ -80,13 +135,31 @@ span.menuitem:hover {
   td.data {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;}
   a.dir {font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}
   a.dir:hover {color:green;}
-  font.fixed {font-size:10pt;color:black;font-family:monospace;}
+  
+  font.fixed {
+      font-size: 14px;
+      color: black;
+      font-family: monospace;
+  }
+  
   input.cb {background-color:white;}
   body.menu {margin-top:0px;margin-left:0px;margin-right:0px;font-size:10pt;background-color:#c0c0c0;font-family:Arial;}
   td.border {background-color:black;}
 
   th.fileListHead {background-color:lavender;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;padding-top:2px;padding-bottom:2px;}
-  td.fileListData {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding-top:2px;}
+  td.fileListData {
+      background-color: ivory;
+      font-size: 10pt;
+      font-family: Arial,Helvetica;
+      vertical-align: top;
+      padding:2px 5px 2px 5px;
+  }
+  
+  td.fileListSelection,
+  td.fileListIcon {
+      vertical-align: middle;
+  }
+  
   .sep {border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:#b0b0b0;}
   input.cb2 {background-color:ivory;}
   input.cb3 {background-color:#ffffe0;}
@@ -94,12 +167,32 @@ span.menuitem:hover {
   
   table.topLess {border-width:1px;border-style:solid;border-color:black;border-top-style:none}
 
-  table.folderFileList {width:100%;border-width:1px;border-style:solid;border-color:black;border-bottom-style:none}
+  table.filterAndSort {
+      width: 100%;
+      border: 1px solid black;
+      border-bottom-color: #b0b0b0;
+  }
+
+  table.folderFileList {
+      width: 100%;
+      border-width: 0 1px 1px 1px;
+      border-style: solid;
+      border-color: black;
+  }
+  
+  table.folderFileList input[type=checkbox] {
+      transform: scale(1.5);
+  }
+  
+  table.multiFileFunct {
+      width: 100%;
+      border-collapse: collapse;
+  }
   
   input.formParm1 {background-color:#ffffe0;}
   
   input, select, textarea {
-      font-size:13px;
+      font-size:18px;
       color:navy;
       background-color:white;
       border: 1px solid #808080;
@@ -109,10 +202,9 @@ span.menuitem:hover {
   
   input[type="submit"], input[type="button"], input.roundedButton {
       color: black;
-      font-size: 13px;
+      font-size: 18px;
       border: 1px solid #a0a0a0;
-      background-image:url('/webfilesys/images/buttonBack.png');
-      background-repeat:repeat-x;
+      background-color: #f0f0f0;
       padding-left: 12px;
       padding-right: 12px;
       padding-top: 2px;
@@ -187,7 +279,117 @@ span.menuitem:hover {
       background-color: #C0C0FF;
       border: 1px solid #000080;
       color: #000000;
-      font-weight: bold;
+      text-decoration: none;
   }
   
+  .mobileFolderIcon:before {
+      font-size: 24px;
+      color: maroon;
+      font-style: normal;
+  }
   
+  .mobileMenuIcon:before {
+      font-size: 24px;
+      color: black;
+      font-style: normal;
+  }
+    
+  td.mobileFolderMenu {
+      text-align: right;
+      padding-right: 6px;
+  }
+
+  td.mobileMainMenu {
+      text-align: right;
+      padding-right: 12px;
+  }
+  
+  div.contextMenu {
+      position: absolute;
+      top: 10px;
+      left: 50px;
+      width: 220px;
+      background-color: #c0c0c0;
+      border-style: ridge;
+      border-width: 3px;
+      border-color: #c0c0c0;
+      visibility: hidden;
+  }
+  
+  div.contextMenu table {
+      border-spacing: 0;
+  }
+  
+  div.contextMenu table th {
+      background-color: lavender;
+      font-size: 16px;
+      color: black;
+      padding: 4px 5px;
+      text-align: left;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+      border-bottom-color: black;  
+  }
+
+div.mouseClickShield {
+    height: 768px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+div.alertCont {
+	position: absolute;
+	width: 300px;
+	min-height: 120px;
+	margin: auto;
+	background-color: #f0f0f0;
+	border: 3px ridge #808080;
+	text-align: center;
+	padding: 20px;
+    box-sizing: content-box;
+}
+
+div.alertTextCont {
+	max-height: 300px;
+	overflow-y: auto;
+	text-align: left;
+}
+
+span.alertText {
+	font-size: 15px;
+}
+
+div.alertButtonCont {
+    margin-top: 40px;
+}
+
+button.alertConfirmButton {
+	width: 120px;
+	height: 30px;
+	font-size: 16px;
+	font-weight: bold;
+	border: 1px solid #404040;
+	border-radius: 8px;
+	cursor: pointer;
+}
+  
+#sortMenu {
+	display: none;
+}
+
+div.toastBox {
+	position: absolute;
+	background-color: ivory;
+	border: 1px solid black;
+	border-radius: 10px;
+	padding: 20px;
+}
+
+div.toastBox span {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 13px;
+    color: #000000;
+}

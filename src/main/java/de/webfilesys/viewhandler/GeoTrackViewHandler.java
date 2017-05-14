@@ -18,6 +18,8 @@ import org.apache.log4j.Logger;
 import com.ctc.wstx.exc.WstxParsingException;
 
 import de.webfilesys.ViewHandlerConfig;
+import de.webfilesys.WebFileSys;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.ISO8601DateParser;
 
 /**
@@ -34,6 +36,13 @@ public class GeoTrackViewHandler implements ViewHandler
     
     public void process(String filePath, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req, HttpServletResponse resp)
     {
+        String googleMapsAPIKey = null;
+		if (req.getScheme().equalsIgnoreCase("https")) {
+			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+		} else {
+			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+		}
+		
     	double[] distanceBuffer = new double[DISTANCE_SMOOTH_FACTOR];
     	
     	for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
@@ -139,6 +148,10 @@ public class GeoTrackViewHandler implements ViewHandler
                             if (tagName.equals("gpx")) 
                             {                        
                                 xmlOut.print(" xmlns=\"http://www.topografix.com/GPX/1/0\"");
+
+                                if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
+                                	xmlOut.print(" googleMapsAPIKey=\"" + googleMapsAPIKey + "\""); 
+                                }
                             }
                             
                             if (tagName.equals("trk")) {
@@ -207,6 +220,14 @@ public class GeoTrackViewHandler implements ViewHandler
                             
                             xmlOut.print(">");
 
+                            /*
+                            if (tagName.equals("gpx")) {
+                                if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
+                                	xmlOut.print("<googleMapsAPIKey>" + googleMapsAPIKey + "</googleMapsAPIKey>"); 
+                                }
+                            }
+                            */
+                            
                             if (tagName.equals("trkpt") || tagName.equals("wpt"))
                             {
                                 if (dist != Double.MIN_VALUE) 

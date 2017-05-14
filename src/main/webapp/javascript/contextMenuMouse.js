@@ -52,37 +52,47 @@ function mouseClickHandler(evt)
     
 }
 
-function positionMenuDiv(menuDiv, maxMenuHeight)
-{
-    windowWidth = getWinWidth();
-    windowHeight = getWinHeight();
+function positionMenuDiv(menuDiv, maxMenuHeight) {
+    var windowWidth = getWinWidth();
+    var windowHeight = getWinHeight();
 
     var yScrolled;
     var xScrolled;
     
-    if (browserFirefox || browserChrome || browserSafari)
-    {
+    if (browserFirefox || browserChrome || browserSafari) {
         yScrolled = window.pageYOffset;
         xScrolled = window.pageXOffset;
-    }
-    else
-    {
+    } else {
         yScrolled = (document.documentElement.scrollTop || document.body.scrollTop);
         xScrolled = (document.documentElement.scrollLeft || document.body.scrollLeft);
     }
     
-	if (clickYPos > yScrolled + windowHeight - maxMenuHeight)
-    {
-        clickYPos = yScrolled + windowHeight - maxMenuHeight;
+    var horizScrollbarWidth = 0;
+    if (document.documentElement.scrollWidth > document.documentElement.clientWidth) {
+    	horizScrollbarWidth = 20;
     }
 
-    if (clickXPos > xScrolled + windowWidth - 200)
-    {
-        clickXPos = xScrolled + windowWidth - 200;
+    var verticalScrollbarWidth = 0;
+    if (document.documentElement.scrollHeight > document.documentElement.clientHeight) {
+    	verticalScrollbarWidth = 20;
+    }
+    
+	var menuHeight = menuDiv.offsetHeight + 10;
+    var menuYPos = clickYPos;
+    
+	if (clickYPos > yScrolled + windowHeight - menuHeight - horizScrollbarWidth) {
+		menuYPos = yScrolled + windowHeight - menuHeight - horizScrollbarWidth;
     }
 
-    menuDiv.style.left = clickXPos + 'px';
-    menuDiv.style.top = clickYPos + 'px';
+	var menuWidth = menuDiv.offsetWidth + 10;
+    var menuXPos = clickXPos;
+
+    if (clickXPos > xScrolled + windowWidth - menuWidth - verticalScrollbarWidth) {
+    	menuXPos = xScrolled + windowWidth - menuWidth - verticalScrollbarWidth;
+    }
+
+    menuDiv.style.left = menuXPos + 'px';
+    menuDiv.style.top = menuYPos + 'px';
     
     menuDiv.style.visibility = 'visible';
 }

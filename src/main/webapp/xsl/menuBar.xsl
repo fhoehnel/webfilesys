@@ -166,27 +166,27 @@
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
             <th>
-	          <div class="icon-button">
-                <a href="javascript:fastpath()" class="icon-font icon-folderOpen">
-                  <xsl:attribute name="titleResource">label.fastpath</xsl:attribute>
+	          <div class="icon-button" onclick="fastpath()">
+                <xsl:attribute name="titleResource">label.fastpath</xsl:attribute>
+                <a class="icon-font icon-folderOpen">
                   <xsl:text> </xsl:text>
                 </a>
               </div>
 		    </th>
 
             <th>
-	          <div class="icon-button">
-                <a href="javascript:bookmarks()" class="icon-font icon-bookmark">
-                  <xsl:attribute name="titleResource">label.bookmarks</xsl:attribute>
+	          <div class="icon-button" onclick="bookmarks()">
+                <xsl:attribute name="titleResource">label.bookmarks</xsl:attribute>
+                <a class="icon-font icon-bookmark">
                   <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
             
             <th>
-	          <div class="icon-button">
-                <a href="javascript:returnToPrevDir()" class="icon-font icon-return">
-                  <xsl:attribute name="titleResource">label.returnToPrevDir</xsl:attribute>
+	          <div class="icon-button" onclick="returnToPrevDir()">
+                <xsl:attribute name="titleResource">label.returnToPrevDir</xsl:attribute>
+                <a class="icon-font icon-return">
                   <xsl:text> </xsl:text>
                 </a>
               </div>
@@ -194,27 +194,27 @@
 
             <xsl:if test="/menubar/unixAdmin">
               <th>
-	            <div class="icon-button">
-                  <a href="/webfilesys/servlet?command=processList" target="_blank" class="icon-font icon-process">
-                    <xsl:attribute name="titleResource">label.processes</xsl:attribute>
+	            <div class="icon-button" onclick="window.open('/webfilesys/servlet?command=processList', 'processWin')">
+                  <xsl:attribute name="titleResource">label.processes</xsl:attribute>
+                  <a class="icon-font icon-process">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
               
               <th>
-	            <div class="icon-button">
-                  <a href="javascript:fileSysStats()" class="icon-font icon-chart">
-                    <xsl:attribute name="titleResource">label.fsstat</xsl:attribute>
+	            <div class="icon-button" onclick="fileSysStats()">
+                  <xsl:attribute name="titleResource">label.fsstat</xsl:attribute>
+                  <a class="icon-font icon-chart">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
               </th>
 
               <th>
-	            <div class="icon-button">
-                  <a href="#" onclick="unixCmdWin()" class="icon-font icon-console">
-                    <xsl:attribute name="titleResource">label.oscmd</xsl:attribute>
+	            <div class="icon-button" onclick="unixCmdWin()">
+                  <xsl:attribute name="titleResource">label.oscmd</xsl:attribute>
+                  <a class="icon-font icon-console">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
@@ -223,9 +223,9 @@
 
             <xsl:if test="/menubar/role='admin'">
               <th>
-	            <div class="icon-button">
-                  <a href="/webfilesys/servlet?command=admin&amp;cmd=menu" target="_parent" class="icon-font icon-admin">
-                    <xsl:attribute name="titleResource">label.admin</xsl:attribute>
+	            <div class="icon-button" onclick="parent.location.href='/webfilesys/servlet?command=admin&amp;cmd=menu'">
+                  <xsl:attribute name="titleResource">label.admin</xsl:attribute>
+                  <a class="icon-font icon-admin">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
@@ -236,9 +236,9 @@
               <xsl:if test="not(readonly) or (readonly='false')">
                 <xsl:if test="registrationType='open'">
                   <th>
-	                <div class="icon-button">
-                      <a href="/webfilesys/servlet?command=selfEditUser" target="FileList" class="icon-font icon-user">
-                        <xsl:attribute name="titleResource">label.editregistration</xsl:attribute>
+	                <div class="icon-button" onclick="parent.FileList.location.href='/webfilesys/servlet?command=selfEditUser'">
+                      <xsl:attribute name="titleResource">label.editregistration</xsl:attribute>
+                      <a class="icon-font icon-user">
                         <xsl:text> </xsl:text>
                       </a>
 					</div>
@@ -247,9 +247,9 @@
 
                 <xsl:if test="not(registrationType='open')">
                   <th>
-	                <div class="icon-button">
-                      <a href="/webfilesys/servlet?command=editPw" target="FileList" class="icon-font icon-user">
-                        <xsl:attribute name="titleResource">label.settings</xsl:attribute>
+	                <div class="icon-button" onclick="parent.FileList.location.href='/webfilesys/servlet?command=editPw'">
+                      <xsl:attribute name="titleResource">label.settings</xsl:attribute>
+                      <a class="icon-font icon-user">
                         <xsl:text> </xsl:text>
                       </a>
 					</div>
@@ -260,9 +260,9 @@
 
             <xsl:if test="not(readonly) or (readonly='false')">
               <th>
-	            <div class="icon-button">
-                  <a href="javascript:publishList()" class="icon-font icon-share">
-                    <xsl:attribute name="titleResource">label.publishList</xsl:attribute>
+	            <div class="icon-button" onclick="publishList()">
+                  <xsl:attribute name="titleResource">label.publishList</xsl:attribute>
+                  <a class="icon-font icon-share">
                     <xsl:text> </xsl:text>
                   </a>
                 </div>
@@ -273,9 +273,9 @@
               <xsl:if test="not(readonly) or (readonly='false')">
                 <xsl:if test="diskQuota='true'">
                   <th>
-	                <div class="icon-button">
-                      <a href="javascript:diskQuota()" class="icon-font icon-chart">
-                        <xsl:attribute name="titleResource">label.diskQuotaUsage</xsl:attribute>
+	                <div class="icon-button" onclick="diskQuota()">
+                      <xsl:attribute name="titleResource">label.diskQuotaUsage</xsl:attribute>
+                      <a class="icon-font icon-chart">
                         <xsl:text> </xsl:text>
                       </a>
 					</div>
@@ -286,9 +286,9 @@
 
             <xsl:if test="/menubar/queryDrives">
               <th>
-	            <div class="icon-button">
-                  <a href="javascript:refreshDriveList()" class="icon-font icon-drive">
-                    <xsl:attribute name="titleResource">label.refreshDrives</xsl:attribute>
+	            <div class="icon-button" onclick="refreshDriveList()">
+                  <xsl:attribute name="titleResource">label.refreshDrives</xsl:attribute>
+                  <a class="icon-font icon-drive">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
@@ -297,9 +297,9 @@
             
             <xsl:if test="not(readonly) or (readonly='false')">
               <th>
-	            <div class="icon-button">
-                  <a href="javascript:watchList()" class="icon-font icon-watch">
-                    <xsl:attribute name="titleResource">watchList</xsl:attribute>
+	            <div class="icon-button" onclick="watchList()">
+                  <xsl:attribute name="titleResource">watchList</xsl:attribute>
+                  <a class="icon-font icon-watch">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
@@ -308,9 +308,9 @@
 
             <xsl:if test="(/menubar/role='admin') or /menubar/queryDrives">
               <th>
-	            <div class="icon-button">
-                  <a href="javascript:enterDirectPath()" class="icon-font icon-pencil">
-                    <xsl:attribute name="titleResource">label.directPath</xsl:attribute>
+	            <div class="icon-button" onclick="enterDirectPath()">
+                  <xsl:attribute name="titleResource">label.directPath</xsl:attribute>
+                  <a class="icon-font icon-pencil">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
@@ -335,27 +335,27 @@
           <tr>
 
             <th>
-		      <div class="icon-button">
-                <a href="javascript:searchParms()" class="icon-font icon-search">
-                  <xsl:attribute name="titleResource">label.search</xsl:attribute>
+		      <div class="icon-button" onclick="searchParms()">
+                <xsl:attribute name="titleResource">label.search</xsl:attribute>
+                <a class="icon-font icon-search">
                   <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
 
             <th>
-		      <div class="icon-button">
-                <a href="javascript:slideshow()" class="icon-font icon-picture">
-                  <xsl:attribute name="titleResource">label.slideshow</xsl:attribute>
+		      <div class="icon-button" onclick="slideshow()">
+                <xsl:attribute name="titleResource">label.slideshow</xsl:attribute>
+                <a class="icon-font icon-picture">
                   <xsl:text> </xsl:text>
                 </a>
 		      </div>
             </th>
 
             <th>
-		      <div class="icon-button">
-                <a href="javascript:javascript:pictureStory()" class="icon-font icon-book">
-                  <xsl:attribute name="titleResource">label.story</xsl:attribute>
+		      <div class="icon-button" onclick="pictureStory()">
+                <xsl:attribute name="titleResource">label.story</xsl:attribute>
+                <a class="icon-font icon-book">
                   <xsl:text> </xsl:text>
                 </a>
 			  </div>
@@ -363,9 +363,9 @@
 
             <xsl:if test="not(readonly) or (readonly='false')">
               <th>
-		        <div class="icon-button">
-                  <a href="javascript:ftpBackup()" class="icon-font icon-upload">
-                    <xsl:attribute name="titleResource">label.ftpBackup</xsl:attribute>
+		        <div class="icon-button" onclick="ftpBackup()">
+                  <xsl:attribute name="titleResource">label.ftpBackup</xsl:attribute>
+                  <a class="icon-font icon-upload">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
@@ -374,9 +374,9 @@
 
             <xsl:if test="calendarEnabled">
               <th>
-			    <div class="icon-button">
-                  <a href="javascript:openCalendar()" class="icon-font icon-calendar">
-                    <xsl:attribute name="titleResource">label.calendar</xsl:attribute>
+			    <div class="icon-button" onclick="openCalendar()">
+                  <xsl:attribute name="titleResource">label.calendar</xsl:attribute>
+                  <a class="icon-font icon-calendar">
                     <xsl:text> </xsl:text>
                   </a>
 				</div>
@@ -384,9 +384,9 @@
             </xsl:if>
 
             <th>
-			  <div class="icon-button">
-                <a href="javascript:mobileVersion()" class="icon-font icon-mobilePhone">
-                  <xsl:attribute name="titleResource">label.mobileVersion</xsl:attribute>
+			  <div class="icon-button" onclick="mobileVersion()">
+                <xsl:attribute name="titleResource">label.mobileVersion</xsl:attribute>
+                <a class="icon-font icon-mobilePhone">
                   <xsl:text> </xsl:text>
                 </a>
 		      </div>
@@ -394,28 +394,27 @@
 
             <th>
 			  <div class="icon-button">
-                <a target="_blank" class="icon-font icon-help">
-                  <xsl:attribute name="href">/webfilesys/help/<xsl:value-of select="helpLanguage" />/help.html</xsl:attribute>
-                  <xsl:attribute name="titleResource">label.help</xsl:attribute>
+                <xsl:attribute name="onclick">window.open('/webfilesys/help/<xsl:value-of select="helpLanguage" />/help.html', 'helpWin')</xsl:attribute>
+                <xsl:attribute name="titleResource">label.help</xsl:attribute>
+                <a class="icon-font icon-help">
                   <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
 
             <th>
-			  <div class="icon-button">
-                <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')"
-				    class="icon-font icon-info">
-                  <xsl:attribute name="titleResource">label.about</xsl:attribute>
+			  <div class="icon-button" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
+                <xsl:attribute name="titleResource">label.about</xsl:attribute>
+                <a class="icon-font icon-info">
                   <xsl:text> </xsl:text>
                 </a>
 			  </div>
             </th>
 
             <th style="padding-left:20px">
-			  <div class="icon-button">
-                <a href="/webfilesys/servlet?command=logout" target="_parent" class="icon-font icon-exit">
-                  <xsl:attribute name="titleResource">label.logout</xsl:attribute>
+			  <div class="icon-button" onclick="parent.location.href='/webfilesys/servlet?command=logout'">
+                <xsl:attribute name="titleResource">label.logout</xsl:attribute>
+                <a class="icon-font icon-exit">
                   <xsl:text> </xsl:text>
                 </a>
 			  </div>

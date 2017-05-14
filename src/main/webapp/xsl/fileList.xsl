@@ -70,50 +70,25 @@
     </xsl:if>
   </xsl:if>
   
-  function setSortField(sortBy)
-  {
+  function setSortField(sortBy) {
       document.sortform.sortBy.value = sortBy;
       document.sortform.submit();
   }
   
-  <xsl:for-each select="/fileList/file">
-    <xsl:if test="@link">
-      function lm<xsl:value-of select="position()" />()
-      {
-          jsLinkMenu('<xsl:value-of select="@nameForScript" />','<xsl:value-of select="@linkMenuPath" />');     
-      }
-    </xsl:if>
-    <xsl:if test="not(@link)">
-      function cm<xsl:value-of select="position()" />()
-      {
-          contextMenu('<xsl:value-of select="@nameForScript" />');     
-      }
-    </xsl:if>
-  </xsl:for-each>  
-  
-  function setFileListHeight()
-  {
-      if (browserMSIE)
-      {
+  function setFileListHeight() {
+      if (browserMSIE) {
           setTimeout('setHeightInternal()', 200);
-      }
-      else
-      {
+      } else {
           setHeightInternal();
       }
   }
 
-  function setHeightInternal()
-  {
+  function setHeightInternal() {
       var windowHeight;
 
-      if (browserFirefox || (browserChrome &amp;&amp; osAndroid)) 
-      {
+      if (browserFirefox || (browserChrome &amp;&amp; osAndroid)) {
           windowHeight = window.innerHeight;
-      }
-      else
-      {
-          // windowHeight = document.body.clientHeight;
+      } else {
           windowHeight = document.documentElement.clientHeight;
       }
 
@@ -128,23 +103,19 @@
   }
 
   <xsl:if test="/fileList/linksExist">
-    function copyLinks()
-    {
-        if (confirm(resourceBundle["confirm.copyLinks"]))
-        {
+    function copyLinks() {
+        if (confirm(resourceBundle["confirm.copyLinks"])) {
             document.form1.command.value = 'copyLinks';
             document.form1.submit();
         }
     }
   </xsl:if>
   
-  function uploadParms()
-  {
+  function uploadParms() {
       window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');  
   }
   
-  function addBookmark()
-  {
+  function addBookmark() {
       bookmark('<xsl:value-of select="/fileList/menuPath" />');
   }
   
@@ -203,9 +174,7 @@
 
   <xsl:if test="description">
     <div class="fileListDesc">
-      <font class="small">
-        <xsl:value-of select="description" disable-output-escaping="yes" />
-      </font>
+      <xsl:value-of select="description" disable-output-escaping="yes" />
     </div>
   </xsl:if>
 
@@ -251,7 +220,7 @@
   <form accept-charset="utf-8" name="sortform" method="get" action="/webfilesys/servlet" style="padding:0px;margin:0px;">
     <input type="hidden" name="command" value="listFiles" />
   
-    <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
+    <table class="fileListFilterSort">
       <input type="hidden">
         <xsl:attribute name="actpath">
           <xsl:value-of select="currentPath" />
@@ -261,7 +230,7 @@
       <tr>
         <td colspan="5" class="fileListFunctCont">
             
-          <table border="0" cellpadding="2" width="100%">
+          <table class="fileListFunctCont">
             <tr>
               <td class="fileListFunct fileFilter">
                 <label resource="label.mask"></label>:
@@ -424,8 +393,12 @@
         <xsl:for-each select="file">
  
           <tr onmouseup="handleRowClick(event)">
+            <xsl:if test="not(description)">
+              <xsl:attribute name="class">sepBot</xsl:attribute>
+            </xsl:if>
+
             <td>
-              <xsl:attribute name="class">fileList fileListSelector <xsl:if test="not(description)">sepBot</xsl:if></xsl:attribute>
+              <xsl:attribute name="class">fileListSelector</xsl:attribute>
               <input type="checkbox" class="cb2">
                 <xsl:attribute name="name">
                   <xsl:value-of select="@name" />
@@ -437,14 +410,14 @@
             </td>
   
             <td>
-              <xsl:attribute name="class">fileList fileListIcon <xsl:if test="not(description)">sepBot</xsl:if></xsl:attribute>
+              <xsl:attribute name="class">fileListIcon</xsl:attribute>
               <img border="0" width="16" height="16">
                 <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon" /></xsl:attribute>
               </img>
             </td>
             
             <td>
-              <xsl:attribute name="class">fileList fileListName <xsl:if test="not(description)">sepBot</xsl:if></xsl:attribute>
+              <xsl:attribute name="class">fileListName</xsl:attribute>
               <xsl:if test="@link">
                 <a class="link">
                   <xsl:if test="@outsideDocRoot">
@@ -452,7 +425,7 @@
                     <xsl:attribute name="title">access forbidden</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="not(@outsideDocRoot)">
-                    <xsl:attribute name="href">javascript:lm<xsl:value-of select="position()" />()</xsl:attribute>
+                    <xsl:attribute name="href">javascript:jsLinkMenu('<xsl:value-of select="@nameForScript" />','<xsl:value-of select="@linkMenuPath" />')</xsl:attribute>
                     <xsl:attribute name="title">
                       <xsl:value-of select="'--&gt; '"/>
                       <xsl:value-of select="linkPath"/>
@@ -468,7 +441,7 @@
               </xsl:if>
               <xsl:if test="not(@link)">
                 <a class="fn">
-                  <xsl:attribute name="href">javascript:cm<xsl:value-of select="position()" />()</xsl:attribute>
+                  <xsl:attribute name="href">javascript:contextMenu('<xsl:value-of select="@nameForScript" />')</xsl:attribute>
                   <xsl:if test="@displayName">
                     <xsl:value-of select="@displayName" />
                   </xsl:if>
@@ -480,7 +453,7 @@
             </td>
             
             <td>
-              <xsl:attribute name="class">fileList fileListModified <xsl:if test="not(description)">sepBot</xsl:if></xsl:attribute>
+              <xsl:attribute name="class">fileListModified</xsl:attribute>
               <font class="fixed">
                 <xsl:if test="age">
                   <span>
@@ -511,7 +484,7 @@
             </td>
             
             <td>
-              <xsl:attribute name="class">fileList fileListSize <xsl:if test="not(description)">sepBot</xsl:if></xsl:attribute>
+              <xsl:attribute name="class">fileListSize</xsl:attribute>
               <font class="fixed">
                 <xsl:value-of select="@size" />
               </font>
@@ -540,7 +513,7 @@
     
     <!-- function buttons and actions -->
     
-    <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <table class="fileListButtonCont">
 
       <xsl:if test="file">
 

@@ -160,6 +160,17 @@ public class XslGoogleMapHandler extends XslRequestHandlerBase
             return;
         }
 		
+        String googleMapsAPIKey = null;
+		if (req.getScheme().equalsIgnoreCase("https")) {
+			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+		} else {
+			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+		}
+		
+		if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
+		    XmlUtil.setChildText(geoTagElement, "googleMapsAPIKey", googleMapsAPIKey, false);
+		}
+        
 		// addMsgResource("label.hintGoogleMapSelect", getResource("label.hintGoogleMapSelect","Double click to select geographic coordinates!"));
 		
 		// when XSLT processing is done by the browser, the Firefox browser and MSIE 7.0 hang up forever

@@ -13,7 +13,7 @@ function jsLinkMenu(linkName, realPath)
 
     scriptPreparedPath = insertDoubleBackslash(realPath);
 
-    menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    menuText = '<table style="width:100%">'
              + '<tr>'
              + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
              + shortFileName
@@ -103,62 +103,7 @@ function jsLinkMenu(linkName, realPath)
 
     menuDiv.innerHTML = menuText;
 
-    menuDiv.style.bgcolor = '#c0c0c0';
-
-    var maxMenuHeight;
-
-    if (readonly == 'true')
-    {
-        maxMenuHeight = 120;
-    }
-    else
-    {
-        maxMenuHeight = 200;
-    }
-
-    // var browserIsFirefox = /a/[-1]=='a';
-    var browserIsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-
-    if (browserIsFirefox)
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-        
-        if (clickYPos > yScrolled + windowHeight - maxMenuHeight)
-        {
-            clickYPos = yScrolled + windowHeight - maxMenuHeight;
-        }
-
-        if (clickXPos > xScrolled + windowWidth - 200)
-        {
-            clickXPos = xScrolled + windowWidth - 200;
-        }
-    }
-    else
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-
-        if (clickXPos > windowWidth - 200)
-        {
-            clickXPos = windowWidth - 200;
-        }
-
-        if (clickYPos > windowHeight - maxMenuHeight)
-        {
-            clickYPos = windowHeight - maxMenuHeight;
-        }
-
-        clickYPos = clickYPos + yScrolled;
-    }
-    
-    menuDiv.style.left = (clickXPos - 50) + 'px';
-    menuDiv.style.top = clickYPos + 'px';
-
-    menuDiv.style.visibility = 'visible';
+    positionMenuDiv(menuDiv);
 }
 
 function editRemoteLink(path)
@@ -172,7 +117,7 @@ function origDir(path)
 }
 
 function emailLink(filePath) {
-    centeredDialog('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 240, function() {
+    centeredDialog('/webfilesys/servlet?command=emailFilePrompt&filePath=' + encodeURIComponent(filePath), '/webfilesys/xsl/emailFile.xsl', 400, 250, function() {
         document.emailForm.receiver.focus();
         document.emailForm.receiver.select();
     });

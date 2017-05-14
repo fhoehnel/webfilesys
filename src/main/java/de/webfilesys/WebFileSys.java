@@ -44,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.17.1-beta1 (23 Apr 2017)";
+	public static final String VERSION = "Version 2.17.1-beta9 (14 May 2017)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -183,6 +183,9 @@ public class WebFileSys
     private int diskQuotaCheckHour = 3;
     
     private long uploadLimit = DEFAULT_UPLOAD_LIMIT;
+    
+    private String googleMapsAPIKeyHTTP;
+    private String googleMapsAPIKeyHTTPS;
     
     private int textFileMaxLineLength = DEFAULT_TEXT_FILE_MAX_LINE_LENGTH;
     
@@ -430,6 +433,9 @@ public class WebFileSys
             autoExtractMP3 = true;
         }
 
+        googleMapsAPIKeyHTTP = config.getProperty("GoogleMapsAPIKeyHTTP");
+        googleMapsAPIKeyHTTPS = config.getProperty("GoogleMapsAPIKeyHTTPS");
+        
         if (openRegistration)
         {
             temp = config.getProperty("DiskQuotaDefaultMB", "1");
@@ -1190,6 +1196,20 @@ public class WebFileSys
     public int getCalendarExpirationPeriod()
     {
     	return calendarExpirationPeriod;
+    }
+    
+    public String getGoogleMapsAPIKeyHTTP() {
+    	if (CommonUtils.isEmpty(googleMapsAPIKeyHTTP)) {
+    		Logger.getLogger(getClass()).warn("no google maps API key configured for HTTP (missing config property GoogleMapsAPIKeyHTTP)");
+    	}
+    	return googleMapsAPIKeyHTTP;
+    }
+
+    public String getGoogleMapsAPIKeyHTTPS() {
+    	if (CommonUtils.isEmpty(googleMapsAPIKeyHTTPS)) {
+    		Logger.getLogger(getClass()).warn("no google maps API key configured for HTTPS (missing config property GoogleMapsAPIKeyHTTPS)");
+    	}
+    	return googleMapsAPIKeyHTTPS;
     }
 }
 

@@ -80,6 +80,10 @@ a.icon-font {
 	content: '\f0ac';
 }
 
+.icon-folderClosed:before {
+	content: '\f114';
+}
+
 .icon-folderOpen:before {
 	content: '\f115';
 }
@@ -153,6 +157,10 @@ a.icon-font {
 	content: '\f0c9';
 }
 
+.icon-menu-dots:before {
+	content: '\f142';
+}
+
 .icon-smiley:before {
 	content: '\f118';
 }
@@ -171,6 +179,14 @@ a.icon-font {
 
 .icon-page-last:before {
 	content: '\f051';
+}
+
+.icon-harddisk:before {
+	content: '\f0a0';
+}
+
+.icon-sort:before {
+	content: '\f15d';
 }
 
 .icon-page-next,
@@ -204,5 +220,6 @@ a.icon-darkgrey:before {
 	border-color: #a0a0a0;
 	padding: 4px 2px 0 2px;
 	background-color: #e0e0e0;
+	cursor: pointer;
 }
 

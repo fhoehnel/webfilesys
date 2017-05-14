@@ -555,10 +555,32 @@ a.dirSpacer {
     margin-left:4px;
 }
 
+table.fileListFilterSort {
+	width: 100%;
+	border-spacing: 0;
+    border: 1px solid black;
+    border-top-width: 0;	
+    border-bottom-width: 0;	
+}
+
+table.fileListButtonCont {
+	width: 100%;
+	border-spacing: 0;
+    border: 1px solid black;
+    border-top-width: 0;	
+}
+
+table.fileListFunctCont {
+	width: 100%;
+	border-spacing: 0;
+}
+
 div.fileListDesc {
     width:100%;
     padding:2px;
     margin-bottom:5px;
+    font-size: 10px;
+    color: navy;
 }
 
 div.searchPath
@@ -1137,6 +1159,17 @@ div.fileListScrollDiv {
     border-bottom:1px solid #b0b0b0;  
     display:block;
     overflow:auto;
+}
+
+table.fileList tr td {
+    background-color: ivory;
+    font-size: 13px;
+    vertical-align: top;
+    padding: 2px;
+}
+
+table.fileList tr.sepBot td {
+	border-bottom: 1px solid #b0b0b0;
 }
 
 td.fileList {

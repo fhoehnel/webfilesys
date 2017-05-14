@@ -7,7 +7,7 @@
 <xsl:template match="/">
 
 <div class="promptHead">
-  <xsl:value-of select="/result/filePath" />
+  <xsl:value-of select="/result/headlinePath" />
 </div>
     
 <form name="delForm" accept-charset="utf-8" style="display:inline;" method="post" action="/webfilesys/servlet">

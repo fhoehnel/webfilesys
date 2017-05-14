@@ -1,9 +1,8 @@
-function folderContextMenu(path, folderName)
-{
+function folderContextMenu(path, folderName) {
+	
     var shortFolderName = folderName;
     
-    if (folderName.length > 24)
-    {
+    if (folderName.length > 24) {
         shortFolderName = folderName.substring(0,7) + "..." + folderName.substring(folderName.length - 14, folderName.length);
     }    
 
@@ -11,25 +10,23 @@ function folderContextMenu(path, folderName)
 
     var menuDiv = document.getElementById('contextMenu');    
     
-    menuText = '<table border="0" width="180" cellpadding="0" cellspacing="0" height="100%">'
+    menuText = '<table style="width:100%">'
              + '<tr>'
-             + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
+             + '<th>'
              + shortFolderName
              + '</th>'
              + '</tr>';
 
-    if (readonly != 'true')
-    {
+    if (readonly != 'true') {
         menuText = menuText 
                  + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceBundle["menuCreateDir"]);
     }
 
     if (((serverOS == 'win') && 
         (((path.charAt(0) == '\\') && (path.length > 4)) || ((path.charAt(0) != '\\') && (path.length > 3)))) ||
-	((serverOS == 'ix') && (path.length > 1)))
-    {
-        if (readonly != 'true')
-        {
+	    ((serverOS == 'ix') && (path.length > 1))) {
+
+    	if (readonly != 'true') {
             menuText = menuText 
                      + menuEntry("javascript:copyDirToClip('" + scriptPreparedPath + "')",resourceBundle["menuCopyDir"]);
 
@@ -41,59 +38,63 @@ function folderContextMenu(path, folderName)
 
             menuText = menuText 
                      + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceBundle["menuRenameDir"]);
+            
+            if (clipboardEmpty != "true") {
+                menuText = menuText 
+                         + menuEntry("javascript:pasteFromClipboard()", resourceBundle["button.paste"]);
+            	
+            	if (copyOperation == "true") {
+                    menuText = menuText 
+                             + menuEntry("javascript:pasteAsLink()", resourceBundle["button.pasteLink"]);
+            	}
+            }
+
+            menuText = menuText 
+                     + menuEntry("javascript:uploadParams()", resourceBundle["button.upload"]);
         }
     }
 
     menuText = menuText 
              + menuEntry("javascript:search('" + scriptPreparedPath + "')",resourceBundle["menuSearch"]);
 
-    if (readonly != 'true')
-    {
+    if (readonly != 'true') {
         menuText = menuText 
                  + menuEntry("javascript:mkfile('" + scriptPreparedPath + "')",resourceBundle["menuCreateFile"]);
     }
 
     if (((serverOS == 'win') && 
         (((path.charAt(0) == '\\') && (path.length > 4)) || ((path.charAt(0) != '\\') && (path.length > 3)))) ||
-	((serverOS == 'ix') && (path.length > 1)))
-    {
-        if (readonly != 'true')
-        {
+	    ((serverOS == 'ix') && (path.length > 1))) {
+    	
+        if (readonly != 'true') {
             menuText = menuText 
                      + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["menuZipDir"]);
 
             lastPathChar = path.charAt(path.length - 1);
     
-            if ((lastPathChar == '/') || (lastPathChar == '\\'))
-            {
-  	        descriptionPath = path + ".";
-	    }
-	    else
-	    {
-	        if (serverOS == 'win')
-	        {
-	            descriptionPath = path + '\\' + '.';
+            if ((lastPathChar == '/') || (lastPathChar == '\\')) {
+  	            descriptionPath = path + ".";
+            } else {
+	            if (serverOS == 'win') {
+	                descriptionPath = path + '\\' + '.';
+	            } else {
+	                descriptionPath = path + '/' + '.';
+	            }
 	        }
-	        else
-	        {
-	            descriptionPath = path + '/' + '.';
-	        }
-	    }
 
             menuText = menuText 
                      + menuEntry("javascript:description('" + insertDoubleBackslash(descriptionPath) + "')",resourceBundle["menuEditDesc"]);
-	}
+	    }
     }
 
+    if (readonly != 'true') {
+        menuText = menuText 
+                 + menuEntry("javascript:bookmark('')", resourceBundle["mobile.addBookmark"]);
+    }
+    
     menuText = menuText + '</table>'; 
 
     menuDiv.innerHTML = menuText;
     
-    menuDiv.style.bgcolor = '#c0c0c0';
-    
-    var maxMenuHeight = 270;
-    
-    positionMenuDiv(menuDiv, maxMenuHeight);
-
-    menuDiv.style.visibility = 'visible';
+    positionMenuDiv(menuDiv);
 }

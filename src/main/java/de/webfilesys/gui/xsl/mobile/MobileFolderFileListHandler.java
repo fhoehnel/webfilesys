@@ -44,9 +44,9 @@ import de.webfilesys.util.XmlUtil;
  */
 public class MobileFolderFileListHandler extends XslRequestHandlerBase
 {
-	private static final int MOBILE_FILE_PAGE_SIZE = 8;
+	private static final int MOBILE_FILE_PAGE_SIZE = 2048;
 	
-	private static final int MAX_FILENAME_DISPLAY_LENGTH = 28;
+	private static final int MAX_FILENAME_DISPLAY_LENGTH = 26;
 	
 	private static final String[] FILTER_ALL_FILES = new String[] {"*"};
 
@@ -101,6 +101,17 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             
             if (cwd != null) 
             {
+            	File cwdFile = new File(cwd);
+            	if (!cwdFile.exists()) {
+            		// folder has been deleted?
+            		cwdFile = cwdFile.getParentFile();
+            		if (cwdFile.exists() && cwdFile.isDirectory() && cwdFile.canRead()) {
+            			if (checkAccess(cwdFile.getAbsolutePath())) {
+            				cwd = cwdFile.getAbsolutePath();
+            			}
+            		}
+            	}
+            	
                 if (docRootOS.charAt(0) == '*') 
                 {
                     relativePath = cwd;
@@ -317,6 +328,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 		
 		currentPathElem.setAttribute("path", relativePath);
 		
+		currentPathElem.setAttribute("pathForScript", insertDoubleBackslash(relativePath));
+		
         if (((File.separatorChar == '\\') && (docRoot.charAt(0) != '*')) ||
             ((File.separatorChar == '/') && (docRoot.length() > 1)))
         {
@@ -384,6 +397,13 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
         
         File dirFile = new File(currentPath);
         
+        String folderName = dirFile.getName();
+        if (CommonUtils.isEmpty(folderName)) {
+        	folderName = dirFile.getAbsolutePath();
+        }
+        
+		currentPathElem.setAttribute("folderName", insertDoubleBackslash(folderName));
+        
         if ((File.separatorChar == '\\') && 
             (docRoot.charAt(0) == '*') &&
             relativePath.equals(File.separator))
@@ -404,6 +424,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                     
                     Element subDirElem = doc.createElement("folder");
                     
+                    subDirElem.setAttribute("drive", "true");
+                    
                     foldersElem.appendChild(subDirElem);
                 
                     subDirElem.setAttribute("name", this.insertDoubleBackslash(subdirPath));
@@ -411,7 +433,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                     String displayName = subdirPath;
                     
                     if (driveLabel.trim().length() > 0) {
-                        displayName = displayName + " [" + CommonUtils.shortName(driveLabel, 15) + "]"; 
+                        displayName = displayName + " [" + CommonUtils.shortName(driveLabel, MAX_FILENAME_DISPLAY_LENGTH - 7) + "]"; 
                     }
                     
                     subDirElem.setAttribute("displayName", displayName);
@@ -460,7 +482,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                     
                     if (subDirName.length() > 18)
                     {
-                        shortDirName = CommonUtils.shortName(subDirName, 18);
+                        shortDirName = CommonUtils.shortName(subDirName, MAX_FILENAME_DISPLAY_LENGTH);
                     }
                     
                     Element subDirElem = doc.createElement("folder");
@@ -476,56 +498,6 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             }
         }
         // end subdir section
-
-        addMsgResource("label.mobileWindowTitle", getResource("label.mobileWindowTitle","WebFileSys mobile version"));
-        addMsgResource("label.about", getResource("label.about","About WebFileSys"));
-        addMsgResource("label.logout", getResource("label.logout","Logout"));
-        addMsgResource("label.bookmarksMobile", getResource("label.bookmarksMobile","bookmarks"));
-        addMsgResource("classicView", getResource("classicView", "classic/desktop view"));
-        addMsgResource("label.selectFunction", getResource("label.selectFunction", "- select function -"));
-        addMsgResource("folderIsEmpty", getResource("folderIsEmpty","no files or subfolders in this directory"));
-        addMsgResource("alert.nofileselected", getResource("alert.nofileselected","Select at least 1 file"));
-		addMsgResource("sort.name", getResource("sort.name","sort by name"));
-		addMsgResource("sort.extension", getResource("sort.extension","sort by extension"));
-		addMsgResource("sort.size", getResource("sort.size","sort by size"));
-		addMsgResource("sort.date", getResource("sort.date","sort by change date"));
-
-        addMsgResource("label.modelist", getResource("label.modelist","file list"));
-        addMsgResource("label.modethumb", getResource("label.modethumb","thumbnails"));
-		addMsgResource("label.modestory", getResource("label.modestory","picture story"));
-		addMsgResource("label.modeSlideshow", getResource("label.modeSlideshow","slideshow"));
-
-		addMsgResource("label.mask", getResource("label.mask","Mask"));
-		addMsgResource("label.listPageSize", getResource("label.listPageSize","files per page"));
-		addMsgResource("label.page", getResource("label.page","page"));
-
-		addMsgResource("checkbox.selectall", getResource("checkbox.selectall","Select all"));
-		addMsgResource("label.selectedFiles", getResource("label.selectedFiles","- selected files -"));
-
-		addMsgResource("label.comments", getResource("label.comments","Comments"));
-
-		// addMsgResource("label.selectFunction", getResource("label.selectFunction","- select function -"));
-
-		if (!readonly)
-		{
-            addMsgResource("checkbox.confirmdel", getResource("checkbox.confirmdel","Confirm Delete"));
-	        addMsgResource("button.delete", getResource("button.delete","Delete"));
-			addMsgResource("label.copyToClip", getResource("label.copyToClip","Copy to clipboard"));
-			addMsgResource("label.cutToClip", getResource("label.cutToClip","Move to clipboard"));
-			addMsgResource("button.zip", getResource("button.zip","Create ZIP archive"));
-			addMsgResource("confirm.deleteFiles", getResource("confirm.deleteFiles", "Delete selected files?"));
-		}
-		addMsgResource("button.downloadAsZip", getResource("button.downloadAsZip","Download as Zip"));
-		
-        if (!readonly)
-        {
-            addMsgResource("button.bookmark", getResource("button.bookmark", "Bookmark"));
-            addMsgResource("title.bookmarkButton", getResource("title.bookmarkButton", "Create bookmark for the current folder"));
-        }
-
-        addMsgResource("button.upload", getResource("button.upload","Upload"));
-        addMsgResource("button.paste", getResource("button.paste","Paste"));
-        addMsgResource("button.pasteLink", getResource("button.pasteLink","Paste as Link"));
 		
 		if (readonly)
 		{
@@ -537,14 +509,6 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(folderFileListElement, "mailEnabled", "true");
         }
             
-		if (WebFileSys.getInstance().isMaintananceMode())
-		{
-			if (!isAdminUser(false))
-			{
-				addMsgResource("alert.maintanance", getResource("alert.maintanance","The server has been switched to maintanance mode. Please logout!"));
-			}
-		}
-
 		XmlUtil.setChildText(folderFileListElement, "userid", uid, false);
 		
 	    XmlUtil.setChildText(folderFileListElement, "language", language, false);
@@ -552,8 +516,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{
 		    Logger.getLogger(getClass()).error("directory not found or not readable: " + dirFile);
-			addMsgResource("alert.dirNotFound", getResource("alert.dirNotFound","The folder is not a readable directory"));
-			this.processResponse("mobile/folderFileList.xsl");
+			processResponse("mobile/folderFileList.xsl");
 			return; 
 		}
 
@@ -569,40 +532,6 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             }
         }
 
-		int pageSize = MOBILE_FILE_PAGE_SIZE;
-		
-		temp = getParameter("pageSize");
-		if ((temp != null) && (temp.trim().length() > 0))
-		{
-			try
-			{
-				pageSize = Integer.parseInt(temp);
-
-				Integer listPageSize = (Integer) session.getAttribute("listPageSize");
-				
-				if ((listPageSize == null) || (listPageSize.intValue() != pageSize))
-				{
-					session.setAttribute("listPageSize", new Integer(pageSize));
-				}
-			}
-			catch (NumberFormatException nfex)
-			{
-			}
-		}
-		else
-		{
-			Integer listPageSize = (Integer) session.getAttribute("listPageSize");
-			
-			if ((listPageSize == null) || (listPageSize.intValue() == 0))
-			{
-				pageSize = WebFileSys.getInstance().getThumbnailsPerPage();
-			}
-			else
-			{
-                pageSize = listPageSize.intValue();				
-			}
-		}
-
         Vector selectedFiles = null;
 
         FileSelectionStatus selectionStatus = null;
@@ -610,7 +539,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
         if (pathNoSlash.length() > 0) {
             FileLinkSelector fileSelector = new FileLinkSelector(currentPath, sortBy, true);
 
-            selectionStatus = fileSelector.selectFiles(fileFilter, -1, pageSize, startIdx);
+            selectionStatus = fileSelector.selectFiles(fileFilter, -1, MOBILE_FILE_PAGE_SIZE, startIdx);
 
             selectedFiles = selectionStatus.getSelectedFiles();
         }
@@ -639,82 +568,6 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(folderFileListElement, "sortBy", Integer.toString(sortBy), false);
 
-		if (fileNum > 0)
-		{
-			Element pagingElement = doc.createElement("paging");
-        
-			folderFileListElement.appendChild(pagingElement);
-        
-			XmlUtil.setChildText(pagingElement, "pageSize", Integer.toString(pageSize));
-
-			XmlUtil.setChildText(pagingElement, "firstOnPage" , Integer.toString(selectionStatus.getBeginIndex()+1), false);
-			XmlUtil.setChildText(pagingElement, "lastOnPage" , Integer.toString(selectionStatus.getEndIndex()+1), false);
-
-			if (selectionStatus.getBeginIndex() > 0)
-			{
-				XmlUtil.setChildText(pagingElement, "prevStartIdx" , Integer.toString(selectionStatus.getBeginIndex() - pageSize), false);
-			}
-			
-			if (!selectionStatus.getIsLastPage())
-			{
-				XmlUtil.setChildText(pagingElement, "nextStartIdx" , Integer.toString(selectionStatus.getBeginIndex() + pageSize), false);
-				XmlUtil.setChildText(pagingElement, "lastStartIdx" , Integer.toString(selectionStatus.getLastPageStartIdx()), false);
-			}
-
-			XmlUtil.setChildText(pagingElement, "currentPage", Integer.toString(selectionStatus.getCurrentPage() + 1), false);
-
-			if (fileNum > pageSize)
-			{
-				int numPages = fileNum / pageSize;
-                
-				int pageStep = numPages / 5;
-                
-				if (pageStep == 0)
-				{
-					pageStep = 1;
-				}
-            
-				int currentPage = selectionStatus.getCurrentPage();
-            
-				boolean currentPrinted = false;
-            
-				Vector pageStartIndices = selectionStatus.getPageStartIndices();
-            
-				for (int pageCounter = 0; pageCounter < pageStartIndices.size(); pageCounter += pageStep)
-				{
-					if (pageCounter == currentPage)
-					{
-						Element pageElement = doc.createElement("page");
-						pagingElement.appendChild(pageElement);
-						pageElement.setAttribute("num", Integer.toString(pageCounter + 1));
-
-						currentPrinted = true;
-					}
-					else
-					{
-						if (!currentPrinted)
-						{
-							if (pageCounter > currentPage)
-							{
-								Element pageElement = doc.createElement("page");
-								pagingElement.appendChild(pageElement);
-								pageElement.setAttribute("num", Integer.toString(currentPage + 1));
-
-								currentPrinted = true;
-							}
-						}
-						
-						Integer pageStartIdx = (Integer) pageStartIndices.elementAt(pageCounter);
-						
-						Element pageElement = doc.createElement("page");
-						pagingElement.appendChild(pageElement);
-						pageElement.setAttribute("num", Integer.toString(pageCounter + 1));
-						pageElement.setAttribute("startIdx", Integer.toString(pageStartIdx.intValue()));
-					}
-				}
-			}
-		}
-
 		Element fileListElement = doc.createElement("fileList");
 			
 		folderFileListElement.appendChild(fileListElement);
@@ -733,9 +586,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 	            iconMgr = IconManager.getInstance();
 	        }
 			
-            int i = 0;
-
-			for (i = 0; i < selectedFiles.size(); i++)
+			for (int i = 0; i < selectedFiles.size(); i++)
 			{
 				Element fileElement = doc.createElement("file");
                 
@@ -743,9 +594,10 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
 				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
 				
-				String actFilename = fileCont.getName();
+				String fileName = fileCont.getName();
 
-				fileElement.setAttribute("name", actFilename);
+				fileElement.setAttribute("name", fileName);
+                fileElement.setAttribute("nameForScript", escapeForJavascript(fileName));
 
 				fileElement.setAttribute("id", Integer.toString(i));
 				
@@ -753,11 +605,11 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                 {
                     String docImage = "doc.gif";
 
-                    int extIdx = actFilename.lastIndexOf('.');
+                    int extIdx = fileName.lastIndexOf('.');
 
-                    if ((extIdx > 0) && (extIdx < (actFilename.length() - 1)))
+                    if ((extIdx > 0) && (extIdx < (fileName.length() - 1)))
                     {
-                        docImage = iconMgr.getAssignedIcon(actFilename.substring(extIdx + 1));
+                        docImage = iconMgr.getAssignedIcon(fileName.substring(extIdx + 1));
                     }
 
                     fileElement.setAttribute("icon", docImage);
@@ -787,7 +639,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 				{
 					if (dirHasMetaInf)
 					{
-						description = metaInfMgr.getDescription(pathNoSlash,actFilename);
+						description = metaInfMgr.getDescription(pathNoSlash,fileName);
 					}
 				}
 
@@ -796,7 +648,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 					XmlUtil.setChildText(fileElement, "description", description, true);
 				}
 
-				String displayName = CommonUtils.shortName(actFilename, MAX_FILENAME_DISPLAY_LENGTH);
+				String displayName = CommonUtils.shortName(fileName, MAX_FILENAME_DISPLAY_LENGTH);
 
 				XmlUtil.setChildText(fileElement, "displayName", displayName);
 
@@ -858,6 +710,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 		
 	    processResponse("mobile/folderFileList.xsl", false);
 
-		FastPathManager.getInstance().queuePath(uid, currentPath);
+	    if (!"\\".equals(currentPath)) {
+			FastPathManager.getInstance().queuePath(uid, currentPath);
+	    }
 	}
 }

@@ -629,6 +629,7 @@ label.noBookmarksDefined=¡No se han definido marcadores!
 label.bookmarks=Carpetas en marcadores
 label.deleteBookmark=Borrar marcador
 label.addBookmark=añadir esta carpeta a marcadores
+mobile.addBookmark=Añadir marcador
 label.bookmarkName=nombre del marcador
 alert.bookmarkMissingName=¡El nombre del marcador no debería estar vacío!
 button.bookmark=Añadir marcador
@@ -910,6 +911,9 @@ menuSearch=buscar
 menuCreateFile=crear nuevo archivo
 menuZipDir=comprimir en ZIP
 folderIsEmpty=no hay archivos que coincidan con este filtro
+mobileFolderMenuHint=menú de la carpeta
+mobileMainMenuHint=menú principal
+showSortMenu=ver menú de la ordenación
 
 # alert messages
 alert.regsuccess=El nuevo usuario ha sido registrado correctamente.

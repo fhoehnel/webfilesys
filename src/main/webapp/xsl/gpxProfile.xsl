@@ -64,10 +64,15 @@
       map.fitBounds(bounds);
   }
 
-  function loadGoogleMapsAPIScriptCode() {
+  function loadGoogleMapsAPIScriptCode(googleMapsAPIKey) {
       var script = document.createElement("script");
       script.type = "text/javascript";
-      script.src = "http://maps.google.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady";
+      
+      if (window.location.href.indexOf("https") == 0) {
+          script.src = "https://maps.google.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey;
+      } else {
+          script.src = "http://maps.google.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey;
+      }      
       document.body.appendChild(script);
   }
   
@@ -625,7 +630,8 @@
 
 </head>
 
-<body onclick="mouseClickHandler()" onload="loadGoogleMapsAPIScriptCode();createProfiles()">
+<body onclick="mouseClickHandler()">
+  <xsl:attribute name="onload">loadGoogleMapsAPIScriptCode('<xsl:value-of select="@googleMapsAPIKey" />');createProfiles()</xsl:attribute>
 
 <xsl:if test="./gpx:name">
   <h3><xsl:value-of select="./gpx:name" /></h3>
