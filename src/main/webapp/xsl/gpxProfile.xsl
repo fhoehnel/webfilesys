@@ -44,17 +44,25 @@
       
       var bounds = new google.maps.LatLngBounds ();
       
+      var coordinates = [
+      
       <xsl:for-each select="./gpx:trk">
         <xsl:for-each select=".//gpx:trkpt">
-          var latLon = new google.maps.LatLng(<xsl:value-of select="@lat" />, <xsl:value-of select="@lon" />);
-          trackPointList.push(latLon);
-          bounds.extend(latLon);
+          [<xsl:value-of select="@lat" />, <xsl:value-of select="@lon" />],
         </xsl:for-each>
       </xsl:for-each>  
       
+      ];
+      
+      for (var i = 0; i &lt; coordinates.length; i++) {
+          var latLon = new google.maps.LatLng(coordinates[i][0], coordinates[i][1]);
+          trackPointList.push(latLon);
+          bounds.extend(latLon);
+      }
+      
       var trackPath = new google.maps.Polyline({
           path: trackPointList,
-          strokeColor:"#FF8000",
+          strokeColor:"#ffff00",
           strokeOpacity:0.8,
           strokeWeight: 4
       });
@@ -143,6 +151,7 @@
         drawSpeedProfile<xsl:value-of select="position()"/>(trackNum);
         
         drawAltDistProfile<xsl:value-of select="position()"/>(trackNum);
+      
       </xsl:for-each>
 
       <xsl:if test="./gpx:wpt">
@@ -246,33 +255,31 @@
       
           var maxHeight = maxElevation[trackNum] - minElevation[trackNum];
       
-          <xsl:for-each select="./gpx:trkseg">
-          
-            <xsl:for-each select="./gpx:trkpt">
-              
-              <xsl:if test="./gpx:ele">
-
-                var height = <xsl:value-of select="./gpx:ele"/> - minElevation[trackNum];
+          var elevationTimeMap = [
+              <xsl:for-each select="./gpx:trkseg">
+                <xsl:for-each select="./gpx:trkpt">
+                  <xsl:if test="./gpx:ele">
+                    [<xsl:value-of select="./gpx:ele"/>, '<xsl:value-of select="./gpx:time" />'],
+                  </xsl:if>
+                </xsl:for-each>
+              </xsl:for-each>
+          ];      
+      
+          for (var i = 0; i &lt; elevationTimeMap.length; i++) {
+              var height = elevationTimeMap[i][0] - minElevation[trackNum];
         
-	        var trackPointDate = new Date();
- 	        trackPointDate.setISO8601('<xsl:value-of select="./gpx:time" />');
+	          var trackPointDate = new Date();
+ 	          trackPointDate.setISO8601(elevationTimeMap[i][1]);
 
- 	        xPos = ((trackPointDate.getTime() - startDate[trackNum].getTime()) * chartWidth) / duration;
-                yPos = chartHeight - (height / maxHeight * chartHeight)
+ 	          var xPos = ((trackPointDate.getTime() - startDate[trackNum].getTime()) * chartWidth) / duration;
+              var yPos = chartHeight - (height / maxHeight * chartHeight)
         
-                if ((xPos != lastX) || (yPos != lastY)) 
-                {
+              if ((xPos != lastX) || (yPos != lastY)) {
                     ctx.lineTo(chartXOffset + xPos, yPos);
-
                     lastX = xPos;
                     lastY = yPos;  
                 }
-                
-              </xsl:if>
-              
-            </xsl:for-each>
-
-          </xsl:for-each>
+          }
           
           ctx.lineTo(canvasWidth - 1, chartHeight);  
           ctx.lineTo(chartXOffset, chartHeight);  
@@ -358,35 +365,35 @@
               maxStepX = 3;
           }
 
-          <xsl:for-each select=".//gpx:trkpt">
+          var speedTimeMap = [ 
+              <xsl:for-each select=".//gpx:trkpt">
+                [<xsl:value-of select="./gpx:speed"/>, '<xsl:value-of select="./gpx:time" />']<xsl:if test="not(position()=last())">,</xsl:if>
+              </xsl:for-each>
+          ];
 
-              var height = <xsl:value-of select="./gpx:speed"/> - minSpeed[trackNum];
+          for (var i = 0; i &lt; speedTimeMap.length; i++) {
+              var height = speedTimeMap[i][0] - minSpeed[trackNum];
         
-	      var trackPointDate = new Date();
- 	      trackPointDate.setISO8601('<xsl:value-of select="./gpx:time" />');
+	          var trackPointDate = new Date();
+ 	          trackPointDate.setISO8601(speedTimeMap[i][1]);
  	      
- 	      xPos = ((trackPointDate.getTime() - startDate[trackNum].getTime()) * chartWidth) / duration;
-              yPos = chartHeight - (height / maxHeight * chartHeight)
+ 	          var xPos = ((trackPointDate.getTime() - startDate[trackNum].getTime()) * chartWidth) / duration;
+              var yPos = chartHeight - (height / maxHeight * chartHeight)
               
-              if ((xPos != lastX) || (yPos != lastY)) 
-              {
+              if ((xPos != lastX) || (yPos != lastY)) {
                   var stepX = xPos - lastX;
                   
-                  if (stepX &gt; maxStepX)
-                  {
+                  if (stepX &gt; maxStepX) {
                       ctx.lineTo(chartXOffset + lastX, chartHeight);
                       ctx.lineTo(chartXOffset + xPos, chartHeight);
-                  }
-                  else
-                  {
+                  } else {
                       ctx.lineTo(chartXOffset + xPos, yPos);
                   }
                   
                   lastX = xPos;
                   lastY = yPos;  
               }
-              
-          </xsl:for-each>
+          }
           
           ctx.lineTo(canvasWidth - 1, chartHeight);  
           ctx.lineTo(chartXOffset, chartHeight);  
@@ -460,31 +467,30 @@
           ctx.beginPath();  
           ctx.moveTo(chartXOffset, canvasHeight);  
           
-          <xsl:for-each select="./gpx:trkseg">
-
-            <xsl:for-each select="./gpx:trkpt">
+          var elevationDistMap = [
+              <xsl:for-each select="./gpx:trkseg">
+                <xsl:for-each select="./gpx:trkpt">
+                  <xsl:if test="./gpx:ele">
+                    [<xsl:value-of select="./gpx:ele"/>, <xsl:value-of select="./gpx:totalDist"/>],
+                  </xsl:if>
+                </xsl:for-each>
+              </xsl:for-each>
+          ];
+          
+          for (var i = 0; i &lt; elevationDistMap.length; i++) {
+              var height = elevationDistMap[i][0] - minElevation[trackNum];
               
-              <xsl:if test="./gpx:ele">
-
-                var height = <xsl:value-of select="./gpx:ele"/> - minElevation[trackNum];
-              
-                var distance = <xsl:value-of select="./gpx:totalDist"/>
+              var distance = elevationDistMap[i][1];
         
- 	        xPos = distance * chartWidth / totalDist[trackNum];
-                yPos = chartHeight - (height * chartHeight / maxHeight)
+ 	          var xPos = distance * chartWidth / totalDist[trackNum];
+              var yPos = chartHeight - (height * chartHeight / maxHeight)
         
-                if ((xPos != lastX) || (yPos != lastY)) 
-                {
-                    ctx.lineTo(chartXOffset + xPos, yPos);
-                    lastX = xPos;
-                    lastY = yPos;  
-                }
-                
-              </xsl:if>
-              
-            </xsl:for-each>
-            
-          </xsl:for-each>
+              if ((xPos != lastX) || (yPos != lastY)) {
+                  ctx.lineTo(chartXOffset + xPos, yPos);
+                  lastX = xPos;
+                  lastY = yPos;  
+              }
+          }
           
           ctx.lineTo(canvasWidth - 1, chartHeight);  
           ctx.lineTo(chartXOffset, chartHeight);  
