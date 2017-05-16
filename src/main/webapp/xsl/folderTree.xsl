@@ -40,6 +40,7 @@
     <script src="/webfilesys/javascript/dirContextMenu.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/jsDirMenu.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/windowFocusVisibility.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/keyDirTree.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/xmlUtil.js" type="text/javascript"></script>
@@ -110,7 +111,7 @@
     <xsl:apply-templates />
 
   </body>
-
+  
   <div id="contextMenu" class="contextMenuCont" ></div>
 
   <div id="msg1" class="msgBox" style="visibility:hidden" />
@@ -124,6 +125,11 @@
       <span resource="label.loginHint"></span>
     </div>
   </xsl:if>
+
+  <script type="text/javascript">
+    window.addEventListener("focus", focusHandler);
+    window.addEventListener("blur", blurHandler);
+  </script>
 
   </html>
 

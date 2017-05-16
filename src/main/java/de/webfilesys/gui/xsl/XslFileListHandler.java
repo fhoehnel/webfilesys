@@ -218,6 +218,8 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			return; 
 		}
  
+		XmlUtil.setChildText(fileListElement, "dirModified", Long.toString(dirFile.lastModified()), false);
+		
 		String normalizedPath=null;
 
 		if (actPath.endsWith(File.separator))

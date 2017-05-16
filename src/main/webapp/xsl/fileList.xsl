@@ -43,6 +43,7 @@
 <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/jsFileMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/windowFocusVisibility.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/crypto.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/videoAudio.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -51,6 +52,9 @@
 </script>
 
 <script language="javascript">
+  var currentPath = '<xsl:value-of select="/fileList/menuPath" />';
+  
+  var dirModified = '<xsl:value-of select="/fileList/dirModified" />';
 
   var noFileSelected = resourceBundle["alert.nofileselected"];
   
@@ -143,7 +147,7 @@
 
 </head>
 
-<body class="fileList" onload="setFileListHeight();addDeselectHandler();">
+<body class="fileList" onload="setFileListHeight();addDeselectHandler();delayedPollForDirChanges()">
 
 <xsl:apply-templates />
 
@@ -151,6 +155,12 @@
 
 <script type="text/javascript">
   setBundleResources();
+  
+  document.addEventListener("visibilitychange", visibilityChangeHandler);
+  window.addEventListener("focus", focusHandler);
+  window.addEventListener("blur", blurHandler);
+  document.addEventListener("mousedown", delayedPollForDirChanges);
+  document.addEventListener("keyup", delayedPollForDirChanges);
 </script>
 
 </html>

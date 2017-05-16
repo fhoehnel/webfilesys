@@ -72,6 +72,7 @@ import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
+import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
@@ -855,6 +856,11 @@ public class WebFileSysServlet extends ServletBase
 			return(true);
     	}
         
+    	if (command.equals("pollForDirChange")) {
+			(new PollForDirChangeHandler(req, resp, session, output, userid)).handleRequest();
+			return(true);
+    	}
+    	
         if (command.equals("fmdelete"))
         {
             (new DeleteFileRequestHandler(req, resp, session, output, userid, requestIsLocal, true)).handleRequest();
