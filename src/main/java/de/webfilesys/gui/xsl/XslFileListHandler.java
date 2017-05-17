@@ -293,6 +293,8 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		long fileSizeSum = selectionStatus.getFileSizeSum();
 		
 		addFormattedSizeSum(fileSizeSum, fileListElement);		
+
+		XmlUtil.setChildText(fileListElement, "sizeSumBytes", Long.toString(fileSizeSum), false);
 		
         boolean linkFound = false;
 		

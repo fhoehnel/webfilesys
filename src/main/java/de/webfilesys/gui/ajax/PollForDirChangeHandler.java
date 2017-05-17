@@ -30,13 +30,16 @@ public class PollForDirChangeHandler extends XmlRequestHandlerBase
         String currentPath = getCwd();
 
         String lastDirStatusTimeParam = getParameter("lastDirStatusTime");
+        String lastSizeSumParam = getParameter("lastSizeSum");
         
         long lastDirStatusTime;
+        long lastSizeSum;
         
         try {
         	lastDirStatusTime = Long.parseLong(lastDirStatusTimeParam);
+        	lastSizeSum = Long.parseLong(lastSizeSumParam);
         } catch (NumberFormatException numEx) {
-            Logger.getLogger(getClass()).error("invalid parameter lastDirStatusTime: " + lastDirStatusTimeParam);
+            Logger.getLogger(getClass()).error("invalid parameter: lastDirStatusTime: " + lastDirStatusTimeParam + " lastSizeSum: " + lastSizeSumParam);
             return;
         }
         
@@ -44,9 +47,22 @@ public class PollForDirChangeHandler extends XmlRequestHandlerBase
         
         long lastModified = dirFile.lastModified();
         
+        long currentSizeSum = 0l;
+        
+        File[] files = dirFile.listFiles();
+        if (files != null) {
+            for (File file : files) {
+            	if (file.isFile()) {
+            		currentSizeSum += file.length();
+            	}
+            }
+        }
+        
         Element resultElement = doc.createElement("result");
 
-        XmlUtil.setElementText(resultElement, Boolean.toString(lastModified > lastDirStatusTime));
+        boolean modified = (lastModified > lastDirStatusTime) || (currentSizeSum != lastSizeSum);
+        
+        XmlUtil.setElementText(resultElement, Boolean.toString(modified));
         
         doc.appendChild(resultElement);
 		

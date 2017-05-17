@@ -43,7 +43,7 @@
 <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/jsFileMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
-<script src="/webfilesys/javascript/windowFocusVisibility.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/crypto.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/videoAudio.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -55,6 +55,8 @@
   var currentPath = '<xsl:value-of select="/fileList/menuPath" />';
   
   var dirModified = '<xsl:value-of select="/fileList/dirModified" />';
+  
+  var fileSizeSum = '<xsl:value-of select="/fileList/sizeSumBytes" />'
 
   var noFileSelected = resourceBundle["alert.nofileselected"];
   
@@ -64,6 +66,8 @@
   
   var addCopyAllowed = false;
   var addMoveAllowed = false;
+  
+  var pollingTimeout;
   
   <xsl:if test="not(/fileList/clipBoardEmpty)">
     <xsl:if test="/fileList/copyOperation">
@@ -147,7 +151,7 @@
 
 </head>
 
-<body class="fileList" onload="setFileListHeight();addDeselectHandler();delayedPollForDirChanges()">
+<body class="fileList" onload="setFileListHeight();addDeselectHandler();delayedPollForDirChanges();">
 
 <xsl:apply-templates />
 
@@ -157,10 +161,6 @@
   setBundleResources();
   
   document.addEventListener("visibilitychange", visibilityChangeHandler);
-  window.addEventListener("focus", focusHandler);
-  window.addEventListener("blur", blurHandler);
-  document.addEventListener("mousedown", delayedPollForDirChanges);
-  document.addEventListener("keyup", delayedPollForDirChanges);
 </script>
 
 </html>
