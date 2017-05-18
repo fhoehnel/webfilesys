@@ -199,6 +199,8 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			return;
 		}
 
+		XmlUtil.setChildText(fileListElement, "dirModified", Long.toString(dirFile.lastModified()), false);
+		
 		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(currentPath), false);
 
 		String description = metaInfMgr.getDescription(currentPath, ".");
@@ -221,6 +223,8 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			fileNum = selectionStatus.getNumberOfFiles();
 		}
 
+		XmlUtil.setChildText(fileListElement, "sizeSumBytes", Long.toString(selectionStatus.getFileSizeSum()), false);
+		
 		XmlUtil.setChildText(fileListElement, "fileNumber", Integer.toString(fileNum), false);
 
 		XmlUtil.setChildText(fileListElement, "currentPath", currentPath, false);
@@ -385,6 +389,11 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
 		}
 
+		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		if (pollInterval > 0) {
+			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
+		}
+		
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
 		processResponse("thumbnailOnePage.xsl", true);

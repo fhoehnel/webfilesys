@@ -43,7 +43,7 @@
 <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/jsFileMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
-<xsl:if test="/fileList/poll">
+<xsl:if test="/fileList/pollInterval">
   <script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
 </xsl:if>
 <script src="/webfilesys/javascript/crypto.js" type="text/javascript"></script>
@@ -69,8 +69,9 @@
   var addCopyAllowed = false;
   var addMoveAllowed = false;
   
-  <xsl:if test="/fileList/poll">
+  <xsl:if test="/fileList/pollInterval">
     var pollingTimeout;
+    var pollInterval = <xsl:value-of select="/fileList/pollInterval" />;
   </xsl:if>
   
   <xsl:if test="not(/fileList/clipBoardEmpty)">
@@ -158,7 +159,7 @@
 <body class="fileList">
   <xsl:attribute name="onload">
     setFileListHeight();addDeselectHandler();
-    <xsl:if test="/fileList/poll">delayedPollForDirChanges();</xsl:if>
+    <xsl:if test="/fileList/pollInterval">delayedPollForDirChanges();</xsl:if>
   </xsl:attribute>
 
 <xsl:apply-templates />
@@ -168,7 +169,7 @@
 <script type="text/javascript">
   setBundleResources();
   
-  <xsl:if test="/fileList/poll">
+  <xsl:if test="/fileList/pollInterval">
     document.addEventListener("visibilitychange", visibilityChangeHandler);
   </xsl:if>
 </script>

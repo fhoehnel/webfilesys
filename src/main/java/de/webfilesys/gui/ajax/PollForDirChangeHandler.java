@@ -63,6 +63,14 @@ public class PollForDirChangeHandler extends XmlRequestHandlerBase
         
         String[] filterMasks = new String[] {fileMask};
         
+        boolean isThumbnailView = (getParameter("thumbnails") != null);
+        
+        if (isThumbnailView) {
+        	if (fileMask.equals("*")) {
+        		filterMasks = Constants.imgFileMasks;
+        	}
+        }
+        
 		FileLinkSelector fileSelector = new FileLinkSelector(currentPath, FileContainerComparator.SORT_BY_FILENAME, true);
 
 		FileSelectionStatus selectionStatus = fileSelector.selectFiles(filterMasks, Constants.MAX_FILE_NUM, 0);
@@ -72,7 +80,7 @@ public class PollForDirChangeHandler extends XmlRequestHandlerBase
         Element resultElement = doc.createElement("result");
 
         boolean modified = false;
-        if (fileMask.equals("*")) {
+        if (fileMask.equals("*") && (!isThumbnailView)) {
             modified = (lastModified > lastDirStatusTime) || (currentSizeSum != lastSizeSum);
         } else {
             modified = (currentSizeSum != lastSizeSum);

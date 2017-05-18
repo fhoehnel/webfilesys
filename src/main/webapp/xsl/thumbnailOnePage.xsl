@@ -42,6 +42,9 @@
 <script src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/popupPicture.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
+<xsl:if test="/fileList/pollInterval">
+  <script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
+</xsl:if>
 
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -60,6 +63,14 @@
   var lastScrollPos = 0;
   
   var pathForScript = '<xsl:value-of select="/fileList/pathForScript" />';
+
+  <xsl:if test="/fileList/pollInterval">
+    var pollingTimeout;
+    var pollThumbs = true;
+    var pollInterval = <xsl:value-of select="/fileList/pollInterval" />;
+    var dirModified = '<xsl:value-of select="/fileList/dirModified" />';
+    var fileSizeSum = '<xsl:value-of select="/fileList/sizeSumBytes" />'
+  </xsl:if>
   
   <xsl:if test="not(/fileList/clipBoardEmpty)">
     <xsl:if test="/fileList/copyOperation">
@@ -132,12 +143,15 @@
 </head>
 
 <body class="fileList">
-  <xsl:if test="/fileList/file">  
-    <xsl:attribute name="onload">setThumbContHeight();initialLoadPictures();attachScrollHandler();</xsl:attribute>
-  </xsl:if>
-  <xsl:if test="not(/fileList/file)">  
-    <xsl:attribute name="onload">setThumbContHeight();</xsl:attribute>
-  </xsl:if>
+  <xsl:attribute name="onload">
+    setThumbContHeight();
+    <xsl:if test="/fileList/file">
+      initialLoadPictures();attachScrollHandler();
+    </xsl:if>
+    <xsl:if test="/fileList/pollInterval">
+      delayedPollForDirChanges();
+    </xsl:if>
+  </xsl:attribute>
 
   <xsl:apply-templates />
 
@@ -158,6 +172,10 @@
 
 <script type="text/javascript">
   setBundleResources();
+
+  <xsl:if test="/fileList/pollInterval">
+    document.addEventListener("visibilitychange", visibilityChangeHandler);
+  </xsl:if>
 </script>
 
 </html>
@@ -269,7 +287,7 @@
 	            <tr>
 	              <td class="fileListFunct" nowrap="nowrap" style="vertical-align:middle;padding-right:20px;">
 	                <label resource="label.mask"></label>:
-	                <input type="text" name="mask" size="8" maxlength="256">
+	                <input id="fileMask" type="text" name="mask" size="8" maxlength="256">
 	                  <xsl:attribute name="value">
 	                    <xsl:value-of select="filter" />
 	                  </xsl:attribute>

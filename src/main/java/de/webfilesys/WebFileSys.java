@@ -131,7 +131,7 @@ public class WebFileSys
     
     private boolean enableFolderWatch = false;
     
-    private boolean pollForFilesysChanges = false;
+    private int pollFilesysChangesInterval = 60;
     
     /** folder watch interval in minutes */
     private int folderWatchInterval = DEFAULT_FOLDER_WATCH_INTERVAL;
@@ -653,8 +653,13 @@ public class WebFileSys
             }
         }
         
-        if (config.getProperty("PollForFilesysChanges", "true").equalsIgnoreCase("true")) {
-        	pollForFilesysChanges = true;
+        temp = config.getProperty("PollFilesysChangesInterval");
+        if (!CommonUtils.isEmpty(temp)) {
+            try {
+            	pollFilesysChangesInterval = Integer.parseInt(temp);
+            } catch (NumberFormatException nfex) {
+            	Logger.getLogger(getClass()).error("invalid value for property PollFilesysChangesInterval: " + temp + " - using default value " + pollFilesysChangesInterval);
+            }
         }
         
 		temp = config.getProperty("SimulateRemote");
@@ -962,8 +967,8 @@ public class WebFileSys
         return enableFolderWatch;
     }
     
-    public boolean isPollForFilesysChanges() {
-    	return pollForFilesysChanges;
+    public int getPollFilesysChangesInterval() {
+    	return pollFilesysChangesInterval * 1000;
     }
     
     public String getMailSenderAddress()

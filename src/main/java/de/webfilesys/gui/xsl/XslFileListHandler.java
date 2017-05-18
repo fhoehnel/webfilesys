@@ -466,8 +466,9 @@ public class XslFileListHandler extends XslFileListHandlerBase
             }
 		}
 
-		if (WebFileSys.getInstance().isPollForFilesysChanges()) {
-			XmlUtil.setChildText(fileListElement, "poll", "true");
+		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		if (pollInterval > 0) {
+			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
 		}
 		
 		addCurrentTrail(fileListElement, actPath, docRoot, mask);		
