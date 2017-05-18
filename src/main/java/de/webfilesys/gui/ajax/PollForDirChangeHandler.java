@@ -2,6 +2,8 @@ package de.webfilesys.gui.ajax;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.Constants;
+import de.webfilesys.FileContainerComparator;
+import de.webfilesys.FileLinkSelector;
+import de.webfilesys.FileSelectionStatus;
+import de.webfilesys.MetaInfManager;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -47,20 +55,28 @@ public class PollForDirChangeHandler extends XmlRequestHandlerBase
         
         long lastModified = dirFile.lastModified();
         
-        long currentSizeSum = 0l;
+        String fileMask = getParameter("mask");
         
-        File[] files = dirFile.listFiles();
-        if (files != null) {
-            for (File file : files) {
-            	if (file.isFile()) {
-            		currentSizeSum += file.length();
-            	}
-            }
+        if (CommonUtils.isEmpty(fileMask)) {
+        	fileMask = "*";
         }
+        
+        String[] filterMasks = new String[] {fileMask};
+        
+		FileLinkSelector fileSelector = new FileLinkSelector(currentPath, FileContainerComparator.SORT_BY_FILENAME, true);
+
+		FileSelectionStatus selectionStatus = fileSelector.selectFiles(filterMasks, Constants.MAX_FILE_NUM, 0);
+
+		long currentSizeSum = selectionStatus.getFileSizeSum();
         
         Element resultElement = doc.createElement("result");
 
-        boolean modified = (lastModified > lastDirStatusTime) || (currentSizeSum != lastSizeSum);
+        boolean modified = false;
+        if (fileMask.equals("*")) {
+            modified = (lastModified > lastDirStatusTime) || (currentSizeSum != lastSizeSum);
+        } else {
+            modified = (currentSizeSum != lastSizeSum);
+        }
         
         XmlUtil.setElementText(resultElement, Boolean.toString(modified));
         

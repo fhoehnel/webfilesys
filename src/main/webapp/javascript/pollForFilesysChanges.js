@@ -9,7 +9,9 @@ function visibilityChangeHandler() {
 
 function pollForDirChanges(immediateRefreshView) {
 	
-	var pollUrl = "/webfilesys/servlet?command=pollForDirChange&lastDirStatusTime=" + dirModified + "&lastSizeSum=" + fileSizeSum;
+	var fileFilter = document.getElementById("fileMask").value;
+	
+	var pollUrl = "/webfilesys/servlet?command=pollForDirChange&lastDirStatusTime=" + dirModified + "&lastSizeSum=" + fileSizeSum + "&mask=" + fileFilter;
 	
 	xmlRequest(pollUrl, function(req) {
         if (req.readyState == 4) {

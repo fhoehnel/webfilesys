@@ -466,6 +466,10 @@ public class XslFileListHandler extends XslFileListHandlerBase
             }
 		}
 
+		if (WebFileSys.getInstance().isPollForFilesysChanges()) {
+			XmlUtil.setChildText(fileListElement, "poll", "true");
+		}
+		
 		addCurrentTrail(fileListElement, actPath, docRoot, mask);		
 		
 		processResponse("fileList.xsl", true);

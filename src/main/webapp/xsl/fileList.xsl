@@ -43,7 +43,9 @@
 <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/jsFileMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
-<script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
+<xsl:if test="/fileList/poll">
+  <script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
+</xsl:if>
 <script src="/webfilesys/javascript/crypto.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/videoAudio.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -67,7 +69,9 @@
   var addCopyAllowed = false;
   var addMoveAllowed = false;
   
-  var pollingTimeout;
+  <xsl:if test="/fileList/poll">
+    var pollingTimeout;
+  </xsl:if>
   
   <xsl:if test="not(/fileList/clipBoardEmpty)">
     <xsl:if test="/fileList/copyOperation">
@@ -151,7 +155,11 @@
 
 </head>
 
-<body class="fileList" onload="setFileListHeight();addDeselectHandler();delayedPollForDirChanges();">
+<body class="fileList">
+  <xsl:attribute name="onload">
+    setFileListHeight();addDeselectHandler();
+    <xsl:if test="/fileList/poll">delayedPollForDirChanges();</xsl:if>
+  </xsl:attribute>
 
 <xsl:apply-templates />
 
@@ -160,7 +168,9 @@
 <script type="text/javascript">
   setBundleResources();
   
-  document.addEventListener("visibilitychange", visibilityChangeHandler);
+  <xsl:if test="/fileList/poll">
+    document.addEventListener("visibilitychange", visibilityChangeHandler);
+  </xsl:if>
 </script>
 
 </html>
@@ -244,7 +254,7 @@
             <tr>
               <td class="fileListFunct fileFilter">
                 <label resource="label.mask"></label>:
-                <input type="text" name="mask" size="8" maxlength="256">
+                <input id="fileMask" type="text" name="mask" size="8" maxlength="256">
                   <xsl:attribute name="value">
                     <xsl:value-of select="filter" />
                   </xsl:attribute>
