@@ -1,10 +1,9 @@
 package de.webfilesys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 
 public class FastPathManager extends Thread
@@ -63,11 +62,11 @@ public class FastPathManager extends Thread
             return;
         }
         
-        Vector fastPathList = userQueue.getPathVector();        
+        ArrayList<String> fastPathList = userQueue.getPathList();        
 
         for (int i = fastPathList.size() - 1; i >= 0; i--) 
         {
-            String fastPath = (String) fastPathList.elementAt(i);
+            String fastPath = (String) fastPathList.get(i);
             
             if (fastPath.startsWith(path))
             {
@@ -83,16 +82,16 @@ public class FastPathManager extends Thread
         cacheModified.put(userid, new Boolean(true));
     }
     
-    public Vector getPathList(String userid)
+    public ArrayList<String> getPathList(String userid)
     {
         FastPathQueue userQueue=(FastPathQueue) queueTable.get(userid);
 
         if (userQueue==null)
         {
-            return(new Vector());
+            return(new ArrayList<String>());
         }
 
-        return(userQueue.getPathVector());
+        return(userQueue.getPathList());
     }
     
     public String returnToPreviousDir(String userid)
@@ -104,7 +103,7 @@ public class FastPathManager extends Thread
             return null;
         }
 
-        Vector fastPathList = userQueue.getPathVector();
+        ArrayList<String> fastPathList = userQueue.getPathList();
         
         if ((fastPathList == null) || (fastPathList.size() == 0))
         {
@@ -113,12 +112,12 @@ public class FastPathManager extends Thread
         
         if (fastPathList.size() == 1)
         {
-            return (String) fastPathList.elementAt(0);
+            return (String) fastPathList.get(0);
         }
         
-        String lastVisitedDir = (String) fastPathList.elementAt(1);
+        String lastVisitedDir = (String) fastPathList.get(1);
         
-        fastPathList.removeElementAt(0);
+        fastPathList.remove(0);
 
         cacheModified.put(userid, new Boolean(true));
         
@@ -138,8 +137,6 @@ public class FastPathManager extends Thread
             if (modified.booleanValue())
             {
                 FastPathQueue userQueue=(FastPathQueue) queueTable.get(userid);
-
-                // System.out.println("saving fastpath queue of user " + userid);
 
                 userQueue.saveToFile();
                 
@@ -162,16 +159,8 @@ public class FastPathManager extends Thread
             return;
         }
         
-        if (fastPathFile.delete())
-        {
-            if (Logger.getLogger(getClass()).isDebugEnabled())
-            {
-                Logger.getLogger(getClass()).debug("fastpath file deleted for user " + userid);
-            }
-            else
-            {
-                Logger.getLogger(getClass()).warn("failed to delete fastpath file for user " + userid);
-            }
+        if (!fastPathFile.delete()) {
+            Logger.getLogger(getClass()).warn("failed to delete fastpath file for user " + userid);
         }
     }
     
