@@ -60,3 +60,9 @@ function delayedPollForDirChanges() {
 	}
 	pollingTimeout = setTimeout(pollForDirChanges, pollInterval);	
 }
+
+function stopPolling() {
+	if (pollingTimeout) {
+		clearTimeout(pollingTimeout);
+	}
+}
