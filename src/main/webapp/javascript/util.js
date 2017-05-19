@@ -247,10 +247,10 @@ function customAlert(alertText, buttonText) {
    	var mouseShield = document.createElement("div");
    	mouseShield.id = "mouseClickShield";
    	mouseShield.setAttribute("class", "mouseClickShield");
-    document.body.appendChild(mouseShield);
+   	document.documentElement.appendChild(mouseShield);
     mouseShield.setAttribute("onclick", "javascript:void(0);");
 	
-    mouseShield.style.height = document.body.clientHeight + "px";   
+    mouseShield.style.height = document.documentElement.clientHeight + "px";   
     
     var alertCont = document.createElement("div");
     alertCont.setAttribute("class", "alertCont");
@@ -282,7 +282,7 @@ function closeAlert() {
 	var clickShield = document.getElementById("mouseClickShield");
 	if (clickShield) {
 		// document.body.removeChild(clickShield);
-		document.getElementsByTagName("BODY")[0].removeChild(clickShield);	
+		document.documentElement.removeChild(clickShield);	
 	}
 }
 

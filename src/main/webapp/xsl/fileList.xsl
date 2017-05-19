@@ -62,8 +62,6 @@
 
   var noFileSelected = resourceBundle["alert.nofileselected"];
   
-  var selectTwoFiles = resourceBundle["selectTwoFilesForDiff"];
-  
   var path = '<xsl:value-of select="/fileList/menuPath" />';
   
   var addCopyAllowed = false;
