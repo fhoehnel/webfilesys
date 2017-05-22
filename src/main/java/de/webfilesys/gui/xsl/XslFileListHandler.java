@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -274,7 +275,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileMasks, Constants.MAX_FILE_NUM, 0);
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		fileNum = selectionStatus.getNumberOfFiles();
 		
@@ -316,7 +317,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
                 
                 fileListElement.appendChild(fileElement);
 
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 				
 				String fileName = fileCont.getName();
 

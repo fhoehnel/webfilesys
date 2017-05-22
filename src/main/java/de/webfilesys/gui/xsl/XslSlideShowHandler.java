@@ -2,6 +2,7 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -194,7 +195,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 
 		FileSelectionStatus selectionStatus=fileSelector.selectFiles(imgFileMasks,4096,null,null);
  
-		Vector imageFiles = null;
+		ArrayList<FileContainer> imageFiles = null;
 		if (randomize) {
 			imageFiles = selectionStatus.getRandomizedFiles();
 		} else {
@@ -205,7 +206,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		{
 			for (i=0;i<imageFiles.size();i++)
 			{
-				FileContainer fileCont = (FileContainer) imageFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) imageFiles.get(i);
 				
 				imageTree.addElement(fileCont.getRealFile().getAbsolutePath());
 			}

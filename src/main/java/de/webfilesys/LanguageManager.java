@@ -5,12 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 
 import de.webfilesys.util.CommonUtils;
@@ -27,7 +26,7 @@ public class LanguageManager
 
     private Hashtable resourceTable;
 
-    private Vector availableLanguages;
+    private ArrayList<String> availableLanguages;
 
     private String defaultLanguage;
 
@@ -43,7 +42,7 @@ public class LanguageManager
     	
         resourceTable=new Hashtable(5);
 
-        availableLanguages=new Vector();
+        availableLanguages = new ArrayList<String>();
 
         defaultLanguage=defaultLang;
 
@@ -108,9 +107,9 @@ public class LanguageManager
         }
     }
 
-    public Vector getAvailableLanguages()
+    public ArrayList<String> getAvailableLanguages()
     {
-        return(availableLanguages);
+        return availableLanguages;
     }
 
     public String getResource(String language,String resource,String defaultValue)
@@ -256,11 +255,11 @@ public class LanguageManager
     {
         LanguageManager langMgr=LanguageManager.getInstance();
 
-        Vector languageNames=langMgr.getAvailableLanguages();
+        ArrayList<String> languageNames = langMgr.getAvailableLanguages();
 
         for (int i=0;i<languageNames.size();i++)
         {
-        	Logger.getLogger(getClass()).info("available language: " + (String) languageNames.elementAt(i));
+        	Logger.getLogger(getClass()).info("available language: " + (String) languageNames.get(i));
         }
     }
     

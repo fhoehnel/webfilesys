@@ -532,7 +532,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             }
         }
 
-        Vector selectedFiles = null;
+        ArrayList<FileContainer> selectedFiles = null;
 
         FileSelectionStatus selectionStatus = null;
 
@@ -592,7 +592,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                 
 				fileListElement.appendChild(fileElement);
 
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 				
 				String fileName = fileCont.getName();
 

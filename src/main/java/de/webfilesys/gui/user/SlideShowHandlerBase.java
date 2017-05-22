@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,13 +59,13 @@ public class SlideShowHandlerBase extends UserRequestHandler
 
 		FileSelectionStatus selectionStatus=fileSelector.selectFiles(Constants.imgFileMasks,4096,null,null);
 
-		Vector imageFiles=selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> imageFiles = selectionStatus.getSelectedFiles();
 
 		if (imageFiles!=null)
 		{
 			for (i=0;i<imageFiles.size();i++)
 			{
-				FileContainer fileCont = (FileContainer) imageFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) imageFiles.get(i);
 				
 				imageTree.addElement(fileCont.getRealFile().getAbsolutePath());
 			}

@@ -11,10 +11,9 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Vector;
-
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -373,13 +372,13 @@ public class ThumbnailCreatorBase
 
         FileSelectionStatus selectionStatus=fileSelector.selectFiles(imgFileMasks,2048,null,null);
 
-        Vector selectedFiles=selectionStatus.getSelectedFiles();
+        ArrayList<String> selectedFiles=selectionStatus.getSelectedFileNames();
 
         if ((selectedFiles!=null) && (selectedFiles.size()>0))
         {
             for (int i=0;i<selectedFiles.size();i++)
             {
-                String actFileName=(String) selectedFiles.elementAt(i);
+                String actFileName=(String) selectedFiles.get(i);
 
                 if (!thumbnailUpToDate(actPath + actFileName))
                 {

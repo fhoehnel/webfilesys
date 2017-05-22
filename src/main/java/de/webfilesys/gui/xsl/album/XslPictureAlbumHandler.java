@@ -575,7 +575,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 
 		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileFilter, rating, pageSize, startIdx);
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		int fileNum = 0;
 
@@ -649,7 +649,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
             
 				boolean currentPrinted = false;
             
-				Vector pageStartIndices = selectionStatus.getPageStartIndices();
+				ArrayList<Integer> pageStartIndices = selectionStatus.getPageStartIndices();
             
 				for (int pageCounter = 0; pageCounter < pageStartIndices.size();)
 				{
@@ -675,7 +675,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 							}
 						}
 						
-						Integer pageStartIdx = (Integer) pageStartIndices.elementAt(pageCounter);
+						Integer pageStartIdx = (Integer) pageStartIndices.get(pageCounter);
 						
 						Element pageElement = doc.createElement("page");
 						pagingElement.appendChild(pageElement);
@@ -721,7 +721,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
                 
 				fileGroupElement.appendChild(fileElement);
 
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 				
 				String actFilename = fileCont.getName();
 

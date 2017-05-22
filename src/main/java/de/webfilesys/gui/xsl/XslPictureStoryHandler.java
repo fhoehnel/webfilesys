@@ -3,6 +3,7 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -357,7 +358,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 
 		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileFilter, pageSize, startIdx);
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		int fileNum = 0;
 
@@ -410,7 +411,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
             
 				boolean currentPrinted = false;
             
-				Vector pageStartIndices = selectionStatus.getPageStartIndices();
+				ArrayList<Integer> pageStartIndices = selectionStatus.getPageStartIndices();
             
 				for (int pageCounter = 0; pageCounter < pageStartIndices.size(); pageCounter += pageStep)
 				{
@@ -436,7 +437,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 							}
 						}
 						
-						Integer pageStartIdx = (Integer) pageStartIndices.elementAt(pageCounter);
+						Integer pageStartIdx = (Integer) pageStartIndices.get(pageCounter);
 						
 						Element pageElement = doc.createElement("page");
 						pagingElement.appendChild(pageElement);
@@ -461,7 +462,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
                 
 				fileListElement.appendChild(fileElement);
 
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 				
 				String actFilename = fileCont.getName();
 

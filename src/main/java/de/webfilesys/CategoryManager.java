@@ -5,12 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -225,15 +224,14 @@ public class CategoryManager extends Thread
         indexTable = new Hashtable();
     }
 
-    public Vector getCategoryIds(String userid)
+    public ArrayList<String> getCategoryIds(String userid)
     {
         Element categoryList = getCategoryList(userid);
 
-        Vector categoryIds = null;
+        ArrayList<String> categoryIds = null;
 
         if (categoryList == null)
         {
-            // System.out.println("contact list for user " + userid + " does not exist!");
             return(null);
         }
 
@@ -249,7 +247,7 @@ public class CategoryManager extends Thread
 
                 if (categoryIds == null)
                 {
-                    categoryIds = new Vector();
+                    categoryIds = new ArrayList<String>();
                 }
 
                 categoryIds.add(category.getAttribute("id"));
@@ -260,32 +258,19 @@ public class CategoryManager extends Thread
             Logger.getLogger(getClass()).debug("no categories found for userid " + userid);
         }
     
-        return(categoryIds);
+        return categoryIds;
     }
 
-    public Vector getListOfCategories(String userid)
-    {
-        return(getListOfCategories(userid,true));
-    }
-    
-    public Vector getListOfCategories(String userid, boolean createIfMissing)
+    public ArrayList<Category> getListOfCategories(String userid)
     {
         Element categoryList = getCategoryList(userid);
 
-        Vector listOfCategories = new Vector();
+        ArrayList<Category> listOfCategories = new ArrayList<Category>();
 
         if (categoryList==null)
         {
             Logger.getLogger(getClass()).debug("category list for user " + userid + " does not exist!");
-
-            return(listOfCategories);
-
-            /*
-            if (createIfMissing)
-            {
-                return(null);
-            }
-            */
+            return listOfCategories;
         }
 
         NodeList categories = categoryList.getElementsByTagName("category");
@@ -341,7 +326,7 @@ public class CategoryManager extends Thread
             Collections.sort(listOfCategories, new CategoryComparator());
         }
 
-        return(listOfCategories);
+        return listOfCategories;
     }
 
     public Category getCategory(String userid, String searchedId)

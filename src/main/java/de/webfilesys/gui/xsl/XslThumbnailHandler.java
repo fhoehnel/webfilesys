@@ -215,7 +215,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 
 		filterLinksOutsideDocRoot(selectionStatus);
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		int fileNum = 0;
 
@@ -255,7 +255,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 
 				fileListElement.appendChild(fileElement);
 
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 
 				String picFilename = fileCont.getName();
 
@@ -404,7 +404,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 	private void filterLinksOutsideDocRoot(FileSelectionStatus selectionStatus) {
 		ArrayList<FileContainer> filteredOutList = new ArrayList<FileContainer>();
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		if (selectedFiles != null) {
 			for (int i = 0; i < selectedFiles.size(); i++) {

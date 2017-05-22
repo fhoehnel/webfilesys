@@ -2,8 +2,6 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import java.util.ArrayList;
 import de.webfilesys.DirStat;
 import de.webfilesys.FileSysStat;
 import de.webfilesys.util.CommonUtils;
@@ -61,7 +60,7 @@ public class XslTreeStatisticsHandler extends XslRequestHandlerBase
 
 		FileSysStat fileSysStat = new FileSysStat(currentPath);
 
-		Vector statList = fileSysStat.getStatistics();
+		ArrayList<DirStat> statList = fileSysStat.getStatistics();
 
 		XmlUtil.setChildText(treeStatsElement, "subdirNum", CommonUtils.formatNumber(fileSysStat.getTotalSubdirNum(),14,false), false);
 
@@ -79,7 +78,7 @@ public class XslTreeStatisticsHandler extends XslRequestHandlerBase
 		{
 			for (int i = 0; i < statList.size(); i++)
 			{
-				DirStat dirStat = (DirStat) statList.elementAt(i);
+				DirStat dirStat = (DirStat) statList.get(i);
 
 				Element folderStatElement = doc.createElement("folderStat");
 

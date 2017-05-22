@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -494,7 +495,7 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 
         FileSelectionStatus selectionStatus = fileSelector.selectFiles(Constants.imgFileMasks, 4096, null, null);
 
-        Vector imageFiles = selectionStatus.getSelectedFiles();
+        ArrayList<FileContainer> imageFiles = selectionStatus.getSelectedFiles();
 
         String nextImg = null;
         
@@ -502,7 +503,7 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
             boolean found = false;
             
             for (int i = 0; (!found) && (i < imageFiles.size()); i++) {
-                FileContainer fileCont = (FileContainer) imageFiles.elementAt(i);
+                FileContainer fileCont = (FileContainer) imageFiles.get(i);
                 
                 if (!fileCont.isLink()) {
                 	if (fileCont.getName().compareToIgnoreCase(afterFileName) > 0) {

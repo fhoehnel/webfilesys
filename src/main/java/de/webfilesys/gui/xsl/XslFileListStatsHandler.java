@@ -3,6 +3,7 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -124,7 +125,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 
 		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileMasks, Constants.MAX_FILE_NUM, 0);
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		if (selectedFiles != null)
 		{
@@ -132,7 +133,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 			
 			for (int i = 0; i < fileNum; i++)
 			{
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 				
 				Element fileElem = doc.createElement("file");
 				

@@ -1322,8 +1322,6 @@ public class MetaInfManager extends Thread
 			return(false);
 		}
 
-		Vector listOfCategories = new Vector();
-
 		for (int i=0; i<listLength; i++)
 		{
 			Element categoryElement = (Element) categoryList.item(i);
@@ -1861,7 +1859,7 @@ public class MetaInfManager extends Thread
         return linkingFiles;
 	}
 	
-	public Vector getListOfLinks(String path)
+	public ArrayList<FileLink> getListOfLinks(String path)
 	{
 		Element metaInfElement=getMetaInfElement(path,".");
 
@@ -1891,7 +1889,7 @@ public class MetaInfManager extends Thread
 			return(null);
 		}
 
-		Vector listOfLinks = new Vector();
+		ArrayList<FileLink> listOfLinks = new ArrayList<FileLink>();
 
 		for (int i=0;i<listLength;i++)
 		{
@@ -2187,7 +2185,7 @@ public class MetaInfManager extends Thread
 		return(downLoadNum);
 	}
 
-    public Vector getTopDownloadList(String path)
+    public ArrayList<Element> getTopDownloadList(String path)
     {
         Element metaInfRoot=(Element) dirList.get(path);
 
@@ -2205,7 +2203,7 @@ public class MetaInfManager extends Thread
             }
         }
 
-        Vector sortedTopList=new Vector();
+        ArrayList<Element> sortedTopList = new ArrayList<Element>();
 
         NodeList metaInfList=metaInfRoot.getElementsByTagName("metainf");
 

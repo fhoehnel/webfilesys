@@ -74,7 +74,7 @@ public class DiskQuotaInspector extends Thread
                     {
                         FileSysStat fileSysStat = new FileSysStat(homeDir);
 
-                        Vector statList=fileSysStat.getStatistics();
+                        fileSysStat.getStatistics();
 
                         if (fileSysStat.getTotalSizeSum() > diskQuota)
                         {

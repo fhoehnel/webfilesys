@@ -1,9 +1,9 @@
 package de.webfilesys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Vector;
 
 public class FileSysStat
 {
@@ -43,9 +43,9 @@ public class FileSysStat
         maxLevel=0;
     }
 
-    public Vector getStatistics()
+    public ArrayList<DirStat> getStatistics()
     {
-        Vector statList=new Vector();
+    	ArrayList<DirStat> statList = new ArrayList<DirStat>();
 
         File dirFile=new File(path);
         

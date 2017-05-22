@@ -3,9 +3,8 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -155,7 +154,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 			pathWithSlash = partOfPath + File.separator;
 		}
 
-		Vector subdirList = new Vector();
+		ArrayList<String> subdirList = new ArrayList<String>();
 
 		for (int i=0; i<fileList.length; i++)
 		{
@@ -203,7 +202,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 		
 		for (int i=0;i<subdirList.size();i++)
 		{
-			String subdirPath=(String) subdirList.elementAt(i);
+			String subdirPath=(String) subdirList.get(i);
 
 			boolean access = (belowDocRoot || accessAllowed(subdirPath));
 

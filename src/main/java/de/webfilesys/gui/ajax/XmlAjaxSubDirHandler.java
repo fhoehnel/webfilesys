@@ -3,9 +3,8 @@ package de.webfilesys.gui.ajax;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -242,7 +241,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 			pathWithSlash = parentPath + File.separator;
 		}
 
-		Vector subdirList = new Vector();
+		ArrayList<String> subdirList = new ArrayList<String>();
 
 		for (int i = 0; i < fileList.length; i++)
 		{
@@ -273,7 +272,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 
 		for (int i = 0; i < subdirList.size(); i++)
 		{
-			String subdirPath=(String) subdirList.elementAt(i);
+			String subdirPath=(String) subdirList.get(i);
 
 			Element folderElement = null;
 

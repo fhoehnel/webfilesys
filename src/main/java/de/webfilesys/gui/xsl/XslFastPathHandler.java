@@ -58,14 +58,11 @@ public class XslFastPathHandler extends XslRequestHandlerBase
 		
 		int docRootTokenCount = getDocRootTokenCount();
 		
-        Vector bookmarkList = FileSysBookmarkManager.getInstance().getListOfBookmarks(uid);
+		ArrayList<FileSysBookmark> bookmarkList = FileSysBookmarkManager.getInstance().getListOfBookmarks(uid);
         
         if (bookmarkList != null) 
         {
-            for (int i = 0; i < bookmarkList.size(); i++) 
-            {
-                FileSysBookmark bookmark = (FileSysBookmark) bookmarkList.elementAt(i);
-                
+        	for (FileSysBookmark bookmark : bookmarkList) {
                 addFastPath(fastPathElement, bookmark.getPath(), docRootTokenCount, PATH_TYPE_BOOKMARK);
             }
         }

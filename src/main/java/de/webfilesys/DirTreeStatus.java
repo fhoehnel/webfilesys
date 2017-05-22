@@ -1,10 +1,10 @@
 package de.webfilesys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 public class DirTreeStatus 
 {
@@ -24,7 +24,7 @@ public class DirTreeStatus
     {
         expandedDirs.remove(path);
 
-        Vector collapsedSubdirs=new Vector();
+        ArrayList<String> collapsedSubdirs = new ArrayList<String>();
 
         Enumeration dirList=expandedDirs.keys();
 
@@ -40,7 +40,7 @@ public class DirTreeStatus
 
         for (int i=0;i<collapsedSubdirs.size();i++)
         {
-            expandedDirs.remove(collapsedSubdirs.elementAt(i));
+            expandedDirs.remove(collapsedSubdirs.get(i));
         }
     }
 
