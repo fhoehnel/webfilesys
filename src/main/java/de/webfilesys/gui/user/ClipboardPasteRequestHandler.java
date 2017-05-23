@@ -325,10 +325,15 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 						{
 							output.println("{window.location=\"/webfilesys/servlet?command=pasteFiles&actpath=" + UTF8URLEncoder.encode(actPath) + "&ignoreExist=true\";}");
 						}
-						output.println("else");
+						output.println("else {");
 
-						output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
+						if (pasteToFileWin) {
+							output.println("window.location.href='/webfilesys/servlet?command=listFiles';");
+						} else {
+							output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
+						}
 
+						output.println("}");
 						output.println("</script>");
 						output.println("</BODY></html>");
 						output.flush();
