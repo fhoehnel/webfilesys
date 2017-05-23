@@ -389,6 +389,7 @@ label.currentcopy=processing file
 label.copyfromclip=Copying files
 label.movefromclip=Moving files
 label.copyresult=files copied
+label.moveresult=files moved
 morePasteConflicts=... more
 pasteConflictHead=The following files already exist in the destination folder
 pasteOverwrite=Overwrite?

@@ -3,9 +3,8 @@ package de.webfilesys.gui.admin;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -161,7 +160,7 @@ public class AdminSelectFolderHandler extends XslRequestHandlerBase
 			pathWithSlash = partOfPath + File.separator;
 		}
 
-		Vector subdirList = new Vector();
+		ArrayList<String> subdirList = new ArrayList<String>();
 
 		for (int i=0; i<fileList.length; i++)
 		{
@@ -178,17 +177,11 @@ public class AdminSelectFolderHandler extends XslRequestHandlerBase
 				int subdirPathLength = subdirPath.length();
 
 				if (belowDocRoot || accessAllowed(subdirPath) ||
-					(
-					(docRoot.indexOf(subdirPath.replace('\\','/'))==0) &&
-					(
-					(subdirPathLength==docRoot.length()) ||
-					(docRoot.charAt(subdirPathLength)=='/')
-					)
-					)
-				   )
-				{
-					if (!subdirName.equals(ThumbnailThread.THUMBNAIL_SUBDIR))
-					{
+					((docRoot.indexOf(subdirPath.replace('\\','/')) == 0) &&
+					 ((subdirPathLength == docRoot.length()) ||
+					(docRoot.charAt(subdirPathLength) == '/')))) {
+					
+					if (!subdirName.equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
 						subdirList.add(subdirPath);
 					}
 				}
@@ -202,12 +195,10 @@ public class AdminSelectFolderHandler extends XslRequestHandlerBase
 
 		if (subdirList.size()>1)
 		{
-			Collections.sort(subdirList,new StringComparator(StringComparator.SORT_IGNORE_CASE));
+			Collections.sort(subdirList, new StringComparator(StringComparator.SORT_IGNORE_CASE));
 		}
 
-		for (int i=0;i<subdirList.size();i++)
-		{
-			String subdirPath=(String) subdirList.elementAt(i);
+		for (String subdirPath : subdirList) {
 
 			boolean access = (belowDocRoot || accessAllowed(subdirPath));
 

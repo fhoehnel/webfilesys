@@ -2,8 +2,7 @@ package de.webfilesys.gui.ajax;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -78,11 +77,11 @@ public class RenamePictureHandler extends XmlRequestHandlerBase {
 				metaInfMgr.setDescription(newImagePath, description);
 			}
 
-			Vector assignedCategories = metaInfMgr.getListOfCategories(imagePath);
+			ArrayList<Category> assignedCategories = metaInfMgr.getListOfCategories(imagePath);
 
 			if (assignedCategories != null) {
 				for (int i = 0; i < assignedCategories.size(); i++) {
-					Category cat = (Category) assignedCategories.elementAt(i);
+					Category cat = (Category) assignedCategories.get(i);
 
 					metaInfMgr.addCategory(newImagePath, cat);
 				}
@@ -93,7 +92,7 @@ public class RenamePictureHandler extends XmlRequestHandlerBase {
 				metaInfMgr.setGeoTag(newImagePath, geoTag);
 			}
 
-			Vector<Comment> comments = metaInfMgr.getListOfComments(imagePath);
+			ArrayList<Comment> comments = metaInfMgr.getListOfComments(imagePath);
 			if ((comments != null) && (comments.size() > 0)) {
 				for (Comment comment : comments) {
 					metaInfMgr.addComment(newImagePath, comment);

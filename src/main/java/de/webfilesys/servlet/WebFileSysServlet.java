@@ -92,7 +92,6 @@ import de.webfilesys.gui.ajax.XmlCreateThumbsHandler;
 import de.webfilesys.gui.ajax.XmlCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlDeleteDirHandler;
 import de.webfilesys.gui.ajax.XmlDirStatsHandler;
-import de.webfilesys.gui.ajax.XmlEmojiListHandler;
 import de.webfilesys.gui.ajax.XmlFileAgeStatsHandler;
 import de.webfilesys.gui.ajax.XmlFileSizeStatsHandler;
 import de.webfilesys.gui.ajax.XmlFileTypeStatsHandler;

@@ -240,7 +240,9 @@ function toast(message, duration) {
 
 function hideToast() {
 	var toastBox = document.getElementById("toastBox");
-	document.documentElement.removeChild(toastBox);
+	if (toastBox) {
+		toastBox.parentNode.removeChild(toastBox);
+	}
 }
 
 function customAlert(alertText, buttonText) {
@@ -281,8 +283,7 @@ function customAlert(alertText, buttonText) {
 function closeAlert() {
 	var clickShield = document.getElementById("mouseClickShield");
 	if (clickShield) {
-		// document.body.removeChild(clickShield);
-		document.documentElement.removeChild(clickShield);	
+		clickShield.parentNode.removeChild(clickShield);
 	}
 }
 

@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -125,7 +122,15 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		
 		output.println("<tr>");
 		output.println("<td class=\"formParm1\">");
-		output.println(getResource("label.copyresult","files copied") + ":");
+		
+		String labelText;
+		if (clipBoard.isCopyOperation()) {
+			labelText = getResource("label.copyresult", "files copied");
+		} else {
+			labelText = getResource("label.moveresult", "files moved");
+		}
+		
+		output.println(labelText + ":");
 		output.println("</td>");
 		output.println("</tr>");
 
@@ -208,7 +213,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 					String description=metaInfMgr.getDescription(sourceFile);
 					
-					Vector assignedCategories = metaInfMgr.getListOfCategories(sourceFile);
+					ArrayList<Category> assignedCategories = metaInfMgr.getListOfCategories(sourceFile);
 					
 					GeoTag geoData =  metaInfMgr.getGeoTag(sourceFile);
 
@@ -252,7 +257,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 					{
 						for (int i = 0; i < assignedCategories.size(); i++)
 						{
-							metaInfMgr.addCategory(destFile, (Category) assignedCategories.elementAt(i));
+							metaInfMgr.addCategory(destFile, (Category) assignedCategories.get(i));
 						}
 					}
 					

@@ -2,8 +2,7 @@ package de.webfilesys.gui.admin;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -93,9 +92,9 @@ public class AdminSelectWinFolderHandler extends AdminSelectFolderHandler
         
         computerElement.setAttribute("name", WebFileSys.getInstance().getLocalHostName());
 
-		Vector existingDrives=new Vector();
+		ArrayList<Integer> existingDrives = new ArrayList<Integer>();
 
-		for (int i=1;i<=26;i++)
+		for (int i = 1; i <= 26; i++)
 		{
 			String driveLabel = WinDriveManager.getInstance().getDriveLabel(i);
 
@@ -110,7 +109,7 @@ public class AdminSelectWinFolderHandler extends AdminSelectFolderHandler
 
 		for (int i=0;i<existingDrives.size();i++)
 		{
-			int driveNum=((Integer) existingDrives.elementAt(i)).intValue();
+			int driveNum=((Integer) existingDrives.get(i)).intValue();
 
 			String driveLabel = WinDriveManager.getInstance().getDriveLabel(driveNum);
 

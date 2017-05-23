@@ -389,6 +389,7 @@ label.currentcopy=procesando archivo
 label.copyfromclip=Copiando archivos
 label.movefromclip=Moviendo archivos
 label.copyresult=archivos copiados
+label.moveresult=archivos movidos
 morePasteConflicts=... mas
 pasteConflictHead=Los archivos siguientes existen en la carpeta de destino
 pasteOverwrite=Exagerar?

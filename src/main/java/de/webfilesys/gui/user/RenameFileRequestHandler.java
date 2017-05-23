@@ -2,8 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -121,13 +120,13 @@ public class RenameFileRequestHandler extends UserRequestHandler
 			metaInfMgr.setDescription(newFilePath,description);
 		}
 		
-		Vector assignedCategories = metaInfMgr.getListOfCategories(oldFilePath);
+		ArrayList<Category> assignedCategories = metaInfMgr.getListOfCategories(oldFilePath);
 		
 		if (assignedCategories != null)
 		{
 			for (int i=0;i<assignedCategories.size();i++)
 			{
-				Category cat = (Category) assignedCategories.elementAt(i);
+				Category cat = (Category) assignedCategories.get(i);
 				
 				metaInfMgr.addCategory(newFilePath, cat);
 			}
@@ -138,7 +137,7 @@ public class RenameFileRequestHandler extends UserRequestHandler
 			metaInfMgr.setGeoTag(newFilePath, geoTag);
 		}
 
-		Vector<Comment> comments = metaInfMgr.getListOfComments(oldFilePath);
+		ArrayList<Comment> comments = metaInfMgr.getListOfComments(oldFilePath);
 		if ((comments != null) && (comments.size() > 0)) {
 			for (Comment comment : comments) {
 				metaInfMgr.addComment(newFilePath, comment);

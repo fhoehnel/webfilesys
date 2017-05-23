@@ -1475,6 +1475,7 @@ div.videoCont {
 
 div.videoCont video {
     width: 480px;
+    max-height: 300px;
 }
 
 div.videoCont img.closeButton {

@@ -2,9 +2,8 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,7 +30,7 @@ public class TransformImageRequestHandler extends UserRequestHandler
 	{
 		String actPath = getCwd();
 
-		Vector selectedFiles=new Vector();
+		ArrayList<String> selectedFiles = new ArrayList<String>();
 
 		Enumeration allKeys = req.getParameterNames();
 
@@ -114,10 +113,7 @@ public class TransformImageRequestHandler extends UserRequestHandler
 
 		output.flush();
 
-		for (int i=0;i<selectedFiles.size();i++)
-		{
-			String currentFile=(String) selectedFiles.elementAt(i);
-
+		for (String currentFile : selectedFiles) {
 			output.println("<script language=\"javascript\">");
 			output.println("document.getElementById('currentFile').innerHTML='" + currentFile + "';");
 			output.println("</script>");

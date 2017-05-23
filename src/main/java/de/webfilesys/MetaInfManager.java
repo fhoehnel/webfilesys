@@ -12,8 +12,6 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Vector;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -664,12 +662,12 @@ public class MetaInfManager extends Thread
         return (seenByOwner.equals("true"));
     }
     
-    public Vector<Comment> getListOfComments(String absoluteFileName) {
+    public ArrayList<Comment> getListOfComments(String absoluteFileName) {
         String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
         return(getListOfComments(partsOfPath[0], partsOfPath[1]));
     }
 
-    public Vector<Comment> getListOfComments(String path, String fileName)
+    public ArrayList<Comment> getListOfComments(String path, String fileName)
     {
         Element metaInfElement=getMetaInfElement(path,fileName);
 
@@ -699,7 +697,7 @@ public class MetaInfManager extends Thread
             return(null);
         }
 
-        Vector listOfComments=new Vector();
+        ArrayList<Comment> listOfComments = new ArrayList<Comment>();
 
         for (int i=0;i<listLength;i++)
         {
@@ -1337,12 +1335,12 @@ public class MetaInfManager extends Thread
 		return(false);
 	}
 
-	public Vector getListOfCategories(String absoluteFileName) {
+	public ArrayList<Category> getListOfCategories(String absoluteFileName) {
         String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
         return(getListOfCategories(partsOfPath[0], partsOfPath[1]));
 	}
 
-	public Vector getListOfCategories(String path, String fileName)
+	public ArrayList<Category> getListOfCategories(String path, String fileName)
 	{
 		Element metaInfElement = getMetaInfElement(path,fileName);
 
@@ -1372,7 +1370,7 @@ public class MetaInfManager extends Thread
 			return(null);
 		}
 
-		Vector listOfCategories = new Vector();
+		ArrayList<Category> listOfCategories = new ArrayList<Category>();
 
 		for (int i=0; i<listLength; i++)
 		{

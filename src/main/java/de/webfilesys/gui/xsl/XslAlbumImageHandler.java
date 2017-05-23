@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -359,7 +358,7 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 			}
 		}
 
-		Vector listOfComments = MetaInfManager.getInstance().getListOfComments(imgPath);
+		ArrayList<Comment> listOfComments = MetaInfManager.getInstance().getListOfComments(imgPath);
 
         if ((listOfComments != null) && (listOfComments.size() > 0))
         {        
@@ -373,7 +372,7 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 
 			for (int i = 0; i < listOfComments.size(); i++)
 			{
-				Comment comment=(Comment) listOfComments.elementAt(i);
+				Comment comment=(Comment) listOfComments.get(i);
 
 				Element commentElement = doc.createElement("comment");
         	
