@@ -16,6 +16,7 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
+import de.webfilesys.WebFileSys;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
@@ -38,6 +39,8 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
     protected DirTreeStatus dirTreeStatus = null;
     
     protected String actPath = null;
+    
+    private boolean pollForChanges;
 	
 	public XslDirTreeHandler(
     		HttpServletRequest req, 
@@ -47,7 +50,9 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
             String uid)
 	{
         super(req, resp, session, output, uid);
-
+        
+        pollForChanges = (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0);
+        
         dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
 		
 		if (dirTreeStatus == null)
@@ -91,6 +96,10 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
         	actPath = collapsePath;
         }
 
+        if (actPath == null) {
+        	actPath = getCwd();
+        }
+        
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/folderTree.xsl\"");
 
 		folderTreeElement = doc.createElement("folderTree");
@@ -128,9 +137,9 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 	
 	protected void dirSubTree(Element parentFolder, String actPath, String partOfPath, boolean belowDocRoot)
 	{
-		File subdirFile = new File(partOfPath);
-
-		String fileList[] = subdirFile.list();
+		File folderFile = new File(partOfPath);
+		
+		File fileList[] = folderFile.listFiles();
 
 		if (fileList == null)
 		{
@@ -156,38 +165,37 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 
 		ArrayList<String> subdirList = new ArrayList<String>();
 
-		for (int i=0; i<fileList.length; i++)
-		{
-			String subdirPath = null;
+		long subirNameLengthSum = 0;
+		
+		for (File file : fileList) {
+		
+			if (file.isDirectory()) {
+				String subdirName = file.getName();
 
-			subdirPath = pathWithSlash + fileList[i];
-
-			File tempFile = new File(subdirPath);
-
-			if (tempFile.isDirectory())
-			{
-				String subdirName = fileList[i];
+				String subdirPath = pathWithSlash + file.getName();
 
 				int subdirPathLength = subdirPath.length();
 
 				if (belowDocRoot || accessAllowed(subdirPath) ||
-					(
-					(docRoot.indexOf(subdirPath.replace('\\','/'))==0) &&
-					(
-					(subdirPathLength==docRoot.length()) ||
-					(docRoot.charAt(subdirPathLength)=='/')
-					)
-					)
-				   )
-				{
-					if (!subdirName.equals(ThumbnailThread.THUMBNAIL_SUBDIR))
-					{
+					((docRoot.indexOf(subdirPath.replace('\\','/')) == 0) &&
+					 ((subdirPathLength == docRoot.length()) ||
+					  (docRoot.charAt(subdirPathLength) == '/')))) {
+					
+					if (!subdirName.equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
 						subdirList.add(subdirPath);
 					}
+				}
+				
+				if (pollForChanges) {
+					subirNameLengthSum += file.getName().length();
 				}
 			}
 		}
 
+		if (pollForChanges) {
+			dirTreeStatus.setSubdirNameLengthSum(partOfPath, subirNameLengthSum);
+		}
+		
 		if (subdirList.size()==0)
 		{
 			return;

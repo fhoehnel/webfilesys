@@ -197,6 +197,11 @@ public class XslWinDirTreeHandler extends XslDirTreeHandler
 			XmlUtil.setChildText(folderTreeElement, "fastPath", insertDoubleBackslash(actPath));
 		}
 
+		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		if (pollInterval > 0) {
+			XmlUtil.setChildText(folderTreeElement, "pollInterval", Integer.toString(pollInterval));
+		}
+		
         this.processResponse("folderTree.xsl");
 	}
 }

@@ -187,6 +187,7 @@ selectTwoFilesForDiff=Select two files to compare!
 confirm.deleteFiles=Delete selected files?
 switchfileAgeColoring=show/hide file age coloring
 folderContentModified=The content of the current folder has been modified. Reload?
+folderTreeModified=The structure of the folder tree has been modified. Reload?
 
 # file list checkboxes
 checkbox.selectall=Select all

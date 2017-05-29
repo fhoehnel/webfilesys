@@ -2,9 +2,6 @@ package de.webfilesys.gui.ajax;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,7 +13,6 @@ import de.webfilesys.Constants;
 import de.webfilesys.FileContainerComparator;
 import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.MetaInfManager;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
@@ -37,23 +33,23 @@ public class PollForDirChangeHandler extends XmlRequestHandlerBase
 	protected void process() {
         String currentPath = getCwd();
 
-        String lastDirStatusTimeParam = getParameter("lastDirStatusTime");
+        // String lastDirStatusTimeParam = getParameter("lastDirStatusTime");
         String lastSizeSumParam = getParameter("lastSizeSum");
         
-        long lastDirStatusTime;
+        // long lastDirStatusTime;
         long lastSizeSum;
         
         try {
-        	lastDirStatusTime = Long.parseLong(lastDirStatusTimeParam);
+        	// lastDirStatusTime = Long.parseLong(lastDirStatusTimeParam);
         	lastSizeSum = Long.parseLong(lastSizeSumParam);
         } catch (NumberFormatException numEx) {
-            Logger.getLogger(getClass()).error("invalid parameter: lastDirStatusTime: " + lastDirStatusTimeParam + " lastSizeSum: " + lastSizeSumParam);
+            // Logger.getLogger(getClass()).error("invalid parameter: lastDirStatusTime: " + lastDirStatusTimeParam + " lastSizeSum: " + lastSizeSumParam);
+            Logger.getLogger(getClass()).error("invalid parameter: lastSizeSum: " + lastSizeSumParam);
             return;
         }
         
-        File dirFile = new File(currentPath);
-        
-        long lastModified = dirFile.lastModified();
+        // File dirFile = new File(currentPath);
+        // long lastModified = dirFile.lastModified();
         
         String fileMask = getParameter("mask");
         
@@ -79,12 +75,17 @@ public class PollForDirChangeHandler extends XmlRequestHandlerBase
         
         Element resultElement = doc.createElement("result");
 
-        boolean modified = false;
-        if (fileMask.equals("*") && (!isThumbnailView)) {
-            modified = (lastModified > lastDirStatusTime) || (currentSizeSum != lastSizeSum);
-        } else {
-            modified = (currentSizeSum != lastSizeSum);
-        }
+//      Adding or deleting subdirectories causes (sometimes?) a change of the last modification time of the directory, but this
+//      should not trigger a change event in the file list / thumbnail view. So we rely only on the file size sum to detect a change.
+//
+//        boolean modified = false;
+//        if (fileMask.equals("*") && (!isThumbnailView)) {
+//            modified = (lastModified > lastDirStatusTime) || (currentSizeSum != lastSizeSum);
+//        } else {
+//            modified = (currentSizeSum != lastSizeSum);
+//        }
+
+        boolean modified = (currentSizeSum != lastSizeSum);
         
         XmlUtil.setElementText(resultElement, Boolean.toString(modified));
         

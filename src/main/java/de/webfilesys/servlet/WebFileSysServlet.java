@@ -73,6 +73,7 @@ import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
 import de.webfilesys.gui.ajax.PollForDirChangeHandler;
+import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
@@ -175,7 +176,6 @@ import de.webfilesys.gui.user.PublishRequestHandler;
 import de.webfilesys.gui.user.RateVotingHandler;
 import de.webfilesys.gui.user.RemoteEditorRequestHandler;
 import de.webfilesys.gui.user.RenameFileRequestHandler;
-import de.webfilesys.gui.user.RenameImageRequestHandler;
 import de.webfilesys.gui.user.RenameLinkRequestHandler;
 import de.webfilesys.gui.user.RenameToExifDateHandler;
 import de.webfilesys.gui.user.ResetStatisticsRequestHandler;
@@ -857,6 +857,11 @@ public class WebFileSysServlet extends ServletBase
         
     	if (command.equals("pollForDirChange")) {
 			(new PollForDirChangeHandler(req, resp, session, output, userid)).handleRequest();
+			return(true);
+    	}
+
+    	if (command.equals("pollForFolderTreeChange")) {
+			(new PollForFolderTreeChangeHandler(req, resp, session, output, userid)).handleRequest();
 			return(true);
     	}
     	

@@ -187,6 +187,7 @@ selectTwoFilesForDiff=Zum Vergleichen müssen 2 Dateien ausgewählt werden!
 confirm.deleteFiles=Ausgewählte Dateien wirklich löschen?
 switchfileAgeColoring=Farben entsprechend Datei-Alter zeigen/ausblenden
 folderContentModified=Der Inhalt des aktuellen Ordners wurde geändert. Anzeige aktualisieren?
+folderTreeModified=Die Ordnerstruktur wurde geändert. Anzeige aktualisieren?
 
 # file list checkboxes
 checkbox.selectall=alle
