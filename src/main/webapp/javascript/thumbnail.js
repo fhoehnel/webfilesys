@@ -544,7 +544,12 @@ function removeDeletedFile(fileName) {
         
         checkThumbnailsToLoad();
         
-        updateFileCount();        
+        updateFileCount();   
+       
+       	if (typeof stopPolling == "function") {
+       		stopPolling();
+        }
+             
     }
 }
 
