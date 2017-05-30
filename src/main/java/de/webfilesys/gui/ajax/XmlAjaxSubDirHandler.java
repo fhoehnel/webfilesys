@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +15,7 @@ import org.w3c.dom.Element;
 
 import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
+import de.webfilesys.DirTreeStatusInspector;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
 import de.webfilesys.WebFileSys;
@@ -31,8 +33,6 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 {
 	DirTreeStatus dirTreeStatus = null;
 	
-    private boolean pollForChanges;
-	
 	public XmlAjaxSubDirHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -41,8 +41,6 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
             String uid)
 	{
         super(req, resp, session, output, uid);
-
-        pollForChanges = (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0);
 	}
 
 	protected void process()
@@ -108,6 +106,10 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 		doc.appendChild(subFolderElement);
 		
 		processResponse();
+
+		if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
+            (new DirTreeStatusInspector(dirTreeStatus)).start();
+        }
 	}
 	
 	protected Element dirSubTree(String parentPath, String lastInLevel)
@@ -247,8 +249,6 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 			pathWithSlash = parentPath + File.separator;
 		}
 
-		long subirNameLengthSum = 0;
-		
 		ArrayList<String> subdirList = new ArrayList<String>();
 
 		for (File file : fileList)
@@ -263,15 +263,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 				{
 					subdirList.add(subdirPath);
 				}
-
-				if (pollForChanges) {
-					subirNameLengthSum += file.getName().length();
-				}
 			}
-		}
-
-		if (pollForChanges) {
-			dirTreeStatus.setSubdirNameLengthSum(parentPath, subirNameLengthSum);
 		}
 
 		if (subdirList.size() == 0)
