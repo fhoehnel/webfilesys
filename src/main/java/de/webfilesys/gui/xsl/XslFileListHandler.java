@@ -70,7 +70,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 		if ((actPath == null) || (actPath.length() == 0))
 		{
-			actPath = (String) session.getAttribute("cwd");
+			actPath = getCwd();
 		}
 
 		String docRoot = userMgr.getDocumentRoot(uid);
@@ -149,7 +149,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			}
 		}
 
-		session.setAttribute("cwd", actPath);
+		session.setAttribute(Constants.SESSION_KEY_CWD, actPath);
 
 		IconManager iconMgr = null;
 

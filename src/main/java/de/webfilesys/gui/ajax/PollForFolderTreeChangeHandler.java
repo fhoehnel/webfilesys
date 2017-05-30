@@ -1,9 +1,6 @@
 package de.webfilesys.gui.ajax;
 
-import java.io.File;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,7 +8,9 @@ import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
 
+import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
+import de.webfilesys.DirTreeStatusInspector;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -29,28 +28,13 @@ public class PollForFolderTreeChangeHandler extends XmlRequestHandlerBase
 	}
 	
 	protected void process() {
-        // String currentPath = getCwd();
-        
         boolean modified = false;
         
-		DirTreeStatus dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+		DirTreeStatus dirTreeStatus = (DirTreeStatus) session.getAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS);
 		
 		if (dirTreeStatus != null) {
-			ArrayList<String> expandedFolders = dirTreeStatus.getExpandedFolders();
 			
-			for (String path : expandedFolders) {
-				File folderFile = new File(path);
-				if (folderFile.exists() && folderFile.isDirectory()) {
-					long lastKnownNameLengthSum = dirTreeStatus.getSubdirNameLenghtSum(path);
-					if (lastKnownNameLengthSum >= 0) {
-						long currentNameLengthSum = getSubdirNameLengthSum(folderFile);
-						if (lastKnownNameLengthSum != currentNameLengthSum) {
-							modified = true;
-							break;
-						}
-					}
-				}
-			}
+			modified = (new DirTreeStatusInspector(dirTreeStatus)).isFolderTreeStructureChanged();
 		}
         
         Element resultElement = doc.createElement("result");
@@ -60,20 +44,5 @@ public class PollForFolderTreeChangeHandler extends XmlRequestHandlerBase
         doc.appendChild(resultElement);
 		
 		processResponse();
-	}
-	
-	private long getSubdirNameLengthSum(File folderFile) {
-		long subdirNameLengthSum = 0;
-		
-		File[] files = folderFile.listFiles();
-		if (files != null) {
-			for (File file : files) {
-				if (file.isDirectory()) {
-					subdirNameLengthSum += file.getName().length();
-				}
-			}
-		}
-		
-		return subdirNameLengthSum;
 	}
 }

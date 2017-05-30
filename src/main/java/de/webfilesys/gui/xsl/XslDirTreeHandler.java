@@ -13,10 +13,10 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
@@ -40,8 +40,6 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
     
     protected String actPath = null;
     
-    private boolean pollForChanges;
-	
 	public XslDirTreeHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -51,15 +49,13 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 	{
         super(req, resp, session, output, uid);
         
-        pollForChanges = (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0);
-        
-        dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+        dirTreeStatus = (DirTreeStatus) session.getAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS);
 		
 		if (dirTreeStatus == null)
 		{
 			dirTreeStatus = new DirTreeStatus();
 			
-			session.setAttribute("dirTreeStatus", dirTreeStatus);
+			session.setAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS, dirTreeStatus);
 		}
 		
 		actPath = getParameter("actPath");
@@ -120,7 +116,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 		dirCounter=0;
 		currentDirNum=0;
 
-		String loginEvent = (String) session.getAttribute("loginEvent");
+		String loginEvent = (String) session.getAttribute(Constants.SESSION_KEY_LOGIN_EVENT);
 		
         if (loginEvent != null)
         {
@@ -131,7 +127,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 				folderTreeElement.appendChild(loginEventElement);
 			}
 
-            session.removeAttribute("loginEvent");
+            session.removeAttribute(Constants.SESSION_KEY_LOGIN_EVENT);
         }
 	}
 	
@@ -165,8 +161,6 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 
 		ArrayList<String> subdirList = new ArrayList<String>();
 
-		long subirNameLengthSum = 0;
-		
 		for (File file : fileList) {
 		
 			if (file.isDirectory()) {
@@ -185,17 +179,9 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 						subdirList.add(subdirPath);
 					}
 				}
-				
-				if (pollForChanges) {
-					subirNameLengthSum += file.getName().length();
-				}
 			}
 		}
 
-		if (pollForChanges) {
-			dirTreeStatus.setSubdirNameLengthSum(partOfPath, subirNameLengthSum);
-		}
-		
 		if (subdirList.size()==0)
 		{
 			return;
@@ -262,6 +248,10 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 					currentDirNum = dirCounter;
 					
 					folderElement.setAttribute("current","true");
+				}
+				
+				if (subdirPath.replace('\\','/').equals(docRoot)) {
+					folderElement.setAttribute("root", "true");
 				}
 				
 				Decoration deco = decoMgr.getDecoration(subdirPath);

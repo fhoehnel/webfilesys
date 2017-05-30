@@ -58,7 +58,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 		if ((actPath==null) || (actPath.length()==0))
 		{
-			actPath = (String) session.getAttribute("cwd");
+			actPath = getCwd();
 			pasteToFileWin=true;
 			
 			String viewMode = getParameter("viewMode");

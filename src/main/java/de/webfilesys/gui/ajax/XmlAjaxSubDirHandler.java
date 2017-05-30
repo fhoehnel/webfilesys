@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
@@ -71,13 +72,13 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
              lastInLevel = "false";
 		}
 		
-		dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+		dirTreeStatus = (DirTreeStatus) session.getAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS);
 		
 		if (dirTreeStatus == null)
 		{
 			dirTreeStatus = new DirTreeStatus();
 			
-			session.setAttribute("dirTreeStatus", dirTreeStatus);
+			session.setAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS, dirTreeStatus);
 		}
 		
         dirTreeStatus.expandDir(expandDir);

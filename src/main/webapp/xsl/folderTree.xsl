@@ -229,7 +229,7 @@
 
      <a>
 
-       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />')</xsl:attribute>
+       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />', '<xsl:value-of select="@root" />')</xsl:attribute>
       
        <xsl:if test="@type='drive'">
          <img src="/webfilesys/images/miniDisk.gif" border="0" width="17" height="14">

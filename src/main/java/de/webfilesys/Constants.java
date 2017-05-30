@@ -38,5 +38,10 @@ public interface Constants
 	 * are usually 160 x 120 pix.
 	 */
 	public static int THUMBNAIL_SIZE = 160;
+	
+	public static final String SESSION_KEY_DIR_TREE_STATUS = "dirTreeStatus";
 
+	public static final String SESSION_KEY_LOGIN_EVENT = "loginEvent";
+	
+	public static final String SESSION_KEY_CWD = "cwd";
 }

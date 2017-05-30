@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.Constants;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
@@ -42,7 +43,7 @@ public class XslMultiUploadHandler extends XslRequestHandlerBase
 		} 
 		else 
 		{
-		    session.setAttribute("cwd", currentPath);
+		    session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
 		}
 
 		if (!checkAccess(currentPath))

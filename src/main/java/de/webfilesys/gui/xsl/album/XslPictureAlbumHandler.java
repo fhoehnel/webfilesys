@@ -118,7 +118,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase
 			relativePath = actPath.substring(docRoot.length());
         }
 
-		session.setAttribute("cwd", actPath);
+		session.setAttribute(Constants.SESSION_KEY_CWD, actPath);
 
 		String showDeatailsParm = req.getParameter("showDetails");
 		

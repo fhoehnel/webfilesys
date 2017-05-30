@@ -2400,7 +2400,7 @@ public class WebFileSysServlet extends ServletBase
 
         		session.setAttribute("userid", userid);
         		
-        		session.setAttribute("loginEvent", "true");
+        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
         		
                 String browserType = req.getHeader("User-Agent");
                 
@@ -2461,7 +2461,7 @@ public class WebFileSysServlet extends ServletBase
 
         		session.setAttribute("userid", userid);
         		
-        		session.setAttribute("loginEvent", "true");
+        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
 
         		session.setAttribute("readonly", "true");
 
@@ -2632,9 +2632,9 @@ public class WebFileSysServlet extends ServletBase
 
         		session.setAttribute("userid", userid);
         		
-        		session.setAttribute("loginEvent", "true");
+        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
         		
-        		session.removeAttribute("cwd");
+        		session.removeAttribute(Constants.SESSION_KEY_CWD);
 
         		session.removeAttribute("startIdx");
         		
@@ -2694,11 +2694,11 @@ public class WebFileSysServlet extends ServletBase
 
         		session.setAttribute("userid", userid);
         		
-        		session.setAttribute("loginEvent", "true");
+        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
 
         		session.setAttribute("readonly", "true");
 
-        		session.removeAttribute("cwd");
+        		session.removeAttribute(Constants.SESSION_KEY_CWD);
 
         		session.removeAttribute("startIdx");
 

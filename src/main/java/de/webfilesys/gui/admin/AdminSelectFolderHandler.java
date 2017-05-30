@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
@@ -51,13 +52,13 @@ public class AdminSelectFolderHandler extends XslRequestHandlerBase
 	{
         super(req, resp, session, output, uid);
 
-        dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+        dirTreeStatus = (DirTreeStatus) session.getAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS);
 		
 		if (dirTreeStatus == null)
 		{
 			dirTreeStatus = new DirTreeStatus();
 			
-			session.setAttribute("dirTreeStatus", dirTreeStatus);
+			session.setAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS, dirTreeStatus);
 		}
 		
 		actPath = getParameter("actPath");

@@ -103,7 +103,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 				act_path = getParameter("actpath");
 				if ((act_path == null) || (act_path.length() == 0))
 				{
-					act_path = (String) session.getAttribute("cwd");
+					act_path = getCwd();
 					
 					if (act_path == null) {
 						act_path = WebFileSys.getInstance().getUserMgr().getDocumentRoot(uid);
@@ -112,7 +112,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			}
 		}
 		
-		session.setAttribute("cwd", act_path);
+		session.setAttribute(Constants.SESSION_KEY_CWD, act_path);
 
 		String fileFilter[] = Constants.imgFileMasks;
 		

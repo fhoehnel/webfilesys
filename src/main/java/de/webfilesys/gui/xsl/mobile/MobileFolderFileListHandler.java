@@ -22,6 +22,7 @@ import org.w3c.dom.ProcessingInstruction;
 import com.sun.org.apache.xml.internal.security.utils.XMLUtils;
 
 import de.webfilesys.ClipBoard;
+import de.webfilesys.Constants;
 import de.webfilesys.FastPathManager;
 import de.webfilesys.FileComparator;
 import de.webfilesys.FileContainer;
@@ -93,11 +94,11 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             {
                 if (checkAccess(absPath))
                 {
-                    session.setAttribute("cwd", absPath);
+                    session.setAttribute(Constants.SESSION_KEY_CWD, absPath);
                 }
             }
             
-            String cwd = (String) session.getAttribute("cwd");
+            String cwd = getCwd();
             
             if (cwd != null) 
             {
@@ -162,7 +163,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             }
 	    }
 
-		session.setAttribute("cwd", currentPath);
+		session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
 
         boolean maskChanged = false;
 

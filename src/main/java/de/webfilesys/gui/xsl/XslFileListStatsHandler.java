@@ -49,7 +49,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 
 		if ((currentPath == null) || (currentPath.length() == 0))
 		{
-			currentPath = (String) session.getAttribute("cwd");
+			currentPath = getCwd();
 		}
 
 		if (!accessAllowed(currentPath))
@@ -57,7 +57,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 			currentPath = userMgr.getDocumentRoot(uid);
 		}
 		
-		session.setAttribute("cwd", currentPath);
+		session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
 		
 		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_STATS));
 
