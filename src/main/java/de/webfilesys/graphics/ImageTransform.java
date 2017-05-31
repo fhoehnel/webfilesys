@@ -315,8 +315,8 @@ public class ImageTransform
 
         try {
             tracker.waitForAll();
-        } catch(InterruptedException intEx1) {
-            Logger.getLogger(getClass()).warn("rotateImage: " + intEx1);
+        } catch (Exception ex) {
+            Logger.getLogger(getClass()).warn("failed to load image for rotation", ex);
         }
 
         tracker.removeImage(origImage);
