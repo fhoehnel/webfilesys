@@ -44,4 +44,6 @@ public interface Constants
 	public static final String SESSION_KEY_LOGIN_EVENT = "loginEvent";
 	
 	public static final String SESSION_KEY_CWD = "cwd";
+	
+	public static final String SEARCH_RESULT_FOLDER_PREFIX = "searchResult-";
 }

@@ -6,8 +6,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -56,17 +54,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 
 		session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
 
-		boolean maskChanged = false;
-
 		String mask = getParameter("mask");
-
-		if (mask != null) {
-			String oldMask = (String) session.getAttribute("mask");
-
-			if ((oldMask != null) && (!oldMask.equals(mask))) {
-				maskChanged = true;
-			}
-		}
 
 		if ((mask != null) && (mask.length() > 0)) {
 			session.setAttribute("mask", mask);

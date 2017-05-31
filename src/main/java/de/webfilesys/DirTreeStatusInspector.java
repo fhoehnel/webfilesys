@@ -3,6 +3,8 @@ package de.webfilesys;
 import java.io.File;
 import java.util.ArrayList;
 
+import de.webfilesys.graphics.ThumbnailThread;
+
 public class DirTreeStatusInspector extends Thread {
 	
 	DirTreeStatus dirTreeStatus;
@@ -26,6 +28,14 @@ public class DirTreeStatusInspector extends Thread {
 				long nameLengthSum = getSubdirNameLengthSum(folderFile);
 				dirTreeStatus.setSubdirNameLengthSum(path, nameLengthSum);
 			}
+		}
+    }
+    
+    public void rememberPathStatus(String path) {
+		File folderFile = new File(path);
+		if (folderFile.exists() && folderFile.isDirectory()) {
+			long nameLengthSum = getSubdirNameLengthSum(folderFile);
+			dirTreeStatus.setSubdirNameLengthSum(path, nameLengthSum);
 		}
     }
     
@@ -55,7 +65,11 @@ public class DirTreeStatusInspector extends Thread {
 		if (files != null) {
 			for (File file : files) {
 				if (file.isDirectory()) {
-					subdirNameLengthSum += file.getName().length();
+					if (!file.getName().startsWith(Constants.SEARCH_RESULT_FOLDER_PREFIX)) {
+						if (!file.getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
+							subdirNameLengthSum += file.getName().length();
+						}
+					}
 				}
 			}
 		}

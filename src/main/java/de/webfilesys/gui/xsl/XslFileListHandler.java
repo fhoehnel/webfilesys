@@ -7,8 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -60,12 +58,6 @@ public class XslFileListHandler extends XslFileListHandlerBase
 	  
 	protected void process()
 	{
-		String path_mask;
-		String path_no_slash;
-		int i;
-		File tempFile;
-		int fileNum;
-
 		String actPath = getParameter("actpath");
 
 		if ((actPath == null) || (actPath.length() == 0))
@@ -80,24 +72,11 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			actPath = docRoot;
 		}
 
-		boolean maskChanged = false;
-
 		String mask = getParameter("mask");
-			
-		if (mask != null)
-		{
-			String oldMask = (String) session.getAttribute("mask");
-
-			if ((oldMask != null) && (!oldMask.equals(mask)))
-			{
-				maskChanged = true;
-			}
-		}
 		
-		if ((mask!=null) && (mask.length()>0))
+		if ((mask != null) && (mask.length() > 0))
 		{
 			session.setAttribute("mask", mask);
-
 		}
 		else
 		{
@@ -189,16 +168,6 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			fileListElement.appendChild(xslEnabledElement);
 		}
 
-		if (!WebFileSys.getInstance().isLicensed())
-		{
-			requestCounter++;
-
-			if (requestCounter % LIC_REMINDER_INTERVAL == 0)
-			{
-				XmlUtil.setChildText(fileListElement, "unlicensed", "true", false);
-			}
-		}
-
 		if (WebFileSys.getInstance().isMaintananceMode())
 		{
 			if (!isAdminUser(false))
@@ -223,9 +192,12 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		
 		String normalizedPath=null;
 
+		String pathWithMask;
+		String path_no_slash;
+
 		if (actPath.endsWith(File.separator))
 		{
-			path_mask=actPath + mask;
+			pathWithMask=actPath + mask;
 			if ((File.separatorChar=='\\') && (actPath.length()==3))
 			{
 				normalizedPath=actPath;
@@ -247,10 +219,10 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		{
 			path_no_slash=actPath;
 			normalizedPath=actPath;
-			path_mask=actPath + File.separator + mask;
+			pathWithMask=actPath + File.separator + mask;
 		}
 
-		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(path_mask), false);
+		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(pathWithMask), false);
 
 		MetaInfManager metaInfMgr=MetaInfManager.getInstance();
 
@@ -277,7 +249,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
-		fileNum = selectionStatus.getNumberOfFiles();
+		int fileNum = selectionStatus.getNumberOfFiles();
 		
 		XmlUtil.setChildText(fileListElement, "fileNumber", Integer.toString(fileNum), false);
 
@@ -311,20 +283,18 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			
 			SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 
-			for (i = 0; i < selectedFiles.size(); i++)
-			{
+			for (FileContainer fileCont : selectedFiles) {
+			
                 Element fileElement = doc.createElement("file");
                 
                 fileListElement.appendChild(fileElement);
-
-				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 				
 				String fileName = fileCont.getName();
 
                 fileElement.setAttribute("name", fileName);
                 fileElement.setAttribute("nameForScript", escapeForJavascript(fileName));
 
-				tempFile = fileCont.getRealFile();
+				File tempFile = fileCont.getRealFile();
 
 				if (fileCont.isLink())
 				{

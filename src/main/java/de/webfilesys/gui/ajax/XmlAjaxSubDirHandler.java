@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -106,9 +105,9 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 		doc.appendChild(subFolderElement);
 		
 		processResponse();
-
-		if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
-            (new DirTreeStatusInspector(dirTreeStatus)).start();
+		
+        if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
+    		(new DirTreeStatusInspector(dirTreeStatus)).rememberPathStatus(actPath);		
         }
 	}
 	

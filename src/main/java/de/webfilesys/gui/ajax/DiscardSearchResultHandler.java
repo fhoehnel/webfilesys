@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
 
+import de.webfilesys.Constants;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
@@ -36,7 +37,7 @@ public class DiscardSearchResultHandler extends XmlRequestHandlerBase
         	return;
         }
         
-        if (!searchResultDir.contains("searchResult-")) {
+        if (!searchResultDir.contains(Constants.SEARCH_RESULT_FOLDER_PREFIX)) {
         	return;
         }
 
