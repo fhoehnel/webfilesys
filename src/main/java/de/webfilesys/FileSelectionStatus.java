@@ -1,10 +1,11 @@
 package de.webfilesys;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class FileSelectionStatus
 {
-    private Vector selectedFiles;
+    private ArrayList<FileContainer> selectedFiles;
+    private ArrayList<String> selectedFileNames;
     private int beginIndex;
     private int endIndex;
     private int lastPageStartIdx;
@@ -15,7 +16,7 @@ public class FileSelectionStatus
     private String lastFileName;
     
 	/** The start indices of all pages. */
-	private Vector pageStartIndices;
+	private ArrayList<Integer> pageStartIndices;
 	
 	private long fileSizeSum = 0;
 	
@@ -31,22 +32,30 @@ public class FileSelectionStatus
         isLastPage=false;
         firstFileName=null;
         lastFileName=null;
-        pageStartIndices = new Vector();
+        pageStartIndices = new ArrayList<Integer>();
     }
 
-    public void setSelectedFiles(Vector selectedFiles)
+    public void setSelectedFiles(ArrayList<FileContainer> newList)
     {
-        this.selectedFiles=selectedFiles;
+        selectedFiles = newList;
     }
 
-    public Vector getSelectedFiles()
+    public ArrayList<FileContainer> getSelectedFiles()
     {
         return(selectedFiles);
     }
 
-    public Vector getRandomizedFiles() {
+    public void setSelectedFileNames(ArrayList<String> newList) {
+    	selectedFileNames = newList;
+    }
+    
+    public ArrayList<String> getSelectedFileNames() {
+    	return selectedFileNames;
+    }
+    
+    public ArrayList<FileContainer> getRandomizedFiles() {
     	
-    	Vector randomizedList = new Vector();
+    	ArrayList<FileContainer> randomizedList = new ArrayList<FileContainer>();
     	
     	while (selectedFiles.size() > 0) {
     		int randomIdx = randomInt(selectedFiles.size());
@@ -160,10 +169,10 @@ public class FileSelectionStatus
 	 */
 	public void addStartIndex(int startIndex) 
 	{
-		pageStartIndices.addElement(new Integer(startIndex));
+		pageStartIndices.add(new Integer(startIndex));
 	}
 
-    public Vector getPageStartIndices()
+    public ArrayList<Integer> getPageStartIndices()
     {
     	return(pageStartIndices);
     }

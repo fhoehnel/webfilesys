@@ -3,18 +3,17 @@ package de.webfilesys.graphics;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Vector;
-
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -130,45 +129,26 @@ public class ThumbnailCreatorBase
         int scaledHeight = scaledImg.getScaledHeight();
         
         long startTime = System.currentTimeMillis();
-
-        Canvas imgObserver = new Canvas();
-
+        
         Image origImage = Toolkit.getDefaultToolkit().createImage(imgFileName);
 
-        imgObserver.prepareImage(origImage, imgObserver);
+        Canvas dummyComponent = new Canvas();
 
-        int timeoutCounter = 900;
+        MediaTracker tracker = new MediaTracker(dummyComponent);
+        tracker.addImage(origImage, 0);
 
-        while ((imgObserver.checkImage(origImage, imgObserver) & ImageObserver.ALLBITS) != ImageObserver.ALLBITS)
-        {
-            try
-            {
-                Thread.sleep(100);
-
-                timeoutCounter--;
-
-                if (timeoutCounter == 0)
-                {
-                    Logger.getLogger(getClass()).error(
-                            "picture load timeout for image " + imgFileName);
-
-                    origImage.flush();
-
-                    return;
-                }
-            }
-            catch (InterruptedException iex)
-            {
-                Logger.getLogger(getClass()).error(iex);
-                origImage.flush();
-                return;
-            }
+        try {
+            tracker.waitForAll();
+        } catch (Exception ex) {
+            Logger.getLogger(getClass()).warn("failed to load original image for thumbnail creation", ex);
         }
 
+        tracker.removeImage(origImage);
+        
         BufferedImage bufferedImg = new BufferedImage(scaledImg.getRealWidth(), scaledImg.getRealHeight(), BufferedImage.TYPE_INT_RGB);
 
         Graphics g = bufferedImg.getGraphics();
-        g.drawImage(origImage, 0, 0, imgObserver);
+        g.drawImage(origImage, 0, 0, dummyComponent);
 
         bufferedImg = ImageTransform.getScaledInstance(bufferedImg, scaledWidth, scaledHeight,
                 RenderingHints.VALUE_INTERPOLATION_BICUBIC, true);
@@ -373,13 +353,13 @@ public class ThumbnailCreatorBase
 
         FileSelectionStatus selectionStatus=fileSelector.selectFiles(imgFileMasks,2048,null,null);
 
-        Vector selectedFiles=selectionStatus.getSelectedFiles();
+        ArrayList<String> selectedFiles=selectionStatus.getSelectedFileNames();
 
         if ((selectedFiles!=null) && (selectedFiles.size()>0))
         {
             for (int i=0;i<selectedFiles.size();i++)
             {
-                String actFileName=(String) selectedFiles.elementAt(i);
+                String actFileName=(String) selectedFiles.get(i);
 
                 if (!thumbnailUpToDate(actPath + actFileName))
                 {

@@ -2,6 +2,7 @@ package de.webfilesys.gui.ajax;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,13 +50,13 @@ public class AutoImageRotateHandler extends XmlRequestHandlerBase
 
 		FileSelectionStatus selectionStatus = fileSelector.selectFiles(imgFileMasks, 4096, 0);
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 		
 		if (selectedFiles != null)
 		{
 			for (int i = 0; i < selectedFiles.size(); i++)
 			{
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 
 				if (!fileCont.isLink()) {
 					String imgFilename = fileCont.getName();

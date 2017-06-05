@@ -2,6 +2,7 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
@@ -57,23 +58,20 @@ public class XslFastPathHandler extends XslRequestHandlerBase
 		
 		int docRootTokenCount = getDocRootTokenCount();
 		
-        Vector bookmarkList = FileSysBookmarkManager.getInstance().getListOfBookmarks(uid);
+		ArrayList<FileSysBookmark> bookmarkList = FileSysBookmarkManager.getInstance().getListOfBookmarks(uid);
         
         if (bookmarkList != null) 
         {
-            for (int i = 0; i < bookmarkList.size(); i++) 
-            {
-                FileSysBookmark bookmark = (FileSysBookmark) bookmarkList.elementAt(i);
-                
+        	for (FileSysBookmark bookmark : bookmarkList) {
                 addFastPath(fastPathElement, bookmark.getPath(), docRootTokenCount, PATH_TYPE_BOOKMARK);
             }
         }
 
-        Vector fastPathList = FastPathManager.getInstance().getPathList(uid);
+        ArrayList<String> fastPathList = FastPathManager.getInstance().getPathList(uid);
         
         for (int i = 0; i < fastPathList.size(); i++)
         {
-        	addFastPath(fastPathElement, (String) fastPathList.elementAt(i), docRootTokenCount, PATH_TYPE_VISITED);
+        	addFastPath(fastPathElement, (String) fastPathList.get(i), docRootTokenCount, PATH_TYPE_VISITED);
         }
 		
 		this.processResponse("fastPath.xsl", false);

@@ -1,6 +1,7 @@
 package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -371,7 +372,7 @@ public class PublishRequestHandler extends UserRequestHandler
 				userLanguage=LanguageManager.DEFAULT_LANGUAGE;
 			}
 
-			Vector languages=LanguageManager.getInstance().getAvailableLanguages();
+			ArrayList<String> languages = LanguageManager.getInstance().getAvailableLanguages();
 
             output.println("<tr>");
             output.println("<td class=\"formParm1\">");
@@ -391,7 +392,7 @@ public class PublishRequestHandler extends UserRequestHandler
 
 			for (int i=0;i<languages.size();i++)
 			{
-				String lang=(String) languages.elementAt(i);
+				String lang=(String) languages.get(i);
 
 				output.print("<option");
 

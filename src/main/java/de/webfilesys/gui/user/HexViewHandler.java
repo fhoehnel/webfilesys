@@ -42,7 +42,7 @@ public class HexViewHandler extends UserRequestHandler
 		    return;
 		}
 
-        String currentPath = (String) session.getAttribute("cwd");
+        String currentPath = getCwd();
 
         int startIdx = 0;
         

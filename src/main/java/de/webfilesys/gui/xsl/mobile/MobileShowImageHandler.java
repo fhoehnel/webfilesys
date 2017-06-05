@@ -3,6 +3,7 @@ package de.webfilesys.gui.xsl.mobile;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -211,7 +212,7 @@ public class MobileShowImageHandler extends XslRequestHandlerBase
 
         FileSelectionStatus selectionStatus = fileSelector.selectFiles(Constants.imgFileMasks, 4096, null, null);
 
-        Vector imageFiles = selectionStatus.getSelectedFiles();
+        ArrayList<FileContainer> imageFiles = selectionStatus.getSelectedFiles();
 
         String prevImg = null;
         
@@ -223,7 +224,7 @@ public class MobileShowImageHandler extends XslRequestHandlerBase
             
             for (int i = 0; (!found) && (i < imageFiles.size()); i++)
             {
-                FileContainer fileCont = (FileContainer) imageFiles.elementAt(i);
+                FileContainer fileCont = (FileContainer) imageFiles.get(i);
                 
                 if (!fileCont.isLink())
                 {

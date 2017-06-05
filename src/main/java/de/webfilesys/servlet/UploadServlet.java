@@ -566,7 +566,7 @@ public class UploadServlet extends WebFileSysServlet
     {
         HttpSession session = req.getSession(true);
         
-        String currentPath = (String) session.getAttribute("cwd");
+        String currentPath = (String) session.getAttribute(Constants.SESSION_KEY_CWD);
         
         if (currentPath == null) {
             Logger.getLogger(getClass()).error("current working directory unknown");

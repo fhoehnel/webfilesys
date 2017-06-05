@@ -208,15 +208,6 @@ public class XslFindFileHandler extends XslRequestHandlerBase
                                 if ((category == null) || 
                                     metaInfMgr.isCategoryAssigned(actPath, fileList[i], category))
                                 {
-                                    String viewLink = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(tempFile.getAbsolutePath());
-                                    
-                                    String iconImg = "doc.gif";
-
-                                    if (WebFileSys.getInstance().isShowAssignedIcons())
-                                    {
-                                        iconImg = IconManager.getInstance().getIconForFileName(fileList[i]);
-                                    }
-                                    
                                     addSearchResult(searchResultElement, tempFile.getAbsolutePath());
                                     
                                     filesFoundNum++;

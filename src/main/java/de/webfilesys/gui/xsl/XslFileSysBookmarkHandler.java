@@ -1,6 +1,7 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -79,11 +80,9 @@ public class XslFileSysBookmarkHandler extends XslRequestHandlerBase
         	XmlUtil.setChildText(bookmarkListElement, "readonly", "true", false);
         }
 		
-		Vector userBookmarks = bookmarkMgr.getListOfBookmarks(uid, true);
+        ArrayList<FileSysBookmark> userBookmarks = bookmarkMgr.getListOfBookmarks(uid);
         
-		for (int i = 0; i < userBookmarks.size(); i++)
-		{
-			FileSysBookmark bookmark = (FileSysBookmark) userBookmarks.elementAt(i);
+        for (FileSysBookmark bookmark : userBookmarks) {
         	
 			Element bookmarkElement = doc.createElement("bookmark");
 			

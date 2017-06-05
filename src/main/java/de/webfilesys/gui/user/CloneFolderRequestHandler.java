@@ -45,11 +45,6 @@ public class CloneFolderRequestHandler extends UserRequestHandler
 
 		String sourceFolderPath = getParameter("sourceFolderPath");
 
-		if (!checkAccess(sourceFolderPath))
-		{
-			return;
-		}
-
 		File sourceFolderFile = new File(sourceFolderPath);
 		
 		if ((!sourceFolderFile.exists()) || (!sourceFolderFile.canRead())) 
@@ -63,6 +58,11 @@ public class CloneFolderRequestHandler extends UserRequestHandler
 		if (parentFolder == null)
 		{
 			Logger.getLogger(getClass()).error("could not determine clone parent folder");
+			return;
+		}
+
+		if (!checkAccess(parentFolder.getAbsolutePath()))
+		{
 			return;
 		}
 		

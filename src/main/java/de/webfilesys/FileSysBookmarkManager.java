@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -225,11 +226,11 @@ public class FileSysBookmarkManager extends Thread
         indexTable = new Hashtable();
     }
 
-    public Vector getBookmarkIds(String userid)
+    public ArrayList<String> getBookmarkIds(String userid)
     {
         Element bookmarkList = getBookmarkList(userid);
 
-        Vector bookmarkIds = null;
+        ArrayList<String> bookmarkIds = null;
 
         if (bookmarkList == null)
         {
@@ -249,7 +250,7 @@ public class FileSysBookmarkManager extends Thread
 
                 if (bookmarkIds == null)
                 {
-                    bookmarkIds = new Vector();
+                    bookmarkIds = new ArrayList<String>();
                 }
 
                 bookmarkIds.add(bookmark.getAttribute("id"));
@@ -263,29 +264,17 @@ public class FileSysBookmarkManager extends Thread
         return(bookmarkIds);
     }
 
-    public Vector getListOfBookmarks(String userid)
-    {
-        return(getListOfBookmarks(userid, true));
-    }
-    
-    public Vector getListOfBookmarks(String userid, boolean createIfMissing)
+    public ArrayList<FileSysBookmark> getListOfBookmarks(String userid)
     {
         Element bookmarkList = getBookmarkList(userid);
 
-        Vector listOfBookmarks = new Vector();
+        ArrayList<FileSysBookmark> listOfBookmarks = new ArrayList<FileSysBookmark>();
 
         if (bookmarkList==null)
         {
             Logger.getLogger(getClass()).debug("bookmark list for user " + userid + " does not exist!");
 
             return(listOfBookmarks);
-
-            /*
-            if (createIfMissing)
-            {
-                return(null);
-            }
-            */
         }
 
         NodeList bookmarks = bookmarkList.getElementsByTagName("bookmark");

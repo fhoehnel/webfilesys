@@ -391,7 +391,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 			userLanguage = LanguageManager.DEFAULT_LANGUAGE;
 		}
 
-		Vector languages = LanguageManager.getInstance().getAvailableLanguages();
+		ArrayList<String> languages = LanguageManager.getInstance().getAvailableLanguages();
 
         output.println("<tr>");
         output.println("<td class=\"formParm1\"><b>language</b></td>");
@@ -399,7 +399,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 
 		for (int i=0;i<languages.size();i++)
 		{
-			String lang=(String) languages.elementAt(i);
+			String lang=(String) languages.get(i);
 
 			output.print("<option");
 

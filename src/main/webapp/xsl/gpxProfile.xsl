@@ -44,17 +44,25 @@
       
       var bounds = new google.maps.LatLngBounds ();
       
+      var coordinates = [
+      
       <xsl:for-each select="./gpx:trk">
         <xsl:for-each select=".//gpx:trkpt">
-          var latLon = new google.maps.LatLng(<xsl:value-of select="@lat" />, <xsl:value-of select="@lon" />);
-          trackPointList.push(latLon);
-          bounds.extend(latLon);
+          [<xsl:value-of select="@lat" />, <xsl:value-of select="@lon" />],
         </xsl:for-each>
       </xsl:for-each>  
       
+      ];
+      
+      for (var i = 0; i &lt; coordinates.length; i++) {
+          var latLon = new google.maps.LatLng(coordinates[i][0], coordinates[i][1]);
+          trackPointList.push(latLon);
+          bounds.extend(latLon);
+      }
+      
       var trackPath = new google.maps.Polyline({
           path: trackPointList,
-          strokeColor:"#FF8000",
+          strokeColor:"#ffff00",
           strokeOpacity:0.8,
           strokeWeight: 4
       });
@@ -138,15 +146,24 @@
       <xsl:for-each select="./gpx:trk">
         var trackNum = <xsl:value-of select="position()"/>;
       
-        drawAltTimeProfile<xsl:value-of select="position()"/>(trackNum);
+        <xsl:if test=".//gpx:trkpt/gpx:ele  and .//gpx:trkpt/gpx:time">
+          drawAltTimeProfile<xsl:value-of select="position()"/>(trackNum);
+        </xsl:if>
 
-        drawSpeedProfile<xsl:value-of select="position()"/>(trackNum);
+        <xsl:if test=".//gpx:trkpt/gpx:speed">
+          drawSpeedProfile<xsl:value-of select="position()"/>(trackNum);
+        </xsl:if>
         
-        drawAltDistProfile<xsl:value-of select="position()"/>(trackNum);
+        <xsl:if test=".//gpx:trkpt/gpx:ele">
+          drawAltDistProfile<xsl:value-of select="position()"/>(trackNum);
+        </xsl:if>
+      
       </xsl:for-each>
 
       <xsl:if test="./gpx:wpt">
-        drawWaypointProfile();
+        <xsl:if test="./gpx:wpt/gpx:ele">
+          drawWaypointProfile();
+        </xsl:if>
       </xsl:if>
   }
 
@@ -154,49 +171,57 @@
   
     var trackNumber = <xsl:value-of select="position()"/>;
 
-    <xsl:variable name="maxElevation">
-      <xsl:for-each select=".//gpx:trkpt/gpx:ele">
-        <xsl:sort data-type="number" order="descending"/>
-        <xsl:if test="position() = 1">
-          <xsl:value-of select="number(.)" />
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:variable>
+    <xsl:if test=".//gpx:trkpt/gpx:ele">
+   
+      <xsl:variable name="maxElevation">
+        <xsl:for-each select=".//gpx:trkpt/gpx:ele">
+          <xsl:sort data-type="number" order="descending"/>
+          <xsl:if test="position() = 1">
+            <xsl:value-of select="number(.)" />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
 
-    maxElevation[trackNumber] = <xsl:value-of select="$maxElevation" />;
+      maxElevation[trackNumber] = <xsl:value-of select="$maxElevation" />;
   
-    <xsl:variable name="minElevation">
-      <xsl:for-each select=".//gpx:trkpt/gpx:ele">
-        <xsl:sort data-type="number" order="ascending"/>
-        <xsl:if test="position() = 1">
-          <xsl:value-of select="number(.)" />
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:variable>
+      <xsl:variable name="minElevation">
+        <xsl:for-each select=".//gpx:trkpt/gpx:ele">
+          <xsl:sort data-type="number" order="ascending"/>
+          <xsl:if test="position() = 1">
+            <xsl:value-of select="number(.)" />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
 
-    minElevation[trackNumber] = <xsl:value-of select="$minElevation" />;
+      minElevation[trackNumber] = <xsl:value-of select="$minElevation" />;
 
-    <xsl:variable name="maxSpeed">
-      <xsl:for-each select=".//gpx:trkpt/gpx:speed">
-        <xsl:sort data-type="number" order="descending"/>
-        <xsl:if test="position() = 1">
-          <xsl:value-of select="number(.)" />
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:variable>
+    </xsl:if>
+
+    <xsl:if test=".//gpx:trkpt/gpx:speed">
+
+      <xsl:variable name="maxSpeed">
+        <xsl:for-each select=".//gpx:trkpt/gpx:speed">
+          <xsl:sort data-type="number" order="descending"/>
+          <xsl:if test="position() = 1">
+            <xsl:value-of select="number(.)" />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
   
-    maxSpeed[trackNumber] = <xsl:value-of select="$maxSpeed" />;
+      maxSpeed[trackNumber] = <xsl:value-of select="$maxSpeed" />;
 
-    <xsl:variable name="minSpeed">
-      <xsl:for-each select=".//gpx:trkpt/gpx:speed">
-        <xsl:sort data-type="number" order="ascending"/>
-        <xsl:if test="position() = 1">
-          <xsl:value-of select="number(.)" />
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:variable>
+      <xsl:variable name="minSpeed">
+        <xsl:for-each select=".//gpx:trkpt/gpx:speed">
+          <xsl:sort data-type="number" order="ascending"/>
+          <xsl:if test="position() = 1">
+            <xsl:value-of select="number(.)" />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
     
-    minSpeed[trackNumber] = <xsl:value-of select="$minSpeed" />;
+      minSpeed[trackNumber] = <xsl:value-of select="$minSpeed" />;
+
+    </xsl:if>
 
     <xsl:variable name="totalDist">
       <xsl:for-each select=".//gpx:trkpt/gpx:totalDist">
@@ -218,6 +243,8 @@
  	endDate[trackNumber].setISO8601('<xsl:value-of select="." />');
       </xsl:if>
     </xsl:for-each>
+
+    <xsl:if test=".//gpx:trkpt/gpx:ele">
 
       function drawAltTimeProfile<xsl:value-of select="position()"/>(trackNum) 
       {
@@ -246,33 +273,31 @@
       
           var maxHeight = maxElevation[trackNum] - minElevation[trackNum];
       
-          <xsl:for-each select="./gpx:trkseg">
-          
-            <xsl:for-each select="./gpx:trkpt">
-              
-              <xsl:if test="./gpx:ele">
-
-                var height = <xsl:value-of select="./gpx:ele"/> - minElevation[trackNum];
+          var elevationTimeMap = [
+              <xsl:for-each select="./gpx:trkseg">
+                <xsl:for-each select="./gpx:trkpt">
+                  <xsl:if test="./gpx:ele">
+                    [<xsl:value-of select="./gpx:ele"/>, '<xsl:value-of select="./gpx:time" />'],
+                  </xsl:if>
+                </xsl:for-each>
+              </xsl:for-each>
+          ];      
+      
+          for (var i = 0; i &lt; elevationTimeMap.length; i++) {
+              var height = elevationTimeMap[i][0] - minElevation[trackNum];
         
-	        var trackPointDate = new Date();
- 	        trackPointDate.setISO8601('<xsl:value-of select="./gpx:time" />');
+	          var trackPointDate = new Date();
+ 	          trackPointDate.setISO8601(elevationTimeMap[i][1]);
 
- 	        xPos = ((trackPointDate.getTime() - startDate[trackNum].getTime()) * chartWidth) / duration;
-                yPos = chartHeight - (height / maxHeight * chartHeight)
+ 	          var xPos = ((trackPointDate.getTime() - startDate[trackNum].getTime()) * chartWidth) / duration;
+              var yPos = chartHeight - (height / maxHeight * chartHeight)
         
-                if ((xPos != lastX) || (yPos != lastY)) 
-                {
+              if ((xPos != lastX) || (yPos != lastY)) {
                     ctx.lineTo(chartXOffset + xPos, yPos);
-
                     lastX = xPos;
                     lastY = yPos;  
                 }
-                
-              </xsl:if>
-              
-            </xsl:for-each>
-
-          </xsl:for-each>
+          }
           
           ctx.lineTo(canvasWidth - 1, chartHeight);  
           ctx.lineTo(chartXOffset, chartHeight);  
@@ -322,6 +347,9 @@
               legendElevation += elevationLegendStep;
           }
       }
+    </xsl:if>
+
+    <xsl:if test=".//gpx:trkpt/gpx:speed">
 
       function drawSpeedProfile<xsl:value-of select="position()"/>(trackNum) 
       {
@@ -358,35 +386,35 @@
               maxStepX = 3;
           }
 
-          <xsl:for-each select=".//gpx:trkpt">
+          var speedTimeMap = [ 
+              <xsl:for-each select=".//gpx:trkpt">
+                [<xsl:value-of select="./gpx:speed"/>, '<xsl:value-of select="./gpx:time" />']<xsl:if test="not(position()=last())">,</xsl:if>
+              </xsl:for-each>
+          ];
 
-              var height = <xsl:value-of select="./gpx:speed"/> - minSpeed[trackNum];
+          for (var i = 0; i &lt; speedTimeMap.length; i++) {
+              var height = speedTimeMap[i][0] - minSpeed[trackNum];
         
-	      var trackPointDate = new Date();
- 	      trackPointDate.setISO8601('<xsl:value-of select="./gpx:time" />');
+	          var trackPointDate = new Date();
+ 	          trackPointDate.setISO8601(speedTimeMap[i][1]);
  	      
- 	      xPos = ((trackPointDate.getTime() - startDate[trackNum].getTime()) * chartWidth) / duration;
-              yPos = chartHeight - (height / maxHeight * chartHeight)
+ 	          var xPos = ((trackPointDate.getTime() - startDate[trackNum].getTime()) * chartWidth) / duration;
+              var yPos = chartHeight - (height / maxHeight * chartHeight)
               
-              if ((xPos != lastX) || (yPos != lastY)) 
-              {
+              if ((xPos != lastX) || (yPos != lastY)) {
                   var stepX = xPos - lastX;
                   
-                  if (stepX &gt; maxStepX)
-                  {
+                  if (stepX &gt; maxStepX) {
                       ctx.lineTo(chartXOffset + lastX, chartHeight);
                       ctx.lineTo(chartXOffset + xPos, chartHeight);
-                  }
-                  else
-                  {
+                  } else {
                       ctx.lineTo(chartXOffset + xPos, yPos);
                   }
                   
                   lastX = xPos;
                   lastY = yPos;  
               }
-              
-          </xsl:for-each>
+          }
           
           ctx.lineTo(canvasWidth - 1, chartHeight);  
           ctx.lineTo(chartXOffset, chartHeight);  
@@ -435,6 +463,9 @@
               legendSpeed += speedLegendStep;
           }
       }
+    </xsl:if>  
+      
+    <xsl:if test=".//gpx:trkpt/gpx:ele">
       
       function drawAltDistProfile<xsl:value-of select="position()"/>(trackNum) 
       {
@@ -460,31 +491,30 @@
           ctx.beginPath();  
           ctx.moveTo(chartXOffset, canvasHeight);  
           
-          <xsl:for-each select="./gpx:trkseg">
-
-            <xsl:for-each select="./gpx:trkpt">
+          var elevationDistMap = [
+              <xsl:for-each select="./gpx:trkseg">
+                <xsl:for-each select="./gpx:trkpt">
+                  <xsl:if test="./gpx:ele">
+                    [<xsl:value-of select="./gpx:ele"/>, <xsl:value-of select="./gpx:totalDist"/>],
+                  </xsl:if>
+                </xsl:for-each>
+              </xsl:for-each>
+          ];
+          
+          for (var i = 0; i &lt; elevationDistMap.length; i++) {
+              var height = elevationDistMap[i][0] - minElevation[trackNum];
               
-              <xsl:if test="./gpx:ele">
-
-                var height = <xsl:value-of select="./gpx:ele"/> - minElevation[trackNum];
-              
-                var distance = <xsl:value-of select="./gpx:totalDist"/>
+              var distance = elevationDistMap[i][1];
         
- 	        xPos = distance * chartWidth / totalDist[trackNum];
-                yPos = chartHeight - (height * chartHeight / maxHeight)
+ 	          var xPos = distance * chartWidth / totalDist[trackNum];
+              var yPos = chartHeight - (height * chartHeight / maxHeight)
         
-                if ((xPos != lastX) || (yPos != lastY)) 
-                {
-                    ctx.lineTo(chartXOffset + xPos, yPos);
-                    lastX = xPos;
-                    lastY = yPos;  
-                }
-                
-              </xsl:if>
-              
-            </xsl:for-each>
-            
-          </xsl:for-each>
+              if ((xPos != lastX) || (yPos != lastY)) {
+                  ctx.lineTo(chartXOffset + xPos, yPos);
+                  lastX = xPos;
+                  lastY = yPos;  
+              }
+          }
           
           ctx.lineTo(canvasWidth - 1, chartHeight);  
           ctx.lineTo(chartXOffset, chartHeight);  
@@ -535,6 +565,7 @@
               legendElevation += elevationLegendStep;
           }
       }
+    </xsl:if>
 
   </xsl:for-each>
   
@@ -566,6 +597,8 @@
           </xsl:if>
         </xsl:for-each>
       </xsl:variable>
+      
+      <xsl:if test=".//gpx:wpt/gpx:ele">
       
       function drawWaypointProfile() 
       {
@@ -605,7 +638,7 @@
               
               var distance = <xsl:value-of select="./gpx:totalDist"/>
         
- 	      xPos = distance * chartWidth / totalDist;
+ 	          xPos = distance * chartWidth / totalDist;
               yPos = chartHeight - (height * chartHeight / maxHeight);
         
               if ((xPos != lastX) || (yPos != lastY)) 
@@ -623,6 +656,8 @@
           ctx.lineTo(chartXOffset, chartHeight);  
           ctx.fill();
       }
+      
+      </xsl:if>
 
   </xsl:if>
   
@@ -665,34 +700,38 @@
   <h3>Track <xsl:value-of select="$trackNum" />: <xsl:value-of select="gpx:name" /></h3>
   
   <div id="mapCont" style="width:1000px;height:600px;border:1px solid black;"></div>
+
+    <xsl:variable name="startTime">
+      <xsl:for-each select=".//gpx:trkpt/gpx:time">
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="." />;
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
   
-  <xsl:variable name="startTime">
-    <xsl:for-each select=".//gpx:trkpt/gpx:time">
-      <xsl:if test="position() = 1">
-        <xsl:value-of select="." />;
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
+    <xsl:variable name="endTime">
+      <xsl:for-each select=".//gpx:trkpt/gpx:time">
+        <xsl:if test="position() = last()">
+          <xsl:value-of select="." />;
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
   
-  <xsl:variable name="endTime">
-    <xsl:for-each select=".//gpx:trkpt/gpx:time">
-      <xsl:if test="position() = last()">
-        <xsl:value-of select="." />;
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
+  <xsl:if test="$startTime != ''">
   
-  <p class="info">
-    start time: 
-    <xsl:call-template name="formatDate">
-      <xsl:with-param name="datestr" select="$startTime"/>
-    </xsl:call-template>
-    &#160;&#160;
-    end time: 
-    <xsl:call-template name="formatDate">
-      <xsl:with-param name="datestr" select="$endTime"/>
-    </xsl:call-template>
-  </p>
+    <p class="info">
+      start time: 
+      <xsl:call-template name="formatDate">
+        <xsl:with-param name="datestr" select="$startTime"/>
+      </xsl:call-template>
+      &#160;&#160;
+      end time: 
+      <xsl:call-template name="formatDate">
+        <xsl:with-param name="datestr" select="$endTime"/>
+      </xsl:call-template>
+    </p>
+  
+  </xsl:if>
 
   <p class="info">number of trackpoints: <xsl:value-of select="count(.//gpx:ele)"/></p>
   
@@ -716,139 +755,151 @@
 
   <!-- ====================== elevation profile per distance ====================== -->
 
-  <h3>elevation profile</h3>
-  <span class="chartText">max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
-  <br/>
-  
-  <div style="width:1100px">
-  
-    <canvas width="1000" height="200">
-      <xsl:attribute name="id">canvasAltDist<xsl:value-of select="$trackNum"/></xsl:attribute>
-    </canvas>   
-  
-    <canvas width="80" height="200">
-      <xsl:attribute name="id">canvasAltDistLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
-    </canvas>
-  
-  </div>
-  
-  <xsl:variable name="totalDist">
-    <xsl:for-each select=".//gpx:totalDist">
-      <xsl:if test="position() = last()">
-        <xsl:value-of select="." />
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
+  <xsl:if test=".//gpx:trkpt/gpx:ele">
 
-  <table style="width:1000px" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="chartText">
-        min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m
-      </td>
-      <td class="chartText" style="text-align:right">
-        distance &#160;
-        <xsl:value-of select='format-number((number($totalDist) div 1000), "###,##0.000")'/> km
-      </td>
-    </tr>
-  </table>
+    <h3>elevation profile</h3>
+    <span class="chartText">max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
+    <br/>
+  
+    <div style="width:1100px">
+   
+      <canvas width="1000" height="200">
+        <xsl:attribute name="id">canvasAltDist<xsl:value-of select="$trackNum"/></xsl:attribute>
+      </canvas>   
+  
+      <canvas width="80" height="200">
+        <xsl:attribute name="id">canvasAltDistLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
+      </canvas>
+  
+    </div>
+  
+    <xsl:variable name="totalDist">
+      <xsl:for-each select=".//gpx:totalDist">
+        <xsl:if test="position() = last()">
+          <xsl:value-of select="." />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+
+    <table style="width:1000px" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="chartText">
+          min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m
+        </td>
+        <td class="chartText" style="text-align:right">
+          distance &#160;
+          <xsl:value-of select='format-number((number($totalDist) div 1000), "###,##0.000")'/> km
+        </td>
+      </tr>
+    </table>
+  
+  </xsl:if>
 
   <!-- ====================== Speed ====================== -->
   
-  <br/><br/>
+  <xsl:if test=".//gpx:trkpt/gpx:speed">
   
-  <xsl:variable name="maxSpeed">
-    <xsl:for-each select=".//gpx:speed">
-      <xsl:sort data-type="number" order="descending"/>
-      <xsl:if test="position() = 1">
-        <xsl:value-of select="number(.)" />
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
+    <br/><br/>
   
-  <h3>speed</h3>
-  <span class="chartText">max: <xsl:value-of select="format-number($maxSpeed * 3.6, '###,###.0')" /> km/h = <xsl:value-of select="format-number($maxSpeed, '###,###.0')" /> m/s</span>
-  <br/>
+    <xsl:variable name="maxSpeed">
+      <xsl:for-each select=".//gpx:speed">
+        <xsl:sort data-type="number" order="descending"/>
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="number(.)" />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
   
-  <div style="width:1100px">
+    <h3>speed</h3>
+    <span class="chartText">max: <xsl:value-of select="format-number($maxSpeed * 3.6, '###,###.0')" /> km/h = <xsl:value-of select="format-number($maxSpeed, '###,###.0')" /> m/s</span>
+    <br/>
   
-    <canvas width='1000' height='200'>
-      <xsl:attribute name="id">canvasSpeed<xsl:value-of select="$trackNum"/></xsl:attribute>
-    </canvas>   
+    <div style="width:1100px">
+  
+      <canvas width='1000' height='200'>
+        <xsl:attribute name="id">canvasSpeed<xsl:value-of select="$trackNum"/></xsl:attribute>
+      </canvas>   
 
-    <canvas width="80" height="200">
-      <xsl:attribute name="id">canvasSpeedLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
-    </canvas>
+      <canvas width="80" height="200">
+        <xsl:attribute name="id">canvasSpeedLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
+      </canvas>
     
-  </div>  
+    </div>  
     
-  <xsl:variable name="minSpeed">
-    <xsl:for-each select=".//gpx:speed">
-      <xsl:sort data-type="number" order="ascending"/>
-      <xsl:if test="position() = 1">
-        <xsl:value-of select="number(.)" />
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
+    <xsl:variable name="minSpeed">
+      <xsl:for-each select=".//gpx:speed">
+        <xsl:sort data-type="number" order="ascending"/>
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="number(.)" />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
 
-  <span class="chartText">min: <xsl:value-of select="format-number($minSpeed * 3.6, '###,##0.0')" /> km/h = <xsl:value-of select="format-number($minSpeed, '###,##0.0')" /> m/s</span>
+    <span class="chartText">min: <xsl:value-of select="format-number($minSpeed * 3.6, '###,##0.0')" /> km/h = <xsl:value-of select="format-number($minSpeed, '###,##0.0')" /> m/s</span>
 
-  <br/>
+    <br/>
 
-  <table style="width:1000px" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="chartText">
-        <xsl:call-template name="formatTime">
-          <xsl:with-param name="datestr" select="$startTime"/>
-        </xsl:call-template>
-      </td>
-      <td class="chartText" style="text-align:right">
-        time &#160;
-        <xsl:call-template name="formatTime">
-          <xsl:with-param name="datestr" select="$endTime"/>
-        </xsl:call-template>
-      </td>
-    </tr>
-  </table>
+    <table style="width:1000px" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="chartText">
+          <xsl:call-template name="formatTime">
+            <xsl:with-param name="datestr" select="$startTime"/>
+          </xsl:call-template>
+        </td>
+        <td class="chartText" style="text-align:right">
+          time &#160;
+          <xsl:call-template name="formatTime">
+            <xsl:with-param name="datestr" select="$endTime"/>
+          </xsl:call-template>
+        </td>
+      </tr>
+    </table>
+  
+  </xsl:if>
 
   <!-- ====================== elevation profile per time ====================== -->
 
-  <br/><br/>
+  <xsl:if test=".//gpx:trkpt/gpx:ele and .//gpx:trkpt/gpx:time">
 
-  <h3>elevation / time</h3>
-  <span class="chartText">max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
-  <br/>
-  
-  <div style="width:1100px">
-  
-    <canvas width='1000' height='200'>
-      <xsl:attribute name="id">canvas<xsl:value-of select="$trackNum"/></xsl:attribute>
-    </canvas>   
+    <br/><br/>
 
-    <canvas width="80" height="200">
-      <xsl:attribute name="id">canvasAltTimeLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
-    </canvas>
+    <h3>elevation / time</h3>
+    <span class="chartText">max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
+    <br/>
   
-  </div>
+    <div style="width:1100px">
   
-  <span class="chartText">min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m</span>
+      <canvas width='1000' height='200'>
+        <xsl:attribute name="id">canvas<xsl:value-of select="$trackNum"/></xsl:attribute>
+      </canvas>   
 
-  <br/>
+      <canvas width="80" height="200">
+        <xsl:attribute name="id">canvasAltTimeLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
+      </canvas>
+  
+    </div>
+  
+    <span class="chartText">min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m</span>
 
-  <table style="width:1000px" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="chartText">
-        <xsl:call-template name="formatTime">
-          <xsl:with-param name="datestr" select="$startTime"/>
-        </xsl:call-template>
-      </td>
-      <td class="chartText" style="text-align:right">
-        time &#160;
-        <xsl:call-template name="formatTime">
-          <xsl:with-param name="datestr" select="$endTime"/>
-        </xsl:call-template>
-      </td>
-    </tr>
-  </table>
+    <br/>
+
+    <table style="width:1000px" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="chartText">
+          <xsl:call-template name="formatTime">
+            <xsl:with-param name="datestr" select="$startTime"/>
+          </xsl:call-template>
+        </td>
+        <td class="chartText" style="text-align:right">
+          time &#160;
+          <xsl:call-template name="formatTime">
+            <xsl:with-param name="datestr" select="$endTime"/>
+          </xsl:call-template>
+        </td>
+      </tr>
+    </table>
+  
+  </xsl:if>
   
 </xsl:template>
 
@@ -856,58 +907,67 @@
 
 <xsl:template name="waypoints">
 
-  <h3>Waypoints Elevation/Distance Profile</h3>
+  <xsl:if test=".//gpx:ele">
+
+    <h3>Waypoints Elevation/Distance Profile</h3>
+
+  </xsl:if>
 
   <p class="info">number of waypoints: <xsl:value-of select="count(//gpx:wpt)"/></p>
 
-  <xsl:variable name="maxElevation">
-    <xsl:for-each select=".//gpx:ele">
-      <xsl:sort data-type="number" order="descending"/>
-      <xsl:if test="position() = 1">
-        <xsl:value-of select="number(.)" />
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
+  <xsl:if test=".//gpx:ele">
 
-  <xsl:variable name="minElevation">
-    <xsl:for-each select=".//gpx:ele">
-      <xsl:sort data-type="number" order="ascending"/>
-      <xsl:if test="position() = 1">
-        <xsl:value-of select="number(.)" />
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
+    <xsl:variable name="maxElevation">
+      <xsl:for-each select=".//gpx:ele">
+        <xsl:sort data-type="number" order="descending"/>
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="number(.)" />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
 
-  <span class="chartText">elevation
-  <br/>
-  max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
-  <br/>
-  
-  <canvas width='1000' height='200'>
-    <xsl:attribute name="id">canvasWaypoint</xsl:attribute>
-  </canvas>   
-  
-  <br/>
-  
-  <xsl:variable name="totalDist">
-    <xsl:for-each select=".//gpx:totalDist">
-      <xsl:if test="position() = last()">
-        <xsl:value-of select="." />
-      </xsl:if>
-    </xsl:for-each>
-  </xsl:variable>
+    <xsl:variable name="minElevation">
+      <xsl:for-each select=".//gpx:ele">
+        <xsl:sort data-type="number" order="ascending"/>
+        <xsl:if test="position() = 1">
+          <xsl:value-of select="number(.)" />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
 
-  <table style="width:1000px" cellpadding="0" cellspacing="0">
-    <tr>
-      <td class="chartText">
-        min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m
-      </td>
-      <td class="chartText" style="text-align:right">
-        distance &#160;
-        <xsl:value-of select='format-number((number($totalDist) div 1000), "###,##0.000")'/> km
-      </td>
-    </tr>
-  </table>
+    <span class="chartText">elevation
+    <br/>
+    max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
+    <br/>
+  
+    <canvas width='1000' height='200'>
+      <xsl:attribute name="id">canvasWaypoint</xsl:attribute>
+    </canvas>   
+  
+    <br/>
+  
+    <xsl:variable name="totalDist">
+      <xsl:for-each select=".//gpx:totalDist">
+        <xsl:if test="position() = last()">
+          <xsl:value-of select="." />
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:variable>
+
+    <table style="width:1000px" cellpadding="0" cellspacing="0">
+      <tr>
+        <td class="chartText">
+          min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m
+        </td>
+        <td class="chartText" style="text-align:right">
+          distance &#160;
+          <xsl:value-of select='format-number((number($totalDist) div 1000), "###,##0.000")'/> km
+        </td>
+      </tr>
+    </table>
+  
+  </xsl:if>
+  
 </xsl:template>
 
 <xsl:template name="formatDate">

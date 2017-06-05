@@ -361,6 +361,9 @@ function delFileAjax(path, deleteWriteProtected) {
                 
                     var viewModeItem = responseXml.getElementsByTagName("viewMode")[0];
                     if ((viewModeItem) && (viewModeItem.firstChild.nodeValue == 2)) {
+                    	if (typeof stopPolling == "function") {
+                    		stopPolling();
+                        }
                         removeDeletedFile(deletedFile);
                         hidePrompt();
                         return;

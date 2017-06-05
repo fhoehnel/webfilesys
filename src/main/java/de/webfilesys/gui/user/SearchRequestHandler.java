@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.Category;
+import de.webfilesys.Constants;
 import de.webfilesys.FileLink;
 import de.webfilesys.IconManager;
 import de.webfilesys.LanguageManager;
@@ -148,7 +149,7 @@ public class SearchRequestHandler extends UserRequestHandler
 			searchResultDir = searchResultDir + File.separator;
 		}
         
-		searchResultDir = searchResultDir + "searchResult-" + System.currentTimeMillis();
+		searchResultDir = searchResultDir + Constants.SEARCH_RESULT_FOLDER_PREFIX + System.currentTimeMillis();
 
 		output.print("<html>");
 		output.print("<head>");

@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -165,7 +166,7 @@ public class PictureStoryRequestHandler extends UserRequestHandler
 
         int fileNum = 0;
 
-		Vector imageFiles=selectionStatus.getSelectedFiles();
+        ArrayList<FileContainer> imageFiles = selectionStatus.getSelectedFiles();
 
 		if (imageFiles != null)
 		{
@@ -260,7 +261,7 @@ public class PictureStoryRequestHandler extends UserRequestHandler
 
 		for (i=0;i<imageFiles.size();i++)
 		{
-			FileContainer fileCont = (FileContainer) imageFiles.elementAt(i);
+			FileContainer fileCont = (FileContainer) imageFiles.get(i);
 			
 			String actImageFile = fileCont.getName();
 

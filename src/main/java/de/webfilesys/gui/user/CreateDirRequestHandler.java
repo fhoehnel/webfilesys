@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
@@ -128,7 +129,7 @@ public class CreateDirRequestHandler extends UserRequestHandler
         {
             if (mobile != null) 
             {
-                session.setAttribute("cwd", actPath);
+                session.setAttribute(Constants.SESSION_KEY_CWD, actPath);
                 
                 (new MobileFolderFileListHandler(req, resp, session, output, uid)).handleRequest();
                 return;
@@ -144,13 +145,13 @@ public class CreateDirRequestHandler extends UserRequestHandler
 
             setParameter("expand", newPath);
 
-            DirTreeStatus dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+            DirTreeStatus dirTreeStatus = (DirTreeStatus) session.getAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS);
     		
     		if (dirTreeStatus == null)
     		{
     			dirTreeStatus = new DirTreeStatus();
     			
-    			session.setAttribute("dirTreeStatus", dirTreeStatus);
+    			session.setAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS, dirTreeStatus);
     		}
     		
     		if (!dirTreeStatus.dirExpanded(parentPath))

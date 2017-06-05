@@ -343,7 +343,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
 
         FileSelectionStatus selectionStatus=fileSelector.selectFiles(Constants.imgFileMasks,4096,null,null);
 
-        Vector imageFiles = null;
+        ArrayList<FileContainer> imageFiles = null;
         if (randomize) {
             imageFiles = selectionStatus.getRandomizedFiles();
         } else {
@@ -354,7 +354,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
         {
             for (i=0;i<imageFiles.size();i++)
             {
-                FileContainer fileCont = (FileContainer) imageFiles.elementAt(i);
+                FileContainer fileCont = (FileContainer) imageFiles.get(i);
                 
                 imageTree.add(fileCont.getRealFile().getAbsolutePath());
             }

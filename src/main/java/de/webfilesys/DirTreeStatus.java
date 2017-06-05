@@ -1,18 +1,20 @@
 package de.webfilesys;
 
 import java.io.File;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.StringTokenizer;
-import java.util.Vector;
 
 public class DirTreeStatus 
 {
-    private Hashtable expandedDirs = null;
+    private HashMap<String, Boolean> expandedDirs = null;
+    
+    private HashMap<String, Long> subdirNameLengthSumMap = null;
 
     public DirTreeStatus()
     {
-    	expandedDirs = new Hashtable();
+    	expandedDirs = new HashMap<String, Boolean>();
+    	subdirNameLengthSumMap = new HashMap<String, Long>();
     }
     
     public void expandDir(String path)
@@ -24,23 +26,16 @@ public class DirTreeStatus
     {
         expandedDirs.remove(path);
 
-        Vector collapsedSubdirs=new Vector();
+        ArrayList<String> collapsedSubdirs = new ArrayList<String>();
 
-        Enumeration dirList=expandedDirs.keys();
-
-        while (dirList.hasMoreElements())
-        {
-            String dirName=(String) dirList.nextElement();
-
-            if (dirName.indexOf(path)==0)
-            {
+        for (String dirName : expandedDirs.keySet()) {
+            if (dirName.indexOf(path) == 0) {
                 collapsedSubdirs.add(dirName);
             }
         }
 
-        for (int i=0;i<collapsedSubdirs.size();i++)
-        {
-            expandedDirs.remove(collapsedSubdirs.elementAt(i));
+        for (int i = 0; i < collapsedSubdirs.size(); i++) {
+            expandedDirs.remove(collapsedSubdirs.get(i));
         }
     }
 
@@ -82,8 +77,36 @@ public class DirTreeStatus
         }
     }
 
+    public ArrayList<String> getExpandedFolders() {
+    	ArrayList<String> expandedFolders = new ArrayList<String>();
+    	
+    	for (String path : expandedDirs.keySet()) {
+    		Boolean expanded = expandedDirs.get(path);
+    		if ((expanded != null) && expanded.booleanValue()) {
+    			expandedFolders.add(path);
+    		}
+    	}
+    	return expandedFolders;
+    }
+    
     public boolean dirExpanded(String path)
     {
         return(expandedDirs.get(path)!=null);
+    }
+    
+    public void setSubdirNameLengthSum(String path, long nameLengthSum) {
+    	subdirNameLengthSumMap.put(path, Long.valueOf(nameLengthSum));
+    }
+    
+    public HashMap<String, Long> getSubdirNameLengthSumMap() {
+    	return subdirNameLengthSumMap;
+    }
+    
+    public long getSubdirNameLenghtSum(String path) {
+    	Long nameLengthSum = subdirNameLengthSumMap.get(path);
+    	if (nameLengthSum == null) {
+    		return (-1);
+    	}
+    	return nameLengthSum.longValue();
     }
 }

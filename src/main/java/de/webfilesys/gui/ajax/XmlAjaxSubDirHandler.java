@@ -3,9 +3,8 @@ package de.webfilesys.gui.ajax;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,9 +12,12 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
+import de.webfilesys.DirTreeStatusInspector;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
+import de.webfilesys.WebFileSys;
 import de.webfilesys.WinDriveManager;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
@@ -67,13 +69,13 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
              lastInLevel = "false";
 		}
 		
-		dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+		dirTreeStatus = (DirTreeStatus) session.getAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS);
 		
 		if (dirTreeStatus == null)
 		{
 			dirTreeStatus = new DirTreeStatus();
 			
-			session.setAttribute("dirTreeStatus", dirTreeStatus);
+			session.setAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS, dirTreeStatus);
 		}
 		
         dirTreeStatus.expandDir(expandDir);
@@ -103,6 +105,10 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 		doc.appendChild(subFolderElement);
 		
 		processResponse();
+		
+        if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
+    		(new DirTreeStatusInspector(dirTreeStatus)).rememberPathStatus(actPath);		
+        }
 	}
 	
 	protected Element dirSubTree(String parentPath, String lastInLevel)
@@ -219,7 +225,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 		
 		File subdirFile = new File(parentPath);
 
-		String fileList[] = subdirFile.list();
+		File[] fileList = subdirFile.listFiles();
 
 		if (fileList == null)
 		{
@@ -242,17 +248,15 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 			pathWithSlash = parentPath + File.separator;
 		}
 
-		Vector subdirList = new Vector();
+		ArrayList<String> subdirList = new ArrayList<String>();
 
-		for (int i = 0; i < fileList.length; i++)
+		for (File file : fileList)
 		{
-			String subdirPath = pathWithSlash + fileList[i];
+			String subdirPath = pathWithSlash + file.getName();
 
-			File tempFile = new File(subdirPath);
-
-			if (tempFile.isDirectory())
+			if (file.isDirectory())
 			{
-				String subdirName = fileList[i];
+				String subdirName = file.getName();
 
 				if (!subdirName.equals(ThumbnailThread.THUMBNAIL_SUBDIR))
 				{
@@ -273,7 +277,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 
 		for (int i = 0; i < subdirList.size(); i++)
 		{
-			String subdirPath=(String) subdirList.elementAt(i);
+			String subdirPath=(String) subdirList.get(i);
 
 			Element folderElement = null;
 

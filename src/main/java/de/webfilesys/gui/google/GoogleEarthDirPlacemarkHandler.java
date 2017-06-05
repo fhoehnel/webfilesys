@@ -48,13 +48,13 @@ public class GoogleEarthDirPlacemarkHandler extends GoogleEarthHandlerBase
 
         ArrayList placemarkList = new ArrayList();
         
-        Vector selectedFiles = selectionStatus.getSelectedFiles();
+        ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
         
         if (selectedFiles != null)
         {
             for (int i = 0; i < selectedFiles.size(); i++)
             {
-                FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+                FileContainer fileCont = (FileContainer) selectedFiles.get(i);
                 
                 File imgFile = fileCont.getRealFile();
                 

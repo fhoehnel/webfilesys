@@ -337,13 +337,13 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
 
         FileSelectionStatus selectionStatus=fileSelector.selectFiles(Constants.imgFileMasks,4096,null,null);
 
-        Vector imageFiles=selectionStatus.getSelectedFiles();
+        ArrayList<FileContainer> imageFiles = selectionStatus.getSelectedFiles();
 
         if (imageFiles!=null)
         {
             for (i=0;i<imageFiles.size();i++)
             {
-                FileContainer fileCont = (FileContainer) imageFiles.elementAt(i);
+                FileContainer fileCont = (FileContainer) imageFiles.get(i);
                 
                 imageTree.add(fileCont.getRealFile().getAbsolutePath());
             }

@@ -1,34 +1,32 @@
 package de.webfilesys;
 
 import java.io.File;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 public class FastPathManager extends Thread
 {
     private static FastPathManager fastPathMgr=null;
 
-    Hashtable queueTable=null;
+    HashMap<String, FastPathQueue> queueTable = null;
 
-    Hashtable cacheModified=null;
+    HashMap<String, Boolean> cacheModified = null;
 
     private FastPathManager()
     {
-        queueTable=new Hashtable(5);
+        queueTable = new HashMap<String, FastPathQueue>(5);
 
-        cacheModified=new Hashtable(5);
+        cacheModified = new HashMap<String, Boolean>(5);
 
         this.start();
     }
 
-    public static FastPathManager getInstance()
+    public static synchronized FastPathManager getInstance()
     {
-        if (fastPathMgr==null)
+        if (fastPathMgr == null)
         {
-            fastPathMgr=new FastPathManager();
+            fastPathMgr = new FastPathManager();
         }
 
         return(fastPathMgr);
@@ -36,18 +34,18 @@ public class FastPathManager extends Thread
 
     public synchronized void queuePath(String userid, String pathName)
     {
-        FastPathQueue userQueue=(FastPathQueue) queueTable.get(userid);
+        FastPathQueue userQueue = queueTable.get(userid);
 
         if (userQueue==null)
         {
             userQueue=new FastPathQueue(userid);
 
-            queueTable.put(userid,userQueue);
+            queueTable.put(userid, userQueue);
         }
 
         userQueue.queuePath(pathName);
 
-        cacheModified.put(userid,new Boolean(true));
+        cacheModified.put(userid, new Boolean(true));
     }
 
     /**
@@ -58,16 +56,16 @@ public class FastPathManager extends Thread
     public void removeTree(String userid, String path) {
         FastPathQueue userQueue = (FastPathQueue) queueTable.get(userid);
 
-        if (userQueue==null)
+        if (userQueue == null)
         {
             return;
         }
         
-        Vector fastPathList = userQueue.getPathVector();        
+        ArrayList<String> fastPathList = userQueue.getPathList();        
 
         for (int i = fastPathList.size() - 1; i >= 0; i--) 
         {
-            String fastPath = (String) fastPathList.elementAt(i);
+            String fastPath = (String) fastPathList.get(i);
             
             if (fastPath.startsWith(path))
             {
@@ -83,28 +81,28 @@ public class FastPathManager extends Thread
         cacheModified.put(userid, new Boolean(true));
     }
     
-    public Vector getPathList(String userid)
+    public ArrayList<String> getPathList(String userid)
     {
-        FastPathQueue userQueue=(FastPathQueue) queueTable.get(userid);
+        FastPathQueue userQueue = queueTable.get(userid);
 
-        if (userQueue==null)
+        if (userQueue == null)
         {
-            return(new Vector());
+            return new ArrayList<String>();
         }
 
-        return(userQueue.getPathVector());
+        return userQueue.getPathList();
     }
     
     public String returnToPreviousDir(String userid)
     {
-        FastPathQueue userQueue = (FastPathQueue) queueTable.get(userid);
+        FastPathQueue userQueue = queueTable.get(userid);
 
         if (userQueue == null)
         {
             return null;
         }
 
-        Vector fastPathList = userQueue.getPathVector();
+        ArrayList<String> fastPathList = userQueue.getPathList();
         
         if ((fastPathList == null) || (fastPathList.size() == 0))
         {
@@ -113,12 +111,12 @@ public class FastPathManager extends Thread
         
         if (fastPathList.size() == 1)
         {
-            return (String) fastPathList.elementAt(0);
+            return (String) fastPathList.get(0);
         }
         
-        String lastVisitedDir = (String) fastPathList.elementAt(1);
+        String lastVisitedDir = (String) fastPathList.get(1);
         
-        fastPathList.removeElementAt(0);
+        fastPathList.remove(0);
 
         cacheModified.put(userid, new Boolean(true));
         
@@ -127,23 +125,17 @@ public class FastPathManager extends Thread
 
     protected void saveChangedUsers()
     {
-        Enumeration changedFlagKeys=cacheModified.keys();
+        for (String userid : cacheModified.keySet()) {
 
-        while (changedFlagKeys.hasMoreElements())
-        {
-            String userid=(String) changedFlagKeys.nextElement();
-
-            Boolean modified=(Boolean) cacheModified.get(userid);
+            Boolean modified = (Boolean) cacheModified.get(userid);
 
             if (modified.booleanValue())
             {
-                FastPathQueue userQueue=(FastPathQueue) queueTable.get(userid);
-
-                // System.out.println("saving fastpath queue of user " + userid);
+                FastPathQueue userQueue = queueTable.get(userid);
 
                 userQueue.saveToFile();
                 
-                cacheModified.put(userid,new Boolean(false));
+                cacheModified.put(userid, new Boolean(false));
             }
         }
     }
@@ -162,22 +154,14 @@ public class FastPathManager extends Thread
             return;
         }
         
-        if (fastPathFile.delete())
-        {
-            if (Logger.getLogger(getClass()).isDebugEnabled())
-            {
-                Logger.getLogger(getClass()).debug("fastpath file deleted for user " + userid);
-            }
-            else
-            {
-                Logger.getLogger(getClass()).warn("failed to delete fastpath file for user " + userid);
-            }
+        if (!fastPathFile.delete()) {
+            Logger.getLogger(getClass()).warn("failed to delete fastpath file for user " + userid);
         }
     }
     
     public synchronized void run()
     {
-    	Logger.getLogger(getClass()).debug("FastPathManager started");
+       	Logger.getLogger(getClass()).debug("FastPathManager started");
     	
     	boolean stop = false;
     	
@@ -187,7 +171,7 @@ public class FastPathManager extends Thread
             {
                 this.wait(60000);
             }
-            catch(InterruptedException e)
+            catch (InterruptedException e)
             {
                 stop = true;
             }

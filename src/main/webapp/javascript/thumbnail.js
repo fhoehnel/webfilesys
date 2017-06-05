@@ -544,7 +544,12 @@ function removeDeletedFile(fileName) {
         
         checkThumbnailsToLoad();
         
-        updateFileCount();        
+        updateFileCount();   
+       
+       	if (typeof stopPolling == "function") {
+       		stopPolling();
+        }
+             
     }
 }
 
@@ -609,6 +614,10 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
 	            var success = successItem.firstChild.nodeValue;
 			    
                 if (success == 'true') {
+                	if (typeof stopPolling == "function") {
+                		stopPolling();
+                    }
+
                 	var fileNameElem = document.getElementById("fileName-" + domId);
                 	if (fileNameElem) {
                 		fileNameElem.innerHTML = abbrevText(newFileName, 23);

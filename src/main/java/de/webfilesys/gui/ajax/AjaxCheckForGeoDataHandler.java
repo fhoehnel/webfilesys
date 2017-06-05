@@ -2,6 +2,7 @@ package de.webfilesys.gui.ajax;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -49,13 +50,13 @@ public class AjaxCheckForGeoDataHandler extends XmlRequestHandlerBase
 
         FileSelectionStatus selectionStatus = fileSelector.selectFiles(Constants.imgFileMasks, -1, MAX_FILE_NUM, 0);
 
-        Vector selectedFiles = selectionStatus.getSelectedFiles();
+        ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
         
         if (selectedFiles != null)
         {
             for (int i = 0; (!geoDataExist) && (i < selectedFiles.size()); i++)
             {
-                FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+                FileContainer fileCont = (FileContainer) selectedFiles.get(i);
                 
                 File imgFile = fileCont.getRealFile();
                 
