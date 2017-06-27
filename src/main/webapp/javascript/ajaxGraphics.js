@@ -22,6 +22,11 @@ function autoImgRotate() {
 	customConfirm(resourceBundle["confirm.rotateByExif"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
 			function() {
                 showHourGlass();
+                
+            	if (typeof stopPolling == "function") {
+            		stopPolling();
+                }
+                
                 var xmlUrl = '/webfilesys/servlet?command=autoImgRotate';
                 var responseXml = xmlRequest(xmlUrl, autoImgRotateResult);
 	});
