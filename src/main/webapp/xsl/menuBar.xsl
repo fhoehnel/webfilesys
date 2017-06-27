@@ -236,7 +236,7 @@
               <xsl:if test="not(readonly) or (readonly='false')">
                 <xsl:if test="registrationType='open'">
                   <th>
-	                <div class="icon-button" onclick="parent.FileList.location.href='/webfilesys/servlet?command=selfEditUser'">
+	                <div class="icon-button" onclick="parent.frames[2].location.href='/webfilesys/servlet?command=selfEditUser'">
                       <xsl:attribute name="titleResource">label.editregistration</xsl:attribute>
                       <a class="icon-font icon-user">
                         <xsl:text> </xsl:text>
@@ -247,7 +247,7 @@
 
                 <xsl:if test="not(registrationType='open')">
                   <th>
-	                <div class="icon-button" onclick="parent.FileList.location.href='/webfilesys/servlet?command=editPw'">
+	                <div class="icon-button" onclick="parent.frames[2].location.href='/webfilesys/servlet?command=editPw'">
                       <xsl:attribute name="titleResource">label.settings</xsl:attribute>
                       <a class="icon-font icon-user">
                         <xsl:text> </xsl:text>
