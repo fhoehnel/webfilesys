@@ -15,7 +15,7 @@ function extractDirNameFromPath(path)
     return path;
 }
 
-function dirContextMenu(domId)
+function dirContextMenu(domId, root)
 {
     parentDiv = document.getElementById(domId);
 
@@ -26,6 +26,11 @@ function dirContextMenu(domId)
         return;
     }
 
+	var dirIsRoot = false;
+	if (root && root == "true") {
+		dirIsRoot = true;
+	}
+    
     var urlEncodedPath = parentDiv.getAttribute("path");
 
     var path = decodeURIComponent(urlEncodedPath);
@@ -74,10 +79,10 @@ function dirContextMenu(domId)
     }
 
     if (((parent.serverOS == 'win') && (path.length > 3)) ||
-	((parent.serverOS == 'ix') && (path.length > 1)))
+	    ((parent.serverOS == 'ix') && (path.length > 1)))
     {
-        if (parent.readonly != 'true')
-	{
+        if ((parent.readonly != 'true') && (!dirIsRoot))
+	    {
             menuText = menuText 
                      + menuEntry("javascript:copyDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.copydir"]);
 
@@ -89,7 +94,7 @@ function dirContextMenu(domId)
 
             menuText = menuText 
                      + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceBundle["label.renamedir"]);
-	}
+	    }
     }
 
     if (!clipboardEmpty)
@@ -175,7 +180,7 @@ function dirContextMenu(domId)
     if (parent.readonly != 'true')
     {
         menuText = menuText 
-                 + menuEntry("javascript:extendedDirMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuMore"]);
+                 + menuEntry("javascript:extendedDirMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "', '" + domId + "', '" + dirIsRoot + "')", resourceBundle["label.menuMore"]);
     }
 
     menuText = menuText + '</table>'; 
@@ -216,7 +221,7 @@ function dirContextMenu(domId)
     // setTimeout('hideMenu()',8000);
 }
 
-function extendedDirMenu(shortPath, path, domId)
+function extendedDirMenu(shortPath, path, domId, dirIsRoot)
 {
     stopMenuClose = true;
 
@@ -268,14 +273,18 @@ function extendedDirMenu(shortPath, path, domId)
                  + menuEntry("javascript:clearThumbs('" + scriptPreparedPath + "')",resourceBundle["label.clearthumbs"]);
     }
     
-    menuText = menuText 
-               + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.compSource"]);
-
+	if (dirIsRoot == 'false') {
+        menuText = menuText 
+                 + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.compSource"]);
+	}
+    
     if (parent.readonly != 'true')
     {
-        menuText = menuText 
-                 + menuEntry("javascript:synchronize('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuSynchronize"]);
-
+    	if (dirIsRoot == 'false') {
+            menuText = menuText 
+                     + menuEntry("javascript:synchronize('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuSynchronize"]);
+    	}
+        
         if (parent.watchEnabled)
         {
             menuText = menuText 
@@ -290,10 +299,16 @@ function extendedDirMenu(shortPath, path, domId)
                  + menuEntry("javascript:downloadFolder('" + scriptPreparedPath + "')",resourceBundle["label.downloadFolder"]);
     }
 
-    if (parent.readonly != 'true')
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:cloneFolder('" + scriptPreparedPath + "', '" + folderName + "')",resourceBundle["label.cloneFolder"]);
+    if (parent.readonly != 'true') {
+    	if (dirIsRoot == 'false') {
+            if (((parent.serverOS == 'win') && (path.length > 3)) ||
+                ((parent.serverOS == 'ix') && (path.length > 1))) {
+            	
+                menuText = menuText 
+                         + menuEntry("javascript:cloneFolder('" + scriptPreparedPath + "', '" + folderName + "')",resourceBundle["label.cloneFolder"]);
+
+            }
+    	}
     }
 
     menuText = menuText + '</table>'; 

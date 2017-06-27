@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.w3c.dom.Element;
 
 import de.webfilesys.ClipBoard;
+import de.webfilesys.DirTreeStatusInspector;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.WinDriveManager;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -102,7 +103,7 @@ public class XslWinDirTreeHandler extends XslDirTreeHandler
         
         computerElement.setAttribute("name", WebFileSys.getInstance().getLocalHostName());
 
-		ArrayList existingDrives = new ArrayList();
+		ArrayList<Integer> existingDrives = new ArrayList();
 
 		if (docRootDriveChar=='*')
         {
@@ -126,9 +127,9 @@ public class XslWinDirTreeHandler extends XslDirTreeHandler
             }
 		}
 		
-		for (int i = 0; i < existingDrives.size(); i++)
-		{
-			int driveNum = ((Integer) existingDrives.get(i)).intValue();
+		for (Integer drive : existingDrives) {
+		
+			int driveNum = drive.intValue();
 
 			String driveLabel = WinDriveManager.getInstance().getDriveLabel(driveNum);
 
@@ -197,6 +198,15 @@ public class XslWinDirTreeHandler extends XslDirTreeHandler
 			XmlUtil.setChildText(folderTreeElement, "fastPath", insertDoubleBackslash(actPath));
 		}
 
+		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		if (pollInterval > 0) {
+			XmlUtil.setChildText(folderTreeElement, "pollInterval", Integer.toString(pollInterval));
+		}
+		
         this.processResponse("folderTree.xsl");
+
+        if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
+        	(new DirTreeStatusInspector(dirTreeStatus)).start();
+        }
 	}
 }

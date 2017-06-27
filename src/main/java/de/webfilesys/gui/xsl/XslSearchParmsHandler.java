@@ -1,6 +1,7 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -96,7 +97,7 @@ public class XslSearchParmsHandler extends XslRequestHandlerBase
 
 		CategoryManager catMgr = CategoryManager.getInstance();
         
-		Vector categoryList = catMgr.getListOfCategories(uid);
+		ArrayList<Category> categoryList = catMgr.getListOfCategories(uid);
         
 		if (categoryList != null)
 		{
@@ -104,10 +105,8 @@ public class XslSearchParmsHandler extends XslRequestHandlerBase
 			
 			searchParmsElement.appendChild(categoriesElement);
 			
-			for (int i = 0; i < categoryList.size(); i++)
-			{
-				Category category = (Category) categoryList.elementAt(i);
-        		
+			for (Category category : categoryList) {
+			
 				Element categoryElement = doc.createElement("category");
 
                 categoryElement.setAttribute("name", category.getName());

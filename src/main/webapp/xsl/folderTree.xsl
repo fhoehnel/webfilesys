@@ -44,6 +44,10 @@
     <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/xmlUtil.js" type="text/javascript"></script>
     
+    <xsl:if test="/folderTree/pollInterval">
+      <script src="/webfilesys/javascript/pollForFolderTreeChanges.js" type="text/javascript"></script>
+    </xsl:if>
+    
     <script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
 
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -82,6 +86,11 @@
         }
       </xsl:if>
 
+      <xsl:if test="/folderTree/pollInterval">
+        var pollingTimeout;
+        var pollInterval = <xsl:value-of select="/folderTree/pollInterval" />;
+      </xsl:if>
+
       <!-- create Stylesheet-Processor for MSIE and precompile stylesheet -->  
       if (window.ActiveXObject !== undefined) 
       {
@@ -105,12 +114,21 @@
 
   <body>
     <xsl:attribute name="class">dirTree</xsl:attribute>
-    <xsl:attribute name="onLoad">setBundleResources();setTimeout('scrollToCurrent()', 100);querySubdirs();setTimeout('setTooltips()', 500);</xsl:attribute>
+    <xsl:attribute name="onLoad">
+      setBundleResources();setTimeout('scrollToCurrent()', 100);querySubdirs();setTimeout('setTooltips()', 500);
+      <xsl:if test="/folderTree/pollInterval">delayedPollForFolderTreeChanges();</xsl:if>
+    </xsl:attribute>
 
     <xsl:apply-templates />
 
   </body>
-
+  
+  <script type="text/javascript">
+    <xsl:if test="/folderTree/pollInterval">
+      document.addEventListener("visibilitychange", visibilityChangeHandler);
+    </xsl:if>
+  </script>
+  
   <div id="contextMenu" class="contextMenuCont" ></div>
 
   <div id="msg1" class="msgBox" style="visibility:hidden" />
@@ -211,7 +229,7 @@
 
      <a>
 
-       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />')</xsl:attribute>
+       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />', '<xsl:value-of select="@root" />')</xsl:attribute>
       
        <xsl:if test="@type='drive'">
          <img src="/webfilesys/images/miniDisk.gif" border="0" width="17" height="14">

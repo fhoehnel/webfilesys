@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.UUID;
-import java.util.Vector;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -22,10 +20,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import de.webfilesys.mail.MailTemplate;
-import de.webfilesys.mail.SmtpEmail;
-import de.webfilesys.util.CommonUtils;
-import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -763,7 +757,7 @@ public class InvitationManager extends Thread
             return;
         }
 
-        Vector expiredList=new Vector();
+        ArrayList<Element> expiredList = new ArrayList<Element>();
 
         int listLength=invitationList.getLength();
 
@@ -796,7 +790,7 @@ public class InvitationManager extends Thread
 
         for (int i=expiredList.size()-1;i >= 0;i--)
         {
-            Element expiredElement=(Element) expiredList.elementAt(i);
+            Element expiredElement=(Element) expiredList.get(i);
 
             String type=XmlUtil.getChildText(expiredElement,"type");
 
@@ -819,7 +813,6 @@ public class InvitationManager extends Thread
             changed=true;
         }
 
-        Logger.getLogger(getClass()).info(expiredNum + " expired invitations removed");
         Logger.getLogger(getClass()).info(expiredNum + " expired invitations removed");
     }
 

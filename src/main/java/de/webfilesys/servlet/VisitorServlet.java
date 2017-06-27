@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.Constants;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumSlideShowHandler;
@@ -108,11 +109,11 @@ public class VisitorServlet extends WebFileSysServlet {
 
             session.setAttribute("userid", visitorUserId);
         
-            session.setAttribute("loginEvent", "true");
+            session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
 
             session.setAttribute("readonly", "true");
 
-            session.setAttribute("cwd", userMgr.getDocumentRoot(visitorUserId));
+            session.setAttribute(Constants.SESSION_KEY_CWD, userMgr.getDocumentRoot(visitorUserId));
 
             session.removeAttribute("startIdx");
 

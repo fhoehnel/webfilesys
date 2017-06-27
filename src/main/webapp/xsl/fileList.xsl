@@ -43,6 +43,9 @@
 <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/jsFileMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
+<xsl:if test="/fileList/pollInterval">
+  <script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
+</xsl:if>
 <script src="/webfilesys/javascript/crypto.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/videoAudio.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -51,15 +54,23 @@
 </script>
 
 <script language="javascript">
+  var currentPath = '<xsl:value-of select="/fileList/menuPath" />';
+  
+  var dirModified = '<xsl:value-of select="/fileList/dirModified" />';
+  
+  var fileSizeSum = '<xsl:value-of select="/fileList/sizeSumBytes" />'
 
   var noFileSelected = resourceBundle["alert.nofileselected"];
-  
-  var selectTwoFiles = resourceBundle["selectTwoFilesForDiff"];
   
   var path = '<xsl:value-of select="/fileList/menuPath" />';
   
   var addCopyAllowed = false;
   var addMoveAllowed = false;
+  
+  <xsl:if test="/fileList/pollInterval">
+    var pollingTimeout;
+    var pollInterval = <xsl:value-of select="/fileList/pollInterval" />;
+  </xsl:if>
   
   <xsl:if test="not(/fileList/clipBoardEmpty)">
     <xsl:if test="/fileList/copyOperation">
@@ -143,7 +154,11 @@
 
 </head>
 
-<body class="fileList" onload="setFileListHeight();addDeselectHandler();">
+<body class="fileList">
+  <xsl:attribute name="onload">
+    setFileListHeight();addDeselectHandler();
+    <xsl:if test="/fileList/pollInterval">delayedPollForDirChanges();</xsl:if>
+  </xsl:attribute>
 
 <xsl:apply-templates />
 
@@ -151,6 +166,10 @@
 
 <script type="text/javascript">
   setBundleResources();
+  
+  <xsl:if test="/fileList/pollInterval">
+    document.addEventListener("visibilitychange", visibilityChangeHandler);
+  </xsl:if>
 </script>
 
 </html>
@@ -234,7 +253,7 @@
             <tr>
               <td class="fileListFunct fileFilter">
                 <label resource="label.mask"></label>:
-                <input type="text" name="mask" size="8" maxlength="256">
+                <input id="fileMask" type="text" name="mask" size="8" maxlength="256">
                   <xsl:attribute name="value">
                     <xsl:value-of select="filter" />
                   </xsl:attribute>

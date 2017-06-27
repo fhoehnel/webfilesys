@@ -186,6 +186,8 @@ action.diff=comparar (diff)
 selectTwoFilesForDiff=¡Seleccione dos archivos para comparar!
 confirm.deleteFiles=¿Borrar los archivos seleccionados?
 switchfileAgeColoring=Mostrar/ocultar colores differentes de acuerdo con la edad del archivo
+folderContentModified=El contenido de la carpeta actual ha cambiado. ¿Actualizar la lista de los archivos? 
+folderTreeModified=La estructura de carpetas ha cambiado. ¿Actualizar la visualización?
 
 # file list checkboxes
 checkbox.selectall=Seleccionar todo
@@ -388,6 +390,7 @@ label.currentcopy=procesando archivo
 label.copyfromclip=Copiando archivos
 label.movefromclip=Moviendo archivos
 label.copyresult=archivos copiados
+label.moveresult=archivos movidos
 morePasteConflicts=... mas
 pasteConflictHead=Los archivos siguientes existen en la carpeta de destino
 pasteOverwrite=Exagerar?

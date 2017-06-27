@@ -3,9 +3,8 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.TestSubDirThread;
@@ -39,7 +39,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
     protected DirTreeStatus dirTreeStatus = null;
     
     protected String actPath = null;
-	
+    
 	public XslDirTreeHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -48,14 +48,14 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
             String uid)
 	{
         super(req, resp, session, output, uid);
-
-        dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+        
+        dirTreeStatus = (DirTreeStatus) session.getAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS);
 		
 		if (dirTreeStatus == null)
 		{
 			dirTreeStatus = new DirTreeStatus();
 			
-			session.setAttribute("dirTreeStatus", dirTreeStatus);
+			session.setAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS, dirTreeStatus);
 		}
 		
 		actPath = getParameter("actPath");
@@ -92,6 +92,10 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
         	actPath = collapsePath;
         }
 
+        if (actPath == null) {
+        	actPath = getCwd();
+        }
+        
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/folderTree.xsl\"");
 
 		folderTreeElement = doc.createElement("folderTree");
@@ -112,7 +116,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 		dirCounter=0;
 		currentDirNum=0;
 
-		String loginEvent = (String) session.getAttribute("loginEvent");
+		String loginEvent = (String) session.getAttribute(Constants.SESSION_KEY_LOGIN_EVENT);
 		
         if (loginEvent != null)
         {
@@ -123,15 +127,15 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 				folderTreeElement.appendChild(loginEventElement);
 			}
 
-            session.removeAttribute("loginEvent");
+            session.removeAttribute(Constants.SESSION_KEY_LOGIN_EVENT);
         }
 	}
 	
 	protected void dirSubTree(Element parentFolder, String actPath, String partOfPath, boolean belowDocRoot)
 	{
-		File subdirFile = new File(partOfPath);
-
-		String fileList[] = subdirFile.list();
+		File folderFile = new File(partOfPath);
+		
+		File fileList[] = folderFile.listFiles();
 
 		if (fileList == null)
 		{
@@ -155,34 +159,23 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 			pathWithSlash = partOfPath + File.separator;
 		}
 
-		Vector subdirList = new Vector();
+		ArrayList<String> subdirList = new ArrayList<String>();
 
-		for (int i=0; i<fileList.length; i++)
-		{
-			String subdirPath = null;
+		for (File file : fileList) {
+		
+			if (file.isDirectory()) {
+				String subdirName = file.getName();
 
-			subdirPath = pathWithSlash + fileList[i];
-
-			File tempFile = new File(subdirPath);
-
-			if (tempFile.isDirectory())
-			{
-				String subdirName = fileList[i];
+				String subdirPath = pathWithSlash + file.getName();
 
 				int subdirPathLength = subdirPath.length();
 
 				if (belowDocRoot || accessAllowed(subdirPath) ||
-					(
-					(docRoot.indexOf(subdirPath.replace('\\','/'))==0) &&
-					(
-					(subdirPathLength==docRoot.length()) ||
-					(docRoot.charAt(subdirPathLength)=='/')
-					)
-					)
-				   )
-				{
-					if (!subdirName.equals(ThumbnailThread.THUMBNAIL_SUBDIR))
-					{
+					((docRoot.indexOf(subdirPath.replace('\\','/')) == 0) &&
+					 ((subdirPathLength == docRoot.length()) ||
+					  (docRoot.charAt(subdirPathLength) == '/')))) {
+					
+					if (!subdirName.equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
 						subdirList.add(subdirPath);
 					}
 				}
@@ -203,7 +196,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 		
 		for (int i=0;i<subdirList.size();i++)
 		{
-			String subdirPath=(String) subdirList.elementAt(i);
+			String subdirPath=(String) subdirList.get(i);
 
 			boolean access = (belowDocRoot || accessAllowed(subdirPath));
 
@@ -255,6 +248,10 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 					currentDirNum = dirCounter;
 					
 					folderElement.setAttribute("current","true");
+				}
+				
+				if (subdirPath.replace('\\','/').equals(docRoot)) {
+					folderElement.setAttribute("root", "true");
 				}
 				
 				Decoration deco = decoMgr.getDecoration(subdirPath);

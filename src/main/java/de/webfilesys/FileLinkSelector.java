@@ -1,6 +1,7 @@
 package de.webfilesys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -11,7 +12,7 @@ import de.webfilesys.util.PatternComparator;
 public class FileLinkSelector
 {
 	private int sortBy;
-	private Vector selectedFiles;
+	private ArrayList<FileContainer> selectedFiles;
 	private String path;
 	private boolean hideMetaInf;
 
@@ -44,20 +45,20 @@ public class FileLinkSelector
 	{
 		FileSelectionStatus selectionStatus=new FileSelectionStatus();
 
-        Vector filesAndLinks = this.getFilesAndLinks();
+		ArrayList<FileContainer> filesAndLinks = getFilesAndLinks();
         
 		if ((filesAndLinks.size() ==0))
 		{
 			return(selectionStatus);
 		}
 
-		selectedFiles=new Vector();
+		selectedFiles = new ArrayList<FileContainer>();
 
 		int selectedFileNumber=0;
 
 		for (int i=0;i<filesAndLinks.size();i++)
 		{
-			FileContainer fileCont = (FileContainer) filesAndLinks.elementAt(i);
+			FileContainer fileCont = (FileContainer) filesAndLinks.get(i);
 
 			String fileName = fileCont.getName();
 
@@ -78,7 +79,7 @@ public class FileLinkSelector
 
 					if (maskMatch)
 					{
-						selectedFiles.addElement(fileCont);
+						selectedFiles.add(fileCont);
 
 						selectedFileNumber++;
 					}
@@ -108,7 +109,7 @@ public class FileLinkSelector
         
 		if (selectedFiles.size()>0)
 		{
-			lastFileOfAll = ((FileContainer) selectedFiles.elementAt(selectedFiles.size()-1)).getName();
+			lastFileOfAll = ((FileContainer) selectedFiles.get(selectedFiles.size()-1)).getName();
 		}
 
 		int beginIndex=(-1);
@@ -117,7 +118,7 @@ public class FileLinkSelector
 
 		int i;
         
-		Vector filesOnPage=new Vector();
+		ArrayList<FileContainer> filesOnPage = new ArrayList<FileContainer>();
 
 		if ((afterName==null) && (beforeName==null))
 		{
@@ -125,12 +126,12 @@ public class FileLinkSelector
 			{
 				for (i=0;i<pageSize;i++)
 				{
-					filesOnPage.addElement(selectedFiles.elementAt(i));
+					filesOnPage.add(selectedFiles.get(i));
 				}
 			}
 			else
 			{
-				filesOnPage=selectedFiles;
+				filesOnPage = selectedFiles;
 			}
 
 			beginIndex=0;
@@ -146,7 +147,7 @@ public class FileLinkSelector
 
 				for (i=0;(i<selectedFiles.size()) && (!found);i++)
 				{
-					FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+					FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 					
 					String upperCaseFile = fileCont.getName().toUpperCase();
 
@@ -172,7 +173,7 @@ public class FileLinkSelector
 
 				for (i=selectedFiles.size()-1;(i>=0) && (!found);i--)
 				{
-					FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+					FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 					
 					String upperCaseFile = fileCont.getName().toUpperCase();
 
@@ -199,7 +200,7 @@ public class FileLinkSelector
 
 			for (i=beginIndex;i<endIndex;i++)
 			{
-				filesOnPage.addElement(selectedFiles.elementAt(i));
+				filesOnPage.add(selectedFiles.get(i));
 			}
 		}
 
@@ -208,10 +209,10 @@ public class FileLinkSelector
 
 		if (selectedFiles.size()>0)
 		{
-		    FileContainer lastSelectedFile=(FileContainer) filesOnPage.elementAt(filesOnPage.size()-1);
+		    FileContainer lastSelectedFile=(FileContainer) filesOnPage.get(filesOnPage.size()-1);
 
 			selectionStatus.setIsLastPage(lastSelectedFile.getName().equals(lastFileOfAll));
-			selectionStatus.setFirstFileName(((FileContainer) filesOnPage.elementAt(0)).getName());
+			selectionStatus.setFirstFileName(((FileContainer) filesOnPage.get(0)).getName());
 			selectionStatus.setLastFileName(lastSelectedFile.getName());
 		}
          
@@ -246,7 +247,7 @@ public class FileLinkSelector
 		
 		FileSelectionStatus selectionStatus=new FileSelectionStatus();
 
-		Vector filesAndLinks = this.getFilesAndLinks();
+		ArrayList<FileContainer> filesAndLinks = getFilesAndLinks();
         
 		if ((filesAndLinks.size() ==0))
 		{
@@ -255,13 +256,13 @@ public class FileLinkSelector
 
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 		
-		selectedFiles=new Vector();
+		selectedFiles = new ArrayList<FileContainer>();
 
 		int selectedFileNumber=0;
 
 		for (int i=0;i<filesAndLinks.size();i++)
 		{
-			FileContainer fileCont = (FileContainer) filesAndLinks.elementAt(i);
+			FileContainer fileCont = (FileContainer) filesAndLinks.get(i);
 
 			String fileName = fileCont.getName();
 
@@ -284,7 +285,7 @@ public class FileLinkSelector
 					{
 						if ((minRating < 0) || (metaInfMgr.getOwnerRating(fileCont.getRealFile().getAbsolutePath()) >= minRating))
 						{
-							selectedFiles.addElement(fileCont);
+							selectedFiles.add(fileCont);
 
 							selectedFileNumber++;
 
@@ -335,12 +336,12 @@ public class FileLinkSelector
 			endIdx = selectedFiles.size() - 1;
 		}
 
-		Vector filesOnPage = new Vector();
+		ArrayList<FileContainer> filesOnPage = new ArrayList<FileContainer>();
 
         for (int i = beginIdx; i <= endIdx; i++)
         {
-        	FileContainer fileOnPage = (FileContainer) selectedFiles.elementAt(i);
-			filesOnPage.addElement(fileOnPage);
+        	FileContainer fileOnPage = (FileContainer) selectedFiles.get(i);
+			filesOnPage.add(fileOnPage);
         }
 
 		selectionStatus.setBeginIndex(beginIdx);
@@ -368,9 +369,9 @@ public class FileLinkSelector
 		return(selectionStatus);
 	}
 
-    private Vector getFilesAndLinks()
+    private ArrayList<FileContainer> getFilesAndLinks()
     {
-    	Vector filesAndLinks = new Vector();
+    	ArrayList<FileContainer> filesAndLinks = new ArrayList<FileContainer>();
     	
 		File dirFile=new File(path);
 
@@ -394,13 +395,13 @@ public class FileLinkSelector
             }
 		}
 
-        Vector linkList = MetaInfManager.getInstance().getListOfLinks(path);
+		ArrayList<FileLink> linkList = MetaInfManager.getInstance().getListOfLinks(path);
         
         if (linkList != null)
         {
         	for (int i=0;i<linkList.size();i++)
         	{
-        		filesAndLinks.add(new FileContainer((FileLink) linkList.elementAt(i)));
+        		filesAndLinks.add(new FileContainer((FileLink) linkList.get(i)));
         	}
         }
         

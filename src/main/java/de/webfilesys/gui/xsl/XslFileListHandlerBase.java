@@ -2,7 +2,6 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.text.DecimalFormat;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;

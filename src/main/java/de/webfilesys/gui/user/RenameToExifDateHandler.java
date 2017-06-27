@@ -3,9 +3,8 @@ package de.webfilesys.gui.user;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -93,13 +92,13 @@ public class RenameToExifDateHandler extends MultiImageRequestHandler
 								metaInfMgr.setDescription(newImgFile.getAbsolutePath(),description);
 							}
 
-							Vector assignedCategories = metaInfMgr.getListOfCategories(imgFileName);
+							ArrayList<Category> assignedCategories = metaInfMgr.getListOfCategories(imgFileName);
 		
 							if (assignedCategories != null)
 							{
 								for (int k=0;k<assignedCategories.size();k++)
 								{
-									Category cat = (Category) assignedCategories.elementAt(k);
+									Category cat = (Category) assignedCategories.get(k);
 				
 									metaInfMgr.addCategory(newImgFile.getAbsolutePath(), cat);
 								}

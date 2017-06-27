@@ -8,6 +8,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.Constants;
+
 /**
  * @author Frank Hoehnel
  */
@@ -205,7 +207,7 @@ public abstract class RequestHandler
 	
 	protected String getCwd()
 	{
-		return((String) session.getAttribute("cwd"));
+		return((String) session.getAttribute(Constants.SESSION_KEY_CWD));
 	}
 	
 	/**

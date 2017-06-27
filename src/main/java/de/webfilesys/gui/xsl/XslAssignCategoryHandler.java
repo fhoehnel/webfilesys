@@ -1,8 +1,7 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.PrintWriter;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -91,17 +90,15 @@ public class XslAssignCategoryHandler extends XslRequestHandlerBase
 		
         MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-        Vector assignedCategories = metaInfMgr.getListOfCategories(filePath);
+        ArrayList<Category> assignedCategories = metaInfMgr.getListOfCategories(filePath);
 
 		CategoryManager catMgr = CategoryManager.getInstance();
 
-		Vector userCategories = catMgr.getListOfCategories(uid);
+		ArrayList<Category> userCategories = catMgr.getListOfCategories(uid);
         
         if (userCategories != null)
         {
-			for (int i = 0; i < userCategories.size(); i++)
-			{
-				Category cat = (Category) userCategories.elementAt(i);
+        	for (Category cat : userCategories) {
         	
 				Element catElement = doc.createElement("category");
 			
@@ -117,7 +114,7 @@ public class XslAssignCategoryHandler extends XslRequestHandlerBase
 			
 					for (int k=0; (!found) && (k < assignedCategories.size()); k++)
 					{
-						Category assignedCat = (Category) assignedCategories.elementAt(k);
+						Category assignedCat = (Category) assignedCategories.get(k);
 				
 						if (cat.getName().equals(assignedCat.getName()))
 						{

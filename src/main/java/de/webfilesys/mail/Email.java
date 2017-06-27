@@ -11,9 +11,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 
 import de.webfilesys.WebFileSys;
@@ -27,7 +26,7 @@ public class Email extends Thread
 
     private static final String BOUNDARY = "--0101011";
     
-    private Vector receiverList=null;
+    private ArrayList<String> receiverList=null;
     private String subject=null;
     private String messageText=null;
     private String contentType=null;
@@ -38,16 +37,16 @@ public class Email extends Thread
     
     public Email(String receiver,String subject,String messageText)
     {
-        receiverList=new Vector();
+        receiverList = new ArrayList<String>();
         receiverList.add(receiver);
         this.subject=subject;
         this.messageText=messageText;
         this.contentType="text/plain; charset=ISO-8859-1";
     }
 
-    public Email(Vector receiverList,String subject,String messageText)
+    public Email(ArrayList<String> receiverList,String subject,String messageText)
     {
-        this.receiverList=receiverList;
+        this.receiverList = receiverList;
         this.subject=subject;
         this.messageText=messageText;
         this.contentType="text/plain; charset=ISO-8859-1";
@@ -55,7 +54,7 @@ public class Email extends Thread
 
     public Email(String receiver,String subject,File attachment)
     {
-        receiverList=new Vector();
+        receiverList = new ArrayList<String>();
         receiverList.add(receiver);
         this.subject=subject;
         this.attachment=attachment;
@@ -63,7 +62,7 @@ public class Email extends Thread
         this.contentType = MimeTypeMap.getInstance().getMimeType(attachment.getName());
     }
 
-    public Email(Vector receiverList,String subject,File attachment)
+    public Email(ArrayList<String> receiverList,String subject,File attachment)
     {
         this.receiverList=receiverList;
         this.subject=subject;
@@ -114,9 +113,7 @@ public class Email extends Thread
     {
     	boolean success = false;
     	
-        for (int i = 0; i < receiverList.size(); i++)
-        {
-             String receiver=(String) receiverList.elementAt(i);
+    	for (String receiver : receiverList) {
              
              Logger.getLogger(getClass()).info("sending SMTP mail to : " + receiver);
              

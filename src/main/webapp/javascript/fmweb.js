@@ -128,7 +128,7 @@ function checkTwoFilesSelected() {
     }
     
     if (numChecked != 2) {
-        alert(selectTwoFiles);
+        customAlert(resourceBundle["selectTwoFilesForDiff"]);
 	    return(false);
     }
     

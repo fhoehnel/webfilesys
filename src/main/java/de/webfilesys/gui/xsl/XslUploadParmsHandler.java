@@ -43,7 +43,7 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
 		} 
 		else 
 		{
-		    session.setAttribute("cwd", currentPath);
+		    session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
 		}
 
 		if (!checkAccess(currentPath))

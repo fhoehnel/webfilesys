@@ -6,135 +6,107 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
-public class FastPathQueue
-{
-    public static final String FAST_PATH_DIR = "fastpath";
+public class FastPathQueue {
+	public static final String FAST_PATH_DIR = "fastpath";
 
-    private String fastPathFileName=null;
+	private String fastPathFileName = null;
 
-    static final int MAX_QUEUE_SIZE = 25;
+	static final int MAX_QUEUE_SIZE = 25;
 
-    private Vector pathQueue=null;
-    
-    FastPathQueue(String userid)
-    {
-    	fastPathFileName = WebFileSys.getInstance().getConfigBaseDir() + "/" + FAST_PATH_DIR + "/" + userid + ".dat";
-        
-        if (!loadFromFile())
-        {
-            pathQueue = new Vector(MAX_QUEUE_SIZE);
-        }
-    }
+	private ArrayList<String> pathQueue = null;
 
-    private boolean loadFromFile()
-    {
-        ObjectInputStream fastPathFile;
+	FastPathQueue(String userid) {
+		fastPathFileName = WebFileSys.getInstance().getConfigBaseDir() + "/" + FAST_PATH_DIR + "/" + userid + ".dat";
 
-        try
-        {
-            fastPathFile=new ObjectInputStream(new FileInputStream(fastPathFileName));
-            pathQueue=(Vector) fastPathFile.readObject();
-            fastPathFile.close();
-        }
-        catch (ClassNotFoundException cnfe)
-        {
-        	Logger.getLogger(getClass()).warn(cnfe);
-            return(false);
-        }
-        catch (IOException ioe)
-        {
-        	Logger.getLogger(getClass()).warn(ioe);
-            return(false);
-        }
+		if (!loadFromFile()) {
+			pathQueue = new ArrayList<String>(MAX_QUEUE_SIZE);
+		}
+	}
 
-        return(true);
-    }
+	private boolean loadFromFile() {
 
-    public void saveToFile()
-    {
-        File fastPathDir = new File(WebFileSys.getInstance().getConfigBaseDir() + "/" + FAST_PATH_DIR);
+		boolean success = false;
+		
+		ObjectInputStream fastPathFile = null;
 
-        if (!fastPathDir.exists())
-        {
-            if (!fastPathDir.mkdirs())
-            {
-            	Logger.getLogger(getClass()).warn("cannot create fastpath directory " + fastPathDir);
-            }
+		try {
+			fastPathFile = new ObjectInputStream(new FileInputStream(fastPathFileName));
+			pathQueue = (ArrayList<String>) fastPathFile.readObject();
+			fastPathFile.close();
+			success = true;
+		} catch (ClassNotFoundException cnfe) {
+			Logger.getLogger(getClass()).warn(cnfe);
+		} catch (IOException ioe) {
+			Logger.getLogger(getClass()).warn(ioe);
+		} catch (ClassCastException cex) {
+			Logger.getLogger(getClass()).warn(cex);
+		} finally {
+			if (fastPathFile != null) {
+				try {
+					fastPathFile.close();
+				} catch (Exception ex) {
+				}
+			}
+		}
 
-            return;
-        }
+		return (success);
+	}
 
-        ObjectOutputStream fastPathFile = null;
+	public void saveToFile() {
+		File fastPathDir = new File(WebFileSys.getInstance().getConfigBaseDir() + "/" + FAST_PATH_DIR);
 
-        try
-        {
-            fastPathFile = new ObjectOutputStream(new FileOutputStream(fastPathFileName));
-            fastPathFile.writeObject(pathQueue);
-            fastPathFile.flush();
-        }
-        catch (IOException ioEx)
-        {
-        	Logger.getLogger(getClass()).warn(ioEx);
-        }
-        finally
-        {
-            if (fastPathFile != null)
-            {
-                try
-                {
-                    fastPathFile.close();
-                }
-                catch (Exception ex)
-                {
-                }
-            }
-        }
-    }
+		if (!fastPathDir.exists()) {
+			if (!fastPathDir.mkdirs()) {
+				Logger.getLogger(getClass()).warn("cannot create fastpath directory " + fastPathDir);
+			}
 
-    public synchronized void queuePath(String pathName)
-    {
-        // remove trailing separator char
+			return;
+		}
 
-        if (File.separatorChar=='/')
-        {
-            if ((pathName.length() > 1) && pathName.endsWith("/"))
-            {
-                pathName=pathName.substring(0,pathName.length()-1);
-            }
-        }
-        else
-        {
-            if ((pathName.length() > 3) && pathName.endsWith("\\"))
-            {
-                pathName=pathName.substring(0,pathName.length()-1);
-            }
-        }
+		ObjectOutputStream fastPathFile = null;
 
-        pathQueue.insertElementAt(pathName,0);
+		try {
+			fastPathFile = new ObjectOutputStream(new FileOutputStream(fastPathFileName));
+			fastPathFile.writeObject(pathQueue);
+			fastPathFile.flush();
+		} catch (IOException ioEx) {
+			Logger.getLogger(getClass()).warn(ioEx);
+		} finally {
+			if (fastPathFile != null) {
+				try {
+					fastPathFile.close();
+				} catch (Exception ex) {
+				}
+			}
+		}
+	}
 
-        for (int i=1;i<pathQueue.size();i++)
-        {
-            String actPath=(String) pathQueue.elementAt(i);
+	public synchronized void queuePath(String pathName) {
+		// remove trailing separator char
+		if (File.separatorChar == '/') {
+			if ((pathName.length() > 1) && pathName.endsWith("/")) {
+				pathName = pathName.substring(0, pathName.length() - 1);
+			}
+		} else {
+			if ((pathName.length() > 3) && pathName.endsWith("\\")) {
+				pathName = pathName.substring(0, pathName.length() - 1);
+			}
+		}
 
-            if (actPath.equals(pathName))
-            {
-                pathQueue.removeElementAt(i);
-            }
-        }
+		pathQueue.remove(pathName);
 
-        if (pathQueue.size() > MAX_QUEUE_SIZE)
-        {
-            pathQueue.removeElementAt(pathQueue.size()-1);
-        }
-    }
+		pathQueue.add(0, pathName);
 
-    public Vector getPathVector()
-    {
-        return(pathQueue);
-    }
+		if (pathQueue.size() > MAX_QUEUE_SIZE) {
+			pathQueue.remove(pathQueue.size() - 1);
+		}
+	}
+
+	public ArrayList<String> getPathList() {
+		return (pathQueue);
+	}
 
 }

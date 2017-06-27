@@ -70,7 +70,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 	            
 	            if (fileName != null) 
 	            {
-	                String cwd = (String) session.getAttribute("cwd");
+	                String cwd = getCwd();
 	                
 	                if (cwd != null) 
 	                {

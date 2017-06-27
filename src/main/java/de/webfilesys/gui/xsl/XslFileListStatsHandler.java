@@ -3,6 +3,7 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -48,7 +49,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 
 		if ((currentPath == null) || (currentPath.length() == 0))
 		{
-			currentPath = (String) session.getAttribute("cwd");
+			currentPath = getCwd();
 		}
 
 		if (!accessAllowed(currentPath))
@@ -56,7 +57,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 			currentPath = userMgr.getDocumentRoot(uid);
 		}
 		
-		session.setAttribute("cwd", currentPath);
+		session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
 		
 		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_STATS));
 
@@ -124,7 +125,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 
 		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileMasks, Constants.MAX_FILE_NUM, 0);
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		if (selectedFiles != null)
 		{
@@ -132,7 +133,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 			
 			for (int i = 0; i < fileNum; i++)
 			{
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 				
 				Element fileElem = doc.createElement("file");
 				

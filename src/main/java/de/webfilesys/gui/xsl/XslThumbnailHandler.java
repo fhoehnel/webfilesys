@@ -6,8 +6,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -54,19 +52,9 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			}
 		}
 
-		session.setAttribute("cwd", currentPath);
-
-		boolean maskChanged = false;
+		session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
 
 		String mask = getParameter("mask");
-
-		if (mask != null) {
-			String oldMask = (String) session.getAttribute("mask");
-
-			if ((oldMask != null) && (!oldMask.equals(mask))) {
-				maskChanged = true;
-			}
-		}
 
 		if ((mask != null) && (mask.length() > 0)) {
 			session.setAttribute("mask", mask);
@@ -199,6 +187,8 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			return;
 		}
 
+		XmlUtil.setChildText(fileListElement, "dirModified", Long.toString(dirFile.lastModified()), false);
+		
 		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(currentPath), false);
 
 		String description = metaInfMgr.getDescription(currentPath, ".");
@@ -213,7 +203,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 
 		filterLinksOutsideDocRoot(selectionStatus);
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		int fileNum = 0;
 
@@ -221,6 +211,8 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			fileNum = selectionStatus.getNumberOfFiles();
 		}
 
+		XmlUtil.setChildText(fileListElement, "sizeSumBytes", Long.toString(selectionStatus.getFileSizeSum()), false);
+		
 		XmlUtil.setChildText(fileListElement, "fileNumber", Integer.toString(fileNum), false);
 
 		XmlUtil.setChildText(fileListElement, "currentPath", currentPath, false);
@@ -251,7 +243,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 
 				fileListElement.appendChild(fileElement);
 
-				FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
 
 				String picFilename = fileCont.getName();
 
@@ -385,6 +377,11 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
 		}
 
+		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		if (pollInterval > 0) {
+			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
+		}
+		
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
 		processResponse("thumbnailOnePage.xsl", true);
@@ -395,7 +392,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 	private void filterLinksOutsideDocRoot(FileSelectionStatus selectionStatus) {
 		ArrayList<FileContainer> filteredOutList = new ArrayList<FileContainer>();
 
-		Vector selectedFiles = selectionStatus.getSelectedFiles();
+		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
 		if (selectedFiles != null) {
 			for (int i = 0; i < selectedFiles.size(); i++) {

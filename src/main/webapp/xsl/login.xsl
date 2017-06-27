@@ -35,6 +35,7 @@
 </title>
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -51,10 +52,6 @@
   function setFocus() {
       document.passwordform.userid.focus();
   }
-
-  <xsl:if test="/login/authFailed">
-    alert(resourceBundle["alert.invalidlogin"]);
-  </xsl:if>
 
   document.cookie = 'CookieTest=1;';
   var idx = document.cookie.indexOf("CookieTest=") + 11;
@@ -140,7 +137,12 @@
 </body>
 
 <script type="text/javascript">
-    setBundleResources();
+  setBundleResources();
+    
+  <xsl:if test="/login/authFailed">
+    customAlert(resourceBundle["alert.invalidlogin"]);
+  </xsl:if>
+    
 </script>
 
 </html>

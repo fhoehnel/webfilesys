@@ -1,14 +1,13 @@
 package de.webfilesys.graphics;
 
-import java.util.Vector;
-
+import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.WebFileSys;
 
 public class AutoThumbnailCreator extends ThumbnailCreatorBase implements Runnable
 {
-    private Vector queue = null;
+    private ArrayList<QueueElem> queue = null;
     
     boolean shutdownFlag = false;
     
@@ -25,7 +24,7 @@ public class AutoThumbnailCreator extends ThumbnailCreatorBase implements Runnab
 			imgFileMasks[1]="*.jpeg";
 		}
     	
-    	queue = new Vector();
+    	queue = new ArrayList<QueueElem>();
     	
     	shutdownFlag = false;
 
@@ -72,13 +71,13 @@ public class AutoThumbnailCreator extends ThumbnailCreatorBase implements Runnab
     	{
     		while (queue.size() > 0)
     		{
-    			QueueElem elem = (QueueElem) queue.elementAt(0);
+    			QueueElem elem = (QueueElem) queue.get(0);
     			
     			updateThumbnails(elem);
     			
     			synchronized (queue)
     			{
-    				queue.removeElementAt(0);
+    				queue.remove(0);
     			}
     			
     			Logger.getLogger(getClass()).debug("size of AutoThumbnailCreator queue: " + queue.size());

@@ -2,8 +2,7 @@ package de.webfilesys.gui.xsl;
 
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -106,7 +105,7 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 		
 		fileCommentsElement.appendChild(commentListElement);
 		
-		Vector listOfComments=MetaInfManager.getInstance().getListOfComments(actPath);
+		ArrayList<Comment> listOfComments = MetaInfManager.getInstance().getListOfComments(actPath);
 
 		if ((listOfComments != null) && (listOfComments.size() > 0))
 		{
@@ -114,7 +113,7 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 
 			for (int i = 0; i < listOfComments.size(); i++)
 			{
-				Comment comment=(Comment) listOfComments.elementAt(i);
+				Comment comment=(Comment) listOfComments.get(i);
 
 				String login = comment.getUser();
 

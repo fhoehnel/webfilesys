@@ -352,11 +352,7 @@ public class TextSearch
 
     public int locateTextInFile(String act_file,String search_arg)
     {
-        int i;
-        int equal;
-        int search_length;
-
-        search_length=search_arg.length();
+        int search_length = search_arg.length();
 
         FileInputStream file_input = null;
 
@@ -374,13 +370,13 @@ public class TextSearch
 
         int count=0;
 
-        equal=0;
+        int equal=0;
 
         try
         {
             while (( count = file_input.read(buffer))>=0 )
             {
-                for (i=0;i<count;i++)
+                for (int i = 0; i < count; i++)
                 {
                     if (Character.toUpperCase((char) buffer[i])==Character.toUpperCase(search_arg.charAt(equal)))
                     {
@@ -434,18 +430,6 @@ public class TextSearch
     {
         int searchLength = searched.length();
 
-        FileInputStream fin = null;
-
-        try
-        {
-            fin = new FileInputStream(fileName);
-        }
-        catch (FileNotFoundException e)
-        {
-            Logger.getLogger(getClass()).error("cannot read file containing search match", e);
-            return;
-        }
-
         char resultBuff[] = new char[searchLength + 10]; 
 
         for (int i = 0; i < resultBuff.length; i++)
@@ -459,8 +443,12 @@ public class TextSearch
 
         int equal=0;
 
+        FileInputStream fin = null;
+
         try
         {
+            fin = new FileInputStream(fileName);
+        	
             int startIdx = firstMatchIdx - 10;
 
             if (startIdx < 0)

@@ -32,7 +32,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 
 	protected void process()
 	{
-		String actPath = (String) session.getAttribute("cwd");
+		String actPath = getCwd();
 
 		if (selectedFiles.size() > 0)
 		{

@@ -1,16 +1,15 @@
 package de.webfilesys;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
-
 import de.webfilesys.util.PatternComparator;
 
 public class FileSelector
 {
     int sortBy;
     FileComparator fileComparator;
-    Vector selectedFiles;
+    ArrayList<String> selectedFiles;
     String path;
     boolean hideMetaInf;
 
@@ -52,7 +51,7 @@ public class FileSelector
             return(selectionStatus);
         }
 
-        selectedFiles=new Vector();
+        selectedFiles = new ArrayList<String>();
 
         int selectedFileNumber=0;
 
@@ -79,7 +78,7 @@ public class FileSelector
 
                     if (maskMatch)
                     {
-                        selectedFiles.addElement(fileName);
+                        selectedFiles.add(fileName);
 
                         selectedFileNumber++;
                     }
@@ -100,16 +99,15 @@ public class FileSelector
         
         if (selectedFiles.size()>0)
         {
-            lastFileOfAll=(String) selectedFiles.elementAt(selectedFiles.size()-1);
+            lastFileOfAll=(String) selectedFiles.get(selectedFiles.size()-1);
         }
 
         int beginIndex=(-1);
         int endIndex=0;
-        boolean isLastPage=false;
 
         int i;
         
-        Vector filesOnPage=new Vector();
+        ArrayList<String> filesOnPage = new ArrayList<String>();
 
         if ((afterName==null) && (beforeName==null))
         {
@@ -117,7 +115,7 @@ public class FileSelector
             {
                 for (i=0;i<pageSize;i++)
                 {
-                    filesOnPage.addElement(selectedFiles.elementAt(i));
+                    filesOnPage.add(selectedFiles.get(i));
                 }
             }
             else
@@ -136,7 +134,7 @@ public class FileSelector
 
                 for (i=0;(i<selectedFiles.size()) && (!found);i++)
                 {
-                    String upperCaseFile=((String) selectedFiles.elementAt(i)).toUpperCase();
+                    String upperCaseFile=((String) selectedFiles.get(i)).toUpperCase();
 
                     if (upperCaseFile.compareTo(afterName.toUpperCase())>0)
                     {
@@ -158,7 +156,7 @@ public class FileSelector
 
                 for (i=selectedFiles.size()-1;(i>=0) && (!found);i--)
                 {
-                    String upperCaseFile=((String) selectedFiles.elementAt(i)).toUpperCase();
+                    String upperCaseFile=((String) selectedFiles.get(i)).toUpperCase();
 
                     if (upperCaseFile.compareTo(beforeName.toUpperCase())<0)
                     {
@@ -183,7 +181,7 @@ public class FileSelector
 
             for (i=beginIndex;i<endIndex;i++)
             {
-                filesOnPage.addElement(selectedFiles.elementAt(i));
+                filesOnPage.add(selectedFiles.get(i));
             }
         }
 
@@ -192,14 +190,14 @@ public class FileSelector
 
         if (selectedFiles.size()>0)
         {
-            String lastSelectedFile=(String) filesOnPage.elementAt(filesOnPage.size()-1);
+            String lastSelectedFile=(String) filesOnPage.get(filesOnPage.size()-1);
 
             selectionStatus.setIsLastPage(lastSelectedFile.equals(lastFileOfAll));
-            selectionStatus.setFirstFileName((String) filesOnPage.elementAt(0));
+            selectionStatus.setFirstFileName((String) filesOnPage.get(0));
             selectionStatus.setLastFileName(lastSelectedFile);
         }
         
-        selectionStatus.setSelectedFiles(filesOnPage);
+        selectionStatus.setSelectedFileNames(filesOnPage);
 
         return(selectionStatus);
     }

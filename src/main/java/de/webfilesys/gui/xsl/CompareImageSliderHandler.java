@@ -37,7 +37,7 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 	
 	protected void process() {
 		
-		String currentPath = (String) session.getAttribute("cwd");
+		String currentPath = getCwd();
 
 		ArrayList<String> selectedFiles = getSelectedFiles();
 		

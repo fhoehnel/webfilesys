@@ -686,7 +686,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 			}
 		}
 
-		Vector languages = LanguageManager.getInstance().getAvailableLanguages();
+		ArrayList<String> languages = LanguageManager.getInstance().getAvailableLanguages();
 
 		output.println("<tr>");
         output.println("<td class=\"formParm1\">");
@@ -706,7 +706,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 
 		for (int i=0;i<languages.size();i++)
 		{
-			String lang=(String) languages.elementAt(i);
+			String lang=(String) languages.get(i);
 
 			output.print("<option");
 

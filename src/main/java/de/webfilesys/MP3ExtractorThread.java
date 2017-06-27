@@ -1,8 +1,7 @@
 package de.webfilesys;
 
 import java.io.File;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 public class MP3ExtractorThread extends Thread
@@ -47,13 +46,13 @@ public class MP3ExtractorThread extends Thread
 
         FileSelectionStatus selectionStatus=fileSelector.selectFiles(musicFileMasks,2048,null,null);
 
-        Vector selectedFiles=selectionStatus.getSelectedFiles();
+        ArrayList<String> selectedFiles=selectionStatus.getSelectedFileNames();
 
         if ((selectedFiles!=null) && (selectedFiles.size()>0))
         {
             for (int i=0;i<selectedFiles.size();i++)
             {
-                String mp3FileName=actPath + (String) selectedFiles.elementAt(i);
+                String mp3FileName=actPath + (String) selectedFiles.get(i);
 
                 MetaInfManager metaInfMgr=MetaInfManager.getInstance();
                 

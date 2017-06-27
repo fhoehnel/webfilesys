@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.FastPathManager;
 import de.webfilesys.SubdirExistCache;
@@ -137,13 +138,13 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
                             return;
 					    }
 					    
-						DirTreeStatus dirTreeStatus = (DirTreeStatus) session.getAttribute("dirTreeStatus");
+						DirTreeStatus dirTreeStatus = (DirTreeStatus) session.getAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS);
 						
 						if (dirTreeStatus == null)
 						{
 							dirTreeStatus = new DirTreeStatus();
 							
-							session.setAttribute("dirTreeStatus", dirTreeStatus);
+							session.setAttribute(Constants.SESSION_KEY_DIR_TREE_STATUS, dirTreeStatus);
 						}
 						
 						dirTreeStatus.expandDir(newPath);

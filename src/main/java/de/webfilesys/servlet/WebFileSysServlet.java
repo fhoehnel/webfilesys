@@ -72,6 +72,8 @@ import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
+import de.webfilesys.gui.ajax.PollForDirChangeHandler;
+import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
@@ -91,7 +93,6 @@ import de.webfilesys.gui.ajax.XmlCreateThumbsHandler;
 import de.webfilesys.gui.ajax.XmlCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlDeleteDirHandler;
 import de.webfilesys.gui.ajax.XmlDirStatsHandler;
-import de.webfilesys.gui.ajax.XmlEmojiListHandler;
 import de.webfilesys.gui.ajax.XmlFileAgeStatsHandler;
 import de.webfilesys.gui.ajax.XmlFileSizeStatsHandler;
 import de.webfilesys.gui.ajax.XmlFileTypeStatsHandler;
@@ -175,7 +176,6 @@ import de.webfilesys.gui.user.PublishRequestHandler;
 import de.webfilesys.gui.user.RateVotingHandler;
 import de.webfilesys.gui.user.RemoteEditorRequestHandler;
 import de.webfilesys.gui.user.RenameFileRequestHandler;
-import de.webfilesys.gui.user.RenameImageRequestHandler;
 import de.webfilesys.gui.user.RenameLinkRequestHandler;
 import de.webfilesys.gui.user.RenameToExifDateHandler;
 import de.webfilesys.gui.user.ResetStatisticsRequestHandler;
@@ -855,6 +855,16 @@ public class WebFileSysServlet extends ServletBase
 			return(true);
     	}
         
+    	if (command.equals("pollForDirChange")) {
+			(new PollForDirChangeHandler(req, resp, session, output, userid)).handleRequest();
+			return(true);
+    	}
+
+    	if (command.equals("pollForFolderTreeChange")) {
+			(new PollForFolderTreeChangeHandler(req, resp, session, output, userid)).handleRequest();
+			return(true);
+    	}
+    	
         if (command.equals("fmdelete"))
         {
             (new DeleteFileRequestHandler(req, resp, session, output, userid, requestIsLocal, true)).handleRequest();
@@ -2390,7 +2400,7 @@ public class WebFileSysServlet extends ServletBase
 
         		session.setAttribute("userid", userid);
         		
-        		session.setAttribute("loginEvent", "true");
+        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
         		
                 String browserType = req.getHeader("User-Agent");
                 
@@ -2451,7 +2461,7 @@ public class WebFileSysServlet extends ServletBase
 
         		session.setAttribute("userid", userid);
         		
-        		session.setAttribute("loginEvent", "true");
+        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
 
         		session.setAttribute("readonly", "true");
 
@@ -2622,9 +2632,9 @@ public class WebFileSysServlet extends ServletBase
 
         		session.setAttribute("userid", userid);
         		
-        		session.setAttribute("loginEvent", "true");
+        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
         		
-        		session.removeAttribute("cwd");
+        		session.removeAttribute(Constants.SESSION_KEY_CWD);
 
         		session.removeAttribute("startIdx");
         		
@@ -2684,11 +2694,11 @@ public class WebFileSysServlet extends ServletBase
 
         		session.setAttribute("userid", userid);
         		
-        		session.setAttribute("loginEvent", "true");
+        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
 
         		session.setAttribute("readonly", "true");
 
-        		session.removeAttribute("cwd");
+        		session.removeAttribute(Constants.SESSION_KEY_CWD);
 
         		session.removeAttribute("startIdx");
 

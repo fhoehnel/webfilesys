@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.user.ZipDirRequestHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
@@ -51,7 +52,9 @@ public class TestSubdirExistHandler extends XmlRequestHandlerBase {
         	if (files != null) {
             	for (int i = 0; (!subdirExists) && (i < files.length); i++) {
             	    if (files[i].isDirectory()) {
-            	    	subdirExists = true;
+						if (!files[i].getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
+            	    	    subdirExists = true;
+						}
             	    }
             	}
         	}

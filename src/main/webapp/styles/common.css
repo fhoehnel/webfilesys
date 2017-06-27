@@ -1475,6 +1475,7 @@ div.videoCont {
 
 div.videoCont video {
     width: 480px;
+    max-height: 300px;
 }
 
 div.videoCont img.closeButton {
@@ -1651,6 +1652,12 @@ div.deleteFromCompareIcon1 {
 div.deleteFromCompareIcon2 {
     right: 10px;
     top: 10px;
+}
+
+a.deleteFromCompareIcon {
+    border: 1px solid white;
+    padding: 8px 3px 3px 3px;
+    border-radius: 5px;
 }
 
 a.deleteFromCompareIcon:before {

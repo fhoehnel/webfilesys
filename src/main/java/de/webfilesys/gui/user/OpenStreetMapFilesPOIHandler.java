@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -67,13 +68,13 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
 
         FileSelectionStatus selectionStatus = fileSelector.selectFiles(Constants.imgFileMasks, -1, MAX_FILE_NUM, 0);
 
-        Vector selectedFiles = selectionStatus.getSelectedFiles();
+        ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
         
         if (selectedFiles != null)
         {
             for (int i = 0; i < selectedFiles.size(); i++)
             {
-                FileContainer fileCont = (FileContainer) selectedFiles.elementAt(i);
+                FileContainer fileCont = (FileContainer) selectedFiles.get(i);
                 
                 File imgFile = fileCont.getRealFile();
 
