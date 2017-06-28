@@ -171,38 +171,59 @@ public class TextSearch
         }
 
         File dirFile = new File(act_path);
-        String[] fileList = dirFile.list();
+        File[] fileList = dirFile.listFiles();
 
         if (fileList != null)
         {
-            for (int i = 0;(session.getAttribute("searchCanceled") == null) && (i < fileList.length);i++)
+            for (int i = 0; (session.getAttribute("searchCanceled") == null) && (i < fileList.length); i++)
             {
-                String fullPath = null;
-                
                 String relativeFile = null;
 
                 if (act_path.endsWith(File.separator))
                 {
-                    fullPath = act_path + fileList[i];
-                    
-                    relativeFile = relativePath + fileList[i];
+                    relativeFile = relativePath + fileList[i].getName();
                 }
                 else
                 {
-                    fullPath=act_path + File.separator + fileList[i];
-
-					relativeFile = relativePath + File.separator + fileList[i];
+					relativeFile = relativePath + File.separator + fileList[i].getName();
                 }
                 
-                File tempFile = new File(fullPath);
+                File tempFile = fileList[i];
 
+            	String fullPath = tempFile.getAbsolutePath();
+            	
                 if (tempFile.isDirectory())
                 {
+                	if (includeMetaInf) {
+                		// search in metainfo of folder
+
+                		if (!tempFile.getName().startsWith(Constants.SEARCH_RESULT_FOLDER_PREFIX)) {
+                    		String description = metaInfMgr.getDescription(fullPath, ".");
+
+    						if (description != null) {
+    							boolean allWordsFound = true;
+    							for (int j = 0; allWordsFound && (j < searchArgs.size()); j++) {
+    								if (description.toLowerCase().indexOf(searchArgs.get(j).toLowerCase()) < 0) {
+    								    allWordsFound = false;
+    								}
+    							}
+    							if (allWordsFound) {
+                                	String folderViewLink = "javascript:gotoSearchResultFolder('" + CommonUtils.escapeForJavascript(fullPath) + "')";
+
+    								output.println("<a class=\"fn\" href=\"" + folderViewLink + "\"><img border=\"0\" src=\"/webfilesys/images/folder.gif\" style=\"margin-top:8px;\"> " + relativeFile + "</a>");
+    								output.println("<br/>");
+    								output.flush();
+    								hitNum++;
+    							}
+    						}
+                		}
+                	}
+                	
                 	if (includeSubdirs)
                 	{
                         if (!CommonUtils.dirIsLink(tempFile))
                         {
-    						if (!fileList[i].equals(ThumbnailThread.THUMBNAIL_SUBDIR))
+    						if (!fileList[i].getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR))
     						{
     							String relativeSubPath = null;
     							
@@ -210,15 +231,15 @@ public class TextSearch
     							
     							if (act_path.endsWith(File.separator))
     							{
-    								subDir = act_path + fileList[i];
+    								subDir = act_path + fileList[i].getName();
     								
-    								relativeSubPath = relativePath + fileList[i];
+    								relativeSubPath = relativePath + fileList[i].getName();
     							}
     							else
     							{
-    								subDir = act_path + File.separator + fileList[i];
+    								subDir = act_path + File.separator + fileList[i].getName();
 
-    								relativeSubPath = relativePath + File.separator + fileList[i];
+    								relativeSubPath = relativePath + File.separator + fileList[i].getName();
     							}
     							
     							search_tree(subDir, file_mask, fromDate, toDate, relativeSubPath);
@@ -231,7 +252,7 @@ public class TextSearch
                     if ((tempFile.lastModified()>=fromDate) &&
                         (tempFile.lastModified()<=toDate))
                     {
-                        if (PatternComparator.patternMatch(fileList[i],file_mask))
+                        if (PatternComparator.patternMatch(fileList[i].getName(), file_mask))
                         {
                         	if ((category == null) || metaInfMgr.isCategoryAssigned(fullPath, category))
                         	{
@@ -303,7 +324,7 @@ public class TextSearch
 
                                         if (WebFileSys.getInstance().isShowAssignedIcons())
                                         {
-                                            iconImg = IconManager.getInstance().getIconForFileName(fileList[i]);
+                                            iconImg = IconManager.getInstance().getIconForFileName(fileList[i].getName());
                                         }
 									    
 										output.println("<a class=\"fn\" href=\"" + viewLink + "\" target=\"_blank\"><img border=\"0\" src=\"icons/" + iconImg + "\" align=\"absbottom\" style=\"margin-top:8px;\"> " + relativeFile + "</a>");
@@ -317,7 +338,7 @@ public class TextSearch
 										{
 											try
 											{
-												metaInfMgr.createLink(searchResultDir, new FileLink(fileList[i], fullPath, uid), true);
+												metaInfMgr.createLink(searchResultDir, new FileLink(fileList[i].getName(), fullPath, uid), true);
 											}
 											catch (FileNotFoundException nfex)
 											{
