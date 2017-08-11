@@ -13,6 +13,7 @@ label.logon=Logon
 label.file=file
 label.files=files
 label.pictures=pictures
+label.videos=videos
 label.mask=Mask
 label.description=description
 label.directory=folder

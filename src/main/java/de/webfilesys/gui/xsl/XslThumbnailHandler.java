@@ -382,6 +382,10 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
 		}
 		
+        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+            XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
+        }
+		
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
 		processResponse("thumbnailOnePage.xsl", true);

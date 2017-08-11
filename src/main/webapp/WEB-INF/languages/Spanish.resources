@@ -13,6 +13,7 @@ label.logon=Iniciar sesión
 label.file=archivo
 label.files=archivos
 label.pictures=imágenes
+label.videos=videos
 label.mask=Filtro
 label.description=descripción
 label.directory=carpeta

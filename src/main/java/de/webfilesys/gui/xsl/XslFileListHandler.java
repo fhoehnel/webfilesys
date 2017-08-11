@@ -441,6 +441,10 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		if (pollInterval > 0) {
 			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
 		}
+
+		if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+            XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
+		}
 		
 		addCurrentTrail(fileListElement, actPath, docRoot, mask);		
 		

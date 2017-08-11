@@ -52,29 +52,7 @@ function destroyVideo() {
 
 function loadVideoThumbs() {
 
-	console.log("loadVideoThumbs thumbnails.length=" + thumbnails.length);
-	
-    var scrollAreaCont = document.getElementById("scrollAreaCont");
-
-    var counter = 0;
-
-	for (var i = 0; (counter < 10) && (i < thumbnails.length); i++) {
-	    var pic = document.getElementById("pic-" + thumbnails[i]);
-	    if (pic) {
-			var imgPath = pic.getAttribute("imgPath");
-			if (imgPath) {
-	        	if (isScrolledIntoView(pic, scrollAreaCont)) {
-		  		    thumbnails.splice(i, 1);
-		    		
-		   		    loadVideoThumbnail(pic, imgPath);
-	    
-	                // setPictureDimensions(pic);
-	                
-	                counter++;
-	        	}
-	        }
-	    }
-	}
+    checkVideoThumbnailsToLoad();	
 }
 
 function loadVideoThumbnail(pic, thumbFileSrc) {
@@ -83,17 +61,6 @@ function loadVideoThumbnail(pic, thumbFileSrc) {
 		
 		var picOrigWidth = pic.naturalWidth;
 		var picOrigHeight = pic.naturalHeight;
-		
-		if ((picOrigWidth == 0) || (picOrigHeight == 0)) {
-            // workaround for MSIE
-            var origWidthAttrib = pic.getAttribute("origWidth");
-            var origHeightAttrib = pic.getAttribute("origHeight");
-            
-            if (origWidthAttrib && origHeightAttrib) {
-		        picOrigWidth = parseInt(origWidthAttrib);
-		        picOrigHeight = parseInt(origHeightAttrib);
-            }
-		}
 		
 		if (picOrigWidth > picOrigHeight) {
 			pic.width = 160;
@@ -148,3 +115,18 @@ function checkVideoThumbnailsToLoad() {
     // releaseInvisibleThumbnails();
 }
 
+function attachVideoScrollHandler() {
+    var scrollAreaCont = document.getElementById("scrollAreaCont");
+
+    scrollAreaCont.onscroll = function() {
+	  	 var scrollPosDiff = scrollAreaCont.scrollTop - lastScrollPos;
+
+		 if ((scrollPosDiff > 20) || (scrollPosDiff < (-20))) {
+			 lastScrollPos = scrollAreaCont.scrollTop;
+			 
+			 if (!thumbLoadRunning) {
+				 checkVideoThumbnailsToLoad();
+			 }
+	  	 }
+	};
+}

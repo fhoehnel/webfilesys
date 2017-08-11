@@ -18,15 +18,6 @@ public class VideoThumbnailCreator extends Thread
     	videoFilePath = videoPath;
     }
 
-    /*
-    public VideoThumbnailThread(String actPath, int scope)
-    {
-        basePath = actPath;
-     
-        this.scope = scope;
-    }
-    */
-
     public void run() {
         if (Logger.getLogger(getClass()).isDebugEnabled()) {
             Logger.getLogger(getClass()).debug("starting video thumbnail creator thread for video file " + videoFilePath);
@@ -39,7 +30,26 @@ public class VideoThumbnailCreator extends Thread
         String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
-        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss 00:00:01.00 -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
+            
+            String videoThumbPath = getThumbPath(videoFilePath);
+            File thumbDirFile = new File(videoThumbPath);
+            if (!thumbDirFile.exists()) {
+                if (!thumbDirFile.mkdir()) {
+                    Logger.getLogger(getClass()).error("failed to create video thumbnail directory " + videoThumbPath);
+                }
+            }
+            
+            File videoFile = new File(videoFilePath);
+            long fileSize = videoFile.length();
+            
+            String frameGrabTime = "00:00:02.00";
+            if (fileSize > 50 * 1000000) {
+                frameGrabTime = "00:00:05.00";
+            } else if (fileSize > 10 * 1000000) {
+                frameGrabTime = "00:00:03.00";
+            }
+            
+        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
                 Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
@@ -49,6 +59,19 @@ public class VideoThumbnailCreator extends Thread
 				Process grabProcess = Runtime.getRuntime().exec(progNameAndParams);
 
 				grabProcess.waitFor();
+				
+				File resultFile = new File(getFfmpegResultFilePath(videoFilePath));
+				
+				if (resultFile.exists()) {
+				    
+				    File thumbnailFile = new File(getThumbnailPath(videoFilePath));
+				    
+				    if (!resultFile.renameTo(thumbnailFile)) {
+		                Logger.getLogger(getClass()).error("failed to rename result file for video frame grabbing from video " + videoFilePath);
+				    }
+				} else {
+                    Logger.getLogger(getClass()).error("result file from ffmpeg video frame grabbing not found: " + getFfmpegResultFilePath(videoFilePath));
+				}
 			} catch (IOException ioex) {
 				Logger.getLogger(getClass()).error("failed to grab frame for thumbnail from video " + videoFilePath, ioex);
 			} catch (InterruptedException iex) {
@@ -62,10 +85,17 @@ public class VideoThumbnailCreator extends Thread
     public static String getFfmpegOutputFileSpec(String videoPath) {
         int sepIdx = videoPath.lastIndexOf(File.separator);
 
-        if (sepIdx < 0) {
-            Logger.getLogger(VideoThumbnailCreator.class).error("incorrect video file path: " + videoPath);
-            return(null); 
-        }
+        String basePath = videoPath.substring(0, sepIdx + 1);
+
+        String thumbPath = basePath + THUMBNAIL_SUBDIR + File.separator;
+
+        String imgFileName = videoPath.substring(sepIdx + 1);
+
+        return(thumbPath + "%01d"+ imgFileName + ".jpg");
+    }
+
+    public static String getFfmpegResultFilePath(String videoPath) {
+        int sepIdx = videoPath.lastIndexOf(File.separator);
 
         String basePath = videoPath.substring(0, sepIdx + 1);
 
@@ -73,7 +103,7 @@ public class VideoThumbnailCreator extends Thread
 
         String imgFileName = videoPath.substring(sepIdx + 1);
 
-        return(thumbPath + imgFileName + "%03d.jpg");
+        return(thumbPath + "1"+ imgFileName + ".jpg");
     }
     
     public static String getThumbnailPath(String videoPath) {
@@ -91,6 +121,19 @@ public class VideoThumbnailCreator extends Thread
         String imgFileName = videoPath.substring(sepIdx + 1) + ".jpg";
 
         return(thumbPath + imgFileName);
+    }
+    
+    private static String getThumbPath(String videoPath) {
+        int sepIdx = videoPath.lastIndexOf(File.separator);
+
+        if (sepIdx < 0) {
+            Logger.getLogger(VideoThumbnailCreator.class).error("incorrect video file path: " + videoPath);
+            return(null); 
+        }
+
+        String basePath = videoPath.substring(0, sepIdx + 1);
+
+        return basePath + THUMBNAIL_SUBDIR;
     }
     
 }

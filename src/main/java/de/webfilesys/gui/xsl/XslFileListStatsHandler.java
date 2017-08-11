@@ -191,6 +191,10 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 			}
 		}		
 		
+        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+            XmlUtil.setChildText(fileListElem, "videoEnabled", "true");
+        }
+		
 		processResponse("fileListStats.xsl", false);
     }
 	

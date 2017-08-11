@@ -80,12 +80,16 @@ public class VideoThumbHandler extends UserRequestHandler
 			}
 		}
 		
+		File videoFile = new File(videoPath);
+		
 		String thumbnailPath = VideoThumbnailCreator.getThumbnailPath(videoPath);
 
 		File thumbnailFile = new File(thumbnailPath);
 		if (thumbnailFile.exists() && thumbnailFile.isFile() && thumbnailFile.canRead()) {
-			serveImageFromFile(thumbnailPath, true);
-			return;
+		    if (thumbnailFile.lastModified() > videoFile.lastModified()) {
+	            serveImageFromFile(thumbnailPath, true);
+	            return;
+		    }
 		}
 		
 		VideoThumbnailCreator thumbCreator = new VideoThumbnailCreator(videoPath);

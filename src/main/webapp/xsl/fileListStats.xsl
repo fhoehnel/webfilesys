@@ -126,6 +126,16 @@
         <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
       </td>
       
+      <xsl:if test="/fileList/videoEnabled">
+      
+        <td class="tabSpacer"></td>
+
+        <td class="tabInactive">
+          <a class="tab" href="javascript:viewModeVideo()" resource="label.modeVideo" />
+        </td>
+      
+      </xsl:if>
+
       <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">

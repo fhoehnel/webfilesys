@@ -13,6 +13,7 @@ label.logon=Anmelden
 label.file=Datei
 label.files=Dateien
 label.pictures=Bilder
+label.videos=Videos
 label.mask=Filter
 label.description=Beschreibung
 label.directory=Ordner

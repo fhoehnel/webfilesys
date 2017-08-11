@@ -142,6 +142,21 @@
         </a>
       </td>
 
+      <xsl:if test="/fileList/videoEnabled">
+
+        <xsl:if test="not(role) or (role!='album')">
+          <td class="tabSpacer"></td>
+
+          <td class="tabInactive" nowrap="true">
+            <a class="tab" href="javascript:viewModeVideo()">
+              <xsl:value-of select="/fileList/resources/msg[@key='label.modeVideo']/@value" />
+            </a>
+          </td>
+
+        </xsl:if>
+
+      </xsl:if>
+
       <td class="tabSpacer"></td>
 
       <td class="tabActive" nowrap="true">

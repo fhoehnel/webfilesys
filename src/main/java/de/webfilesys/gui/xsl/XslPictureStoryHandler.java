@@ -234,6 +234,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 
 		addMsgResource("label.modelist", getResource("label.modelist","list files"));
 		addMsgResource("label.modethumb", getResource("label.modethumb","thumbnails"));
+        addMsgResource("label.modeVideo", getResource("label.modeVideo","videos"));
 		addMsgResource("label.modestory", getResource("label.modestory","picture story"));
 		addMsgResource("label.modeSlideshow", getResource("label.modeSlideshow","slideshow"));
 		addMsgResource("label.fileStats", getResource("label.fileStats","statistics"));
@@ -576,6 +577,10 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			}
 		}
 
+        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+            XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
+        }
+		
 		this.processResponse(stylesheetName, false);
 
 		FastPathManager.getInstance().queuePath(uid,act_path);

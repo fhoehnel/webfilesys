@@ -51,6 +51,8 @@
   
   var path = '<xsl:value-of select="/fileList/menuPath" />';
   
+  var lastScrollPos = 0;
+  
 </script>
 
 <xsl:if test="/fileList/maintananceMode">
@@ -77,7 +79,7 @@
   <xsl:attribute name="onload">
     setThumbContHeight();
     <xsl:if test="/fileList/file">
-      loadVideoThumbs();
+      loadVideoThumbs();attachVideoScrollHandler();
     </xsl:if>
   </xsl:attribute>
 
@@ -206,7 +208,7 @@
                       <xsl:value-of select="fileNumber" />
                     </span>
                     <xsl:text> </xsl:text>
-                    <label resource="label.pictures"></label>
+                    <label resource="label.videos"></label>
                     
                     <xsl:if test="sizeSumInt">
                       &#160;
@@ -245,12 +247,10 @@
                 <a>
                   <xsl:attribute name="id">thumb-<xsl:value-of select="@id" /></xsl:attribute>
                   <xsl:if test="@link">
-                    <xsl:attribute name="href">javascript:showVideo('<xsl:value-of select="realPathForScript" />');hidePopupPicture()</xsl:attribute>
-                    <xsl:attribute name="oncontextmenu">picturePopupInFrame('<xsl:value-of select="realPathForScript" />', '<xsl:value-of select="@id" />');return false;</xsl:attribute>
+                    <xsl:attribute name="href">javascript:playVideo('<xsl:value-of select="realPathForScript" />');</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="not(@link)">
-                    <xsl:attribute name="href">javascript:showVideo('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />');hidePopupPicture()</xsl:attribute>
-                    <xsl:attribute name="oncontextmenu">picturePopupInFrame('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />', '<xsl:value-of select="@id" />');return false;</xsl:attribute>
+                    <xsl:attribute name="href">javascript:playVideo('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />');hidePopupPicture()</xsl:attribute>
                   </xsl:if>
                   <img class="thumb" border="0">
                     <xsl:attribute name="id">pic-<xsl:value-of select="@id" /></xsl:attribute>
