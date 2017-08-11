@@ -39,14 +39,10 @@ public class VideoThumbnailCreator extends Thread
         String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
-        	String progNameAndParams[] = new String[2];
-
-        	progNameAndParams[0] = ffmpegExePath;
-        	
-        	progNameAndParams[1] = "-i " + videoFilePath + " -ss 00:00:01.00 -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
+        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss 00:00:01.00 -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                Logger.getLogger(getClass()).debug("ffmpeg params: " + progNameAndParams[1]);
+                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
             }
         	
 			try {
