@@ -198,6 +198,7 @@ label.modelist=list files
 label.modethumb=thumbnails
 label.modestory=picture story
 label.modeSlideshow=slideshow
+label.modeVideo=videos
 label.fileStats=statistics
 
 # sorting types for files

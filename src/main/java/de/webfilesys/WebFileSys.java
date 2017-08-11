@@ -186,6 +186,8 @@ public class WebFileSys
     
     private long uploadLimit = DEFAULT_UPLOAD_LIMIT;
     
+    private String ffmpegExePath = null;
+    
     private String googleMapsAPIKeyHTTP;
     private String googleMapsAPIKeyHTTPS;
     
@@ -670,6 +672,8 @@ public class WebFileSys
 			
 		    simulateRemote = true;
 		}
+		
+        ffmpegExePath = config.getProperty("ffmpegExePath");
 		
 		chmodAllowed = false;
 		temp = config.getProperty("ChmodWebspace", "false");
@@ -1225,6 +1229,10 @@ public class WebFileSys
     		Logger.getLogger(getClass()).warn("no google maps API key configured for HTTPS (missing config property GoogleMapsAPIKeyHTTPS)");
     	}
     	return googleMapsAPIKeyHTTPS;
+    }
+    
+    public String getFfmpegExePath() {
+    	return ffmpegExePath;
     }
 }
 

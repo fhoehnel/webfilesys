@@ -213,6 +213,12 @@
       <td class="tabSpacer"></td>
 
       <td class="tabInactive">
+        <a class="tab" href="javascript:viewModeVideo()" resource="label.modeVideo" />
+      </td>
+
+      <td class="tabSpacer"></td>
+
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    

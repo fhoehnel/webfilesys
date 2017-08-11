@@ -23,6 +23,11 @@ function viewModeSlideshow()
     window.location.href='/webfilesys/servlet?command=slideShowInFrame&windowWidth=' + getWinWidth() + '&windowHeight=' + getWinHeight() + '&screenWidth=' + screen.width + '&screenHeight=' + screen.height + '&random=' + new Date().getTime();
 }
 
+function viewModeVideo()
+{
+    window.location.href='/webfilesys/servlet?command=listVideos&random=' + new Date().getTime() + '&screenWidth=' + screen.width + '&screenHeight=' + screen.height;
+}
+
 function fileStats()
 {
     window.location.href='/webfilesys/servlet?command=fileStats&initial=true&random=' + new Date().getTime();

@@ -193,6 +193,7 @@ import de.webfilesys.gui.user.TransformImageRequestHandler;
 import de.webfilesys.gui.user.URLFileRequestHandler;
 import de.webfilesys.gui.user.UntarRequestHandler;
 import de.webfilesys.gui.user.UserSettingsRequestHandler;
+import de.webfilesys.gui.user.VideoThumbHandler;
 import de.webfilesys.gui.user.ZipContentFileRequestHandler;
 import de.webfilesys.gui.user.ZipDirRequestHandler;
 import de.webfilesys.gui.user.ZipFileRequestHandler;
@@ -256,6 +257,7 @@ import de.webfilesys.gui.xsl.XslTreeStatsHandler;
 import de.webfilesys.gui.xsl.XslUnixCmdLineHandler;
 import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
 import de.webfilesys.gui.xsl.XslUploadParmsHandler;
+import de.webfilesys.gui.xsl.XslVideoListHandler;
 import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
 import de.webfilesys.gui.xsl.XslZipContentHandler;
 import de.webfilesys.gui.xsl.album.AddAlbumCommentHandler;
@@ -422,6 +424,7 @@ public class WebFileSysServlet extends ServletBase
 		    ((!command.equals("exifThumb")) && (!command.equals("getFile")) && (!command.equals("picThumb")) &&
 		     (!command.equals("getThumb")) && (!command.equals("multiDownload")) &&
 		     (!command.equals("getZipContentFile")) && (!command.equals("visitorFile")) &&
+		     (!command.equals("videoThumb")) && 
 		     (!command.equals("mp3Thumb")) && (!command.equals("downloadFolder"))))
 		{
             // resp.setCharacterEncoding("ISO-8859-1");
@@ -738,6 +741,13 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
     	
+        if (command.equals("listVideos"))
+        {
+		    (new XslVideoListHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+		    
+            return(true);
+        }
+    	
         if (command.equals("storyInFrame"))
         {
 		    (new XslPictureStoryHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -780,6 +790,13 @@ public class WebFileSysServlet extends ServletBase
 		    return(true);
         }
         
+        if (command.equals("videoThumb"))
+        {
+  		    (new VideoThumbHandler(req, resp, session, output, userid)).handleRequest(); 
+		    
+		    return(true);
+        }
+
         if (command.equals("getFile"))
         {
 		    (new GetFileRequestHandler(req, resp, session, output, userid)).handleRequest(); 
