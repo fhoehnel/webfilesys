@@ -49,7 +49,7 @@ public class VideoThumbnailCreator extends Thread
                 frameGrabTime = "00:00:03.00";
             }
             
-        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
+        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -s 160x90" + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
                 Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
