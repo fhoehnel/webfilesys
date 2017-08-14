@@ -146,7 +146,9 @@ function setVideoDimensions(pic) {
 			    
 			    var videoWidth = null;
 			    var videoHeight = null;
-                var videoType = null;
+                var codec = null;
+                var duration = null;
+                var fps = null;
 			    
                 var item = xmlDoc.getElementsByTagName("xpix")[0];            
                 if (item) {
@@ -158,11 +160,21 @@ function setVideoDimensions(pic) {
                     videoHeight = item.firstChild.nodeValue;
                 }
 			    
-                item = xmlDoc.getElementsByTagName("videoType")[0];            
+                item = xmlDoc.getElementsByTagName("codec")[0];            
                 if (item) {
-                	videoType = item.firstChild.nodeValue;
+                	codec = item.firstChild.nodeValue;
                 }
 			    
+                item = xmlDoc.getElementsByTagName("duration")[0];            
+                if (item) {
+                	duration = item.firstChild.nodeValue;
+                }
+			    
+                item = xmlDoc.getElementsByTagName("fps")[0];            
+                if (item) {
+                	fps = item.firstChild.nodeValue;
+                }
+
 			    if ((videoWidth != null) && (videoHeight != null)) {
 			        pixDim.innerHTML = videoWidth + " x " + videoHeight + " pix";
 			        
@@ -170,8 +182,26 @@ function setVideoDimensions(pic) {
 			        if (pic) {
 			        	pic.setAttribute("origWidth", videoWidth);
 			        	pic.setAttribute("origHeight", videoHeight);
-			        	if (videoType) {
-			        		pic.setAttribute("videoType", imageType);
+			        	if (codec) {
+                            var codecCont = document.getElementById("codec-" + picId.substring(4));
+                            if (codecCont) {
+                                codecCont.innerHTML = codec;
+                            }
+			        		// pic.setAttribute("codec", codec);
+			        	}
+			        	if (duration) {
+                            var durationCont = document.getElementById("duration-" + picId.substring(4));
+                            if (durationCont) {
+                                durationCont.innerHTML = duration;
+                            }
+			        		// pic.setAttribute("duration", duration);
+			        	}
+			        	if (fps) {
+                            var fpsCont = document.getElementById("fps-" + picId.substring(4));
+                            if (fpsCont) {
+                                fpsCont.innerHTML = fps + " fps";
+                            }
+			        		// pic.setAttribute("fps", fps);
 			        	}
 			        } 
 			    }

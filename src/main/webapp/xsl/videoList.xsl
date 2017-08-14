@@ -306,6 +306,20 @@
                     </xsl:if>
                   </span>
                 </div>
+
+                <div>
+                  <span>
+                    <xsl:attribute name="id">codec-<xsl:value-of select="@id" /></xsl:attribute>
+                  </span>
+                  &#160;
+                  <span>
+                    <xsl:attribute name="id">duration-<xsl:value-of select="@id" /></xsl:attribute>
+                  </span>
+                  &#160;
+                  <span>
+                    <xsl:attribute name="id">fps-<xsl:value-of select="@id" /></xsl:attribute>
+                  </span>
+                </div>
                 
               </div>
             
