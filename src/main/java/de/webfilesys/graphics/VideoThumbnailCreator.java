@@ -1,8 +1,8 @@
 package de.webfilesys.graphics;
 
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
-
 import org.apache.log4j.Logger;
 
 import de.webfilesys.WebFileSys;
@@ -42,14 +42,16 @@ public class VideoThumbnailCreator extends Thread
             File videoFile = new File(videoFilePath);
             long fileSize = videoFile.length();
             
-            String frameGrabTime = "00:00:02.00";
+            String frameGrabTime = "00:00:01.00";
             if (fileSize > 50 * 1000000) {
                 frameGrabTime = "00:00:05.00";
             } else if (fileSize > 10 * 1000000) {
                 frameGrabTime = "00:00:03.00";
+            } else if (fileSize > 5 * 1000000) {
+                frameGrabTime = "00:00:02.00";
             }
             
-        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -s 160x90" + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
+        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -filter:v scale=\"160:-1\"" + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
                 Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
@@ -57,20 +59,34 @@ public class VideoThumbnailCreator extends Thread
         	
 			try {
 				Process grabProcess = Runtime.getRuntime().exec(progNameAndParams);
-
-				grabProcess.waitFor();
 				
-				File resultFile = new File(getFfmpegResultFilePath(videoFilePath));
+		        DataInputStream grabProcessOut = new DataInputStream(grabProcess.getErrorStream());
+		        
+		        String outLine = null;
+		        
+		        while ((outLine = grabProcessOut.readLine()) != null) {
+		        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
+		                Logger.getLogger(getClass()).debug("ffmpeg output: " + outLine);
+		        	}
+		        }
 				
-				if (resultFile.exists()) {
-				    
-				    File thumbnailFile = new File(getThumbnailPath(videoFilePath));
-				    
-				    if (!resultFile.renameTo(thumbnailFile)) {
-		                Logger.getLogger(getClass()).error("failed to rename result file for video frame grabbing from video " + videoFilePath);
-				    }
+				int grabResult = grabProcess.waitFor();
+				
+				if (grabResult == 0) {
+					File resultFile = new File(getFfmpegResultFilePath(videoFilePath));
+					
+					if (resultFile.exists()) {
+					    
+					    File thumbnailFile = new File(getThumbnailPath(videoFilePath));
+					    
+					    if (!resultFile.renameTo(thumbnailFile)) {
+			                Logger.getLogger(getClass()).error("failed to rename result file for video frame grabbing from video " + videoFilePath);
+					    }
+					} else {
+	                    Logger.getLogger(getClass()).error("result file from ffmpeg video frame grabbing not found: " + getFfmpegResultFilePath(videoFilePath));
+					}
 				} else {
-                    Logger.getLogger(getClass()).error("result file from ffmpeg video frame grabbing not found: " + getFfmpegResultFilePath(videoFilePath));
+					Logger.getLogger(getClass()).warn("ffmpeg returned error " + grabResult);
 				}
 			} catch (IOException ioex) {
 				Logger.getLogger(getClass()).error("failed to grab frame for thumbnail from video " + videoFilePath, ioex);
