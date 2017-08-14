@@ -101,6 +101,8 @@ function checkVideoThumbnailsToLoad() {
 	        		thumbnails.splice(i, 1);
 		    		
 	        		loadVideoThumbnail(pic, imgPath);
+	        		
+	                setVideoDimensions(pic);
 	    
 	                thumbLoadRunning = false;
 	                
@@ -113,6 +115,71 @@ function checkVideoThumbnailsToLoad() {
     thumbLoadRunning = false;
     
     // releaseInvisibleThumbnails();
+}
+
+function setVideoDimensions(pic) { 
+
+    if (pic.getAttribute("origWidth")) {
+        return;
+    }
+
+    var picId = pic.id;
+
+    var pixDim = document.getElementById("pixDim-" + picId.substring(4));
+    if (!pixDim) {
+        return;
+    }
+
+    var picFileName = pixDim.getAttribute("picFileName");
+
+    var url = "/webfilesys/servlet?command=getVideoDimensions&fileName=" +  encodeURIComponent(picFileName);
+
+    var picIsLink = pixDim.getAttribute("picIsLink");
+    if (picIsLink) {
+    	url = url + "&link=true";
+    }
+    
+	xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+			    
+			    var videoWidth = null;
+			    var videoHeight = null;
+                var videoType = null;
+			    
+                var item = xmlDoc.getElementsByTagName("xpix")[0];            
+                if (item) {
+                    videoWidth = item.firstChild.nodeValue;
+                }
+             
+                item = xmlDoc.getElementsByTagName("ypix")[0];            
+                if (item) {
+                    videoHeight = item.firstChild.nodeValue;
+                }
+			    
+                item = xmlDoc.getElementsByTagName("videoType")[0];            
+                if (item) {
+                	videoType = item.firstChild.nodeValue;
+                }
+			    
+			    if ((videoWidth != null) && (videoHeight != null)) {
+			        pixDim.innerHTML = videoWidth + " x " + videoHeight + " pix";
+			        
+			        var pic = document.getElementById(picId);
+			        if (pic) {
+			        	pic.setAttribute("origWidth", videoWidth);
+			        	pic.setAttribute("origHeight", videoHeight);
+			        	if (videoType) {
+			        		pic.setAttribute("videoType", imageType);
+			        	}
+			        } 
+			    }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
 }
 
 function attachVideoScrollHandler() {

@@ -187,6 +187,8 @@ public class WebFileSys
     private long uploadLimit = DEFAULT_UPLOAD_LIMIT;
     
     private String ffmpegExePath = null;
+
+    private String ffprobeExePath = null;
     
     private String googleMapsAPIKeyHTTP;
     private String googleMapsAPIKeyHTTPS;
@@ -674,7 +676,9 @@ public class WebFileSys
 		}
 		
         ffmpegExePath = config.getProperty("ffmpegExePath");
-		
+
+        ffprobeExePath = config.getProperty("ffprobeExePath");
+        
 		chmodAllowed = false;
 		temp = config.getProperty("ChmodWebspace", "false");
 		if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
@@ -1233,6 +1237,10 @@ public class WebFileSys
     
     public String getFfmpegExePath() {
     	return ffmpegExePath;
+    }
+
+    public String getFfprobeExePath() {
+    	return ffprobeExePath;
     }
 }
 

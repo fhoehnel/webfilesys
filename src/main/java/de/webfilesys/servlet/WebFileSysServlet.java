@@ -72,6 +72,7 @@ import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
+import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
 import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
@@ -943,6 +944,13 @@ public class WebFileSysServlet extends ServletBase
     	if (command.equals("getPicDimensions"))
     	{
 		    (new GetPictureDimensionsHandler(req, resp, session, output, userid)).handleRequest(); 
+
+		    return(true);
+    	}
+
+    	if (command.equals("getVideoDimensions"))
+    	{
+		    (new GetVideoDimensionsHandler(req, resp, session, output, userid)).handleRequest(); 
 
 		    return(true);
     	}

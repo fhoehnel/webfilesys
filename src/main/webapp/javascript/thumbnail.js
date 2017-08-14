@@ -401,7 +401,7 @@ function setPictureDimensions(pic) {
                 }
 			    
 			    if ((picWidth != null) && (picHeight != null)) {
-			        pixDim.innerHTML = picWidth + " x " + picHeight + "pix";
+			        pixDim.innerHTML = picWidth + " x " + picHeight + " pix";
 			        
 			        var pic = document.getElementById(picId);
 			        if (pic) {
