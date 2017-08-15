@@ -32,8 +32,11 @@ function videoContextMenu(fileName, domId) {
                  + '</th>'
                  + '</tr>';
 
+    menuText = menuText 
+                 + menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", "play video");
+
     if (parent.readonly != 'true') {
-        menuText = menuText 
+    	menuText = menuText 
                  + menuEntry("javascript:delVideo('" + scriptPreparedFile + "')",resourceBundle["label.delete"]);
 
         menuText = menuText 
@@ -49,6 +52,9 @@ function videoContextMenu(fileName, domId) {
                  + menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"]);
     }
         
+    menuText = menuText 
+             + menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
+    
     menuText = menuText + '</table>'; 
 
     var menuDiv = document.getElementById('contextMenu');    
@@ -77,6 +83,19 @@ function videoLinkMenu(linkName, realPath, domId) {
 
     var scriptPreparedFile = insertDoubleBackslash(linkName);
         
+    var realDir;
+    if (parent.serverOS == 'win') {
+        realDir = realPath.substring(0, realPath.lastIndexOf('\\'));
+        if (realDir.length < 3) {
+            realDir = realDir + "\\";
+        }
+    } else {
+        realDir = realPath.substring(0, realPath.lastIndexOf('/'));
+        if (realDir.length == 0) {
+            realDir = "/";
+        }
+    }
+
     var menuText = '<table class="contextMenu">'
                  + '<tr>'
                  + '<th>'
@@ -84,6 +103,9 @@ function videoLinkMenu(linkName, realPath, domId) {
                  + '</th>'
                  + '</tr>';
 
+    menuText = menuText 
+             + menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", "play video");
+    
     if (parent.readonly != 'true') {
         menuText = menuText 
                  + menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
@@ -91,7 +113,13 @@ function videoLinkMenu(linkName, realPath, domId) {
         menuText = menuText 
                  + menuEntry("javascript:renameLink('" + linkName + "')", resourceBundle["label.renameLink"]);
     }
-        
+
+    menuText = menuText 
+             + menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
+    
+    menuText = menuText 
+             + menuEntry("javascript:gotoOrigDir('" + insertDoubleBackslash(realDir) + "')", resourceBundle["label.origDir"]);
+    
     menuText = menuText + '</table>'; 
 
     var menuDiv = document.getElementById('contextMenu');    
@@ -122,8 +150,7 @@ function renameVideo(fileName, domId) {
     });
 }
 
-function editVideoDesc(path)
-{
+function editVideoDesc(path) {
     var windowWidth = 600;
     var windowHeight = 450;
     
@@ -135,13 +162,43 @@ function editVideoDesc(path)
     descWin.opener=self;
 }
 
-function copyToClipboard(fileName)
-{
+function copyToClipboard(fileName) {
     cutCopyToClip(fileName, 'copy');
 }
 
-function cutToClipboard(fileName)
-{
+function cutToClipboard(fileName) {
     cutCopyToClip(fileName, 'move');
 }
 
+function gotoOrigDir(path) {
+    parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(path) + "&fastPath=true";
+}
+
+function videoComments(path) {
+    commentWin=window.open("/webfilesys/servlet?command=listComments&actPath=" + encodeURIComponent(path),"commentWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=550,height=400,resizable=yes,left=80,top=100,screenX=80,screenY=100");
+    commentWin.focus();
+}
+
+function playVideoLocal(path) {
+    var url = "/webfilesys/servlet?command=playVideoLocal&videoPath=" + encodeURIComponent(path);
+	
+	xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+
+			    var item = xmlDoc.getElementsByTagName("success")[0];            
+                if (item) {
+                    var success = item.firstChild.nodeValue;
+                    if (success != "true") {
+                    	customAlert("local video player could not be started");
+                    }
+                } else {
+                	customAlert("local video player could not be started");
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+	});
+}

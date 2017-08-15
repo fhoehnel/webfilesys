@@ -190,6 +190,8 @@ public class WebFileSys
 
     private String ffprobeExePath = null;
     
+    private String ffplayExePath = null;
+
     private String googleMapsAPIKeyHTTP;
     private String googleMapsAPIKeyHTTPS;
     
@@ -678,6 +680,8 @@ public class WebFileSys
         ffmpegExePath = config.getProperty("ffmpegExePath");
 
         ffprobeExePath = config.getProperty("ffprobeExePath");
+
+        ffplayExePath = config.getProperty("ffplayExePath");
         
 		chmodAllowed = false;
 		temp = config.getProperty("ChmodWebspace", "false");
@@ -1241,6 +1245,10 @@ public class WebFileSys
 
     public String getFfprobeExePath() {
     	return ffprobeExePath;
+    }
+
+    public String getFfplayExePath() {
+    	return ffplayExePath;
     }
 }
 

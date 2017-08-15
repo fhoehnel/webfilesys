@@ -78,6 +78,7 @@ import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
+import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
 import de.webfilesys.gui.ajax.XformImageHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
 import de.webfilesys.gui.ajax.XmlAssociatedProgramHandler;
@@ -2112,6 +2113,11 @@ public class WebFileSysServlet extends ServletBase
         
         if (command.equals("googleEarthFolderPlacemark")) {
             (new GoogleEarthFolderPlacemarkHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
+        if (command.equals("playVideoLocal")) {
+            (new VideoLocalPlayerHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
             return(true);
         }
         
