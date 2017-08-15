@@ -30,12 +30,10 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
 	}
 
 	protected void process() {
-		/*
 		if (!clientIsLocal) {
 			Logger.getLogger(getClass()).warn("remote user tried to start local video player");
 			return;
 		}
-		*/
 		
         String videoFilePath = getParameter("videoPath");
         
@@ -55,17 +53,17 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
 	}
 
 	private int playVideoInLocalPlayer(String videoFilePath) {
-        String ffplayExePath = WebFileSys.getInstance().getFfplayExePath();
+        String videoPlayerExePath = WebFileSys.getInstance().getVideoPlayerExePath();
         
-        if (CommonUtils.isEmpty(ffplayExePath)) {
+        if (CommonUtils.isEmpty(videoPlayerExePath)) {
             return -1;
         }
 
         try {
-        	String progNameAndParams = ffplayExePath + " " + videoFilePath;
+        	String progNameAndParams = videoPlayerExePath + " " + videoFilePath;
 
         	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-        		Logger.getLogger(getClass()).debug("ffplay call with parameters: " + progNameAndParams);
+        		Logger.getLogger(getClass()).debug("video player call with parameters: " + progNameAndParams);
         	}
         	
 			Process ffplayProcess = Runtime.getRuntime().exec(progNameAndParams);
@@ -76,7 +74,7 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
 	        
 	        while ((outLine = ffplayOut.readLine()) != null) {
                 if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                    Logger.getLogger(getClass()).debug("ffplay output: " + outLine);
+                    Logger.getLogger(getClass()).debug("video player output: " + outLine);
                 }
 	        }
 			

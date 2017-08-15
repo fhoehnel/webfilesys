@@ -33,7 +33,7 @@ function videoContextMenu(fileName, domId) {
                  + '</tr>';
 
     menuText = menuText 
-                 + menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", "play video");
+                 + menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
 
     if (parent.readonly != 'true') {
     	menuText = menuText 
@@ -104,7 +104,7 @@ function videoLinkMenu(linkName, realPath, domId) {
                  + '</tr>';
 
     menuText = menuText 
-             + menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", "play video");
+             + menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
     
     if (parent.readonly != 'true') {
         menuText = menuText 
@@ -191,10 +191,10 @@ function playVideoLocal(path) {
                 if (item) {
                     var success = item.firstChild.nodeValue;
                     if (success != "true") {
-                    	customAlert("local video player could not be started");
+                    	customAlert(resourceBundle["errorVideoPlayer"]);
                     }
                 } else {
-                	customAlert("local video player could not be started");
+                	customAlert(resourceBundle["errorVideoPlayer"]);
                 }
             } else {
                 alert(resourceBundle["alert.communicationFailure"]);

@@ -470,7 +470,7 @@ public class WebFileSysServlet extends ServletBase
         
         if (!WebFileSys.getInstance().isSimulateRemote())
         {
-            requestIsLocal = clientIP.equals(localIP) || clientIP.equals(WebFileSys.getInstance().getLoopbackAddress());
+            requestIsLocal = clientIP.equals(localIP) || clientIP.equals(WebFileSys.getInstance().getLoopbackAddress()) || clientIP.equals(WebFileSys.getInstance().getIPV6LoopbackAddress());
         }
 		
         // prevent caching

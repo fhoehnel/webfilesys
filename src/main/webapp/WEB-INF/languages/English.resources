@@ -154,6 +154,10 @@ label.downloadFolder=download as zip
 title.addCopyToClip=Add to clipboard for copy operation
 title.addMoveToClip=Add to clipboard for move operation
 
+# video list labels
+playVideoLocally=Play video locally
+errorVideoPlayer=local video player could not be started
+
 # directory tree tooltips
 tooltip.folder=open the context menu for folder
 tooltip.listFiles=list the files of this directory

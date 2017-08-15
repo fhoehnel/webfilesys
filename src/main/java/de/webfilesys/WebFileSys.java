@@ -62,6 +62,8 @@ public class WebFileSys
     public static final int OS_UNKNOWN = 9;
 
     private static final String LOOPBACK_ADDRESS = "127.0.0.1";
+    
+    private static final String IPV6_LOOPBACK_ADDRESS = "0:0:0:0:0:0:0:1";
 
     // default upload limit: 128 MBytes
     private static final long DEFAULT_UPLOAD_LIMIT = (128l * 1024l * 1024l);
@@ -190,7 +192,7 @@ public class WebFileSys
 
     private String ffprobeExePath = null;
     
-    private String ffplayExePath = null;
+    private String videoPlayerExePath = null;
 
     private String googleMapsAPIKeyHTTP;
     private String googleMapsAPIKeyHTTPS;
@@ -681,7 +683,7 @@ public class WebFileSys
 
         ffprobeExePath = config.getProperty("ffprobeExePath");
 
-        ffplayExePath = config.getProperty("ffplayExePath");
+        videoPlayerExePath = config.getProperty("VideoPlayerExePath");
         
 		chmodAllowed = false;
 		temp = config.getProperty("ChmodWebspace", "false");
@@ -1170,6 +1172,11 @@ public class WebFileSys
     	return(LOOPBACK_ADDRESS);
     }
     
+    public String getIPV6LoopbackAddress()
+    {
+        return(IPV6_LOOPBACK_ADDRESS);
+    }
+    
     public String getServerDNS()
     {
         return(serverDNS);
@@ -1247,8 +1254,8 @@ public class WebFileSys
     	return ffprobeExePath;
     }
 
-    public String getFfplayExePath() {
-    	return ffplayExePath;
+    public String getVideoPlayerExePath() {
+    	return videoPlayerExePath;
     }
 }
 

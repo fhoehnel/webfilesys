@@ -154,6 +154,10 @@ label.downloadFolder=Descargar como ZIP
 title.addCopyToClip=Añadir para copiar
 title.addMoveToClip=Añadir para mover
 
+# video list labels
+playVideoLocally=reproducción de vídeo local
+errorVideoPlayer=No se pudo iniciar el reproductor de video local.
+
 # directory tree tooltips
 tooltip.folder=abrir el menu contextual de la carpeta
 tooltip.listFiles=listar los archivos de esta carpeta
