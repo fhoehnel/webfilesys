@@ -169,7 +169,7 @@ public class RenameFileRequestHandler extends UserRequestHandler
 		
         if (mobile == null) 
         {
-            (new XslFileListHandler(req, resp, session, output, uid, false)).handleRequest();
+            (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
         }
         else
         {

@@ -189,6 +189,7 @@ confirm.deleteFiles=¿Borrar los archivos seleccionados?
 switchfileAgeColoring=Mostrar/ocultar colores differentes de acuerdo con la edad del archivo
 folderContentModified=El contenido de la carpeta actual ha cambiado. ¿Actualizar la lista de los archivos? 
 folderTreeModified=La estructura de carpetas ha cambiado. ¿Actualizar la visualización?
+noVideosInFolder=no hay archivos de vídeo (JPG,GIF,PNG,BMP)
 
 # file list checkboxes
 checkbox.selectall=Seleccionar todo

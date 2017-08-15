@@ -55,6 +55,6 @@ public class ExecProgramRequestHandler extends UserRequestHandler
 			sysCmd.start();
 		}
 
-		(new XslFileListHandler(req, resp, session, output, uid, false)).handleRequest();
+		(new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 }

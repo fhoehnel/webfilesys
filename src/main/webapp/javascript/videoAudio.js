@@ -227,3 +227,47 @@ function attachVideoScrollHandler() {
 	  	 }
 	};
 }
+
+function multiVideoFunction() {
+    var idx = document.form2.cmd.selectedIndex;
+
+    var cmd = document.form2.cmd.options[idx].value;
+
+    if ((cmd == 'copy') || (cmd == 'move') ) {
+        multiVideoCopyMove();
+    } else if (cmd == 'delete') {
+        multiVideoDelete();
+    }
+     
+    document.form2.cmd.selectedIndex = 0;
+}
+
+function multiVideoCopyMove() {
+    if (anySelected()) {
+        document.form2.command.value = 'multiImageCopyMove';
+        xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), showCopyResult);
+	    document.form2.command.value = '';
+        resetSelected();
+    } else {   
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
+    }
+}
+
+function multiVideoDelete() {
+    if (anySelected()) {
+    	customConfirm(resourceBundle["confirm.deleteFiles"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+    			function() {
+	                document.form2.command.value = 'multiVideoDelete';
+                    document.form2.submit();
+    	        },
+    			function() {
+    	            document.form2.command.value = '';
+    	            document.form2.cmd.selectedIndex = 0;
+    	            resetSelected();
+    	            closeAlert();
+    	        }
+    	);
+    } else {   
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
+    }
+}

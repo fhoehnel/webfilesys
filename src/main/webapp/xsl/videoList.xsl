@@ -35,6 +35,7 @@
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/videoContextMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></script>
@@ -137,7 +138,7 @@
       <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeThumb()" resource="label.modethumb" />
+        <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
       </td>
 
       <td class="tabSpacer"></td>
@@ -220,6 +221,10 @@
                       <label style="margin-left:5px"><xsl:value-of select="sizeSumUnit" /></label>
                     </xsl:if>
                   </td>
+                  
+	              <xsl:if test="not(/fileList/file)">
+	                <td class="fileListFunct" style="text-align:right" resource="noVideosInFolder" />
+	              </xsl:if>
 	              
 	            </tr>
 	          </table>
@@ -235,6 +240,8 @@
         <xsl:value-of select="currentPath" />
       </xsl:attribute>
     </input>
+    
+    <input type="hidden" name="command" value="" />
 
     <div id="scrollAreaCont" class="pictureScrollCont sepTop">
 
@@ -333,43 +340,51 @@
       <tr>
         <td class="fileListFunct">
         
-          <table border="0" width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-              <td>
-        
-                <div class="buttonCont">
+          <div class="buttonCont">
 
-                  <xsl:if test="not(/fileList/readonly)">
+            <xsl:if test="not(/fileList/readonly)">
 
-                    <input type="button" resource="button.upload">
-                      <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');</xsl:attribute>
-                    </input> 
+              <input type="button" resource="button.upload">
+                <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');</xsl:attribute>
+              </input> 
                                  
-                    <input type="button" resource="button.paste" id="pasteButton">
-                      <xsl:attribute name="onclick">checkPasteOverwrite()</xsl:attribute>
-                      <xsl:if test="/fileList/clipBoardEmpty">
-                        <xsl:attribute name="style">display:none</xsl:attribute>
-                      </xsl:if>
-                    </input> 
+              <input type="button" resource="button.paste" id="pasteButton">
+                <xsl:attribute name="onclick">checkPasteOverwrite()</xsl:attribute>
+                <xsl:if test="/fileList/clipBoardEmpty">
+                  <xsl:attribute name="style">display:none</xsl:attribute>
+                </xsl:if>
+              </input> 
         
-                    <input type="button" resource="button.pasteLink" id="pasteLinkButton">
-                      <xsl:attribute name="onclick">javascript:pasteLinks();</xsl:attribute>
-                      <xsl:if test="not(/fileList/copyOperation) or (/fileList/clipBoardEmpty)">
-                        <xsl:attribute name="style">display:none</xsl:attribute>
-                      </xsl:if>
-                    </input> 
+              <input type="button" resource="button.pasteLink" id="pasteLinkButton">
+                <xsl:attribute name="onclick">javascript:pasteLinks();</xsl:attribute>
+                <xsl:if test="not(/fileList/copyOperation) or (/fileList/clipBoardEmpty)">
+                  <xsl:attribute name="style">display:none</xsl:attribute>
+                </xsl:if>
+              </input> 
                     
-                  </xsl:if>
+            </xsl:if>
                   
-                </div>
-                
-              </td>   
-            
-            </tr>
-            
-          </table>
+          </div>
 
         </td>
+
+        <xsl:if test="file">
+          <xsl:if test="not(/fileList/readonly)">
+
+          <td class="fileListFunct" style="text-align:right">
+            <label resource="label.selectedFiles"></label>:
+            &#160;
+            <select name="cmd" size="1" onchange="javascript:multiVideoFunction()">
+              <option resource="label.selectFunction" />
+              <option value="delete" resource="button.delete" />
+              <option value="copy" resource="label.copyToClip" />
+              <option value="move" resource="label.cutToClip" />
+            </select>
+          </td>
+
+          </xsl:if>
+        </xsl:if>
+        
       </tr>
 
     </table>

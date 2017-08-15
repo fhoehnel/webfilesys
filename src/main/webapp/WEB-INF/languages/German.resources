@@ -189,6 +189,7 @@ confirm.deleteFiles=Ausgewählte Dateien wirklich löschen?
 switchfileAgeColoring=Farben entsprechend Datei-Alter zeigen/ausblenden
 folderContentModified=Der Inhalt des aktuellen Ordners wurde geändert. Anzeige aktualisieren?
 folderTreeModified=Die Ordnerstruktur wurde geändert. Anzeige aktualisieren?
+noVideosInFolder=keine unterstützten Video-Dateien (MP4,MPG,MOV)
 
 # file list checkboxes
 checkbox.selectall=alle

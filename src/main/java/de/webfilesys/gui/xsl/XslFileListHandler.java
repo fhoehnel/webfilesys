@@ -41,19 +41,14 @@ public class XslFileListHandler extends XslFileListHandlerBase
 	private static final long MILLISECONDS_MONTH = MILLISECONDS_DAY * 30l;
 	private static final long MILLISECONDS_YEAR = MILLISECONDS_DAY * 365l;
 	
-	protected boolean initial = false;
-	
 	public XslFileListHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid,
-            boolean initial)
+            String uid)
 	{
         super(req, resp, session, output, uid);
-        
-        this.initial = initial;
 	}
 	  
 	protected void process()

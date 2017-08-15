@@ -167,6 +167,7 @@ import de.webfilesys.gui.user.MultiFileDownloadHandler;
 import de.webfilesys.gui.user.MultiImageDeleteHandler;
 import de.webfilesys.gui.user.MultiImageDownloadHandler;
 import de.webfilesys.gui.user.MultiMoveCopyRequestHandler;
+import de.webfilesys.gui.user.MultiVideoDeleteHandler;
 import de.webfilesys.gui.user.MultiZipRequestHandler;
 import de.webfilesys.gui.user.OpenStreetMapFilesPOIHandler;
 import de.webfilesys.gui.user.OpenStreetMapPOIHandler;
@@ -179,6 +180,7 @@ import de.webfilesys.gui.user.RemoteEditorRequestHandler;
 import de.webfilesys.gui.user.RenameFileRequestHandler;
 import de.webfilesys.gui.user.RenameLinkRequestHandler;
 import de.webfilesys.gui.user.RenameToExifDateHandler;
+import de.webfilesys.gui.user.RenameVideoRequestHandler;
 import de.webfilesys.gui.user.ResetStatisticsRequestHandler;
 import de.webfilesys.gui.user.ResizeImageRequestHandler;
 import de.webfilesys.gui.user.ReturnToPrevDirHandler;
@@ -673,8 +675,6 @@ public class WebFileSysServlet extends ServletBase
                 return true;
     	    }
     	    
-    		boolean initial = false;
-    		
 			int viewMode = Constants.VIEW_MODE_LIST;
         	
         	String viewModeParm = req.getParameter("viewMode");
@@ -699,8 +699,7 @@ public class WebFileSysServlet extends ServletBase
 			    }
             }
         	
-        	if (viewMode == Constants.VIEW_MODE_THUMBS)
-        	{
+        	if (viewMode == Constants.VIEW_MODE_THUMBS) {
     			if (req.getParameter("keepListStatus") == null)
     			{
     				req.setAttribute("initial", "true");
@@ -709,28 +708,24 @@ public class WebFileSysServlet extends ServletBase
     		    (new XslThumbnailHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
 					
 				return(true);
-        	}
-
-			if (viewMode == Constants.VIEW_MODE_STORY)
-			{
-			    (new XslPictureStoryHandler(req, resp, session, output, userid)).handleRequest(); 
-				
+        	} 
+        	
+        	if (viewMode == Constants.VIEW_MODE_VIDEO) {
+			    (new XslVideoListHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
 				return(true);
-			}
-
-            if (viewMode == Constants.VIEW_MODE_STATS)
-            {
+			} 
+        	
+        	if (viewMode == Constants.VIEW_MODE_STORY) {
+			    (new XslPictureStoryHandler(req, resp, session, output, userid)).handleRequest(); 
+				return(true);
+			} 
+        	
+        	if (viewMode == Constants.VIEW_MODE_STATS) {
                 (new XslFileListStatsHandler(req, resp, session, output, userid)).handleRequest();
-
                 return(true);
             }
             
-			if (req.getParameter("keepListStatus") == null)
-			{
-        		initial = true;
-			}
-            
-			(new XslFileListHandler(req, resp, session, output, userid, initial)).handleRequest();
+			(new XslFileListHandler(req, resp, session, output, userid)).handleRequest();
 			
 			return(true);
     	}
@@ -1199,6 +1194,13 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
+        if (command.equals("renameVideo"))
+        {
+            (new RenameVideoRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
+
+            return(true);
+        }
+
         if (command.equals("gunzip"))
         {
 		    (new GUnzipRequestHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -1301,7 +1303,14 @@ public class WebFileSysServlet extends ServletBase
 
             return(true);
         }
-                
+
+        if (command.equals("multiVideoDelete"))
+        {
+		    (new MultiVideoDeleteHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+
+            return(true);
+        }
+        
         if (command.equals("multiImageExifRename"))
         {
 		    (new RenameToExifDateHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 

@@ -189,6 +189,7 @@ confirm.deleteFiles=Delete selected files?
 switchfileAgeColoring=show/hide file age coloring
 folderContentModified=The content of the current folder has been modified. Reload?
 folderTreeModified=The structure of the folder tree has been modified. Reload?
+noVideosInFolder=no supported video files (MP4,MPG,MOV)
 
 # file list checkboxes
 checkbox.selectall=Select all

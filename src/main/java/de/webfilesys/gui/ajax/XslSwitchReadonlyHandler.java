@@ -93,7 +93,7 @@ public class XslSwitchReadonlyHandler extends XmlRequestHandlerBase
 
 			setParameter("mask","*");
 
-			(new XslFileListHandler(req, resp, session, output, uid, false)).handleRequest();
+			(new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
 
 			return;
 		}

@@ -18,6 +18,7 @@ import de.webfilesys.TestSubDirThread;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.graphics.ThumbnailThread;
+import de.webfilesys.graphics.VideoThumbnailCreator;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 
@@ -245,6 +246,18 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 									Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
 								}
 							}
+							
+				            if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+				                String videoThumbnailPath = VideoThumbnailCreator.getThumbnailPath(sourceFile);
+
+				                File videoThumbnailFile = new File(videoThumbnailPath);
+
+				                if (videoThumbnailFile.exists()) {
+				                    if (!videoThumbnailFile.delete()) {
+				                        Logger.getLogger(getClass()).warn("failed to remove video thumbnail file " + videoThumbnailPath);
+				                    }
+				                }
+				            }
 						}
 					}
 

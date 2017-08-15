@@ -164,7 +164,7 @@ public class UserSettingsRequestHandler extends UserRequestHandler {
 			return;
 		}
 		
-		(new XslFileListHandler(req, resp, session, output, uid, true)).handleRequest();
+		(new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 	
 	protected void userForm(String errorMsg) {

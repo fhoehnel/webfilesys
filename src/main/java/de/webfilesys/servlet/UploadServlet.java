@@ -544,7 +544,7 @@ public class UploadServlet extends WebFileSysServlet
                     }
                     else
                     {
-                       (new XslFileListHandler(req, resp, session, output, userid, true)).handleRequest();
+                       (new XslFileListHandler(req, resp, session, output, userid)).handleRequest();
                     }
         	    }
 
