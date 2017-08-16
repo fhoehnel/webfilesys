@@ -254,10 +254,10 @@
                 <a>
                   <xsl:attribute name="id">thumb-<xsl:value-of select="@id" /></xsl:attribute>
                   <xsl:if test="@link">
-                    <xsl:attribute name="href">javascript:playVideo('<xsl:value-of select="realPathForScript" />');</xsl:attribute>
+                    <xsl:attribute name="href">javascript:playVideoMaxSize('<xsl:value-of select="realPathForScript" />', '<xsl:value-of select="@nameForScript" />', true);</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="not(@link)">
-                    <xsl:attribute name="href">javascript:playVideo('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />');hidePopupPicture()</xsl:attribute>
+                    <xsl:attribute name="href">javascript:playVideoMaxSize('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />', '<xsl:value-of select="@nameForScript" />', false);</xsl:attribute>
                   </xsl:if>
                   <img class="thumb" border="0">
                     <xsl:attribute name="id">pic-<xsl:value-of select="@id" /></xsl:attribute>

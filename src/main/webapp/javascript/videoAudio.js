@@ -271,3 +271,125 @@ function multiVideoDelete() {
         customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
 }
+
+function playVideoMaxSize(videoFilePath, videoFileName, isLink) { 
+
+	var fileNameExt = getFileNameExt(videoFileName);
+	
+    if ((fileNameExt != ".MP4") && (fileNameExt != ".OGG") && (fileNameExt != ".OGV") && (fileNameExt != ".WEBM")) {
+    	
+    	// no HTML 5 video - cannot be played in browser
+    	playVideoLocal(videoFilePath);
+    	return;
+    }
+	
+    var url = "/webfilesys/servlet?command=getVideoDimensions&fileName=" +  encodeURIComponent(videoFileName);
+
+    if (isLink) {
+    	url = url + "&link=true";
+    }
+    
+	xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+			    
+			    var videoWidth = 480;
+			    var videoHeight = 360;
+			    var codec = null;
+			    
+                item = xmlDoc.getElementsByTagName("codec")[0];            
+                if (item) {
+                	codec = item.firstChild.nodeValue;
+                	if (codec == "mpeg4") {
+                    	// no HTML 5 video - cannot be played in browser
+                    	playVideoLocal(videoFilePath);
+                    	return;
+                	}
+                }
+			    
+                var item = xmlDoc.getElementsByTagName("xpix")[0];            
+                if (item) {
+                    videoWidth = parseInt(item.firstChild.nodeValue);
+                }
+             
+                item = xmlDoc.getElementsByTagName("ypix")[0];            
+                if (item) {
+                    videoHeight = parseInt(item.firstChild.nodeValue);
+                }
+
+                var availWidth = getWinWidth() - 20;
+                var availHeight = getWinHeight() - 20;
+                
+                var maxVideoWidth = availWidth - 40;
+                var maxVideoHeight = availHeight - 60;
+                
+                var videoPresentationWidth;
+
+                var widthScale = videoWidth / maxVideoWidth;
+                var heightScale = videoHeight / maxVideoHeight;
+                
+                var scaledWidth = videoWidth;
+                var scaledHeight = videoHeight;
+                
+                if ((widthScale > 1) || (heightScale > 1)) {
+                    var scale;
+                	if (widthScale > heightScale) {
+                		scale = widthScale;
+                	} else {
+                		scale = heightScale;
+                	}
+                	
+                	scaledWidth = videoWidth * (1 / scale);
+                	scaledHeight = videoHeight * (1 / scale);
+                }
+                
+                var videoType = "mp4";
+                
+                if (videoFileName.endsWithIgnoreCase(".ogg") || videoFileName.endsWithIgnoreCase(".ogv")) {
+                    videoType = "ogg"
+                } else if (videoFileName.endsWithIgnoreCase(".webm")) {
+                    videoType = "webm"
+                }
+                
+                var videoCont = document.createElement("div");
+                videoCont.id = "videoCont";
+                videoCont.setAttribute("class", "maxVideoCont");
+                videoCont.style.width = (scaledWidth + 20) + "px";
+                videoCont.style.height = (scaledHeight + 40) + "px";
+                
+                var closeButton = document.createElement("img");
+                closeButton.setAttribute("src", "/webfilesys/images/winClose.gif");
+                closeButton.setAttribute("class", "closeButton");
+                closeButton.setAttribute("onclick", "destroyVideo()");
+                videoCont.appendChild(closeButton);
+                
+                var videoUrl = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(videoFilePath);
+                
+                var videoElem = document.createElement("video");
+                videoElem.setAttribute("autobuffer", "autobuffer");
+                videoElem.setAttribute("autoplay", "autoplay");
+                videoElem.setAttribute("controls", "controls");
+                videoElem.setAttribute("src", videoUrl);
+                videoElem.setAttribute("type", videoType);
+                videoElem.style.width = scaledWidth + "px";
+                videoElem.style.height = scaledHeight + "px";
+
+                var altTextElem = document.createElement("p");
+                altTextElem.innerHTML = "This browser does not support HTML5 video!"
+                videoElem.appendChild(altTextElem);
+                
+                videoCont.appendChild(videoElem);    
+
+                var docRoot = document.documentElement;
+                docRoot.appendChild(videoCont);
+                
+                centerBox(videoCont);    
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
+}
+
+                

@@ -155,8 +155,9 @@ title.addCopyToClip=Add to clipboard for copy operation
 title.addMoveToClip=Add to clipboard for move operation
 
 # video list labels
-playVideoLocally=Play video locally
+playVideoLocally=Play with local player
 errorVideoPlayer=local video player could not be started
+playerStartedInBackground=Video player window may be behind the browser window.
 
 # directory tree tooltips
 tooltip.folder=open the context menu for folder

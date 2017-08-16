@@ -180,6 +180,8 @@ function videoComments(path) {
 }
 
 function playVideoLocal(path) {
+	toast(resourceBundle["playerStartedInBackground"], 4000);
+	
     var url = "/webfilesys/servlet?command=playVideoLocal&videoPath=" + encodeURIComponent(path);
 	
 	xmlRequest(url, function(req) {

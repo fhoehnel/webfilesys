@@ -1459,7 +1459,8 @@ span.searchDateSep {
 	vertical-align: bottom;
 }
 
-div.videoCont {
+div.videoCont,
+div.maxVideoCont {
     position: absolute;
     top: 40px;
     left: 10px;
@@ -1478,7 +1479,8 @@ div.videoCont video {
     max-height: 300px;
 }
 
-div.videoCont img.closeButton {
+div.videoCont img.closeButton,
+div.maxVideoCont img.closeButton {
     position: absolute;
     top: 5px;
     right: 5px;

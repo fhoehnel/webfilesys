@@ -155,8 +155,9 @@ title.addCopyToClip=Zur Zwischenablage hinzufügen für Kopier-Operation
 title.addMoveToClip=Zur Zwischenablage hinzufügen für Verschiebe-Operation
 
 # video list labels
-playVideoLocally=Video lokal abspielen
+playVideoLocally=mit Videoplayer abspielen
 errorVideoPlayer=lokaler Video Player konnte nicht gestartet werden
+playerStartedInBackground=Videoplayer-Window ist möglicherweise vom Browser verdeckt.
 
 # directory tree tooltips
 tooltip.folder=Context-Menü anzeigen für Ordner
