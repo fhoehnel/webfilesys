@@ -37,19 +37,22 @@ function videoContextMenu(fileName, domId) {
 
     if (parent.readonly != 'true') {
     	menuText = menuText 
-                 + menuEntry("javascript:delVideo('" + scriptPreparedFile + "')",resourceBundle["label.delete"]);
+                 + menuEntry("javascript:delVideo('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:renameVideo('" + scriptPreparedFile + "', '" + domId + "')",resourceBundle["label.renameFile"]);
+                 + menuEntry("javascript:renameVideo('" + scriptPreparedFile + "', '" + domId + "')", resourceBundle["label.renameFile"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"]);
+                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.copyToClip"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"]);
+                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.cutToClip"]);
 
         menuText = menuText 
-                 + menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"]);
+                 + menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
+
+        menuText = menuText 
+                 + menuEntry("javascript:editConvertVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuEditVideo"]);
     }
         
     menuText = menuText 
@@ -148,6 +151,10 @@ function renameVideo(fileName, domId) {
     	document.renameForm.newFileName.focus();
         document.renameForm.newFileName.select();
     });
+}
+
+function editConvertVideo(fileName) {
+	window.location.href = "/webfilesys/servlet?command=editVideoParams&videoFile=" + encodeURIComponent(fileName);
 }
 
 function editVideoDesc(path) {

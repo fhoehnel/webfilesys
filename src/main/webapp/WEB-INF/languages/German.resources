@@ -893,6 +893,20 @@ grepResultEmpty=keine Zeilen gefunden mit
 grepFilterMissing=Bitte geben Sie einen Filter-Wert ein!
 grepReadError=einige Zeilen der Datei konnten nicht gelesen werden
 
+# edit/convert video
+contextMenuEditVideo=editieren/konvertieren
+titleEditVideo=Video editieren/konvertieren
+label.videoFile=Video-Datei
+label.videoResolution=Auflösung (Breite x Höhe)
+label.fps=Bildrate
+label.duration=Laufzeit
+label.codec=Codec
+label.newResolution=neue Auflösung (Breite x Höhe)
+label.newFps=neue Bildrate
+label.newCodec=neuer Codec
+keepOrigFrameRate=beibehalten
+keepOrigCodec=beibehalten
+
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version
 label.bookmarksMobile=Ordner-Lesezeichen

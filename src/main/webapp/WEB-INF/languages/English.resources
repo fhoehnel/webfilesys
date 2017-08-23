@@ -890,6 +890,20 @@ grepResultEmpty=no lines found containing
 grepFilterMissing=please enter a grep filter value
 grepReadError=some lines of the file could not be read
 
+# edit/convert video
+contextMenuEditVideo=edit/convert video
+titleEditVideo=edit/convert video
+label.videoFile=video file
+label.videoResolution=resolution (width x height)
+label.fps=frame rate
+label.duration=duration
+label.codec=codec
+label.newResolution=new resolution (width x height)
+label.newFps=new frame rate
+label.newCodec=new codec
+keepOrigFrameRate=no change
+keepOrigCodec=no change
+
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version
 label.bookmarksMobile=bookmarks

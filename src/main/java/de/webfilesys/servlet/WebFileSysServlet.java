@@ -209,6 +209,7 @@ import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
 import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.CompareImageSliderHandler;
+import de.webfilesys.gui.xsl.EditVideoParamHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -2118,6 +2119,13 @@ public class WebFileSysServlet extends ServletBase
 
         if (command.equals("playVideoLocal")) {
             (new VideoLocalPlayerHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
+            return(true);
+        }
+        
+        if (command.equals("editVideoParams"))
+        {
+		    (new EditVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
+
             return(true);
         }
         

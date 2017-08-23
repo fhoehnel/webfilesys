@@ -891,6 +891,20 @@ grepResultEmpty=no hay líneas que contienen la palabra
 grepFilterMissing=Introduce un valor para el filtro de grep
 grepReadError=unas líneas del archivo no son legible
 
+# edit/convert video
+contextMenuEditVideo=editar/convertir
+titleEditVideo=editar/convertir el vídeo
+label.videoFile=archivo de vídeo
+label.videoResolution=resolución
+label.fps=cuadros por segundo
+label.duration=duración del video
+label.codec=codec
+label.newResolution=resolución nueva
+label.newFps=cuadros por segundo nuevos
+label.newCodec=codec nuevo
+keepOrigFrameRate=no cambio
+keepOrigCodec=no cambio
+
 # mobile version
 label.mobileWindowTitle=WebFileSys version móvil
 label.bookmarksMobile=carpetas en marcadores
