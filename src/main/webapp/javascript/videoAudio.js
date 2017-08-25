@@ -392,4 +392,25 @@ function playVideoMaxSize(videoFilePath, videoFileName, isLink) {
     });
 }
 
+function sendEditConvertForm() {
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var successItem = req.responseXML.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
+                
+                if (success == "true") {
+                    customAlert(resourceBundle["videoConversionStarted"] + "!");
+                } else {
+                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
+                    var message = messageItem.firstChild.nodeValue;
+                    customAlert(message);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
+}
+
                 

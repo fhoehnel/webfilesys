@@ -18,6 +18,7 @@
     </link>
 
     <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -130,7 +131,7 @@
                 
               <tr>
                 <td class="formParm1">
-                  <input type="submit" name="start" class="formButton" resource="button.start" />
+                  <input type="button" class="formButton" resource="button.start" onclick="sendEditConvertForm()" />
                 </td>
                 <td class="formParm2" style="text-align:right">
                   <input type="button" class="formButton" name="cancel" resource="button.cancel">
