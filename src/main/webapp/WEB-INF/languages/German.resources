@@ -906,6 +906,7 @@ label.newFps=neue Bildrate
 label.newCodec=neuer Codec
 keepOrigFrameRate=beibehalten
 keepOrigCodec=beibehalten
+videoConversionStarted=Die Videokonvertierung wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner 
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version

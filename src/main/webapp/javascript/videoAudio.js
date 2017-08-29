@@ -400,7 +400,19 @@ function sendEditConvertForm() {
                 var success = successItem.firstChild.nodeValue;
                 
                 if (success == "true") {
-                    customAlert(resourceBundle["videoConversionStarted"] + "!");
+                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                    var targetPath = targetPathItem.firstChild.nodeValue;
+                    
+                    customAlert(resourceBundle["videoConversionStarted"] + " " + targetFolder + ".");
+                    
+                    setTimeout(function() {
+    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	                window.parent.frames[1].location.href = expUrl;
+                    } , 4000);
+                    
                 } else {
                     var messageItem = req.responseXML.getElementsByTagName("message")[0];            
                     var message = messageItem.firstChild.nodeValue;

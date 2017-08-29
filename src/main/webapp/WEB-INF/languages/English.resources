@@ -903,6 +903,7 @@ label.newFps=new frame rate
 label.newCodec=new codec
 keepOrigFrameRate=no change
 keepOrigCodec=no change
+videoConversionStarted=The conversion of the video has been started. This can take some time to complete. For the result file watch the subfolder 
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version

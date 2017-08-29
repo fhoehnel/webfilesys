@@ -70,6 +70,7 @@ import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
+import de.webfilesys.gui.ajax.EditConvertVideoHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
 import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
@@ -2125,7 +2126,12 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("editVideoParams"))
         {
 		    (new EditVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
+            return(true);
+        }
 
+        if (command.equals("editConvertVideo"))
+        {
+		    (new EditConvertVideoHandler(req, resp, session, output, userid)).handleRequest(); 
             return(true);
         }
         

@@ -19,6 +19,8 @@
 
     <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/videoAudio.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -120,9 +122,9 @@
                 <td class="formParm1"><span resource="label.newCodec"></span>:</td>
                 <td class="formParm2">
                   <select name="newCodec" size="1" style="width:140px;">
-                    <option value="0" selected="selected" resource="keepOrigCodec"></option>
+                    <option value="" selected="selected" resource="keepOrigCodec"></option>
                     <option value="h264">h264</option>
-                    <option value="mpeg2">mpeg2</option>
+                    <option value="mpeg2video">mpeg2</option>
                   </select>
                 </td>
               </tr>
