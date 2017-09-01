@@ -25,6 +25,8 @@ public class VideoConverterThread extends Thread {
     
     private String oldCodec;
     
+    private String oldFrameRate = "";
+    
     private static HashMap<String, String> videoFileExtensions;
     
     static {
@@ -103,8 +105,16 @@ public class VideoConverterThread extends Thread {
                 	}
             	}
             }
+
+            String frameRateFilter = "";
             
-        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + scaleFilter + codecFilter + " "  + targetFilePath;
+            if (!CommonUtils.isEmpty(newFps)) {
+                if (!newFps.equals(oldFrameRate)) {
+                    frameRateFilter = " -r " + newFps;
+                }
+            }
+            
+        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + scaleFilter + codecFilter + frameRateFilter + " "  + targetFilePath;
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
                 Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
@@ -160,9 +170,8 @@ public class VideoConverterThread extends Thread {
                 String videoHeight = "";
                 String codec = "";
                 String duration = "";
-                String frameRate = "";
-                
-    			Process ffprobeProcess = Runtime.getRuntime().exec(progNameAndParams);
+
+                Process ffprobeProcess = Runtime.getRuntime().exec(progNameAndParams);
     			
     	        DataInputStream ffprobeOut = new DataInputStream(ffprobeProcess.getInputStream());
     	        
@@ -194,7 +203,7 @@ public class VideoConverterThread extends Thread {
                         // streams_stream_0_duration="0:04:36.400000"
                         String[] tokens = outLine.split("=");
                         duration = tokens[1].substring(1, 8);
-                    } else if ((frameRate.length() == 0) && outLine.contains("_avg_frame_rate")) {
+                    } else if ((oldFrameRate.length() == 0) && outLine.contains("_avg_frame_rate")) {
                         String[] tokens = outLine.split("=");
                         String averageFrameRate = tokens[1].substring(1, tokens[1].length() - 1);
                         tokens =  averageFrameRate.split("/");
@@ -203,7 +212,7 @@ public class VideoConverterThread extends Thread {
                                 int frameRatePart1 = Integer.parseInt(tokens[0]);
                                 int frameRatePart2 = Integer.parseInt(tokens[1]);
                                 int fps = frameRatePart1 / frameRatePart2;
-                                frameRate = Integer.toString(fps);
+                                oldFrameRate = Integer.toString(fps);
                             } catch (Exception ex) {
                                 Logger.getLogger(getClass()).warn("invalid frame rate for " + videoFilePath + ": " + averageFrameRate);
                             }

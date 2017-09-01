@@ -172,7 +172,7 @@
 
   <form accept-charset="utf-8" name="sortform" method="get" action="/webfilesys/servlet" style="padding:0px;margin:0px;">
   
-    <input type="hidden" name="command" value="thumbnail" />
+    <input type="hidden" name="command" value="listVideos" />
     
 	    <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
 	      <input type="hidden" name="actpath">
