@@ -95,7 +95,7 @@
                 <td class="formParm1"><span resource="label.newResolution"></span>:</td>
                 <td class="formParm2">
                   <select name="newSize" size="1" style="width:140px;">
-                    <option value="0" selected="selected" resource="label.keepOrigSize"></option>
+                    <option value="" selected="selected" resource="label.keepOrigSize"></option>
                     <xsl:for-each select="/editParams/targetResolution/option">
                       <option>
                         <xsl:attribute name="value"><xsl:value-of select="." /></xsl:attribute>
@@ -110,7 +110,7 @@
                 <td class="formParm1"><span resource="label.newFps"></span>:</td>
                 <td class="formParm2">
                   <select name="newFps" size="1" style="width:140px;">
-                    <option value="0" selected="selected" resource="keepOrigFrameRate"></option>
+                    <option value="" selected="selected" resource="keepOrigFrameRate"></option>
                     <option value="24">24</option>
                     <option value="25">25</option>
                     <option value="30">30</option>
@@ -128,6 +128,21 @@
                     <option value="h264">h264</option>
                     <option value="mpeg2video">mpeg2</option>
                   </select>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="formParm1"><span resource="label.timeRange"></span>:</td>
+                <td class="formParm2">
+                  <input type="text" name="startHour" class="timeSel" placeholder="hh" />:
+                  <input type="text" name="startMin" class="timeSel" placeholder="mm"  />:
+                  <input type="text" name="startSec" class="timeSel" placeholder="ss"  />
+
+                  &#160;<span style="font-size:20px;font-weight:bold">-</span>&#160;&#160;
+
+                  <input type="text" name="endHour" class="timeSel" placeholder="hh" />:
+                  <input type="text" name="endMin" class="timeSel" placeholder="mm"/>:
+                  <input type="text" name="endSec" class="timeSel" placeholder="ss" />
                 </td>
               </tr>
                 

@@ -1769,6 +1769,12 @@ button.alertConfirmButton {
 	cursor: pointer;
 }
 
+input.timeSel {
+    width: 40px;
+    padding: 4px 8px;
+    margin-right: 10px;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

@@ -19,6 +19,9 @@ public class VideoConverterThread extends Thread {
     
     private String newFps;
     
+    private String startTime;
+    private String endTime;     
+    
     private int oldVideoWidth;
     
     private int oldVideoHeight;
@@ -51,6 +54,14 @@ public class VideoConverterThread extends Thread {
     	newFps = newVal;
     }
     
+    public void setStartTime(String newVal) {
+        startTime = newVal;
+    }
+    
+    public void setEndTime(String newVal) {
+        endTime = newVal;
+    }
+    
     public void run() {
         if (Logger.getLogger(getClass()).isDebugEnabled()) {
             Logger.getLogger(getClass()).debug("starting video conversion thread for video file " + videoFilePath);
@@ -63,13 +74,20 @@ public class VideoConverterThread extends Thread {
         String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
+
+            getSourceVideoInfo(videoFilePath);
             
         	String[] partsOfPath = CommonUtils.splitPath(videoFilePath);
         	
         	String sourcePath = partsOfPath[0];
         	String sourceFileName = partsOfPath[1];
-        	
-        	String targetPath = sourcePath + File.separator + newSize;
+
+            String targetPath = null;
+            if (CommonUtils.isEmpty(newSize)) {
+                targetPath = sourcePath + File.separator + "_converted";
+            } else {
+                targetPath = sourcePath + File.separator + newSize;
+            }
         	
             File targetDirFile = new File(targetPath);
             if (!targetDirFile.exists()) {
@@ -80,14 +98,14 @@ public class VideoConverterThread extends Thread {
             
             String targetFilePath = targetPath + File.separator + sourceFileName;
             
-            getSourceVideoInfo(videoFilePath);
+            String scaleFilter = "";
             
-            String scaleFilter = null;
-            
-            if (oldVideoWidth > oldVideoHeight) {
-            	scaleFilter = " -vf scale=" + newSize + ":-1";
-            } else {
-            	scaleFilter = " -vf scale=-1:" + newSize;
+            if (!CommonUtils.isEmpty(newSize)) {
+                if (oldVideoWidth > oldVideoHeight) {
+                    scaleFilter = " -vf scale=" + newSize + ":-1";
+                } else {
+                    scaleFilter = " -vf scale=-1:" + newSize;
+                }
             }
             
             String codecFilter = "";
@@ -114,7 +132,17 @@ public class VideoConverterThread extends Thread {
                 }
             }
             
-        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + scaleFilter + codecFilter + frameRateFilter + " "  + targetFilePath;
+            String timeRangeParam = "";
+            
+            if ((!CommonUtils.isEmpty(startTime)) && (!CommonUtils.isEmpty(endTime))) {
+                if (CommonUtils.isEmpty(scaleFilter) && (CommonUtils.isEmpty(codecFilter)) && (CommonUtils.isEmpty(frameRateFilter))) {
+                    timeRangeParam = " -c copy -ss " + startTime + " -to " + endTime;
+                } else {
+                    timeRangeParam = " -ss " + startTime + " -to " + endTime;
+                }
+            }
+            
+        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + timeRangeParam + scaleFilter + codecFilter + frameRateFilter + " "  + targetFilePath;
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
                 Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);

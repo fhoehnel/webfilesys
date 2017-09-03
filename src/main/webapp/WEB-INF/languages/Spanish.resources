@@ -904,6 +904,7 @@ label.newFps=cuadros por segundo nuevos
 label.newCodec=codec nuevo
 keepOrigFrameRate=no cambio
 keepOrigCodec=no cambio
+label.timeRange=intervalo de tiempo
 videoConversionStarted=Se ha iniciado la conversión del vídeo. Esto puede tomar algún tiempo para completar. Para el archivo de resultados, vea la subcarpeta 
 
 # mobile version
