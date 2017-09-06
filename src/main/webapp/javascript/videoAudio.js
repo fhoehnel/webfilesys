@@ -425,4 +425,28 @@ function sendEditConvertForm() {
     });
 }
 
+function createVideoTimeRangeSelOptions() {
+    createVideoTimeOptions(document.getElementById("startHour"), 0, 10);
+    createVideoTimeOptions(document.getElementById("startMin"), 0, 59);
+    createVideoTimeOptions(document.getElementById("startSec"), 0, 59);
+    
+    createVideoTimeOptions(document.getElementById("endHour"), 0, 10);
+    createVideoTimeOptions(document.getElementById("endMin"), 0, 59);
+    createVideoTimeOptions(document.getElementById("endSec"), 0, 59);
+}
+
+function createVideoTimeOptions(selectBox, minVal, maxVal) {
+    var i = 0;
+    for (var val = minVal; val <= maxVal; val++) {
+        var optionLabel;
+        if (val < 10) {
+            optionLabel = "0" + val;
+        } else {
+            optionLabel = val;
+        }
+        
+        selectBox.options[i] = new Option(optionLabel, val);
+        i++;
+    }    
+}
                 

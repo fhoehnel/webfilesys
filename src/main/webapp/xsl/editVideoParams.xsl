@@ -29,7 +29,7 @@
 
   </head>
 
-  <body>
+  <body onload="createVideoTimeRangeSelOptions()">
     <div class="headline" resource="titleEditVideo" />
     
     <br/>
@@ -134,15 +134,15 @@
               <tr>
                 <td class="formParm1"><span resource="label.timeRange"></span>:</td>
                 <td class="formParm2">
-                  <input type="text" name="startHour" class="timeSel" placeholder="hh" />:
-                  <input type="text" name="startMin" class="timeSel" placeholder="mm"  />:
-                  <input type="text" name="startSec" class="timeSel" placeholder="ss"  />
+                  <select name="startHour" id="startHour" class="timeSel" />:
+                  <select name="startMin" id="startMin" class="timeSel" />:
+                  <select name="startSec" id="startSec" class="timeSel" />
 
                   &#160;<span style="font-size:20px;font-weight:bold">-</span>&#160;&#160;
 
-                  <input type="text" name="endHour" class="timeSel" placeholder="hh" />:
-                  <input type="text" name="endMin" class="timeSel" placeholder="mm"/>:
-                  <input type="text" name="endSec" class="timeSel" placeholder="ss" />
+                  <select name="endHour" id="endHour" class="timeSel" />: 
+                  <select name="endMin" id="endMin" class="timeSel" />:
+                  <select name="endSec" id="endSec" class="timeSel" />
                 </td>
               </tr>
                 
