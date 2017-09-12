@@ -906,6 +906,8 @@ keepOrigFrameRate=no cambio
 keepOrigCodec=no cambio
 label.timeRange=intervalo de tiempo
 videoConversionStarted=Se ha iniciado la conversión del vídeo. Esto puede tomar algún tiempo para completar. Para el archivo de resultados, vea la subcarpeta 
+validationError.videoStartEndTime=La hora de finalización puede no ser anterior a la hora de inicio.
+validationError.videoTimeRange=El intervalo de tiempo seleccionado está fuera del rango del archivo de vídeo.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys version móvil

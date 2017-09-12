@@ -908,6 +908,8 @@ keepOrigFrameRate=beibehalten
 keepOrigCodec=beibehalten
 label.timeRange=Start-/Endezeit
 videoConversionStarted=Die Videokonvertierung wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner 
+validationError.videoStartEndTime=Die Endezeit darf nicht vor der Startzeit liegen.
+validationError.videoTimeRange=Das gewählte Zeitfenster liegt ausserhalb des Zeitbereiches des Videos.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version

@@ -392,7 +392,43 @@ function playVideoMaxSize(videoFilePath, videoFileName, isLink) {
     });
 }
 
+function validateConvertVideoForm() {
+    var startHour = getSelectboxValueInt("startHour");
+    var startMin = getSelectboxValueInt("startMin");
+    var startSec = getSelectboxValueInt("startSec");
+    
+    var endHour = getSelectboxValueInt("endHour");
+    var endMin = getSelectboxValueInt("endMin");
+    var endSec = getSelectboxValueInt("endSec");
+
+    var startTime = (startHour * 3600) + (startMin * 60) + startSec;
+    var endTime = (endHour * 3600) + (endMin * 60) + endSec;
+
+    if (startTime >= endTime) {
+        customAlert(resourceBundle["validationError.videoStartEndTime"]);
+        return false;
+    }
+    
+    if (endTime > durationSeconds) {
+        customAlert(resourceBundle["validationError.videoTimeRange"]);
+        return false;
+    }
+
+    return true;
+}
+
+function getSelectboxValueInt(selectboxId) {
+    var selBox = document.getElementById(selectboxId);
+    var val = selBox.options[selBox.selectedIndex].value;
+    return parseInt(val);
+}
+
 function sendEditConvertForm() {
+
+    if (!validateConvertVideoForm()) {
+        return;
+    }
+
     xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {

@@ -905,6 +905,8 @@ keepOrigFrameRate=no change
 keepOrigCodec=no change
 label.timeRange=time range
 videoConversionStarted=The conversion of the video has been started. This can take some time to complete. For the result file watch the subfolder 
+validationError.videoStartEndTime=The end time may not be before the start time.
+validationError.videoTimeRange=The selected time range is outside the range of the video.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version

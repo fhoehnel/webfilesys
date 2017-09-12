@@ -83,6 +83,7 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
                 String codec = "";
                 String duration = "";
                 String frameRate = "";
+                int durationSeconds = 0;
     			Process ffprobeProcess = Runtime.getRuntime().exec(progNameAndParams);
     			
     	        DataInputStream ffprobeOut = new DataInputStream(ffprobeProcess.getInputStream());
@@ -107,6 +108,15 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
                         // streams_stream_0_duration="0:04:36.400000"
                         String[] tokens = outLine.split("=");
                         duration = tokens[1].substring(1, 8);
+                        
+                        String[] partsOfDuration = duration.split(":");
+                        if (partsOfDuration.length == 3) {
+                            try {
+                                durationSeconds = (Integer.parseInt(partsOfDuration[0]) * 3600) + (Integer.parseInt(partsOfDuration[1]) * 60) + Integer.parseInt(partsOfDuration[2]);
+                            } catch (Exception ex) {
+                                Logger.getLogger(getClass()).warn("invalid video duration: " + duration);
+                            }
+                        }
                     } else if ((frameRate.length() == 0) && outLine.contains("_avg_frame_rate")) {
                         String[] tokens = outLine.split("=");
                         String averageFrameRate = tokens[1].substring(1, tokens[1].length() - 1);
@@ -134,6 +144,7 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
         	        XmlUtil.setChildText(videoInfoElem, "ypix", videoHeight);
                     XmlUtil.setChildText(videoInfoElem, "codec", codec);
                     XmlUtil.setChildText(videoInfoElem, "duration", duration);
+                    XmlUtil.setChildText(videoInfoElem, "durationSeconds", Integer.toString(durationSeconds));
                     XmlUtil.setChildText(videoInfoElem, "fps", frameRate);
                     
                     try {
