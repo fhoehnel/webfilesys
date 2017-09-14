@@ -1772,7 +1772,7 @@ button.alertConfirmButton {
 select.timeSel {
     width: 50px;
     padding: 4px;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 @media (max-width: 400px) {

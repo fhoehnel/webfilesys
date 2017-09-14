@@ -138,14 +138,14 @@
               <tr>
                 <td class="formParm1"><span resource="label.timeRange"></span>:</td>
                 <td class="formParm2">
-                  <select name="startHour" id="startHour" class="timeSel" />:
-                  <select name="startMin" id="startMin" class="timeSel" />:
+                  <select name="startHour" id="startHour" class="timeSel" /><b>:</b>&#160;
+                  <select name="startMin" id="startMin" class="timeSel" /><b>:</b>&#160;
                   <select name="startSec" id="startSec" class="timeSel" />
 
-                  &#160;<span style="font-size:20px;font-weight:bold">-</span>&#160;&#160;
+                  &#160;<span style="font-size:20px;font-weight:bold">&#8211;</span>&#160;&#160;
 
-                  <select name="endHour" id="endHour" class="timeSel" />: 
-                  <select name="endMin" id="endMin" class="timeSel" />:
+                  <select name="endHour" id="endHour" class="timeSel" /><b>:</b>&#160; 
+                  <select name="endMin" id="endMin" class="timeSel" /><b>:</b>&#160;
                   <select name="endSec" id="endSec" class="timeSel" />
                 </td>
               </tr>
