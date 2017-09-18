@@ -124,6 +124,18 @@ public class VideoConverterThread extends Thread {
             	}
             }
 
+            boolean targetFileNameOk = true;
+            do {
+                File existingTargetFile = new File(targetFilePath);
+                if (existingTargetFile.exists()) {
+                    targetFileNameOk = false;
+                    int dotIdx = targetFilePath.lastIndexOf(".");
+                    targetFilePath = targetFilePath.substring(0, dotIdx) + "-1" + targetFilePath.substring(dotIdx);
+                } else {
+                    targetFileNameOk = true;
+                }
+            } while (!targetFileNameOk);
+            
             String frameRateFilter = "";
             
             if (!CommonUtils.isEmpty(newFps)) {
