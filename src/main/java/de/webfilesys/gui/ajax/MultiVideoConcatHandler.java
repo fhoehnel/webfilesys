@@ -1,6 +1,9 @@
 package de.webfilesys.gui.ajax;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -12,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.graphics.VideoInfo;
+import de.webfilesys.graphics.VideoInfoExtractor;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -24,6 +29,8 @@ public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
 	public static final String LIST_PREFIX = "list-";
 	
 	private static final int LIST_PREFIX_LENGTH = LIST_PREFIX.length();
+	
+	private static final String FFMPEG_INPUT_LIST_FILE_NAME = "ffmpegInputFileList.txt";
 	
 	boolean clientIsLocal = false;
 
@@ -53,16 +60,39 @@ public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
             }
 		}
 		
-		for (int i = 0; i < selectedFiles.size(); i++) {
-			String filePath = null;
+		File ffmpegInputFileListFilePath = new File(currentPath, FFMPEG_INPUT_LIST_FILE_NAME);
+		
+		PrintWriter ffmpegInputFileListFile = null;
+		
+		try {
+	        ffmpegInputFileListFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(ffmpegInputFileListFilePath), "UTF-8"));
+	        
+	        VideoInfoExtractor videoInfoExtractor = new VideoInfoExtractor();
+	        
+	        for (int i = 0; i < selectedFiles.size(); i++) {
+	            String filePath = null;
 
-			if (currentPath.endsWith(File.separator)) {
-				filePath = currentPath + selectedFiles.get(i);
-			} else {
-				filePath = currentPath + File.separator + selectedFiles.get(i);
-			}
-			
-			LOG.debug("video file to concatenate: " + filePath);
+	            if (currentPath.endsWith(File.separator)) {
+	                filePath = currentPath + selectedFiles.get(i);
+	            } else {
+	                filePath = currentPath + File.separator + selectedFiles.get(i);
+	            }
+	            
+	            VideoInfo videoInfo = videoInfoExtractor.getVideoInfo(filePath);
+	            
+	            LOG.debug("video file to concatenate: " + filePath + ": codec=" + videoInfo.getCodec() + " width: " + videoInfo.getWidth() + " height: " + videoInfo.getHeight() + " fps=" + videoInfo.getFrameRate() + " duration=" + videoInfo.getDuration());
+	        
+	            ffmpegInputFileListFile.println("file " + '\'' +  filePath + '\'');
+	        }
+		} catch (IOException ioex) {
+		    LOG.error("failed to write ffmpeg input list file for video concatenation", ioex);
+		} finally {
+		    if (ffmpegInputFileListFile != null) {
+		        try {
+		            ffmpegInputFileListFile.close();
+		        } catch (Exception ex) {
+		        }
+		    }
 		}
 
 		Element resultElement = doc.createElement("result");
