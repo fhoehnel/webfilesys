@@ -74,6 +74,7 @@ import de.webfilesys.gui.ajax.EditConvertVideoHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
 import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
+import de.webfilesys.gui.ajax.MultiVideoConcatHandler;
 import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
@@ -1314,6 +1315,13 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
+        if (command.equals("multiVideoConcat"))
+        {
+		    (new MultiVideoConcatHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+
+            return(true);
+        }
+
         if (command.equals("multiImageExifRename"))
         {
 		    (new RenameToExifDateHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 

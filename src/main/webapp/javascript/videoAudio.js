@@ -237,6 +237,8 @@ function multiVideoFunction() {
         multiVideoCopyMove();
     } else if (cmd == 'delete') {
         multiVideoDelete();
+    } else if (cmd == 'concat') {
+        multiVideoConcat();
     }
      
     document.form2.cmd.selectedIndex = 0;
@@ -270,6 +272,49 @@ function multiVideoDelete() {
     } else {   
         customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
+}
+
+function multiVideoConcat() {
+    if (checkTwoOrMoreFilesSelected()) {
+    	showHourGlass();
+	    document.form2.command.value = 'multiVideoConcat';
+	    
+	    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
+	        if (req.readyState == 4) {
+	            if (req.status == 200) {
+	                 var item = req.responseXML.getElementsByTagName("result")[0];            
+	                 var success = item.firstChild.nodeValue;
+
+	                 toast(resourceBundle["videoConcatStarted"], 5000);
+	            } else {
+	            	alert(resourceBundle["alert.communicationFailure"]);
+	            }
+	            
+	            document.form2.command.value = '';
+	            document.form2.cmd.selectedIndex = 0;
+
+	            hideHourGlass();
+	        }
+	    });
+    } else {   
+        customAlert(resourceBundle["selectTwoOrMoreVideoFiles"] + "!");
+        document.form2.command.value = '';
+        document.form2.cmd.selectedIndex = 0;
+    }
+}
+
+function checkTwoOrMoreFilesSelected() {
+    var numChecked = 0;
+    
+    for (var i = 0; i < document.form2.elements.length; i++) {
+         if ((document.form2.elements[i].type == "checkbox") && 
+		     (document.form2.elements[i].name != "cb-setAll") &&
+		     document.form2.elements[i].checked) {
+	         numChecked++;
+         }
+    }
+    
+    return (numChecked >= 2);
 }
 
 function playVideoMaxSize(videoFilePath, videoFileName, isLink) { 

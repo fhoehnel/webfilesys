@@ -910,6 +910,9 @@ label.timeRange=Start-/Endezeit (hh:mm:ss)
 videoConversionStarted=Die Videokonvertierung wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner 
 validationError.videoStartEndTime=Die Endezeit darf nicht vor der Startzeit liegen.
 validationError.videoTimeRange=Das gewählte Zeitfenster liegt ausserhalb des Zeitbereiches des Videos.
+selectTwoOrMoreVideoFiles=Es müssen mindestens 2 Video-Dateien ausgewählt werden. 
+concatVideos=Videos verketten
+videoConcatStarted=Die Verkettung der selektierten Video-Dateien wurde gestartet und kann einige Minuten dauern.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version

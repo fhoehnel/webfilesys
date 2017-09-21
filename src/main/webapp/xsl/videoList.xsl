@@ -379,6 +379,7 @@
               <option value="delete" resource="button.delete" />
               <option value="copy" resource="label.copyToClip" />
               <option value="move" resource="label.cutToClip" />
+              <option value="concat" resource="concatVideos" />
             </select>
           </td>
 

@@ -194,7 +194,7 @@ confirm.deleteFiles=¿Borrar los archivos seleccionados?
 switchfileAgeColoring=Mostrar/ocultar colores differentes de acuerdo con la edad del archivo
 folderContentModified=El contenido de la carpeta actual ha cambiado. ¿Actualizar la lista de los archivos? 
 folderTreeModified=La estructura de carpetas ha cambiado. ¿Actualizar la visualización?
-noVideosInFolder=no hay archivos de vídeo (JPG,GIF,PNG,BMP)
+noVideosInFolder=no hay archivos de vídeo en esta carpeta (MP4,MPG,MOV)
 
 # file list checkboxes
 checkbox.selectall=Seleccionar todo
@@ -908,6 +908,9 @@ label.timeRange=intervalo de tiempo (hh:mm:ss)
 videoConversionStarted=Se ha iniciado la conversión del vídeo. Esto puede tomar algún tiempo para completar. Para el archivo de resultados, vea la subcarpeta 
 validationError.videoStartEndTime=La hora de finalización puede no ser anterior a la hora de inicio.
 validationError.videoTimeRange=El intervalo de tiempo seleccionado está fuera del rango del archivo de vídeo.
+selectTwoOrMoreVideoFiles=¡Seleccione dos o mas archivos de vídeo! 
+concatVideos=concatenar vídeos
+videoConcatStarted=La concatenación de los archivos de vídeo seleccionado ha comenzado.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys version móvil

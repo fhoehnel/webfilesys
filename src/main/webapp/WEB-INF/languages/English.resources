@@ -907,6 +907,9 @@ label.timeRange=time range (hh:mm:ss)
 videoConversionStarted=The conversion of the video has been started. This can take some time to complete. For the result file watch the subfolder 
 validationError.videoStartEndTime=The end time may not be before the start time.
 validationError.videoTimeRange=The selected time range is outside the range of the video.
+selectTwoOrMoreVideoFiles=Select at least two video files to concatenate.
+concatVideos=concatenate videos
+videoConcatStarted=The concatenation of the selected video files has been started. This can take some time to complete.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version
