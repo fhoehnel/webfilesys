@@ -911,6 +911,10 @@ validationError.videoTimeRange=El intervalo de tiempo seleccionado está fuera de
 selectTwoOrMoreVideoFiles=¡Seleccione dos o mas archivos de vídeo! 
 concatVideos=concatenar vídeos
 videoConcatStarted=La concatenación de los archivos de vídeo seleccionado ha comenzado.
+videoConcatErrorCodec=La concatenación del los archivos de vídeo es possible solo si usan lo mismo codec.
+videoConcatErrorFrameRate=La concatenación del los archivos de vídeo es possible solo si tienen lo mismo valor para cuadros por segundo.
+videoConcatErrorResolution=La concatenación del los archivos de vídeo es possible solo si tienen lo mismo valor para anchura y altura.
+videoConcatErrorProcess=Error al concatenación del los archivos de vídeo.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys version móvil

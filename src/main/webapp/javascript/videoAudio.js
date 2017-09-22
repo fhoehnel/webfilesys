@@ -282,10 +282,22 @@ function multiVideoConcat() {
 	    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
 	        if (req.readyState == 4) {
 	            if (req.status == 200) {
-	                 var item = req.responseXML.getElementsByTagName("result")[0];            
-	                 var success = item.firstChild.nodeValue;
-
-	                 toast(resourceBundle["videoConcatStarted"], 5000);
+	                var success = req.responseXML.getElementsByTagName("success")[0];
+	                if (success) {
+		                toast(resourceBundle["videoConcatStarted"], 5000);
+	                } else {
+		                var item = req.responseXML.getElementsByTagName("errorCode")[0];
+		                var errorCode = item.firstChild.nodeValue;
+		                if (errorCode == '1') {
+		                    customAlert(resourceBundle["videoConcatErrorFrameRate"]);
+		                } else if (errorCode == '2') {
+		               	    customAlert(resourceBundle["videoConcatErrorCodec"]);
+		                } else if (errorCode == '3') {
+		                    customAlert(resourceBundle["videoConcatErrorResolution"]);
+		                } else if (errorCode == '4') {
+		                    customAlert(resourceBundle["videoConcatErrorProcess"]);
+		                }
+	                }
 	            } else {
 	            	alert(resourceBundle["alert.communicationFailure"]);
 	            }

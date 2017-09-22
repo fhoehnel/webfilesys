@@ -910,6 +910,10 @@ validationError.videoTimeRange=The selected time range is outside the range of t
 selectTwoOrMoreVideoFiles=Select at least two video files to concatenate.
 concatVideos=concatenate videos
 videoConcatStarted=The concatenation of the selected video files has been started. This can take some time to complete.
+videoConcatErrorCodec=Videos to be concatenated must use the same codec.
+videoConcatErrorFrameRate=Videos to be concatenated must have the same frame rate.
+videoConcatErrorResolution=Videos to be concatenated must have the same dimensions.
+videoConcatErrorProcess=An error occured while concatenating the video files.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version

@@ -913,6 +913,10 @@ validationError.videoTimeRange=Das gewählte Zeitfenster liegt ausserhalb des Zei
 selectTwoOrMoreVideoFiles=Es müssen mindestens 2 Video-Dateien ausgewählt werden. 
 concatVideos=Videos verketten
 videoConcatStarted=Die Verkettung der selektierten Video-Dateien wurde gestartet und kann einige Minuten dauern.
+videoConcatErrorCodec=Zu verkettende Videos müssen den gleichen Codec benutzen.
+videoConcatErrorFrameRate=Zu verkettende Videos müssen die gleiche Framerate haben.
+videoConcatErrorResolution=Zu verkettende Videos müssen die gleiche Breite und Höhe haben.
+videoConcatErrorProcess=Beim Verketten der Videos ist ein Fehler aufgetreten.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version
