@@ -172,13 +172,25 @@
 
           currentPicture = '';
           
+          var popupShield = document.getElementById("popupShield");
+          if (popupShield) {
+        	  popupShield.parentNode.removeChild(popupShield);
+          }
+          
           // document.getElementsByTagName("body")[0].style.opacity = "1.0";
       }
 
       function showPicturePopup(imgSrc, xsize, ysize)
       {
+          var popupShield = document.createElement("div");
+    	  popupShield.id = "popupShield";
+    	  popupShield.setAttribute("class", "popupShield");    		  
+    	  document.getElementsByTagName("body")[0].appendChild(popupShield);    	  
+    	  
           var zoomImgObj = document.getElementById('zoomPic');
 
+          zoomImgObj.style.position = "static";
+          
           zoomImgObj.src = imgSrc;
 
           var xRatio;
@@ -260,7 +272,22 @@
           
           /*
           document.getElementsByTagName("body")[0].style.opacity = "0.5";
-          
           picturePopup.style.opacity = "1.0";
           */
+
+          picturePopup.style.backgroundImage = "url('" + zoomImgObj.src + "')";
+          
+          zoomedPicContOffset = null;
+      }
+
+      function hidePopupAndClearEventListeners() {
+          var picturePopup = document.getElementById('picturePopup');
+    	  
+          // picturePopup.removeEventListener("mouseenter",  zoomMouseEnterHandler);
+          // picturePopup.removeEventListener("mouseleave",  zoomMouseLeaveHandler);
+          picturePopup.removeEventListener("mousemove",  zoomMouseMoveHandler);
+
+          picturePopup.style.cursor = "auto";
+          
+    	  hidePopupPicture();
       }

@@ -19,6 +19,7 @@
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
 </link>
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/imgZoom.css" />
 
 <xsl:if test="not(/fileList/browserXslEnabled)">
   <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
@@ -41,6 +42,7 @@
 <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/popupPicture.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/imgZoom.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/keyFileList.js" type="text/javascript"></script>
 <xsl:if test="/fileList/pollInterval">
   <script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
@@ -163,10 +165,13 @@
 
 </body>
 
-<div id="picturePopup" class="picturePopup">
-  <img id="zoomPic" class="zoomPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/>
+<div id="picturePopup" class="picturePopup zoomedPicCont">
+  <img id="zoomPic" class="zoomPic zoomedPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/>
   <div id="popupClose" class="popupClose">
-    <img src="images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupPicture()"/>
+    <img src="images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupAndClearEventListeners()"/>
+  </div>
+  <div id="popupZoomSwitch" class="popupZoomIcon" onclick="initPopupZoom()">
+    <a class="icon-font icon-search"></a>
   </div>
 </div>
 

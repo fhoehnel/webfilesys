@@ -1721,7 +1721,8 @@ div.picturePopup div.popupClose {
     padding: 0px;
     visibility: hidden;
     border-style: none;
-    z-index:3;
+    z-index: 3;
+    cursor: auto;
 } 
 
 div.mouseClickShield {
@@ -1773,6 +1774,33 @@ select.timeSel {
     width: 50px;
     padding: 4px;
     margin-right: 5px;
+}
+
+div.popupZoomIcon {
+	display: inline-block;
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	border: 1px solid #ffffff;
+	padding: 2px;
+}
+
+div.popupZoomIcon a {
+	cursor: pointer;
+}
+
+div.popupZoomIcon a:before {
+	font-size: 20px;
+}
+
+div.popupShield {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #a0a0a0;
+    opacity: 0.8;
 }
 
 @media (max-width: 400px) {
