@@ -147,7 +147,6 @@ function delVideo(fileName) {
 
 function renameVideo(fileName, domId) {
     centeredDialog('/webfilesys/servlet?command=renameImagePrompt&imageFile=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameVideo.xsl', 360, 160, function() {
-    	document.renameForm.domId.value = domId;
     	document.renameForm.newFileName.focus();
         document.renameForm.newFileName.select();
     });
@@ -206,7 +205,8 @@ function playVideoLocal(path) {
                 	customAlert(resourceBundle["errorVideoPlayer"]);
                 }
             } else {
-                alert(resourceBundle["alert.communicationFailure"]);
+                // no response if external videoplayer is not closed by user
+                // alert(resourceBundle["alert.communicationFailure"]);
             }
         }
 	});
