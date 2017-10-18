@@ -32,7 +32,19 @@ function initPopupZoom() {
 		document.getElementById("popupZoomSwitch").addEventListener("click", stopZoomPic);
 	}, 1000);
 	
-	initialZoomIn(zoomedPic.parentNode);	
+	if (browserFirefox) {
+		// serious performance problems in firefox with zooming background image
+		var zoomedPicCont = zoomedPic.parentNode;
+	    zoomedPicCont.style.backgroundSize = zoomedPic.naturalWidth + "px " + zoomedPic.naturalHeight + "px";	
+		zoomedPicCont.style.backgroundPosition = "50% 50%";
+		zoomedPicContOffset = cumulativeOffset(zoomedPicCont);
+		zoomedPicContWidth = zoomedPicCont.clientWidth;
+		zoomedPicContHeight = zoomedPicCont.clientHeight;
+		currentMouseXPos = zoomedPicContOffset.left + zoomedPicContWidth - 40;
+		currentMouseYPos = zoomedPicContOffset.top + 40;
+	} else {
+		initialZoomIn(zoomedPic.parentNode);	
+	}
 }
 
 function stopZoomPic() {
@@ -40,7 +52,12 @@ function stopZoomPic() {
 	var zoomedPic = document.getElementById('zoomPic');
 	var zoomedPicCont = zoomedPic.parentNode;
 
-	zoomPictureOut(zoomedPicCont);
+	if (browserFirefox) {
+	    zoomedPicCont.style.backgroundSize = zoomedPicContWidth + "px " + zoomedPicContHeight + "px";	
+	    zoomedPic.style.position = "static";
+	} else {
+		zoomPictureOut(zoomedPicCont);
+	}
 	
 	// zoomedPicCont.removeEventListener("mouseenter",  zoomMouseEnterHandler);
 	// zoomedPicCont.removeEventListener("mouseleave",  zoomMouseLeaveHandler);
@@ -62,13 +79,14 @@ function initZoomedPic(zoomedPic) {
 	// zoomedPicCont.addEventListener("mouseleave",  zoomMouseLeaveHandler);
 	zoomedPicCont.addEventListener("mousemove",  zoomMouseMoveHandler);
 	
-	zoomedPicCont.style.cursor = "url(/webfilesys/images/search.gif),auto";
+	var urlBase = zoomedPic.src.substring(0, zoomedPic.src.lastIndexOf("/"));
+	var cursorImgUrl = urlBase + "/images/search.cur"; 
+	
+	zoomedPicCont.style.cursor = "url(/webfilesys/images/search.gif),url(" + cursorImgUrl + "),auto";
 	
 	zoomedPicCont.style.backgroundSize = zoomedPic.clientWidth + "px " + zoomedPic.clientHeight + "px";
 	
-	if (!zoomedPicCont.style.backgroundImage) {
-		zoomedPicCont.style.backgroundImage = "url('" + zoomedPic.src + "')";
-	}
+	zoomedPicCont.style.backgroundImage = "url('" + zoomedPic.src + "&cached=true')";
 	
 	zoomedPic.style.position = "relative";
 	zoomedPic.style.top = "-3000px";
@@ -77,21 +95,9 @@ function initZoomedPic(zoomedPic) {
 
 function zoomMouseMoveHandler(evt) {
 	
-	var moveEvent = window.event;
-		
-	var mouseXPos;
-    var mouseYPos;	
-		
-	if (moveEvent) {
-		mouseXPos = moveEvent.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft);
-		mouseYPos = moveEvent.clientY + (document.documentElement.scrollTop || document.body.scrollTop);		
-    } else {
-		moveEvent = evt;
-		if (moveEvent)  {
-            mouseXPos = moveEvent.layerX;
-            mouseYPos = moveEvent.layerY;
-		}
-    }
+	var moveEvent = evt;
+	var mouseXPos = moveEvent.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft);
+	var mouseYPos = moveEvent.clientY + (document.documentElement.scrollTop || document.body.scrollTop);		
 	
 	currentMouseXPos = mouseXPos;
 	currentMouseYPos = mouseYPos;
@@ -99,7 +105,7 @@ function zoomMouseMoveHandler(evt) {
 	if (zoomTimeout != null) {
 		return;
 	}
-	
+
     if (!moveEvent.target) {
     	return;
     }
@@ -115,10 +121,10 @@ function zoomMouseMoveHandler(evt) {
 		initialZoomIn(zoomedPicCont);
 		return;
 	}
-	
+
 	if (((mouseXPos >= zoomedPicContOffset.left) && (mouseXPos <= zoomedPicContOffset.left + zoomedPicContWidth)) &&
 	    ((mouseYPos >= zoomedPicContOffset.top) && (mouseYPos <= zoomedPicContOffset.top + zoomedPicContHeight))) {
-			
+
 		var relativeXPos = mouseXPos - zoomedPicContOffset.left;
 		var relativeYPos = mouseYPos - zoomedPicContOffset.top;
 		
@@ -131,8 +137,6 @@ function zoomMouseMoveHandler(evt) {
 
 function zoomMouseEnterHandler(evt) {
     
-	console.log("zoomMouseEnterHandler");
-	
 	var mouseEnterEvt = evt;
 	if (!evt) {
 		mouseEnterEvt = window.event;

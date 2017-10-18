@@ -3,3 +3,7 @@ div.zoomedPicCont {
 	margin: auto;
     background-repeat: no-repeat;	
 }
+
+div.popupClose {
+	cursor: pointer;
+}

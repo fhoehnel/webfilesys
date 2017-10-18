@@ -167,8 +167,8 @@
 
 <div id="picturePopup" class="picturePopup zoomedPicCont">
   <img id="zoomPic" class="zoomPic zoomedPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/>
-  <div id="popupClose" class="popupClose">
-    <img src="images/winClose.gif" border="0" width="16" height="14" onclick="hidePopupAndClearEventListeners()"/>
+  <div id="popupClose" class="popupClose" onclick="hidePopupAndClearEventListeners()">
+    <img src="images/winClose.gif" border="0" width="16" height="14"/>
   </div>
   <div id="popupZoomSwitch" class="popupZoomIcon" onclick="initPopupZoom()">
     <a class="icon-font icon-search"></a>
