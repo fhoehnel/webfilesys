@@ -523,12 +523,20 @@ function createVideoTimeRangeSelOptions() {
     createVideoTimeOptions(document.getElementById("startMin"), 0, 59);
     createVideoTimeOptions(document.getElementById("startSec"), 0, 59);
     
-    createVideoTimeOptions(document.getElementById("endHour"), 0, 10);
-    createVideoTimeOptions(document.getElementById("endMin"), 0, 59);
-    createVideoTimeOptions(document.getElementById("endSec"), 0, 59);
+    var hourPreselect = Math.floor(durationSeconds / (60 * 60));
+    
+    createVideoTimeOptions(document.getElementById("endHour"), 0, 10, hourPreselect);
+
+    var minutePreselect = Math.floor(durationSeconds % (60 * 60) / 60);
+    
+    createVideoTimeOptions(document.getElementById("endMin"), 0, 59, minutePreselect);
+
+    var secondPreselect = Math.floor(durationSeconds % 60);
+    
+    createVideoTimeOptions(document.getElementById("endSec"), 0, 59, secondPreselect);
 }
 
-function createVideoTimeOptions(selectBox, minVal, maxVal) {
+function createVideoTimeOptions(selectBox, minVal, maxVal, preselectVal) {
     var i = 0;
     for (var val = minVal; val <= maxVal; val++) {
         var optionLabel;
@@ -539,6 +547,11 @@ function createVideoTimeOptions(selectBox, minVal, maxVal) {
         }
         
         selectBox.options[i] = new Option(optionLabel, val);
+        
+        if (preselectVal && (val == preselectVal)) {
+        	selectBox.selectedIndex = i;
+        }
+        
         i++;
     }    
 }
