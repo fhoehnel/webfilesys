@@ -71,6 +71,7 @@ import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.EditConvertVideoHandler;
+import de.webfilesys.gui.ajax.ExtractVideoFrameHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
 import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
@@ -212,6 +213,7 @@ import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
 import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.CompareImageSliderHandler;
 import de.webfilesys.gui.xsl.EditVideoParamHandler;
+import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -2142,7 +2144,19 @@ public class WebFileSysServlet extends ServletBase
 		    (new EditConvertVideoHandler(req, resp, session, output, userid)).handleRequest(); 
             return(true);
         }
+
+        if (command.equals("extractVideoFrameParams"))
+        {
+		    (new ExtractVideoFrameParamHandler(req, resp, session, output, userid)).handleRequest(); 
+            return(true);
+        }
         
+        if (command.equals("extractVideoFrame"))
+        {
+		    (new ExtractVideoFrameHandler(req, resp, session, output, userid)).handleRequest(); 
+            return(true);
+        }
+
         if (command.equals("mobile"))
         {
             String cmd = req.getParameter("cmd");

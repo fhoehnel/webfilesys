@@ -918,6 +918,15 @@ videoConcatErrorFrameRate=Zu verkettende Videos müssen die gleiche Framerate hab
 videoConcatErrorResolution=Zu verkettende Videos müssen die gleiche Breite und Höhe haben.
 videoConcatErrorProcess=Beim Verketten der Videos ist ein Fehler aufgetreten.
 
+# extract video frame
+contextMenuExtractVideoFrame=Standbild extrahieren
+titleExtractVideoFrame=Video-Standbild extrahieren
+label.frameResolution=Auflösung des Bildes (Breite x Höhe)
+label.extractFrameTime=Zeitpunkt im Video (hh:mm:ss)
+button.startExtract=Extrahieren
+videoFrameExtractionStarted=Die Extrahierung des Standbildes wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
+validationError.videoFrameExtractTime=Der gewählte Zeitpunkt liegt ausserhalb des Zeitbereiches des Videos.
+
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version
 label.bookmarksMobile=Ordner-Lesezeichen

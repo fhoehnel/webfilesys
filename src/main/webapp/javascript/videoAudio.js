@@ -518,6 +518,56 @@ function sendEditConvertForm() {
     });
 }
 
+function validateExtractVideoFrameForm() {
+    var startHour = getSelectboxValueInt("startHour");
+    var startMin = getSelectboxValueInt("startMin");
+    var startSec = getSelectboxValueInt("startSec");
+    
+    var startTime = (startHour * 3600) + (startMin * 60) + startSec;
+
+    if (startTime > durationSeconds) {
+        customAlert(resourceBundle["validationError.videoFrameExtractTime"]);
+        return false;
+    }
+
+    return true;
+}
+
+function sendExtractVideoFrameForm() {
+    if (!validateExtractVideoFrameForm()) {
+        return;
+    }
+
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var successItem = req.responseXML.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
+                
+                if (success == "true") {
+                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                    var targetPath = targetPathItem.firstChild.nodeValue;
+                    
+                    customAlert(resourceBundle["videoFrameExtractionStarted"] + " " + targetFolder + ".");
+                    
+                    setTimeout(function() {
+                        window.location.href = "/webfilesys/servlet?command=listVideos";
+                    }, 4000);
+                } else {
+                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
+                    var message = messageItem.firstChild.nodeValue;
+                    customAlert(message);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
+}
+
 function createVideoTimeRangeSelOptions() {
     createVideoTimeOptions(document.getElementById("startHour"), 0, 10);
     createVideoTimeOptions(document.getElementById("startMin"), 0, 59);

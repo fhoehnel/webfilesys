@@ -915,6 +915,15 @@ videoConcatErrorFrameRate=Videos to be concatenated must have the same frame rat
 videoConcatErrorResolution=Videos to be concatenated must have the same dimensions.
 videoConcatErrorProcess=An error occured while concatenating the video files.
 
+# extract video frame
+contextMenuExtractVideoFrame=extract video frame
+titleExtractVideoFrame=extract video frame
+label.frameResolution=frame resolution (width x height)
+label.extractFrameTime=time in video (hh:mm:ss)
+button.startExtract=Extract Frame
+videoFrameExtractionStarted=The extraction of the video frame has been started. This can take some time to complete. For the result file watch the subfolder
+validationError.videoFrameExtractTime=The selected time is outside the range of the video.
+
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version
 label.bookmarksMobile=bookmarks
