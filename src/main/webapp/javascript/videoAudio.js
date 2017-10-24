@@ -132,7 +132,7 @@ function setVideoDimensions(pic) {
 
     var picFileName = pixDim.getAttribute("picFileName");
 
-    var url = "/webfilesys/servlet?command=getVideoDimensions&fileName=" +  encodeURIComponent(picFileName);
+    var url = "/webfilesys/servlet?command=video&cmd=getVideoDimensions&fileName=" +  encodeURIComponent(picFileName);
 
     var picIsLink = pixDim.getAttribute("picIsLink");
     if (picIsLink) {
@@ -340,7 +340,7 @@ function playVideoMaxSize(videoFilePath, videoFileName, isLink) {
     	return;
     }
 	
-    var url = "/webfilesys/servlet?command=getVideoDimensions&fileName=" +  encodeURIComponent(videoFileName);
+    var url = "/webfilesys/servlet?command=video&cmd=getVideoDimensions&fileName=" +  encodeURIComponent(videoFileName);
 
     if (isLink) {
     	url = url + "&link=true";

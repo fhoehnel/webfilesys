@@ -949,13 +949,6 @@ public class WebFileSysServlet extends ServletBase
 		    return(true);
     	}
 
-    	if (command.equals("getVideoDimensions"))
-    	{
-		    (new GetVideoDimensionsHandler(req, resp, session, output, userid)).handleRequest(); 
-
-		    return(true);
-    	}
-
     	if (command.equals("bookPicture"))
     	{
 		    (new XslAlbumPictureHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -1200,13 +1193,6 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
-        if (command.equals("renameVideo"))
-        {
-            (new RenameVideoRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
-
-            return(true);
-        }
-
         if (command.equals("gunzip"))
         {
 		    (new GUnzipRequestHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -2133,28 +2119,41 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
-        if (command.equals("editVideoParams"))
-        {
-		    (new EditVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
-            return(true);
-        }
+        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+        	
+            if (command.equals("video")) {
+            	String cmd = req.getParameter("cmd");
 
-        if (command.equals("editConvertVideo"))
-        {
-		    (new EditConvertVideoHandler(req, resp, session, output, userid)).handleRequest(); 
-            return(true);
-        }
+            	if (cmd.equals("getVideoDimensions")) {
+        		    (new GetVideoDimensionsHandler(req, resp, session, output, userid)).handleRequest(); 
+        		    return(true);
+            	}
+            	
+                if (cmd.equals("editVideoParams")) {
+        		    (new EditVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
 
-        if (command.equals("extractVideoFrameParams"))
-        {
-		    (new ExtractVideoFrameParamHandler(req, resp, session, output, userid)).handleRequest(); 
-            return(true);
-        }
-        
-        if (command.equals("extractVideoFrame"))
-        {
-		    (new ExtractVideoFrameHandler(req, resp, session, output, userid)).handleRequest(); 
-            return(true);
+                if (cmd.equals("editConvertVideo")) {
+        		    (new EditConvertVideoHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+                
+                if (cmd.equals("extractVideoFrameParams")) {
+        		    (new ExtractVideoFrameParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+                
+                if (cmd.equals("extractVideoFrame")) {
+        		    (new ExtractVideoFrameHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+                
+                if (cmd.equals("renameVideo")) {
+                    (new RenameVideoRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
+                    return(true);
+                }
+            }
         }
 
         if (command.equals("mobile"))

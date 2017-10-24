@@ -39,7 +39,8 @@
     <br/>
 
     <form accept-charset="utf-8" name="form1" method="get" action="/webfilesys/servlet">
-      <input type="hidden" name="command" value="extractVideoFrame" />
+      <input type="hidden" name="command" value="video" />
+      <input type="hidden" name="cmd" value="extractVideoFrame" />
       <input type="hidden" name="videoWidth">
         <xsl:attribute name="value"><xsl:value-of select="/editParams/videoInfo/xpix" /></xsl:attribute>
       </input>

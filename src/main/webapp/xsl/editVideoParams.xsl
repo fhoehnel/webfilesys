@@ -38,8 +38,9 @@
     
     <br/>
 
-    <form accept-charset="utf-8" name="form1" method="get" action="/webfilesys/servlet">
-      <input type="hidden" name="command" value="editConvertVideo" />
+    <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet">
+      <input type="hidden" name="command" value="video" />
+      <input type="hidden" name="cmd" value="editConvertVideo" />
       
       <input type="hidden" name="videoFileName">
         <xsl:attribute name="value"><xsl:value-of select="/editParams/videoFileName" /></xsl:attribute>

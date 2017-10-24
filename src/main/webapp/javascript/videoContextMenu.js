@@ -156,11 +156,11 @@ function renameVideo(fileName, domId) {
 }
 
 function editConvertVideo(fileName) {
-	window.location.href = "/webfilesys/servlet?command=editVideoParams&videoFile=" + encodeURIComponent(fileName);
+	window.location.href = "/webfilesys/servlet?command=video&cmd=editVideoParams&videoFile=" + encodeURIComponent(fileName);
 }
 
 function extractVideoFrame(fileName) {
-	window.location.href = "/webfilesys/servlet?command=extractVideoFrameParams&videoFile=" + encodeURIComponent(fileName);
+	window.location.href = "/webfilesys/servlet?command=video&cmd=extractVideoFrameParams&videoFile=" + encodeURIComponent(fileName);
 }
 
 function editVideoDesc(path) {
