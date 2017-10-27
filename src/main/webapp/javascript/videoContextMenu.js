@@ -32,36 +32,27 @@ function videoContextMenu(fileName, domId) {
                  + '</th>'
                  + '</tr>';
 
-    menuText = menuText 
-                 + menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
+    menuText += menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
 
     if (parent.readonly != 'true') {
-    	menuText = menuText 
-                 + menuEntry("javascript:delVideo('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
+    	menuText += menuEntry("javascript:delVideo('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:renameVideo('" + scriptPreparedFile + "', '" + domId + "')", resourceBundle["label.renameFile"]);
+        menuText += menuEntry("javascript:renameVideo('" + scriptPreparedFile + "', '" + domId + "')", resourceBundle["label.renameFile"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.copyToClip"]);
+        menuText += menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.copyToClip"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.cutToClip"]);
+        menuText += menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.cutToClip"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
+        menuText += menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:editConvertVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuEditVideo"]);
+        menuText += menuEntry("javascript:editConvertVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuEditVideo"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:extractVideoFrame('" + scriptPreparedFile + "')", resourceBundle["contextMenuExtractVideoFrame"]);
+        menuText += menuEntry("javascript:extractVideoFrame('" + scriptPreparedFile + "')", resourceBundle["contextMenuExtractVideoFrame"]);
     }
         
-    menuText = menuText 
-             + menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
+    menuText += menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
     
-    menuText = menuText + '</table>'; 
+    menuText += '</table>'; 
 
     var menuDiv = document.getElementById('contextMenu');    
     
@@ -109,24 +100,19 @@ function videoLinkMenu(linkName, realPath, domId) {
                  + '</th>'
                  + '</tr>';
 
-    menuText = menuText 
-             + menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
+    menuText += menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
     
     if (parent.readonly != 'true') {
-        menuText = menuText 
-                 + menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
+        menuText += menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
         
-        menuText = menuText 
-                 + menuEntry("javascript:renameLink('" + linkName + "')", resourceBundle["label.renameLink"]);
+        menuText += menuEntry("javascript:renameLink('" + linkName + "')", resourceBundle["label.renameLink"]);
     }
 
-    menuText = menuText 
-             + menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
+    menuText += menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
     
-    menuText = menuText 
-             + menuEntry("javascript:gotoOrigDir('" + insertDoubleBackslash(realDir) + "')", resourceBundle["label.origDir"]);
+    menuText += menuEntry("javascript:gotoOrigDir('" + insertDoubleBackslash(realDir) + "')", resourceBundle["label.origDir"]);
     
-    menuText = menuText + '</table>'; 
+    menuText += '</table>'; 
 
     var menuDiv = document.getElementById('contextMenu');    
 
