@@ -90,6 +90,7 @@ public class GeoTrackViewHandler implements ViewHandler
             boolean isCDATA = false;
             
             String ignoreUnknownTag = null;
+            boolean invalidTime = false;
             
             // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             
@@ -317,6 +318,10 @@ public class GeoTrackViewHandler implements ViewHandler
                                     prevSpeed = correctedSpeed;
                                 }
                                 */
+                            } else if (invalidTime) {
+                                if (tagName.equals("trk")) {
+                                    xmlOut.print("\n<invalidTime>true</invalidTime>");
+                                }
                             }
 
                             lastWasText = false;
@@ -343,6 +348,7 @@ public class GeoTrackViewHandler implements ViewHandler
                                             
                                             if (duration < 0) {
                                                 Logger.getLogger(getClass()).warn("invalid trkpt time (before previous timestamp): " + elementText);
+                                                invalidTime = true;
                                                 speed = 0.0f;
                                             } else {
                                         	    for (int i = 0; i < DISTANCE_SMOOTH_FACTOR - 1; i++) {

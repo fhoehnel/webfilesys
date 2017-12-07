@@ -13,18 +13,16 @@
 
 <meta http-equiv="expires" content="0" />
 
-<link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
-
-<link rel="stylesheet" type="text/css">
-  <xsl:attribute name="href">/webfilesys/styles/common.css</xsl:attribute>
-</link>
-
 <style>
-  p.info {font-size:13px;font-family:Arial,Helvetica;color:black;clear:both;}
-  span.chartText {font-size:13px;font-family:Arial,Helvetica;color:black;clear:both;}
-  td.chartText {font-size:13px;font-family:Arial,Helvetica;color:black;}
-  h3 {font-size:14px;font-family:Arial,Helvetica;font-weight:bold;color:black}
+  body {font-family:Arial,Helvetica;}
+  p.info {font-size:13px;color:black;clear:both;}
+  span.chartText {font-size:13px;color:black;clear:both;}
+  span.error {color:#a00000}
+  td.chartText {font-size:13px;color:black;}
+  h3 {font-size:14px;font-weight:bold;color:black}
 </style>
+
+<title>WebFileSys geotrack viewer</title>
 
 <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 
@@ -146,12 +144,14 @@
       <xsl:for-each select="./gpx:trk">
         var trackNum = <xsl:value-of select="position()"/>;
       
-        <xsl:if test=".//gpx:trkpt/gpx:ele  and .//gpx:trkpt/gpx:time">
-          drawAltTimeProfile<xsl:value-of select="position()"/>(trackNum);
-        </xsl:if>
+        <xsl:if test="not(/gpx:gpx/gpx:invalidTime)">
+          <xsl:if test=".//gpx:trkpt/gpx:ele  and .//gpx:trkpt/gpx:time">
+            drawAltTimeProfile<xsl:value-of select="position()"/>(trackNum);
+          </xsl:if>
 
-        <xsl:if test=".//gpx:trkpt/gpx:speed">
-          drawSpeedProfile<xsl:value-of select="position()"/>(trackNum);
+          <xsl:if test=".//gpx:trkpt/gpx:speed">
+            drawSpeedProfile<xsl:value-of select="position()"/>(trackNum);
+          </xsl:if>
         </xsl:if>
         
         <xsl:if test=".//gpx:trkpt/gpx:ele">
@@ -797,109 +797,122 @@
 
   <!-- ====================== Speed ====================== -->
   
-  <xsl:if test=".//gpx:trkpt/gpx:speed">
+  <xsl:if test="not(/gpx:gpx/gpx:invalidTime)">
   
-    <br/><br/>
+    <xsl:if test=".//gpx:trkpt/gpx:speed">
   
-    <xsl:variable name="maxSpeed">
-      <xsl:for-each select=".//gpx:speed">
-        <xsl:sort data-type="number" order="descending"/>
-        <xsl:if test="position() = 1">
-          <xsl:value-of select="number(.)" />
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:variable>
+      <br/><br/>
   
-    <h3>speed</h3>
-    <span class="chartText">max: <xsl:value-of select="format-number($maxSpeed * 3.6, '###,###.0')" /> km/h = <xsl:value-of select="format-number($maxSpeed, '###,###.0')" /> m/s</span>
-    <br/>
+      <xsl:variable name="maxSpeed">
+        <xsl:for-each select=".//gpx:speed">
+          <xsl:sort data-type="number" order="descending"/>
+          <xsl:if test="position() = 1">
+            <xsl:value-of select="number(.)" />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
   
-    <div style="width:1100px">
+      <h3>speed</h3>
+      <span class="chartText">max: <xsl:value-of select="format-number($maxSpeed * 3.6, '###,###.0')" /> km/h = <xsl:value-of select="format-number($maxSpeed, '###,###.0')" /> m/s</span>
+      <br/>
   
-      <canvas width='1000' height='200'>
-        <xsl:attribute name="id">canvasSpeed<xsl:value-of select="$trackNum"/></xsl:attribute>
-      </canvas>   
+      <div style="width:1100px">
+  
+        <canvas width='1000' height='200'>
+          <xsl:attribute name="id">canvasSpeed<xsl:value-of select="$trackNum"/></xsl:attribute>
+        </canvas>   
 
-      <canvas width="80" height="200">
-        <xsl:attribute name="id">canvasSpeedLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
-      </canvas>
+        <canvas width="80" height="200">
+          <xsl:attribute name="id">canvasSpeedLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
+        </canvas>
     
-    </div>  
+      </div>  
     
-    <xsl:variable name="minSpeed">
-      <xsl:for-each select=".//gpx:speed">
-        <xsl:sort data-type="number" order="ascending"/>
-        <xsl:if test="position() = 1">
-          <xsl:value-of select="number(.)" />
-        </xsl:if>
-      </xsl:for-each>
-    </xsl:variable>
+      <xsl:variable name="minSpeed">
+        <xsl:for-each select=".//gpx:speed">
+          <xsl:sort data-type="number" order="ascending"/>
+          <xsl:if test="position() = 1">
+            <xsl:value-of select="number(.)" />
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:variable>
 
-    <span class="chartText">min: <xsl:value-of select="format-number($minSpeed * 3.6, '###,##0.0')" /> km/h = <xsl:value-of select="format-number($minSpeed, '###,##0.0')" /> m/s</span>
+      <span class="chartText">min: <xsl:value-of select="format-number($minSpeed * 3.6, '###,##0.0')" /> km/h = <xsl:value-of select="format-number($minSpeed, '###,##0.0')" /> m/s</span>
 
-    <br/>
+      <br/>
 
-    <table style="width:1000px" cellpadding="0" cellspacing="0">
-      <tr>
-        <td class="chartText">
-          <xsl:call-template name="formatTime">
-            <xsl:with-param name="datestr" select="$startTime"/>
-          </xsl:call-template>
-        </td>
-        <td class="chartText" style="text-align:right">
-          time &#160;
-          <xsl:call-template name="formatTime">
-            <xsl:with-param name="datestr" select="$endTime"/>
-          </xsl:call-template>
-        </td>
-      </tr>
-    </table>
+      <table style="width:1000px" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="chartText">
+            <xsl:call-template name="formatTime">
+              <xsl:with-param name="datestr" select="$startTime"/>
+            </xsl:call-template>
+          </td>
+          <td class="chartText" style="text-align:right">
+            time &#160;
+            <xsl:call-template name="formatTime">
+              <xsl:with-param name="datestr" select="$endTime"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+      </table>
   
+    </xsl:if>
+
   </xsl:if>
 
   <!-- ====================== elevation profile per time ====================== -->
 
-  <xsl:if test=".//gpx:trkpt/gpx:ele and .//gpx:trkpt/gpx:time">
+  <xsl:if test="not(/gpx:gpx/gpx:invalidTime)">
 
-    <br/><br/>
+    <xsl:if test=".//gpx:trkpt/gpx:ele and .//gpx:trkpt/gpx:time">
 
-    <h3>elevation / time</h3>
-    <span class="chartText">max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
-    <br/>
+      <br/><br/>
+
+      <h3>elevation / time</h3>
+      <span class="chartText">max: <xsl:value-of select="format-number($maxElevation, '###,###.0')" /> m</span>
+      <br/>
   
-    <div style="width:1100px">
+      <div style="width:1100px">
   
-      <canvas width='1000' height='200'>
-        <xsl:attribute name="id">canvas<xsl:value-of select="$trackNum"/></xsl:attribute>
-      </canvas>   
+        <canvas width='1000' height='200'>
+          <xsl:attribute name="id">canvas<xsl:value-of select="$trackNum"/></xsl:attribute>
+        </canvas>   
 
-      <canvas width="80" height="200">
-        <xsl:attribute name="id">canvasAltTimeLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
-      </canvas>
+        <canvas width="80" height="200">
+          <xsl:attribute name="id">canvasAltTimeLegend<xsl:value-of select="$trackNum"/></xsl:attribute>
+        </canvas>
   
-    </div>
+      </div>
   
-    <span class="chartText">min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m</span>
+      <span class="chartText">min: <xsl:value-of select="format-number($minElevation, '###,###.0')" /> m</span>
 
-    <br/>
+      <br/>
 
-    <table style="width:1000px" cellpadding="0" cellspacing="0">
-      <tr>
-        <td class="chartText">
-          <xsl:call-template name="formatTime">
-            <xsl:with-param name="datestr" select="$startTime"/>
-          </xsl:call-template>
-        </td>
-        <td class="chartText" style="text-align:right">
-          time &#160;
-          <xsl:call-template name="formatTime">
-            <xsl:with-param name="datestr" select="$endTime"/>
-          </xsl:call-template>
-        </td>
-      </tr>
-    </table>
+      <table style="width:1000px" cellpadding="0" cellspacing="0">
+        <tr>
+          <td class="chartText">
+            <xsl:call-template name="formatTime">
+              <xsl:with-param name="datestr" select="$startTime"/>
+            </xsl:call-template>
+          </td>
+          <td class="chartText" style="text-align:right">
+            time &#160;
+            <xsl:call-template name="formatTime">
+              <xsl:with-param name="datestr" select="$endTime"/>
+            </xsl:call-template>
+          </td>
+        </tr>
+      </table>
+  
+    </xsl:if>
   
   </xsl:if>
+  
+  <xsl:if test="/gpx:gpx/gpx:invalidTime">
+    <br/>
+    <span class="error">Invalid time data in GPX file. Time-based diagrams cannot be shown.</span>
+  </xsl:if>  
   
 </xsl:template>
 
