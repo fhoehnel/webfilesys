@@ -31,40 +31,7 @@ function showCopyResult(req)
              
              hideMenu();
         
-             msgBox1 = document.getElementById("msg1");
-        
-             if (window.ActiveXObject !== undefined) 
-             {
-                 windowWidth = document.body.clientWidth;
-                 windowHeight = document.body.clientHeight;
-                 yScrolled = document.body.scrollTop;
-                 xScrolled = document.body.scrollLeft;
-             }
-             else
-             {
-                 windowWidth = window.innerWidth;
-                 windowHeight = window.innerHeight;
-                 yScrolled = window.pageYOffset;
-                 xScrolled = window.pageXOffset;
-             }
-        
-             msgXpos = 30 + xScrolled;
-        
-             msgBox1.style.left = msgXpos + 'px';
-
-             msgYpos = (windowHeight - 100) / 2 + yScrolled;
-             if (msgYpos < 10)
-             {
-                 msgYpos = 10;
-             }
-
-             msgBox1.style.top = msgYpos + 'px';
-        
-             msgBox1.style.visibility = "visible";
-             
-             msgBox1.innerHTML = message;
-             
-             setTimeout("hideMsg()", 2000);
+             toast(message, 2000);
 
              if (req.responseXML.getElementsByTagName("copyOperation").length > 0) 
              {
@@ -167,40 +134,7 @@ function diffSelectResult(req)
              item = req.responseXML.getElementsByTagName("message")[0];            
              var message = item.firstChild.nodeValue;
              
-             msgBox1 = document.getElementById("msg1");
-        
-             if (window.ActiveXObject !== undefined) 
-             {
-                 windowWidth = document.body.clientWidth;
-                 windowHeight = document.body.clientHeight;
-                 yScrolled = document.body.scrollTop;
-                 xScrolled = document.body.scrollLeft;
-             }
-             else
-             {
-                 windowWidth = window.innerWidth;
-                 windowHeight = window.innerHeight;
-                 yScrolled = window.pageYOffset;
-                 xScrolled = window.pageXOffset;
-             }
-        
-             msgXpos = 10 + xScrolled;
-        
-             msgBox1.style.left = msgXpos + 'px';
-
-             msgYpos = (windowHeight - 100) / 2 + yScrolled;
-             if (msgYpos < 10)
-             {
-                 msgYpos = 10;
-             }
-
-             msgBox1.style.top = msgYpos + 'px';
-        
-             msgBox1.style.visibility = "visible";
-             
-             msgBox1.innerHTML = message;
-             
-             setTimeout("hideMsg()", 4000);
+             toast(message, 4000);
         }
     }
 }

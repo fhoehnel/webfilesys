@@ -1440,7 +1440,7 @@ td.pagingIcon {
 
 div.toastBox {
 	position: absolute;
-	background-color: ivory;
+	background-color: #e0e0e0;
 	border: 1px solid black;
 	border-radius: 10px;
 	padding: 20px;
