@@ -190,38 +190,12 @@ function resetMultifileSelection(unhighlight) {
 function showMsgCentered(message, boxWidth, boxHeight, duration)
 {
     var msgBox1 = document.getElementById("msg1");
-      
-    var windowWidth;
-    var windowHeight;
-    var yScrolled;
-    var xScrolled;
         
-    if (window.ActiveXObject !== undefined) 
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-        xScrolled = document.body.scrollLeft;
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-    }
-        
-    msgXpos = (windowWidth - boxWidth) / 2 + xScrolled;
-       
-    msgBox1.style.left = msgXpos + 'px';
-
-    msgYpos = (windowHeight - boxHeight) / 2 + yScrolled;
-
-    msgBox1.style.top = msgYpos + 'px';
-        
-    msgBox1.style.visibility = "visible";
-             
     msgBox1.innerHTML = message;
+    
+    centerBox(msgBox1);
+
+    msgBox1.style.visibility = "visible";
              
     setTimeout("hideMsgBox()", duration);
 }
