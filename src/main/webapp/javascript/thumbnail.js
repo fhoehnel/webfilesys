@@ -744,3 +744,12 @@ function getThumbnailCheckbox(thumbnailCont) {
     
     return null;
 }
+
+function scrollToPicture(picId) {
+    setTimeout(function() {
+		var picCont = document.getElementById("thumbCont-" + picId);
+		if (picCont) {
+			picCont.scrollIntoView();
+	    }
+	}, 200);
+}
