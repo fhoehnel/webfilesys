@@ -386,6 +386,11 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
             XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
         }
 		
+        String scrollTo = getParameter("scrollTo");
+        if (scrollTo != null) {
+            XmlUtil.setChildText(fileListElement, "scrollTo", scrollTo);
+        }
+        
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
 		processResponse("thumbnailOnePage.xsl", true);

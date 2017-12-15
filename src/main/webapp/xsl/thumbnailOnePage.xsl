@@ -153,6 +153,9 @@
     <xsl:if test="/fileList/pollInterval">
       delayedPollForDirChanges();
     </xsl:if>
+    <xsl:if test="/fileList/scrollTo">
+      scrollToPicture('<xsl:value-of select="/fileList/scrollTo" />');
+    </xsl:if>
   </xsl:attribute>
 
   <xsl:apply-templates />
