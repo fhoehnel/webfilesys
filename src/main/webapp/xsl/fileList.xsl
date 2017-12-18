@@ -579,6 +579,7 @@
               </xsl:if>
               <option value="download" resource="button.downloadAsZip" />
               <option value="diff" resource="action.diff" />
+              <option value="multiGPX" resource="viewMultipleGPX" />
             </select>
           </td>
         </tr>

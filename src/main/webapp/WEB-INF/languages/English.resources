@@ -790,6 +790,7 @@ label.hintGoogleMapSelect=Click to select geographic coordinates!
 noFilesWithGeoData=This folder does not contain pictures with geographic coordinates!
 button.hideMapInfo=Hide Info Text
 button.showMapInfo=Show Info Text
+viewMultipleGPX=show GPX on map
 
 # folder synchronization
 label.selectSyncSourceResult=Select the synchronization target folder and choose snychronize from the context menu!

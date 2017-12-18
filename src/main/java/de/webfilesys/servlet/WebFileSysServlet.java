@@ -214,6 +214,7 @@ import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.CompareImageSliderHandler;
 import de.webfilesys.gui.xsl.EditVideoParamHandler;
 import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
+import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -2114,6 +2115,11 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
 
+        if (command.equals("multiGPX")) {
+            (new MultiGPXTrackHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+        
         if (command.equals("playVideoLocal")) {
             (new VideoLocalPlayerHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
             return(true);

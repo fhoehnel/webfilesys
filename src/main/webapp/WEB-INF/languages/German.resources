@@ -793,6 +793,7 @@ label.hintGoogleMapSelect=Klick wählt geografische Lokation aus
 noFilesWithGeoData=Dieser Ordner enthält keine Bilder mit geografischen Koordinaten!
 button.hideMapInfo=Info-Text ausblenden
 button.showMapInfo=Info-Text einblenden
+viewMultipleGPX=auf Karte anzeigen
 
 # folder synchronization
 label.selectSyncSourceResult=Navigieren Sie zum Ziel-Ordner der Synchronisation und wählen Sie Synchronisieren im Kontext-Menü!
