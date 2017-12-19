@@ -20,7 +20,6 @@ import com.ctc.wstx.exc.WstxParsingException;
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
-import de.webfilesys.util.UTF8URLEncoder;
 
 /**
  * GPS track file viewer.
@@ -49,12 +48,14 @@ public class GPXViewHandler implements ViewHandler {
 			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
 		}
 
+		BufferedReader gpxReader = null;
+
 		try {
 			resp.setContentType("text/xml");
 
 			PrintWriter xmlOut = resp.getWriter();
 
-			BufferedReader gpxReader = new BufferedReader(new FileReader(filePath));
+			gpxReader = new BufferedReader(new FileReader(filePath));
 
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			XMLStreamReader parser = factory.createXMLStreamReader(gpxReader);
@@ -63,8 +64,6 @@ public class GPXViewHandler implements ViewHandler {
 
 			boolean documentEnd = false;
 
-			String ignoreUnknownTag = null;
-			
 			int trackCounter = 0;
 
 			while (!documentEnd) {
@@ -78,26 +77,15 @@ public class GPXViewHandler implements ViewHandler {
 						break;
 
 					case XMLStreamConstants.START_DOCUMENT:
-						/*
-						 * xmlOut.println(XML_HEADER);
-						 * xmlOut.println(STYLESHEET_REF);
-						 */
 						break;
 
 					case XMLStreamConstants.START_ELEMENT:
-
-						if (ignoreUnknownTag != null) {
-							break;
-						}
-
 						tagName = parser.getLocalName();
 
 						if (tagName.equals("gpx")) {
 							xmlOut.println(XML_HEADER);
 							xmlOut.println(STYLESHEET_REF);
-						}
 
-						if (tagName.equals("gpx")) {
 							xmlOut.println("<gpx>");
 
 							if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
@@ -116,7 +104,6 @@ public class GPXViewHandler implements ViewHandler {
 					case XMLStreamConstants.END_ELEMENT:
 
 						tagName = parser.getLocalName();
-
 						if (tagName.equals("gpx")) {
 							xmlOut.println("</gpx>");
 						}
@@ -131,13 +118,19 @@ public class GPXViewHandler implements ViewHandler {
 			}
 
 			xmlOut.flush();
-			gpxReader.close();
 		} catch (IOException e) {
 			Logger.getLogger(getClass()).error("failed to read target file", e);
 		} catch (XMLStreamException xmlEx) {
 			Logger.getLogger(getClass()).error("error parsing XML stream", xmlEx);
 		} catch (Exception e) {
 			Logger.getLogger(getClass()).error("failed to transform GPX file", e);
+		} finally {
+			if (gpxReader != null) {
+				try {
+					gpxReader.close();
+				} catch (Exception ex) {
+				}
+			}
 		}
 	}
 
@@ -145,20 +138,15 @@ public class GPXViewHandler implements ViewHandler {
 	 * Create the HTML response for viewing the given file contained in a ZIP
 	 * archive..
 	 * 
-	 * @param zipFilePath
-	 *            path of the ZIP entry
-	 * @param zipIn
-	 *            the InputStream for the file extracted from a ZIP archive
-	 * @param req
-	 *            the servlet request
-	 * @param resp
-	 *            the servlet response
+	 * @param zipFilePath  path of the ZIP entry
+	 * @param zipIn the InputStream for the file extracted from a ZIP archive
+	 * @param req the servlet request
+	 * @param resp the servlet response
 	 */
 	public void processZipContent(String zipFilePath, InputStream zipIn, ViewHandlerConfig viewHandlerConfig,
 			HttpServletRequest req, HttpServletResponse resp) {
 		// not yet supported
-		Logger.getLogger(getClass())
-				.warn("reading from ZIP archive not supported by ViewHandler " + this.getClass().getName());
+		Logger.getLogger(getClass()).warn("reading from ZIP archive not supported by ViewHandler " + this.getClass().getName());
 	}
 
 	/**

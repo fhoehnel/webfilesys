@@ -55,13 +55,15 @@ public class GeoTrackViewHandler implements ViewHandler
     		durationBuffer[i] = 0.0;
     	}
     	
+        BufferedReader gpxReader = null;
+
         try 
         {
             resp.setContentType("text/xml");
 
             PrintWriter xmlOut = resp.getWriter();
             
-            BufferedReader gpxReader = new BufferedReader(new FileReader(filePath));
+            gpxReader = new BufferedReader(new FileReader(filePath));
                 	
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader parser = factory.createXMLStreamReader(gpxReader);
@@ -419,7 +421,6 @@ public class GeoTrackViewHandler implements ViewHandler
             }            
 
             xmlOut.flush();
-            gpxReader.close();
         } 
         catch (IOException e) 
         {
@@ -431,6 +432,15 @@ public class GeoTrackViewHandler implements ViewHandler
         catch (Exception e) 
         {
             Logger.getLogger(getClass()).error("failed to transform GPX file", e);
+		} 
+        finally 
+        {
+			if (gpxReader != null) {
+				try {
+					gpxReader.close();
+				} catch (Exception ex) {
+				}
+			}
         }
     }
 

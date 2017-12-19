@@ -1803,6 +1803,26 @@ div.popupShield {
     opacity: 0.8;
 }
 
+div.gpsTrackMapCont {
+	width: 100%;
+	height: 600px;
+	border: 1px solid black;
+} 
+
+div.trackMetaInfo {
+	margin: 8px 0;
+	
+}
+
+span.trackName {
+	margin-right: 20px;
+	color: navy;
+}
+
+span.trackTime {
+    color: maroon;	
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

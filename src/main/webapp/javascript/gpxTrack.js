@@ -1,3 +1,11 @@
+var TRACK_COLORS = [
+	"#ffff00", 
+	"#ff4040", 
+	"#00c0ff" 
+];
+
+var globalTrackCounter = 0;
+
 var trackPointList = new Array();
 
 var bounds;
@@ -5,6 +13,9 @@ var bounds;
 var map;
 
 function handleGoogleMapsApiReady() {
+
+	document.getElementById("mapCont").style.height = (getWinHeight() - 120) + "px";
+	
     var mapCenter = new google.maps.LatLng(0, 0);
       
     var mapOptions = {
@@ -17,7 +28,7 @@ function handleGoogleMapsApiReady() {
       
     bounds = new google.maps.LatLngBounds();
     
-    if (gpxFiles) {
+    if (typeof(gpxFiles) != "undefined") {
     	loadAndShowMultipleGPXFiles();
     } else {
         loadAndShowTrack();    
@@ -67,6 +78,8 @@ function loadAndShowMultipleGPXFiles() {
             
             	showTrackOnMap(response.trackpoints);
             	
+            	showTrackMetaData(response);
+            	
             	if (gpxFiles.length > 0) {
             		loadAndShowMultipleGPXFiles();
             	}
@@ -87,10 +100,12 @@ function showTrackOnMap(trackpoints) {
         trackPointList.push(latLon);
         bounds.extend(latLon);
 	}
-                       
+        
+	var trackColor = TRACK_COLORS[globalTrackCounter % TRACK_COLORS.length];
+	
     var trackPath = new google.maps.Polyline({
         path: trackPointList,
-        strokeColor: "#ffff00",
+        strokeColor: trackColor,
         strokeOpacity: 0.8,
         strokeWeight: 4
     });
@@ -98,4 +113,36 @@ function showTrackOnMap(trackpoints) {
     trackPath.setMap(map);
                        
     map.fitBounds(bounds);
+    
+    globalTrackCounter++;    
+}
+
+function showTrackMetaData(response) {
+   	var trackElem = document.createElement("div");
+   	trackElem.setAttribute("class", "trackMetaInfo");
+   	var trackCont = document.getElementById("gpsTrackMetaInfo");
+   	trackCont.appendChild(trackElem);
+
+	if (response.trackName) {
+	   	var trackNameElem = document.createElement("span");
+	   	trackNameElem.setAttribute("class", "trackName");
+	   	trackNameElem.innerHTML = response.trackName;
+	   	trackElem.appendChild(trackNameElem);
+	}
+
+	if (response.startTime) {
+		var startTime = new Date(parseInt(response.startTime));
+
+		var metaData = startTime.toLocaleString();
+
+		if (response.endTime) {
+			var endTime = new Date(parseInt(response.endTime));
+			metaData = metaData + " - " + endTime.toLocaleString();
+		}
+		
+	   	var trackTimeElem = document.createElement("span");
+	   	trackTimeElem.setAttribute("class", "trackTime");
+	   	trackTimeElem.innerHTML = metaData;
+	   	trackElem.appendChild(trackTimeElem);
+	}
 }

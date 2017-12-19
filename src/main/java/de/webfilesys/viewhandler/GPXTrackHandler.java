@@ -53,12 +53,14 @@ public class GPXTrackHandler implements ViewHandler {
 			durationBuffer[i] = 0.0;
 		}
 
+		BufferedReader gpxReader = null;
+
 		try {
 			resp.setContentType("application/json");
 
 			PrintWriter jsonOut = resp.getWriter();
 
-			BufferedReader gpxReader = new BufferedReader(new FileReader(filePath));
+			gpxReader = new BufferedReader(new FileReader(filePath));
 
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			XMLStreamReader parser = factory.createXMLStreamReader(gpxReader);
@@ -79,12 +81,10 @@ public class GPXTrackHandler implements ViewHandler {
 			double totalDist = 0.0f;
 			double distFromStart = Double.MIN_VALUE;
 			double speed = Double.MIN_VALUE;
-			double prevSpeed = Double.MIN_VALUE;
 
 			String tagName = null;
 
 			boolean documentEnd = false;
-			boolean isCDATA = false;
 
 			String ignoreUnknownTag = null;
 			boolean invalidTime = false;
@@ -95,6 +95,14 @@ public class GPXTrackHandler implements ViewHandler {
 			
 			boolean firstTrackpoint = true;
 
+			boolean startTimeSet = false;
+			
+			long startTime = 0;
+			
+			long endTime = 0;
+			
+			String trackName = null;
+			
 			// SimpleDateFormat dateFormat = new
 			// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
@@ -154,9 +162,6 @@ public class GPXTrackHandler implements ViewHandler {
 								totalDist = 0.0f;
 								distFromStart = Double.MIN_VALUE;
 								speed = Double.MIN_VALUE;
-								prevSpeed = Double.MIN_VALUE;
-								
-								jsonOut.println("{\"trackpoints\": [");
 							} else {
 								currentTrack = false;
 							}
@@ -165,11 +170,13 @@ public class GPXTrackHandler implements ViewHandler {
 						if (tagName.equals("trkpt") || tagName.equals("wpt")) {
 							
 							if (currentTrack) {
-								if (!firstTrackpoint) {
-									jsonOut.println(",");
-								} else {
+								if (firstTrackpoint) {
+									jsonOut.println("{\"trackpoints\": [");
 									firstTrackpoint = false;
+								} else {
+									jsonOut.println(",");
 								}
+
 								jsonOut.println("{");
 								
 								speed = Double.MIN_VALUE;
@@ -258,8 +265,12 @@ public class GPXTrackHandler implements ViewHandler {
 							}
 						}
 
-						isCDATA = (tagName.equals("name") || tagName.equals("desc"));
+						// isCDATA = (tagName.equals("name") || tagName.equals("desc"));
 
+						if (tagName.equals("name")) {
+							trackName = parser.getElementText();
+						}
+						
 						break;
 
 					case XMLStreamConstants.END_ELEMENT:
@@ -281,6 +292,19 @@ public class GPXTrackHandler implements ViewHandler {
 							jsonOut.println("}");
 						} else if (tagName.equals("trk")) {
 							jsonOut.println("\n]");
+							
+							if (startTimeSet) {
+								jsonOut.print(",\n\"startTime\": \"" + startTime + "\"");
+								
+								if (endTime > 0) {
+									jsonOut.print(",\n\"endTime\": \"" + endTime + "\"");
+								}
+							}
+							
+							if (trackName != null) {
+								jsonOut.print(",\n\"trackName\": \"" + trackName + "\"");
+							}
+							
 						    if (invalidTime) {
 								jsonOut.print(",\n\"invalidTime\": true");
 							}
@@ -312,6 +336,13 @@ public class GPXTrackHandler implements ViewHandler {
 								try {
 									long trackPointTime = ISO8601DateParser.parse(elementText).getTime();
 
+									if (!startTimeSet) {
+										startTime = trackPointTime;
+										startTimeSet = true;
+									} else {
+										endTime = trackPointTime;
+									}
+									
 									if ((prevTime > 0L) && (dist != Double.MIN_VALUE)) {
 										double duration = trackPointTime - prevTime;
 
@@ -382,13 +413,19 @@ public class GPXTrackHandler implements ViewHandler {
 			}
 
 			jsonOut.flush();
-			gpxReader.close();
-		} catch (IOException e) {
-			Logger.getLogger(getClass()).error("failed to read target file", e);
+		} catch (IOException ioex) {
+			Logger.getLogger(getClass()).error("failed to read target file", ioex);
 		} catch (XMLStreamException xmlEx) {
 			Logger.getLogger(getClass()).error("error parsing XML stream", xmlEx);
 		} catch (Exception e) {
 			Logger.getLogger(getClass()).error("failed to transform GPX file", e);
+		} finally {
+			if (gpxReader != null) {
+				try {
+					gpxReader.close();
+				} catch (Exception ex) {
+				}
+			}
 		}
 	}
 

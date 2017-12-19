@@ -40,8 +40,7 @@ public class MultiGPXTrackHandler extends XslRequestHandlerBase {
 		while (allKeys.hasMoreElements()) {
 			String paramKey = (String) allKeys.nextElement();
 
-			if ((!paramKey.equals("cb-setAll")) && (!paramKey.equals("command")) && (!paramKey.equals("cmd"))
-					&& (!paramKey.equals("actpath"))) {
+			if ((!paramKey.equals("cb-setAll")) && (!paramKey.equals("command")) && (!paramKey.equals("cmd")) && (!paramKey.equals("actpath"))) {
 				try {
 					String fileName = UTF8URLDecoder.decode(paramKey);
 					selectedFiles.add(fileName);

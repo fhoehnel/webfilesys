@@ -15,6 +15,8 @@
 
     <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
+    <title>WebFileSys GPX track viewer</title>
+
     <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
@@ -46,7 +48,10 @@
   <body>
     <xsl:attribute name="onload">loadGoogleMapsAPIScriptCode('<xsl:value-of select="/gpxTracks/googleMapsAPIKey" />')</xsl:attribute>
 
-    <div id="mapCont" style="width:1000px;height:600px;border:1px solid black;"></div>
+    <div id="mapCont" class="gpsTrackMapCont"></div>
+
+    <div id="gpsTrackMetaInfo">
+    </div>
 
   </body>
   
