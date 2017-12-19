@@ -42,7 +42,9 @@
   <body>
     <xsl:attribute name="onload">loadGoogleMapsAPIScriptCode('<xsl:value-of select="/gpx/googleMapsAPIKey" />')</xsl:attribute>
 
-    <div id="mapCont" style="width:1000px;height:600px;border:1px solid black;"></div>
+    <div id="mapCont" class="gpsTrackMapCont"></div>
+
+    <div id="gpsTrackMetaInfo"></div>
 
   </body>
   

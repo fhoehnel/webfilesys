@@ -50,8 +50,7 @@
 
     <div id="mapCont" class="gpsTrackMapCont"></div>
 
-    <div id="gpsTrackMetaInfo">
-    </div>
+    <div id="gpsTrackMetaInfo"></div>
 
   </body>
   

@@ -14,7 +14,13 @@ var map;
 
 function handleGoogleMapsApiReady() {
 
-	document.getElementById("mapCont").style.height = (getWinHeight() - 120) + "px";
+    var spaceForMetaData = 120;
+    
+    if (typeof(gpxFiles) === "undefined") {
+        spaceForMetaData = 50;
+    }
+
+	document.getElementById("mapCont").style.height = (getWinHeight() - spaceForMetaData) + "px";
 	
     var mapCenter = new google.maps.LatLng(0, 0);
       
@@ -57,6 +63,8 @@ function loadAndShowTrack() {
             	var response = JSON.parse(req.responseText);
             
             	showTrackOnMap(response.trackpoints);
+
+            	showTrackMetaData(response);
             	
                 currentTrack++;
             } else {
