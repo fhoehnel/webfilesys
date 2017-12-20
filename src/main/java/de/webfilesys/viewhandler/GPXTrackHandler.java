@@ -103,6 +103,8 @@ public class GPXTrackHandler implements ViewHandler {
 			
 			String trackName = null;
 			
+			boolean dataInvalid = false;
+			
 			// SimpleDateFormat dateFormat = new
 			// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
@@ -131,14 +133,6 @@ public class GPXTrackHandler implements ViewHandler {
 
 						tagName = parser.getLocalName();
 
-						if ((!tagName.equals("gpx")) && (!tagName.equals("trk")) && (!tagName.equals("trkseg"))
-								&& (!tagName.equals("trkpt")) && (!tagName.equals("wpt")) && (!tagName.equals("ele"))
-								&& (!tagName.equals("time")) && (!tagName.equals("metadata"))
-								&& (!tagName.equals("name")) && (!tagName.equals("desc"))) {
-							ignoreUnknownTag = tagName;
-							break;
-						}
-
 						currentElementName = tagName;
 
 						if (tagName.equals("gpx")) {
@@ -165,244 +159,265 @@ public class GPXTrackHandler implements ViewHandler {
 							} else {
 								currentTrack = false;
 							}
+							
+							trackCounter++;
 						}
 
-						if (tagName.equals("trkpt") || tagName.equals("wpt")) {
+						if (currentTrack) {
+
+							if ((!tagName.equals("gpx")) && (!tagName.equals("trk")) && (!tagName.equals("trkseg"))
+									&& (!tagName.equals("trkpt")) && (!tagName.equals("wpt")) && (!tagName.equals("ele"))
+									&& (!tagName.equals("time")) && (!tagName.equals("metadata"))
+									&& (!tagName.equals("name")) && (!tagName.equals("desc"))) {
+								ignoreUnknownTag = tagName;
+								break;
+							}
 							
-							if (currentTrack) {
-								if (firstTrackpoint) {
-									jsonOut.println("{\"trackpoints\": [");
-									firstTrackpoint = false;
-								} else {
-									jsonOut.println(",");
-								}
-
-								jsonOut.println("{");
+							if (tagName.equals("trkpt") || tagName.equals("wpt")) {
 								
-								speed = Double.MIN_VALUE;
+								if (currentTrack) {
+									if (firstTrackpoint) {
+										jsonOut.println("{\"trackpoints\": [");
+										firstTrackpoint = false;
+									} else {
+										jsonOut.println(",");
+									}
 
-								String lat = parser.getAttributeValue(null, "lat");
-								String lon = parser.getAttributeValue(null, "lon");
+									jsonOut.println("{");
+									
+									speed = Double.MIN_VALUE;
 
-								if ((lat != null) && (lon != null)) {
-									jsonOut.println("\"lat\": \"" + lat + "\",");
-									jsonOut.print("\"lon\": \"" + lon + "\"");
+									String lat = parser.getAttributeValue(null, "lat");
+									String lon = parser.getAttributeValue(null, "lon");
 
-									try {
-										double latitude = Double.parseDouble(lat);
-										double longitude = Double.parseDouble(lon);
+									if ((lat != null) && (lon != null)) {
+										jsonOut.println("\"lat\": \"" + lat + "\",");
+										jsonOut.print("\"lon\": \"" + lon + "\"");
 
-										if (prevLat == Double.MIN_VALUE) {
-											dist = 0.0f;
-										} else {
-											dist = calculateDistance(prevLat, prevLon, latitude, longitude);
+										try {
+											double latitude = Double.parseDouble(lat);
+											double longitude = Double.parseDouble(lon);
 
-											for (int i = 0; i < DISTANCE_SMOOTH_FACTOR - 1; i++) {
-												distanceBuffer[i] = distanceBuffer[i + 1];
+											if (prevLat == Double.MIN_VALUE) {
+												dist = 0.0f;
+											} else {
+												dist = calculateDistance(prevLat, prevLon, latitude, longitude);
+
+												for (int i = 0; i < DISTANCE_SMOOTH_FACTOR - 1; i++) {
+													distanceBuffer[i] = distanceBuffer[i + 1];
+												}
+												distanceBuffer[DISTANCE_SMOOTH_FACTOR - 1] = dist;
 											}
-											distanceBuffer[DISTANCE_SMOOTH_FACTOR - 1] = dist;
+
+											totalDist += dist;
+
+											prevLat = latitude;
+											prevLon = longitude;
+
+											if ((startPointLat == Double.MIN_VALUE) || (startPointLon == Double.MIN_VALUE)) {
+												distFromStart = 0.0f;
+												startPointLat = latitude;
+												startPointLon = longitude;
+											} else {
+												distFromStart = calculateDistance(startPointLat, startPointLon, latitude,
+														longitude);
+											}
+										} catch (NumberFormatException numEx) {
+											dataInvalid = true;
+											Logger.getLogger(getClass()).debug(numEx, numEx);
 										}
-
-										totalDist += dist;
-
-										prevLat = latitude;
-										prevLon = longitude;
-
-										if ((startPointLat == Double.MIN_VALUE) || (startPointLon == Double.MIN_VALUE)) {
-											distFromStart = 0.0f;
-											startPointLat = latitude;
-											startPointLon = longitude;
-										} else {
-											distFromStart = calculateDistance(startPointLat, startPointLon, latitude,
-													longitude);
-										}
-									} catch (NumberFormatException numEx) {
-										Logger.getLogger(getClass()).error(numEx, numEx);
 									}
 								}
 							}
-						}
 
-						// jsonOut.print(">");
+							// jsonOut.print(">");
 
-						/*
-						 * if (tagName.equals("gpx")) { if
-						 * (!CommonUtils.isEmpty(googleMapsAPIKey)) {
-						 * xmlOut.print("<googleMapsAPIKey>" + googleMapsAPIKey
-						 * + "</googleMapsAPIKey>"); } }
-						 */
+							/*
+							 * if (tagName.equals("gpx")) { if
+							 * (!CommonUtils.isEmpty(googleMapsAPIKey)) {
+							 * xmlOut.print("<googleMapsAPIKey>" + googleMapsAPIKey
+							 * + "</googleMapsAPIKey>"); } }
+							 */
 
-						if (tagName.equals("trkpt") || tagName.equals("wpt")) {
-							if (dist != Double.MIN_VALUE) {
-								jsonOut.print(",\n\"dist\": \"");
-								if (dist < 0.001f) {
+							if (tagName.equals("trkpt") || tagName.equals("wpt")) {
+								if (dist != Double.MIN_VALUE) {
+									jsonOut.print(",\n\"dist\": \"");
+									if (dist < 0.001f) {
+										// prevent exponential format
+										jsonOut.print("0.0");
+									} else {
+										jsonOut.print(dist);
+									}
+									jsonOut.print("\"");
+								}
+
+								jsonOut.print(",\n\"totalDist\": \"");
+								if (totalDist < 0.001f) {
 									// prevent exponential format
 									jsonOut.print("0.0");
 								} else {
-									jsonOut.print(dist);
+									jsonOut.print(totalDist);
 								}
 								jsonOut.print("\"");
-							}
 
-							jsonOut.print(",\n\"totalDist\": \"");
-							if (totalDist < 0.001f) {
-								// prevent exponential format
-								jsonOut.print("0.0");
-							} else {
-								jsonOut.print(totalDist);
-							}
-							jsonOut.print("\"");
-
-							if (distFromStart != Double.MIN_VALUE) {
-								jsonOut.print(",\n\"distFromStart\": \"");
-								if (distFromStart < 0.001f) {
-									// prevent exponential format
-									jsonOut.print("0.0");
-								} else {
-									jsonOut.print(distFromStart);
+								if (distFromStart != Double.MIN_VALUE) {
+									jsonOut.print(",\n\"distFromStart\": \"");
+									if (distFromStart < 0.001f) {
+										// prevent exponential format
+										jsonOut.print("0.0");
+									} else {
+										jsonOut.print(distFromStart);
+									}
+									jsonOut.print("\"");
 								}
-								jsonOut.print("\"");
 							}
-						}
 
-						// isCDATA = (tagName.equals("name") || tagName.equals("desc"));
+							// isCDATA = (tagName.equals("name") || tagName.equals("desc"));
 
-						if (tagName.equals("name")) {
-							trackName = parser.getElementText();
+							if (tagName.equals("name")) {
+								trackName = parser.getElementText();
+							}
 						}
 						
 						break;
 
 					case XMLStreamConstants.END_ELEMENT:
 
-						tagName = parser.getLocalName();
+						if (currentTrack) {
+							tagName = parser.getLocalName();
 
-						if (ignoreUnknownTag != null) {
-							if (tagName.equals(ignoreUnknownTag)) {
-								ignoreUnknownTag = null;
+							if (ignoreUnknownTag != null) {
+								if (tagName.equals(ignoreUnknownTag)) {
+									ignoreUnknownTag = null;
+								}
+								break;
 							}
-							break;
-						}
 
-						if (!lastWasText) {
-							jsonOut.println();
-						}
-						
-						if (tagName.equals("trkpt")) {
-							jsonOut.println("}");
-						} else if (tagName.equals("trk")) {
-							jsonOut.println("\n]");
+							if (!lastWasText) {
+								jsonOut.println();
+							}
 							
-							if (startTimeSet) {
-								jsonOut.print(",\n\"startTime\": \"" + startTime + "\"");
+							if (tagName.equals("trkpt")) {
+								jsonOut.println("}");
+							} else if (tagName.equals("trk")) {
+								jsonOut.println("\n]");
 								
-								if (endTime > 0) {
-									jsonOut.print(",\n\"endTime\": \"" + endTime + "\"");
+								if (startTimeSet) {
+									jsonOut.print(",\n\"startTime\": \"" + startTime + "\"");
+									
+									if (endTime > 0) {
+										jsonOut.print(",\n\"endTime\": \"" + endTime + "\"");
+									}
+								}
+								
+								if (trackName != null) {
+									jsonOut.print(",\n\"trackName\": \"" + trackName + "\"");
+								}
+								
+							    if (invalidTime) {
+									jsonOut.print(",\n\"invalidTime\": true");
+								}
+								jsonOut.println("\n}");
+								
+								currentTrack = false;
+							} else if (tagName.equals("time")) {
+								double correctedSpeed = speed;
+								if (correctedSpeed < 0.001f) {
+									// prevent exponential format
+									correctedSpeed = 0.0f;
+								}
+
+								if (speed != Double.MIN_VALUE) {
+									jsonOut.print(",\n\"speed\": \"" + correctedSpeed + "\"");
 								}
 							}
 							
-							if (trackName != null) {
-								jsonOut.print(",\n\"trackName\": \"" + trackName + "\"");
-							}
-							
-						    if (invalidTime) {
-								jsonOut.print(",\n\"invalidTime\": true");
-							}
-							jsonOut.println("\n}");
-						} else if (tagName.equals("time")) {
-							double correctedSpeed = speed;
-							if (correctedSpeed < 0.001f) {
-								// prevent exponential format
-								correctedSpeed = 0.0f;
-							}
-
-							if (speed != Double.MIN_VALUE) {
-								jsonOut.print(",\n\"speed\": \"" + correctedSpeed + "\"");
-							}
+							lastWasText = false;
 						}
 						
-						lastWasText = false;
 						break;
 
 					case XMLStreamConstants.CHARACTERS:
-						if (ignoreUnknownTag != null) {
-							break;
-						}
+						
+						if (currentTrack) {
+							if (ignoreUnknownTag != null) {
+								break;
+							}
 
-						String elementText = parser.getText().trim();
+							String elementText = parser.getText().trim();
 
-						if (currentElementName.equals("time")) {
-							if (elementText.length() > 0) {
-								try {
-									long trackPointTime = ISO8601DateParser.parse(elementText).getTime();
+							if (currentElementName.equals("time")) {
+								if (elementText.length() > 0) {
+									try {
+										long trackPointTime = ISO8601DateParser.parse(elementText).getTime();
 
-									if (!startTimeSet) {
-										startTime = trackPointTime;
-										startTimeSet = true;
-									} else {
-										endTime = trackPointTime;
-									}
-									
-									if ((prevTime > 0L) && (dist != Double.MIN_VALUE)) {
-										double duration = trackPointTime - prevTime;
-
-										if (duration < 0) {
-											Logger.getLogger(getClass()).warn(
-													"invalid trkpt time (before previous timestamp): " + elementText);
-											invalidTime = true;
-											speed = 0.0f;
+										if (!startTimeSet) {
+											startTime = trackPointTime;
+											startTimeSet = true;
 										} else {
-											for (int i = 0; i < DISTANCE_SMOOTH_FACTOR - 1; i++) {
-												durationBuffer[i] = durationBuffer[i + 1];
-											}
-											durationBuffer[DISTANCE_SMOOTH_FACTOR - 1] = duration;
+											endTime = trackPointTime;
+										}
+										
+										if ((prevTime > 0L) && (dist != Double.MIN_VALUE)) {
+											double duration = trackPointTime - prevTime;
 
-											if (duration == 0l) {
+											if (duration < 0) {
+												invalidTime = true;
 												speed = 0.0f;
 											} else {
-												// speed = dist / (duration /
-												// 1000f);
-
-												double bufferedDuration = 0.0;
-												for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
-													bufferedDuration += durationBuffer[i];
+												for (int i = 0; i < DISTANCE_SMOOTH_FACTOR - 1; i++) {
+													durationBuffer[i] = durationBuffer[i + 1];
 												}
+												durationBuffer[DISTANCE_SMOOTH_FACTOR - 1] = duration;
 
-												double bufferedDistance = 0.0;
-												for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
-													bufferedDistance += distanceBuffer[i];
+												if (duration == 0l) {
+													speed = 0.0f;
+												} else {
+													// speed = dist / (duration /
+													// 1000f);
+
+													double bufferedDuration = 0.0;
+													for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
+														bufferedDuration += durationBuffer[i];
+													}
+
+													double bufferedDistance = 0.0;
+													for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
+														bufferedDistance += distanceBuffer[i];
+													}
+
+													speed = bufferedDistance / (bufferedDuration / 1000f);
 												}
-
-												speed = bufferedDistance / (bufferedDuration / 1000f);
 											}
 										}
+
+										prevTime = trackPointTime;
+									} catch (Exception ex) {
+										Logger.getLogger(getClass()).error(ex, ex);
+
+										prevTime = 0L;
 									}
-
-									prevTime = trackPointTime;
-								} catch (Exception ex) {
-									Logger.getLogger(getClass()).error(ex, ex);
-
-									prevTime = 0L;
 								}
 							}
-						}
 
-                        /*
-						if (isCDATA) {
-							jsonOut.print("<![CDATA[");
-						}
+	                        /*
+							if (isCDATA) {
+								jsonOut.print("<![CDATA[");
+							}
 
-						jsonOut.print(elementText);
+							jsonOut.print(elementText);
 
-						if (isCDATA) {
-							jsonOut.print("]]>");
-							isCDATA = false;
-						}
-						*/
+							if (isCDATA) {
+								jsonOut.print("]]>");
+								isCDATA = false;
+							}
+							*/
 
-						if (elementText.length() > 0) {
-							lastWasText = true;
+							if (elementText.length() > 0) {
+								lastWasText = true;
+							}
 						}
+						
 						break;
 					default:
 						// System.out.println("unhandled event: " + event);
@@ -412,7 +427,20 @@ public class GPXTrackHandler implements ViewHandler {
 				}
 			}
 
+			if (trackCounter <= trackNumber) {
+				jsonOut.println("{\"trackpoints\": []}");			
+			}
+			
 			jsonOut.flush();
+			
+			if (dataInvalid) {
+			    Logger.getLogger(getClass()).warn("GPX file contains invalid data: " + filePath);
+			}
+			
+			if (invalidTime) {
+				Logger.getLogger(getClass()).warn(
+						"invalid trkpt time (before previous timestamp) in GPX file: " + filePath);
+			}
 		} catch (IOException ioex) {
 			Logger.getLogger(getClass()).error("failed to read target file", ioex);
 		} catch (XMLStreamException xmlEx) {

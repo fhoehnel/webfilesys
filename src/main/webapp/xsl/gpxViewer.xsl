@@ -5,7 +5,6 @@
 
 <xsl:strip-space elements="gpx" />
 
-<!-- root node-->
 <xsl:template match="/">
 
 <html>
@@ -40,11 +39,21 @@
   </head>
 
   <body>
-    <xsl:attribute name="onload">loadGoogleMapsAPIScriptCode('<xsl:value-of select="/gpx/googleMapsAPIKey" />')</xsl:attribute>
+    <xsl:if test="/gpx/track">
+      <xsl:attribute name="onload">loadGoogleMapsAPIScriptCode('<xsl:value-of select="/gpx/googleMapsAPIKey" />')</xsl:attribute>
+    </xsl:if>
 
-    <div id="mapCont" class="gpsTrackMapCont"></div>
+    <xsl:if test="not(/gpx/track)">
+      <script type="text/javascript">
+          customAlert("GPX file does not contain any track data");
+      </script>
+    </xsl:if>
 
-    <div id="gpsTrackMetaInfo"></div>
+    <xsl:if test="/gpx/track">
+      <div id="mapCont" class="gpsTrackMapCont"></div>
+
+      <div id="gpsTrackMetaInfo"></div>
+    </xsl:if>
 
   </body>
   

@@ -62,11 +62,19 @@ function loadAndShowTrack() {
             if (req.status == 200) {
             	var response = JSON.parse(req.responseText);
             
-            	showTrackOnMap(response.trackpoints);
+            	if (response.trackpoints && (response.trackpoints.length > 0)) {
+                	showTrackOnMap(response.trackpoints);
 
-            	showTrackMetaData(response);
-            	
-                currentTrack++;
+                	showTrackMetaData(response);
+                	
+                	currentTrack++;
+                	
+                	if (currentTrack < trackNumber) {
+                		loadAndShowTrack();
+                	}
+            	} else {
+            		customAlert("track " + (currentTrack + 1) + " not found in GPX file");
+            	}
             } else {
                 alert(resourceBundle["alert.communicationFailure"]);
             }
