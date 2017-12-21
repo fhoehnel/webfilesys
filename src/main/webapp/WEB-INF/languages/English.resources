@@ -791,6 +791,7 @@ noFilesWithGeoData=This folder does not contain pictures with geographic coordin
 button.hideMapInfo=Hide Info Text
 button.showMapInfo=Show Info Text
 viewMultipleGPX=show GPX on map
+nonGPXFile=This function is only applicable to GPX files (filename extension .GPX).
 
 # folder synchronization
 label.selectSyncSourceResult=Select the synchronization target folder and choose snychronize from the context menu!

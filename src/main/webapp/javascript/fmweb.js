@@ -117,6 +117,19 @@ function diffCompare() {
 }
 
 function showMultipleGPX() {
+
+    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
+         if ((document.form1.elements[i].type == "checkbox") && 
+		     (document.form1.elements[i].name != "cb-setAll") &&
+		     document.form1.elements[i].checked) {
+	         if (getFileNameExt(document.form1.elements[i].name) != ".GPX") {
+	             customAlert(resourceBundle["nonGPXFile"]);
+	             return;
+	         }
+         }
+    }
+
+
     var mapWin = window.open('/webfilesys/servlet','mapWin','width=' + (screen.width - 20) + ',height=' + (screen.height - 80) + ',scrollbars=yes,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
     mapWin.focus();
     document.form1.command.value = 'multiGPX';

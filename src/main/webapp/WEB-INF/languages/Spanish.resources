@@ -793,6 +793,7 @@ noFilesWithGeoData=No hay imagenes con coordenadas geográficas en esta carpeta.
 button.hideMapInfo=Ocultar texto de información
 button.showMapInfo=Mostrar texto de información
 viewMultipleGPX=mostrar en el mapa
+nonGPXFile=Esta función solo se aplica a los archivos GPX (*.GPX).
 
 # folder synchronization
 label.selectSyncSourceResult=¡Selecciona la carpeta para sincronizar y elije sincronizar en el menú contextual!
