@@ -81,6 +81,8 @@ public class GPXTrackHandler implements ViewHandler {
 			double totalDist = 0.0f;
 			double distFromStart = Double.MIN_VALUE;
 			double speed = Double.MIN_VALUE;
+			
+			String elevation = null;
 
 			String tagName = null;
 
@@ -104,6 +106,8 @@ public class GPXTrackHandler implements ViewHandler {
 			String trackName = null;
 			
 			boolean dataInvalid = false;
+			
+			boolean hasElevation = false;
 			
 			// SimpleDateFormat dateFormat = new
 			// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -186,6 +190,8 @@ public class GPXTrackHandler implements ViewHandler {
 									jsonOut.println("{");
 									
 									speed = Double.MIN_VALUE;
+									
+									elevation = null;
 
 									String lat = parser.getAttributeValue(null, "lat");
 									String lon = parser.getAttributeValue(null, "lon");
@@ -298,6 +304,9 @@ public class GPXTrackHandler implements ViewHandler {
 							}
 							
 							if (tagName.equals("trkpt")) {
+								if (elevation != null) {
+									jsonOut.print(",\n\"ele\": \"" + elevation + "\"");
+								}
 								jsonOut.println("}");
 							} else if (tagName.equals("trk")) {
 								jsonOut.println("\n]");
@@ -312,6 +321,10 @@ public class GPXTrackHandler implements ViewHandler {
 								
 								if (trackName != null) {
 									jsonOut.print(",\n\"trackName\": \"" + trackName + "\"");
+								}
+								
+								if (hasElevation) {
+									jsonOut.print(",\n\"hasElevation\": true");
 								}
 								
 							    if (invalidTime) {
@@ -346,7 +359,12 @@ public class GPXTrackHandler implements ViewHandler {
 
 							String elementText = parser.getText().trim();
 
-							if (currentElementName.equals("time")) {
+							if (currentElementName.equals("ele")) {
+								if (elementText.length() > 0) {
+								    elevation = elementText;
+								    hasElevation = true;
+								}
+							} else if (currentElementName.equals("time")) {
 								if (elementText.length() > 0) {
 									try {
 										long trackPointTime = ISO8601DateParser.parse(elementText).getTime();

@@ -4,6 +4,9 @@ var TRACK_COLORS = [
 	"#00c0ff" 
 ];
 
+var CANVAS_HEIGHT = 200;
+var CANVAS_WIDTH = 1000;
+
 var globalTrackCounter = 0;
 
 var trackPointList = new Array();
@@ -66,6 +69,10 @@ function loadAndShowTrack() {
                 	showTrackOnMap(response.trackpoints);
 
                 	showTrackMetaData(response);
+                	
+                	if (response.hasElevation) {
+                    	drawAltDistProfile(response);
+                	}
                 	
                 	currentTrack++;
                 	
@@ -161,4 +168,183 @@ function showTrackMetaData(response) {
 	   	trackTimeElem.innerHTML = metaData;
 	   	trackElem.appendChild(trackTimeElem);
 	}
+	
+	if (response.trackpoints) {
+	   	var trackpointNumElem = document.createElement("span");
+	   	trackpointNumElem.setAttribute("class", "trackName");
+	   	trackpointNumElem.innerHTML = "(" + response.trackpoints.length + " trackpoints)";
+	   	trackElem.appendChild(trackpointNumElem);
+	}
 }
+
+function drawAltDistProfile(response) {
+	
+	var canvasCont = document.createElement("div");
+	canvasCont.setAttribute("class", "gpsProfileCont");
+    document.getElementsByTagName("body")[0].appendChild(canvasCont);    
+	
+    var maxValueCont = document.createElement("div");
+    maxValueCont.setAttribute("class", "gpsChartText");
+    canvasCont.appendChild(maxValueCont);
+    
+	var canvas = document.createElement("canvas");
+    canvas.setAttribute("class", "gpsProfile");
+    
+    canvasCont.appendChild(canvas);
+    
+    canvas.style.width = CANVAS_WIDTH + "px";
+    canvas.style.height = CANVAS_HEIGHT + "px";
+    
+    canvas.setAttribute("width", CANVAS_WIDTH);
+    canvas.setAttribute("height", CANVAS_HEIGHT);
+    
+    var chartXOffset = 10;
+    var chartYOffset = 10;
+
+    var chartWidth = CANVAS_WIDTH - chartXOffset;
+	var chartHeight = CANVAS_HEIGHT - chartYOffset;
+	
+    var ctx = canvas.getContext("2d");  
+    ctx.fillStyle = "#000";
+    ctx.strokeStyle = "#000";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    
+    ctx.moveTo(chartXOffset - 1, 0);
+    ctx.lineTo(chartXOffset - 1, chartHeight + 5);
+    ctx.stroke();
+    
+    ctx.moveTo(chartXOffset - 5, chartHeight + 1);
+    ctx.lineTo(CANVAS_WIDTH - 1, chartHeight + 1);
+    ctx.stroke();
+    
+    var lastX = chartXOffset;
+    var lastY = chartHeight;
+
+    ctx.fillStyle = "#00c";
+
+    ctx.beginPath();  
+    ctx.moveTo(chartXOffset, CANVAS_HEIGHT);  
+
+    var minElevation = 10000;
+    var maxElevation = -10000;
+    var maxTotalDist = 0;
+    
+    var elevationDistMap = [];
+    
+    var trackpoints = response.trackpoints;
+    
+    for (var i = 0; i < trackpoints.length; i++) {
+    	if (trackpoints[i].ele) {
+    		var mapEntry = [];
+    		
+    		var elevation = Number.parseFloat(trackpoints[i].ele);
+    		var totalDist = Number.parseFloat(trackpoints[i].totalDist);
+    		
+    		mapEntry[0] = elevation;
+    		mapEntry[1] = totalDist;
+    		
+    		elevationDistMap[i] = mapEntry;
+    		
+    		if (elevation < minElevation) {
+    			minElevation = elevation;
+    		}
+    		if (elevation > maxElevation) {
+    			maxElevation = elevation;
+    		}
+    		if (totalDist > maxTotalDist) {
+    			maxTotalDist = totalDist;
+    		}
+    	}
+    }
+
+    var maxHeight = maxElevation - minElevation;
+    
+    for (var i = 0; i < elevationDistMap.length; i++) {
+    	if (elevationDistMap[i]) {
+            var height = elevationDistMap[i][0] - minElevation;
+            
+            var distance = elevationDistMap[i][1];
+      
+            var xPos = distance * chartWidth / maxTotalDist;
+            var yPos = chartHeight - (height * chartHeight / maxHeight)
+      
+            if ((xPos != lastX) || (yPos != lastY)) {
+                ctx.lineTo(chartXOffset + xPos, yPos);
+                lastX = xPos;
+                lastY = yPos;  
+            }
+    	}
+    }
+    
+    ctx.lineTo(CANVAS_WIDTH - 1, chartHeight);  
+    ctx.lineTo(chartXOffset, chartHeight);  
+    ctx.fill();
+
+    // elevation legend
+
+	var legendCanvas = document.createElement("canvas");
+	legendCanvas.setAttribute("class", "gpsProfileLegend");
+    
+	legendCanvas.setAttribute("width", 80);
+	legendCanvas.setAttribute("height", CANVAS_HEIGHT);
+	
+    canvasCont.appendChild(legendCanvas);
+	
+    var legendCtx = legendCanvas.getContext("2d");  
+
+    legendCtx.font = "10pt Arial";
+    
+    var elevationLegendStep = Math.ceil(maxHeight / 10);
+    
+    if (elevationLegendStep < 10) {
+        elevationLegendStep = 10;
+    } else {
+        while (elevationLegendStep % 10 != 0) {
+            elevationLegendStep ++;
+        }
+    }
+    
+    var legendElevation = Math.ceil(minElevation);
+    
+    while (legendElevation % 10 != 0) {
+        legendElevation++;
+    }
+    
+    ctx.strokeStyle = "#c0c0c0";
+    ctx.lineWidth = 1;
+    
+    while (legendElevation < maxElevation) {
+        var legendYPos = chartHeight - ((legendElevation - minElevation) * chartHeight / maxHeight);
+        
+        ctx.beginPath();
+        ctx.moveTo(chartXOffset - 1, legendYPos);
+        ctx.lineTo(CANVAS_WIDTH - 1, legendYPos);
+        ctx.stroke();
+
+        legendCtx.fillText(String(legendElevation) , 5, legendYPos + 5, 70);
+        
+        legendElevation += elevationLegendStep;
+    }
+    
+    maxValueCont.innerHTML = "max: " + maxElevation + " m";
+    
+    var tableElem = document.createElement("table");
+    tableElem.style.width = CANVAS_WIDTH + "px";
+    canvasCont.appendChild(tableElem);
+    
+    var rowElem = document.createElement("tr");
+    tableElem.appendChild(rowElem);
+    
+    var minElem = document.createElement("td");
+    minElem.setAttribute("class", "gpsChartText");
+    minElem.innerHTML = "min: " + minElevation + " m";
+    rowElem.appendChild(minElem);
+
+    var distanceElem = document.createElement("td");
+    distanceElem.setAttribute("class", "gpsChartText");
+    distanceElem.style.textAlign = "right";
+    distanceElem.innerHTML = "distance: " + formatDecimalNumber(Math.ceil(maxTotalDist)) + " km";
+    rowElem.appendChild(distanceElem);
+}
+

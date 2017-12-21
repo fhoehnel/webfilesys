@@ -1820,7 +1820,29 @@ span.trackName {
 }
 
 span.trackTime {
-    color: maroon;	
+	margin-right: 20px;
+	color: maroon;	
+}
+
+div.gpsProfileCont {
+	width: 1100px;
+	margin-top: 20px;
+}
+
+canvas.gpsProfile {
+	width: 1000px;
+	height: 200px;
+} 
+
+canvas.gpsProfileLegend {
+	width: 80px;
+	height: 200px;
+}
+
+td.gpsChartText {
+    font-size: 13px;
+    font-family: Arial,Helvetica;
+    color: black;
 }
 
 @media (max-width: 400px) {

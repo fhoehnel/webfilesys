@@ -53,6 +53,7 @@
       <div id="mapCont" class="gpsTrackMapCont"></div>
 
       <div id="gpsTrackMetaInfo"></div>
+      
     </xsl:if>
 
   </body>
