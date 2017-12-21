@@ -103,11 +103,15 @@ public class GPXTrackHandler implements ViewHandler {
 			
 			long endTime = 0;
 			
+			long timestamp = 0;
+			
 			String trackName = null;
 			
 			boolean dataInvalid = false;
 			
 			boolean hasElevation = false;
+			
+			boolean hasSpeed = false;
 			
 			// SimpleDateFormat dateFormat = new
 			// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
@@ -192,6 +196,8 @@ public class GPXTrackHandler implements ViewHandler {
 									speed = Double.MIN_VALUE;
 									
 									elevation = null;
+									
+									timestamp = 0;
 
 									String lat = parser.getAttributeValue(null, "lat");
 									String lon = parser.getAttributeValue(null, "lon");
@@ -307,6 +313,9 @@ public class GPXTrackHandler implements ViewHandler {
 								if (elevation != null) {
 									jsonOut.print(",\n\"ele\": \"" + elevation + "\"");
 								}
+								if (timestamp > 0) {
+									jsonOut.print(",\n\"time\": \"" + timestamp + "\"");
+								}
 								jsonOut.println("}");
 							} else if (tagName.equals("trk")) {
 								jsonOut.println("\n]");
@@ -325,6 +334,10 @@ public class GPXTrackHandler implements ViewHandler {
 								
 								if (hasElevation) {
 									jsonOut.print(",\n\"hasElevation\": true");
+								}
+
+								if (hasSpeed) {
+									jsonOut.print(",\n\"hasSpeed\": true");
 								}
 								
 							    if (invalidTime) {
@@ -369,6 +382,8 @@ public class GPXTrackHandler implements ViewHandler {
 									try {
 										long trackPointTime = ISO8601DateParser.parse(elementText).getTime();
 
+										timestamp = trackPointTime;
+										
 										if (!startTimeSet) {
 											startTime = trackPointTime;
 											startTimeSet = true;
@@ -407,6 +422,8 @@ public class GPXTrackHandler implements ViewHandler {
 													speed = bufferedDistance / (bufferedDuration / 1000f);
 												}
 											}
+											
+											hasSpeed = true;
 										}
 
 										prevTime = trackPointTime;
@@ -417,19 +434,6 @@ public class GPXTrackHandler implements ViewHandler {
 									}
 								}
 							}
-
-	                        /*
-							if (isCDATA) {
-								jsonOut.print("<![CDATA[");
-							}
-
-							jsonOut.print(elementText);
-
-							if (isCDATA) {
-								jsonOut.print("]]>");
-								isCDATA = false;
-							}
-							*/
 
 							if (elementText.length() > 0) {
 								lastWasText = true;
