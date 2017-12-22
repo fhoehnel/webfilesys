@@ -1,13 +1,13 @@
-package de.webfilesys.viewhandler;
+package de.webfilesys.gui.xsl;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -17,8 +17,8 @@ import org.apache.log4j.Logger;
 
 import com.ctc.wstx.exc.WstxParsingException;
 
-import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.gui.user.UserRequestHandler;
 import de.webfilesys.util.CommonUtils;
 
 /**
@@ -26,20 +26,23 @@ import de.webfilesys.util.CommonUtils;
  * 
  * @author Frank Hoehnel
  */
-public class GPXViewHandler implements ViewHandler {
+public class GPXViewHandler extends UserRequestHandler {
 	private static final String STYLESHEET_REF = "<?xml-stylesheet type=\"text/xsl\" href=\"/webfilesys/xsl/gpxViewer.xsl\"?>";
 
 	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
 
-	public void process(String filePath, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req,
-			HttpServletResponse resp) {
-		
-		String trackNumber = req.getParameter("trackNumber");
-		
-		if (trackNumber != null) {
-			new GPXTrackHandler().process(filePath, viewHandlerConfig, req, resp);
-			return;
-		}
+	public GPXViewHandler(
+    		HttpServletRequest req, 
+    		HttpServletResponse resp,
+            HttpSession session,
+            PrintWriter output, 
+            String uid) {
+        super(req, resp, session, output, uid);
+	}	
+	
+	protected void process() {
+	
+	    String filePath = getParameter("filePath"); 
 		
 		String googleMapsAPIKey = null;
 		if (req.getScheme().equalsIgnoreCase("https")) {
@@ -52,8 +55,6 @@ public class GPXViewHandler implements ViewHandler {
 
 		try {
 			resp.setContentType("text/xml");
-
-			PrintWriter xmlOut = resp.getWriter();
 
 			gpxReader = new BufferedReader(new FileReader(filePath));
 
@@ -83,19 +84,19 @@ public class GPXViewHandler implements ViewHandler {
 						tagName = parser.getLocalName();
 
 						if (tagName.equals("gpx")) {
-							xmlOut.println(XML_HEADER);
-							xmlOut.println(STYLESHEET_REF);
+							output.println(XML_HEADER);
+							output.println(STYLESHEET_REF);
 
-							xmlOut.println("<gpx>");
+							output.println("<gpx>");
 
 							if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
-								xmlOut.println("  <googleMapsAPIKey>" + googleMapsAPIKey + "</googleMapsAPIKey>");
+								output.println("  <googleMapsAPIKey>" + googleMapsAPIKey + "</googleMapsAPIKey>");
 							}
-							xmlOut.println("  <filePath>" + filePath + "</filePath>");
+							output.println("  <filePath>" + CommonUtils.escapeForJavascript(filePath) + "</filePath>");
 						}
 
 						if (tagName.equals("trk")) {
-							xmlOut.println("<track>" + trackCounter + "</track>");
+							output.println("<track>" + trackCounter + "</track>");
 							trackCounter++;
 						}
 
@@ -105,7 +106,7 @@ public class GPXViewHandler implements ViewHandler {
 
 						tagName = parser.getLocalName();
 						if (tagName.equals("gpx")) {
-							xmlOut.println("</gpx>");
+							output.println("</gpx>");
 						}
 						break;
 
@@ -117,9 +118,9 @@ public class GPXViewHandler implements ViewHandler {
 				}
 			}
 
-			xmlOut.flush();
+			output.flush();
 		} catch (IOException e) {
-			Logger.getLogger(getClass()).error("failed to read target file", e);
+			Logger.getLogger(getClass()).error("failed to read GPX file", e);
 		} catch (XMLStreamException xmlEx) {
 			Logger.getLogger(getClass()).error("error parsing XML stream", xmlEx);
 		} catch (Exception e) {
@@ -132,30 +133,5 @@ public class GPXViewHandler implements ViewHandler {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Create the HTML response for viewing the given file contained in a ZIP
-	 * archive..
-	 * 
-	 * @param zipFilePath  path of the ZIP entry
-	 * @param zipIn the InputStream for the file extracted from a ZIP archive
-	 * @param req the servlet request
-	 * @param resp the servlet response
-	 */
-	public void processZipContent(String zipFilePath, InputStream zipIn, ViewHandlerConfig viewHandlerConfig,
-			HttpServletRequest req, HttpServletResponse resp) {
-		// not yet supported
-		Logger.getLogger(getClass()).warn("reading from ZIP archive not supported by ViewHandler " + this.getClass().getName());
-	}
-
-	/**
-	 * Does this ViewHandler support reading the file from an input stream of a
-	 * ZIP archive?
-	 * 
-	 * @return true if reading from ZIP archive is supported, otherwise false
-	 */
-	public boolean supportsZipContent() {
-		return false;
 	}
 }

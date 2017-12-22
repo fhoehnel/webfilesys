@@ -1,13 +1,13 @@
-package de.webfilesys.viewhandler;
+package de.webfilesys.gui.user;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
@@ -17,9 +17,6 @@ import org.apache.log4j.Logger;
 
 import com.ctc.wstx.exc.WstxParsingException;
 
-import de.webfilesys.ViewHandlerConfig;
-import de.webfilesys.WebFileSys;
-import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.ISO8601DateParser;
 
 /**
@@ -27,15 +24,25 @@ import de.webfilesys.util.ISO8601DateParser;
  * 
  * @author Frank Hoehnel
  */
-public class GPXTrackHandler implements ViewHandler {
+public class GPXTrackHandler extends UserRequestHandler {
 
 	private static final int DISTANCE_SMOOTH_FACTOR = 12;
 
-	public void process(String filePath, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req,
-			HttpServletResponse resp) {
+	public GPXTrackHandler(
+    		HttpServletRequest req, 
+    		HttpServletResponse resp,
+            HttpSession session,
+            PrintWriter output, 
+            String uid) {
+        super(req, resp, session, output, uid);
+	}	
+	
+	protected void process() {
+
+	    String filePath = getParameter("filePath"); 
 		
 		int trackNumber = 0;
-		String trackNumberParam = req.getParameter("trackNumber");
+		String trackNumberParam = getParameter("trackNumber");
 		try {
 			trackNumber = Integer.parseInt(trackNumberParam);
 		} catch (Exception ex) {
@@ -57,8 +64,6 @@ public class GPXTrackHandler implements ViewHandler {
 
 		try {
 			resp.setContentType("application/json");
-
-			PrintWriter jsonOut = resp.getWriter();
 
 			gpxReader = new BufferedReader(new FileReader(filePath));
 
@@ -144,11 +149,11 @@ public class GPXTrackHandler implements ViewHandler {
 						currentElementName = tagName;
 
 						if (tagName.equals("gpx")) {
-							// jsonOut.println(XML_HEADER);
-							// jsonOut.println(STYLESHEET_REF);
+							// output.println(XML_HEADER);
+							// output.println(STYLESHEET_REF);
 						}
 
-						// jsonOut.print("\n<" + tagName);
+						// output.print("\n<" + tagName);
 
 						if (tagName.equals("trk")) {
 							
@@ -185,13 +190,13 @@ public class GPXTrackHandler implements ViewHandler {
 								
 								if (currentTrack) {
 									if (firstTrackpoint) {
-										jsonOut.println("{\"trackpoints\": [");
+										output.println("{\"trackpoints\": [");
 										firstTrackpoint = false;
 									} else {
-										jsonOut.println(",");
+										output.println(",");
 									}
 
-									jsonOut.println("{");
+									output.println("{");
 									
 									speed = Double.MIN_VALUE;
 									
@@ -203,8 +208,8 @@ public class GPXTrackHandler implements ViewHandler {
 									String lon = parser.getAttributeValue(null, "lon");
 
 									if ((lat != null) && (lon != null)) {
-										jsonOut.println("\"lat\": \"" + lat + "\",");
-										jsonOut.print("\"lon\": \"" + lon + "\"");
+										output.println("\"lat\": \"" + lat + "\",");
+										output.print("\"lon\": \"" + lon + "\"");
 
 										try {
 											double latitude = Double.parseDouble(lat);
@@ -242,7 +247,7 @@ public class GPXTrackHandler implements ViewHandler {
 								}
 							}
 
-							// jsonOut.print(">");
+							// output.print(">");
 
 							/*
 							 * if (tagName.equals("gpx")) { if
@@ -253,34 +258,34 @@ public class GPXTrackHandler implements ViewHandler {
 
 							if (tagName.equals("trkpt") || tagName.equals("wpt")) {
 								if (dist != Double.MIN_VALUE) {
-									jsonOut.print(",\n\"dist\": \"");
+									output.print(",\n\"dist\": \"");
 									if (dist < 0.001f) {
 										// prevent exponential format
-										jsonOut.print("0.0");
+										output.print("0.0");
 									} else {
-										jsonOut.print(dist);
+										output.print(dist);
 									}
-									jsonOut.print("\"");
+									output.print("\"");
 								}
 
-								jsonOut.print(",\n\"totalDist\": \"");
+								output.print(",\n\"totalDist\": \"");
 								if (totalDist < 0.001f) {
 									// prevent exponential format
-									jsonOut.print("0.0");
+									output.print("0.0");
 								} else {
-									jsonOut.print(totalDist);
+									output.print(totalDist);
 								}
-								jsonOut.print("\"");
+								output.print("\"");
 
 								if (distFromStart != Double.MIN_VALUE) {
-									jsonOut.print(",\n\"distFromStart\": \"");
+									output.print(",\n\"distFromStart\": \"");
 									if (distFromStart < 0.001f) {
 										// prevent exponential format
-										jsonOut.print("0.0");
+										output.print("0.0");
 									} else {
-										jsonOut.print(distFromStart);
+										output.print(distFromStart);
 									}
-									jsonOut.print("\"");
+									output.print("\"");
 								}
 							}
 
@@ -306,44 +311,44 @@ public class GPXTrackHandler implements ViewHandler {
 							}
 
 							if (!lastWasText) {
-								jsonOut.println();
+								output.println();
 							}
 							
 							if (tagName.equals("trkpt")) {
 								if (elevation != null) {
-									jsonOut.print(",\n\"ele\": \"" + elevation + "\"");
+									output.print(",\n\"ele\": \"" + elevation + "\"");
 								}
 								if (timestamp > 0) {
-									jsonOut.print(",\n\"time\": \"" + timestamp + "\"");
+									output.print(",\n\"time\": \"" + timestamp + "\"");
 								}
-								jsonOut.println("}");
+								output.println("}");
 							} else if (tagName.equals("trk")) {
-								jsonOut.println("\n]");
+								output.println("\n]");
 								
 								if (startTimeSet) {
-									jsonOut.print(",\n\"startTime\": \"" + startTime + "\"");
+									output.print(",\n\"startTime\": \"" + startTime + "\"");
 									
 									if (endTime > 0) {
-										jsonOut.print(",\n\"endTime\": \"" + endTime + "\"");
+										output.print(",\n\"endTime\": \"" + endTime + "\"");
 									}
 								}
 								
 								if (trackName != null) {
-									jsonOut.print(",\n\"trackName\": \"" + trackName + "\"");
+									output.print(",\n\"trackName\": \"" + trackName + "\"");
 								}
 								
 								if (hasElevation) {
-									jsonOut.print(",\n\"hasElevation\": true");
+									output.print(",\n\"hasElevation\": true");
 								}
 
 								if (hasSpeed) {
-									jsonOut.print(",\n\"hasSpeed\": true");
+									output.print(",\n\"hasSpeed\": true");
 								}
 								
 							    if (invalidTime) {
-									jsonOut.print(",\n\"invalidTime\": true");
+									output.print(",\n\"invalidTime\": true");
 								}
-								jsonOut.println("\n}");
+								output.println("\n}");
 								
 								currentTrack = false;
 							} else if (tagName.equals("time")) {
@@ -354,7 +359,7 @@ public class GPXTrackHandler implements ViewHandler {
 								}
 
 								if (speed != Double.MIN_VALUE) {
-									jsonOut.print(",\n\"speed\": \"" + correctedSpeed + "\"");
+									output.print(",\n\"speed\": \"" + correctedSpeed + "\"");
 								}
 							}
 							
@@ -450,10 +455,10 @@ public class GPXTrackHandler implements ViewHandler {
 			}
 
 			if (trackCounter <= trackNumber) {
-				jsonOut.println("{\"trackpoints\": []}");			
+				output.println("{\"trackpoints\": []}");			
 			}
 			
-			jsonOut.flush();
+			output.flush();
 			
 			if (dataInvalid) {
 			    Logger.getLogger(getClass()).warn("GPX file contains invalid data: " + filePath);
@@ -536,33 +541,4 @@ public class GPXTrackHandler implements ViewHandler {
 				- x * h2 * Math.pow(Math.cos(f), 2) * Math.pow(Math.sin(g), 2)));
 	}
 
-	/**
-	 * Create the HTML response for viewing the given file contained in a ZIP
-	 * archive..
-	 * 
-	 * @param zipFilePath
-	 *            path of the ZIP entry
-	 * @param zipIn
-	 *            the InputStream for the file extracted from a ZIP archive
-	 * @param req
-	 *            the servlet request
-	 * @param resp
-	 *            the servlet response
-	 */
-	public void processZipContent(String zipFilePath, InputStream zipIn, ViewHandlerConfig viewHandlerConfig,
-			HttpServletRequest req, HttpServletResponse resp) {
-		// not yet supported
-		Logger.getLogger(getClass())
-				.warn("reading from ZIP archive not supported by ViewHandler " + this.getClass().getName());
-	}
-
-	/**
-	 * Does this ViewHandler support reading the file from an input stream of a
-	 * ZIP archive?
-	 * 
-	 * @return true if reading from ZIP archive is supported, otherwise false
-	 */
-	public boolean supportsZipContent() {
-		return false;
-	}
 }

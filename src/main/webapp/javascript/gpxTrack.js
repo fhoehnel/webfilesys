@@ -58,7 +58,7 @@ function loadGoogleMapsAPIScriptCode(googleMapsAPIKey) {
 
 function loadAndShowTrack() {
 	
-    var url = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(filePath) + "&trackNumber=" + currentTrack;
+    var url = "/webfilesys/servlet?command=gpxTrack&filePath=" + encodeURIComponent(filePath) + "&trackNumber=" + currentTrack;
     
     xmlRequest(url, function(req) {
         if (req.readyState == 4) {
@@ -100,7 +100,7 @@ function loadAndShowTrack() {
 function loadAndShowMultipleGPXFiles() {
 	var filePath = gpxFiles.pop();
 	
-    var url = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(filePath) + "&trackNumber=0";
+    var url = "/webfilesys/servlet?command=gpxTrack&filePath=" + encodeURIComponent(filePath) + "&trackNumber=0";
     
     xmlRequest(url, function(req) {
         if (req.readyState == 4) {
@@ -246,8 +246,8 @@ function drawAltDistProfile(response) {
     	if (trackpoints[i].ele) {
     		var mapEntry = [];
     		
-    		var elevation = Number.parseFloat(trackpoints[i].ele);
-    		var totalDist = Number.parseFloat(trackpoints[i].totalDist);
+    		var elevation = parseFloat(trackpoints[i].ele);
+    		var totalDist = parseFloat(trackpoints[i].totalDist);
     		
     		mapEntry[0] = elevation;
     		mapEntry[1] = totalDist;
@@ -417,8 +417,8 @@ function drawSpeedProfile(response) {
     	if (trackpoints[i].speed && (trackpoints[i].time)) {
     		var mapEntry = [];
     		
-    		var speed = Number.parseFloat(trackpoints[i].speed);
-    		var time = Number.parseInt(trackpoints[i].time);
+    		var speed = parseFloat(trackpoints[i].speed);
+    		var time = parseInt(trackpoints[i].time);
     		
     		mapEntry[0] = speed;
     		mapEntry[1] = time;

@@ -793,6 +793,7 @@ label.hintGoogleMapSelect=Klick wählt geografische Lokation aus
 noFilesWithGeoData=Dieser Ordner enthält keine Bilder mit geografischen Koordinaten!
 button.hideMapInfo=Info-Text ausblenden
 button.showMapInfo=Info-Text einblenden
+viewTrackOnMap=auf Karte anzeigen
 viewMultipleGPX=auf Karte anzeigen
 nonGPXFile=Diese Funktion ist nur für GPX-Dateien verfügbar (Dateinamen-Erweiterung .GPX).
 

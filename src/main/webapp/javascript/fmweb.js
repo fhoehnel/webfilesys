@@ -130,7 +130,7 @@ function showMultipleGPX() {
     }
 
 
-    var mapWin = window.open('/webfilesys/servlet','mapWin','width=' + (screen.width - 20) + ',height=' + (screen.height - 80) + ',scrollbars=yes,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
+    var mapWin = window.open('/webfilesys/servlet?command=blank','mapWin','width=' + (screen.width - 20) + ',height=' + (screen.height - 110) + ',scrollbars=yes,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
     mapWin.focus();
     document.form1.command.value = 'multiGPX';
     document.form1.target = 'mapWin';

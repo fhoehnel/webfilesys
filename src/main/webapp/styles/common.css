@@ -1827,6 +1827,7 @@ span.trackTime {
 div.gpsProfileCont {
 	width: 1100px;
 	margin-top: 20px;
+	margin-bottom: 10px;
 }
 
 canvas.gpsProfile {
