@@ -20,7 +20,7 @@ import com.ctc.wstx.exc.WstxParsingException;
 import de.webfilesys.util.ISO8601DateParser;
 
 /**
- * Delivers GPX track as JSON.
+ * Delivers data extracted from GPX track as JSON.
  * 
  * @author Frank Hoehnel
  */
@@ -70,8 +70,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			XMLStreamReader parser = factory.createXMLStreamReader(gpxReader);
 
-			boolean lastWasText = false;
-
 			double prevLat = Double.MIN_VALUE;
 			double prevLon = Double.MIN_VALUE;
 
@@ -118,9 +116,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 			
 			boolean hasSpeed = false;
 			
-			// SimpleDateFormat dateFormat = new
-			// SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
-
 			while (!documentEnd) {
 				try {
 					int event = parser.next();
@@ -132,10 +127,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 						break;
 
 					case XMLStreamConstants.START_DOCUMENT:
-						/*
-						 * xmlOut.println(XML_HEADER);
-						 * xmlOut.println(STYLESHEET_REF);
-						 */
 						break;
 
 					case XMLStreamConstants.START_ELEMENT:
@@ -147,13 +138,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 						tagName = parser.getLocalName();
 
 						currentElementName = tagName;
-
-						if (tagName.equals("gpx")) {
-							// output.println(XML_HEADER);
-							// output.println(STYLESHEET_REF);
-						}
-
-						// output.print("\n<" + tagName);
 
 						if (tagName.equals("trk")) {
 							
@@ -247,15 +231,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 								}
 							}
 
-							// output.print(">");
-
-							/*
-							 * if (tagName.equals("gpx")) { if
-							 * (!CommonUtils.isEmpty(googleMapsAPIKey)) {
-							 * xmlOut.print("<googleMapsAPIKey>" + googleMapsAPIKey
-							 * + "</googleMapsAPIKey>"); } }
-							 */
-
 							if (tagName.equals("trkpt") || tagName.equals("wpt")) {
 								if (dist != Double.MIN_VALUE) {
 									output.print(",\n\"dist\": \"");
@@ -289,8 +264,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 								}
 							}
 
-							// isCDATA = (tagName.equals("name") || tagName.equals("desc"));
-
 							if (tagName.equals("name")) {
 								trackName = parser.getElementText();
 							}
@@ -310,10 +283,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 								break;
 							}
 
-							if (!lastWasText) {
-								output.println();
-							}
-							
 							if (tagName.equals("trkpt")) {
 								if (elevation != null) {
 									output.print(",\n\"ele\": \"" + elevation + "\"");
@@ -362,8 +331,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 									output.print(",\n\"speed\": \"" + correctedSpeed + "\"");
 								}
 							}
-							
-							lastWasText = false;
 						}
 						
 						break;
@@ -411,9 +378,6 @@ public class GPXTrackHandler extends UserRequestHandler {
 												if (duration == 0l) {
 													speed = 0.0f;
 												} else {
-													// speed = dist / (duration /
-													// 1000f);
-
 													double bufferedDuration = 0.0;
 													for (int i = 0; i < DISTANCE_SMOOTH_FACTOR; i++) {
 														bufferedDuration += durationBuffer[i];
@@ -439,15 +403,11 @@ public class GPXTrackHandler extends UserRequestHandler {
 									}
 								}
 							}
-
-							if (elementText.length() > 0) {
-								lastWasText = true;
-							}
 						}
 						
 						break;
 					default:
-						// System.out.println("unhandled event: " + event);
+						// Logger.getLogger(getClass()).debug("unhandled event: " + event);
 					}
 				} catch (WstxParsingException epex) {
 					Logger.getLogger(getClass()).warn("GPX parsing error", epex);

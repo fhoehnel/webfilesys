@@ -24,6 +24,9 @@ import de.webfilesys.util.ISO8601DateParser;
 
 /**
  * GPS track file viewer.
+ * 
+ * @deprecated replaced by GPXViewHandler, MultiGPXTrackHandler, GPXTrackHandler
+ * 
  * @author Frank Hoehnel
  */
 public class GeoTrackViewHandler implements ViewHandler
