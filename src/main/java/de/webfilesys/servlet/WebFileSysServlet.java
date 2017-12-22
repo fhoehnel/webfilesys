@@ -157,6 +157,7 @@ import de.webfilesys.gui.user.EncryptFileRequestHandler;
 import de.webfilesys.gui.user.ExecProgramRequestHandler;
 import de.webfilesys.gui.user.ExifThumbRequestHandler;
 import de.webfilesys.gui.user.FtpBackupHandler;
+import de.webfilesys.gui.user.GPXTrackHandler;
 import de.webfilesys.gui.user.GUnzipRequestHandler;
 import de.webfilesys.gui.user.GetFileRequestHandler;
 import de.webfilesys.gui.user.GetThumbRequestHandler;
@@ -214,6 +215,8 @@ import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.CompareImageSliderHandler;
 import de.webfilesys.gui.xsl.EditVideoParamHandler;
 import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
+import de.webfilesys.gui.xsl.GPXViewHandler;
+import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -2114,6 +2117,21 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
 
+        if (command.equals("viewGPX")) {
+            (new GPXViewHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
+        if (command.equals("multiGPX")) {
+            (new MultiGPXTrackHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
+        if (command.equals("gpxTrack")) {
+            (new GPXTrackHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+        
         if (command.equals("playVideoLocal")) {
             (new VideoLocalPlayerHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
             return(true);

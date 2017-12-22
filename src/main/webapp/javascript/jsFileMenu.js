@@ -23,7 +23,7 @@ function comments(path)
     var xpos = (screen.width - windowWidth) / 2;
     var ypos = (screen.height - windowHeight) / 2;
 
-    commentWin = window.open("/webfilesys/servlet?command=listComments&actPath=" + encodeURIComponent(path),"commentWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=" + windowWidth + ",height=" + windowHeight + ",resizable=yes,left=" + xpos + ",top=" + ypos + ",screenX" + xpos + ",screenY=" + ypos);
+    commentWin = window.open("/webfilesys/servlet?command=listComments&actPath=" + encodeURIComponent(path),"commentWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=" + windowWidth + ",height=" + windowHeight + ",resizable=yes,left=" + xpos + ",top=" + ypos + ",screenX=" + xpos + ",screenY=" + ypos);
     commentWin.focus();
 }
 
@@ -192,6 +192,11 @@ function compress(path)
 function untar(path)
 {
     window.location.href="/webfilesys/servlet?command=untar&filePath=" + encodeURIComponent(path);
+}
+
+function viewTrackOnMap(path) {
+    mapWin = window.open("/webfilesys/servlet?command=viewGPX&filePath=" + encodeURIComponent(path), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
+    maptWin.focus();
 }
 
 function sendFile(fileName) {

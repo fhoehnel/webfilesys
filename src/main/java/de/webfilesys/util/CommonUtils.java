@@ -513,4 +513,12 @@ public class CommonUtils
     	return cleanText.toString();
     }
     
+    public static String joinFilesysPath(String part1, String part2) {
+        
+        if (part1.endsWith(File.separator)) {
+            return part1 + part2;
+        }
+        return part1 + File.separatorChar + part2;
+    }
+    
 }

@@ -155,7 +155,7 @@ function getFileNameExt(fileName)
 
     if (extStart > 0)
     {
-	fileExt=fileName.substring(extStart).toUpperCase();
+	    fileExt=fileName.substring(extStart).toUpperCase();
     }
     
     return(fileExt);
