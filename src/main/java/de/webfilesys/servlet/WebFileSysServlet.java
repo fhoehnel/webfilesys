@@ -70,13 +70,18 @@ import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
+import de.webfilesys.gui.ajax.EditConvertVideoHandler;
+import de.webfilesys.gui.ajax.ExtractVideoFrameHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
+import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
+import de.webfilesys.gui.ajax.MultiVideoConcatHandler;
 import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
+import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
 import de.webfilesys.gui.ajax.XformImageHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
 import de.webfilesys.gui.ajax.XmlAssociatedProgramHandler;
@@ -152,6 +157,7 @@ import de.webfilesys.gui.user.EncryptFileRequestHandler;
 import de.webfilesys.gui.user.ExecProgramRequestHandler;
 import de.webfilesys.gui.user.ExifThumbRequestHandler;
 import de.webfilesys.gui.user.FtpBackupHandler;
+import de.webfilesys.gui.user.GPXTrackHandler;
 import de.webfilesys.gui.user.GUnzipRequestHandler;
 import de.webfilesys.gui.user.GetFileRequestHandler;
 import de.webfilesys.gui.user.GetThumbRequestHandler;
@@ -166,6 +172,7 @@ import de.webfilesys.gui.user.MultiFileDownloadHandler;
 import de.webfilesys.gui.user.MultiImageDeleteHandler;
 import de.webfilesys.gui.user.MultiImageDownloadHandler;
 import de.webfilesys.gui.user.MultiMoveCopyRequestHandler;
+import de.webfilesys.gui.user.MultiVideoDeleteHandler;
 import de.webfilesys.gui.user.MultiZipRequestHandler;
 import de.webfilesys.gui.user.OpenStreetMapFilesPOIHandler;
 import de.webfilesys.gui.user.OpenStreetMapPOIHandler;
@@ -178,6 +185,7 @@ import de.webfilesys.gui.user.RemoteEditorRequestHandler;
 import de.webfilesys.gui.user.RenameFileRequestHandler;
 import de.webfilesys.gui.user.RenameLinkRequestHandler;
 import de.webfilesys.gui.user.RenameToExifDateHandler;
+import de.webfilesys.gui.user.RenameVideoRequestHandler;
 import de.webfilesys.gui.user.ResetStatisticsRequestHandler;
 import de.webfilesys.gui.user.ResizeImageRequestHandler;
 import de.webfilesys.gui.user.ReturnToPrevDirHandler;
@@ -193,6 +201,7 @@ import de.webfilesys.gui.user.TransformImageRequestHandler;
 import de.webfilesys.gui.user.URLFileRequestHandler;
 import de.webfilesys.gui.user.UntarRequestHandler;
 import de.webfilesys.gui.user.UserSettingsRequestHandler;
+import de.webfilesys.gui.user.VideoThumbHandler;
 import de.webfilesys.gui.user.ZipContentFileRequestHandler;
 import de.webfilesys.gui.user.ZipDirRequestHandler;
 import de.webfilesys.gui.user.ZipFileRequestHandler;
@@ -204,6 +213,10 @@ import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
 import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.CompareImageSliderHandler;
+import de.webfilesys.gui.xsl.EditVideoParamHandler;
+import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
+import de.webfilesys.gui.xsl.GPXViewHandler;
+import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -256,6 +269,7 @@ import de.webfilesys.gui.xsl.XslTreeStatsHandler;
 import de.webfilesys.gui.xsl.XslUnixCmdLineHandler;
 import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
 import de.webfilesys.gui.xsl.XslUploadParmsHandler;
+import de.webfilesys.gui.xsl.XslVideoListHandler;
 import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
 import de.webfilesys.gui.xsl.XslZipContentHandler;
 import de.webfilesys.gui.xsl.album.AddAlbumCommentHandler;
@@ -422,6 +436,7 @@ public class WebFileSysServlet extends ServletBase
 		    ((!command.equals("exifThumb")) && (!command.equals("getFile")) && (!command.equals("picThumb")) &&
 		     (!command.equals("getThumb")) && (!command.equals("multiDownload")) &&
 		     (!command.equals("getZipContentFile")) && (!command.equals("visitorFile")) &&
+		     (!command.equals("videoThumb")) && 
 		     (!command.equals("mp3Thumb")) && (!command.equals("downloadFolder"))))
 		{
             // resp.setCharacterEncoding("ISO-8859-1");
@@ -463,7 +478,7 @@ public class WebFileSysServlet extends ServletBase
         
         if (!WebFileSys.getInstance().isSimulateRemote())
         {
-            requestIsLocal = clientIP.equals(localIP) || clientIP.equals(WebFileSys.getInstance().getLoopbackAddress());
+            requestIsLocal = clientIP.equals(localIP) || clientIP.equals(WebFileSys.getInstance().getLoopbackAddress()) || clientIP.equals(WebFileSys.getInstance().getIPV6LoopbackAddress());
         }
 		
         // prevent caching
@@ -669,8 +684,6 @@ public class WebFileSysServlet extends ServletBase
                 return true;
     	    }
     	    
-    		boolean initial = false;
-    		
 			int viewMode = Constants.VIEW_MODE_LIST;
         	
         	String viewModeParm = req.getParameter("viewMode");
@@ -695,8 +708,7 @@ public class WebFileSysServlet extends ServletBase
 			    }
             }
         	
-        	if (viewMode == Constants.VIEW_MODE_THUMBS)
-        	{
+        	if (viewMode == Constants.VIEW_MODE_THUMBS) {
     			if (req.getParameter("keepListStatus") == null)
     			{
     				req.setAttribute("initial", "true");
@@ -705,28 +717,24 @@ public class WebFileSysServlet extends ServletBase
     		    (new XslThumbnailHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
 					
 				return(true);
-        	}
-
-			if (viewMode == Constants.VIEW_MODE_STORY)
-			{
-			    (new XslPictureStoryHandler(req, resp, session, output, userid)).handleRequest(); 
-				
+        	} 
+        	
+        	if (viewMode == Constants.VIEW_MODE_VIDEO) {
+			    (new XslVideoListHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
 				return(true);
-			}
-
-            if (viewMode == Constants.VIEW_MODE_STATS)
-            {
+			} 
+        	
+        	if (viewMode == Constants.VIEW_MODE_STORY) {
+			    (new XslPictureStoryHandler(req, resp, session, output, userid)).handleRequest(); 
+				return(true);
+			} 
+        	
+        	if (viewMode == Constants.VIEW_MODE_STATS) {
                 (new XslFileListStatsHandler(req, resp, session, output, userid)).handleRequest();
-
                 return(true);
             }
             
-			if (req.getParameter("keepListStatus") == null)
-			{
-        		initial = true;
-			}
-            
-			(new XslFileListHandler(req, resp, session, output, userid, initial)).handleRequest();
+			(new XslFileListHandler(req, resp, session, output, userid)).handleRequest();
 			
 			return(true);
     	}
@@ -734,6 +742,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("thumbnail"))
         {
 		    (new XslThumbnailHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+		    
+            return(true);
+        }
+    	
+        if (command.equals("listVideos"))
+        {
+		    (new XslVideoListHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
 		    
             return(true);
         }
@@ -780,6 +795,13 @@ public class WebFileSysServlet extends ServletBase
 		    return(true);
         }
         
+        if (command.equals("videoThumb"))
+        {
+  		    (new VideoThumbHandler(req, resp, session, output, userid)).handleRequest(); 
+		    
+		    return(true);
+        }
+
         if (command.equals("getFile"))
         {
 		    (new GetFileRequestHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -1276,7 +1298,21 @@ public class WebFileSysServlet extends ServletBase
 
             return(true);
         }
-                
+
+        if (command.equals("multiVideoDelete"))
+        {
+		    (new MultiVideoDeleteHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+
+            return(true);
+        }
+        
+        if (command.equals("multiVideoConcat"))
+        {
+		    (new MultiVideoConcatHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+
+            return(true);
+        }
+
         if (command.equals("multiImageExifRename"))
         {
 		    (new RenameToExifDateHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
@@ -2080,7 +2116,64 @@ public class WebFileSysServlet extends ServletBase
             (new GoogleEarthFolderPlacemarkHandler(req, resp, session, output, userid)).handleRequest();
             return(true);
         }
+
+        if (command.equals("viewGPX")) {
+            (new GPXViewHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
+        if (command.equals("multiGPX")) {
+            (new MultiGPXTrackHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
+        if (command.equals("gpxTrack")) {
+            (new GPXTrackHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
         
+        if (command.equals("playVideoLocal")) {
+            (new VideoLocalPlayerHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
+            return(true);
+        }
+        
+        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+        	
+            if (command.equals("video")) {
+            	String cmd = req.getParameter("cmd");
+
+            	if (cmd.equals("getVideoDimensions")) {
+        		    (new GetVideoDimensionsHandler(req, resp, session, output, userid)).handleRequest(); 
+        		    return(true);
+            	}
+            	
+                if (cmd.equals("editVideoParams")) {
+        		    (new EditVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("editConvertVideo")) {
+        		    (new EditConvertVideoHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+                
+                if (cmd.equals("extractVideoFrameParams")) {
+        		    (new ExtractVideoFrameParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+                
+                if (cmd.equals("extractVideoFrame")) {
+        		    (new ExtractVideoFrameHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+                
+                if (cmd.equals("renameVideo")) {
+                    (new RenameVideoRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
+                    return(true);
+                }
+            }
+        }
+
         if (command.equals("mobile"))
         {
             String cmd = req.getParameter("cmd");

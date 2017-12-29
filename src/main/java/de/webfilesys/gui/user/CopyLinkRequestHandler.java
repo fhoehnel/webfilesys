@@ -131,7 +131,7 @@ public class CopyLinkRequestHandler extends UserRequestHandler
         }
         else
         {
-            (new XslFileListHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest(); 
+            (new XslFileListHandler(req, resp, session, output, uid)).handleRequest(); 
         }
 	}
 }

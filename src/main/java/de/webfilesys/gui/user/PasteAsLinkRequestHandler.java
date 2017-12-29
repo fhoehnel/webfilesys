@@ -123,7 +123,7 @@ public class PasteAsLinkRequestHandler extends UserRequestHandler
             }
             else
             {
-                (new XslFileListHandler(req, resp, session, output, uid, true)).handleRequest();
+                (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
             }
         }
         else

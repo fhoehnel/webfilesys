@@ -12,6 +12,7 @@ import de.webfilesys.Constants;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.gui.xsl.XslFileListHandler;
 import de.webfilesys.gui.xsl.XslThumbnailHandler;
+import de.webfilesys.gui.xsl.XslVideoListHandler;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 
 /**
@@ -77,19 +78,15 @@ public class RenameLinkRequestHandler extends UserRequestHandler
 	    
         String mobile = (String) session.getAttribute("mobile");
         
-        if (mobile != null) 
-        {
+        if (mobile != null) {
             (new MobileFolderFileListHandler(req, resp, session, output, uid)).handleRequest(); 
-        }
-        else
-        {
-            if (viewMode == Constants.VIEW_MODE_THUMBS)
-            {
+        } else {
+            if (viewMode == Constants.VIEW_MODE_THUMBS) {
                 (new XslThumbnailHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest(); 
-            }
-            else
-            {
-                (new XslFileListHandler(req, resp, session, output, uid, false)).handleRequest();
+            } else if (viewMode == Constants.VIEW_MODE_VIDEO) {
+                (new XslVideoListHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest(); 
+            } else {
+                (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
             }
         }	    
 	}

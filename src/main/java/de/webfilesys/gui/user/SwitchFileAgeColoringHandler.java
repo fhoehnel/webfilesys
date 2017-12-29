@@ -41,6 +41,6 @@ public class SwitchFileAgeColoringHandler extends UserRequestHandler {
 			session.setAttribute(SESSION_KEY_FILE_AGE_COLORING, Boolean.TRUE);
 		}
 		
-        (new XslFileListHandler(req, resp, session, output, uid, true)).handleRequest();
+        (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 }

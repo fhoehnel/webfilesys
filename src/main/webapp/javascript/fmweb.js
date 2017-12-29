@@ -116,6 +116,29 @@ function diffCompare() {
     }
 }
 
+function showMultipleGPX() {
+
+    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
+         if ((document.form1.elements[i].type == "checkbox") && 
+		     (document.form1.elements[i].name != "cb-setAll") &&
+		     document.form1.elements[i].checked) {
+	         if (getFileNameExt(document.form1.elements[i].name) != ".GPX") {
+	             customAlert(resourceBundle["nonGPXFile"]);
+	             return;
+	         }
+         }
+    }
+
+
+    var mapWin = window.open('/webfilesys/servlet?command=blank','mapWin','width=' + (screen.width - 20) + ',height=' + (screen.height - 110) + ',scrollbars=yes,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
+    mapWin.focus();
+    document.form1.command.value = 'multiGPX';
+    document.form1.target = 'mapWin';
+    
+    document.form1.submit();
+    document.form1.target = '';
+}
+
 function checkTwoFilesSelected() {
     var numChecked = 0;
     
@@ -171,6 +194,8 @@ function selectedFileFunction(unhighlight) {
 	    multiDownload();
     } else if (cmd == 'diff') {
 	    diffCompare();
+    } else if (cmd == 'multiGPX') {
+	    showMultipleGPX();
     }
      
     resetMultifileSelection(unhighlight);
@@ -190,38 +215,12 @@ function resetMultifileSelection(unhighlight) {
 function showMsgCentered(message, boxWidth, boxHeight, duration)
 {
     var msgBox1 = document.getElementById("msg1");
-      
-    var windowWidth;
-    var windowHeight;
-    var yScrolled;
-    var xScrolled;
         
-    if (window.ActiveXObject !== undefined) 
-    {
-        windowWidth = document.body.clientWidth;
-        windowHeight = document.body.clientHeight;
-        yScrolled = document.body.scrollTop;
-        xScrolled = document.body.scrollLeft;
-    }
-    else
-    {
-        windowWidth = window.innerWidth;
-        windowHeight = window.innerHeight;
-        yScrolled = window.pageYOffset;
-        xScrolled = window.pageXOffset;
-    }
-        
-    msgXpos = (windowWidth - boxWidth) / 2 + xScrolled;
-       
-    msgBox1.style.left = msgXpos + 'px';
-
-    msgYpos = (windowHeight - boxHeight) / 2 + yScrolled;
-
-    msgBox1.style.top = msgYpos + 'px';
-        
-    msgBox1.style.visibility = "visible";
-             
     msgBox1.innerHTML = message;
+    
+    centerBox(msgBox1);
+
+    msgBox1.style.visibility = "visible";
              
     setTimeout("hideMsgBox()", duration);
 }

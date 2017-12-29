@@ -12,7 +12,6 @@ function uncheckDefaultColor() {
   
 function resetTextColor(checkbox) {
     if (checkbox.checked) {
-        console.log("resetting text color");
         document.getElementById("textColor").value = "00000";
         document.getElementById("textColor").style.color = "#000000";
         document.getElementById("textColor").style.backgroundColor = "#ffffff";

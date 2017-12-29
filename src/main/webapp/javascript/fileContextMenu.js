@@ -52,6 +52,9 @@ function contextMenu(fileName)
     } else if (fileExt == ".URL") {
         menuText = menuText 
                  + menuEntry("javascript:openUrlFile('" + scriptPreparedPath + "')",resourceBundle["label.view"]);
+    } else if (fileExt == ".GPX") {
+        menuText = menuText 
+                 + menuEntry("javascript:viewTrackOnMap('" + scriptPreparedPath + "')",resourceBundle["viewTrackOnMap"]);
     } else {
          if ((fileExt == ".MP4") || (fileExt == ".OGG") || (fileExt == ".OGV")|| (fileExt == ".WEBM")) {
              menuText = menuText 

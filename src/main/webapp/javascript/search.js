@@ -35,6 +35,12 @@ function discardSearchResults() {
 function discardAndClose() {
     discardSearchResults();
 }
-			
+	
+function gotoSearchResultFolder(folderPath) {
+	if (window.opener) {
+		window.opener.location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(folderPath) + "&fastPath=true;"
+	}
+}
+
 window.onbeforeunload = discardSearchResults;
 			

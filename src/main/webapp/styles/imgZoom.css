@@ -1,0 +1,9 @@
+div.zoomedPicCont {
+	border: 1px solid black;
+	margin: auto;
+    background-repeat: no-repeat;	
+}
+
+div.popupClose {
+	cursor: pointer;
+}

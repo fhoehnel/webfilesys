@@ -210,6 +210,16 @@
         <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
       </td>
       
+      <xsl:if test="/fileList/videoEnabled">
+      
+        <td class="tabSpacer"></td>
+
+        <td class="tabInactive">
+          <a class="tab" href="javascript:viewModeVideo()" resource="label.modeVideo" />
+        </td>
+      
+      </xsl:if>
+
       <td class="tabSpacer"></td>
 
       <td class="tabInactive">
@@ -569,6 +579,7 @@
               </xsl:if>
               <option value="download" resource="button.downloadAsZip" />
               <option value="diff" resource="action.diff" />
+              <option value="multiGPX" resource="viewMultipleGPX" />
             </select>
           </td>
         </tr>

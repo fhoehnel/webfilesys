@@ -155,7 +155,7 @@ function getFileNameExt(fileName)
 
     if (extStart > 0)
     {
-	fileExt=fileName.substring(extStart).toUpperCase();
+	    fileExt=fileName.substring(extStart).toUpperCase();
     }
     
     return(fileExt);
@@ -228,12 +228,11 @@ function toast(message, duration) {
         yScrolled = window.pageYOffset;
     }
    	
-   	toastBox.style.top = yScrolled + (getWinHeight() / 2 - 75) + "px";
-   	toastBox.style.left = (getWinWidth() / 2 - 125) + "px";
-
    	toastText = document.createElement("span");
    	toastText.innerHTML = message;
    	toastBox.appendChild(toastText);
+
+   	centerBox(toastBox);
    	
    	setTimeout(hideToast, duration);
 }

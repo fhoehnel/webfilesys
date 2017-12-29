@@ -14,6 +14,7 @@ import de.webfilesys.Constants;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
+import de.webfilesys.graphics.VideoThumbnailCreator;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
@@ -59,13 +60,13 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
         
         boolean success = false;
 
-        File imgFile = new File(filePath);
+        File fileToDelete = new File(filePath);
         
         String deletedFile = null;
 
-        if (imgFile.exists() && imgFile.isFile() && 
-            (imgFile.canWrite() || (deleteWriteProtected != null))) {
-            deletedFile = imgFile.getName();
+        if (fileToDelete.exists() && fileToDelete.isFile() && 
+            (fileToDelete.canWrite() || (deleteWriteProtected != null))) {
+            deletedFile = fileToDelete.getName();
             
             MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
@@ -85,7 +86,19 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
                 }
             }
 
-            if (imgFile.delete()) {
+            if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+                String videoThumbnailPath = VideoThumbnailCreator.getThumbnailPath(filePath);
+
+                File videoThumbnailFile = new File(videoThumbnailPath);
+
+                if (videoThumbnailFile.exists()) {
+                    if (!videoThumbnailFile.delete()) {
+                        Logger.getLogger(getClass()).warn("failed to remove video thumbnail file " + videoThumbnailPath);
+                    }
+                }
+            }
+            
+            if (fileToDelete.delete()) {
                 success = true;
             } else {
                 Logger.getLogger(getClass()).warn("failed to delete file " + filePath);

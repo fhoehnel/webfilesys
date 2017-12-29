@@ -12,6 +12,7 @@ public interface Constants
 	public static final int VIEW_MODE_STORY      = 3;
 	public static final int VIEW_MODE_SLIDESHOW  = 4;
 	public static final int VIEW_MODE_STATS      = 5;
+	public static final int VIEW_MODE_VIDEO      = 6;
 
     public static final int DEFAULT_SCREEN_WIDTH  = 1024;
     public static final int DEFAULT_SCREEN_HEIGHT = 768;
@@ -25,7 +26,9 @@ public interface Constants
 	public static final String imgFileMasks[]={"*.gif","*.jpg","*.jpeg","*.png","*.bmp"};
 
     public static final String JPEG_FILE_MASKS[]={"*.jpg","*.jpeg"};
-	
+
+    public static final String VIDEO_FILE_MASKS[] = {"*.mp4", "*.mpg", "*.mpeg", "*.mov"};
+    
 	public static final String UPLOAD_COUNTER = "uploadCounter";
 	public static final String UPLOAD_SIZE = "uploadSize";
 	public static final String UPLOAD_SUCCESS = "uploadSuccess";

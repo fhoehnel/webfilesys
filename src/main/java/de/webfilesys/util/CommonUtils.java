@@ -394,6 +394,21 @@ public class CommonUtils
         return sb.toString();
      }
     
+	public static String escapeForJavascript(String source) {
+		StringBuffer dest = new StringBuffer();
+
+		for (int i = 0; i < source.length(); i++) {
+			if (source.charAt(i)=='\\') {
+				dest.append("\\\\");
+			} else if (source.charAt(i)=='\'') {
+				dest.append("\\\'");
+			} else {
+				dest.append(source.charAt(i));
+			}
+		}    
+		return(dest.toString());
+	}
+    
     /**
      * This code is from http://www.rgagnon.com/javadetails/java-0306.html
      * @param s the original String
@@ -496,6 +511,14 @@ public class CommonUtils
     	}
     	
     	return cleanText.toString();
+    }
+    
+    public static String joinFilesysPath(String part1, String part2) {
+        
+        if (part1.endsWith(File.separator)) {
+            return part1 + part2;
+        }
+        return part1 + File.separatorChar + part2;
     }
     
 }

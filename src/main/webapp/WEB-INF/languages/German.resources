@@ -13,6 +13,7 @@ label.logon=Anmelden
 label.file=Datei
 label.files=Dateien
 label.pictures=Bilder
+label.videos=Videos
 label.mask=Filter
 label.description=Beschreibung
 label.directory=Ordner
@@ -153,6 +154,11 @@ label.downloadFolder=Download als ZIP-Archiv
 title.addCopyToClip=Zur Zwischenablage hinzufügen für Kopier-Operation
 title.addMoveToClip=Zur Zwischenablage hinzufügen für Verschiebe-Operation
 
+# video list labels
+playVideoLocally=mit Videoplayer abspielen
+errorVideoPlayer=lokaler Video Player konnte nicht gestartet werden
+playerStartedInBackground=Videoplayer-Window ist möglicherweise vom Browser verdeckt.
+
 # directory tree tooltips
 tooltip.folder=Context-Menü anzeigen für Ordner
 tooltip.listFiles=Dateien dieses Ordners anzeigen
@@ -188,6 +194,7 @@ confirm.deleteFiles=Ausgewählte Dateien wirklich löschen?
 switchfileAgeColoring=Farben entsprechend Datei-Alter zeigen/ausblenden
 folderContentModified=Der Inhalt des aktuellen Ordners wurde geändert. Anzeige aktualisieren?
 folderTreeModified=Die Ordnerstruktur wurde geändert. Anzeige aktualisieren?
+noVideosInFolder=keine unterstützten Video-Dateien (MP4,MPG,MOV)
 
 # file list checkboxes
 checkbox.selectall=alle
@@ -198,6 +205,7 @@ label.modelist=File-Liste
 label.modethumb=Bilder
 label.modestory=Story
 label.modeSlideshow=Diashow
+label.modeVideo=Videos
 label.fileStats=Statistik
 
 # sorting types for files
@@ -785,6 +793,9 @@ label.hintGoogleMapSelect=Klick wählt geografische Lokation aus
 noFilesWithGeoData=Dieser Ordner enthält keine Bilder mit geografischen Koordinaten!
 button.hideMapInfo=Info-Text ausblenden
 button.showMapInfo=Info-Text einblenden
+viewTrackOnMap=auf Karte anzeigen
+viewMultipleGPX=auf Karte anzeigen
+nonGPXFile=Diese Funktion ist nur für GPX-Dateien verfügbar (Dateinamen-Erweiterung .GPX).
 
 # folder synchronization
 label.selectSyncSourceResult=Navigieren Sie zum Ziel-Ordner der Synchronisation und wählen Sie Synchronisieren im Kontext-Menü!
@@ -884,6 +895,40 @@ button.startGrep=grep starten
 grepResultEmpty=keine Zeilen gefunden mit
 grepFilterMissing=Bitte geben Sie einen Filter-Wert ein!
 grepReadError=einige Zeilen der Datei konnten nicht gelesen werden
+
+# edit/convert video
+contextMenuEditVideo=editieren/konvertieren
+titleEditVideo=Video editieren/konvertieren
+label.videoFile=Video-Datei
+label.videoResolution=Auflösung (Breite x Höhe)
+label.fps=Bildrate
+label.duration=Laufzeit
+label.codec=Codec
+label.newResolution=neue Auflösung (Breite x Höhe)
+label.newFps=neue Bildrate
+label.newCodec=neuer Codec
+keepOrigFrameRate=beibehalten
+keepOrigCodec=beibehalten
+label.timeRange=Start-/Endezeit (hh:mm:ss)
+videoConversionStarted=Die Videokonvertierung wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner 
+validationError.videoStartEndTime=Die Endezeit darf nicht vor der Startzeit liegen.
+validationError.videoTimeRange=Das gewählte Zeitfenster liegt ausserhalb des Zeitbereiches des Videos.
+selectTwoOrMoreVideoFiles=Es müssen mindestens 2 Video-Dateien ausgewählt werden. 
+concatVideos=Videos verketten
+videoConcatStarted=Die Verkettung der selektierten Video-Dateien wurde gestartet und kann einige Minuten dauern.
+videoConcatErrorCodec=Zu verkettende Videos müssen den gleichen Codec benutzen.
+videoConcatErrorFrameRate=Zu verkettende Videos müssen die gleiche Framerate haben.
+videoConcatErrorResolution=Zu verkettende Videos müssen die gleiche Breite und Höhe haben.
+videoConcatErrorProcess=Beim Verketten der Videos ist ein Fehler aufgetreten.
+
+# extract video frame
+contextMenuExtractVideoFrame=Standbild extrahieren
+titleExtractVideoFrame=Video-Standbild extrahieren
+label.frameResolution=Auflösung des Bildes (Breite x Höhe)
+label.extractFrameTime=Zeitpunkt im Video (hh:mm:ss)
+button.startExtract=Extrahieren
+videoFrameExtractionStarted=Die Extrahierung des Standbildes wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
+validationError.videoFrameExtractTime=Der gewählte Zeitpunkt liegt ausserhalb des Zeitbereiches des Videos.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version

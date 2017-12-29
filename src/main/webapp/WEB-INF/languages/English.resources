@@ -13,6 +13,7 @@ label.logon=Logon
 label.file=file
 label.files=files
 label.pictures=pictures
+label.videos=videos
 label.mask=Mask
 label.description=description
 label.directory=folder
@@ -153,6 +154,11 @@ label.downloadFolder=download as zip
 title.addCopyToClip=Add to clipboard for copy operation
 title.addMoveToClip=Add to clipboard for move operation
 
+# video list labels
+playVideoLocally=Play with local player
+errorVideoPlayer=local video player could not be started
+playerStartedInBackground=Video player window may be behind the browser window.
+
 # directory tree tooltips
 tooltip.folder=open the context menu for folder
 tooltip.listFiles=list the files of this directory
@@ -188,6 +194,7 @@ confirm.deleteFiles=Delete selected files?
 switchfileAgeColoring=show/hide file age coloring
 folderContentModified=The content of the current folder has been modified. Reload?
 folderTreeModified=The structure of the folder tree has been modified. Reload?
+noVideosInFolder=no supported video files (MP4,MPG,MOV)
 
 # file list checkboxes
 checkbox.selectall=Select all
@@ -198,6 +205,7 @@ label.modelist=list files
 label.modethumb=thumbnails
 label.modestory=picture story
 label.modeSlideshow=slideshow
+label.modeVideo=videos
 label.fileStats=statistics
 
 # sorting types for files
@@ -782,6 +790,9 @@ label.hintGoogleMapSelect=Click to select geographic coordinates!
 noFilesWithGeoData=This folder does not contain pictures with geographic coordinates!
 button.hideMapInfo=Hide Info Text
 button.showMapInfo=Show Info Text
+viewTrackOnMap=show GPX track on map
+viewMultipleGPX=show GPX on map
+nonGPXFile=This function is only applicable to GPX files (filename extension .GPX).
 
 # folder synchronization
 label.selectSyncSourceResult=Select the synchronization target folder and choose snychronize from the context menu!
@@ -881,6 +892,40 @@ button.startGrep=start grep
 grepResultEmpty=no lines found containing
 grepFilterMissing=please enter a grep filter value
 grepReadError=some lines of the file could not be read
+
+# edit/convert video
+contextMenuEditVideo=edit/convert video
+titleEditVideo=edit/convert video
+label.videoFile=video file
+label.videoResolution=resolution (width x height)
+label.fps=frame rate
+label.duration=duration
+label.codec=codec
+label.newResolution=new resolution (width x height)
+label.newFps=new frame rate
+label.newCodec=new codec
+keepOrigFrameRate=no change
+keepOrigCodec=no change
+label.timeRange=time range (hh:mm:ss)
+videoConversionStarted=The conversion of the video has been started. This can take some time to complete. For the result file watch the subfolder 
+validationError.videoStartEndTime=The end time may not be before the start time.
+validationError.videoTimeRange=The selected time range is outside the range of the video.
+selectTwoOrMoreVideoFiles=Select at least two video files to concatenate.
+concatVideos=concatenate videos
+videoConcatStarted=The concatenation of the selected video files has been started. This can take some time to complete.
+videoConcatErrorCodec=Videos to be concatenated must use the same codec.
+videoConcatErrorFrameRate=Videos to be concatenated must have the same frame rate.
+videoConcatErrorResolution=Videos to be concatenated must have the same dimensions.
+videoConcatErrorProcess=An error occured while concatenating the video files.
+
+# extract video frame
+contextMenuExtractVideoFrame=extract video frame
+titleExtractVideoFrame=extract video frame
+label.frameResolution=frame resolution (width x height)
+label.extractFrameTime=time in video (hh:mm:ss)
+button.startExtract=Extract Frame
+videoFrameExtractionStarted=The extraction of the video frame has been started. This can take some time to complete. For the result file watch the subfolder
+validationError.videoFrameExtractTime=The selected time is outside the range of the video.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version

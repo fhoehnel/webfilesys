@@ -13,6 +13,7 @@ label.logon=Iniciar sesión
 label.file=archivo
 label.files=archivos
 label.pictures=imágenes
+label.videos=videos
 label.mask=Filtro
 label.description=descripción
 label.directory=carpeta
@@ -153,6 +154,11 @@ label.downloadFolder=Descargar como ZIP
 title.addCopyToClip=Añadir para copiar
 title.addMoveToClip=Añadir para mover
 
+# video list labels
+playVideoLocally=reproducción de vídeo local
+errorVideoPlayer=No se pudo iniciar el reproductor de video local.
+playerStartedInBackground=La ventana del reproductor puede estar detrás de la ventana del navegador.
+
 # directory tree tooltips
 tooltip.folder=abrir el menu contextual de la carpeta
 tooltip.listFiles=listar los archivos de esta carpeta
@@ -188,6 +194,7 @@ confirm.deleteFiles=¿Borrar los archivos seleccionados?
 switchfileAgeColoring=Mostrar/ocultar colores differentes de acuerdo con la edad del archivo
 folderContentModified=El contenido de la carpeta actual ha cambiado. ¿Actualizar la lista de los archivos? 
 folderTreeModified=La estructura de carpetas ha cambiado. ¿Actualizar la visualización?
+noVideosInFolder=no hay archivos de vídeo en esta carpeta (MP4,MPG,MOV)
 
 # file list checkboxes
 checkbox.selectall=Seleccionar todo
@@ -198,6 +205,7 @@ label.modelist=listar archivos
 label.modethumb=miniaturas
 label.modestory=fotolog
 label.modeSlideshow=diapositivas
+label.modeVideo=vídeo
 label.fileStats=estadísticas
 
 # sorting types for files
@@ -784,6 +792,9 @@ label.hintGoogleMapSelect=¡Haz click para seleccionar las coordenadas geográfica
 noFilesWithGeoData=No hay imagenes con coordenadas geográficas en esta carpeta.
 button.hideMapInfo=Ocultar texto de información
 button.showMapInfo=Mostrar texto de información
+viewTrackOnMap=mostrar en el mapa
+viewMultipleGPX=mostrar en el mapa
+nonGPXFile=Esta función solo se aplica a los archivos GPX (*.GPX).
 
 # folder synchronization
 label.selectSyncSourceResult=¡Selecciona la carpeta para sincronizar y elije sincronizar en el menú contextual!
@@ -882,6 +893,40 @@ button.startGrep=comenzar grep
 grepResultEmpty=no hay líneas que contienen la palabra
 grepFilterMissing=Introduce un valor para el filtro de grep
 grepReadError=unas líneas del archivo no son legible
+
+# edit/convert video
+contextMenuEditVideo=editar/convertir
+titleEditVideo=editar/convertir el vídeo
+label.videoFile=archivo de vídeo
+label.videoResolution=resolución
+label.fps=cuadros por segundo
+label.duration=duración del video
+label.codec=codec
+label.newResolution=resolución nueva
+label.newFps=cuadros por segundo nuevos
+label.newCodec=codec nuevo
+keepOrigFrameRate=no cambio
+keepOrigCodec=no cambio
+label.timeRange=intervalo de tiempo (hh:mm:ss)
+videoConversionStarted=Se ha iniciado la conversión del vídeo. Esto puede tomar algún tiempo para completar. Para el archivo de resultados, vea la subcarpeta 
+validationError.videoStartEndTime=La hora de finalización puede no ser anterior a la hora de inicio.
+validationError.videoTimeRange=El intervalo de tiempo seleccionado está fuera del rango del archivo de vídeo.
+selectTwoOrMoreVideoFiles=¡Seleccione dos o mas archivos de vídeo! 
+concatVideos=concatenar vídeos
+videoConcatStarted=La concatenación de los archivos de vídeo seleccionado ha comenzado.
+videoConcatErrorCodec=La concatenación del los archivos de vídeo es possible solo si usan lo mismo codec.
+videoConcatErrorFrameRate=La concatenación del los archivos de vídeo es possible solo si tienen lo mismo valor para cuadros por segundo.
+videoConcatErrorResolution=La concatenación del los archivos de vídeo es possible solo si tienen lo mismo valor para anchura y altura.
+videoConcatErrorProcess=Error al concatenación del los archivos de vídeo.
+
+# extract video frame
+contextMenuExtractVideoFrame=extraer cuadro de vídeo
+titleExtractVideoFrame=extraer cuadro de vídeo
+label.frameResolution=resolución del cuadro
+label.extractFrameTime=tiempo en vídeo (hh:mm:ss)
+button.startExtract=Extraer
+videoFrameExtractionStarted=Se ha iniciado la extracción del cuadro del vídeo. Esto puede tomar algún tiempo para completar. Para el archivo de resultados, vea la subcarpeta
+validationError.videoFrameExtractTime=El tiempo seleccionado está fuera del rango del archivo de vídeo.
 
 # mobile version
 label.mobileWindowTitle=WebFileSys version móvil

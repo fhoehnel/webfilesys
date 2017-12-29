@@ -1,55 +1,40 @@
 var stopMenuClose = false;
 
-function mouseClickHandler(evt)
-{
-	var rightMouseButton = false;
+function mouseClickHandler(evt) {
 
-	var clickEvent = window.event;
-		
-	if (clickEvent)
-    {
-		clickXPos = clickEvent.clientX + (document.documentElement.scrollLeft || document.body.scrollLeft);
-		clickYPos = clickEvent.clientY + (document.documentElement.scrollTop || document.body.scrollTop);		
-    }
-	else
-	{
-		clickEvent = evt;
-		if (clickEvent) 
-		{
-            clickXPos = clickEvent.layerX;
-            clickYPos = clickEvent.layerY;
-		}
-    }
+	clickXPos = 0;
+	clickYPos = 0;
+	
+	var clickEvent = evt;
 
-	if (clickEvent && clickEvent.button && (clickEvent.button == 2))
-    {
-        rightMouseButton = true;
-    }
+	if (!clickEvent) {
+		clickEvent = window.event;
+	}
+	
+	if (!clickEvent) {
+		return;
+	}
 
-    if (stopMenuClose)
-    {
+	var bodyElem = document.getElementsByTagName('body')[0];
+	
+	clickXPos = clickEvent.clientX + (document.documentElement.scrollLeft || bodyElem.scrollLeft);
+	clickYPos = clickEvent.clientY + (document.documentElement.scrollTop || bodyElem.scrollTop);		
+
+    if (stopMenuClose) {
         stopMenuClose = false;
-    } 
-    else
-    {
+    } else {
         document.getElementById('contextMenu').style.visibility = 'hidden';
     }    
     
-    if (window.name == 'DirectoryPath')
-    {
-        if (parent.frames[2].document.getElementById('contextMenu'))
-        {
+    if (window.name == 'DirectoryPath') {
+        if (parent.frames[2].document.getElementById('contextMenu')) {
             parent.frames[2].document.getElementById('contextMenu').style.visibility = 'hidden';
         }
-    }
-    else if (window.name == 'FileList')
-    {   
-        if (parent.frames[1].document.getElementById('contextMenu'))
-        {
+    } else if (window.name == 'FileList') {   
+        if (parent.frames[1].document.getElementById('contextMenu')) {
             parent.frames[1].document.getElementById('contextMenu').style.visibility = 'hidden';
         }
     }
-    
 }
 
 function positionMenuDiv(menuDiv, maxMenuHeight) {
@@ -99,7 +84,5 @@ function positionMenuDiv(menuDiv, maxMenuHeight) {
 
 var clickXPos = 0;
 var clickYPos = 0;
-
-var rightMouseButton = false;
 
 document.onclick = mouseClickHandler;

@@ -44,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.18.0 (06 June 2017)";
+	public static final String VERSION = "Version 2.19.0 (28 Dec 2017)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -62,6 +62,8 @@ public class WebFileSys
     public static final int OS_UNKNOWN = 9;
 
     private static final String LOOPBACK_ADDRESS = "127.0.0.1";
+    
+    private static final String IPV6_LOOPBACK_ADDRESS = "0:0:0:0:0:0:0:1";
 
     // default upload limit: 128 MBytes
     private static final long DEFAULT_UPLOAD_LIMIT = (128l * 1024l * 1024l);
@@ -186,6 +188,12 @@ public class WebFileSys
     
     private long uploadLimit = DEFAULT_UPLOAD_LIMIT;
     
+    private String ffmpegExePath = null;
+
+    private String ffprobeExePath = null;
+    
+    private String videoPlayerExePath = null;
+
     private String googleMapsAPIKeyHTTP;
     private String googleMapsAPIKeyHTTPS;
     
@@ -671,6 +679,12 @@ public class WebFileSys
 		    simulateRemote = true;
 		}
 		
+        ffmpegExePath = config.getProperty("ffmpegExePath");
+
+        ffprobeExePath = config.getProperty("ffprobeExePath");
+
+        videoPlayerExePath = config.getProperty("VideoPlayerExePath");
+        
 		chmodAllowed = false;
 		temp = config.getProperty("ChmodWebspace", "false");
 		if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
@@ -1158,6 +1172,11 @@ public class WebFileSys
     	return(LOOPBACK_ADDRESS);
     }
     
+    public String getIPV6LoopbackAddress()
+    {
+        return(IPV6_LOOPBACK_ADDRESS);
+    }
+    
     public String getServerDNS()
     {
         return(serverDNS);
@@ -1225,6 +1244,18 @@ public class WebFileSys
     		Logger.getLogger(getClass()).warn("no google maps API key configured for HTTPS (missing config property GoogleMapsAPIKeyHTTPS)");
     	}
     	return googleMapsAPIKeyHTTPS;
+    }
+    
+    public String getFfmpegExePath() {
+    	return ffmpegExePath;
+    }
+
+    public String getFfprobeExePath() {
+    	return ffprobeExePath;
+    }
+
+    public String getVideoPlayerExePath() {
+    	return videoPlayerExePath;
     }
 }
 

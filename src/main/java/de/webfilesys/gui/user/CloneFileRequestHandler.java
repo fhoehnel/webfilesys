@@ -101,6 +101,6 @@ public class CloneFileRequestHandler extends UserRequestHandler
 
 		setParameter("mask","*");
 		
-        (new XslFileListHandler(req, resp, session, output, uid, false)).handleRequest();
+        (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 }

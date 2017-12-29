@@ -24,6 +24,9 @@ import de.webfilesys.util.ISO8601DateParser;
 
 /**
  * GPS track file viewer.
+ * 
+ * @deprecated replaced by GPXViewHandler, MultiGPXTrackHandler, GPXTrackHandler
+ * 
  * @author Frank Hoehnel
  */
 public class GeoTrackViewHandler implements ViewHandler
@@ -55,13 +58,15 @@ public class GeoTrackViewHandler implements ViewHandler
     		durationBuffer[i] = 0.0;
     	}
     	
+        BufferedReader gpxReader = null;
+
         try 
         {
             resp.setContentType("text/xml");
 
             PrintWriter xmlOut = resp.getWriter();
             
-            BufferedReader gpxReader = new BufferedReader(new FileReader(filePath));
+            gpxReader = new BufferedReader(new FileReader(filePath));
                 	
             XMLInputFactory factory = XMLInputFactory.newInstance();
             XMLStreamReader parser = factory.createXMLStreamReader(gpxReader);
@@ -90,6 +95,7 @@ public class GeoTrackViewHandler implements ViewHandler
             boolean isCDATA = false;
             
             String ignoreUnknownTag = null;
+            boolean invalidTime = false;
             
             // SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
             
@@ -317,6 +323,10 @@ public class GeoTrackViewHandler implements ViewHandler
                                     prevSpeed = correctedSpeed;
                                 }
                                 */
+                            } else if (invalidTime) {
+                                if (tagName.equals("trk")) {
+                                    xmlOut.print("\n<invalidTime>true</invalidTime>");
+                                }
                             }
 
                             lastWasText = false;
@@ -343,6 +353,7 @@ public class GeoTrackViewHandler implements ViewHandler
                                             
                                             if (duration < 0) {
                                                 Logger.getLogger(getClass()).warn("invalid trkpt time (before previous timestamp): " + elementText);
+                                                invalidTime = true;
                                                 speed = 0.0f;
                                             } else {
                                         	    for (int i = 0; i < DISTANCE_SMOOTH_FACTOR - 1; i++) {
@@ -413,7 +424,6 @@ public class GeoTrackViewHandler implements ViewHandler
             }            
 
             xmlOut.flush();
-            gpxReader.close();
         } 
         catch (IOException e) 
         {
@@ -425,6 +435,15 @@ public class GeoTrackViewHandler implements ViewHandler
         catch (Exception e) 
         {
             Logger.getLogger(getClass()).error("failed to transform GPX file", e);
+		} 
+        finally 
+        {
+			if (gpxReader != null) {
+				try {
+					gpxReader.close();
+				} catch (Exception ex) {
+				}
+			}
         }
     }
 

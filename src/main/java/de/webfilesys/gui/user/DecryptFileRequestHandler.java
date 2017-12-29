@@ -82,7 +82,7 @@ public class DecryptFileRequestHandler extends UserRequestHandler
 
 		setParameter("mask","*");
 		
-        (new XslFileListHandler(req, resp, session, output, uid, false)).handleRequest();
+        (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 	
 	private boolean decryptFile(String currentPath, String fileName, String cryptoKey)

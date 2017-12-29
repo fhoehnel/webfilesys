@@ -162,7 +162,7 @@ public class SelfChangeUserRequestHandler extends UserRequestHandler {
 			return;
 		}
 		
-		(new XslFileListHandler(req, resp, session, output, uid, true)).handleRequest();
+		(new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 
 }
