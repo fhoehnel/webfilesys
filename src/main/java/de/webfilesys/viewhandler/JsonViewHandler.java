@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 import de.webfilesys.ViewHandlerConfig;
 
@@ -53,18 +54,18 @@ public class JsonViewHandler implements ViewHandler {
 			output.println("<body>");
 			output.println("<pre>");
 
-			StringBuffer buff = new StringBuffer();
-			
-			String line;
-			while ((line = jsonReader.readLine()) != null) {
-				buff.append(line);
-			}
-			
 			JsonParser parser = new JsonParser();
 			Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-			JsonElement el = parser.parse(buff.toString());
-			output.println(gson.toJson(el));			
+			try {
+				JsonElement el = parser.parse(jsonReader);
+				output.println(gson.toJson(el));			
+			} catch (JsonSyntaxException jsonEx) {
+				output.println("<span style=\"color:red\">The file does not contain valid JSON data.</span>");
+				if (Logger.getLogger(getClass()).isDebugEnabled()) {
+					Logger.getLogger(getClass()).debug("invalid JSON data: " + jsonEx.toString());
+				}
+			}
 			
 			output.println("</pre>");
 			output.println("</body>");
