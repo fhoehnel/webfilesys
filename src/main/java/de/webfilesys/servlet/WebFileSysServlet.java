@@ -251,6 +251,7 @@ import de.webfilesys.gui.xsl.XslOpenStreetMapHandler;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
 import de.webfilesys.gui.xsl.XslPublishFileHandler;
 import de.webfilesys.gui.xsl.XslPublishListHandler;
+import de.webfilesys.gui.xsl.XslQuizHandler;
 import de.webfilesys.gui.xsl.XslRenameDirHandler;
 import de.webfilesys.gui.xsl.XslRenameFilePromptHandler;
 import de.webfilesys.gui.xsl.XslRenameFolderPromptHandler;
@@ -2378,8 +2379,16 @@ public class WebFileSysServlet extends ServletBase
         		
                 return(true);
         	}
+        	
         }
         	
+        if (command.equals("quiz"))
+        {
+            (new XslQuizHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+        
         if (command.equals("start"))
         {
         	// for executeOnSlientLogin

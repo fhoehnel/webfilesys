@@ -13,6 +13,7 @@ public interface Constants
 	public static final int VIEW_MODE_SLIDESHOW  = 4;
 	public static final int VIEW_MODE_STATS      = 5;
 	public static final int VIEW_MODE_VIDEO      = 6;
+    public static final int VIEW_MODE_QUIZ       = 7;
 
     public static final int DEFAULT_SCREEN_WIDTH  = 1024;
     public static final int DEFAULT_SCREEN_HEIGHT = 768;
