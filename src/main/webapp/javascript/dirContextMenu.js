@@ -311,6 +311,9 @@ function extendedDirMenu(shortPath, path, domId, dirIsRoot)
     	}
     }
 
+    menuText = menuText 
+             + menuEntry("javascript:quiz('" + scriptPreparedPath + "')", "Quiz");
+    
     menuText = menuText + '</table>'; 
 
     menuDiv.innerHTML = menuText;

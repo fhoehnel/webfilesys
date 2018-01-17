@@ -153,6 +153,11 @@ function description(path)
     // descWin.opener=parent.FileList;
 }
 
+function quiz(path) {
+    quizWin = window.open("/webfilesys/servlet?command=quiz&quizDirPath=" + encodeURIComponent(path),"quizWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,resizable=yes,left=0,top=0,screenX=0,screenY=0");
+    quizWin.focus();
+}
+
 function driveInfo(path) {
     centeredDialog("/webfilesys/servlet?command=driveInfo&path=" + encodeURIComponent(path), "/webfilesys/xsl/driveInfo.xsl", 260, 400);
 }

@@ -31,16 +31,33 @@
   }
   
   function showSolution() {
+  
+   	  var opaqueShield = document.createElement("div");
+   	  opaqueShield.id = "opaqueShield";
+   	  opaqueShield.setAttribute("class", "opaqueShield");
+   	  document.documentElement.appendChild(opaqueShield);
+  
       var solutionCont = document.getElementById("solutionCont");
       
       centerBox(solutionCont); 
-  
-      document.getElementById("solutionButton").value = "Weiter";
   }
   
   function closeSolution() {
       var solutionCont = document.getElementById("solutionCont");
       solutionCont.style.visibility = "hidden";
+      
+	  var opaqueShield = document.getElementById("opaqueShield");
+	  if (opaqueShield) {
+		  document.documentElement.removeChild(opaqueShield);
+	  }
+  }
+  
+  function prevQuestion() {
+      window.location.href = '/webfilesys/servlet?command=quiz&amp;beforeDir=<xsl:value-of select="/quiz/currentQuestionDir" />';
+  }
+
+  function nextQuestion() {
+      window.location.href = '/webfilesys/servlet?command=quiz&amp;afterDir=<xsl:value-of select="/quiz/currentQuestionDir" />';
   }
   
 </script>
@@ -59,36 +76,64 @@
 
 <xsl:template match="quiz">
 
-  <h2>Wer kennt Edit wirklich</h2>
+  <div class="quizCont">
 
-  <h3 class="question"><xsl:value-of select="question" disable-output-escaping="yes" /></h3>
+    <h2><xsl:value-of select="quizTitle" disable-output-escaping="yes" /></h2>
+
+    <h3>
+      <xsl:choose>
+        <xsl:when test="string-length(question) &lt; 46">
+          <xsl:attribute name="class">question</xsl:attribute>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:attribute name="class">questionLong</xsl:attribute>
+        </xsl:otherwise>
+      </xsl:choose>
+      <xsl:value-of select="question" disable-output-escaping="yes" />
+    </h3>
   
-  <xsl:for-each select="answer">
+    <xsl:for-each select="answer">
 
-    <div class="answerCont">
-      <img class="answerImg">
-        <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
-        <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
-        <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
-      </img>
+      <div class="answerCont">
+        <img class="answerImg">
+          <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
+          <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
+          <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
+        </img>
       
-      <div class="answerText">
-        <span class="answerId">
-          <xsl:value-of select="@answerId" />
-        </span>
-        <xsl:if test="description">
-          <xsl:value-of select="description" />
-        </xsl:if>
-        <xsl:if test="not(description)">
-          [answer not defined]
-        </xsl:if>
+        <div class="answerText">
+          <span class="answerId">
+            <xsl:value-of select="@answerId" />
+          </span>
+          <xsl:if test="answerText">
+            <xsl:value-of select="answerText" />
+          </xsl:if>
+          <xsl:if test="not(answerText)">
+            [answer not defined]
+          </xsl:if>
+        </div>
       </div>
-    </div>
 
-  </xsl:for-each>
+    </xsl:for-each>
+  
+  </div>
   
   <div id="solutionCont" class="solutionCont" onclick="closeSolution()">
-    <h3 class="solution">Richtige Antwort:</h3> 
+    
+    <xsl:for-each select="answer">
+      <xsl:if test="correct">
+        <h3 class="solution">
+          Richtige Antwort: 
+          <span class="answerId">
+            <xsl:value-of select="@answerId" />
+          </span>
+        </h3>
+        
+        <div class="correctAnswerText">
+          <xsl:value-of select="answerText" />
+        </div>
+      </xsl:if>
+    </xsl:for-each>
 
     <div class="solutionImgCont">
       <img class="solutionImg">
@@ -108,6 +153,28 @@
     <form>
       <input id="solutionButton" type="button" value="Loesung" onclick="showSolution()" />
     </form>
+  </div>
+
+  <xsl:if test="not(firstQuestion)">
+    <div class="navPrevButtonCont">
+      <form>
+        <input id="prevButton" type="button" value="Zurueck" onclick="prevQuestion()" />
+      </form>
+    </div>
+  </xsl:if>
+
+  <xsl:if test="not(lastQuestion)">
+    <div class="navNextButtonCont">
+      <form>
+        <input id="nextButton" type="button" value="Weiter" onclick="nextQuestion()" />
+      </form>
+    </div>
+  </xsl:if>
+  
+  <div class="questionStatusCont">
+    <xsl:value-of select="currentQuestionNum" />
+    <xsl:text>/</xsl:text>
+    <xsl:value-of select="questionCount" />
   </div>
   
 </xsl:template>

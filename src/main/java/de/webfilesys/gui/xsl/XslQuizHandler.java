@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.Category;
 import de.webfilesys.Constants;
 import de.webfilesys.FileComparator;
 import de.webfilesys.FileContainer;
@@ -21,6 +23,7 @@ import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ScaledImage;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -33,6 +36,14 @@ public class XslQuizHandler extends XslRequestHandlerBase {
 
     public static final String SOLUTION_FILE_MASKS[]={"s*.gif","s*.jpg","s*.jpeg","s*.png","s*.bmp"};
     
+    private static final String CORRECT_ANSWER_SUFFIX = "-correct";
+    
+    private static final int SOLUTION_THUMBNAIL_WIDTH = 800;
+    private static final int SOLUTION_THUMBNAIL_HEIGHT = 480;
+    
+    private static final int ANSWER_THUMBNAIL_WIDTH = 500;
+    private static final int ANSWER_THUMBNAIL_HEIGHT = 320;
+    
     public XslQuizHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session, PrintWriter output,
             String uid) {
         super(req, resp, session, output, uid);
@@ -40,40 +51,35 @@ public class XslQuizHandler extends XslRequestHandlerBase {
 
     protected void process() {
 
-        session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_QUIZ));
-
-        MetaInfManager metaInfMgr = MetaInfManager.getInstance();
-
-        String currentPath = null;
-
-        if (currentPath == null) {
-            currentPath = getParameter("actPath");
-            if ((currentPath == null) || (currentPath.length() == 0)) {
-                currentPath = getParameter("actpath");
-                if ((currentPath == null) || (currentPath.length() == 0)) {
-                    currentPath = getCwd();
-
-                    if (currentPath == null) {
-                        currentPath = WebFileSys.getInstance().getUserMgr().getDocumentRoot(uid);
-                    }
-                }
+    	String quizDirPath = getParameter("quizDirPath");
+    	
+    	if (CommonUtils.isEmpty(quizDirPath)) {
+    		quizDirPath = getCwd();
+    	} else {
+            File quizDirFile = new File(quizDirPath);
+            if (quizDirFile.exists() && quizDirFile.isDirectory() && quizDirFile.canRead()) {
+        		session.setAttribute(Constants.SESSION_KEY_CWD, quizDirPath);
             }
-        }
-
-        session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
-
+    	}
+    	
+    	String afterDir = getParameter("afterDir");
+    	String beforeDir = getParameter("beforeDir");
+    	
+    	QuestionInfo questionInfo = getCurrentQuestionPath(quizDirPath, beforeDir, afterDir);
+    	String currentQuestionPath = questionInfo.getCurrentQuestionPath();
+    	
+        MetaInfManager metaInfMgr = MetaInfManager.getInstance();
+        
         String path_no_slash = null;
         String pathWithSlash = null;
 
-        if (currentPath.endsWith(File.separator)) {
-            path_no_slash = currentPath.substring(0, currentPath.length() - 1);
-            pathWithSlash = currentPath;
+        if (currentQuestionPath.endsWith(File.separator)) {
+            path_no_slash = currentQuestionPath.substring(0, currentQuestionPath.length() - 1);
+            pathWithSlash = currentQuestionPath;
         } else {
-            path_no_slash = currentPath;
-            pathWithSlash = currentPath + File.separator;
+            path_no_slash = currentQuestionPath;
+            pathWithSlash = currentQuestionPath + File.separator;
         }
-
-        boolean dirHasMetaInf = metaInfMgr.dirHasMetaInf(currentPath);
 
         String stylesheetName = "quiz.xsl";
 
@@ -86,7 +92,24 @@ public class XslQuizHandler extends XslRequestHandlerBase {
 
         doc.insertBefore(xslRef, quizElement);
 
-        File dirFile = new File(currentPath);
+        String quizTitle = metaInfMgr.getDescription(quizDirPath, ".");
+        
+        if (!CommonUtils.isEmpty(quizTitle)) {
+        	XmlUtil.setChildText(quizElement, "quizTitle", quizTitle, true);
+        }
+        
+        XmlUtil.setChildText(quizElement, "questionCount", Integer.toString(questionInfo.getQuestionCount()));
+        XmlUtil.setChildText(quizElement, "currentQuestionNum", Integer.toString(questionInfo.getCurrentQuestionNum() + 1));
+        
+        if (questionInfo.getCurrentQuestionNum() == 0) {
+            XmlUtil.setChildText(quizElement, "firstQuestion", "true");
+        }
+
+        if (questionInfo.getCurrentQuestionNum() == questionInfo.getQuestionCount() - 1) {
+            XmlUtil.setChildText(quizElement, "lastQuestion", "true");
+        }
+        
+        File dirFile = new File(currentQuestionPath);
 
         if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {
             XmlUtil.setChildText(quizElement, "dirNotFound", "true", false);
@@ -95,7 +118,9 @@ public class XslQuizHandler extends XslRequestHandlerBase {
             return;
         }
 
-        String question = metaInfMgr.getDescription(currentPath, ".");
+        XmlUtil.setChildText(quizElement, "currentQuestionDir", dirFile.getName());
+        
+        String question = metaInfMgr.getDescription(currentQuestionPath, ".");
 
         if ((question != null) && (question.trim().length() > 0)) {
             XmlUtil.setChildText(quizElement, "question", question, true);
@@ -105,13 +130,11 @@ public class XslQuizHandler extends XslRequestHandlerBase {
 
         quizElement.appendChild(currentPathElem);
 
-        XmlUtil.setElementText(currentPathElem, currentPath, false);
+        XmlUtil.setElementText(currentPathElem, currentQuestionPath, false);
         
-        FileLinkSelector fileSelector = new FileLinkSelector(currentPath, FileComparator.SORT_BY_FILENAME, true);
+        FileLinkSelector fileSelector = new FileLinkSelector(currentQuestionPath, FileComparator.SORT_BY_FILENAME, true);
 
         // solution picture
-        
-        int thumbnailSize = 600;
         
         FileSelectionStatus selectionStatus = fileSelector.selectFiles(SOLUTION_FILE_MASKS, 4, 0);
 
@@ -131,7 +154,7 @@ public class XslQuizHandler extends XslRequestHandlerBase {
             ScaledImage scaledImage = null;
 
             try {
-                scaledImage = new ScaledImage(fileCont.getRealFile().getAbsolutePath(), thumbnailSize, thumbnailSize);
+                scaledImage = new ScaledImage(fileCont.getRealFile().getAbsolutePath(), SOLUTION_THUMBNAIL_WIDTH, SOLUTION_THUMBNAIL_HEIGHT);
 
                 XmlUtil.setChildText(solutionElem, "imgType", Integer.toString(scaledImage.getImageType()));
                 XmlUtil.setChildText(solutionElem, "xpix", Integer.toString(scaledImage.getRealWidth()));
@@ -140,16 +163,16 @@ public class XslQuizHandler extends XslRequestHandlerBase {
                 int thumbWidth = 0;
                 int thumbHeight = 0;
 
-                if ((scaledImage.getRealWidth() <= thumbnailSize) && (scaledImage.getRealHeight() <= thumbnailSize)) {
+                if ((scaledImage.getRealWidth() <= SOLUTION_THUMBNAIL_WIDTH) && (scaledImage.getRealHeight() <= SOLUTION_THUMBNAIL_HEIGHT)) {
                     thumbHeight = scaledImage.getRealHeight();
                     thumbWidth = scaledImage.getRealWidth();
                 } else {
-                    if (scaledImage.getRealHeight() > scaledImage.getRealWidth()) {
-                        thumbHeight = thumbnailSize;
-                        thumbWidth = scaledImage.getRealWidth() * thumbnailSize / scaledImage.getRealHeight();
+                    if ((scaledImage.getRealHeight() * 100 / SOLUTION_THUMBNAIL_HEIGHT) > (scaledImage.getRealWidth() * 100 / SOLUTION_THUMBNAIL_WIDTH)) {
+                        thumbHeight = SOLUTION_THUMBNAIL_HEIGHT;
+                        thumbWidth = scaledImage.getRealWidth() * SOLUTION_THUMBNAIL_HEIGHT / scaledImage.getRealHeight();
                     } else {
-                        thumbWidth = thumbnailSize;
-                        thumbHeight = scaledImage.getRealHeight() * thumbnailSize / scaledImage.getRealWidth();
+                        thumbWidth = SOLUTION_THUMBNAIL_WIDTH;
+                        thumbHeight = scaledImage.getRealHeight() * SOLUTION_THUMBNAIL_WIDTH / scaledImage.getRealWidth();
                     }
                 }
 
@@ -165,8 +188,6 @@ public class XslQuizHandler extends XslRequestHandlerBase {
         }
         
         // answer pictures
-        
-        thumbnailSize = 400;
         
         selectionStatus = fileSelector.selectFiles(ANSWER_FILE_MASKS, 4, 0);
         
@@ -204,31 +225,16 @@ public class XslQuizHandler extends XslRequestHandlerBase {
 
                 File tempFile = fileCont.getRealFile();
 
-                if (fileCont.isLink()) {
-                    answerElement.setAttribute("link", "true");
-                    XmlUtil.setChildText(answerElement, "realPath", fileCont.getRealFile().getAbsolutePath(), false);
-                    XmlUtil.setChildText(answerElement, "realPathForScript", insertDoubleBackslash(fileCont.getRealFile()
-                            .getAbsolutePath()), false);
+                String answerText = metaInfMgr.getDescription(path_no_slash, actFilename);
 
-                    if (!this.accessAllowed(fileCont.getRealFile().getAbsolutePath())) {
-                        answerElement.setAttribute("outsideDocRoot", "true");
-                    }
+                if ((answerText != null) && (answerText.trim().length() > 0)) {
+                    XmlUtil.setChildText(answerElement, "answerText", answerText, true);
                 }
 
-                String description = null;
-
-                if (fileCont.isLink()) {
-                    description = metaInfMgr.getDescription(fileCont.getRealFile().getAbsolutePath());
-                } else {
-                    if (dirHasMetaInf) {
-                        description = metaInfMgr.getDescription(path_no_slash, actFilename);
-                    }
+                if (isCorrectAnswer(fileCont.getRealFile())) {
+                    XmlUtil.setChildText(answerElement, "correct", Boolean.toString(true));
                 }
-
-                if ((description != null) && (description.trim().length() > 0)) {
-                    XmlUtil.setChildText(answerElement, "description", description, true);
-                }
-
+                
                 String fullFileName = tempFile.getAbsolutePath();
 
                 boolean imgFound = true;
@@ -236,7 +242,7 @@ public class XslQuizHandler extends XslRequestHandlerBase {
                 ScaledImage scaledImage = null;
 
                 try {
-                    scaledImage = new ScaledImage(fullFileName, thumbnailSize, thumbnailSize);
+                    scaledImage = new ScaledImage(fullFileName, ANSWER_THUMBNAIL_WIDTH, ANSWER_THUMBNAIL_HEIGHT);
                 } catch (IOException io1) {
                     Logger.getLogger(getClass()).error("failed to get scaled image dimensions", io1);
                     imgFound = false;
@@ -250,16 +256,16 @@ public class XslQuizHandler extends XslRequestHandlerBase {
                     int thumbWidth = 0;
                     int thumbHeight = 0;
 
-                    if ((scaledImage.getRealWidth() <= thumbnailSize) && (scaledImage.getRealHeight() <= thumbnailSize)) {
+                    if ((scaledImage.getRealWidth() <= ANSWER_THUMBNAIL_WIDTH) && (scaledImage.getRealHeight() <= ANSWER_THUMBNAIL_HEIGHT)) {
                         thumbHeight = scaledImage.getRealHeight();
                         thumbWidth = scaledImage.getRealWidth();
                     } else {
-                        if (scaledImage.getRealHeight() > scaledImage.getRealWidth()) {
-                            thumbHeight = thumbnailSize;
-                            thumbWidth = scaledImage.getRealWidth() * thumbnailSize / scaledImage.getRealHeight();
+                        if ((scaledImage.getRealHeight() * 100 / ANSWER_THUMBNAIL_HEIGHT) > (scaledImage.getRealWidth() * 100 / ANSWER_THUMBNAIL_WIDTH)) {
+                            thumbHeight = ANSWER_THUMBNAIL_HEIGHT;
+                            thumbWidth = scaledImage.getRealWidth() * ANSWER_THUMBNAIL_HEIGHT / scaledImage.getRealHeight();
                         } else {
-                            thumbWidth = thumbnailSize;
-                            thumbHeight = scaledImage.getRealHeight() * thumbnailSize / scaledImage.getRealWidth();
+                            thumbWidth = ANSWER_THUMBNAIL_WIDTH;
+                            thumbHeight = scaledImage.getRealHeight() * ANSWER_THUMBNAIL_WIDTH / scaledImage.getRealWidth();
                         }
                     }
 
@@ -275,5 +281,95 @@ public class XslQuizHandler extends XslRequestHandlerBase {
         }
 
         processResponse(stylesheetName, false);
+    }
+    
+    private QuestionInfo getCurrentQuestionPath(String quizDirPath, String beforeDir, String afterDir) {
+    	QuestionInfo questionInfo = new QuestionInfo();
+    	
+    	File quizDirFile = new File(quizDirPath);
+    	
+    	ArrayList<String> subdirs = new ArrayList<String>();
+    	
+    	File[] fileList = quizDirFile.listFiles();
+    	for (File file : fileList) {
+    		if (file.isDirectory() && file.canRead()) {
+    			subdirs.add(file.getName());
+    		}
+    	}
+    	
+    	questionInfo.setQuestionCount(subdirs.size());
+    	
+    	if (subdirs.size() > 1) {
+    		Collections.sort(subdirs, new FileComparator(quizDirPath, FileComparator.SORT_BY_FILENAME));
+    	}
+    	
+    	String currentQuestionSubdir = null;
+    	
+    	int currentQuestionNum = 0;
+    	
+    	if (!CommonUtils.isEmpty(beforeDir)) {
+    		String lastBefore = subdirs.get(0);
+    		for (String subdir : subdirs) {
+    			if (subdir.toLowerCase().compareTo(beforeDir.toLowerCase()) >= 0) {
+    				break;
+    			} else {
+    				lastBefore = subdir;
+    				currentQuestionNum++;
+    			}
+    		}
+    		currentQuestionSubdir = lastBefore;
+    		currentQuestionNum--;
+    	} else if (!CommonUtils.isEmpty(afterDir)) {
+    		String firstAfter = subdirs.get(subdirs.size() - 1);
+    		for (String subdir : subdirs) {
+    			if (subdir.toLowerCase().compareTo(afterDir.toLowerCase()) > 0) {
+    				firstAfter = subdir;
+    				break;
+    			}
+				currentQuestionNum++;
+    		}
+    		currentQuestionSubdir = firstAfter;
+    	} else {
+    		currentQuestionSubdir = subdirs.get(0);
+    	}
+    	
+    	questionInfo.setCurrentQuestionPath(CommonUtils.joinFilesysPath(quizDirPath, currentQuestionSubdir));
+    	questionInfo.setCurrentQuestionNum(currentQuestionNum);
+    	
+    	return questionInfo;
+    }
+
+    private boolean isCorrectAnswer(File answerFile) {
+    	return answerFile.getName().contains(CORRECT_ANSWER_SUFFIX);
+    }
+    
+    private class QuestionInfo {
+    	String currentQuestionPath;
+    	int questionCount;
+    	int currentQuestionNum;
+    	
+    	public void setCurrentQuestionPath(String newVal) {
+    		currentQuestionPath = newVal;    		
+    	}
+    	
+    	public String getCurrentQuestionPath() {
+    		return currentQuestionPath;
+    	}
+    	
+    	public void setQuestionCount(int newVal) {
+    		questionCount = newVal;
+    	}
+    	
+    	public int getQuestionCount() {
+    		return questionCount;
+    	}
+
+    	public void setCurrentQuestionNum(int newVal) {
+    		currentQuestionNum = newVal;
+    	}
+    	
+    	public int getCurrentQuestionNum() {
+    		return currentQuestionNum;
+    	}
     }
 }
