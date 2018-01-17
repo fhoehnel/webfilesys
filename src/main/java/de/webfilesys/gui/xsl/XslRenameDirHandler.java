@@ -20,6 +20,7 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -115,6 +116,8 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 				else
 				{
 					Decoration savedDeco = DecorationManager.getInstance().getDecoration(currentPath);
+					
+					MetaInfManager.getInstance().saveMetaInfFile(currentPath);
 					
 					if (!oldDir.renameTo(newDir))
 					{
