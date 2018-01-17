@@ -179,7 +179,7 @@ public class XslQuizHandler extends XslRequestHandlerBase {
                 XmlUtil.setChildText(solutionElem, "thumbnailWidth", Integer.toString(thumbWidth));
                 XmlUtil.setChildText(solutionElem, "thumbnailHeight", Integer.toString(thumbHeight));
 
-                String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(fileCont.getRealFile().getAbsolutePath()) + "&cached=true";
+                String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(fileCont.getRealFile().getAbsolutePath());
 
                 XmlUtil.setChildText(solutionElem, "imgPath", srcFileName);
             } catch (IOException io1) {
@@ -272,8 +272,7 @@ public class XslQuizHandler extends XslRequestHandlerBase {
                     XmlUtil.setChildText(answerElement, "thumbnailWidth", Integer.toString(thumbWidth));
                     XmlUtil.setChildText(answerElement, "thumbnailHeight", Integer.toString(thumbHeight));
 
-                    String srcFileName = "/webfilesys/servlet?command=getFile&filePath="
-                            + UTF8URLEncoder.encode(fullFileName) + "&cached=true";
+                    String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(fullFileName);
 
                     XmlUtil.setChildText(answerElement, "imgPath", srcFileName);
                 }

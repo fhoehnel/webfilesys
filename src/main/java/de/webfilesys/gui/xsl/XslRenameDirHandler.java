@@ -13,6 +13,7 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.FastPathManager;
+import de.webfilesys.MetaInfManager;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.UpdateLinksAfterDirRenameThread;
 import de.webfilesys.WebFileSys;
@@ -121,6 +122,8 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 					}
 					else
 					{
+					    MetaInfManager.getInstance().releaseMetaInf(currentPath);
+					    
 					    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
 					    {
 	                        (new UpdateLinksAfterDirRenameThread(newPath, uid)).start();

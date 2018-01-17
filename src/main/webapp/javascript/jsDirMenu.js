@@ -154,7 +154,10 @@ function description(path)
 }
 
 function quiz(path) {
-    quizWin = window.open("/webfilesys/servlet?command=quiz&quizDirPath=" + encodeURIComponent(path),"quizWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,resizable=yes,left=0,top=0,screenX=0,screenY=0");
+    var windowWidth = screen.availWidth - 10;
+    var windowHeight = screen.availHeight - 70;
+
+    quizWin = window.open("/webfilesys/servlet?command=quiz&quizDirPath=" + encodeURIComponent(path),"quizWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,resizable=yes,width=" + windowWidth + ",height=" + windowHeight + ",left=0,top=0");
     quizWin.focus();
 }
 
