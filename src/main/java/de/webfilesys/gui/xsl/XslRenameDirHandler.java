@@ -117,7 +117,7 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 				{
 					Decoration savedDeco = DecorationManager.getInstance().getDecoration(currentPath);
 					
-					String savedFolderDescr = MetaInfManager.getInstance().getDescription(currentPath, ".");
+					MetaInfManager.getInstance().saveMetaInfFile(currentPath);
 					
 					if (!oldDir.renameTo(newDir))
 					{
@@ -127,10 +127,6 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 					{
                         MetaInfManager.getInstance().releaseMetaInf(currentPath);
                         
-                        if (!CommonUtils.isEmpty(savedFolderDescr)) {
-                            MetaInfManager.getInstance().setDescription(newPath, ".", savedFolderDescr);
-                        }
-					    
 					    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
 					    {
 	                        (new UpdateLinksAfterDirRenameThread(newPath, uid)).start();
