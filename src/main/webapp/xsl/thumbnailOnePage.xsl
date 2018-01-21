@@ -445,6 +445,7 @@
                 <br/>
                 <input type="checkbox" class="cb2">
                   <xsl:attribute name="name">list-<xsl:value-of select="@name" /></xsl:attribute>
+                  <xsl:attribute name="id">cb-<xsl:value-of select="@id" /></xsl:attribute>
                   <xsl:attribute name="onclick">handleThumbRangeSelection(event)</xsl:attribute>
                   <xsl:if test="@link">
                     <xsl:attribute name="disabled">true</xsl:attribute>

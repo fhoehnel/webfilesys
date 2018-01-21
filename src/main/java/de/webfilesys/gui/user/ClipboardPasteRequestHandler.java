@@ -360,7 +360,11 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 						output.println("<script language=\"javascript\">");
 						output.println("alert('" + getResource("alert.mkdirfail","Cannot create directory") + "\\n" + insertDoubleBackslash(destSubdir) + "!');");
 
-						output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
+						if (pasteToFileWin) {
+							output.println("window.location.href='/webfilesys/servlet?command=listFiles';");
+						} else {
+							output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
+						}
 
 						output.println("</script>");
 						output.println("</BODY></html>");

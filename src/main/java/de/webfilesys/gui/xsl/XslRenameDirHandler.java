@@ -13,12 +13,14 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.FastPathManager;
+import de.webfilesys.MetaInfManager;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.UpdateLinksAfterDirRenameThread;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -115,12 +117,16 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 				{
 					Decoration savedDeco = DecorationManager.getInstance().getDecoration(currentPath);
 					
+					MetaInfManager.getInstance().saveMetaInfFile(currentPath);
+					
 					if (!oldDir.renameTo(newDir))
 					{
 						errorCode = ERROR_RENAME_FAILED;
 					}
 					else
 					{
+                        MetaInfManager.getInstance().releaseMetaInf(currentPath);
+                        
 					    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
 					    {
 	                        (new UpdateLinksAfterDirRenameThread(newPath, uid)).start();

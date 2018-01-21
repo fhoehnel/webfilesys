@@ -37,6 +37,14 @@
       <filePattern>*.tar</filePattern>
     </filePatternList>
   </viewHandler>
+
+  <!-- shows JSON data prettyprinted -->
+  <viewHandler>
+    <class>de.webfilesys.viewhandler.JsonViewHandler</class>
+    <filePatternList>
+      <filePattern>*.json</filePattern>
+    </filePatternList>
+  </viewHandler>
   
   <!-- 
     This view handler for compiled Java class files requires the JAD decompiler.

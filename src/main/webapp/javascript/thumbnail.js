@@ -623,6 +623,11 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                 		fileNameElem.innerHTML = abbrevText(newFileName, 23);
                 	}
 
+                    var checkboxElem = document.getElementById("cb-" + domId);
+                    if (checkboxElem) {
+                        checkboxElem.setAttribute("name", "list-" + newFileName);
+                    }
+
                 	var newFilePathItem = req.responseXML.getElementsByTagName("filePath")[0];
                 	var newFilePath = newFilePathItem.firstChild.nodeValue;
                 	
