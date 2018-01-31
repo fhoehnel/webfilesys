@@ -294,6 +294,8 @@ function attachScrollHandler() {
 			 
 			 if (!thumbLoadRunning) {
 				 checkThumbnailsToLoad();
+				 
+                 releaseInvisibleThumbnails();
 			 }
 	  	 }
 	};
@@ -307,7 +309,7 @@ function releaseInvisibleThumbnails() {
 	for (var i = loadedThumbs.length - 1; i >= 0; i--) {
 	    var pic = loadedThumbs[i];
 	    
-	    if ((pic.naturalWidth > 400) || (pic.naturalHeight > 400)) {
+	    if ((getNaturalWidth(pic) > 400) || (getNaturalHeight(pic) > 400)) {
 	       	if (isScrolledOutOfView(pic, scrollAreaCont)) {
 	       	    pic.setAttribute("imgPath", pic.src);
 	       	    pic.src = "";
@@ -316,6 +318,36 @@ function releaseInvisibleThumbnails() {
 	       	}
 	    }
 	}
+}
+
+function getNaturalWidth(pic) {
+    if (pic.naturalWidth) {
+        return pic.naturalWidth;
+    }
+
+    // workaround for MSIE
+    var origWidthAttrib = pic.getAttribute("origWidth");
+            
+    if (origWidthAttrib) {
+	    return parseInt(origWidthAttrib);
+    }
+    
+    return 0;
+}
+
+function getNaturalHeight(pic) {
+    if (pic.naturalHeight) {
+        return pic.naturalHeight;
+    }
+
+    // workaround for MSIE
+    var origHeightAttrib = pic.getAttribute("origHeight");
+            
+    if (origHeightAttrib) {
+	    return parseInt(origHeightAttrib);
+    }
+    
+    return 0;
 }
 
 function checkThumbnailsToLoad() {
@@ -329,7 +361,7 @@ function checkThumbnailsToLoad() {
 
     var scrollAreaCont = document.getElementById("scrollAreaCont");
 	
-	for (var i = 0; i < thumbnails.length; i++) {
+	for (var i = thumbnails.length - 1; i >= 0; i--) {
 		var pic = document.getElementById("pic-" + thumbnails[i]);
 	    if (pic) {
 			var imgPath = pic.getAttribute("imgPath");
@@ -351,7 +383,7 @@ function checkThumbnailsToLoad() {
 
     thumbLoadRunning = false;
     
-    releaseInvisibleThumbnails();
+    // releaseInvisibleThumbnails();
 }
 
 function setPictureDimensions(pic) { 
@@ -444,20 +476,9 @@ function isScrolledOutOfView(el, view) {
 function loadThumbnail(pic, thumbFileSrc) {
 
 	pic.onload = function() {
-		
-		var picOrigWidth = pic.naturalWidth;
-		var picOrigHeight = pic.naturalHeight;
-		
-		if ((picOrigWidth == 0) || (picOrigHeight == 0)) {
-            // workaround for MSIE
-            var origWidthAttrib = pic.getAttribute("origWidth");
-            var origHeightAttrib = pic.getAttribute("origHeight");
-            
-            if (origWidthAttrib && origHeightAttrib) {
-		        picOrigWidth = parseInt(origWidthAttrib);
-		        picOrigHeight = parseInt(origHeightAttrib);
-            }
-		}
+
+		var picOrigWidth = getNaturalWidth(pic);
+		var picOrigHeight = getNaturalHeight(pic);
 		
 		if (picOrigWidth > picOrigHeight) {
 			pic.width = 160;

@@ -15,15 +15,16 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge"/> 
   <meta http-equiv="expires" content="0" />
   
-  <link rel="stylesheet" type="text/css">
-    <xsl:attribute name="href">/webfilesys/styles/pictureAlbum.css</xsl:attribute>
-  </link>
-
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/pictureAlbum.css" />
+  
   <title>WebFileSys Picture Album</title>
 
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/pictureAlbum.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -37,6 +38,8 @@
   </script>
 
   <script language="javascript">
+  
+    var lastScrollPos = 0;
   
     var selectOnePic = resourceBundle['alert.nofileselected'];
     var selectTwoPic = resourceBundle['error.compselect'];
@@ -88,6 +91,12 @@
 </head>
 
 <body id="albumBody" class="pictureAlbum">
+  <xsl:attribute name="onload">
+    setAlbumThumbContHeight();
+    <xsl:if test="//file">
+      initialLoadPictures();attachScrollHandler();
+    </xsl:if>
+  </xsl:attribute>
 
     <div class="pictureAlbumCont">
 
@@ -120,7 +129,7 @@
       </xsl:for-each>
       
       <xsl:if test="pictureAlbum/description">
-        <div class="albumDescription">
+        <div id="albumDescription" class="albumDescription">
           <xsl:value-of select="pictureAlbum/description" disable-output-escaping="yes" />
         </div>
       </xsl:if>
@@ -139,11 +148,9 @@
           </xsl:if>
 
           <td valign="top" style="width:90%">
-            <div class="picturesCont">
-              <xsl:for-each select="pictureAlbum">
-                <xsl:call-template name="fileList" />
-              </xsl:for-each>
-            </div>
+            <xsl:for-each select="pictureAlbum">
+              <xsl:call-template name="fileList" />
+            </xsl:for-each>
           </td>
         </tr>
       
@@ -237,7 +244,7 @@
   
 </xsl:template>
 
-<!-- ############################## sorting and paging ################################ -->
+<!-- ############################## options ################################ -->
 
 <xsl:template name="sortAndPaging">
   <form accept-charset="utf-8" name="sortform" method="get" action="/webfilesys/servlet" style="padding:0px;margin:0px;">
@@ -265,20 +272,7 @@
         </input>
       </div>
                 
-      <xsl:if test="fileList/fileGroup">
-        <div class="pictureAlbumOptions">
-          <span resource="albumPageSize"></span>
-          <xsl:text> </xsl:text>
-                  
-          <input type="text" name="pageSize" maxlength="4" style="width:35px;" class="pictureAlbum">
-            <xsl:attribute name="value">
-              <xsl:value-of select="paging/pageSize" />
-            </xsl:attribute>
-          </input>
-        </div>
-      </xsl:if>
-
-      <xsl:if test="fileList/fileGroup">
+      <xsl:if test="fileList/file">
         <div class="pictureAlbumOptions">
           <xsl:if test="not(/pictureAlbum/showDetails)">
             <a resource="details.show">
@@ -293,7 +287,7 @@
         </div>
       </xsl:if>
 
-      <xsl:if test="fileList/fileGroup">
+      <xsl:if test="fileList/file">
         <div class="pictureAlbumOptions">
           <select id="sortBy" name="sortBy" size="1" onChange="document.sortform.submit();" class="pictureAlbum">
             <option value="1" resource="sort.name.ignorecase">
@@ -350,83 +344,6 @@
       </div>
 
     </div>
-
-    <!-- paging -->
-      
-    <xsl:if test="fileList/fileGroup">
-
-      <div class="resetFloat"></div>
-
-      <xsl:if test="paging/currentPage &gt; 1">
-          
-        <div class="albumPagingArrow">
-          <a class="pictureAlbumPaging" href="/webfilesys/servlet?command=album&amp;startIdx=0">|&lt;</a>
-          &#160;
-          <a class="pictureAlbumPaging">
-            <xsl:attribute name="href">
-              <xsl:value-of select="concat('/webfilesys/servlet?command=album&amp;startIdx=',paging/prevStartIdx)"/>
-            </xsl:attribute>
-            &lt;
-          </a>
-        </div>
-        
-      </xsl:if>
-        
-      <div class="pictureAlbumPaging">
-            
-        <span resource="label.pictures"></span>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="paging/firstOnPage" />
-        ...
-        <xsl:value-of select="paging/lastOnPage" />
-        <xsl:text> </xsl:text>
-        <span resource="label.of"></span>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="fileNumber" />
-
-      </div>
-              
-      <xsl:if test="fileNumber &gt; paging/pageSize">
-              
-        <div class="pictureAlbumPaging">
-          <span resource="label.page"></span>
-
-          <xsl:for-each select="paging/page">
-            <xsl:if test="@num=../currentPage">
-              <div class="pagingPage pagingPageCurrent">
-                <xsl:value-of select="@num" />
-              </div>
-            </xsl:if>
-            <xsl:if test="not(@num=../currentPage)">
-              <div class="pagingPage pagingPageOther">
-                <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=album&amp;startIdx=<xsl:value-of select="@startIdx" />'</xsl:attribute>
-                <xsl:value-of select="@num" />
-              </div>
-            </xsl:if>
-          </xsl:for-each>
-        </div>
-
-        <xsl:if test="paging/nextStartIdx">
-          <div class="albumPagingArrow">
-            <a class="pictureAlbumPaging">
-              <xsl:attribute name="href">
-                <xsl:value-of select="concat('/webfilesys/servlet?command=album&amp;startIdx=',paging/nextStartIdx)"/>
-              </xsl:attribute>
-              &gt;
-            </a>
-            &#160;
-            <a class="pictureAlbumPaging">
-              <xsl:attribute name="href">
-                <xsl:value-of select="concat('/webfilesys/servlet?command=album&amp;startIdx=',paging/lastStartIdx)"/>
-              </xsl:attribute>
-              &gt;|
-            </a>
-          </div>
-        </xsl:if>
-                
-      </xsl:if>
-            
-    </xsl:if> <!-- test="fileList/fileGroup" -->
       
   </form>
 </xsl:template>
@@ -466,17 +383,18 @@
 
     <input type="hidden" name="degrees" value="90" />
 
-      <xsl:if test="not(fileList/fileGroup) and not(/pictureAlbum/folders/folder)">
+    <div id="scrollAreaCont" class="picturesCont">
+
+
+      <xsl:if test="not(fileList/file) and not(/pictureAlbum/folders/folder)">
         <div>
           <span resource="alert.noPicturesInAlbum"></span>
         </div>
       </xsl:if>
 
-      <xsl:if test="fileList/fileGroup">
+      <xsl:if test="fileList/file">
 
-        <xsl:for-each select="fileList/fileGroup">
-
-            <xsl:for-each select="file">
+            <xsl:for-each select="fileList/file">
           
               <div class="albumPictCont">
 
@@ -489,9 +407,11 @@
                         <xsl:attribute name="href">javascript:si<xsl:value-of select="@id" />()</xsl:attribute>
                       </xsl:if>
                       <img class="albumPicture">
-                        <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
-                        <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
-                        <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
+                        <xsl:attribute name="id">pic-<xsl:value-of select="@id" /></xsl:attribute>
+                        <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
+                        <xsl:attribute name="width">1</xsl:attribute>
+                        <xsl:attribute name="height">100</xsl:attribute>
+                        <xsl:attribute name="imgPath"><xsl:value-of select="imgPath" /></xsl:attribute>
                         <xsl:if test="description">
                           <xsl:attribute name="title"><xsl:value-of select="description" /></xsl:attribute>
                         </xsl:if>
@@ -521,20 +441,24 @@
                     </a>
                   </div>
 
-                  <xsl:if test="/pictureAlbum/showDetails">
-                    <div class="pictureInfo">
-                      <xsl:value-of select="@lastModified" />
-                    </div>
+                  <div class="pictureInfo">
+                    <xsl:if test="not(/pictureAlbum/showDetails)">
+                      <xsl:attribute name="style">display:none</xsl:attribute>
+                    </xsl:if>
+                    <xsl:value-of select="@lastModified" />
+                  </div>
                 
-                    <div class="pictureInfo">
-                      <xsl:value-of select="@size" /> KB
-                      &#160;
-                      <xsl:value-of select="xpix" />
-                      x
-                      <xsl:value-of select="ypix" />
-                      pix
-                    </div>
-                  </xsl:if>
+                    
+                  <div class="pictureInfo">
+                    <xsl:if test="not(/pictureAlbum/showDetails)">
+                      <xsl:attribute name="style">display:none</xsl:attribute>
+                    </xsl:if>
+                    <xsl:attribute name="id">pixDim-<xsl:value-of select="@id" /></xsl:attribute>
+                    <xsl:attribute name="picFileName"><xsl:value-of select="@name" /></xsl:attribute>
+                    <xsl:if test="@link">
+                      <xsl:attribute name="picIsLink">true</xsl:attribute>
+                    </xsl:if>
+                  </div>
 
                   <div class="pictureInfo">
                     <xsl:value-of select="comments" />
@@ -555,27 +479,43 @@
             
             </xsl:for-each>
         
-        </xsl:for-each>
-
-        <!-- buttons -->
+      </xsl:if>    
+      
+    </div>  
             
-        <div class="albumButtonCont">    
-          <input type="checkbox" class="pictureAlbumCheckbox" name="cb-setAll" onClick="javascript:setAllSelected()" />
-          <span resource="checkbox.selectall"></span>
-          
+    <xsl:if test="//file">
 
-          <span style="margin-left:40px;margin-right:8px;" resource="label.selectedFiles"></span>:
+      <!-- selected file functions -->
+            
+      <div class="albumButtonCont">    
+        <input type="checkbox" class="pictureAlbumCheckbox" id="cb-setAll" name="cb-setAll" onClick="javascript:setAllSelected()" />
+        <span resource="checkbox.selectall"></span>
+  
+        <span style="margin-left:40px;margin-right:8px;" resource="label.selectedFiles"></span>:
           
-          <select id="cmd" name="cmd" size="1" onchange="multiFileFunction()" class="pictureAlbum">
-            <option resource="label.selectFunction" />
-            <option value="compare" resource="label.compare" />
-            <option value="download" resource="button.downloadAsZip" />
-          </select>
-        </div>
-                  
-      </xsl:if>      
+        <select id="cmd" name="cmd" size="1" onchange="multiFileFunction()" class="pictureAlbum">
+          <option resource="label.selectFunction" />
+          <option value="compare" resource="label.compare" />
+          <option value="download" resource="button.downloadAsZip" />
+        </select>
+      </div>
+    
+    </xsl:if>
 
   </form>
+
+  <xsl:if test="//file">
+  
+    <script type="text/javascript">
+      var thumbnails = new Array();
+      var loadedThumbs = new Array();
+        
+      <xsl:for-each select="//file">
+        thumbnails.push("<xsl:value-of select="@id" />");
+      </xsl:for-each>
+    </script>
+      
+  </xsl:if>
 
 </xsl:template>
 
