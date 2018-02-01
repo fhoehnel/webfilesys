@@ -46,8 +46,8 @@
 
 <script language="javascript">
 
-  var selectedFromDate;
-  var selectedUntilDate;
+  var selectedFromDate = null;
+  var selectedUntilDate = null;
 
   $(function() {
 
@@ -101,9 +101,12 @@
   }
 
   function submitIfValid() {
-      if (selectedFromDate.getTime() &gt; selectedUntilDate.getTime()) {
-          alert(resourceBundle["label.searchDateConflict"]);
-          return;
+  
+      if ((selectedFromDate != null) &amp;&amp; (selectedUntilDate != null)) {
+          if (selectedFromDate.getTime() &gt; selectedUntilDate.getTime()) {
+              customAlert(resourceBundle["label.searchDateConflict"]);
+              return;
+          }
       }
       
       showHourGlass();
@@ -152,7 +155,7 @@
 
 </head>
 
-<body onload="setBundleResources();setCalendarStyles()">
+<body onload="setBundleResources()">
 
   <div class="headline" resource="label.searchHead" />
   
