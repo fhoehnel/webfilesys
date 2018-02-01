@@ -19,6 +19,10 @@
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/searchParms/css" />.css</xsl:attribute>
 </link>
 
+<link rel="stylesheet" href="javascript/jquery-ui-1.12.1.custom/jquery-ui.min.css" />
+<link rel="stylesheet" href="javascript/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css" />
+<link rel="stylesheet" href="javascript/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css" />
+
 <title resource="label.searchTitle"></title>
 
 <script src="javascript/browserCheck.js" type="text/javascript"></script>
@@ -28,6 +32,10 @@
 <script src="javascript/calendar/AnchorPosition.js" type="text/javascript"></script>
 <script src="javascript/calendar/date.js" type="text/javascript"></script>
 <script src="javascript/calendar/PopupWindow.js" type="text/javascript"></script>
+
+<script type="text/javascript" src="javascript/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="javascript/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
   <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/searchParms/language" /></xsl:attribute>
@@ -38,98 +46,62 @@
 
 <script language="javascript">
 
-  function setCalendarStyles() 
-  {
-      if (browserFirefox) 
-      {
-          var calendarCssElem = document.getElementById("calendarStyle");
-          calendarCssElem.innerHTML = getCalStyles();
-      }
-  }
+  var selectedFromDate;
+  var selectedUntilDate;
 
-  if (!browserFirefox) 
-  {
-      document.write(getCalendarStyles());
-  }
+  $(function() {
+
+      var dayNamesShort = [
+          resourceBundle["calendar.mon"], 
+          resourceBundle["calendar.tue"], 
+          resourceBundle["calendar.wed"], 
+          resourceBundle["calendar.thu"], 
+          resourceBundle["calendar.fri"], 
+          resourceBundle["calendar.sat"], 
+          resourceBundle["calendar.sun"] 
+      ]; 
   
-  var cal1x = new CalendarPopup("calDiv");
-   
-  function selectFromDate()
-  {
-     cal1x.setReturnFunction("splitFromDate");
-     cal1x.select(document.findform.fromYear,'anchorFrom','MM/dd/yyyy');
-  }
-
-  function splitFromDate(y,m,d) 
-  { 
-     document.findform.fromYear.value = y; 
-     document.findform.fromMonth.value = LZ(m); 
-     document.findform.fromDay.value = LZ(d); 
-  }
-
-  function selectToDate()
-  {
-     cal1x.setReturnFunction("splitToDate");
-     cal1x.select(document.findform.toYear,'anchorTo','MM/dd/yyyy');
-  }
-
-  function splitToDate(y,m,d) 
-  { 
-     document.findform.toYear.value = y; 
-     document.findform.toMonth.value = LZ(m); 
-     document.findform.toDay.value = LZ(d); 
-  }
-
-  function checkDate()
-  {
-      dateInvalid = false;
-  
-      fromYear = document.findform.fromYear.value;
-      toYear = document.findform.toYear.value;
-
-      if (fromYear == '')
-      {
-          return(true);
-      }
+      $("#dateRangeFrom").datepicker({
+          showButtonPanel: true,
+          showOtherMonths: true,
+          selectOtherMonths: true,
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: resourceBundle["datePickerFormat"],
+          currentText: resourceBundle["calendar.today"],
+          closeText: resourceBundle["button.close"],
+          dayNamesMin: dayNamesShort,
+          onSelect: function(dateText, inst) { 
+                        selectedFromDate = $(this).datepicker('getDate'); 
+                    }
+      });
       
-      if (fromYear &lt; toYear)
-      {
-          return(true);
-      }
+      $("#dateRangeUntil").datepicker({
+          showButtonPanel: true,
+          showOtherMonths: true,
+          selectOtherMonths: true,
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: resourceBundle["datePickerFormat"],
+          currentText: resourceBundle["calendar.today"],
+          closeText: resourceBundle["button.close"],
+          dayNamesMin: dayNamesShort,
+          onSelect: function(dateText, inst) { 
+                        selectedUntilDate = $(this).datepicker('getDate'); 
+                    }
+      });
+  });
 
-      if (fromYear &gt; toYear)
-      {
-          return(false);
-      }
-      
-      fromMonth = document.findform.fromMonth.value;
-      toMonth = document.findform.toMonth.value;
-      
-      if (fromMonth &lt; toMonth)
-      {
-          return(true);
-      }
-
-      if (fromMonth &gt; toMonth)
-      {
-          return(false);
-      }
-
-      fromDay = document.findform.fromDay.value;
-      toDay = document.findform.toDay.value;
-
-      if (fromDay &gt; toDay)
-      {
-          return(false);
-      }
-      
-      return(true);
+  function openFromDateSelection() {
+      $("#dateRangeFrom").trigger("focus");
   }
-  
-  function submitIfValid()
-  {
-      if (!checkDate())
-      {
+
+  function openUntilDateSelection() {
+      $("#dateRangeUntil").trigger("focus");
+  }
+
+  function submitIfValid() {
+      if (selectedFromDate.getTime() &gt; selectedUntilDate.getTime()) {
           alert(resourceBundle["label.searchDateConflict"]);
           return;
       }
@@ -141,8 +113,7 @@
       
       var resultAsTreeCheckbox = document.getElementById("resultAsTree");
       
-      if (resultAsTreeCheckbox.checked) 
-      {
+      if (resultAsTreeCheckbox.checked) {
           document.findform.command.value = "findFileTree";
       }
       
@@ -253,14 +224,9 @@
       <tr>
         <td class="formParm1" resource="label.dateRangeFrom" />
         <td class="formParm2">
-          <input type="text" name="fromYear" size="4" maxlength="4" style="width:40px" id="fromYear" readonly="readonly"/>
-          <span class="searchDateSep">/</span>
-          <input type="text" name="fromMonth" size="2" maxlength="2" style="width:30px" id="fromMonth" readonly="readonly"/>
-          <span class="searchDateSep">/</span>
-          <input type="text" name="fromDay" size="2" maxlength="2" style="width:30px" id="fromDay" readonly="readonly"/>
+          <input type="text" id ="dateRangeFrom" name="dateRangeFrom" style="width:80px" readonly="readonly" />
           &#160;
-          <a href="#" name="anchorFrom" id="anchorFrom" titleResource="label.searchCalendar">
-            <xsl:attribute name="onClick">selectFromDate()</xsl:attribute>
+          <a href="javascript:openFromDateSelection()">
             <img src="images/calendar.gif" border="0" />
           </a>
         </td>
@@ -269,23 +235,11 @@
       <tr>
         <td class="formParm1" resource="label.dateRangeUntil" />
         <td class="formParm2">
-          <input type="text" name="toYear" size="4" maxlength="4" style="width:40px" readonly="readonly">
-            <xsl:attribute name="value"><xsl:value-of select="currentDate/year" /></xsl:attribute>
-          </input>
-          <span class="searchDateSep">/</span>
-          <input type="text" name="toMonth" size="2" maxlength="2" style="width:30px" readonly="readonly">
-            <xsl:attribute name="value"><xsl:value-of select="currentDate/month" /></xsl:attribute>
-          </input>
-          <span class="searchDateSep">/</span>
-          <input type="text" name="toDay" size="2" maxlength="2" style="width:30px" readonly="readonly">
-            <xsl:attribute name="value"><xsl:value-of select="currentDate/day" /></xsl:attribute>
-          </input>
+          <input type="text" id ="dateRangeUntil" name="dateRangeUntil" style="width:80px" readonly="readonly" />
           &#160;
-          <a href="#" name="anchorTo" id="anchorTo" titleResource="label.searchCalendar">
-            <xsl:attribute name="onClick">selectToDate()</xsl:attribute>
+          <a href="javascript:openUntilDateSelection()">
             <img src="images/calendar.gif" border="0" />
           </a>
-          
         </td>
       </tr>
 

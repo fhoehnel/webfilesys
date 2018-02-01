@@ -2,6 +2,7 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
 
@@ -74,48 +75,31 @@ public class XslFindFileHandler extends XslRequestHandlerBase
 
 		String includeSubdirs = getParameter("includeSubdirs");
 
-		String fromYear=getParameter("fromYear");
-		String fromMonth=getParameter("fromMonth");
-		String fromDay=getParameter("fromDay");
-
+        String datePickerFormat = getResource("datePickerFormat", "mm/dd/yy").replace("m",  "M");
+        
+        SimpleDateFormat dateParser = new SimpleDateFormat(datePickerFormat);
+        
 		Date fromDate = new Date(0L);
-
-		if ((fromYear.trim().length()>0) &&
-			(fromMonth.trim().length()>0) &&
-			(fromDay.trim().length()>0))
-		{
-			try
-			{
-				int year = Integer.parseInt(fromYear);
-				int month = Integer.parseInt(fromMonth);
-				int day = Integer.parseInt(fromDay);
-
-				fromDate = new Date(year-1900,month-1,day);
-			}
-			catch (NumberFormatException nfe)
-			{
-				Logger.getLogger(getClass()).warn(nfe);
-			}
-		}
-
-		String toYear=getParameter("toYear");
-		String toMonth=getParameter("toMonth");
-		String toDay=getParameter("toDay");
-
 		Date toDate = new Date();
 
-		try
-		{
-			int year = Integer.parseInt(toYear);
-			int month = Integer.parseInt(toMonth);
-			int day = Integer.parseInt(toDay);
-
-			toDate = new Date(year-1900,month-1,day,23,59,59);
-
-		}
-		catch (NumberFormatException nfe)
-		{
-            Logger.getLogger(getClass()).warn(nfe);
+		String dateRangeFrom = getParameter("dateRangeFrom");
+		String dateRangeUntil = getParameter("dateRangeUntil");
+		
+		try {
+			if (!CommonUtils.isEmpty(dateRangeFrom)) {
+				fromDate = dateParser.parse(dateRangeFrom);
+				fromDate.setHours(0);
+				fromDate.setMinutes(0);
+				fromDate.setSeconds(0);
+			}
+			if (!CommonUtils.isEmpty(dateRangeUntil)) {
+				toDate = dateParser.parse(dateRangeUntil);
+                toDate.setHours(23);
+                toDate.setMinutes(59);
+                toDate.setSeconds(59);
+			}
+		} catch (Exception ex) {
+			Logger.getLogger(getClass()).warn("invalid date format in search date range", ex);
 		}
 
         Category category = null;

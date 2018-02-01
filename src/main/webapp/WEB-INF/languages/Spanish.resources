@@ -347,7 +347,7 @@ label.dateRangeUntil=fecha de modificación (hasta)
 label.dateRange=fecha de modificación (rango)
 label.and=y
 label.searchCalendar=seleccionar fecha en calendario
-label.searchDateConflict=¡la fecha final parece ser anterior a la inicial!
+label.searchDateConflict=¡La fecha de inicio debe ser anterior a la fecha de finalización!
 button.startsearch=Comenzar búsqueda
 label.searchresults=Resultados de la búsqueda
 label.matches=coincidencias encontradas
@@ -357,6 +357,7 @@ label.selectCategory=- selecciona categoría -
 label.searchResultAsTree=mostrar resultados de búsqueda como árbol
 button.keepSearchResults=Conservar resultados de la búsqueda
 button.discardSearchResults=Descartar resultados de la búsqueda
+datePickerFormat=dd-mm-yy
 
 # copy/rename/move labels and buttons
 label.copymovehead=Copiar/Cambiar nombre/Mover
