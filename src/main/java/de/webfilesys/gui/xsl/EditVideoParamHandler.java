@@ -164,8 +164,8 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
         				addTargetResolutionOption(targetResolutionElem, maxDimension, 1024);
         				addTargetResolutionOption(targetResolutionElem, maxDimension, 800);
         				addTargetResolutionOption(targetResolutionElem, maxDimension, 640);
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 400);
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 200);
+        				addTargetResolutionOption(targetResolutionElem, maxDimension, 380);
+        				addTargetResolutionOption(targetResolutionElem, maxDimension, 260);
         				
                     } catch (Exception ex) {
                     	Logger.getLogger(getClass()).warn("invalid video resolution: " + videoWidth + " x " + videoHeight);

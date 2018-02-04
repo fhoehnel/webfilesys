@@ -17,6 +17,7 @@ import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.gui.user.MultiImageRequestHandler;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -59,6 +60,22 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 		
 		int displayWidth = 770;
 
+		String screenWidthParam = getParameter("screenWidth");
+		if (!CommonUtils.isEmpty(screenWidthParam)) {
+		    try {
+		        session.setAttribute("screenWidth", new Integer(Integer.parseInt(screenWidthParam)));
+		    } catch (Exception numEx) {
+		    }
+		}
+
+        String screenHeightParam = getParameter("screenHeight");
+        if (!CommonUtils.isEmpty(screenHeightParam)) {
+            try {
+                session.setAttribute("screenHeight", new Integer(Integer.parseInt(screenHeightParam)));
+            } catch (Exception numEx) {
+            }
+        }
+		
 		Integer screenWidth = (Integer) session.getAttribute("screenWidth");
 		
 		if (screenWidth != null) {

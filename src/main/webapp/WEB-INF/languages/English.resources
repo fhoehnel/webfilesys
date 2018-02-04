@@ -357,6 +357,7 @@ label.selectCategory=- select category -
 label.searchResultAsTree=show search results as tree
 button.keepSearchResults=Keep Search Results
 button.discardSearchResults=Discard Search Results
+datePickerFormat=mm/dd/yy
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Copy/Rename/Move

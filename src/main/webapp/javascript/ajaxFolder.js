@@ -361,6 +361,9 @@ function exp(parentDivId, lastInLevel)
 }
     
 function expMozilla(parentDiv, xmlUrl, xslUrl) {
+
+    showHourGlass();
+    
 	xmlRequest(xslUrl, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
@@ -388,6 +391,8 @@ function expMozilla(parentDiv, xmlUrl, xslUrl) {
 
                             parentDiv.parentNode.replaceChild(fragment, parentDiv);
                             
+                            hideHourGlass();
+                            
                             setTimeout('setTooltips()', 500);
                             
                             querySubdirs();
@@ -406,6 +411,8 @@ function expMozilla(parentDiv, xmlUrl, xslUrl) {
 
 function expMSIE(parentDiv, xmlUrl, xslUrl)
 { 
+    showHourGlass();
+
     xml = new ActiveXObject("Msxml2.DOMDocument.3.0");
     xml.async = false;
     if (!xml.load(xmlUrl))
@@ -424,6 +431,8 @@ function expMSIE(parentDiv, xmlUrl, xslUrl)
     xslProcessor.transform();
     
     parentDiv.outerHTML = xslProcessor.output;
+    
+    hideHourGlass();
     
     currentDirId = newId;
 
