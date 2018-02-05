@@ -575,6 +575,7 @@ label.publishType=publicar como
 label.publishTypeExplorer=lista de archivos
 label.publishTypeAlbum=álbum de fotos
 button.returnToAlbum=Volver al álbum
+button.copyPublicUrl=Copiar al portapapeles
 
 # user comments
 label.commentList=Comentarios de usuario

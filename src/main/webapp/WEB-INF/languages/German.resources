@@ -577,6 +577,7 @@ label.sendInvitationMail=Einladung als e-mail versenden
 label.publishType=freigeben als
 label.publishTypeExplorer=Datei-Explorer
 label.publishTypeAlbum=Bilderalbum
+button.copyPublicUrl=in Zwischenablage kopieren
 
 # user comments
 label.commentList=Kommentare von Nutzern

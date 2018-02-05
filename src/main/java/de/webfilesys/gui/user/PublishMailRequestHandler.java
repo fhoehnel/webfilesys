@@ -337,7 +337,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println("<script src=\"/webfilesys/javascript/publish.js\" type=\"text/javascript\"></script>");
 		
 		output.println("</head>"); 
-		output.println("<body onload=\"selectPublicLink()\">");
+		output.println("<body>");
 
 		headLine(getResource("label.published","Folder has been published"));
 
@@ -386,8 +386,11 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println("<tr><td>&nbsp;</td></tr>");
 
         output.println("<tr>");
-        output.println("<td colspan=\"2\" class=\"formButton\" style=\"text-align:center\">");
+        output.println("<td class=\"formButton\">");
 		output.println("<input type=\"button\" value=\"" + getResource("button.closewin","Close Window") + "\" onclick=\"self.close();\">");
+        output.println("</td>");
+        output.println("<td class=\"formButton\" style=\"text-align:right\">");
+		output.println("<input type=\"button\" value=\"" + getResource("button.copyPublicUrl","Copy to clipboard") + "\" onclick=\"copyPublicUrl();\">");
         output.println("</td>");
         output.println("</tr>");
 

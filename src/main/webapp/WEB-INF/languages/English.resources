@@ -574,6 +574,7 @@ label.sendInvitationMail=send invitation e-mail
 label.publishType=publish as
 label.publishTypeExplorer=file explorer
 label.publishTypeAlbum=picture album
+button.copyPublicUrl=Copy to clipboard
 
 # user comments
 label.commentList=User Comments
