@@ -22,6 +22,8 @@ function multiFileFunction() {
         multiImageDownload();
     } else if (cmd == 'exifRename') {
         renameToExifDate();
+    } else if (cmd == 'view') {
+        multiViewImage();
     }
      
     document.form2.cmd.selectedIndex = 0;
@@ -34,6 +36,31 @@ function resetSelected() {
 	    if ((document.form2.elements[i].type == "checkbox") && document.form2.elements[i].checked) {
 	        document.form2.elements[i].checked = false;
         }
+    }
+}
+
+function multiViewImage() {
+	if (anySelected()) {
+		var delay = 2000;
+		
+		var openWinDelay = delay;
+		
+	    for (var i = 0; i < document.form2.elements.length; i++) {
+	         if ((document.form2.elements[i].type == "checkbox") && document.form2.elements[i].checked) {
+	        	 setTimeout(function() {
+		        	 eval($(document.form2.elements[i]).prev().prev().attr("href"));
+	        	 }, openWinDelay);
+	        	 
+	        	 openWinDelay += delay;
+		     }
+	    }
+	    
+	    setTimeout(function() {
+	        resetSelected();
+		    document.form2.command.value = 'compareImg';
+	    }, openWinDelay);
+    } else {
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
 }
 

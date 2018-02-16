@@ -29,6 +29,8 @@
   <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 </xsl:if>
 
+<script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
+
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
@@ -574,6 +576,7 @@
 
                       <option value="delete" resource="button.delete" />
                       <option value="exifRename" resource="label.exifRename" />
+                      <option value="view">view</option>
                     </xsl:if>
                    
                     <option value="download" resource="button.downloadAsZip" />
