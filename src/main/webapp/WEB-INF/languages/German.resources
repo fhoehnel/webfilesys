@@ -424,6 +424,7 @@ label.compare=Vergleichen
 label.comparehead=Bildervergleich
 label.renameImage=Bilddatei umbenennen
 label.exifRename=Umbenennen nach Aufnahmedatum
+viewFullSize=Anzeige in neuem Tab/Fenster
 label.noThumbRefresh=Vorschaubildanzeige nicht aktualisieren
 label.selectedPictures=ausgewählte Bilder
 label.selectFunction=- Funktion auswählen -

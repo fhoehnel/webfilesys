@@ -576,7 +576,7 @@
 
                       <option value="delete" resource="button.delete" />
                       <option value="exifRename" resource="label.exifRename" />
-                      <option value="view">view</option>
+                      <option value="view" resource="viewFullSize" />
                     </xsl:if>
                    
                     <option value="download" resource="button.downloadAsZip" />

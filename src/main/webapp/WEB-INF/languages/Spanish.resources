@@ -422,6 +422,7 @@ label.compare=Comparar
 label.comparehead=Comparar imágenes
 label.renameImage=Cambiar nombre de imagen
 label.exifRename=Cambiar nombre a fecha de captura
+viewFullSize=Ver tamaño completo
 label.noThumbRefresh=no actualizar la vista de miniaturas
 label.selectedPictures=imágenes seleccionadas
 label.selectFunction=- selecciona función -

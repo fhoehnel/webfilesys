@@ -422,6 +422,7 @@ label.compare=Compare
 label.comparehead=Compare Images
 label.renameImage=rename picture file
 label.exifRename=rename to exposure date
+viewFullSize=view in new tab/window
 label.noThumbRefresh=do not refresh the thumbnail view
 label.selectedPictures=selected pictures
 label.selectFunction=- select function -

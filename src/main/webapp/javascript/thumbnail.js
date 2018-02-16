@@ -1,5 +1,7 @@
 var thumbLoadRunning = false;
 
+var viewPicQueue;
+
 function multiFileFunction() {
     var idx = document.form2.cmd.selectedIndex;
 
@@ -41,27 +43,36 @@ function resetSelected() {
 
 function multiViewImage() {
 	if (anySelected()) {
-		var delay = 2000;
-		
-		var openWinDelay = delay;
-		
-	    for (var i = 0; i < document.form2.elements.length; i++) {
+	    viewPicQueue = new Array();
+	
+	    for (var i = document.form2.elements.length - 1; i >= 0; i--) {
 	         if ((document.form2.elements[i].type == "checkbox") && document.form2.elements[i].checked) {
-	        	 setTimeout(function() {
-		        	 eval($(document.form2.elements[i]).prev().prev().attr("href"));
-	        	 }, openWinDelay);
-	        	 
-	        	 openWinDelay += delay;
+	         
+	             viewPicQueue.push($(document.form2.elements[i]).prev().prev().attr("href"));
 		     }
 	    }
-	    
-	    setTimeout(function() {
-	        resetSelected();
-		    document.form2.command.value = 'compareImg';
-	    }, openWinDelay);
+
+        viewQueuedPics();
     } else {
         customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
+}
+
+function viewQueuedPics() {
+    if (viewPicQueue.length == 0) {
+        return;
+    }
+    
+    var viewPicCommand = viewPicQueue.pop();
+    
+    eval(viewPicCommand);
+    
+    if (viewPicQueue.length == 0) {
+	    resetSelected();
+		document.form2.command.value = 'compareImg';
+    } else {
+        setTimeout(viewQueuedPics, 600);
+    }    
 }
 
 function compare() {
