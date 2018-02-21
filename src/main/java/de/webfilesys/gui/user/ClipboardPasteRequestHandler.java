@@ -398,6 +398,8 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
                                 subDirThread.start();
                             }
                         }
+
+                        (new TestSubDirThread(destSubdir)).start();
                     }
                 }
 			}     
