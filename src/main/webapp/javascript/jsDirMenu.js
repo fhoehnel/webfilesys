@@ -63,7 +63,7 @@ function statSunburst(path)
     {
         windowHeight = windowWidth - 200;
     }
-    var statWin = open("/webfilesys/servlet?command=folderTreeStats&path=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=" + windowWidth + ",height=" + windowHeight);
+    var statWin = open("/webfilesys/html/wait.html?command=folderTreeStats&path=" + encodeURIComponent(path), "Statistics", "scrollbars=yes,resizable=yes,width=" + windowWidth + ",height=" + windowHeight);
     statWin.focus();
 }
 
