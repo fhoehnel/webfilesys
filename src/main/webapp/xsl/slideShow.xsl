@@ -86,7 +86,7 @@
   <!-- button div -->
 
   <div id="buttonDiv" 
-       style="position:absolute;top:6px;left:6px;width=76px;height=20px;padding:5px;background-color:ivory;text-align:center;border-style:solid;border-width:1px;border-color:#000000;visibility:hidden">
+       style="position:absolute;top:6px;left:6px;width=76px;height=20px;padding:5px;background-color:ivory;text-align:center;border-style:solid;border-width:1px;border-color:#000000;white-space:nowrap;visibility:hidden">
     
     <xsl:if test="/slideShow/autoForward='true'">
       <a href="javascript:hideActionButtons()">
