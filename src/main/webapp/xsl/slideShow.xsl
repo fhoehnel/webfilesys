@@ -69,7 +69,7 @@
 
 <xsl:template match="slideShow">
 
-  <p id="centerDiv" width="100%" style="margin:0px;padding:0px;text-align:center;">
+  <div id="centerDiv" width="100%" style="margin:0px;padding:0px;text-align:center;">
     
     <img id="slideShowImg0" border="0" class="thumb" style="position:absolute;opacity:1">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
@@ -81,7 +81,7 @@
       <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
     </img>
       
-  </p>
+  </div>
   
   <!-- button div -->
 
@@ -126,6 +126,12 @@
       </a>
     </xsl:if>
   </div>
+  
+  <a id="fullScreenButton" href="javascript:void(0)" onclick="javascript:makeSlideshowFullscreen()" style="position:absolute;top:10px;right:10px;">
+    <img src="/webfilesys/images/fullscreen.png">
+      <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='fullScreenMode']/@value" /></xsl:attribute>
+    </img>    
+  </a>
   
 </xsl:template>
 

@@ -354,4 +354,8 @@ function switchOpacity(pic1, pic2) {
 	}
 }
 
+function makeSlideshowFullscreen() {
+	document.getElementById("fullScreenButton").style.display = "none";
+    requestFullScreen(document.documentElement);
+}
     

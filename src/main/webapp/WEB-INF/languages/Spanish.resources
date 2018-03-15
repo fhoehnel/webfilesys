@@ -515,6 +515,7 @@ alt.back=anterior imagen
 startSlideshowHere=comenzar diapositivas aqui
 label.startPic=primera imagen
 slideshowHeadline=WebFileSys diapositivas
+fullScreenMode=pantalla completa
 
 # co-browsing labels
 titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)

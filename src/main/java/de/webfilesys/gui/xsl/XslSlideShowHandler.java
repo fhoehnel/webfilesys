@@ -147,6 +147,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		addMsgResource("alt.pause", getResource("alt.pause","pause slideshow"));
 		addMsgResource("alt.continue", getResource("alt.continue","continue slideshow"));
         addMsgResource("alt.back", getResource("alt.back","previous picture"));
+        addMsgResource("fullScreenMode", getResource("fullScreenMode", "fullscreen mode"));
 		
 		this.processResponse("slideShow.xsl", false);
 	}
