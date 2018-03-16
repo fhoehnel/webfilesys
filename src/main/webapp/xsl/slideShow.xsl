@@ -9,7 +9,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<html>
+<html style="height:100%">
 
 <head>
 
@@ -56,7 +56,7 @@
   
 </head>
 
-<body style="margin:0px;border:0px;background-color:#c0c0c0;padding:0px;">
+<body class="slideshowFullscreen">
   <xsl:attribute name="onload">setTimeout('self.focus()', 500); initSlideshow(); loadImage();if (autoForward!='true') {showActionButtons();};</xsl:attribute>
 
   <xsl:apply-templates />
@@ -69,14 +69,18 @@
 
 <xsl:template match="slideShow">
 
-  <div id="centerDiv" width="100%" style="margin:0px;padding:0px;text-align:center;">
-    
-    <img id="slideShowImg0" border="0" class="thumb" style="position:absolute;opacity:1">
+  <div id="centerDiv" class="slideshowCont">
+
+    <xsl:if test="/slideShow/autoForward='false'">
+      <xsl:attribute name="onClick">stopAndGo()</xsl:attribute>
+    </xsl:if>
+
+    <img id="slideShowImg0" class="slideshowImg thumb" style="opacity:1">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
       <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
     </img>
 
-    <img id="slideShowImg1" border="0" class="thumb" style="position:absolute;opacity:0">
+    <img id="slideShowImg1" class="slideshowImg thumb" style="opacity:0">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
       <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
     </img>

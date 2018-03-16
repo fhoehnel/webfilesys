@@ -827,6 +827,26 @@ div.hint {
     font-size: 13px;
 }
 
+body.slideshowFullscreen {
+    margin: 0px;
+    border: 0px;
+    background-color: #c0c0c0;
+    padding: 0px;
+    height: 100%;	
+}
+
+div.slideshowCont {
+	width: 100%;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;	
+}
+
+img.slideshowImg {
+    position: absolute;
+    cursor: url('../images/arrow-right.png'), auto;
+}
+
 div.slideShowText {
     font-size:13px;
     color:black;
