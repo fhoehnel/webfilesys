@@ -303,6 +303,8 @@ function validateCloneFolderName() {
                 
                 var ajaxUrl = "/webfilesys/servlet?command=ajaxRPC&method=existFolder&param1=" + encodeURIComponent(targetFolderPath);
                 
+                showHourGlass();                
+                
             	xmlRequest(ajaxUrl, function(req) {
                     if (req.readyState == 4) {
                         if (req.status == 200) {
@@ -311,9 +313,11 @@ function validateCloneFolderName() {
                                 document.renameForm.submit();
                             } else {
                	                customAlert(resourceBundle["alert.cloneTargetFolderExists"]);
+               	                hideHourGlass();
                             }
                         } else {
                             alert(resourceBundle["alert.communicationFailure"]);
+                            hideHourGlass();
         	            }
                     }
             	});

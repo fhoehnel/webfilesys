@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.CopyStatus;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.ViewHandlerConfig;
@@ -197,8 +199,8 @@ public class UserRequestHandler extends ProtectedRequestHandler
             return (false);
         }
     }
-
-    public boolean copyFolderTree(String sourcePath, String destPath, boolean ignoreExistingDir) {
+    
+    public boolean copyFolderTreeWithStatus(String sourcePath, String destPath, boolean ignoreExistingDir, CopyStatus copyStatus, DecimalFormat numFormat) {
         boolean copyError = false;
         
         File sourceFolderFile = new File(sourcePath);
@@ -206,6 +208,10 @@ public class UserRequestHandler extends ProtectedRequestHandler
         File fileList[] = sourceFolderFile.listFiles();
 
         if (fileList != null) {
+        	
+        	String formattedTreeFileNum = numFormat.format(copyStatus.getTreeFileNum());
+        	String formattedTreeFileSize = numFormat.format(copyStatus.getTreeFileSize());
+        	
             for (int i = 0; i < fileList.length; i++) {
             	
                 File sourceFile = fileList[i];
@@ -214,10 +220,10 @@ public class UserRequestHandler extends ProtectedRequestHandler
                     String destFileName = destPath + File.separator + sourceFile.getName();
 
                     if (sourceFile.isFile()) {
-                        if ((fileCopyCounter <= 100) ||
-                            ((fileCopyCounter < 300) && (fileCopyCounter % 5 == 0)) ||
-                            ((fileCopyCounter < 1000) && (fileCopyCounter % 10 == 0)) ||
-                            (fileCopyCounter % 50 == 0)) {
+                        if ((copyStatus.getFilesCopied() <= 100) ||
+                            ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
+                            ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
+                            (copyStatus.getFilesCopied() % 50 == 0)) {
                             output.println("<script language=\"javascript\">");
                             output.println("document.getElementById('currentFile').innerHTML='" + insertDoubleBackslash(CommonUtils.shortName(getHeadlinePath(sourceFile.getAbsolutePath()), 40)) + "';");
                             output.println("</script>");
@@ -225,15 +231,20 @@ public class UserRequestHandler extends ProtectedRequestHandler
                         }                    
 
                         if (copyFile(sourceFile.getAbsolutePath(), destFileName)) {
-                            fileCopyCounter++;
+                            copyStatus.setFilesCopied(copyStatus.getFilesCopied() + 1);
+                            copyStatus.setBytesCopied(copyStatus.getBytesCopied() + sourceFile.length());
                                     
-                            if ((fileCopyCounter <= 100) ||
-                                ((fileCopyCounter < 300) && (fileCopyCounter % 5 == 0)) ||
-                                ((fileCopyCounter < 1000) && (fileCopyCounter % 10 == 0)) ||
-                                (fileCopyCounter % 50 == 0)) {
+                            if ((copyStatus.getFilesCopied() <= 100) ||
+                                ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
+                                ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
+                                (copyStatus.getFilesCopied() % 50 == 0)) {
                                     	
+                            	long progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
+                            	
                                 output.println("<script language=\"javascript\">");
-                                output.println("document.getElementById('fileCount').innerHTML='" + fileCopyCounter +  "';");
+                                output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyStatus.getFilesCopied()) + " / " + formattedTreeFileNum +  "';");
+                                output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(copyStatus.getBytesCopied()) + " / " + formattedTreeFileSize +  "';");
+                                output.println("document.getElementById('copyProgressBar').style.width='" + progress + "px';");
                                 output.println("</script>");
                             }
                             
@@ -252,7 +263,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
                                             + insertDoubleBackslash(destFileName));
                             copyError = true;
                         } else {
-                            if (!copyFolderTree(sourceFile.getAbsolutePath(), destFileName, ignoreExistingDir)) {
+                            if (!copyFolderTreeWithStatus(sourceFile.getAbsolutePath(), destFileName, ignoreExistingDir, copyStatus, numFormat)) {
                                 copyError = true;
                             }
                         }
@@ -260,13 +271,21 @@ public class UserRequestHandler extends ProtectedRequestHandler
             	}
             }
             
-            if (fileCopyCounter > 100) {
+            if (copyStatus.getFilesCopied() > 100) {
+            	long progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
+
                 output.println("<script language=\"javascript\">");
-                output.println("document.getElementById('fileCount').innerHTML='" + fileCopyCounter +  "';");
+                output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyStatus.getFilesCopied()) + " / " + formattedTreeFileNum +  "';");
+                output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(copyStatus.getBytesCopied()) + " / " + formattedTreeFileSize +  "';");
+                output.println("document.getElementById('copyProgressBar').style.width='" + progress + "px';");
                 output.println("</script>");
             }
         }
 
+        if (copyError) {
+        	copyStatus.setError(true);
+        }
+        
         return(!copyError);
     }
     

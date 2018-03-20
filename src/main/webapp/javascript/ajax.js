@@ -228,6 +228,9 @@ function showEmailResult(req)
 }
 
 function checkPasteOverwrite(path) {
+	
+	showHourGlass();
+	
     var url = "/webfilesys/servlet?command=checkPasteOverwrite";
     
     if (path) {
@@ -252,6 +255,8 @@ function checkPasteOverwriteResult(req) {
             var conflicts = req.responseXML.getElementsByTagName("conflict");            
 
             if (conflicts.length > 0) {
+            	hideHourGlass();
+            	
                 var msg = resourceBundle["pasteConflictHead"] + "<br/>";
             	 
                 for (var i = 0; i < conflicts.length; i++) {
@@ -262,6 +267,7 @@ function checkPasteOverwriteResult(req) {
                  
             	customConfirm(msg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
             			function() {
+            		        showHourGlass();
                             window.location.href = pasteUrl;
             	        }
             	);
@@ -269,6 +275,7 @@ function checkPasteOverwriteResult(req) {
                 window.location.href = pasteUrl;
             }
         } else {
+        	hideHourGlass();
             alert(resourceBundle["alert.communicationFailure"]);
         }
     }

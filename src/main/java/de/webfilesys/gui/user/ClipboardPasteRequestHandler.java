@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import de.webfilesys.Category;
 import de.webfilesys.ClipBoard;
+import de.webfilesys.CopyStatus;
+import de.webfilesys.FileSysStat;
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.TestSubDirThread;
@@ -140,10 +143,39 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		output.println("<div id=\"fileCount\" />");
 		output.println("</td>");
 		output.println("</tr>");
+
+		output.println("<tr>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<div class=\"progressBar\">");
+		output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/images/bluedot.gif\" style=\"width:1px\" />");
+		output.println("</div>");
+		output.println("</td>");
+		output.println("</tr>");
 		
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">");
+		
+		if (clipBoard.isCopyOperation()) {
+			labelText = getResource("bytesCopied", "bytes copied");
+		} else {
+			labelText = getResource("bytesMoved", "bytes moved");
+		}
+		
+		output.println(labelText + ":");
+		output.println("</td>");
+		output.println("</tr>");
+
+		output.println("<tr>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<div id=\"bytesCopied\" />");
+		output.println("</td>");
+		output.println("</tr>");
+
 		output.println("</table>");
 
 		output.println("</form>");
+		
+		output.flush();
 
 		ArrayList<String> clipFiles = clipBoard.getAllFiles();
 
@@ -373,7 +405,16 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 					}
 				}
 
-				boolean copyOK = copyFolderTree(sourceDir, destSubdir, ignoreExist);
+				DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");
+				
+		        FileSysStat fileSysStat = new FileSysStat(sourceDir);
+		        fileSysStat.getStatistics();        
+				
+				CopyStatus copyStatus = new CopyStatus();
+				copyStatus.setTreeFileSize(fileSysStat.getTotalSizeSum());
+				copyStatus.setTreeFileNum(fileSysStat.getTotalFileNum());
+				
+				boolean copyOK = copyFolderTreeWithStatus(sourceDir, destSubdir, ignoreExist, copyStatus, numFormat);
                 
                 if (!copyOK)
                 {
