@@ -239,7 +239,10 @@ public class UserRequestHandler extends ProtectedRequestHandler
                                 ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
                                 (copyStatus.getFilesCopied() % 50 == 0)) {
                                     	
-                            	long progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
+                            	long progress = 0;
+                            	if (copyStatus.getTreeFileSize() > 0) {
+                                	progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
+                            	}
                             	
                                 output.println("<script language=\"javascript\">");
                                 output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyStatus.getFilesCopied()) + " / " + formattedTreeFileNum +  "';");
@@ -272,7 +275,10 @@ public class UserRequestHandler extends ProtectedRequestHandler
             }
             
             if (copyStatus.getFilesCopied() > 100) {
-            	long progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
+            	long progress = 0;
+            	if (copyStatus.getTreeFileSize() > 0) {
+                	progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
+            	}
 
                 output.println("<script language=\"javascript\">");
                 output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyStatus.getFilesCopied()) + " / " + formattedTreeFileNum +  "';");
