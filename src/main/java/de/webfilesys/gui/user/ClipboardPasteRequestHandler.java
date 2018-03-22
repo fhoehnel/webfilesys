@@ -22,6 +22,7 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.graphics.VideoThumbnailCreator;
+import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 
@@ -408,33 +409,30 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 			clipBoard.reset();
 		}
 		
-		if (pasteToFileWin)
-		{
-			if (thumbView)
-			{
+		if (pasteToFileWin) {
+			if (thumbView) {
 				output.println("window.location.href='/webfilesys/servlet?command=thumbnail&zoom=no&random="  + (new Date()).getTime() + "';");
-			}
-			else
-			{
+			} else {
 				output.println("window.location.href='/webfilesys/servlet?command=listFiles&mask=*';");
 			}
 			
-			if (clipDirs != null)
-			{
+			if (clipDirs != null) {
 				output.print("window.parent.DirectoryPath.location.href='/webfilesys/servlet?command=refresh&path=" + UTF8URLEncoder.encode(getCwd()) + "';");
 			}
-		}
-		else
-		{
-			output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "&fastPath=true';");
+		} else {
+    	    String mobile = (String) session.getAttribute("mobile");
+    	    if (mobile != null) {
+    			output.println("window.location.href='/webfilesys/servlet?command=mobile&cmd=folderFileList';");
+    	    } else {
+    			output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "&fastPath=true';");
+    	    }
 		}
 		output.println("</script>");
 
 		output.println("</body></html>");
 		output.flush();
 		
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
-		{
+		if (WebFileSys.getInstance().isAutoCreateThumbs()) {
 			AutoThumbnailCreator.getInstance().queuePath(actPath, AutoThumbnailCreator.SCOPE_TREE);
 		}
 	}
