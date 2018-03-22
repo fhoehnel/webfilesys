@@ -404,7 +404,11 @@ bytesCopied=bytes copied
 bytesMoved=bytes moved
 morePasteConflicts=... more
 pasteConflictHead=The following files already exist in the destination folder
+pasteConflictHeadFolder=The following subdirectory already exists in the destination folder
 pasteOverwrite=Overwrite?
+destFolderFileConflict=The folder could not be copied because a file with the same name exists in the target folder.
+targetEqualsSource=The target folder must be different from the source folder.
+targetIsSubOfSource=The target folder may not be a subdirectory of the source folder.
 
 # remote editor labels
 saveSuccess=editor data saved successfully

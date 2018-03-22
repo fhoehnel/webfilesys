@@ -252,13 +252,42 @@ function checkPasteOverwriteResult(req) {
             	pasteUrl = pasteUrl + "&actpath=" + encodeURIComponent(path);
             }
         	
+            var destFolderFileConflictElem = req.responseXML.getElementsByTagName("destFolderFileConflict");
+            if (destFolderFileConflictElem && (destFolderFileConflictElem.length > 0)) {
+            	hideHourGlass();
+            	customAlert(resourceBundle["destFolderFileConflict"]);
+                return;
+            }
+            
+            var targetEqualsSourceElem = req.responseXML.getElementsByTagName("targetEqualsSource");
+            if (targetEqualsSourceElem && (targetEqualsSourceElem.length > 0)) {
+            	hideHourGlass();
+            	customAlert(resourceBundle["targetEqualsSource"]);
+                return;
+            }
+
+            var targetIsSubOfSourceElem = req.responseXML.getElementsByTagName("targetIsSubOfSource");
+            if (targetIsSubOfSourceElem && (targetIsSubOfSourceElem.length > 0)) {
+            	hideHourGlass();
+            	customAlert(resourceBundle["targetIsSubOfSource"]);
+                return;
+            }
+            
             var conflicts = req.responseXML.getElementsByTagName("conflict");            
 
             if (conflicts.length > 0) {
             	hideHourGlass();
+
+                var msg;
+                var folderElem = req.responseXML.getElementsByTagName("folder");
+                if (folderElem && (folderElem.length > 0)) {
+                    msg = resourceBundle["pasteConflictHeadFolder"];
+                } else {
+                    msg = resourceBundle["pasteConflictHead"];
+                }
             	
-                var msg = resourceBundle["pasteConflictHead"] + "<br/>";
-            	 
+                msg += "<br/>"; 
+                
                 for (var i = 0; i < conflicts.length; i++) {
                 	msg = msg + "<br/>" + conflicts[i].firstChild.nodeValue;
                 }

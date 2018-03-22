@@ -327,68 +327,20 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 		ArrayList<String> clipDirs = clipBoard.getAllDirs();
 
-		if (clipDirs != null)
-		{
+		if (clipDirs != null) {
 			String destDir=actPath;
 
-			if (!destDir.endsWith(File.separator))
-			{
+			if (!destDir.endsWith(File.separator)) {
 				destDir=destDir + File.separator;
 			}
 
-			for (String sourceDir : clipDirs)
-			{
-				if (destDir.regionMatches(true,0,sourceDir,0,sourceDir.length()))
-				{
-					output.println("<script language=\"javascript\">");
-					output.println("alert('" + insertDoubleBackslash(sourceDir) + "\\n" + getResource("alert.copytosubdir","cannot be copied to an own subdirectory") + "!');");
-
-					output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
-
-					output.println("</script>");
-					output.println("</BODY></html>");
-					output.flush();
-					return; 
-				}
-
+			for (String sourceDir : clipDirs) {
 				String destSubdir = destDir + sourceDir.substring(sourceDir.lastIndexOf(File.separatorChar)+1);
 
 				File destDirFile = new File(destSubdir);
 
-				if (destDirFile.exists())
-				{
-					if (!ignoreExist)
-					{
-						output.println("<script language=\"javascript\">");
-						output.println("if (confirm('" + insertDoubleBackslash(destSubdir) + "\\n" + getResource("confirm.overwritedir","directory already exists - overwrite?") + "'))");
-						
-						if (pasteToFileWin) 
-						{
-							output.println("{window.location=\"/webfilesys/servlet?command=pasteFiles&ignoreExist=true\";}");
-						}
-						else 
-						{
-							output.println("{window.location=\"/webfilesys/servlet?command=pasteFiles&actpath=" + UTF8URLEncoder.encode(actPath) + "&ignoreExist=true\";}");
-						}
-						output.println("else {");
-
-						if (pasteToFileWin) {
-							output.println("window.location.href='/webfilesys/servlet?command=listFiles';");
-						} else {
-							output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
-						}
-
-						output.println("}");
-						output.println("</script>");
-						output.println("</BODY></html>");
-						output.flush();
-						return;
-					}
-				}
-				else
-				{
-					if (!destDirFile.mkdir())
-					{
+				if (!destDirFile.exists()) {
+					if (!destDirFile.mkdir()) {
 						output.println("<script language=\"javascript\">");
 						output.println("alert('" + getResource("alert.mkdirfail","Cannot create directory") + "\\n" + insertDoubleBackslash(destSubdir) + "!');");
 
@@ -414,7 +366,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 				copyStatus.setTreeFileSize(fileSysStat.getTotalSizeSum());
 				copyStatus.setTreeFileNum(fileSysStat.getTotalFileNum());
 				
-				boolean copyOK = copyFolderTreeWithStatus(sourceDir, destSubdir, ignoreExist, copyStatus, numFormat);
+				boolean copyOK = copyFolderTreeWithStatus(sourceDir, destSubdir, true, copyStatus, numFormat);
                 
                 if (!copyOK)
                 {

@@ -404,7 +404,11 @@ bytesCopied=bytes copiados
 bytesMoved=bytes movidos
 morePasteConflicts=... mas
 pasteConflictHead=Los archivos siguientes existen en la carpeta de destino
+pasteConflictHeadFolder=Esta subcarpeta ya existe en la carpeta de destino
 pasteOverwrite=Exagerar?
+destFolderFileConflict=La carpeta no se pudo copiar porque existe un archivo con el mismo nombre en la carpeta de destino.
+targetEqualsSource=La carpeta de destino debe ser diferente de la carpeta de origen.
+targetIsSubOfSource=La carpeta de destino no puede ser una subcarpeta de la carpeta de origen.
 
 # remote editor labels
 saveSuccess=datos del editor guardado correctamente
