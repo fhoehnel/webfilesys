@@ -138,7 +138,7 @@
       
       <tr>
         <td class="formButton">
-          <input id="uploadButton" type="button" onclick="positionStatusDiv();sendFiles()" resource="button.startUpload" style="visibility:hidden;display:none;" />
+          <input id="uploadButton" type="button" onclick="positionStatusDiv();checkUploadFileConflicts()" resource="button.startUpload" style="visibility:hidden;display:none;" />
           <input id="doneButton" type="button" style="visibility:hidden" resource="upload.button.done"
                  onclick="window.location.href='/webfilesys/servlet?command=listFiles&amp;keepListStatus=true'" />
         </td>

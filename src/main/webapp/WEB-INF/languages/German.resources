@@ -234,8 +234,8 @@ label.xfertext=text
 button.startUpload=Upload starten
 hint.upload.multizip=Mehrere Dateien oder ein ganzer Directory-Baum kann in Form eines ZIP-Archives hochgeladen werden, welches automatisch entpackt wird.
 label.upload.unzip=nach Upload ZIP Archiv entpacken
-link.multiUpload=Erweiterter Upload
-headline.multiUpload=Erweiterter Upload
+link.multiUpload=Upload mehrere Dateien
+headline.multiUpload=Upload mehrere Dateien
 upload.selected.pictures=Bilder selektiert für Upload
 upload.dropZone=Drag and drop Dateien für Upload hier!
 upload.lastSent=zuletzt hochgeladene Datei
@@ -248,6 +248,8 @@ upload.file.exists=eine Datei mit diesem Namen existiert bereits - überschreiben
 uploadTargetFileNameExt=Die Dateinamen-Erweiterung der lokalen Datei wird auch für den Dateinamen auf dem Server verwendet. Fortfahren?
 upload.total.status=Gesamt-Status
 upload.error=Fehler beim Upload der Datei
+upload.conflictHead=Die folgenden Dateien existieren bereits im Zielordner
+upload.overwrite=Überschreiben?
 
 # switch Read/Only labels
 label.readWriteStatus=Schreibschutz-Status

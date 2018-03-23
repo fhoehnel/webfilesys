@@ -248,6 +248,8 @@ upload.file.exists=Un archivo con este nombre ya existe. ¿Reemplazar?
 uploadTargetFileNameExt=La extensión del nombre del archivo local se agregará al nombre de archivo en el servidor de destino. ¿Continuar?
 upload.total.status=estado total
 upload.error=No es posible cargar archivos.
+upload.conflictHead=Los archivos siguientes existen en la carpeta de destino
+upload.overwrite=¿Exagerar?
 
 # switch Read/Only labels
 label.readWriteStatus=estado Lectura/Escritura

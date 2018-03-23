@@ -200,6 +200,52 @@
                  (lowerCaseFileType.indexOf("bmp") >= 0));
       }
       
+      function checkUploadFileConflicts() {
+    	  
+    	  showHourGlass();
+    	  
+    	  var postData = "command=checkUploadConflict";
+		  for (var i = 0; i < selectedForUpload.length; i++) {
+	    	  postData += "&file=";
+	          if (browserSafari) {
+	    	      postData += selectedForUpload[i].fileName;
+	          } else {
+	    	      postData += selectedForUpload[i].name;
+	          }
+		  }
+		  
+		  xmlRequestPost("/webfilesys/servlet", postData, function(req) {
+	          if (req.readyState == 4) {
+	              if (req.status == 200) {
+		              var conflicts = req.responseXML.getElementsByTagName("conflict");            
+
+			          if (conflicts.length > 0) {
+
+		                  var msg = resourceBundle["upload.conflictHead"];
+			            	
+			              msg += "<br/>"; 
+			                
+			              for (var i = 0; i < conflicts.length; i++) {
+			              	  msg = msg + "<br/>" + conflicts[i].firstChild.nodeValue;
+			              }
+
+			              msg = msg + "<br/><br/>" + resourceBundle["upload.overwrite"];
+
+		            	  hideHourGlass();
+			              
+			              customConfirm(msg, resourceBundle["button.cancel"], resourceBundle["button.ok"], sendFiles);
+			          } else {
+		            	  hideHourGlass();
+			              sendFiles();
+			          }
+	              } else {
+	            	  hideHourGlass();
+	                  alert(resourceBundle["alert.communicationFailure"]);
+	              }
+	          }
+	      });
+      }
+      
       function sendFiles() {  
           uploadStartedByButton = true;
 
@@ -236,47 +282,37 @@
       
 	      sizeOfCurrentFile = fileSize;
 	  
-	      checkMultiUploadTargetExists(fileName, 
-	          function() {
-                  var nextFile = selectedForUpload.pop();
-                  if (nextFile) {
-                      new singleFileBinaryUpload(nextFile)
-                  }
-	          }, 
-	          function() {
-                  lastUploadedFile = fileName;
+          lastUploadedFile = fileName;
       
-                  document.getElementById("currentFile").innerHTML = shortText(fileName, 50);
+          document.getElementById("currentFile").innerHTML = shortText(fileName, 50);
           
-                  document.getElementById("statusText").innerHTML = "0 " + resourceOf + " " + formatDecimalNumber(fileSize) + " bytes ( 0%)";
+          document.getElementById("statusText").innerHTML = "0 " + resourceOf + " " + formatDecimalNumber(fileSize) + " bytes ( 0%)";
 
-                  var statusWin = document.getElementById("uploadStatus");
-                  statusWin.style.visibility = 'visible';
+          var statusWin = document.getElementById("uploadStatus");
+          statusWin.style.visibility = 'visible';
 
-                  xhr = new XMLHttpRequest();  
+          xhr = new XMLHttpRequest();  
 
-                  xhr.onreadystatechange = handleUploadState;
-                  xhr.upload.addEventListener("progress", updateProgress, false);
-                  xhr.upload.addEventListener("load", uploadComplete, false);
+          xhr.onreadystatechange = handleUploadState;
+          xhr.upload.addEventListener("progress", updateProgress, false);
+          xhr.upload.addEventListener("load", uploadComplete, false);
 
-                  xhr.open("POST", "/webfilesys/upload/singleBinary/" + encodeURIComponent(fileName), true);  
+          xhr.open("POST", "/webfilesys/upload/singleBinary/" + encodeURIComponent(fileName), true);  
 
-		          if (!browserMSIE) {
-                      xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');  
-	              }
+          if (!browserMSIE) {
+              xhr.overrideMimeType('text/plain; charset=x-user-defined-binary');  
+          }
          
-                  if (firefoxDragDrop) {
-                      try {
-                          xhr.sendAsBinary(file.getAsBinary());    
-                      } catch (ex) {
-                          // Chrome has no file.getAsBinary() function
-                          xhr.send(file);
-                      }
-                  } else {
-                      xhr.send(file);
-                  }    
-	          }
-	      );
+          if (firefoxDragDrop) {
+              try {
+                  xhr.sendAsBinary(file.getAsBinary());    
+              } catch (ex) {
+                  // Chrome has no file.getAsBinary() function
+                  xhr.send(file);
+              }
+          } else {
+              xhr.send(file);
+          }    
       }
 
       function handleUploadState() {

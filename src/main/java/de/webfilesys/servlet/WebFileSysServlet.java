@@ -68,6 +68,7 @@ import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
 import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
+import de.webfilesys.gui.ajax.CheckUploadConflictHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.EditConvertVideoHandler;
@@ -1464,6 +1465,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("uploadStatus"))
         {
 			(new XmlUploadStatusHandler(req, resp, session, output, userid)).handleRequest();
+			
+            return(true);
+        }
+        
+        if (command.equals("checkUploadConflict"))
+        {
+			(new CheckUploadConflictHandler(req, resp, session, output, userid)).handleRequest();
 			
             return(true);
         }

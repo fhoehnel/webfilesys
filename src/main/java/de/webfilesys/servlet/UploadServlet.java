@@ -644,7 +644,7 @@ public class UploadServlet extends WebFileSysServlet
         {
             String ext = CommonUtils.getFileExtension(fileName);
             
-            if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png")))
+            if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals(".png")))
             {
                 AutoThumbnailCreator.getInstance().queuePath(outFile.getAbsolutePath(), AutoThumbnailCreator.SCOPE_FILE);
             }

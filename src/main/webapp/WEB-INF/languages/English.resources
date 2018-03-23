@@ -248,6 +248,8 @@ upload.file.exists=a file with this name already exists - overwrite?
 uploadTargetFileNameExt=The filename extension of the local file will be appended to the filename on the target server. Continue?
 upload.total.status=total status
 upload.error=failed to upload file
+upload.conflictHead=The following files already exist in the destination folder
+upload.overwrite=Overwrite?
 
 # switch Read/Only labels
 label.readWriteStatus=Read/Write status
