@@ -55,7 +55,7 @@
 
     <tr>
       <td colspan="2" class="formParm2">
-        <xsl:value-of select="/publishFile/publishPath" />
+        <xsl:value-of select="/publishFile/shortPath" />
       </td>
     </tr>
     

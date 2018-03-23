@@ -34,7 +34,7 @@
 
 </head>
 
-<body>
+<body style="margin-bottom:0">
   <xsl:if test="/metaInf/geoTag">
     <xsl:attribute name="onload">loadGoogleMapsAPIScriptCode('<xsl:value-of select="/metaInf/googleMapsAPIKey" />')</xsl:attribute>
   </xsl:if>
@@ -203,7 +203,7 @@
             <span resource="label.folderIcon"></span>
           </td>
           <td class="formParm2">
-            <div style="width:300px;height:80px;overflow-x:auto;overflow-y:auto;border:1px solid #a0a0a0">
+            <div style="width:300px;height:100px;overflow-x:auto;overflow-y:auto;border:1px solid #a0a0a0">
               <table border="0">
                 <tr>
                   <td>
