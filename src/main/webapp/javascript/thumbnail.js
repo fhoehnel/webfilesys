@@ -293,14 +293,14 @@ function googleMapAllPics() {
             var mapWin = window.open('/webfilesys/servlet?command=googleMapMulti', 'mapWin', 'status=no,toolbar=no,location=no,menu=no,width=' + mapWinWidth + ',height=' + mapWinHeight + ',resizable=yes,left=2,top=2,screenX=2,screenY=2');
 
             if (!mapWin) {
-                alert(resourceBundle["alert.enablePopups"]);
+                customAlert(resourceBundle["alert.enablePopups"]);
             } else {
                 mapWin.focus();
             }
         },
         function() {
             hideHourGlass();
-            alert(resourceBundle["noFilesWithGeoData"]);
+            customAlert(resourceBundle["noFilesWithGeoData"]);
         }
     );
 }
