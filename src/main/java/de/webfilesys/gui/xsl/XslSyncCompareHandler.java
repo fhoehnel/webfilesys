@@ -166,7 +166,7 @@ public class XslSyncCompareHandler extends XslRequestHandlerBase
             Element sourceElement = doc.createElement("source");
             
             XmlUtil.setChildText(sourceElement, "path", syncItem.getSource().getPath());
-            XmlUtil.setChildText(sourceElement, "displayPath", getForcedLineBreakPath(getHeadlinePath(syncItem.getSource().getPath())));
+            XmlUtil.setChildText(sourceElement, "displayPath", getRelativePath(syncSourcePath, syncItem.getSource().getPath()));
             XmlUtil.setChildText(sourceElement, "size", numFormat.format(syncItem.getSource().getSize()));
             XmlUtil.setChildText(sourceElement, "modified", dateFormat.format(new Date(syncItem.getSource().getModificationTime())));
             XmlUtil.setChildText(sourceElement, "canRead", "" + syncItem.getSource().getCanRead());
@@ -177,7 +177,7 @@ public class XslSyncCompareHandler extends XslRequestHandlerBase
             Element targetElement = doc.createElement("target");
             
             XmlUtil.setChildText(targetElement, "path", syncItem.getTarget().getPath());
-            XmlUtil.setChildText(targetElement, "displayPath", getForcedLineBreakPath(getHeadlinePath(syncItem.getTarget().getPath())));
+            XmlUtil.setChildText(targetElement, "displayPath", getRelativePath(syncTargetPath, syncItem.getTarget().getPath()));
             XmlUtil.setChildText(targetElement, "size", numFormat.format(syncItem.getTarget().getSize()));
             XmlUtil.setChildText(targetElement, "modified", dateFormat.format(new Date(syncItem.getTarget().getModificationTime())));
             XmlUtil.setChildText(targetElement, "canRead", "" + syncItem.getTarget().getCanRead());
@@ -196,6 +196,10 @@ public class XslSyncCompareHandler extends XslRequestHandlerBase
 		this.processResponse("syncCompare.xsl", true);
     }
     
+	private String getRelativePath(String basePath, String fullPath) {
+		return fullPath.substring(basePath.length() + 1);
+	}
+	
     private String getForcedLineBreakPath(String path)
     {
         if (path.length() <= MAX_PATH_LINE_LENGTH)

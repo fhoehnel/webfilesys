@@ -284,13 +284,13 @@ function validateCloneFolderName() {
     var newFolderName = document.getElementById('renameForm').newFolderName.value;
     
     if (newFolderName == sourceFolderName) {
-        alert(resourceBundle['alert.destFolderEqualsSource']);
+        customAlert(resourceBundle['alert.destFolderEqualsSource']);
     } else {
         if (!checkFileNameSyntax(newFolderName)) {
-            alert(resourceBundle['alert.illegalCharInFilename']);
+            customAlert(resourceBundle['alert.illegalCharInFilename']);
         } else {
             if (newFolderName.trim().length == 0) {
-                alert(resourceBundle["alert.newFolderNameEmpty"]);
+                customAlert(resourceBundle["alert.newFolderNameEmpty"]);
             } else {
                 var sourceFolderPath = document.getElementById("sourceFolderPath").value;
             	var pathSeparator = "/";

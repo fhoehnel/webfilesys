@@ -1016,6 +1016,7 @@ td.syncCompare {
     border-top-width:1px;
     border-top-style:solid;
     border-top-color:#b0b0b0;
+    word-wrap: break-word;
 }
 
 .buttonCont { 
