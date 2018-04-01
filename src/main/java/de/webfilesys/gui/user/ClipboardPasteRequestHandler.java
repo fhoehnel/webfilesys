@@ -145,36 +145,32 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		output.println("</td>");
 		output.println("</tr>");
 
-        ArrayList<String> clipDirs = clipBoard.getAllDirs();
-		
-        if (clipDirs != null) {
-            output.println("<tr>");
-            output.println("<td class=\"formParm2\">");
-            output.println("<div class=\"progressBar\">");
-            output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/images/bluedot.gif\" style=\"width:1px\" />");
-            output.println("</div>");
-            output.println("</td>");
-            output.println("</tr>");
-            
-            output.println("<tr>");
-            output.println("<td class=\"formParm1\">");
-            
-            if (clipBoard.isCopyOperation()) {
-                labelText = getResource("bytesCopied", "bytes copied");
-            } else {
-                labelText = getResource("bytesMoved", "bytes moved");
-            }
-            
-            output.println(labelText + ":");
-            output.println("</td>");
-            output.println("</tr>");
-
-            output.println("<tr>");
-            output.println("<td class=\"formParm2\">");
-            output.println("<div id=\"bytesCopied\" />");
-            output.println("</td>");
-            output.println("</tr>");
+        output.println("<tr>");
+        output.println("<td class=\"formParm2\">");
+        output.println("<div class=\"progressBar\">");
+        output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/images/bluedot.gif\" style=\"width:1px\" />");
+        output.println("</div>");
+        output.println("</td>");
+        output.println("</tr>");
+        
+        output.println("<tr>");
+        output.println("<td class=\"formParm1\">");
+        
+        if (clipBoard.isCopyOperation()) {
+            labelText = getResource("bytesCopied", "bytes copied");
+        } else {
+            labelText = getResource("bytesMoved", "bytes moved");
         }
+        
+        output.println(labelText + ":");
+        output.println("</td>");
+        output.println("</tr>");
+
+        output.println("<tr>");
+        output.println("<td class=\"formParm2\">");
+        output.println("<div id=\"bytesCopied\" />");
+        output.println("</td>");
+        output.println("</tr>");
 
 		output.println("</table>");
 
@@ -192,8 +188,22 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 			{
 				destDir=destDir + File.separator;
 			}
-
+			
+            DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");
+            
+            long copySizeSum = 0;
+            
+            for (String sourceFile : clipFiles) {
+                File file = new File(sourceFile);
+                if (file.exists() && file.isFile() && file.canRead()) {
+                    copySizeSum += file.length();
+                }
+            }
+			
+            String formattedSizeSum = numFormat.format(copySizeSum);
+            
 			int copyFileCounter = 0;
+			long bytesCopied = 0;
 			
 			for (String sourceFile : clipFiles) 
 			{
@@ -235,16 +245,26 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 				{
 					copyFileCounter++;
 					
+	                File file = new File(sourceFile);
+	                if (file.exists() && file.isFile() && file.canRead()) {
+	                    bytesCopied += file.length();                   
+	                }
+					
 	                if ((copyFileCounter <= 100) ||
 	                    ((copyFileCounter < 300) && (copyFileCounter % 5 == 0)) ||
 	                    ((copyFileCounter < 1000) && (copyFileCounter % 10 == 0)) ||
 	                    (copyFileCounter % 50 == 0))
 	                {
-	                    output.println("<script language=\"javascript\">");
-
-	                    output.println("document.getElementById('fileCount').innerHTML='" + copyFileCounter +  "';");
-	                    
-	                    output.println("</script>");
+                        long progress = 0;
+                        if (copySizeSum > 0) {
+                            progress = bytesCopied * 300l / copySizeSum;
+                        }
+                        
+                        output.println("<script language=\"javascript\">");
+                        output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyFileCounter) + " / " + numFormat.format(clipFiles.size()) +  "';");
+                        output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(bytesCopied) + " / " + formattedSizeSum +  "';");
+                        output.println("document.getElementById('copyProgressBar').style.width='" + progress + "px';");
+                        output.println("</script>");
 	                }
 
 					MetaInfManager metaInfMgr=MetaInfManager.getInstance();
@@ -324,13 +344,22 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 			
 			if (copyFileCounter > 100)
 			{
+                long progress = 0;
+                if (copySizeSum > 0) {
+                    progress = bytesCopied * 300l / copySizeSum;
+                }
+                
                 output.println("<script language=\"javascript\">");
-                output.println("document.getElementById('fileCount').innerHTML='" + copyFileCounter +  "';");
+                output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyFileCounter) + " / " + numFormat.format(clipFiles.size()) +  "';");
+                output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(bytesCopied) + " / " + formattedSizeSum +  "';");
+                output.println("document.getElementById('copyProgressBar').style.width='" + progress + "px';");
                 output.println("</script>");
 			}
 		}
 
-		if (clipDirs != null) {
+        ArrayList<String> clipDirs = clipBoard.getAllDirs();
+
+        if (clipDirs != null) {
 			String destDir=actPath;
 
 			if (!destDir.endsWith(File.separator)) {
