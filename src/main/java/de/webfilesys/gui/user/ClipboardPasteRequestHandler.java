@@ -145,32 +145,36 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		output.println("</td>");
 		output.println("</tr>");
 
-		output.println("<tr>");
-		output.println("<td class=\"formParm2\">");
-		output.println("<div class=\"progressBar\">");
-		output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/images/bluedot.gif\" style=\"width:1px\" />");
-		output.println("</div>");
-		output.println("</td>");
-		output.println("</tr>");
+        ArrayList<String> clipDirs = clipBoard.getAllDirs();
 		
-		output.println("<tr>");
-		output.println("<td class=\"formParm1\">");
-		
-		if (clipBoard.isCopyOperation()) {
-			labelText = getResource("bytesCopied", "bytes copied");
-		} else {
-			labelText = getResource("bytesMoved", "bytes moved");
-		}
-		
-		output.println(labelText + ":");
-		output.println("</td>");
-		output.println("</tr>");
+        if (clipDirs != null) {
+            output.println("<tr>");
+            output.println("<td class=\"formParm2\">");
+            output.println("<div class=\"progressBar\">");
+            output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/images/bluedot.gif\" style=\"width:1px\" />");
+            output.println("</div>");
+            output.println("</td>");
+            output.println("</tr>");
+            
+            output.println("<tr>");
+            output.println("<td class=\"formParm1\">");
+            
+            if (clipBoard.isCopyOperation()) {
+                labelText = getResource("bytesCopied", "bytes copied");
+            } else {
+                labelText = getResource("bytesMoved", "bytes moved");
+            }
+            
+            output.println(labelText + ":");
+            output.println("</td>");
+            output.println("</tr>");
 
-		output.println("<tr>");
-		output.println("<td class=\"formParm2\">");
-		output.println("<div id=\"bytesCopied\" />");
-		output.println("</td>");
-		output.println("</tr>");
+            output.println("<tr>");
+            output.println("<td class=\"formParm2\">");
+            output.println("<div id=\"bytesCopied\" />");
+            output.println("</td>");
+            output.println("</tr>");
+        }
 
 		output.println("</table>");
 
@@ -325,8 +329,6 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
                 output.println("</script>");
 			}
 		}
-
-		ArrayList<String> clipDirs = clipBoard.getAllDirs();
 
 		if (clipDirs != null) {
 			String destDir=actPath;
