@@ -48,6 +48,14 @@ function getWinWidth()
     return w;
 }  
 
+function getVisualWinWidth() {
+	if (window.visualViewport) {
+		// supported starting with Chrome 61
+		return window.visualViewport.width;
+	}
+	return getWinWidth();
+}
+
 /*
   Places a box centered vertically and horizontally on the browser window.
   @param box a DOM element of type div

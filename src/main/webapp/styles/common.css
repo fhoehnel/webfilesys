@@ -1880,6 +1880,52 @@ div.progressBar img {
 	height: 20px;
 }
 
+img.uploadPreview {
+	height: 100px;
+	border: 2px ridge #808080;
+	margin: 4px;
+}
+
+div.dropZone {
+	width: 95%;
+	min-height: 112px;
+	background-color: #e0e0e0;
+	border: 2px ridge #808080;
+}
+
+div.dragDropHint {
+	color: #808080;
+	font-family: Arial,Helvetica;
+	font-size: 16pt;
+	font-weight: bold;
+	margin-top: 45px;
+}
+
+div#dragDropHint {
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+td.dropTarget {
+	text-align: center;
+	padding: 10px;
+}
+
+#uploadFiles {
+	padding-left: 20px;
+}
+
+input[type=file] {
+	border: none;
+}
+
+li.selectedFile {
+	color: navy;
+	font-family: Arial,Helvetica;
+	font-size: 10pt;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

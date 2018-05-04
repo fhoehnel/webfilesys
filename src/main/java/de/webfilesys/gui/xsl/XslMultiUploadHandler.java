@@ -70,6 +70,10 @@ public class XslMultiUploadHandler extends XslRequestHandlerBase
 		
 	    XmlUtil.setChildText(uploadElement, "language", language, false);
 		
+		if (session.getAttribute("mobile") != null) {
+		    XmlUtil.setChildText(uploadElement, "mobile", "true", false);
+		}
+	    
 	    /*
 		addMsgResource("headline.multiUpload", getResource("headline.multiUpload", "Extended Upload"));
         addMsgResource("upload.selected.pictures", getResource("upload.selected.pictures", "pictures selected for upload"));

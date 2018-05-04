@@ -93,6 +93,10 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
         addMsgResource("alert.illegalCharInFilename", getResource("alert.illegalCharInFilename","The file name contains illegal characters!"));
         addMsgResource("uploadTargetFileNameExt", getResource("uploadTargetFileNameExt","Append the filename extension of the source file to the filename on the target server?"));
         
+		if (session.getAttribute("mobile") != null) {
+		    XmlUtil.setChildText(uploadElement, "mobile", "true", false);
+		}
+        
 		this.processResponse("uploadParms.xsl", true);
     }
 }
