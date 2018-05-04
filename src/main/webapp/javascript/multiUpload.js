@@ -163,6 +163,8 @@
                       uploadFileList.appendChild(listElem);
                       
                       selectedForUpload.push(file);
+                      
+                      updateSelectedFileSize();
                   }
                   
                   document.getElementById('uploadButton').style.visibility = 'visible';
@@ -172,6 +174,19 @@
               }
           }  
       } 
+      
+      function updateSelectedFileSize() {
+          var sizeSum = 0;
+    	  for (var i = 0; i < selectedForUpload.length; i++) {
+              if (browserSafari) {
+            	  sizeSum += selectedForUpload[i].fileSize;
+              } else {
+            	  sizeSum += selectedForUpload[i].size;
+              }
+    	  }
+    	  
+    	  document.getElementById("selectedFilesSize").innerHTML = formatDecimalNumber(sizeSum) + " Bytes";
+      }
       
       function selectedDuplicate(fileName) {
           for (var i = 0; i < selectedForUpload.length; i++) {

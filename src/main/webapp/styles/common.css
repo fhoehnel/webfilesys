@@ -1926,6 +1926,10 @@ li.selectedFile {
 	font-size: 10pt;
 }
 
+#selectedFilesSize {
+	color: navy;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

@@ -118,7 +118,8 @@
 
       <tr id="selectedForUpload">
         <td colspan="2" class="formParm1">
-          <span resource="upload.selectedFiles"></span>:
+          <span resource="upload.selectedFiles"></span>:&#160;
+          <span id="selectedFilesSize"></span>
           <ul id="uploadFiles"/>
         </td>
       </tr>
