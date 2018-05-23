@@ -76,7 +76,7 @@
 
 </head>
 
-<body class="fileList">
+<body class="fileListNoMargin">
   <xsl:attribute name="onload">
     setThumbContHeight();
     <xsl:if test="/fileList/file">
@@ -105,7 +105,7 @@
 <xsl:template match="fileList">
 
   <xsl:for-each select="/fileList/currentTrail">
-    <div class="headline">
+    <div class="headline headlineBorderless">
       <xsl:call-template name="currentTrail" />
     </div>
   </xsl:for-each>
@@ -174,7 +174,7 @@
   
     <input type="hidden" name="command" value="listVideos" />
     
-	    <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
 	      <input type="hidden" name="actpath">
 	        <xsl:attribute name="value">
 	          <xsl:value-of select="currentPath" />
@@ -243,7 +243,7 @@
     
     <input type="hidden" name="command" value="" />
 
-    <div id="scrollAreaCont" class="pictureScrollCont sepTop">
+    <div id="scrollAreaCont" class="pictureScrollContNoBorder sepTop" thumbnailType="video">
 
       <xsl:if test="/fileList/file">
 
@@ -335,10 +335,10 @@
          
     </div>
 
-    <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
 
       <tr>
-        <td class="fileListFunct">
+        <td class="fileListButton sepTop">
         
           <div class="buttonCont">
 
@@ -371,7 +371,7 @@
         <xsl:if test="file">
           <xsl:if test="not(/fileList/readonly)">
 
-          <td class="fileListFunct" style="text-align:right">
+          <td class="fileListButton sepTop" style="text-align:right">
             <label resource="label.selectedFiles"></label>:
             &#160;
             <select name="cmd" size="1" onchange="javascript:multiVideoFunction()">

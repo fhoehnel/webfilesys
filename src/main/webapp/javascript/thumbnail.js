@@ -564,14 +564,21 @@ function setThumbContHeightInternal() {
         windowHeight = document.documentElement.clientHeight;
     }
 
-    var offset = 200;
+    var offset = 185;
     
     var folderMetaInfElem = document.getElementById("folderMetaInf");
     if (folderMetaInfElem) {
     	offset += folderMetaInfElem.offsetHeight;
     }
     
-    document.getElementById("scrollAreaCont").style.height = (windowHeight - offset) + 'px';
+    var scrollAreaCont = document.getElementById("scrollAreaCont");
+    
+    var thumbnailType = scrollAreaCont.getAttribute("thumbnailType");
+    if (thumbnailType && (thumbnailType == "video")) {
+    	offset -= 30;
+    }
+    
+    scrollAreaCont.style.height = (windowHeight - offset) + 'px';
 }
 
 function picturePopupInFrame(filePath, picIdx) {

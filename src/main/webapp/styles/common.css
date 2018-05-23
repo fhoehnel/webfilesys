@@ -24,6 +24,11 @@ body.dirTree {
     background-color:#f0f0f0;
 }
   
+body.fileListNoMargin {
+	margin: 0;
+	background-color: #f0f0f0;
+}  
+  
 body.fileList,
 body.zipContent {
     background-color: #f0f0f0;
@@ -242,6 +247,12 @@ div.headline {
     padding:3px;
     margin-bottom:5px;
 }
+
+div.headlineBorderless {
+    border-left-width: 0;	
+    border-right-width: 0;	
+    border-top-width: 0;	
+}
   
 table.dataList {
     border-collapse: collapse;
@@ -427,6 +438,11 @@ input,select,textarea {
     padding: 2px;    
 }
 
+table.storyPicCont {
+	width: 100%;
+	border: none;
+}
+
 td.story {
     font-size:12pt;
     color:#306048;
@@ -436,9 +452,10 @@ td.story {
   
 td.story2 {
     background-color: #c0c0c0;
-    font-size:12pt;
-    color:#306048;
-    font-weight:bold;
+    font-size: 12pt;
+    color: #306048;
+    font-weight: bold;
+    vertical-align: top;
 }
 
 body.menu {
@@ -486,8 +503,14 @@ td.border {
 }
 
 td.fileListFunct {
-    font-size:13px;
-    color:black;
+    font-size: 13px;
+    color: black;
+    padding: 5px 10px 5px 10px;
+}
+
+td.fileListButton {
+    font-size: 13px;
+    color: black;
     padding: 5px 10px 5px 10px;
 }
   
@@ -563,11 +586,23 @@ table.fileListFilterSort {
     border-bottom-width: 0;	
 }
 
+table.fileListFilterSort2 {
+	width: 100%;
+	border-spacing: 0;
+    border: none;
+}
+
 table.fileListButtonCont {
 	width: 100%;
 	border-spacing: 0;
     border: 1px solid black;
     border-top-width: 0;	
+}
+
+table.fileListButtonCont2 {
+	width: 100%;
+	border-spacing: 0;
+    border: none;
 }
 
 table.fileListFunctCont {
@@ -576,9 +611,18 @@ table.fileListFunctCont {
 }
 
 div.fileListDesc {
-    width:100%;
-    padding:2px;
-    margin-bottom:5px;
+    width: 100%;
+    padding: 2px;
+    margin-bottom: 5px;
+    font-size: 10px;
+    color: navy;
+}
+
+div.fileListFolderDesc {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 2px 10px;
+    margin-bottom: 5px;
     font-size: 10px;
     color: navy;
 }
@@ -1121,8 +1165,6 @@ td.fileSort {
 table.fileListHead {
     width:100%;
     background-color:ivory;
-    border-left:1px solid black;
-    border-right:1px solid black;
     border-collapse: collapse;
 }
 
@@ -1172,14 +1214,12 @@ th.fileListSize {
 }
 
 div.fileListScrollDiv {
-    background-color:ivory;
-    height:400px;
-    border-left:1px solid black;
-    border-right:1px solid black;
-    border-top:1px solid #b0b0b0;  
-    border-bottom:1px solid #b0b0b0;  
-    display:block;
-    overflow:auto;
+    background-color: ivory;
+    height: 400px;
+    border-top: 1px solid #b0b0b0;  
+    border-bottom: 1px solid #b0b0b0;  
+    display: block;
+    overflow: auto;
 }
 
 table.fileList tr td {
@@ -1205,10 +1245,15 @@ td.fileListSelectedRow {
 }
 
 td.fileListSelector {
-    width:20px;
-    min-width:20px;
+    width: 20px;
+    min-width: 20px;
+    padding-left: 8px;
 }
   
+table.fileList tr td.fileListSelector {
+    padding-left: 4px;
+}
+	
 td.fileListIcon {
     width:20px;
     min-width:20px;
@@ -1707,6 +1752,13 @@ div.pictureScrollCont {
 	height: 200px;
 	border-left: 1px solid black;
 	border-right: 1px solid black;
+	padding-left: 10px;
+	background-color: #d0d0d0;
+}
+
+div.pictureScrollContNoBorder {
+	overflow-y: auto;
+	height: 200px;
 	padding-left: 10px;
 	background-color: #d0d0d0;
 }

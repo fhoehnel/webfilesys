@@ -195,7 +195,7 @@
 
 </head>
 
-<body class="fileList">
+<body class="fileListNoMargin">
   <xsl:if test="not(/slideShow/imageCount = 0)">
     <xsl:if test="/slideShow/crossfade">
       <xsl:attribute name="onload">fadeIn(); setTimeout('preload()', 200)</xsl:attribute>
@@ -211,7 +211,8 @@
 <center>
 
 <xsl:if test="/slideShow/imageCount = 0">
-  <div class="headline">
+
+  <div class="headline headlineBorderless">
     <xsl:value-of select="/slideShow/shortPath"/>
   </div>
 
@@ -228,7 +229,7 @@
 
 <xsl:if test="not(/slideShow/imageCount = 0)">
 
-<div class="headline">
+<div class="headline headlineBorderless">
   <xsl:value-of select="/slideShow/shortImgName"/>
   (<xsl:value-of select="/slideShow/imgIdx + 1"/>/<xsl:value-of select="/slideShow/imageCount"/>)
 </div>

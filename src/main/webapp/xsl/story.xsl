@@ -78,7 +78,7 @@
 
 </head>
 
-<body class="fileList">
+<body class="fileListNoMargin">
 
 <xsl:apply-templates />
 
@@ -92,13 +92,9 @@
 
 <xsl:template match="fileList">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="headLine" disable-output-escaping="yes" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline headlineBorderless">
+    <xsl:value-of select="headLine" disable-output-escaping="yes" />
+  </div>
 
   <!-- path for picture album -->
   
@@ -194,7 +190,7 @@
     
       <input type="hidden" name="command" value="storyInFrame" />
     
-      <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
+      <table class="fileListFilterSort2">
  
         <tr>
           <td class="fileListFunctCont sep">
@@ -296,33 +292,32 @@
       </tr>
     </table>
   </xsl:if>
-      
   
-  <table class="topLess" border="0" width="100%" cellspacing="0" cellpadding="5">
+  <table class="storyPicCont" cellspacing="0" cellpadding="5">
 
     <xsl:for-each select="file">
           
       <tr>
-        <td class="story2" valign="top">
+        <td class="story2">
+        
           <xsl:if test="/fileList/role = 'album'">
             <img class="thumb" border="0">
               <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
               <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
               <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
               <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
-              <xsl:if test="position() mod 2 = 0">
-                <xsl:attribute name="align">right</xsl:attribute>
-                <xsl:attribute name="style">margin-left:10px</xsl:attribute>
-              </xsl:if>
-              <xsl:if test="position() mod 2 = 1">
-                <xsl:attribute name="align">left</xsl:attribute>
-                <xsl:attribute name="style">margin-right:10px</xsl:attribute>
-              </xsl:if>
             </img>
           </xsl:if>
 
           <xsl:if test="not(/fileList/role = 'album')">
             <a>
+              <xsl:if test="position() mod 2 = 1">
+                <xsl:attribute name="style">float:right</xsl:attribute>
+              </xsl:if>
+              <xsl:if test="position() mod 2 = 0">
+                <xsl:attribute name="style">float:left</xsl:attribute>
+              </xsl:if>
+              
               <xsl:if test="@link">
                 <xsl:attribute name="href">javascript:sli<xsl:value-of select="@id" />()</xsl:attribute>
               </xsl:if>
@@ -335,56 +330,49 @@
                 <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
                 <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
                 <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
-                <xsl:if test="position() mod 2 = 0">
-                  <xsl:attribute name="align">right</xsl:attribute>
-                  <xsl:attribute name="style">margin-left:10px</xsl:attribute>
-                </xsl:if>
-                <xsl:if test="position() mod 2 = 1">
-                  <xsl:attribute name="align">left</xsl:attribute>
-                  <xsl:attribute name="style">margin-right:10px</xsl:attribute>
-                </xsl:if>
               </img>
             </a>
           </xsl:if>
             
-          <xsl:if test="description">
-            <xsl:value-of select="description" />
-          </xsl:if>
-          <xsl:if test="not(description)">
-            <xsl:value-of select="@name" />
-          </xsl:if>
+          <div>
+            <xsl:if test="position() mod 2 = 1">
+              <xsl:attribute name="style">float:right;margin-right:10px;max-width:45%</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="position() mod 2 = 0">
+              <xsl:attribute name="style">float:left;margin-left:10px;max-width:45%</xsl:attribute>
+            </xsl:if>
+
+            <xsl:if test="description">
+              <xsl:value-of select="description" />
+            </xsl:if>
+            <xsl:if test="not(description)">
+              <xsl:value-of select="@name" />
+            </xsl:if>
           
-          <xsl:if test="not(/fileList/role = 'album')">
-            <br/>
-            <a class="dirtree">
-              <xsl:if test="@link">
-                <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="realPathForScript" />')</xsl:attribute>
-              </xsl:if>
-              <xsl:if test="not(@link)">
-                <xsl:attribute name="href">javascript:comm<xsl:value-of select="@id" />()</xsl:attribute>
-              </xsl:if>
-              <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.comments']/@value" /></xsl:attribute>
-                (<xsl:value-of select="comments" />)
-            </a>
-          </xsl:if>
+            <xsl:if test="not(/fileList/role = 'album')">
+              <br/>
+              <a class="dirtree">
+                <xsl:if test="@link">
+                  <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="realPathForScript" />')</xsl:attribute>
+                </xsl:if>
+                <xsl:if test="not(@link)">
+                  <xsl:attribute name="href">javascript:comm<xsl:value-of select="@id" />()</xsl:attribute>
+                </xsl:if>
+                <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.comments']/@value" /></xsl:attribute>
+                  (<xsl:value-of select="comments" />)
+              </a>
+            </xsl:if>
+          </div>  
           
         </td>
       </tr>
       
-      <xsl:if test="position() != last()">
-        <tr>
-          <td class="story2 sepTop">
-            <img src="/webfilesys/images/space.gif" border="0" width="1" height="1" />
-          </td>
-        </tr>
-      </xsl:if>  
-        
     </xsl:for-each>
   </table>  
   
   <xsl:if test="/fileList/file">
   
-    <table class="topLess" border="0" width="100%" cellpadding="4" cellspacing="0">
+    <table class="fileListButtonCont2" cellpadding="4" cellspacing="0">
       <tr>
         <xsl:if test="paging/currentPage &gt; 1">
           <td class="fileListFunct" valign="center" nowrap="true">

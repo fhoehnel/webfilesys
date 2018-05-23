@@ -70,10 +70,10 @@
       }
       
       <xsl:if test="/fileList/description">
-        var padding = 220;
+        var padding = 200;
       </xsl:if>
       <xsl:if test="not(/fileList/description)">
-        var padding = 180;
+        var padding = 150;
       </xsl:if>
       
       document.getElementById('fileListTable').style.height = windowHeight - padding + 'px';
@@ -87,7 +87,7 @@
 
 </head>
 
-<body class="fileList" onload="setBundleResources();setFileListHeight()">
+<body class="fileListNoMargin" onload="setBundleResources();setFileListHeight()">
 
   <xsl:call-template name="fileList" />
 
@@ -99,12 +99,12 @@
 
 <xsl:template name="fileList">
 
-  <div class="headline">
+  <div class="headline headlineBorderless">
     <xsl:value-of select="fileList/headLine" />
   </div>
 
   <xsl:if test="/fileList/description">
-    <div class="fileListDesc">
+    <div class="fileListFolderDesc">
       <font class="small">
         <xsl:value-of select="/fileList/description" disable-output-escaping="yes" />
       </font>
@@ -280,9 +280,9 @@
       
     </div>
     
-    <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
       <tr>
-        <td class="fileListFunct">
+        <td class="fileListButton">
           <div class="buttonCont">
             <input type="button" onclick="document.resetForm.submit()" resource="button.resetStats" />
           </div>
