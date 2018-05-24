@@ -178,7 +178,6 @@ import de.webfilesys.gui.user.MultiZipRequestHandler;
 import de.webfilesys.gui.user.OpenStreetMapFilesPOIHandler;
 import de.webfilesys.gui.user.OpenStreetMapPOIHandler;
 import de.webfilesys.gui.user.PasteAsLinkRequestHandler;
-import de.webfilesys.gui.user.PictureStoryRequestHandler;
 import de.webfilesys.gui.user.PublishMailRequestHandler;
 import de.webfilesys.gui.user.PublishRequestHandler;
 import de.webfilesys.gui.user.RateVotingHandler;
@@ -250,6 +249,7 @@ import de.webfilesys.gui.xsl.XslMultiUploadHandler;
 import de.webfilesys.gui.xsl.XslOpenStreetMapFilesHandler;
 import de.webfilesys.gui.xsl.XslOpenStreetMapHandler;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
+import de.webfilesys.gui.xsl.XslPictureStoryOwnWindowHandler;
 import de.webfilesys.gui.xsl.XslPublishFileHandler;
 import de.webfilesys.gui.xsl.XslPublishListHandler;
 import de.webfilesys.gui.xsl.XslRenameDirHandler;
@@ -726,6 +726,7 @@ public class WebFileSysServlet extends ServletBase
 			} 
         	
         	if (viewMode == Constants.VIEW_MODE_STORY) {
+				req.setAttribute("initial", "true");
 			    (new XslPictureStoryHandler(req, resp, session, output, userid)).handleRequest(); 
 				return(true);
 			} 
@@ -763,7 +764,7 @@ public class WebFileSysServlet extends ServletBase
         
         if (command.equals("pictureStory"))
         {
-		    (new PictureStoryRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+		    (new XslPictureStoryOwnWindowHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }

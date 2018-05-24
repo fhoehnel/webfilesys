@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -43,9 +41,6 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 	  
 	protected void process()
 	{
-		int i;
-		File tempFile;
-
 		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_STORY));
 
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
@@ -232,34 +227,11 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			
 		doc.insertBefore(xslRef, fileListElement);
 
-		addMsgResource("label.modelist", getResource("label.modelist","list files"));
-		addMsgResource("label.modethumb", getResource("label.modethumb","thumbnails"));
-        addMsgResource("label.modeVideo", getResource("label.modeVideo","videos"));
-		addMsgResource("label.modestory", getResource("label.modestory","picture story"));
-		addMsgResource("label.modeSlideshow", getResource("label.modeSlideshow","slideshow"));
-		addMsgResource("label.fileStats", getResource("label.fileStats","statistics"));
-		
-		addMsgResource("albumPageSize", getResource("albumPageSize","pictures/page"));
-		addMsgResource("label.files", getResource("label.files","files"));
-		addMsgResource("label.of", getResource("label.of","of"));
-		addMsgResource("label.page", getResource("label.page","page"));
-
-		if (!WebFileSys.getInstance().isLicensed())
-		{
-			requestCounter++;
-
-			if (requestCounter % LIC_REMINDER_INTERVAL == 0)
-			{
-				XmlUtil.setChildText(fileListElement, "unlicensed", "true", false);
-			}
-		}
-		
 		if (WebFileSys.getInstance().isMaintananceMode())
 		{
 			if (!isAdminUser(false))
 			{
 				XmlUtil.setChildText(fileListElement, "maintananceMode", "true", false);
-				addMsgResource("alert.maintanance", getResource("alert.maintanance", "Maintanance mode. Please logout!"));
 			}
 		}
 
@@ -272,16 +244,10 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{
 			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
-			addMsgResource("alert.dirNotFound", getResource("alert.dirNotFound", "directory does not exist"));
-			this.processResponse("xsl/folderTree.xsl");
+			processResponse("xsl/folderTree.xsl");
 			return; 
 		}
 
-		// TODO: remove this historic relict
-		XmlUtil.setChildText(fileListElement, "jpegtran", "true");
-
-		addMsgResource("label.comments", getResource("label.comments","Comments"));
-		
 		String description = metaInfMgr.getDescription(act_path,".");
 
 		if ((description!=null) && (description.trim().length()>0))
@@ -401,7 +367,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			{
 				int numPages = fileNum / pageSize;
                 
-				int pageStep = numPages / 9;
+				int pageStep = (int) Math.round(Math.ceil(((float) numPages) / 9));
                 
 				if (pageStep == 0)
 				{
@@ -448,16 +414,12 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 				}
 			}
 		}
-		else
-		{
-			addMsgResource("alert.nopictures", getResource("alert.nopictures","no picture files (JPG,GIF,PNG,BMP)"));
-		}
 
 		if (selectedFiles != null)
 		{
 			// boolean metaInfFileIncluded=false;
 
-			for (i=0;i<selectedFiles.size();i++)
+			for (int i = 0; i < selectedFiles.size(); i++)
 			{
 				Element fileElement = doc.createElement("file");
                 
@@ -471,7 +433,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 
 				fileElement.setAttribute("id", Integer.toString(i));
 				
-				tempFile = fileCont.getRealFile();
+				File tempFile = fileCont.getRealFile();
 
 				if (fileCont.isLink())
 				{
@@ -581,7 +543,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
         }
 		
-		this.processResponse(stylesheetName, false);
+		processResponse(stylesheetName, false);
 
 		FastPathManager.getInstance().queuePath(uid,act_path);
 	}
