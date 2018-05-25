@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.util.CommonUtils;
 
 /**
  * @author Frank Hoehnel
@@ -97,8 +98,8 @@ public class EmailUtils
 		return(true);
 	}
 
-	public static void sendWelcomeMail(String email,String firstName,String lastName,
-								   String login,String password,String userLanguage) 
+	public static void sendWelcomeMail(String email, String firstName, String lastName,String login, String password, 
+			String activationLink, String userLanguage) 
 	{
 		String newUserName=login;
 
@@ -114,27 +115,32 @@ public class EmailUtils
 			}
 		}
 
-		String welcomeText="Welcome new user " + newUserName + " to WebFileSys.\r\n\r\nYour login name: " + login;
-
 		try
 		{
 	    	String languagePath = WebFileSys.getInstance().getConfigBaseDir() + "/" + LanguageManager.LANGUAGE_DIR;
-			
-			MailTemplate welcomeMailTemplate = new MailTemplate(languagePath + "/welcome_" + userLanguage + ".template");
+	    	
+            MailTemplate welcomeMailTemplate = null;
 
-			welcomeMailTemplate.setVarValue("USERNAME",newUserName);
-			welcomeMailTemplate.setVarValue("LOGIN",login);
-			welcomeMailTemplate.setVarValue("PASSWORD",password);
+            if (!CommonUtils.isEmpty(password)) {
+                welcomeMailTemplate = new MailTemplate(languagePath + "/welcome_" + userLanguage + ".template");
+                welcomeMailTemplate.setVarValue("PASSWORD", password);
+            } else {
+                welcomeMailTemplate = new MailTemplate(languagePath + "/registration_" + userLanguage + ".template");
+                welcomeMailTemplate.setVarValue("ACTIVATIONLINK", activationLink);
+            }
 
-			welcomeText=welcomeMailTemplate.getText();
+            welcomeMailTemplate.setVarValue("USERNAME", newUserName);
+            welcomeMailTemplate.setVarValue("LOGIN", login);
+
+            String welcomeText = welcomeMailTemplate.getText();
+
+            String subject = LanguageManager.getInstance().getResource(userLanguage, "subject.welcome", "Welcome to WebFileSys");
+
+            (new SmtpEmail(email, subject, welcomeText)).send();
 		}
 		catch (IllegalArgumentException iaex)
 		{
             Logger.getLogger(EmailUtils.class).error("failed to send welcome mail", iaex);
 		}
-
-		String subject=LanguageManager.getInstance().getResource(userLanguage,"subject.welcome","Welcome to WebFileSys");
-
-		(new SmtpEmail(email, subject, welcomeText)).send();
 	}
 }

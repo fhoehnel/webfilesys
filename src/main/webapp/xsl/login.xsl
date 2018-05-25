@@ -64,6 +64,10 @@
       alert('Cookies must be enabled to login to this web site!');
   }
 
+  <xsl:if test="/login/activationSuccess">
+    customAlert(resourceBundle["activationSuccessful"]);
+  </xsl:if>
+
 </script>
 
 </head>

@@ -134,6 +134,7 @@ import de.webfilesys.gui.anonymous.VisitorFileRequestHandler;
 import de.webfilesys.gui.google.GoogleEarthDirPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthFolderPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthSinglePlacemarkHandler;
+import de.webfilesys.gui.user.ActivateUserRequestHandler;
 import de.webfilesys.gui.user.AddCommentRequestHandler;
 import de.webfilesys.gui.user.CancelPublishRequestHandler;
 import de.webfilesys.gui.user.ClipboardPasteRequestHandler;
@@ -590,6 +591,13 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
+        if (command.equals("visitorFile"))
+    	{
+		    (new VisitorFileRequestHandler(req, resp, null, output)).handleRequest(); 
+		    
+    		return(true);
+    	}
+        
         if (command.equals("login"))
     	{
     		verifyLogin(req, resp, output, requestIsLocal);
@@ -611,12 +619,11 @@ public class WebFileSysServlet extends ServletBase
     		return(true);
     	}
         
-        if (command.equals("visitorFile"))
-    	{
-		    (new VisitorFileRequestHandler(req, resp, null, output)).handleRequest(); 
-		    
-    		return(true);
-    	}
+        if (command.equals("activateUser")) {
+            (new ActivateUserRequestHandler(req, resp)).handleRequest();
+
+            return true;
+        }
         
         if (command.equals("blank"))
     	{

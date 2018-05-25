@@ -226,7 +226,7 @@ public class AdminAddUserRequestHandler extends AdminRequestHandler
 
 		if ((WebFileSys.getInstance().getMailHost() != null) && (sendWelcomeMail != null))
 		{
-			EmailUtils.sendWelcomeMail(email, newUser.getFirstName(), newUser.getLastName(), login, password, userLanguage); 
+			EmailUtils.sendWelcomeMail(email, newUser.getFirstName(), newUser.getLastName(), login, password, null, userLanguage); 
 		}
 
 		(new UserListRequestHandler(req, resp, session, output, uid)).handleRequest(); 

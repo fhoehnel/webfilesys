@@ -1,0 +1,12 @@
+Welcome,
+
+new user $USERNAME to WebFileSys.
+Thank you for your registration.
+
+Your login: $LOGIN
+
+To complete the activation of your account click on the following activation link within the next 5 days:
+
+$ACTIVATIONLINK
+
+Your WebFileSys admin team

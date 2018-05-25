@@ -22,6 +22,7 @@ import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.user.TransientUser;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.UserMgmtException;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -185,6 +186,9 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 
 		newUser.setDiskQuota(WebFileSys.getInstance().getDefaultDiskQuota());
 
+        newUser.setActivationCode(CommonUtils.generateAccessCode());
+        newUser.setActivationCodeExpiration(System.currentTimeMillis() + UserManager.ACTIVATION_CODE_EXPIRATION);
+		
 		try {
 			userMgr.createUser(newUser);
 		} catch (UserMgmtException ex) {
@@ -194,20 +198,42 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 			return;
 		}
 
-		Logger.getLogger(getClass()).info(req.getRemoteAddr() + ": new user " + login + " registered");
-
-		if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyRegister())
-		{
-			ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
-            
-			(new SmtpEmail(adminUserEmailList, "new user self-registration",
-					   WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + req.getRemoteAddr() + ": new user " + login + " registered")).send();
+		if (Logger.getLogger(getClass()).isInfoEnabled()) {
+			Logger.getLogger(getClass()).info(req.getRemoteAddr() + ": new user " + login + " registered (not activated)");
 		}
 
-		if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyWelcome())
-		{
-			EmailUtils.sendWelcomeMail(email, newUser.getFirstName(), newUser.getLastName(), login, password, userLanguage); 
-		}
+		
+        if (WebFileSys.getInstance().getMailHost() != null) {
+    		if (WebFileSys.getInstance().isMailNotifyRegister()) {
+    			ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
+                
+    			(new SmtpEmail(adminUserEmailList, "new user self-registration",
+    					   WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + req.getRemoteAddr() + ": new user " + login + " registered")).send();
+    		}
+
+            StringBuffer activationLink = new StringBuffer();
+
+            if (req.getScheme().toLowerCase().startsWith("https")) {
+                activationLink.append("https://");
+            } else {
+                activationLink.append("http://");
+            }
+
+            if (WebFileSys.getInstance().getServerDNS() != null) {
+                activationLink.append(WebFileSys.getInstance().getServerDNS());
+            } else {
+                activationLink.append(WebFileSys.getInstance().getLocalIPAddress());
+            }
+
+            activationLink.append(":");
+            activationLink.append(req.getServerPort());
+
+            activationLink.append(req.getContextPath());
+            activationLink.append("/servlet?command=activateUser&code=");
+            activationLink.append(newUser.getActivationCode());
+
+            EmailUtils.sendWelcomeMail(email, newUser.getFirstName(), newUser.getLastName(), login, null, activationLink.toString(), userLanguage);
+        }
 
 		if (session != null)
 		{
@@ -216,15 +242,22 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 	    	session.invalidate();
 		}
         
-		output.println("<HTML>");
-		output.println("<HEAD>");
+        Element rootElement = doc.createElement("registration");
 
-		javascriptAlert(langMgr.getResource(userLanguage, "alert.regsuccess", "New user has been registered successfully.")); 
+        doc.appendChild(rootElement);
 
-		output.println("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=/webfilesys/servlet\">");
+        ProcessingInstruction xslRef = doc
+                        .createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"" + req.getContextPath() + "/xsl/registrationConfirmation.xsl\"");
 
-		output.println("</HEAD></HTML>");
-		output.flush();
+        doc.insertBefore(xslRef, rootElement);
+
+        XmlUtil.setChildText(rootElement, "language", userLanguage, false);
+
+        if (WebFileSys.getInstance().getMailHost() == null) {
+            XmlUtil.setChildText(rootElement, "activationByAdminRequired", "true", false);
+        }
+        
+        processResponse("registrationConfirmation.xsl", false);
 	}
 	  
 	protected void selfRegistrationForm(HttpServletRequest req, HttpSession session)

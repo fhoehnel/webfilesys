@@ -86,6 +86,21 @@ div.loginBox {
     box-shadow: 5px 5px 5px #666666;
 }
 
+div.registrationBox {
+    width: 520px;
+    height: 400px;
+    position: relative;
+    top: -200px;
+    left: -260px;
+    background-color: #ffffe0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px #666666;
+    padding: 20px;
+}
+
 div.msgBox {
     width: 260px;
     height: 100px;
@@ -196,6 +211,13 @@ td.loginTitle {
 span.selfRegistrationSubTitle {
     color: #808080;
     font-size: 15px;
+}
+
+td.registrationConfirmation {
+    padding: 20px;
+    font-size: 15px;
+    color: #404040;
+    vertical-align: top;
 }
 
 td.loginFormLabel {
