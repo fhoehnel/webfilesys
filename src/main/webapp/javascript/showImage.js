@@ -40,10 +40,10 @@
             windowHeight;
             if (xRatio > yRatio) {
                 windowWidth = screenWidth - 20;
-                windowHeight = windowWidth * picRealHeight / picRealWidth;
+                windowHeight = Math.round(windowWidth * picRealHeight / picRealWidth);
             } else {
                 windowHeight = screenHeight - 80;
-                windowWidth = windowHeight * picRealWidth / picRealHeight;
+                windowWidth = Math.round(windowHeight * picRealWidth / picRealHeight);
             }
             resizeViewPort(windowWidth + 2, windowHeight + 2);
         }
