@@ -19,6 +19,7 @@
     }
 
     function scaleImage(picRealWidth, picRealHeight) {
+    	
         var screenWidth = screen.availWidth;
         var screenHeight = screen.availHeight;
         
@@ -29,7 +30,9 @@
         var browserHeightForRealSize = picRealHeight + 80;
                
         var pic = document.getElementById("picFullScreen");
-                
+              
+        var picScaled = false;
+        
         if ((browserWidthForRealSize <= screenWidth) && (browserHeightForRealSize <= screenHeight)) {
             resizeViewPort(picRealWidth + 1, picRealHeight + 1);
             pic.style.width = picRealWidth + "px";
@@ -50,11 +53,13 @@
                 pic.style.width = "auto";
             }
             resizeViewPort(imgDisplayWidth + 2, imgDisplayHeight + 2);
+
+            picScaled = true;
         }
         
         pic.style.visibility = "visible";
         
-        if ((windowWidth < picRealWidth) || (windowHeight < picRealHeight)) {
+        if (picScaled) {
             document.getElementById("origSizeOption").style.display = "inline";
         }
     }
