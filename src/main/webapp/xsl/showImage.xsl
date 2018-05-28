@@ -90,8 +90,6 @@
     
     <img id="picFullScreen" class="picFullScreen">
       <xsl:attribute name="src"><xsl:value-of select="/imageData/imageSource" /></xsl:attribute>
-      <xsl:attribute name="width">1</xsl:attribute>
-      <xsl:attribute name="height">1</xsl:attribute>
       <xsl:if test="/imageData/description">
         <xsl:attribute name="title"><xsl:value-of select="/imageData/description" /></xsl:attribute>
         <!--  
