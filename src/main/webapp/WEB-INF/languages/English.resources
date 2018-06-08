@@ -865,6 +865,7 @@ sync.foldersCreatedSource=folders created in source
 sync.copiedToTarget=files copied to target
 sync.copiedToSource=files copied to source
 sync.readWriteChanges=read/write access changed
+sync.wait=Determining differences between folder trees ...
 
 # compare folders
 label.selectCompSourceResult=Select compare from the context menu of the target folder!

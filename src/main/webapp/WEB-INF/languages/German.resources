@@ -868,6 +868,7 @@ sync.foldersCreatedSource=Unterordner im Quellordner angelegt
 sync.copiedToTarget=Dateien zum Zielordner kopiert
 sync.copiedToSource=Dateien zum Quellordner kopiert
 sync.readWriteChanges=Lese/Schreibrechte geändert
+sync.wait=Unterschiede zwischen den Ordnern werden ermittelt ...
 
 # compare folders
 label.selectCompSourceResult=Navigieren Sie zum Ziel-Ordner und wählen Sie Vergleichen im Kontext-Menü!

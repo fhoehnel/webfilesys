@@ -867,6 +867,7 @@ sync.foldersCreatedSource=carpetas creadas en carpeta orígen
 sync.copiedToTarget=archivos se han copiado a destino
 sync.copiedToSource=archivos se han copiado a orígen
 sync.readWriteChanges=estado Lectura/Escritura ha cambiado para unos archivos
+sync.wait=Determinando las diferencias entre los árboles de carpetas ...
 
 # compare folders
 label.selectCompSourceResult=¡Selecciona comparar en el menu contextual de la carpeta destino!
