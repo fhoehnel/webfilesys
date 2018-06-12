@@ -645,7 +645,7 @@ error.duplicateCategory=A Category with this name already exists!
 error.missingCategoryName=Enter a name for the new category!
 
 # filesystem bookmarks
-label.noBookmarksDefined=No bookmarks have been defined!
+label.noBookmarksDefined=You don't have any bookmarks yet.
 label.bookmarks=Bookmarked Folders
 label.deleteBookmark=Delete Bookmark
 label.addBookmark=bookmark this folder

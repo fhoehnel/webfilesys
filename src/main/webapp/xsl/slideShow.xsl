@@ -75,14 +75,26 @@
       <xsl:attribute name="onClick">stopAndGo()</xsl:attribute>
     </xsl:if>
 
-    <img id="slideShowImg0" class="slideshowImg thumb" style="opacity:1">
+    <img id="slideShowImg0" style="opacity:1">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
       <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
+      <xsl:if test="/slideShow/autoForward='true'">
+        <xsl:attribute name="class">slideshowImg thumb</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="/slideShow/autoForward='false'">
+        <xsl:attribute name="class">slideshowImg thumb slideshowNextPointer</xsl:attribute>
+      </xsl:if>
     </img>
 
-    <img id="slideShowImg1" class="slideshowImg thumb" style="opacity:0">
+    <img id="slideShowImg1" style="opacity:0">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
       <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
+      <xsl:if test="/slideShow/autoForward='true'">
+        <xsl:attribute name="class">slideshowImg thumb</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="/slideShow/autoForward='false'">
+        <xsl:attribute name="class">slideshowImg thumb slideshowNextPointer</xsl:attribute>
+      </xsl:if>
     </img>
       
   </div>

@@ -910,6 +910,9 @@ div.slideshowCont {
 
 img.slideshowImg {
     position: absolute;
+}
+
+img.slideshowNextPointer {
     cursor: url('../images/arrow-right.png'), auto;
 }
 
@@ -2002,6 +2005,13 @@ li.selectedFile {
 
 #selectedFilesSize {
 	color: navy;
+}
+
+form.userData input[type="text"], 
+form.userData input[type="email"], 
+form.userData input[type="password"], 
+form.userData select {
+    width: 240px;
 }
 
 @media (max-width: 400px) {
