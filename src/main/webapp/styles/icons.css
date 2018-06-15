@@ -137,6 +137,10 @@ a.icon-font {
 	content: '\f08b';
 }
 
+.icon-cancel:before {
+	content: '\f057';
+}
+
 .icon-close:before {
 	content: '\f00d';
 }
@@ -221,5 +225,11 @@ a.icon-darkgrey:before {
 	padding: 4px 2px 0 2px;
 	background-color: #e0e0e0;
 	cursor: pointer;
+}
+
+.icon-cancel-slideshow:before {
+	color: #a00000;
+	margin: 0 5px;
+	font-size: 22px;
 }
 
