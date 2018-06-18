@@ -101,11 +101,17 @@
     <div class="pictureAlbumCont">
 
       <div class="pictureAlbumHeadline">
-        <span resource="label.albumTitle"></span>
-        :
-        <span>
-          <xsl:value-of select="pictureAlbum/userid" />
-        </span>
+        <xsl:if test="pictureAlbum/description">
+          <xsl:value-of select="pictureAlbum/description" disable-output-escaping="yes" />
+        </xsl:if>
+
+        <xsl:if test="not(pictureAlbum/description)">
+          <span resource="label.albumTitle"></span>
+          :
+          <span>
+            <xsl:value-of select="pictureAlbum/userid" />
+          </span>
+        </xsl:if>
       </div>
 
       <div class="infoIcon">
@@ -127,12 +133,6 @@
       <xsl:for-each select="pictureAlbum">
         <xsl:call-template name="sortAndPaging" />
       </xsl:for-each>
-      
-      <xsl:if test="pictureAlbum/description">
-        <div id="albumDescription" class="albumDescription">
-          <xsl:value-of select="pictureAlbum/description" disable-output-escaping="yes" />
-        </div>
-      </xsl:if>
 
       <table width="100%">
       

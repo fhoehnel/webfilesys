@@ -58,7 +58,7 @@ div.pictureAlbumCont {
 }
 
 div.pictureAlbumHeadline {
-    color: #000060;
+    color: ivory;
     font-size: 1.364rem;
     text-align: center;
 }
@@ -565,7 +565,7 @@ div.slideshowCurrentPicNum {
 }
 
 div.slideShowHeadline {
-    color: #000060;
+    color: ivory;
     font-size: 1.25rem;
     text-align: center;
 }
