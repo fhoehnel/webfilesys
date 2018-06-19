@@ -13,6 +13,8 @@ import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 
 import javax.security.auth.x500.X500Principal;
@@ -68,13 +70,21 @@ public class KeyStoreViewHandler implements ViewHandler {
 		        if (aliases.hasMoreElements()) {
 		        	output.println("<table style=\"border:1px solid #a0a0a0;font-family:Arial,Helvetica;font-size:16px;border-collapse:collapse\">");
 		        	empty = false;
-		        	
 		        }
 
+                ArrayList<String> sortList = new ArrayList<String>();
+                
+		        while (aliases.hasMoreElements()) {
+		            sortList.add(aliases.nextElement());
+		        }
+		        
+		        if (sortList.size() > 1) {
+		        	Collections.sort(sortList);
+		        }
+		        
 		        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		        
-		        while (aliases.hasMoreElements()) {
-		        	String alias = aliases.nextElement();
+		        for (String alias : sortList) {
 		        	output.println("<tr style=\"background-color:lavender\"><td>alias:</td><td>" + alias + "</td></tr>");
 		        	
 		        	Certificate cert = keyStore.getCertificate(alias);
