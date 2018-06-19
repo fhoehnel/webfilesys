@@ -46,6 +46,15 @@
     </filePatternList>
   </viewHandler>
   
+  <!-- shows content of java keystore files -->
+  <viewHandler>
+    <class>de.webfilesys.viewhandler.KeyStoreViewHandler</class>
+    <filePatternList>
+      <filePattern>*.jks</filePattern>
+      <filePattern>*.keystore</filePattern>
+    </filePatternList>
+  </viewHandler>
+
   <!-- 
     This view handler for compiled Java class files requires the JAD decompiler.
     It works only on Windows and only for Java classes that do not use Java 1.5 or higher version language constructs.
