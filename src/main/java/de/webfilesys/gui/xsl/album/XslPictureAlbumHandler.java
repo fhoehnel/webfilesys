@@ -220,7 +220,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase {
 
         currentPathElem.appendChild(partOfPathElem);
 
-        partOfPathElem.setAttribute("name", uid);
+        partOfPathElem.setAttribute("name", "home");
 
         partOfPathElem.setAttribute("path", File.separator);
 
