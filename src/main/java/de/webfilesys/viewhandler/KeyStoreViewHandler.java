@@ -8,6 +8,8 @@ import java.security.cert.Certificate;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableEntryException;
+import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateExpiredException;
 import java.security.cert.CertificateNotYetValidException;
@@ -87,9 +89,33 @@ public class KeyStoreViewHandler implements ViewHandler {
 		        for (String alias : sortList) {
 		        	output.println("<tr style=\"background-color:lavender\"><td>alias:</td><td>" + alias + "</td></tr>");
 		        	
+		        	KeyStore.Entry entry = null;
+		        	
+                    try {
+    		        	entry = keyStore.getEntry(alias, null);
+                    } catch (UnrecoverableKeyException ukEx) {
+    		        	try {
+    		        		entry = keyStore.getEntry(alias,  new KeyStore.PasswordProtection(keyStorePassword.toCharArray()));
+    		        	} catch (Exception ex) {
+    		        		LOG.warn("failed to determine type of keystore entry", ex);
+    		        	}
+                    }
+		        	
+		        	String entryType = "unknown";
+		        	if (entry != null) {
+			        	if (entry instanceof KeyStore.PrivateKeyEntry) {
+			        		entryType = "private key";
+			        	} else if (entry instanceof KeyStore.SecretKeyEntry) {
+			        		entryType = "secret key";
+			        	} else if (entry instanceof KeyStore.TrustedCertificateEntry) {
+			        		entryType = "trusted certificate";
+			        	}
+		        	}
+		        	output.println("<tr style=\"background-color:ivory\"><td style=\"white-space:nowrap\">entry type:</td><td>" + entryType + "</td></tr>");
+		        	
 		        	Certificate cert = keyStore.getCertificate(alias);
 		        	
-		        	output.println("<tr style=\"background-color:ivory\"><td>type:</td><td>" + cert.getType() + "</td></tr>");
+		        	output.println("<tr style=\"background-color:ivory\"><td style=\"white-space:nowrap\">certificate type:</td><td>" + cert.getType() + "</td></tr>");
 
 		        	if (cert instanceof X509Certificate) {
 		        		X509Certificate x509Cert = (X509Certificate) cert;
@@ -137,6 +163,9 @@ public class KeyStoreViewHandler implements ViewHandler {
 		    } catch (IOException ioEx) {
 		    	LOG.warn("failed to load keystore " + filePath, ioEx);
 		    	output.println("failed to load keystore: " + ioEx);
+			} catch (UnrecoverableEntryException ueEx) {
+		    	LOG.warn("failed to load keystore " + filePath, ueEx);
+		    	output.println("failed to load keystore: " + ueEx);
 			} finally {
 		        if (fis != null) {
 		        	try {
