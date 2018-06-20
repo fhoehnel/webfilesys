@@ -55,6 +55,16 @@
     </filePatternList>
   </viewHandler>
 
+  <!-- shows content of certificate files -->
+  <viewHandler>
+    <class>de.webfilesys.viewhandler.CertificateFileViewHandler</class>
+    <filePatternList>
+      <filePattern>*.crt</filePattern>
+      <filePattern>*.cert</filePattern>
+      <filePattern>*.pem</filePattern>
+    </filePatternList>
+  </viewHandler>
+
   <!-- 
     This view handler for compiled Java class files requires the JAD decompiler.
     It works only on Windows and only for Java classes that do not use Java 1.5 or higher version language constructs.

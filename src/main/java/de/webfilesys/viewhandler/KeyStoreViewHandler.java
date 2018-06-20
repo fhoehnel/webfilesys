@@ -53,6 +53,7 @@ public class KeyStoreViewHandler implements ViewHandler {
 			output.println("<html>");
 			output.println("<head>");
 			output.println("<title>WebFileSys KeyStore viewer</title>");
+			output.println("<style>td {padding:2px 6px}</style>");
 			output.println("</head>");
 			output.println("<body>");
 
