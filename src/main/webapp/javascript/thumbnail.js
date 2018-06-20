@@ -722,6 +722,8 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                 	if (thumbContElem) {
                 	    thumbContElem.id = "thumbCont-" + newFileName;
                 	}
+                } else {
+                	customAlert(oldFileName + " " + resourceBundle["error.renameFailed"] + " " + newFileName);
                 }			    
             } else {
                 alert(resourceBundle["alert.communicationFailure"]);

@@ -69,7 +69,7 @@
       <td colspan="2">
 	  
         <input type="button" resource="button.sendfile" style="float:left">
-          <xsl:attribute name="onclick">javascript:if (validateEmailList(document.emailForm.receiver.value)) {sendFileViaEmail(); hidePrompt(); showHourGlass();} else {alert('<xsl:value-of select="/emailFile/resources/msg[@key='alert.emailsyntax']/@value" />');}</xsl:attribute>
+          <xsl:attribute name="onclick">javascript:if (validateEmailList(document.emailForm.receiver.value)) {sendFileViaEmail(); hidePrompt(); showHourGlass();} else {alert(resourceBundle["alert.emailsyntax"]);}</xsl:attribute>
         </input> 
 	  
         <input type="button" resource="button.cancel" style="float:right">

@@ -57,14 +57,6 @@ public class XslCloneFilePromptHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(cloneFileElement, "shortFileName", CommonUtils.shortName(sourceFileName, 36), false);
 		
-		addMsgResource("label.cloneFile", getResource("label.cloneFile", "Clone File"));
-		addMsgResource("label.cloneSource", getResource("label.cloneSource", "source file"));
-		addMsgResource("label.newname", getResource("label.newname","new name"));
-		addMsgResource("button.clone", getResource("button.clone","Create Clone"));
-		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
-		addMsgResource("alert.destEqualsSource", getResource("alert.destEqualsSource", "The new file name must be different!"));
-		addMsgResource("alert.illegalCharInFilename", getResource("alert.illegalCharInFilename", "The new file name contains illegal characters."));
-
 		resp.setContentType("text/xml");
 		
 		BufferedWriter xmlOutFile = new BufferedWriter(output);

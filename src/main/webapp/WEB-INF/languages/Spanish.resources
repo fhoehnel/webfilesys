@@ -363,6 +363,7 @@ datePickerFormat=dd-mm-yy
 
 # copy/rename/move labels and buttons
 label.copymovehead=Copiar/Cambiar nombre/Mover
+label.renameFolderHead=cambiar nombre de carpeta
 label.destfile=nombre de archivo de destino
 label.destdir=carpeta de destino
 label.sourcepath=ruta de orígen

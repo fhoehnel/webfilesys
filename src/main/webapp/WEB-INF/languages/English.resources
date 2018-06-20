@@ -363,6 +363,7 @@ datePickerFormat=mm/dd/yy
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Copy/Rename/Move
+label.renameFolderHead=rename folder
 label.destfile=destination filename
 label.destdir=destination directory
 label.sourcepath=source path

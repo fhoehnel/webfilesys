@@ -81,13 +81,6 @@ public class XslCreateFilePromptHandler extends XslRequestHandlerBase
 		
 		XmlUtil.setChildText(createFileElement, "baseFolderShort", shortPath, false);
 		
-		addMsgResource("label.createfile", getResource("label.createfile", "create new empty file"));
-		addMsgResource("label.directory", getResource("label.directory","folder"));
-		addMsgResource("label.newFileName", getResource("label.newFileName","name of new file"));
-		addMsgResource("alert.illegalCharInFilename", getResource("alert.illegalCharInFilename", "The new file name contains illegal characters."));
-		addMsgResource("button.create", getResource("button.create","Create"));
-		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
-
 		resp.setContentType("text/xml");
 		
 		BufferedWriter xmlOutFile = new BufferedWriter(output);

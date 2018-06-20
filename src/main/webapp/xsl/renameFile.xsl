@@ -43,7 +43,7 @@
       <td colspan="2">
 	  
         <input type="button" resource="button.rename" style="float:left">
-          <xsl:attribute name="onclick">javascript:validateNewFileName('<xsl:value-of select="/renameFile/oldFileNameForScript" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.destEqualsSource']/@value" />', '<xsl:value-of select="/renameFile/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
+          <xsl:attribute name="onclick">javascript:validateNewFileName('<xsl:value-of select="/renameFile/oldFileNameForScript" />', resourceBundle["alert.destEqualsSource"], resourceBundle["alert.illegalCharInFilename"])</xsl:attribute>
         </input> 
 	  
         <input type="button" resource="button.cancel" style="float:right">

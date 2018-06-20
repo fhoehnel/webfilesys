@@ -220,8 +220,8 @@ sort.voteValue=sortieren nach Bewertung
 
 # create file/subdir labels
 label.parentDir=Basis-Ordner
-label.newDirName=Neuer Ordnername
-label.newFileName=Neuer Dateiname
+label.newDirName=neuer Ordnername
+label.newFileName=neuer Dateiname
 
 # upload parameter window labels
 label.uploadfile=Datei-Upload
@@ -363,6 +363,7 @@ datePickerFormat=dd.mm.yy
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Kopieren/Umbenennen/Verschieben
+label.renameFolderHead=Ordner umbenennen
 label.destfile=Ziel-Datei
 label.destdir=Ziel-Ordner
 label.sourcepath=Quell-Pfad

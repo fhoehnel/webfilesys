@@ -41,7 +41,7 @@
       <td>
 	  
         <input type="button" resource="button.create" style="float:left">
-          <xsl:attribute name="onclick">javascript:validateCreateFileName('<xsl:value-of select="/createFile/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
+          <xsl:attribute name="onclick">javascript:validateCreateFileName(resourceBundle["alert.illegalCharInFilename"])</xsl:attribute>
         </input> 
 
         <input type="button" resource="button.cancel" style="float:right">

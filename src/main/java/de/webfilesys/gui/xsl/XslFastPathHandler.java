@@ -54,7 +54,7 @@ public class XslFastPathHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(fastPathElement, "css", userMgr.getCSS(uid), false);
 
-		addMsgResource("label.fastpath", getResource("label.fastpath", "Fast Path (last visited directories)"));
+	    XmlUtil.setChildText(fastPathElement, "language", language, false);
 		
 		int docRootTokenCount = getDocRootTokenCount();
 		

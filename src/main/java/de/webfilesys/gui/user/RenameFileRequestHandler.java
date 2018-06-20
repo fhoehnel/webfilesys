@@ -90,9 +90,9 @@ public class RenameFileRequestHandler extends UserRequestHandler
 			output.println("<head>");
 			output.println("<script language=\"javascript\">");
 
-			String errorMsg=insertDoubleBackslash(oldFilePath) + "\\n" 
+			String errorMsg=insertDoubleBackslash(oldFileName) + "\\n" 
 							+ getResource("error.renameFailed","could not be renamed to")
-							+ "\\n" + insertDoubleBackslash(newFilePath);
+							+ "\\n" + insertDoubleBackslash(newFileName);
 
 			output.println("alert('" + errorMsg + "');");
 			

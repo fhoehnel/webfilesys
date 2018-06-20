@@ -6,7 +6,6 @@
 
 <xsl:strip-space elements="folderTree folder" />
 
-<!-- root node-->
 <xsl:template match="/">
 
 <html>
@@ -24,14 +23,25 @@
     img {vertical-align:bottom;}
   </style>
 
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/folderTree/language" /></xsl:attribute>
+  </script>
+
 </head>
 
 <body>
-<xsl:attribute name="class">dirTree</xsl:attribute>
+  <xsl:attribute name="class">dirTree</xsl:attribute>
 
-<xsl:apply-templates />
+  <xsl:apply-templates />
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
+
 </html>
 
 
@@ -44,7 +54,7 @@
   <img src="images/fastpath.gif" border="0" width="19" height="14" />
   <img src="images/space.gif" border="0" width="4" height="1" />
   <a class="dirtree">
-    <xsl:value-of select="resources/msg[@key='label.fastpath']/@value" />
+    <span resource="label.fastpath"></span>
   </a>
   
   <xsl:for-each select="folder">
