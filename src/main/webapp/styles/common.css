@@ -1133,8 +1133,8 @@ a.button:active span
 } 
 
 td.statsBarGraph {
-    font-size:8pt;
-    color:navy;
+    font-size: 14px;
+    color: navy;
 }
 
 .logFatal {

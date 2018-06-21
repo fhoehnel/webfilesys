@@ -22,7 +22,12 @@
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/treeStats/css" />.css</xsl:attribute>
 </link>
 
+<script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/treeStats/language" /></xsl:attribute>
+</script>
 
 <script type="text/javascript">
 
@@ -116,6 +121,7 @@
              else
              {
                  document.getElementById('inProgressIcon').src = '/webfilesys/images/space.gif';
+                 document.getElementById('inProgressIcon').style.height = "1px";
              
                  prepareDiagram();
              }            
@@ -182,9 +188,14 @@
 
 <body onload="getSubfolderStats()">
 
-<xsl:apply-templates />
+  <xsl:apply-templates />
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
+
 </html>
 
 </xsl:template>
@@ -204,10 +215,10 @@
   
   <table class="dataForm" border="0" width="100%">
     <tr>
-      <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/treeStats/resources/msg[@key='label.subdirs']/@value" />:
+      <td class="formParm1" style="white-space:nowrap">
+        <span resource="label.subdirs"></span>
       </td>
-      <td id="treeFolders" class="formParm2" align="right" nowrap="nowrap">
+      <td id="treeFolders" class="formParm2" style="text-align:right;white-space:nowrap">
         <xsl:value-of select="subdirNum" />
       </td>
 
@@ -215,20 +226,20 @@
         &#160;
       </td>
 
-      <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/treeStats/resources/msg[@key='label.subdirlevels']/@value" />:
+      <td class="formParm1" style="white-space:nowrap">
+        <span resource="label.subdirlevels"></span>
       </td>
-      <td id="subdirLevels" class="formParm2" align="right" nowrap="nowrap">
+      <td id="subdirLevels" class="formParm2" style="text-align:right;white-space:nowrap">
         <xsl:if test="/treeStats/folders/folder">1</xsl:if>
         <xsl:if test="not(/treeStats/folders/folder)">0</xsl:if>
       </td>
     </tr>
 
     <tr>
-      <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/treeStats/resources/msg[@key='label.firstlevelfiles']/@value" />:
+      <td class="formParm1" style="white-space:nowrap">
+        <span resource="label.firstlevelfiles"></span>
       </td>
-      <td class="formParm2" align="right" nowrap="nowrap">
+      <td class="formParm2" style="text-align:right;white-space:nowrap">
         <xsl:value-of select="format-number(dirFiles,'#.###','decimalFormat')" />
       </td>
       
@@ -236,19 +247,19 @@
         <img id="inProgressIcon" src="images/hourglass.gif" border="0" width="32" height="32" />
       </td>
 
-      <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/treeStats/resources/msg[@key='label.firstlevelbytes']/@value" />:
+      <td class="formParm1" style="white-space:nowrap">
+        <span resource="label.firstlevelbytes"></span>
       </td>
-      <td class="formParm2" align="right" nowrap="nowrap">
+      <td class="formParm2" style="text-align:right;white-space:nowrap">
         <xsl:value-of select="format-number(dirBytes,'#.###','decimalFormat')" />
       </td>
     </tr>
 
     <tr>
-      <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/treeStats/resources/msg[@key='label.treefiles']/@value" />:
+      <td class="formParm1" style="white-space:nowrap">
+        <span resource="label.treefiles"></span>
       </td>
-      <td id="treeFiles" class="formParm2" align="right" nowrap="nowrap">
+      <td id="treeFiles" class="formParm2" style="text-align:right;white-space:nowrap">
         <xsl:value-of select="format-number(dirFiles,'#.###','decimalFormat')" />
       </td>
 
@@ -256,10 +267,10 @@
         &#160;
       </td>
   
-      <td class="formParm1" nowrap="nowrap">
-        <xsl:value-of select="/treeStats/resources/msg[@key='label.treebytes']/@value" />:
+      <td class="formParm1" style="white-space:nowrap">
+        <span resource="label.treebytes"></span>
       </td>
-      <td id="treeBytes" class="formParm2" align="right" nowrap="nowrap">
+      <td id="treeBytes" class="formParm2" style="text-align:right;white-space:nowrap">
         <xsl:value-of select="format-number(dirBytes,'#.###','decimalFormat')" />
       </td>
     </tr>
@@ -267,27 +278,26 @@
   
   <br/>
   
-  <center> 
 
-  <table bgcolor="white" cellpadding="0" cellspacing="2" style="border-style:solid;border-color:#808080;border-width:1px;">
+  <table style="margin-left:auto;margin-right:auto;background-color:#ffffff;border-style:solid;border-color:#808080;border-width:1px;border-spacing:2px;">
 
   <xsl:for-each select="folders/folder">
   
     <tr>
-      <td bgcolor="white">
+      <td style="background-color:#ffffff;padding:0">
         <table border="0" cellpadding="0" cellspacing="0">
           <tr>
             <td>
-              <table border="0" cellpadding="0" cellspacing="0">
+              <table style="border-spacing:0;border:none">
                 <tr>
-                  <td height="20" class="statsBarGraph" style="width:1px;background-image:url(images/bar.gif);border-width:0px;padding-left:2px">
+                  <td class="statsBarGraph" style="height:20px;width:1px;background-image:url(images/bar.gif);border-width:0;margin-left:2px;padding:0">
                     <xsl:attribute name="id">bar-<xsl:value-of select="position()-1"/></xsl:attribute>
                     <div class="small" style="color:black;"><xsl:attribute name="id">largeSizeText-<xsl:value-of select="position()-1"/></xsl:attribute>&#160;</div>
                   </td>
                   
                   <td class="statsBarGraph" style="width:300px;" bgcolor="white">
                     <xsl:attribute name="id">notbar-<xsl:value-of select="position()-1"/></xsl:attribute>
-                    <div class="small" style="color:black;"><xsl:attribute name="id">smallSizeText-<xsl:value-of select="position()-1"/></xsl:attribute>&#160;?</div>
+                    <div style="color:black;"><xsl:attribute name="id">smallSizeText-<xsl:value-of select="position()-1"/></xsl:attribute>&#160;?</div>
                   </td>
                 </tr>
               </table>
@@ -317,22 +327,11 @@
   
   </table>
   
-  <br/>
-  
-  <table border="0" width="100%">
-    <tr>
-      <td width="40%">&#160;</td>
-      <td nowrap="nowrap" style="padding:10px">
-        <a class="button" href="#"> 
-          <xsl:attribute name="onclick">this.blur();self.close();</xsl:attribute>
-          <span><xsl:value-of select="/treeStats/resources/msg[@key='button.closewin']/@value" /></span>
-        </a>
-      </td>
-      <td width="40%">&#160;</td>
-    </tr>
-  </table>
-   
-  </center>  
+  <div style="margin-left:auto;margin-right:auto;margin-top:16px;width:100px;">
+    <input type="button" resource="button.closewin">
+      <xsl:attribute name="onclick">this.blur();self.close();</xsl:attribute>
+    </input>
+  </div>
   
 </xsl:template>
 
