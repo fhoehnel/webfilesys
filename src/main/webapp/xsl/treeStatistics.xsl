@@ -17,6 +17,7 @@
 <meta http-equiv="expires" content="0" />
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/statistics.css" />
 
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/treeStats/css" />.css</xsl:attribute>
@@ -24,6 +25,7 @@
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
   <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/treeStats/language" /></xsl:attribute>
@@ -54,11 +56,11 @@
     folderNum++;
   </xsl:for-each>
 
-  function getSubfolderStats()
-  {
-      if (folderNum == 0)
-      {
+  function getSubfolderStats() {
+  
+      if (folderNum == 0) {
           document.getElementById('inProgressIcon').src = '/webfilesys/images/space.gif';
+          document.getElementById('inProgressIcon').style.height = "1px";
           return;
       }
       
@@ -69,119 +71,83 @@
       xmlRequest(url, handleStatsResult);
   }
   
-  function handleStatsResult(req)
-  {
-      if (req.readyState == 4)
-      {
-          if (req.status == 200)
-          {
-             var item = req.responseXML.getElementsByTagName("bytesInTree")[0];            
-             var bytesInTree = item.firstChild.nodeValue;
+  function handleStatsResult(req) {
+      if (req.readyState == 4) {
+          if (req.status == 200) {
+              var item = req.responseXML.getElementsByTagName("bytesInTree")[0];            
+              var bytesInTree = item.firstChild.nodeValue;
 
-             item = req.responseXML.getElementsByTagName("foldersInTree")[0];            
-             var foldersInTree = item.firstChild.nodeValue;
+              item = req.responseXML.getElementsByTagName("foldersInTree")[0];            
+              var foldersInTree = item.firstChild.nodeValue;
 
-             item = req.responseXML.getElementsByTagName("filesInTree")[0];            
-             var filesInTree = item.firstChild.nodeValue;
+              item = req.responseXML.getElementsByTagName("filesInTree")[0];            
+              var filesInTree = item.firstChild.nodeValue;
 
-             item = req.responseXML.getElementsByTagName("subdirLevels")[0];            
-             var subdirLevels = item.firstChild.nodeValue;
+              item = req.responseXML.getElementsByTagName("subdirLevels")[0];            
+              var subdirLevels = item.firstChild.nodeValue;
              
-             totalFileNum += parseInt(filesInTree);
-             totalSubFolderNum += parseInt(foldersInTree);
-             totalBytesInTree += parseInt(bytesInTree);
+              totalFileNum += parseInt(filesInTree);
+              totalSubFolderNum += parseInt(foldersInTree);
+              totalBytesInTree += parseInt(bytesInTree);
              
-             document.getElementById("treeFiles").innerHTML = formatNumber(totalFileNum);
-             document.getElementById("treeBytes").innerHTML = formatNumber(totalBytesInTree);
-             document.getElementById("treeFolders").innerHTML = formatNumber(totalSubFolderNum);
+              document.getElementById("treeFiles").innerHTML = formatDecimalNumber(totalFileNum);
+              document.getElementById("treeBytes").innerHTML = formatDecimalNumber(totalBytesInTree);
+              document.getElementById("treeFolders").innerHTML = formatDecimalNumber(totalSubFolderNum);
 
-             var treeDepth = parseInt(subdirLevels) + 1;
-             if (treeDepth > maxSubdirLevels)
-             {
-                 maxSubdirLevels = treeDepth;
-                 document.getElementById("subdirLevels").innerHTML = maxSubdirLevels;
-             }
+              var treeDepth = parseInt(subdirLevels) + 1;
+              if (treeDepth > maxSubdirLevels) {
+                  maxSubdirLevels = treeDepth;
+                  document.getElementById("subdirLevels").innerHTML = maxSubdirLevels;
+              }
              
-             var subdirSize = parseInt(bytesInTree);
+              var subdirSize = parseInt(bytesInTree);
              
-             sizeTextId = "smallSizeText-" + (folderIdx - 1);
-             document.getElementById(sizeTextId).innerHTML = '&amp;nbsp;' + formatNumber(subdirSize);
+              var sizeTextId = "bar-" + (folderIdx - 1);
+              document.getElementById(sizeTextId).innerHTML = formatDecimalNumber(subdirSize);
              
-             subTreeSize[folderIdx - 1] = subdirSize;
+              subTreeSize[folderIdx - 1] = subdirSize;
              
-             if (subdirSize &gt; maxSubTreeSize)
-             {
-                 maxSubTreeSize = subdirSize;
-             }
+              if (subdirSize &gt; maxSubTreeSize) {
+                  maxSubTreeSize = subdirSize;
+              }
 
-             if (folderIdx &lt; folderNum)
-             {
-                 setTimeout('getSubfolderStats()', 1);
-             } 
-             else
-             {
-                 document.getElementById('inProgressIcon').src = '/webfilesys/images/space.gif';
-                 document.getElementById('inProgressIcon').style.height = "1px";
+              if (folderIdx &lt; folderNum) {
+                  setTimeout('getSubfolderStats()', 1);
+              } else {
+                  document.getElementById('inProgressIcon').src = '/webfilesys/images/space.gif';
+                  document.getElementById('inProgressIcon').style.height = "1px";
              
-                 prepareDiagram();
-             }            
+                  paintDiagram();
+              }            
+          } else {
+              alert(resourceBundle["alert.communicationFailure"]);
           }
       }
   }
   
-  function prepareDiagram()
-  {
-      var i;
-  
-      for (i = 0; i &lt; folderNum; i++)
-      {
+  function paintDiagram() {
+      for (var i = 0; i &lt; folderNum; i++) {
           var sizePercent = subTreeSize[i] * 100 / maxSubTreeSize;
           
           var totalPercent = Math.round(subTreeSize[i] * 100 / totalBytesInTree);
           
-          var barWidth = sizePercent * 3;
+          var barWidth = sizePercent * 4;
+          
+          if (barWidth &lt; 2) {
+              barWidth = 2;
+          }
           
           var barId = "bar-" + i;
-          document.getElementById(barId).style.width = barWidth + "px";
+          document.getElementById(barId).style.backgroundSize = barWidth + "px" + " 20px";
           
-          var notBarWidth = 300 - barWidth;
-          
-          if (sizePercent &lt; 0.34)
-          {
-              notBarWidth -= 2;
+          if (sizePercent &lt; 50) {
+              document.getElementById(barId).style.paddingLeft = (barWidth + 4) + "px";
           }
           
-          var notbarId = "notbar-" + i;
-          document.getElementById(notbarId).style.width = notBarWidth + "px";
-
-          var smallSizeTextId = "smallSizeText-" + i;
-
-          if (sizePercent &gt; 40)
-          {
-              document.getElementById(smallSizeTextId).innerHTML = '&amp;nbsp;';
-              var sizeTextId = "largeSizeText-" + i;
-              document.getElementById(sizeTextId).innerHTML = '&amp;nbsp;' + formatNumber(subTreeSize[i]) + ' (' + totalPercent + ' %)';
-          }
-          else
-          {
-              document.getElementById(smallSizeTextId).innerHTML = '&amp;nbsp;' + formatNumber(subTreeSize[i]) + ' (' + totalPercent + ' %)';
-          }
+          document.getElementById(barId).innerHTML = formatDecimalNumber(subTreeSize[i]) + ' (' + totalPercent + ' %)';
       }
   }
   
-  function formatNumber(nStr)
-  {
-      nStr += '';
-      x = nStr.split('.');
-      x1 = x[0];
-      x2 = x.length > 1 ? '.' + x[1] : '';
-      var rgx = /(\d+)(\d{3})/;
-      while (rgx.test(x1)) {
-	  x1 = x1.replace(rgx, '$1' + '.' + '$2');
-      }
-      return x1 + x2;
-  }
-
 </script>
 
 </head>
@@ -203,17 +169,11 @@
 
 <xsl:template match="treeStats">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="shortPath" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline">
+    <xsl:value-of select="shortPath" />
+  </div>
   
-  <br />
-  
-  <table class="dataForm" border="0" width="100%">
+  <table class="dataForm" style="width:100%;margin-top:12px">
     <tr>
       <td class="formParm1" style="white-space:nowrap">
         <span resource="label.subdirs"></span>
@@ -222,7 +182,7 @@
         <xsl:value-of select="subdirNum" />
       </td>
 
-      <td width="80%" style="width:80%;min-width:15px;">
+      <td style="width:80%;min-width:15px;">
         &#160;
       </td>
 
@@ -240,10 +200,10 @@
         <span resource="label.firstlevelfiles"></span>
       </td>
       <td class="formParm2" style="text-align:right;white-space:nowrap">
-        <xsl:value-of select="format-number(dirFiles,'#.###','decimalFormat')" />
+        <xsl:value-of select="format-number(/treeStats/dirFiles,'#.###','decimalFormat')" />
       </td>
       
-      <td width="80%" style="text-align:center;vertical-align:center;">
+      <td style="text-align:center;vertical-align:center;">
         <img id="inProgressIcon" src="images/hourglass.gif" border="0" width="32" height="32" />
       </td>
 
@@ -251,7 +211,7 @@
         <span resource="label.firstlevelbytes"></span>
       </td>
       <td class="formParm2" style="text-align:right;white-space:nowrap">
-        <xsl:value-of select="format-number(dirBytes,'#.###','decimalFormat')" />
+        <xsl:value-of select="format-number(/treeStats/dirBytes,'#.###','decimalFormat')" />
       </td>
     </tr>
 
@@ -260,10 +220,10 @@
         <span resource="label.treefiles"></span>
       </td>
       <td id="treeFiles" class="formParm2" style="text-align:right;white-space:nowrap">
-        <xsl:value-of select="format-number(dirFiles,'#.###','decimalFormat')" />
+        <xsl:value-of select="format-number(/treeStats/dirFiles,'#.###','decimalFormat')" />
       </td>
 
-      <td width="80%" style="width:80%;min-width:15px;">
+      <td style="width:80%;min-width:15px;">
         &#160;
       </td>
   
@@ -271,65 +231,48 @@
         <span resource="label.treebytes"></span>
       </td>
       <td id="treeBytes" class="formParm2" style="text-align:right;white-space:nowrap">
-        <xsl:value-of select="format-number(dirBytes,'#.###','decimalFormat')" />
+        <xsl:value-of select="format-number(/treeStats/dirBytes,'#.###','decimalFormat')" />
       </td>
     </tr>
   </table>
   
-  <br/>
-  
+  <xsl:if test="folders/folder">
+    <table class="statsTable">
 
-  <table style="margin-left:auto;margin-right:auto;background-color:#ffffff;border-style:solid;border-color:#808080;border-width:1px;border-spacing:2px;">
-
-  <xsl:for-each select="folders/folder">
+      <xsl:for-each select="folders/folder">
   
-    <tr>
-      <td style="background-color:#ffffff;padding:0">
-        <table border="0" cellpadding="0" cellspacing="0">
-          <tr>
-            <td>
-              <table style="border-spacing:0;border:none">
-                <tr>
-                  <td class="statsBarGraph" style="height:20px;width:1px;background-image:url(images/bar.gif);border-width:0;margin-left:2px;padding:0">
-                    <xsl:attribute name="id">bar-<xsl:value-of select="position()-1"/></xsl:attribute>
-                    <div class="small" style="color:black;"><xsl:attribute name="id">largeSizeText-<xsl:value-of select="position()-1"/></xsl:attribute>&#160;</div>
-                  </td>
-                  
-                  <td class="statsBarGraph" style="width:300px;" bgcolor="white">
-                    <xsl:attribute name="id">notbar-<xsl:value-of select="position()-1"/></xsl:attribute>
-                    <div style="color:black;"><xsl:attribute name="id">smallSizeText-<xsl:value-of select="position()-1"/></xsl:attribute>&#160;?</div>
-                  </td>
-                </tr>
-              </table>
-            </td>
-            <td bgcolor="white"></td>
-            <td>
-              <a class="fn">
-                <xsl:attribute name="href">
-                  <xsl:value-of select="'/webfilesys/servlet?command=fileStatistics&amp;cmd=treeStats&amp;actpath='" />
-                  <xsl:value-of select="@path" />
-                </xsl:attribute>
-                <xsl:if test="@shortName">
-                  <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
-                  <xsl:value-of select="@shortName" />
-                </xsl:if>
-                <xsl:if test="not(@shortName)">
-                  <xsl:value-of select="@name" />
-                </xsl:if>
-              </a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
+        <tr>
+          <td class="statsBar">
+            <div class="statsBar">
+              <xsl:attribute name="id">bar-<xsl:value-of select="position()-1"/></xsl:attribute>
+            </div>
+          </td>
+           
+          <td>
+            <a class="statsFolderName">
+              <xsl:attribute name="href">
+                <xsl:value-of select="'/webfilesys/servlet?command=fileStatistics&amp;cmd=treeStats&amp;actpath='" />
+                <xsl:value-of select="@path" />
+              </xsl:attribute>
+              <xsl:if test="@shortName">
+                <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
+                <xsl:value-of select="@shortName" />
+              </xsl:if>
+              <xsl:if test="not(@shortName)">
+                <xsl:value-of select="@name" />
+              </xsl:if>
+            </a>
+          </td>
+        </tr>
   
-  </xsl:for-each>
+      </xsl:for-each>
   
-  </table>
+    </table>
+  </xsl:if>
   
   <div style="margin-left:auto;margin-right:auto;margin-top:16px;width:100px;">
     <input type="button" resource="button.closewin">
-      <xsl:attribute name="onclick">this.blur();self.close();</xsl:attribute>
+      <xsl:attribute name="onclick">self.close();</xsl:attribute>
     </input>
   </div>
   
