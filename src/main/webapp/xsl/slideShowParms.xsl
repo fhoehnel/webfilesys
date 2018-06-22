@@ -19,9 +19,13 @@
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/slideShowParms/css" />.css</xsl:attribute>
   </link>
 
-  <title><xsl:value-of select="resources/msg[@key='label.slideparmhead']/@value" /></title>
+  <title resource="label.slideparmhead"></title>
 
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/slideShowParms/language" /></xsl:attribute>
+  </script>
   
   <script type="text/javascript">
     function startShow() {
@@ -80,9 +84,7 @@
 
 <body>
 
-  <div class="headline">
-    <xsl:value-of select="resources/msg[@key='label.slideparmhead']/@value" />
-  </div>
+  <div class="headline" resource="label.slideparmhead"></div>
 
   <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet">
   
@@ -101,7 +103,7 @@
       
       <tr>
         <td colspan="2" class="formParm1">
-          <xsl:value-of select="resources/msg[@key='label.directory']/@value" />:
+          <span resource="label.directory"></span>
         </td>
       </tr>
      
@@ -114,7 +116,7 @@
       <xsl:if test="startFile">
         <tr>
           <td colspan="2" class="formParm1">
-            <xsl:value-of select="resources/msg[@key='label.startPic']/@value" />:
+            <span resource="label.startPic"></span>
           </td>
         </tr>
         <tr>
@@ -132,7 +134,7 @@
         <td colspan="2" class="formParm1">
           <input type="checkbox" class="cb3" name="recurse" />
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.recurse']/@value" />
+          <span resource="label.recurse"></span>
         </td>
       </tr>
      
@@ -140,14 +142,14 @@
         <td colspan="2" class="formParm1">
           <input type="checkbox" class="cb3" name="autoForward" checked="checked" />
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.autoForward']/@value" />
+          <span resource="label.autoForward"></span>
         </td>
       </tr>
      
       <tr>
         <td colspan="2" class="formParm1">
           <span style="padding-left:25px;">&#160;</span>
-          <xsl:value-of select="resources/msg[@key='label.delay']/@value" />
+          <span resource="label.delay"></span>
           &#160;
 
           <select name="delay" size="1">
@@ -168,7 +170,7 @@
         <td colspan="2" class="formParm1">
           <input type="checkbox" class="cb3" name="extraWin" onclick="setCrossfade(this);" />
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.fullScreen']/@value" />
+          <span resource="label.fullScreen"></span>
         </td>
       </tr>
      
@@ -176,7 +178,7 @@
         <td colspan="2" class="formParm1">
           <input id="crossfade" type="checkbox" class="cb3" name="fadeInOut" disabled="true" />
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.crossfade']/@value" />
+          <span resource="label.crossfade"></span>
         </td>
       </tr>
 
@@ -184,7 +186,7 @@
         <td colspan="2" class="formParm1">
           <input id="randomize" type="checkbox" class="cb3" name="randomize" />
           &#160;
-          <xsl:value-of select="resources/msg[@key='label.randomize']/@value" />
+          <span resource="label.randomize"></span>
         </td>
       </tr>
      
@@ -194,15 +196,11 @@
 
       <tr>
         <td class="formButton">
-          <input type="button" name="start" onclick="javascript:startShow();">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.startshow']/@value" /></xsl:attribute>
-          </input>
+          <input type="button" name="start" onclick="javascript:startShow();" resource="button.startshow"></input>
         </td>
        
         <td class="formButton" align="right">
-          <input type="button" name="cancel" onclick="window.location.href = '/webfilesys/servlet?command=listFiles';">
-            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
-          </input>
+          <input type="button" name="cancel" onclick="window.location.href = '/webfilesys/servlet?command=listFiles';" resource="button.cancel"></input>
         </td>
       </tr>
      
@@ -210,6 +208,10 @@
   </form>
   
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
 
 </html>
 
