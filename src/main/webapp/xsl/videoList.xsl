@@ -335,7 +335,7 @@
          
     </div>
 
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <table cellspacing="0" class="fileListButtonCont2">
 
       <tr>
         <td class="fileListButton sepTop">
