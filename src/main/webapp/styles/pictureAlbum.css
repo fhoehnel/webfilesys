@@ -58,7 +58,7 @@ div.pictureAlbumCont {
 }
 
 div.pictureAlbumHeadline {
-    color: #000060;
+    color: ivory;
     font-size: 1.364rem;
     text-align: center;
 }
@@ -138,14 +138,18 @@ textarea.pictureAlbum,
 div.albumTabActive {
     float: left;
     font-size: 1.25rem;
-    font-weight: bold;
     color: #FFFF80;
     margin-right: 16px;
+    background-color: #808080;
+    padding: 4px 6px;
+    border: 1px solid #ffff80;
+    border-radius: 8px;
 }
 
 div.albumTab {
     float: left;
     margin-right: 16px;
+    padding-top: 4px;
 }
 
 div.albumTabOptions {
@@ -232,7 +236,6 @@ div.albumPagingArrow {
 }
 
 div.pictureAlbumOptions {
-    float: left;
     margin-right: 40px;
     margin: 10px;
 }
@@ -314,6 +317,11 @@ div.infoIcon {
     right: 20px;
 }
 
+div.infoIcon a.icon-info:before {
+	font-size: 28px;
+	color: #FFFF80;
+}
+
 div.albumMapSelection {
     float: right;
 }
@@ -328,7 +336,7 @@ span.pictureAlbumPath {
 
 a.pictureAlbumPath {
     color: #000000;
-    font-size: 1rem;
+    font-size: 1.2rem;
     text-decoration: none;
 }
 
@@ -566,7 +574,7 @@ div.slideshowCurrentPicNum {
 }
 
 div.slideShowHeadline {
-    color: #000060;
+    color: ivory;
     font-size: 1.25rem;
     text-align: center;
 }

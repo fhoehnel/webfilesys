@@ -68,6 +68,7 @@ import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
 import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
+import de.webfilesys.gui.ajax.CheckUploadConflictHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.EditConvertVideoHandler;
@@ -133,6 +134,7 @@ import de.webfilesys.gui.anonymous.VisitorFileRequestHandler;
 import de.webfilesys.gui.google.GoogleEarthDirPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthFolderPlacemarkHandler;
 import de.webfilesys.gui.google.GoogleEarthSinglePlacemarkHandler;
+import de.webfilesys.gui.user.ActivateUserRequestHandler;
 import de.webfilesys.gui.user.AddCommentRequestHandler;
 import de.webfilesys.gui.user.CancelPublishRequestHandler;
 import de.webfilesys.gui.user.ClipboardPasteRequestHandler;
@@ -177,7 +179,6 @@ import de.webfilesys.gui.user.MultiZipRequestHandler;
 import de.webfilesys.gui.user.OpenStreetMapFilesPOIHandler;
 import de.webfilesys.gui.user.OpenStreetMapPOIHandler;
 import de.webfilesys.gui.user.PasteAsLinkRequestHandler;
-import de.webfilesys.gui.user.PictureStoryRequestHandler;
 import de.webfilesys.gui.user.PublishMailRequestHandler;
 import de.webfilesys.gui.user.PublishRequestHandler;
 import de.webfilesys.gui.user.RateVotingHandler;
@@ -249,6 +250,7 @@ import de.webfilesys.gui.xsl.XslMultiUploadHandler;
 import de.webfilesys.gui.xsl.XslOpenStreetMapFilesHandler;
 import de.webfilesys.gui.xsl.XslOpenStreetMapHandler;
 import de.webfilesys.gui.xsl.XslPictureStoryHandler;
+import de.webfilesys.gui.xsl.XslPictureStoryOwnWindowHandler;
 import de.webfilesys.gui.xsl.XslPublishFileHandler;
 import de.webfilesys.gui.xsl.XslPublishListHandler;
 import de.webfilesys.gui.xsl.XslRenameDirHandler;
@@ -589,6 +591,13 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
+        if (command.equals("visitorFile"))
+    	{
+		    (new VisitorFileRequestHandler(req, resp, null, output)).handleRequest(); 
+		    
+    		return(true);
+    	}
+        
         if (command.equals("login"))
     	{
     		verifyLogin(req, resp, output, requestIsLocal);
@@ -610,12 +619,11 @@ public class WebFileSysServlet extends ServletBase
     		return(true);
     	}
         
-        if (command.equals("visitorFile"))
-    	{
-		    (new VisitorFileRequestHandler(req, resp, null, output)).handleRequest(); 
-		    
-    		return(true);
-    	}
+        if (command.equals("activateUser")) {
+            (new ActivateUserRequestHandler(req, resp)).handleRequest();
+
+            return true;
+        }
         
         if (command.equals("blank"))
     	{
@@ -725,6 +733,7 @@ public class WebFileSysServlet extends ServletBase
 			} 
         	
         	if (viewMode == Constants.VIEW_MODE_STORY) {
+				req.setAttribute("initial", "true");
 			    (new XslPictureStoryHandler(req, resp, session, output, userid)).handleRequest(); 
 				return(true);
 			} 
@@ -762,7 +771,7 @@ public class WebFileSysServlet extends ServletBase
         
         if (command.equals("pictureStory"))
         {
-		    (new PictureStoryRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+		    (new XslPictureStoryOwnWindowHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }
@@ -1464,6 +1473,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("uploadStatus"))
         {
 			(new XmlUploadStatusHandler(req, resp, session, output, userid)).handleRequest();
+			
+            return(true);
+        }
+        
+        if (command.equals("checkUploadConflict"))
+        {
+			(new CheckUploadConflictHandler(req, resp, session, output, userid)).handleRequest();
 			
             return(true);
         }

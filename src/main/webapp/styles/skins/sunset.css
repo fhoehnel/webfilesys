@@ -82,6 +82,10 @@ th.fileListHead {
     background-color: #d0d0d0;
 }
 
+table.fileListButtonCont2 {
+    background-color: #ffd060;
+}
+
 div.searchPath
 {
     background-color: ivory;

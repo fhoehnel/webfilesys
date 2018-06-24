@@ -6,7 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead" resource="label.renamedir"></div>
+<div class="promptHead" resource="label.renameFolderHead"></div>
     
 <form accept-charset="utf-8" name="mkdirForm" id="mkdirForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="renameDir" />
@@ -42,7 +42,7 @@
     <tr>
       <td>
         <input type="button" resource="button.rename" style="float:left">
-          <xsl:attribute name="onclick">javascript:validateNewFolderName('<xsl:value-of select="/renameFolder/resources/msg[@key='alert.illegalCharInFilename']/@value" />')</xsl:attribute>
+          <xsl:attribute name="onclick">javascript:validateNewFolderName(resourceBundle["alert.illegalCharInFilename"])</xsl:attribute>
         </input> 
 	  
         <input type="button" resource="button.cancel" style="float:right">

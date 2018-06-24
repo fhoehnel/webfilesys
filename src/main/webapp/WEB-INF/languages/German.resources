@@ -220,8 +220,8 @@ sort.voteValue=sortieren nach Bewertung
 
 # create file/subdir labels
 label.parentDir=Basis-Ordner
-label.newDirName=Neuer Ordnername
-label.newFileName=Neuer Dateiname
+label.newDirName=neuer Ordnername
+label.newFileName=neuer Dateiname
 
 # upload parameter window labels
 label.uploadfile=Datei-Upload
@@ -234,8 +234,8 @@ label.xfertext=text
 button.startUpload=Upload starten
 hint.upload.multizip=Mehrere Dateien oder ein ganzer Directory-Baum kann in Form eines ZIP-Archives hochgeladen werden, welches automatisch entpackt wird.
 label.upload.unzip=nach Upload ZIP Archiv entpacken
-link.multiUpload=Erweiterter Upload
-headline.multiUpload=Erweiterter Upload
+link.multiUpload=Upload mehrere Dateien
+headline.multiUpload=Upload mehrere Dateien
 upload.selected.pictures=Bilder selektiert für Upload
 upload.dropZone=Drag and drop Dateien für Upload hier!
 upload.lastSent=zuletzt hochgeladene Datei
@@ -248,6 +248,8 @@ upload.file.exists=eine Datei mit diesem Namen existiert bereits - überschreiben
 uploadTargetFileNameExt=Die Dateinamen-Erweiterung der lokalen Datei wird auch für den Dateinamen auf dem Server verwendet. Fortfahren?
 upload.total.status=Gesamt-Status
 upload.error=Fehler beim Upload der Datei
+upload.conflictHead=Die folgenden Dateien existieren bereits im Zielordner
+upload.overwrite=Überschreiben?
 
 # switch Read/Only labels
 label.readWriteStatus=Schreibschutz-Status
@@ -361,6 +363,7 @@ datePickerFormat=dd.mm.yy
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Kopieren/Umbenennen/Verschieben
+label.renameFolderHead=Ordner umbenennen
 label.destfile=Ziel-Datei
 label.destdir=Ziel-Ordner
 label.sourcepath=Quell-Pfad
@@ -400,9 +403,15 @@ label.copyfromclip=Kopiere Dateien
 label.movefromclip=Verschiebe Dateien
 label.copyresult=Dateien kopiert
 label.moveresult=Dateien verschoben
+bytesCopied=Bytes kopiert
+bytesMoved=Bytes verschoben
 morePasteConflicts=... weitere
 pasteConflictHead=Die folgenden Dateien existieren bereits im Zielordner
+pasteConflictHeadFolder=Der folgende Unterordner existiert bereits im Zielordner
 pasteOverwrite=Überschreiben?
+destFolderFileConflict=Der Ordner konnte nicht kopiert werden weil eine Datei mit dem selben Namen im Zielordner existiert.
+targetEqualsSource=Quell- und Zielordner dürfen nicht identisch sein.
+targetIsSubOfSource=Der Zielordner darf kein Unterordner des Quellordners sein.
 
 # remote editor labels
 saveSuccess=Editor-Daten erfolgreich gespeichert
@@ -419,11 +428,12 @@ label.invite=Einladung senden
 alt.editdesc=Beschreibung editieren
 alt.imgtransform=Bild bearbeiten
 label.pagesize=Bilder je Seite
-error.compselect=Es müssen mindestens 2 Bilder zum Vergleichen ausgewählt werden
+error.compselect=Es müssen mindestens 2 und höchstens 8 Bilder zum Vergleichen ausgewählt werden.
 label.compare=Vergleichen
 label.comparehead=Bildervergleich
 label.renameImage=Bilddatei umbenennen
 label.exifRename=Umbenennen nach Aufnahmedatum
+viewFullSize=Anzeige in neuem Tab/Fenster
 label.noThumbRefresh=Vorschaubildanzeige nicht aktualisieren
 label.selectedPictures=ausgewählte Bilder
 label.selectFunction=- Funktion auswählen -
@@ -516,6 +526,7 @@ alt.back=vorheriges Bild
 startSlideshowHere=Diashow hier starten
 label.startPic=Startbild
 slideshowHeadline=WebFileSys Diashow
+fullScreenMode=Vollbildmodus
 
 # co-browsing labels
 titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)
@@ -577,6 +588,7 @@ label.sendInvitationMail=Einladung als e-mail versenden
 label.publishType=freigeben als
 label.publishTypeExplorer=Datei-Explorer
 label.publishTypeAlbum=Bilderalbum
+button.copyPublicUrl=in Zwischenablage kopieren
 
 # user comments
 label.commentList=Kommentare von Nutzern
@@ -677,6 +689,10 @@ label.css=Layout
 label.selectLanguage=- bitte auswählen -
 label.userRole=Nutzer-Rolle
 button.register=Anmelden
+registrationConfirmation=Der erste Schritt der Registrierung war erfolgreich. Eine e-mail mit Informationen zum Beenden des Registrierungsvorganges wurde an die angegebene Adresse gesendet.
+button.registrationToLogin=Zum Login
+activationSuccessful=Die Aktivierung des Nutzerkontos war erfolgreich.
+registrationAdminActivation=Das neu registrierte Nutzerkonto muss durch einen Administrator freigeschaltet werden (e-mail Versand ist nicht konfiguriert).
 error.missinglogin=Der Login-Name muss mindestens 3 Zeichen lang sein
 error.spacesinlogin=Der Login-Name darf keine Leerzeichen enthalten
 error.passwordlength=Das Passwort muss mindestens 5 Zeichen lang sein
@@ -853,6 +869,7 @@ sync.foldersCreatedSource=Unterordner im Quellordner angelegt
 sync.copiedToTarget=Dateien zum Zielordner kopiert
 sync.copiedToSource=Dateien zum Quellordner kopiert
 sync.readWriteChanges=Lese/Schreibrechte geändert
+sync.wait=Unterschiede zwischen den Ordnern werden ermittelt ...
 
 # compare folders
 label.selectCompSourceResult=Navigieren Sie zum Ziel-Ordner und wählen Sie Vergleichen im Kontext-Menü!

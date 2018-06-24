@@ -30,6 +30,12 @@ public class ResourceBundleHandler extends UserRequestHandler{
 	
 	protected void process()
 	{
+        String bundleLang = language;
+		String langParam = getParameter("lang");
+		if (!CommonUtils.isEmpty(langParam)) {
+			bundleLang = langParam;
+		}
+		
 		resp.setContentType("text/javascript");
 
         // overwrite the no chache headers already set in WebFileSysServlet
@@ -39,7 +45,7 @@ public class ResourceBundleHandler extends UserRequestHandler{
 
 		output.println("var resourceBundle = {");
 		
-		Properties languageResources = LanguageManager.getInstance().getLanguageResources(language);
+		Properties languageResources = LanguageManager.getInstance().getLanguageResources(bundleLang);
 
 		Enumeration keys = languageResources.propertyNames();
 

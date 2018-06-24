@@ -1,0 +1,13 @@
+Willkommen,
+
+neuer Nutzer $USERNAME bei WebFileSys.
+Danke für deine Registrierung.
+
+Dein Login-Name: $LOGIN
+
+Um die Registrierung abzuschliessen, klicke bitte innerhalb von 5 Tagen auf den folgenden Aktivierungs-Link:
+
+$ACTIVATIONLINK
+
+Bis bald!
+Dein WebFileSys Admin Team

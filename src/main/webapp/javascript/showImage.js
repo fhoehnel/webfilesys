@@ -19,6 +19,7 @@
     }
 
     function scaleImage(picRealWidth, picRealHeight) {
+    	
         var screenWidth = screen.availWidth;
         var screenHeight = screen.availHeight;
         
@@ -28,32 +29,37 @@
         var browserWidthForRealSize = picRealWidth + 20;
         var browserHeightForRealSize = picRealHeight + 80;
                
-        var windowWidth;
-        var windowHeight;
-                
+        var pic = document.getElementById("picFullScreen");
+              
+        var picScaled = false;
+        
         if ((browserWidthForRealSize <= screenWidth) && (browserHeightForRealSize <= screenHeight)) {
             resizeViewPort(picRealWidth + 1, picRealHeight + 1);
-            windowWidth = picRealWidth;
-            windowHeight = picRealHeight;
+            pic.style.width = picRealWidth + "px";
+            pic.style.height = picRealHeight + "px";
         } else {
-            windowWidth;
-            windowHeight;
+        	var imgDisplayWidth;
+        	var imgDisplayHeight;
+        	
             if (xRatio > yRatio) {
-                windowWidth = screenWidth - 20;
-                windowHeight = windowWidth * picRealHeight / picRealWidth;
+            	imgDisplayWidth = screenWidth - 20;
+            	imgDisplayHeight = Math.round(imgDisplayWidth * picRealHeight / picRealWidth)
+                pic.style.width = imgDisplayWidth + "px";
+                pic.style.height = "auto";
             } else {
-                windowHeight = screenHeight - 80;
-                windowWidth = windowHeight * picRealWidth / picRealHeight;
+            	imgDisplayHeight = screenHeight - 80;
+            	imgDisplayWidth = Math.round(imgDisplayHeight * picRealWidth / picRealHeight);
+                pic.style.height = imgDisplayHeight + "px";
+                pic.style.width = "auto";
             }
-            resizeViewPort(windowWidth + 2, windowHeight + 2);
+            resizeViewPort(imgDisplayWidth + 2, imgDisplayHeight + 2);
+
+            picScaled = true;
         }
         
-        var pic = document.getElementById("picFullScreen");
-        pic.style.width = windowWidth + "px";
-        pic.style.height = windowHeight + "px";
         pic.style.visibility = "visible";
         
-        if ((windowWidth < picRealWidth) || (windowHeight < picRealHeight)) {
+        if (picScaled) {
             document.getElementById("origSizeOption").style.display = "inline";
         }
     }

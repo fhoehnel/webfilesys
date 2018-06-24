@@ -71,30 +71,6 @@ public class XslSearchParmsHandler extends XslRequestHandlerBase
 		
 	    XmlUtil.setChildText(searchParmsElement, "language", language, false);
 		
-		addMsgResource("label.searchHead", getResource("label.searchHead", "File and fulltext search"));
-		addMsgResource("label.searchPath", getResource("label.searchPath", "Search in Folder tree"));
-		addMsgResource("label.filemask", getResource("label.filemask", "file name filter"));
-		addMsgResource("label.searcharg", getResource("label.searcharg","Text in File"));
-		addMsgResource("label.argdesc1", getResource("label.argdesc1","searches for files that contain all of the words above"));
-		addMsgResource("label.argdesc2", getResource("label.argdesc2","search phrase containing spaces"));
-		addMsgResource("label.includeSubdirs", getResource("label.includeSubdirs","include subdirectories in search"));
-		addMsgResource("label.includemetainf", getResource("label.includemetainf","include meta info/description in search"));
-		addMsgResource("label.metainfonly", getResource("label.metainfonly","search in meta info/description only"));
-
-		addMsgResource("label.dateRangeFrom", getResource("label.dateRangeFrom","modification date from"));
-		addMsgResource("label.dateRangeUntil", getResource("label.dateRangeUntil","modification date until"));
-
-		addMsgResource("label.searchCalendar", getResource("label.searchCalendar", "select date from calendar"));
-		addMsgResource("label.searchDateConflict", getResource("label.searchDateConflict", "the end date must be after start date!"));
-
-		addMsgResource("label.assignedToCategory", getResource("label.assignedToCategory","assigned to category"));
-		addMsgResource("label.selectCategory", getResource("label.selectCategory","- select categories -"));
-		
-        addMsgResource("label.searchResultAsTree", getResource("label.searchResultAsTree","show results as folder tree"));
-		
-		addMsgResource("button.startsearch", getResource("button.startsearch","Start Search"));
-		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
-
 		CategoryManager catMgr = CategoryManager.getInstance();
         
 		ArrayList<Category> categoryList = catMgr.getListOfCategories(uid);

@@ -1,7 +1,7 @@
 function scrollCurrentPath() {
 	var currentPath = document.getElementById("currentPathScrollCont");
 	
-	currentPath.style.width = (getWinWidth() - 10) + "px";
+	currentPath.style.width = (getVisualWinWidth() - 10) + "px";
 	
 	var oldScrollPos = currentPath.scrollLeft;
 	

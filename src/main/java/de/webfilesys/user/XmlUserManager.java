@@ -453,6 +453,12 @@ public class XmlUserManager extends UserManagerBase
         
         XmlUtil.setChildText(newUserElement, "pageSize", Integer.toString(newUser.getPageSize()));
         
+        if (newUser.getActivationCode() != null) {
+            XmlUtil.setChildText(newUserElement, "activationCode", encryptPassword(newUser.getActivationCode(), ENCRYPTION_METHOD_SHA256));
+            XmlUtil.setChildText(newUserElement, "activationExpiration", Long.toString(newUser.getActivationCodeExpiration()));
+            XmlUtil.setChildText(newUserElement, "activated", "false");
+        }
+        
         userRoot.appendChild(newUserElement);
 
         userCache.put(newUser.getUserid(), newUserElement);
@@ -518,6 +524,8 @@ public class XmlUserManager extends UserManagerBase
         } else {
             XmlUtil.setChildText(userElem,"readonly","false");
         }
+        
+        XmlUtil.setChildText(userElem, "activated", (changedUser.isActivated() ? "true" : "false"));
         
         if (!CommonUtils.isEmpty(changedUser.getPassword())) {
             setPassword(changedUser.getUserid(), changedUser.getPassword());
@@ -938,6 +946,10 @@ public class XmlUserManager extends UserManagerBase
             return(false);
         }
 
+        if (XmlUtil.getChildText(userElement, "activated").equals("false")) {
+            return false;
+        }
+
         Element passwordElement = XmlUtil.getChildByTagName(userElement,"password");
 
         if (passwordElement == null)
@@ -969,6 +981,10 @@ public class XmlUserManager extends UserManagerBase
 
         if (userElement == null) {
             return(false);
+        }
+
+        if (XmlUtil.getChildText(userElement, "activated").equals("false")) {
+            return false;
         }
 
         Element passwordElement = XmlUtil.getChildByTagName(userElement,"read-password");
@@ -1144,6 +1160,10 @@ public class XmlUserManager extends UserManagerBase
 			}
 		}
 
+        String activated = XmlUtil.getChildText(userElement, "activated");
+
+        user.setActivated(CommonUtils.isEmpty(activated) || activated.equals("true"));
+		
 		return(user);
 	}
 
@@ -1193,6 +1213,63 @@ public class XmlUserManager extends UserManagerBase
 		return(codeBuffer.toString());
 	}
 
+    /**
+     * Activate a user account created by self-registration.
+     * 
+     * @param activationCode
+     *            the activation code
+     */
+    public void activateUser(String activationCode) throws UserMgmtException {
+        if (CommonUtils.isEmpty(activationCode)) {
+            throw new UserMgmtException("activation code may not be empty");
+        }
+
+        String encryptedActivationCode = encryptPassword(activationCode, ENCRYPTION_METHOD_SHA256);
+
+        NodeList userList = userRoot.getElementsByTagName("user");
+
+        if (userList == null) {
+            throw new UserMgmtException("user to activate not found");
+        }
+
+        int listLength = userList.getLength();
+
+        for (int i = 0; i < listLength; i++) {
+            Element userElement = (Element) userList.item(i);
+
+            String activated = XmlUtil.getChildText(userElement, "activated");
+
+            if ((!CommonUtils.isEmpty(activated)) && activated.equals("false")) {
+                String codeOfUser = XmlUtil.getChildText(userElement, "activationCode");
+
+                if (codeOfUser.equals(encryptedActivationCode)) {
+                    String activationExp = XmlUtil.getChildText(userElement, "activationExpiration");
+                    if (!CommonUtils.isEmpty(activationExp)) {
+                        try {
+                            long activationExpiration = Long.parseLong(activationExp);
+
+                            if (System.currentTimeMillis() < activationExpiration) {
+                                XmlUtil.setChildText(userElement, "activated", "true");
+                                modified = true;
+
+                                if (Logger.getLogger(getClass()).isInfoEnabled()) {
+                                    Logger.getLogger(getClass()).info("user activated: " + userElement.getAttribute("id"));
+                                }
+
+                                return;
+                            }
+                            XmlUtil.removeChild(userElement, "activationCode");
+                            XmlUtil.removeChild(userElement, "activationExpiration");
+                            throw new UserMgmtException("activation link has expired");
+                        } catch (NumberFormatException ex) {
+                        }
+                    }
+                }
+            }
+        }
+        throw new UserMgmtException("user to activate not found");
+    }
+	
     public synchronized void run()
     {
         boolean exitFlag=false;

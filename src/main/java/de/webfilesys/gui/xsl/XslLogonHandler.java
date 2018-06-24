@@ -53,6 +53,10 @@ public class XslLogonHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(loginElement, "authFailed", "true", false);
 		}
 
+		if (getParameter("activationSuccess") != null) {
+            XmlUtil.setChildText(loginElement, "activationSuccess", "true", false);
+        }
+
 		if (WebFileSys.getInstance().isOpenRegistration())
 		{
 			XmlUtil.setChildText(loginElement, "openRegistration", "true", false);

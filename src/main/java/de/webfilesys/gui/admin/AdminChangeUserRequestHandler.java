@@ -8,6 +8,9 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import com.ctc.wstx.util.StringUtil;
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import de.webfilesys.mail.EmailUtils;
 import de.webfilesys.user.TransientUser;
 import de.webfilesys.user.UserMgmtException;
@@ -186,6 +189,8 @@ public class AdminChangeUserRequestHandler extends AdminRequestHandler {
 		changedUser.setReadonly(getParameter("readonly") != null);
 
 		changedUser.setEmail(email);
+		
+		changedUser.setActivated(!CommonUtils.isEmpty(getParameter("activated")));
 
 		String role = getParameter("role");
 

@@ -104,10 +104,14 @@
       }
 
       <xsl:if test="/fileList/description">
-        var padding = 260;
+        var padding = 240;
       </xsl:if>
       <xsl:if test="not(/fileList/description)">
-        var padding = 230;
+        var padding = 200;
+      </xsl:if>
+      
+      <xsl:if test="/fileList/readonly">
+        padding = padding - 20;
       </xsl:if>
   
       document.getElementById('fileListTable').style.height = (windowHeight - padding) + 'px';
@@ -154,7 +158,7 @@
 
 </head>
 
-<body class="fileList">
+<body class="fileListNoMargin">
   <xsl:attribute name="onload">
     setFileListHeight();addDeselectHandler();
     <xsl:if test="/fileList/pollInterval">delayedPollForDirChanges();</xsl:if>
@@ -186,13 +190,13 @@
 <xsl:template match="fileList">
 
   <xsl:for-each select="/fileList/currentTrail">
-    <div class="headline">
+    <div class="headline headlineBorderless">
       <xsl:call-template name="currentTrail" />
     </div>
   </xsl:for-each>
 
   <xsl:if test="description">
-    <div class="fileListDesc">
+    <div class="fileListFolderDesc">
       <xsl:value-of select="description" disable-output-escaping="yes" />
     </div>
   </xsl:if>
@@ -249,7 +253,7 @@
   <form accept-charset="utf-8" name="sortform" method="get" action="/webfilesys/servlet" style="padding:0px;margin:0px;">
     <input type="hidden" name="command" value="listFiles" />
   
-    <table class="fileListFilterSort">
+    <table class="fileListFilterSort2">
       <input type="hidden">
         <xsl:attribute name="actpath">
           <xsl:value-of select="currentPath" />
@@ -542,12 +546,12 @@
     
     <!-- function buttons and actions -->
     
-    <table class="fileListButtonCont">
+    <table class="fileListButtonCont2">
 
       <xsl:if test="file">
 
         <tr>
-          <td class="fileListFunct">
+          <td class="fileListButton">
             <label resource="label.selectedFiles"></label>:
             &#160;
             <select name="cmd" size="1" onchange="javascript:selectedFileFunction(true)">
@@ -588,7 +592,7 @@
 
       <xsl:if test="not(/fileList/readonly)">
         <tr>
-          <td class="fileListFunct">
+          <td class="fileListButton">
           
             <div class="buttonCont">
 
@@ -628,7 +632,7 @@
       
       <xsl:if test="/fileList/readonly">
         <xsl:if test="not(file)">
-          <tr><td class="fileListFunct">&#160;</td></tr>
+          <tr><td class="fileListButton">&#160;</td></tr>
         </xsl:if>
       </xsl:if>
 

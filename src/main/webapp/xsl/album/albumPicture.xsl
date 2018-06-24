@@ -192,8 +192,11 @@
       <a href="javascript:showOriginalSize()">
         <img border="0" class="albumDetailPicture" titleResource="showPictureOrigSize">
             <xsl:attribute name="src"><xsl:value-of select="imageSource" /></xsl:attribute>
+            <xsl:attribute name="style">width:<xsl:value-of select="displayWidth" />px;height:auto</xsl:attribute>
+            <!--  
             <xsl:attribute name="width"><xsl:value-of select="displayWidth" /></xsl:attribute>
             <xsl:attribute name="height"><xsl:value-of select="displayHeight" /></xsl:attribute>
+            -->
         </img>
       </a>
       

@@ -199,6 +199,13 @@ public class XmlUtil
         }
     }
     
+    public static void removeChild(Element parentElem, String tagName) {
+        Element firstChild = getChildByTagName(parentElem, tagName);
+        if (firstChild != null) {
+            parentElem.removeChild(firstChild);
+        }
+    }
+    
     public static void writeToStream(Element rootElement,Writer outputWriter)
     {
         OutputFormat outputFormat = new OutputFormat();

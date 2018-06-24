@@ -1,5 +1,7 @@
 var thumbLoadRunning = false;
 
+var viewPicQueue;
+
 function multiFileFunction() {
     var idx = document.form2.cmd.selectedIndex;
 
@@ -22,6 +24,8 @@ function multiFileFunction() {
         multiImageDownload();
     } else if (cmd == 'exifRename') {
         renameToExifDate();
+    } else if (cmd == 'view') {
+        multiViewImage();
     }
      
     document.form2.cmd.selectedIndex = 0;
@@ -37,11 +41,45 @@ function resetSelected() {
     }
 }
 
+function multiViewImage() {
+	if (anySelected()) {
+	    viewPicQueue = new Array();
+	
+	    for (var i = document.form2.elements.length - 1; i >= 0; i--) {
+	         if ((document.form2.elements[i].type == "checkbox") && document.form2.elements[i].checked) {
+	         
+	             viewPicQueue.push($(document.form2.elements[i]).prev().prev().attr("href"));
+		     }
+	    }
+
+        viewQueuedPics();
+    } else {
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
+    }
+}
+
+function viewQueuedPics() {
+    if (viewPicQueue.length == 0) {
+        return;
+    }
+    
+    var viewPicCommand = viewPicQueue.pop();
+    
+    eval(viewPicCommand);
+    
+    if (viewPicQueue.length == 0) {
+	    resetSelected();
+		document.form2.command.value = 'compareImg';
+    } else {
+        setTimeout(viewQueuedPics, 600);
+    }    
+}
+
 function compare() {
 	var numChecked = getSelectedCheckboxCount();
 
-    if (numChecked < 2) {
-        customAlert(resourceBundle["error.compselect"] + "!");
+    if ((numChecked < 2) || (numChecked > 8)) {
+        customAlert(resourceBundle["error.compselect"]);
         return;
     }
 
@@ -246,16 +284,25 @@ function filesOSMap() {
 }
 
 function googleMapAllPics() {
-	var mapWinWidth =  screen.availWidth - 20;
-	var mapWinHeight = screen.availHeight - 80;
-	
-    var mapWin = window.open('/webfilesys/servlet?command=googleMapMulti', 'mapWin', 'status=no,toolbar=no,location=no,menu=no,width=' + mapWinWidth + ',height=' + mapWinHeight + ',resizable=yes,left=2,top=2,screenX=2,screenY=2');
+    checkGeoDataExist(
+        function() {
+            hideHourGlass();
+            var mapWinWidth =  screen.availWidth - 20;
+            var mapWinHeight = screen.availHeight - 80;
+            	
+            var mapWin = window.open('/webfilesys/servlet?command=googleMapMulti', 'mapWin', 'status=no,toolbar=no,location=no,menu=no,width=' + mapWinWidth + ',height=' + mapWinHeight + ',resizable=yes,left=2,top=2,screenX=2,screenY=2');
 
-    if (!mapWin) {
-        alert(resourceBundle["alert.enablePopups"]);
-    } else {
-        mapWin.focus();
-    }
+            if (!mapWin) {
+                customAlert(resourceBundle["alert.enablePopups"]);
+            } else {
+                mapWin.focus();
+            }
+        },
+        function() {
+            hideHourGlass();
+            customAlert(resourceBundle["noFilesWithGeoData"]);
+        }
+    );
 }
 
 function initialLoadPictures() {
@@ -517,14 +564,21 @@ function setThumbContHeightInternal() {
         windowHeight = document.documentElement.clientHeight;
     }
 
-    var offset = 200;
+    var offset = 185;
     
     var folderMetaInfElem = document.getElementById("folderMetaInf");
     if (folderMetaInfElem) {
     	offset += folderMetaInfElem.offsetHeight;
     }
     
-    document.getElementById("scrollAreaCont").style.height = (windowHeight - offset) + 'px';
+    var scrollAreaCont = document.getElementById("scrollAreaCont");
+    
+    var thumbnailType = scrollAreaCont.getAttribute("thumbnailType");
+    if (thumbnailType && (thumbnailType == "video")) {
+    	offset -= 30;
+    }
+    
+    scrollAreaCont.style.height = (windowHeight - offset) + 'px';
 }
 
 function picturePopupInFrame(filePath, picIdx) {
@@ -668,6 +722,8 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                 	if (thumbContElem) {
                 	    thumbContElem.id = "thumbCont-" + newFileName;
                 	}
+                } else {
+                	customAlert(oldFileName + " " + resourceBundle["error.renameFailed"] + " " + newFileName);
                 }			    
             } else {
                 alert(resourceBundle["alert.communicationFailure"]);

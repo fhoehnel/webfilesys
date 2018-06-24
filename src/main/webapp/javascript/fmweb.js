@@ -282,17 +282,45 @@ function validateNewFileName(oldFileName, errorMsg1, errorMsg2) {
 function validateCloneFolderName() {
     var sourceFolderName = document.getElementById("sourceFolderName").value
     var newFolderName = document.getElementById('renameForm').newFolderName.value;
-
+    
     if (newFolderName == sourceFolderName) {
-        alert(resourceBundle['alert.destFolderEqualsSource']);
+        customAlert(resourceBundle['alert.destFolderEqualsSource']);
     } else {
         if (!checkFileNameSyntax(newFolderName)) {
-            alert(resourceBundle['alert.illegalCharInFilename']);
+            customAlert(resourceBundle['alert.illegalCharInFilename']);
         } else {
             if (newFolderName.trim().length == 0) {
-                alert(resourceBundle["alert.newFolderNameEmpty"]);
+                customAlert(resourceBundle["alert.newFolderNameEmpty"]);
             } else {
-                document.renameForm.submit();
+                var sourceFolderPath = document.getElementById("sourceFolderPath").value;
+            	var pathSeparator = "/";
+            	if (sourceFolderPath.indexOf("\\") > 0) {
+            		pathSeparator = "\\";
+            	}
+
+                var sourceFolderParentPath = sourceFolderPath.substring(0, sourceFolderPath.lastIndexOf(pathSeparator));
+                var targetFolderPath = sourceFolderParentPath + pathSeparator + newFolderName;
+                
+                var ajaxUrl = "/webfilesys/servlet?command=ajaxRPC&method=existFolder&param1=" + encodeURIComponent(targetFolderPath);
+                
+                showHourGlass();                
+                
+            	xmlRequest(ajaxUrl, function(req) {
+                    if (req.readyState == 4) {
+                        if (req.status == 200) {
+                            var subdirExists = req.responseXML.getElementsByTagName("result")[0].firstChild.nodeValue;        
+                            if (subdirExists == "false") {
+                                document.renameForm.submit();
+                            } else {
+               	                customAlert(resourceBundle["alert.cloneTargetFolderExists"]);
+               	                hideHourGlass();
+                            }
+                        } else {
+                            alert(resourceBundle["alert.communicationFailure"]);
+                            hideHourGlass();
+        	            }
+                    }
+            	});
             }
         }
     }

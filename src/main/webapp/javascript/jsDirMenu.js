@@ -63,7 +63,7 @@ function statSunburst(path)
     {
         windowHeight = windowWidth - 200;
     }
-    var statWin = open("/webfilesys/servlet?command=folderTreeStats&path=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=" + windowWidth + ",height=" + windowHeight);
+    var statWin = open("/webfilesys/html/wait.html?command=folderTreeStats&path=" + encodeURIComponent(path), "Statistics", "scrollbars=yes,resizable=yes,width=" + windowWidth + ",height=" + windowHeight);
     statWin.focus();
 }
 
@@ -172,11 +172,12 @@ function watchFolder(path) {
 }
 
 function cloneFolder(path, folderName) {   
-	showPromptDialog("/webfilesys/html/cloneFolder.html", 360, function() {	
+	showPromptDialog("/webfilesys/html/cloneFolder.html", 300, function() {	
 	
 	    document.getElementById("sourceFolderPath").value = path;
 	    document.getElementById("sourceFolderName").value = folderName;
-	    document.getElementById("oldLinkNameShort").innerHTML = shortText(folderName, 35);
+	    document.getElementById("oldLinkNameShort").innerHTML = shortText(folderName, 25);
+	    document.getElementById("oldLinkNameShort").title = folderName;
 
 	    var newFolderName = document.getElementById("newFolderName");
 	    newFolderName.value = folderName;

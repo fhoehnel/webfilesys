@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.LanguageManager;
 import de.webfilesys.gui.CSSManager;
 import de.webfilesys.gui.xsl.XslFileListHandler;
 import de.webfilesys.user.TransientUser;
@@ -149,6 +150,11 @@ public class UserSettingsRequestHandler extends UserRequestHandler {
 			changedUser.setReadonlyPassword(ropassword);
 		}
 
+		String newLang = getParameter("language");
+		if (!CommonUtils.isEmpty(newLang)) {
+			changedUser.setLanguage(newLang);
+		}
+		
 		String css = getParameter("css");
 
 		if (!CommonUtils.isEmpty(css)) {
@@ -227,6 +233,25 @@ public class UserSettingsRequestHandler extends UserRequestHandler {
 		output.println("<td class=\"formParm2\"><input type=\"password\" name=\"ropwconfirm\" maxlength=\"30\" /></td>");
 		output.println("</tr>");
 
+        output.println("<tr>");
+        output.println("<td class=\"formParm1\">" + getResource("label.language", "language") + "</td>");
+		output.println("<td class=\"formParm2\"><select id=\"language\" name=\"language\" size=\"1\">");
+
+		ArrayList<String> languages = LanguageManager.getInstance().getAvailableLanguages();
+
+		for (String lang : languages) {
+			output.print("<option");
+
+			if (lang.equals(language)) {
+				output.print(" selected=\"selected\"");
+			}
+
+			output.println(">" + lang + "</option>");
+		}
+		
+		output.println("</select></td>");
+        output.println("</tr>");
+		
         String userCss = null;
         
         if (errorMsg != null) {

@@ -1,4 +1,9 @@
-  body.mobile {margin:0px;font-size:12pt;font-family:Arial,Helvetica;background-color:#ffffff;}
+  body.mobile {
+      margin: 0px;
+      font-size: 12pt;
+      font-family: Arial,Helvetica;
+      background-color:#ffffff;
+  }
   
   div.albumPath {
       padding: 4px;
@@ -392,4 +397,8 @@ div.toastBox span {
     font-family: Arial,Helvetica,sans-serif;
     font-size: 13px;
     color: #000000;
+}
+
+body.mobile a.dirtree {
+	font-size: 24px;
 }

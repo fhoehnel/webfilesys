@@ -17,6 +17,7 @@
   
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/pictureAlbum.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
   
   <title>WebFileSys Picture Album</title>
 
@@ -101,16 +102,22 @@
     <div class="pictureAlbumCont">
 
       <div class="pictureAlbumHeadline">
-        <span resource="label.albumTitle"></span>
-        :
-        <span>
-          <xsl:value-of select="pictureAlbum/userid" />
-        </span>
+        <xsl:if test="pictureAlbum/description">
+          <xsl:value-of select="pictureAlbum/description" disable-output-escaping="yes" />
+        </xsl:if>
+
+        <xsl:if test="not(pictureAlbum/description)">
+          <span resource="label.albumTitle"></span>
+          :
+          <span>
+            <xsl:value-of select="pictureAlbum/userid" />
+          </span>
+        </xsl:if>
       </div>
 
-      <div class="infoIcon">
-        <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')">
-          <img src="/webfilesys/images/info.png" border="0" width="32" height="32" titleResource="label.about" />
+      <div class="infoIcon" titleResource="label.about">
+        <a href="#" onclick="window.open('/webfilesys/servlet?command=versionInfo','infowindow','status=no,toolbar=no,location=no,menu=no,width=300,height=220,resizable=no,left=250,top=150,screenX=250,screenY=150')"
+           class="icon-font icon-info">
         </a>
       </div>
 
@@ -127,12 +134,6 @@
       <xsl:for-each select="pictureAlbum">
         <xsl:call-template name="sortAndPaging" />
       </xsl:for-each>
-      
-      <xsl:if test="pictureAlbum/description">
-        <div id="albumDescription" class="albumDescription">
-          <xsl:value-of select="pictureAlbum/description" disable-output-escaping="yes" />
-        </div>
-      </xsl:if>
 
       <table width="100%">
       

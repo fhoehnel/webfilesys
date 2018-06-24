@@ -67,7 +67,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
 
 		output.println("<br/>");
 
-		output.println("<form accept-charset=\"utf-8\" method=\"post\" action=\"/webfilesys/servlet\">");
+		output.println("<form accept-charset=\"utf-8\" method=\"post\" action=\"/webfilesys/servlet\" class=\"userData\">");
 
 		output.println("<input type=\"hidden\" name=\"command\" value=\"selfChangeUser\">");
 
@@ -79,12 +79,12 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
         output.println("</tr>");
         
         output.println("<tr>");
-        output.println("<td class=\"formParm1\"><b>" + getResource("label.password","password") + "</b></td>");
+        output.println("<td class=\"formParm1\">" + getResource("label.password","password") + "</td>");
 		output.println("<td class=\"formParm2\"><input type=\"password\" name=\"password\" maxlength=\"30\" value=\"\"></td>");
         output.println("</tr>");
 
         output.println("<tr>");
-        output.println("<td class=\"formParm1\"><b>" + getResource("label.passwordconfirm","password confirmation") + "</b></td>");
+        output.println("<td class=\"formParm1\">" + getResource("label.passwordconfirm","password confirmation") + "</td>");
 		output.println("<td class=\"formParm2\"><input type=\"password\" name=\"pwconfirm\" maxlength=\"30\" value=\"\"></td>");
         output.println("</tr>");
 

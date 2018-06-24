@@ -28,6 +28,10 @@
 <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="javascript/contextMenuCommon.js" type="text/javascript"></script>
 <script src="javascript/graphicsContextMenu.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
+</script>
 
 <script language="javascript">
   
@@ -66,23 +70,28 @@
 
   <xsl:if test="/fileList/maintananceMode">
     <script type="text/javascript">
-      alert('<xsl:value-of select="/fileList/resources/msg[@key='alert.maintanance']/@value" />');
+      alert(resourceBundle["alert.maintanance"]);
     </script>
   </xsl:if>
 
   <xsl:if test="/fileList/dirNotFound">
     <script type="text/javascript">
-      alert('<xsl:value-of select="/fileList/resources/msg[@key='alert.dirNotFound']/@value" />');
+      alert(resourceBundle["alert.dirNotFound"]);
     </script>
   </xsl:if>
 
 </head>
 
-<body class="fileList">
+<body class="fileListNoMargin">
 
 <xsl:apply-templates />
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
+
 </html>
 
 <div id="msg1" class="msgBox" style="visibility:hidden" />
@@ -92,13 +101,9 @@
 
 <xsl:template match="fileList">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="headLine" disable-output-escaping="yes" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline headlineBorderless">
+    <xsl:value-of select="headLine" disable-output-escaping="yes" />
+  </div>
 
   <!-- path for picture album -->
   
@@ -121,8 +126,7 @@
       
       <xsl:if test="not(role) or (role!='album')">
         <td class="tabInactive" nowrap="true">
-          <a class="tab" href="javascript:viewModeList()">
-            <xsl:value-of select="/fileList/resources/msg[@key='label.modelist']/@value" />
+          <a class="tab" href="javascript:viewModeList()" resource="label.modelist">
           </a>
         </td>
 
@@ -131,14 +135,13 @@
       </xsl:if>
  
       <td class="tabInactive" nowrap="true">
-        <a class="tab">
+        <a class="tab" resource="label.modethumb">
           <xsl:if test="role and (role='album')">
             <xsl:attribute name="href">javascript:viewModeAlbum()</xsl:attribute>
           </xsl:if>
           <xsl:if test="not(role) or (role!='album')">
             <xsl:attribute name="href">javascript:viewModeThumbs()</xsl:attribute>
           </xsl:if>
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modethumb']/@value" />
         </a>
       </td>
 
@@ -148,8 +151,7 @@
           <td class="tabSpacer"></td>
 
           <td class="tabInactive" nowrap="true">
-            <a class="tab" href="javascript:viewModeVideo()">
-              <xsl:value-of select="/fileList/resources/msg[@key='label.modeVideo']/@value" />
+            <a class="tab" href="javascript:viewModeVideo()" resource="label.modeVideo">
             </a>
           </td>
 
@@ -160,14 +162,13 @@
       <td class="tabSpacer"></td>
 
       <td class="tabActive" nowrap="true">
-        <xsl:value-of select="/fileList/resources/msg[@key='label.modestory']/@value" />
+        <span resource="label.modestory"></span>
       </td>
       
       <td class="tabSpacer"></td>
 
       <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeSlideshow()">
-          <xsl:value-of select="/fileList/resources/msg[@key='label.modeSlideshow']/@value" />
+        <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow">
         </a>
       </td>
 
@@ -176,8 +177,7 @@
           <td class="tabSpacer"></td>
 
           <td class="tabInactive" nowrap="true">
-            <a class="tab" href="javascript:fileStats()">
-              <xsl:value-of select="/fileList/resources/msg[@key='label.fileStats']/@value" />
+            <a class="tab" href="javascript:fileStats()" resource="label.fileStats">
             </a>
           </td>
         </xsl:if>
@@ -194,7 +194,7 @@
     
       <input type="hidden" name="command" value="storyInFrame" />
     
-      <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
+      <table class="fileListFilterSort2">
  
         <tr>
           <td class="fileListFunctCont sep">
@@ -212,13 +212,13 @@
                 </xsl:if>
             
                 <td class="fileListFunct" valign="center" nowrap="true">
-                  <xsl:value-of select="resources/msg[@key='label.files']/@value" /> 
+                  <span resource="label.files"></span>
                   <xsl:text> </xsl:text>
                   <xsl:value-of select="paging/firstOnPage" />
                   ...
                   <xsl:value-of select="paging/lastOnPage" />
                   <xsl:text> </xsl:text>
-                  <xsl:value-of select="resources/msg[@key='label.of']/@value" /> 
+                  <span resource="label.of"></span>
                   <xsl:text> </xsl:text>
                   <xsl:value-of select="fileNumber" />
                 </td>
@@ -226,7 +226,7 @@
                 <xsl:if test="fileNumber &gt; paging/pageSize">
               
                   <td class="fileListFunct" valign="center" nowrap="true">
-                    <xsl:value-of select="resources/msg[@key='label.page']/@value" /> 
+                    <span resource="label.page"></span>
 
                     <xsl:for-each select="paging/page">
                       <span>
@@ -252,9 +252,8 @@
                       <xsl:value-of select="paging/pageSize" />
                     </xsl:attribute>
                   </input>
-                  <input type="button" style="margin-left:4px">
+                  <input type="button" style="margin-left:4px" resource="albumPageSize">
                     <xsl:attribute name="onclick">javascript:document.sortform.submit()</xsl:attribute>
-                    <xsl:attribute name="value"><xsl:value-of select="/fileList/resources/msg[@key='albumPageSize']/@value" /></xsl:attribute>
                   </input> 
                 </td>
 
@@ -291,38 +290,37 @@
     <table class="topLess" border="0" cellpadding="5" cellspacing="0" width="100%">
       <tr>
         <td class="fileListFunct" style="padding:10px 10px">
-          <xsl:value-of select="resources/msg[@key='alert.nopictures']/@value" />
+          <span resource="alert.nopictures"></span>
         </td>
       </tr>
     </table>
   </xsl:if>
-      
   
-  <table class="topLess" border="0" width="100%" cellspacing="0" cellpadding="5">
+  <table class="storyPicCont" cellspacing="0" cellpadding="5">
 
     <xsl:for-each select="file">
           
       <tr>
-        <td class="story2" valign="top">
+        <td class="story2">
+        
           <xsl:if test="/fileList/role = 'album'">
             <img class="thumb" border="0">
               <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
               <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
               <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
               <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
-              <xsl:if test="position() mod 2 = 0">
-                <xsl:attribute name="align">right</xsl:attribute>
-                <xsl:attribute name="style">margin-left:10px</xsl:attribute>
-              </xsl:if>
-              <xsl:if test="position() mod 2 = 1">
-                <xsl:attribute name="align">left</xsl:attribute>
-                <xsl:attribute name="style">margin-right:10px</xsl:attribute>
-              </xsl:if>
             </img>
           </xsl:if>
 
           <xsl:if test="not(/fileList/role = 'album')">
             <a>
+              <xsl:if test="position() mod 2 = 1">
+                <xsl:attribute name="style">float:right</xsl:attribute>
+              </xsl:if>
+              <xsl:if test="position() mod 2 = 0">
+                <xsl:attribute name="style">float:left</xsl:attribute>
+              </xsl:if>
+              
               <xsl:if test="@link">
                 <xsl:attribute name="href">javascript:sli<xsl:value-of select="@id" />()</xsl:attribute>
               </xsl:if>
@@ -335,56 +333,48 @@
                 <xsl:attribute name="width"><xsl:value-of select="thumbnailWidth" /></xsl:attribute>
                 <xsl:attribute name="height"><xsl:value-of select="thumbnailHeight" /></xsl:attribute>
                 <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
-                <xsl:if test="position() mod 2 = 0">
-                  <xsl:attribute name="align">right</xsl:attribute>
-                  <xsl:attribute name="style">margin-left:10px</xsl:attribute>
-                </xsl:if>
-                <xsl:if test="position() mod 2 = 1">
-                  <xsl:attribute name="align">left</xsl:attribute>
-                  <xsl:attribute name="style">margin-right:10px</xsl:attribute>
-                </xsl:if>
               </img>
             </a>
           </xsl:if>
             
-          <xsl:if test="description">
-            <xsl:value-of select="description" />
-          </xsl:if>
-          <xsl:if test="not(description)">
-            <xsl:value-of select="@name" />
-          </xsl:if>
+          <div>
+            <xsl:if test="position() mod 2 = 1">
+              <xsl:attribute name="style">float:right;margin-right:10px;max-width:45%</xsl:attribute>
+            </xsl:if>
+            <xsl:if test="position() mod 2 = 0">
+              <xsl:attribute name="style">float:left;margin-left:10px;max-width:45%</xsl:attribute>
+            </xsl:if>
+
+            <xsl:if test="description">
+              <xsl:value-of select="description" />
+            </xsl:if>
+            <xsl:if test="not(description)">
+              <xsl:value-of select="@name" />
+            </xsl:if>
           
-          <xsl:if test="not(/fileList/role = 'album')">
-            <br/>
-            <a class="dirtree">
-              <xsl:if test="@link">
-                <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="realPathForScript" />')</xsl:attribute>
-              </xsl:if>
-              <xsl:if test="not(@link)">
-                <xsl:attribute name="href">javascript:comm<xsl:value-of select="@id" />()</xsl:attribute>
-              </xsl:if>
-              <xsl:attribute name="title"><xsl:value-of select="/fileList/resources/msg[@key='label.comments']/@value" /></xsl:attribute>
+            <xsl:if test="not(/fileList/role = 'album')">
+              <br/>
+              <a class="dirtree" titleResource="label.comments">
+                <xsl:if test="@link">
+                  <xsl:attribute name="href">javascript:jsComments('<xsl:value-of select="realPathForScript" />')</xsl:attribute>
+                </xsl:if>
+                <xsl:if test="not(@link)">
+                  <xsl:attribute name="href">javascript:comm<xsl:value-of select="@id" />()</xsl:attribute>
+                </xsl:if>
                 (<xsl:value-of select="comments" />)
-            </a>
-          </xsl:if>
+              </a>
+            </xsl:if>
+          </div>  
           
         </td>
       </tr>
       
-      <xsl:if test="position() != last()">
-        <tr>
-          <td class="story2 sepTop">
-            <img src="/webfilesys/images/space.gif" border="0" width="1" height="1" />
-          </td>
-        </tr>
-      </xsl:if>  
-        
     </xsl:for-each>
   </table>  
   
   <xsl:if test="/fileList/file">
   
-    <table class="topLess" border="0" width="100%" cellpadding="4" cellspacing="0">
+    <table class="fileListButtonCont2" cellpadding="4" cellspacing="0">
       <tr>
         <xsl:if test="paging/currentPage &gt; 1">
           <td class="fileListFunct" valign="center" nowrap="true">

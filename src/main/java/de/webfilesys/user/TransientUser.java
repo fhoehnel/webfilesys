@@ -54,6 +54,13 @@ public class TransientUser
     /** date of the last login */
     private Date lastLogin = null;
     
+    /** activation code for self registration */
+    private String activationCode = null;
+
+    private long activationCodeExpiration = 0l;
+    
+    private boolean activated;
+    
     /** number of picture thumbnails per page */
     private int pageSize = UserManager.DEFAULT_THUMB_PAGE_SIZE;
     
@@ -207,6 +214,30 @@ public class TransientUser
     
     public int getPageSize() {
     	return pageSize;
+    }
+
+    public void setActivationCode(String newVal) {
+        activationCode = newVal;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+    
+    public void setActivationCodeExpiration(long newVal) {
+        activationCodeExpiration = newVal;
+    }
+
+    public long getActivationCodeExpiration() {
+        return activationCodeExpiration;
+    }
+
+    public void setActivated(boolean newVal) {
+        activated = newVal;
+    }
+
+    public boolean isActivated() {
+        return activated;
     }
 }
 

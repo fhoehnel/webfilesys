@@ -29,6 +29,8 @@
   <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 </xsl:if>
 
+<script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
+
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
@@ -144,7 +146,7 @@
 
 </head>
 
-<body class="fileList">
+<body class="fileListNoMargin">
   <xsl:attribute name="onload">
     setThumbContHeight();
     <xsl:if test="/fileList/file">
@@ -193,7 +195,7 @@
 <xsl:template match="fileList">
 
   <xsl:for-each select="/fileList/currentTrail">
-    <div class="headline">
+    <div class="headline headlineBorderless">
       <xsl:call-template name="currentTrail" />
     </div>
   </xsl:for-each>
@@ -289,7 +291,7 @@
   
     <input type="hidden" name="command" value="thumbnail" />
     
-	    <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
+	    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
 	      <input type="hidden">
 	        <xsl:attribute name="actpath">
 	          <xsl:value-of select="currentPath" />
@@ -413,7 +415,7 @@
 
     <input type="hidden" name="degrees" value="90" />
 
-    <div id="scrollAreaCont" class="pictureScrollCont sepTop">
+    <div id="scrollAreaCont" class="pictureScrollContNoBorder sepTop">
 
       <xsl:if test="/fileList/file">
 
@@ -525,17 +527,17 @@
          
     </div>
 
-    <table class="topLess" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <table cellspacing="0" class="fileListButtonCont2">
 
       <xsl:if test="file">
 
         <tr>
-          <td class="fileListFunctCont sepTop">
+          <td class="sepTop">
             
             <table border="0" width="100%">
 
               <tr>
-                <td align="left" class="fileListFunct" nowrap="true">
+                <td align="left" class="fileListButton" nowrap="true">
                   <input type="checkbox" class="cb3" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" style="vertical-align:middle;"/>
                   <label for="cb-setAll" resource="checkbox.selectall"></label>
                 </td>
@@ -544,7 +546,7 @@
                   &#160;
                 </td>
 
-                <td class="fileListFunct" style="text-align:right;white-space:nowrap">
+                <td class="fileListButton" style="text-align:right;white-space:nowrap">
                   <label resource="label.selectedFiles"></label>:
                   <select name="cmd" size="1" onchange="multiFileFunction()">
                     <option resource="label.selectFunction" />
@@ -574,6 +576,7 @@
 
                       <option value="delete" resource="button.delete" />
                       <option value="exifRename" resource="label.exifRename" />
+                      <option value="view" resource="viewFullSize" />
                     </xsl:if>
                    
                     <option value="download" resource="button.downloadAsZip" />
@@ -581,7 +584,7 @@
                 </td>
                 
                 <xsl:if test="not(/fileList/readonly)">
-                  <td class="fileListFunct" style="text-align:right;padding-right:10px;padding-left:10px;white-space:nowrap">
+                  <td class="fileListButton" style="text-align:right;padding-right:10px;padding-left:10px;white-space:nowrap">
 
                     <label resource="rating.owner"></label>:
 
@@ -624,7 +627,7 @@
       </xsl:if>      
 
       <tr>
-        <td class="fileListFunct">
+        <td class="fileListButton">
         
           <table border="0" width="100%" cellpadding="0" cellspacing="0">
             <tr>

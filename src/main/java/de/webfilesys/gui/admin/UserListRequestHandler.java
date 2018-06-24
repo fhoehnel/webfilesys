@@ -227,7 +227,7 @@ public class UserListRequestHandler extends AdminRequestHandler {
 
 		output.println("<table width=\"100%\" border=\"1\" cellspacing=\"0\">");
 		output.println("<tr bgcolor=lavender>");
-		output.println("<th class=\"datahead\">&nbsp;</th><th class=\"datahead\">userid/login</th><th class=\"datahead\">document root</th><th class=\"datahead\">readonly</th><th class=\"datahead\">role</th><th class=\"datahead\">language</th><th class=\"datahead\">last name, first name</th><th class=\"datahead\">e-mail</th><th class=\"datahead\">last login</th></tr>");
+		output.println("<th class=\"datahead\">&nbsp;</th><th class=\"datahead\">userid/login</th><th class=\"datahead\">activated</th><th class=\"datahead\">document root</th><th class=\"datahead\">readonly</th><th class=\"datahead\">role</th><th class=\"datahead\">language</th><th class=\"datahead\">last name, first name</th><th class=\"datahead\">e-mail</th><th class=\"datahead\">last login</th></tr>");
 
 		SimpleDateFormat dateFormat = LanguageManager.getInstance()
 				.getDateFormat("admin");
@@ -284,6 +284,9 @@ public class UserListRequestHandler extends AdminRequestHandler {
 			output.println("<td class=\"data\" align=\"left\" valign=\"top\">"
 					+ actUser.getUserid() + " </td>");
 
+			output.println("<td class=\"data\" align=\"left\" valign=\"top\">"
+					+ Boolean.valueOf(actUser.isActivated()).toString() + " </td>");
+			
 			String docRoot = actUser.getDocumentRoot();
 
 			String shortDocRoot = docRoot;

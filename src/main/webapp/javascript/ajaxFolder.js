@@ -571,7 +571,7 @@ function openSyncWindow()
 {
     deselectFolder();
 
-    syncWin = window.open("/webfilesys/servlet?command=syncCompare","syncWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=700,height=500,resizable=yes,left=10,top=10,screenX=10,screenY=10");
+    syncWin = window.open("/webfilesys/html/waitSync.html?command=syncCompare","syncWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=700,height=500,resizable=yes,left=10,top=10,screenX=10,screenY=10");
     
     if (!syncWin)
     {

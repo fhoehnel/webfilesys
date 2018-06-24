@@ -248,6 +248,8 @@ upload.file.exists=a file with this name already exists - overwrite?
 uploadTargetFileNameExt=The filename extension of the local file will be appended to the filename on the target server. Continue?
 upload.total.status=total status
 upload.error=failed to upload file
+upload.conflictHead=The following files already exist in the destination folder
+upload.overwrite=Overwrite?
 
 # switch Read/Only labels
 label.readWriteStatus=Read/Write status
@@ -361,6 +363,7 @@ datePickerFormat=mm/dd/yy
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Copy/Rename/Move
+label.renameFolderHead=rename folder
 label.destfile=destination filename
 label.destdir=destination directory
 label.sourcepath=source path
@@ -400,9 +403,15 @@ label.copyfromclip=Copying files
 label.movefromclip=Moving files
 label.copyresult=files copied
 label.moveresult=files moved
+bytesCopied=bytes copied
+bytesMoved=bytes moved
 morePasteConflicts=... more
 pasteConflictHead=The following files already exist in the destination folder
+pasteConflictHeadFolder=The following subdirectory already exists in the destination folder
 pasteOverwrite=Overwrite?
+destFolderFileConflict=The folder could not be copied because a file with the same name exists in the target folder.
+targetEqualsSource=The target folder must be different from the source folder.
+targetIsSubOfSource=The target folder may not be a subdirectory of the source folder.
 
 # remote editor labels
 saveSuccess=editor data saved successfully
@@ -417,11 +426,12 @@ label.savethumbs=Store Thumbnails
 label.invite=Send Invitation
 label.of=of
 label.pagesize=files per page
-error.compselect=Select at least 2 pictures to compare
+error.compselect=Select at least 2 and not more than 8 pictures to compare!
 label.compare=Compare
 label.comparehead=Compare Images
 label.renameImage=rename picture file
 label.exifRename=rename to exposure date
+viewFullSize=view in new tab/window
 label.noThumbRefresh=do not refresh the thumbnail view
 label.selectedPictures=selected pictures
 label.selectFunction=- select function -
@@ -514,6 +524,7 @@ alt.back=previous picture
 startSlideshowHere=start slideshow here
 label.startPic=start picture
 slideshowHeadline=WebFileSys Slideshow
+fullScreenMode=fullscreen mode
 
 # co-browsing labels
 titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)
@@ -574,6 +585,7 @@ label.sendInvitationMail=send invitation e-mail
 label.publishType=publish as
 label.publishTypeExplorer=file explorer
 label.publishTypeAlbum=picture album
+button.copyPublicUrl=Copy to clipboard
 
 # user comments
 label.commentList=User Comments
@@ -634,7 +646,7 @@ error.duplicateCategory=A Category with this name already exists!
 error.missingCategoryName=Enter a name for the new category!
 
 # filesystem bookmarks
-label.noBookmarksDefined=No bookmarks have been defined!
+label.noBookmarksDefined=You don't have any bookmarks yet.
 label.bookmarks=Bookmarked Folders
 label.deleteBookmark=Delete Bookmark
 label.addBookmark=bookmark this folder
@@ -674,6 +686,10 @@ label.css=layout
 label.selectLanguage=- select language -
 label.userRole=user role
 button.register=Register
+registrationConfirmation=The first step of the registration process was successful. An e-mail containing information about how to complete the registration has been sent to the provided e-mail address.
+button.registrationToLogin=Goto Login
+activationSuccessful=Your account has been activated successfully.
+registrationAdminActivation=The new registered account must be activated by an administrator (sending e-mails is deactivated).
 error.missinglogin=the minimum length of the login name is 3 characters
 error.spacesinlogin=the login name must not contain spaces
 error.passwordlength=the minimum password length is 5 characters
@@ -850,6 +866,7 @@ sync.foldersCreatedSource=folders created in source
 sync.copiedToTarget=files copied to target
 sync.copiedToSource=files copied to source
 sync.readWriteChanges=read/write access changed
+sync.wait=Determining differences between folder trees ...
 
 # compare folders
 label.selectCompSourceResult=Select compare from the context menu of the target folder!

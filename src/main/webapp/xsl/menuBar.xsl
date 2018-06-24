@@ -60,7 +60,12 @@
 
   function pictureStory()
   {
-      thumbwin=open('/webfilesys/servlet?command=pictureStory&amp;random=' + new Date().getTime() + '&amp;screenWidth=' + screen.width + '&amp;screenHeight=' + screen.height,'thumbwin','status=no,toolbar=no,menu=no,width=' + (screen.width-20) + ',height=' + (screen.height-80) + ',resizable=yes,scrollbars=yes,left=5,top=1,screenX=5,screenY=1');
+      var winWidth = 900;
+      if (winWidth > screen.width - 40) {
+          winWidth = screen.width - 40;
+      }
+      var xpos = (screen.width - 40 - winWidth) / 2;
+      thumbwin = window.open('/webfilesys/servlet?command=pictureStory&amp;initial=true', 'thumbwin', 'status=no,toolbar=no,menu=no,width=' + (winWidth) + ',height=' + (screen.height - 120) + ',resizable=yes,scrollbars=yes,left=' + xpos + ',top=1,screenX=' + xpos + ',screenY=1');
   }
  
   function slideshow()

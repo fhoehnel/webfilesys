@@ -2,6 +2,7 @@ package de.webfilesys;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -39,6 +40,10 @@ public class FastPathQueue {
 			success = true;
 		} catch (ClassNotFoundException cnfe) {
 			Logger.getLogger(getClass()).warn(cnfe);
+		} catch (FileNotFoundException ioe) {
+			if (Logger.getLogger(getClass()).isDebugEnabled()) {
+				Logger.getLogger(getClass()).debug(ioe);
+			}
 		} catch (IOException ioe) {
 			Logger.getLogger(getClass()).warn(ioe);
 		} catch (ClassCastException cex) {

@@ -62,22 +62,8 @@ public class XslSlideshowParmsHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(slideShowParmsElement, "startFile", startFile, false);
 			XmlUtil.setChildText(slideShowParmsElement, "startPath", startPath, false);
 			XmlUtil.setChildText(slideShowParmsElement, "encodedStartPath", insertDoubleBackslash(startPath), false);
-			addMsgResource("label.startPic", getResource("label.startPic","start picture"));
 		}
-		
-		addMsgResource("label.slideparmhead", getResource("label.slideparmhead","Slideshow Parameters"));
-		addMsgResource("label.directory", getResource("label.directory", "folder"));
-		addMsgResource("label.recurse", getResource("label.recurse","include subdirectories"));
-		addMsgResource("label.autoForward", getResource("label.autoForward","automatic forward"));
-		addMsgResource("label.delay", getResource("label.delay","delay (seconds)"));
-		addMsgResource("label.fullScreen", getResource("label.fullScreen", "fullscreen"));
-		
-        addMsgResource("label.crossfade", getResource("label.crossfade", "crossfade"));
-        addMsgResource("label.randomize", getResource("label.randomize", "random order"));
-        
-		addMsgResource("button.startshow", getResource("button.startshow","start slideshow"));
-		addMsgResource("button.cancel", getResource("button.cancel", "cancel"));
 			
-		this.processResponse("slideShowParms.xsl", true);
+		processResponse("slideShowParms.xsl", true);
     }
 }

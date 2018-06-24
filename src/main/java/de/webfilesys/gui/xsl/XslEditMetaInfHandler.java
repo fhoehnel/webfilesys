@@ -309,7 +309,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
         String headLinePath = this.getHeadlinePath(path);
 
-		String shortPath = CommonUtils.shortName(headLinePath, 32);
+		String shortPath = CommonUtils.shortName(headLinePath, 50);
 		
 		Element metaInfElement = doc.createElement("metaInf");
 			

@@ -74,13 +74,6 @@ public class XslRenameFolderPromptHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(renameFolderElement, "currentNameShort", CommonUtils.shortName(currentName, 24), false);
 		
-		addMsgResource("label.renamedir", getResource("label.renamedir", "rename folder"));
-		addMsgResource("label.currentName", getResource("label.currentName","current name"));
-		addMsgResource("label.newDirName", getResource("label.newDirName","new folder name"));
-		addMsgResource("alert.illegalCharInFilename", getResource("alert.illegalCharInFilename", "The new folder name contains illegal characters."));
-		addMsgResource("button.rename", getResource("button.rename","Rename"));
-		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
-
 		resp.setContentType("text/xml");
 		
 		BufferedWriter xmlOutFile = new BufferedWriter(output);

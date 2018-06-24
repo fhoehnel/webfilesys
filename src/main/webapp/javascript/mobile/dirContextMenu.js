@@ -41,7 +41,7 @@ function folderContextMenu(path, folderName) {
             
             if (clipboardEmpty != "true") {
                 menuText = menuText 
-                         + menuEntry("javascript:pasteFromClipboard()", resourceBundle["button.paste"]);
+                         + menuEntry("javascript:checkPasteOverwrite('" + scriptPreparedPath + "')",resourceBundle["button.paste"]);
             	
             	if (copyOperation == "true") {
                     menuText = menuText 

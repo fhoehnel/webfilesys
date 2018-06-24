@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import org.apache.log4j.Logger;
 
 import de.webfilesys.Category;
 import de.webfilesys.ClipBoard;
+import de.webfilesys.CopyStatus;
+import de.webfilesys.FileSysStat;
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.TestSubDirThread;
@@ -19,6 +22,7 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.graphics.VideoThumbnailCreator;
+import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 
@@ -140,10 +144,39 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		output.println("<div id=\"fileCount\" />");
 		output.println("</td>");
 		output.println("</tr>");
-		
+
+        output.println("<tr>");
+        output.println("<td class=\"formParm2\">");
+        output.println("<div class=\"progressBar\">");
+        output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/images/bluedot.gif\" style=\"width:1px\" />");
+        output.println("</div>");
+        output.println("</td>");
+        output.println("</tr>");
+        
+        output.println("<tr>");
+        output.println("<td class=\"formParm1\">");
+        
+        if (clipBoard.isCopyOperation()) {
+            labelText = getResource("bytesCopied", "bytes copied");
+        } else {
+            labelText = getResource("bytesMoved", "bytes moved");
+        }
+        
+        output.println(labelText + ":");
+        output.println("</td>");
+        output.println("</tr>");
+
+        output.println("<tr>");
+        output.println("<td class=\"formParm2\">");
+        output.println("<div id=\"bytesCopied\" />");
+        output.println("</td>");
+        output.println("</tr>");
+
 		output.println("</table>");
 
 		output.println("</form>");
+		
+		output.flush();
 
 		ArrayList<String> clipFiles = clipBoard.getAllFiles();
 
@@ -155,8 +188,22 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 			{
 				destDir=destDir + File.separator;
 			}
-
+			
+            DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");
+            
+            long copySizeSum = 0;
+            
+            for (String sourceFile : clipFiles) {
+                File file = new File(sourceFile);
+                if (file.exists() && file.isFile() && file.canRead()) {
+                    copySizeSum += file.length();
+                }
+            }
+			
+            String formattedSizeSum = numFormat.format(copySizeSum);
+            
 			int copyFileCounter = 0;
+			long bytesCopied = 0;
 			
 			for (String sourceFile : clipFiles) 
 			{
@@ -198,16 +245,26 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 				{
 					copyFileCounter++;
 					
+	                File file = new File(sourceFile);
+	                if (file.exists() && file.isFile() && file.canRead()) {
+	                    bytesCopied += file.length();                   
+	                }
+					
 	                if ((copyFileCounter <= 100) ||
 	                    ((copyFileCounter < 300) && (copyFileCounter % 5 == 0)) ||
 	                    ((copyFileCounter < 1000) && (copyFileCounter % 10 == 0)) ||
 	                    (copyFileCounter % 50 == 0))
 	                {
-	                    output.println("<script language=\"javascript\">");
-
-	                    output.println("document.getElementById('fileCount').innerHTML='" + copyFileCounter +  "';");
-	                    
-	                    output.println("</script>");
+                        long progress = 0;
+                        if (copySizeSum > 0) {
+                            progress = bytesCopied * 300l / copySizeSum;
+                        }
+                        
+                        output.println("<script language=\"javascript\">");
+                        output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyFileCounter) + " / " + numFormat.format(clipFiles.size()) +  "';");
+                        output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(bytesCopied) + " / " + formattedSizeSum +  "';");
+                        output.println("document.getElementById('copyProgressBar').style.width='" + progress + "px';");
+                        output.println("</script>");
 	                }
 
 					MetaInfManager metaInfMgr=MetaInfManager.getInstance();
@@ -287,76 +344,35 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 			
 			if (copyFileCounter > 100)
 			{
+                long progress = 0;
+                if (copySizeSum > 0) {
+                    progress = bytesCopied * 300l / copySizeSum;
+                }
+                
                 output.println("<script language=\"javascript\">");
-                output.println("document.getElementById('fileCount').innerHTML='" + copyFileCounter +  "';");
+                output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyFileCounter) + " / " + numFormat.format(clipFiles.size()) +  "';");
+                output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(bytesCopied) + " / " + formattedSizeSum +  "';");
+                output.println("document.getElementById('copyProgressBar').style.width='" + progress + "px';");
                 output.println("</script>");
 			}
 		}
 
-		ArrayList<String> clipDirs = clipBoard.getAllDirs();
+        ArrayList<String> clipDirs = clipBoard.getAllDirs();
 
-		if (clipDirs != null)
-		{
+        if (clipDirs != null) {
 			String destDir=actPath;
 
-			if (!destDir.endsWith(File.separator))
-			{
+			if (!destDir.endsWith(File.separator)) {
 				destDir=destDir + File.separator;
 			}
 
-			for (String sourceDir : clipDirs)
-			{
-				if (destDir.regionMatches(true,0,sourceDir,0,sourceDir.length()))
-				{
-					output.println("<script language=\"javascript\">");
-					output.println("alert('" + insertDoubleBackslash(sourceDir) + "\\n" + getResource("alert.copytosubdir","cannot be copied to an own subdirectory") + "!');");
-
-					output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
-
-					output.println("</script>");
-					output.println("</BODY></html>");
-					output.flush();
-					return; 
-				}
-
+			for (String sourceDir : clipDirs) {
 				String destSubdir = destDir + sourceDir.substring(sourceDir.lastIndexOf(File.separatorChar)+1);
 
 				File destDirFile = new File(destSubdir);
 
-				if (destDirFile.exists())
-				{
-					if (!ignoreExist)
-					{
-						output.println("<script language=\"javascript\">");
-						output.println("if (confirm('" + insertDoubleBackslash(destSubdir) + "\\n" + getResource("confirm.overwritedir","directory already exists - overwrite?") + "'))");
-						
-						if (pasteToFileWin) 
-						{
-							output.println("{window.location=\"/webfilesys/servlet?command=pasteFiles&ignoreExist=true\";}");
-						}
-						else 
-						{
-							output.println("{window.location=\"/webfilesys/servlet?command=pasteFiles&actpath=" + UTF8URLEncoder.encode(actPath) + "&ignoreExist=true\";}");
-						}
-						output.println("else {");
-
-						if (pasteToFileWin) {
-							output.println("window.location.href='/webfilesys/servlet?command=listFiles';");
-						} else {
-							output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "';");
-						}
-
-						output.println("}");
-						output.println("</script>");
-						output.println("</BODY></html>");
-						output.flush();
-						return;
-					}
-				}
-				else
-				{
-					if (!destDirFile.mkdir())
-					{
+				if (!destDirFile.exists()) {
+					if (!destDirFile.mkdir()) {
 						output.println("<script language=\"javascript\">");
 						output.println("alert('" + getResource("alert.mkdirfail","Cannot create directory") + "\\n" + insertDoubleBackslash(destSubdir) + "!');");
 
@@ -373,7 +389,16 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 					}
 				}
 
-				boolean copyOK = copyFolderTree(sourceDir, destSubdir, ignoreExist);
+				DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");
+				
+		        FileSysStat fileSysStat = new FileSysStat(sourceDir);
+		        fileSysStat.getStatistics();        
+				
+				CopyStatus copyStatus = new CopyStatus();
+				copyStatus.setTreeFileSize(fileSysStat.getTotalSizeSum());
+				copyStatus.setTreeFileNum(fileSysStat.getTotalFileNum());
+				
+				boolean copyOK = copyFolderTreeWithStatus(sourceDir, destSubdir, true, copyStatus, numFormat);
                 
                 if (!copyOK)
                 {
@@ -398,6 +423,8 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
                                 subDirThread.start();
                             }
                         }
+
+                        (new TestSubDirThread(destSubdir)).start();
                     }
                 }
 			}     
@@ -413,33 +440,30 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 			clipBoard.reset();
 		}
 		
-		if (pasteToFileWin)
-		{
-			if (thumbView)
-			{
+		if (pasteToFileWin) {
+			if (thumbView) {
 				output.println("window.location.href='/webfilesys/servlet?command=thumbnail&zoom=no&random="  + (new Date()).getTime() + "';");
-			}
-			else
-			{
+			} else {
 				output.println("window.location.href='/webfilesys/servlet?command=listFiles&mask=*';");
 			}
 			
-			if (clipDirs != null)
-			{
+			if (clipDirs != null) {
 				output.print("window.parent.DirectoryPath.location.href='/webfilesys/servlet?command=refresh&path=" + UTF8URLEncoder.encode(getCwd()) + "';");
 			}
-		}
-		else
-		{
-			output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "&fastPath=true';");
+		} else {
+    	    String mobile = (String) session.getAttribute("mobile");
+    	    if (mobile != null) {
+    			output.println("window.location.href='/webfilesys/servlet?command=mobile&cmd=folderFileList';");
+    	    } else {
+    			output.println("window.location.href='/webfilesys/servlet?command=exp&expand=" + UTF8URLEncoder.encode(actPath) + "&fastPath=true';");
+    	    }
 		}
 		output.println("</script>");
 
 		output.println("</body></html>");
 		output.flush();
 		
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
-		{
+		if (WebFileSys.getInstance().isAutoCreateThumbs()) {
 			AutoThumbnailCreator.getInstance().queuePath(actPath, AutoThumbnailCreator.SCOPE_TREE);
 		}
 	}

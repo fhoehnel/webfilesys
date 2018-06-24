@@ -228,6 +228,9 @@ function showEmailResult(req)
 }
 
 function checkPasteOverwrite(path) {
+	
+	showHourGlass();
+	
     var url = "/webfilesys/servlet?command=checkPasteOverwrite";
     
     if (path) {
@@ -249,11 +252,42 @@ function checkPasteOverwriteResult(req) {
             	pasteUrl = pasteUrl + "&actpath=" + encodeURIComponent(path);
             }
         	
+            var destFolderFileConflictElem = req.responseXML.getElementsByTagName("destFolderFileConflict");
+            if (destFolderFileConflictElem && (destFolderFileConflictElem.length > 0)) {
+            	hideHourGlass();
+            	customAlert(resourceBundle["destFolderFileConflict"]);
+                return;
+            }
+            
+            var targetEqualsSourceElem = req.responseXML.getElementsByTagName("targetEqualsSource");
+            if (targetEqualsSourceElem && (targetEqualsSourceElem.length > 0)) {
+            	hideHourGlass();
+            	customAlert(resourceBundle["targetEqualsSource"]);
+                return;
+            }
+
+            var targetIsSubOfSourceElem = req.responseXML.getElementsByTagName("targetIsSubOfSource");
+            if (targetIsSubOfSourceElem && (targetIsSubOfSourceElem.length > 0)) {
+            	hideHourGlass();
+            	customAlert(resourceBundle["targetIsSubOfSource"]);
+                return;
+            }
+            
             var conflicts = req.responseXML.getElementsByTagName("conflict");            
 
             if (conflicts.length > 0) {
-                var msg = resourceBundle["pasteConflictHead"] + "<br/>";
-            	 
+            	hideHourGlass();
+
+                var msg;
+                var folderElem = req.responseXML.getElementsByTagName("folder");
+                if (folderElem && (folderElem.length > 0)) {
+                    msg = resourceBundle["pasteConflictHeadFolder"];
+                } else {
+                    msg = resourceBundle["pasteConflictHead"];
+                }
+            	
+                msg += "<br/>"; 
+                
                 for (var i = 0; i < conflicts.length; i++) {
                 	msg = msg + "<br/>" + conflicts[i].firstChild.nodeValue;
                 }
@@ -262,6 +296,7 @@ function checkPasteOverwriteResult(req) {
                  
             	customConfirm(msg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
             			function() {
+            		        showHourGlass();
                             window.location.href = pasteUrl;
             	        }
             	);
@@ -269,6 +304,7 @@ function checkPasteOverwriteResult(req) {
                 window.location.href = pasteUrl;
             }
         } else {
+        	hideHourGlass();
             alert(resourceBundle["alert.communicationFailure"]);
         }
     }

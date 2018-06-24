@@ -63,34 +63,3 @@ function checkUploadTargetExists(targetFileName, callback) {
     });          
 }
 
-function checkMultiUploadTargetExists(targetFileName, callbackRejected, callbackOk) {
-    var url = "/webfilesys/servlet?command=ajaxRPC&method=existFile&param1=" + encodeURIComponent(targetFileName);
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-            
-                var responseXml = req.responseXML;
-                var resultItem = responseXml.getElementsByTagName("result")[0];
-                var result = resultItem.firstChild.nodeValue;  
-                
-                if (result && (result == "true")) {
-                    var confirmMsg = targetFileName + " - " + resourceBundle["upload.file.exists"];
-                	customConfirm(confirmMsg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
-                			function() {
-                		        callbackOk();
-                	        },
-                			function() {
-                	        	callbackRejected();
-                	        }
-                	);
-                    return;
-                }
-                callbackOk();
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-        }
-    });          
-}
-

@@ -24,6 +24,11 @@ body.dirTree {
     background-color:#f0f0f0;
 }
   
+body.fileListNoMargin {
+	margin: 0;
+	background-color: #f0f0f0;
+}  
+  
 body.fileList,
 body.zipContent {
     background-color: #f0f0f0;
@@ -79,6 +84,21 @@ div.loginBox {
     border:none;
     border-radius:24px;
     box-shadow: 5px 5px 5px #666666;
+}
+
+div.registrationBox {
+    width: 520px;
+    height: 400px;
+    position: relative;
+    top: -200px;
+    left: -260px;
+    background-color: #ffffe0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px #666666;
+    padding: 20px;
 }
 
 div.msgBox {
@@ -193,6 +213,13 @@ span.selfRegistrationSubTitle {
     font-size: 15px;
 }
 
+td.registrationConfirmation {
+    padding: 20px;
+    font-size: 15px;
+    color: #404040;
+    vertical-align: top;
+}
+
 td.loginFormLabel {
     color:navy;
     font-size:13px;
@@ -241,6 +268,12 @@ div.headline {
     border-color:navy;
     padding:3px;
     margin-bottom:5px;
+}
+
+div.headlineBorderless {
+    border-left-width: 0;	
+    border-right-width: 0;	
+    border-top-width: 0;	
 }
   
 table.dataList {
@@ -427,6 +460,11 @@ input,select,textarea {
     padding: 2px;    
 }
 
+table.storyPicCont {
+	width: 100%;
+	border: none;
+}
+
 td.story {
     font-size:12pt;
     color:#306048;
@@ -436,9 +474,10 @@ td.story {
   
 td.story2 {
     background-color: #c0c0c0;
-    font-size:12pt;
-    color:#306048;
-    font-weight:bold;
+    font-size: 12pt;
+    color: #306048;
+    font-weight: bold;
+    vertical-align: top;
 }
 
 body.menu {
@@ -486,8 +525,14 @@ td.border {
 }
 
 td.fileListFunct {
-    font-size:13px;
-    color:black;
+    font-size: 13px;
+    color: black;
+    padding: 5px 10px 5px 10px;
+}
+
+td.fileListButton {
+    font-size: 13px;
+    color: black;
     padding: 5px 10px 5px 10px;
 }
   
@@ -563,11 +608,23 @@ table.fileListFilterSort {
     border-bottom-width: 0;	
 }
 
+table.fileListFilterSort2 {
+	width: 100%;
+	border-spacing: 0;
+    border: none;
+}
+
 table.fileListButtonCont {
 	width: 100%;
 	border-spacing: 0;
     border: 1px solid black;
     border-top-width: 0;	
+}
+
+table.fileListButtonCont2 {
+	width: 100%;
+	border-spacing: 0;
+    border: none;
 }
 
 table.fileListFunctCont {
@@ -576,9 +633,18 @@ table.fileListFunctCont {
 }
 
 div.fileListDesc {
-    width:100%;
-    padding:2px;
-    margin-bottom:5px;
+    width: 100%;
+    padding: 2px;
+    margin-bottom: 5px;
+    font-size: 10px;
+    color: navy;
+}
+
+div.fileListFolderDesc {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 2px 10px;
+    margin-bottom: 5px;
     font-size: 10px;
     color: navy;
 }
@@ -827,9 +893,39 @@ div.hint {
     font-size: 13px;
 }
 
+body.slideshowFullscreen {
+    margin: 0px;
+    border: 0px;
+    background-color: #c0c0c0;
+    padding: 0px;
+    height: 100%;	
+}
+
+div.slideshowCont {
+	width: 100%;
+    margin: 0px;
+    padding: 0px;
+    text-align: center;	
+}
+
+img.slideshowImg {
+    position: absolute;
+}
+
+img.slideshowNextPointer {
+    cursor: url('../images/arrow-right.png'), auto;
+}
+
 div.slideShowText {
     font-size:13px;
     color:black;
+}
+  
+img.slideshowControl {
+	vertical-align: text-bottom;
+	width: 22px;
+	height: 22px;
+	border: 0;
 }
   
 div.albumPath {
@@ -996,6 +1092,7 @@ td.syncCompare {
     border-top-width:1px;
     border-top-style:solid;
     border-top-color:#b0b0b0;
+    word-wrap: break-word;
 }
 
 .buttonCont { 
@@ -1036,8 +1133,8 @@ a.button:active span
 } 
 
 td.statsBarGraph {
-    font-size:8pt;
-    color:navy;
+    font-size: 14px;
+    color: navy;
 }
 
 .logFatal {
@@ -1100,8 +1197,6 @@ td.fileSort {
 table.fileListHead {
     width:100%;
     background-color:ivory;
-    border-left:1px solid black;
-    border-right:1px solid black;
     border-collapse: collapse;
 }
 
@@ -1151,14 +1246,12 @@ th.fileListSize {
 }
 
 div.fileListScrollDiv {
-    background-color:ivory;
-    height:400px;
-    border-left:1px solid black;
-    border-right:1px solid black;
-    border-top:1px solid #b0b0b0;  
-    border-bottom:1px solid #b0b0b0;  
-    display:block;
-    overflow:auto;
+    background-color: ivory;
+    height: 400px;
+    border-top: 1px solid #b0b0b0;  
+    border-bottom: 1px solid #b0b0b0;  
+    display: block;
+    overflow: auto;
 }
 
 table.fileList tr td {
@@ -1184,10 +1277,15 @@ td.fileListSelectedRow {
 }
 
 td.fileListSelector {
-    width:20px;
-    min-width:20px;
+    width: 20px;
+    min-width: 20px;
+    padding-left: 8px;
 }
   
+table.fileList tr td.fileListSelector {
+    padding-left: 4px;
+}
+	
 td.fileListIcon {
     width:20px;
     min-width:20px;
@@ -1690,6 +1788,13 @@ div.pictureScrollCont {
 	background-color: #d0d0d0;
 }
 
+div.pictureScrollContNoBorder {
+	overflow-y: auto;
+	height: 200px;
+	padding-left: 10px;
+	background-color: #d0d0d0;
+}
+
 div.thumbnailCont {
 	display: inline-block;
 	width: 180px;
@@ -1844,6 +1949,76 @@ td.gpsChartText {
     font-size: 13px;
     font-family: Arial,Helvetica;
     color: black;
+}
+
+div.progressBar {
+	display: inline-block;
+	width: 300px;
+	height: 20px;
+	border: 1px solid black;
+	background-color: #d0d0d0;
+	border-radius: 5px;
+}
+
+div.progressBar img {
+	height: 20px;
+}
+
+img.uploadPreview {
+	height: 100px;
+	border: 2px ridge #808080;
+	margin: 4px;
+}
+
+div.dropZone {
+	width: 95%;
+	min-height: 112px;
+	background-color: #e0e0e0;
+	border: 2px ridge #808080;
+}
+
+div.dragDropHint {
+	color: #808080;
+	font-family: Arial,Helvetica;
+	font-size: 16pt;
+	font-weight: bold;
+	margin-top: 45px;
+}
+
+div#dragDropHint {
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+td.dropTarget {
+	text-align: center;
+	padding: 10px;
+}
+
+#uploadFiles {
+	padding-left: 20px;
+}
+
+input[type=file] {
+	border: none;
+}
+
+li.selectedFile {
+	color: navy;
+	font-family: Arial,Helvetica;
+	font-size: 10pt;
+}
+
+#selectedFilesSize {
+	color: navy;
+}
+
+form.userData input[type="text"], 
+form.userData input[type="email"], 
+form.userData input[type="password"], 
+form.userData select {
+    width: 240px;
 }
 
 @media (max-width: 400px) {

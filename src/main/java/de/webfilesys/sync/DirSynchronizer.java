@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import org.apache.log4j.Logger;
+
 import de.webfilesys.WebFileSys;
 
 public class DirSynchronizer
 {
+    private static final Logger LOG = Logger.getLogger(DirSynchronizer.class);
+	
     /** the granularity of file timestamps for FAT filesystems is 2 sec ! */
     private static final long TIMESTAMP_GRANULARITY = 2000;
     
@@ -356,6 +360,13 @@ public class DirSynchronizer
 
         String fileList[] = folder.list();
 
+        if (fileList == null) {
+        	if (LOG.isInfoEnabled()) {
+            	LOG.info("sync dirs: file list is null for directory " + path);
+        	}
+        	return;
+        }
+        
         for (int i = 0; i < fileList.length; i++)
         {
             String fileName = fileList[i];

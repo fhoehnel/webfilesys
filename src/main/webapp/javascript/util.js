@@ -48,6 +48,14 @@ function getWinWidth()
     return w;
 }  
 
+function getVisualWinWidth() {
+	if (window.visualViewport) {
+		// supported starting with Chrome 61
+		return window.visualViewport.width;
+	}
+	return getWinWidth();
+}
+
 /*
   Places a box centered vertically and horizontally on the browser window.
   @param box a DOM element of type div
@@ -403,4 +411,28 @@ function getNextSiblingElement(element) {
     	nextSib = nextSib.nextSibling;
     }
 	return null;
+}
+
+function requestFullScreen(elem) {
+	if (elem.requestFullscreen) {
+		elem.requestFullscreen();
+	} else if (elem.mozRequestFullScreen) {
+		elem.mozRequestFullScreen();
+	} else if (elem.webkitRequestFullscreen) {
+		elem.webkitRequestFullscreen();
+	} else if (elem.msRequestFullscreen) {
+	    elem.msRequestFullscreen();
+	}
+}
+
+function cancelFullScreen(elem) {
+	if (document.cancelFullScreen) {
+        document.cancelFullScreen();
+	} else if (document.mozCancelFullScreen) {
+	    document.mozCancelFullScreen();
+	} else if (document.webkitCancelFullScreen) {
+	    document.webkitCancelFullScreen();
+	} else if (document.msExitFullscreen) {
+		document.msExitFullscreen();
+	}
 }

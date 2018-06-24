@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import de.webfilesys.graphics.ThumbnailThread;
-import de.webfilesys.gui.user.ZipDirRequestHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 

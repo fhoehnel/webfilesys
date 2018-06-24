@@ -34,7 +34,7 @@
 
 </head>
 
-<body>
+<body style="margin-bottom:0">
   <xsl:if test="/metaInf/geoTag">
     <xsl:attribute name="onload">loadGoogleMapsAPIScriptCode('<xsl:value-of select="/metaInf/googleMapsAPIKey" />')</xsl:attribute>
   </xsl:if>
@@ -87,33 +87,32 @@
         </td>
       </tr>
 
-      <tr>
-        <td class="formParm1" nowrap="nowrap">
-          <span resource="label.geoTag"></span>
-        </td>
-        <td class="formParm2" width="80%">
-          <ul style="list-style:none;margin:0;padding:0;">
-            <li style="padding-bottom:5px;">
-              <input name="latitude" style="width:60px;">
-                <xsl:if test="/metaInf/geoTag/latitude">
-                  <xsl:attribute name="value"><xsl:value-of select="/metaInf/geoTag/latitude" /></xsl:attribute>
-                </xsl:if>
-              </input>
-              &#160;
-              <span resource="label.latitude"></span>
-            </li>
+      <xsl:if test="/metaInf/geoTag/mapSelection">
+        <tr>
+          <td class="formParm1" nowrap="nowrap">
+            <span resource="label.geoTag"></span>
+          </td>
+          <td class="formParm2" width="80%">
+            <ul style="list-style:none;margin:0;padding:0;">
+              <li style="padding-bottom:5px;">
+                <input name="latitude" style="width:60px;">
+                  <xsl:if test="/metaInf/geoTag/latitude">
+                    <xsl:attribute name="value"><xsl:value-of select="/metaInf/geoTag/latitude" /></xsl:attribute>
+                  </xsl:if>
+                </input>
+                &#160;
+                <span resource="label.latitude"></span>
+              </li>
 
-            <li style="padding-bottom:5px;">
-              <input name="longitude" style="width:60px;">
-                <xsl:if test="/metaInf/geoTag/longitude">
-                  <xsl:attribute name="value"><xsl:value-of select="/metaInf/geoTag/longitude" /></xsl:attribute>
-                </xsl:if>
-              </input>
-              &#160;
-              <span resource="label.longitude"></span>
-            </li>
-              
-            <xsl:if test="/metaInf/geoTag/mapSelection">
+              <li style="padding-bottom:5px;">
+                <input name="longitude" style="width:60px;">
+                  <xsl:if test="/metaInf/geoTag/longitude">
+                    <xsl:attribute name="value"><xsl:value-of select="/metaInf/geoTag/longitude" /></xsl:attribute>
+                  </xsl:if>
+                </input>
+                &#160;
+                <span resource="label.longitude"></span>
+              </li>
       
               <li style="padding-bottom:5px;">
                 <table border="0">
@@ -147,15 +146,11 @@
                 &#160;
                 <span resource="label.zoomFactor"></span>
               </li>
-              
-            </xsl:if>
             
-          </ul>
+            </ul>
+          </td>
+        </tr>
 
-        </td>
-      </tr>
-        
-      <xsl:if test="/metaInf/geoTag/mapSelection">
         <tr>
           <td class="formParm1">
             &#160;
@@ -203,7 +198,7 @@
             <span resource="label.folderIcon"></span>
           </td>
           <td class="formParm2">
-            <div style="width:300px;height:80px;overflow-x:auto;overflow-y:auto;border:1px solid #a0a0a0">
+            <div style="width:300px;height:100px;overflow-x:auto;overflow-y:auto;border:1px solid #a0a0a0">
               <table border="0">
                 <tr>
                   <td>

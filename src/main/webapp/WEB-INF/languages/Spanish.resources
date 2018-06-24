@@ -248,6 +248,8 @@ upload.file.exists=Un archivo con este nombre ya existe. ¿Reemplazar?
 uploadTargetFileNameExt=La extensión del nombre del archivo local se agregará al nombre de archivo en el servidor de destino. ¿Continuar?
 upload.total.status=estado total
 upload.error=No es posible cargar archivos.
+upload.conflictHead=Los archivos siguientes existen en la carpeta de destino
+upload.overwrite=¿Exagerar?
 
 # switch Read/Only labels
 label.readWriteStatus=estado Lectura/Escritura
@@ -361,6 +363,7 @@ datePickerFormat=dd-mm-yy
 
 # copy/rename/move labels and buttons
 label.copymovehead=Copiar/Cambiar nombre/Mover
+label.renameFolderHead=cambiar nombre de carpeta
 label.destfile=nombre de archivo de destino
 label.destdir=carpeta de destino
 label.sourcepath=ruta de orígen
@@ -400,9 +403,15 @@ label.copyfromclip=Copiando archivos
 label.movefromclip=Moviendo archivos
 label.copyresult=archivos copiados
 label.moveresult=archivos movidos
+bytesCopied=bytes copiados
+bytesMoved=bytes movidos
 morePasteConflicts=... mas
 pasteConflictHead=Los archivos siguientes existen en la carpeta de destino
+pasteConflictHeadFolder=Esta subcarpeta ya existe en la carpeta de destino
 pasteOverwrite=Exagerar?
+destFolderFileConflict=La carpeta no se pudo copiar porque existe un archivo con el mismo nombre en la carpeta de destino.
+targetEqualsSource=La carpeta de destino debe ser diferente de la carpeta de origen.
+targetIsSubOfSource=La carpeta de destino no puede ser una subcarpeta de la carpeta de origen.
 
 # remote editor labels
 saveSuccess=datos del editor guardado correctamente
@@ -417,11 +426,12 @@ label.savethumbs=Guardar miniaturas
 label.invite=Enviar invitación
 label.of=de
 label.pagesize=archivos por página
-error.compselect=Selecciona por lo menos 2 imágenes para comparar
+error.compselect=Selecciona al menos dos y no más de ocho imágenes para comparar.
 label.compare=Comparar
 label.comparehead=Comparar imágenes
 label.renameImage=Cambiar nombre de imagen
 label.exifRename=Cambiar nombre a fecha de captura
+viewFullSize=Ver tamaño completo
 label.noThumbRefresh=no actualizar la vista de miniaturas
 label.selectedPictures=imágenes seleccionadas
 label.selectFunction=- selecciona función -
@@ -514,6 +524,7 @@ alt.back=anterior imagen
 startSlideshowHere=comenzar diapositivas aqui
 label.startPic=primera imagen
 slideshowHeadline=WebFileSys diapositivas
+fullScreenMode=pantalla completa
 
 # co-browsing labels
 titleCoBrowsingMaster=WebFilesys Co-Browsing (Master)
@@ -575,6 +586,7 @@ label.publishType=publicar como
 label.publishTypeExplorer=lista de archivos
 label.publishTypeAlbum=álbum de fotos
 button.returnToAlbum=Volver al álbum
+button.copyPublicUrl=Copiar al portapapeles
 
 # user comments
 label.commentList=Comentarios de usuario
@@ -677,6 +689,10 @@ label.css=estilo
 label.selectLanguage=- seleccionar lengua -
 label.userRole=rol del usuario
 button.register=Registrar
+registrationConfirmation=El primer paso del proceso de registro fue exitoso. Se ha enviado un correo electrónico con información sobre cómo completar el registro a la dirección de correo electrónico introducido.
+button.registrationToLogin=Acceso a arcoíris blog
+activationSuccessful=El registro de nuevo usario ha completado exitoso.
+registrationAdminActivation=La nueva cuenta registrada debe ser activada por un administrador (el envío de correos electrónicos está desactivado).
 error.missinglogin=nombre de usuario, mínimo 3 caracteres
 error.spacesinlogin=el nombre de usuario no puede tener espacios
 error.passwordlength=contraseña, mínimo 3 caracteres
@@ -852,6 +868,7 @@ sync.foldersCreatedSource=carpetas creadas en carpeta orígen
 sync.copiedToTarget=archivos se han copiado a destino
 sync.copiedToSource=archivos se han copiado a orígen
 sync.readWriteChanges=estado Lectura/Escritura ha cambiado para unos archivos
+sync.wait=Determinando las diferencias entre los árboles de carpetas ...
 
 # compare folders
 label.selectCompSourceResult=¡Selecciona comparar en el menu contextual de la carpeta destino!

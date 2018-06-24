@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.CopyStatus;
+import de.webfilesys.FileSysStat;
 import de.webfilesys.util.UTF8URLEncoder;
 
 /**
@@ -120,11 +123,33 @@ public class CloneFolderRequestHandler extends UserRequestHandler
 		output.println("<div id=\"fileCount\" />");
 		output.println("</td>");
 		output.println("</tr>");
+
+		output.println("<tr>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<div class=\"progressBar\">");
+		output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/images/bluedot.gif\" style=\"width:1px\" />");
+		output.println("</div>");
+		output.println("</td>");
+		output.println("</tr>");
+		
+		output.println("<tr>");
+		output.println("<td class=\"formParm1\">");
+		output.println(getResource("bytesCopied", "bytes copied") + ":");
+		output.println("</td>");
+		output.println("</tr>");
+
+		output.println("<tr>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<div id=\"bytesCopied\" />");
+		output.println("</td>");
+		output.println("</tr>");
 		
 		output.println("</table>");
 
 		output.println("</form>");
 
+		output.flush();
+		
 		String errorMsg = null;
 		
 		File destFile = new File(newFolderPath);
@@ -141,7 +166,16 @@ public class CloneFolderRequestHandler extends UserRequestHandler
 			}
 			else 
 			{
-				if (!copyFolderTree(sourceFolderPath, newFolderPath, false))
+				DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");
+				
+		        FileSysStat fileSysStat = new FileSysStat(sourceFolderPath);
+		        fileSysStat.getStatistics();        
+				
+				CopyStatus copyStatus = new CopyStatus();
+				copyStatus.setTreeFileSize(fileSysStat.getTotalSizeSum());
+				copyStatus.setTreeFileNum(fileSysStat.getTotalFileNum());
+				
+				if (!copyFolderTreeWithStatus(sourceFolderPath, newFolderPath, false, copyStatus, numFormat))
 			    {
 	                errorMsg = getResource("alert.cloneFolderFailed", "Failed to clone folder.");
 			    }

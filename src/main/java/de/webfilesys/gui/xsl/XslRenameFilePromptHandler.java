@@ -65,14 +65,6 @@ public class XslRenameFilePromptHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(renameFileElement, "mobile", "true", false);
         }
 		
-		addMsgResource("label.renameFile", getResource("label.renameFile","Rename File"));
-		addMsgResource("label.oldName", getResource("label.oldName","current name"));
-		addMsgResource("label.newname", getResource("label.newname","new name"));
-		addMsgResource("button.rename", getResource("button.rename","Rename"));
-		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
-		addMsgResource("alert.destEqualsSource", getResource("alert.destEqualsSource", "The new file name must be different!"));
-		addMsgResource("alert.illegalCharInFilename", getResource("alert.illegalCharInFilename", "The new file name contains illegal characters."));
-
 		resp.setContentType("text/xml");
 		
 		BufferedWriter xmlOutFile = new BufferedWriter(output);

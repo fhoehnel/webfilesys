@@ -86,6 +86,13 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         output.println("</tr>");
 
         output.println("<tr>");
+        output.println("<td class=\"formParm1\">activated</td>");
+		output.println("<td class=\"formParm2\">");
+		output.println("<input type=\"checkbox\" id=\"activated\" name=\"activated\"" + (user.isActivated() ? "checked" : "") + " class=\"cb3\">");
+		output.println("</td>");
+        output.println("</tr>");
+        
+        output.println("<tr>");
         output.println("<td class=\"formParm1\">new password</td>");
 		output.println("<td class=\"formParm2\"><input type=\"password\" id=\"password\" name=\"password\" maxlength=\"30\" value=\"\"></td>");
         output.println("</tr>");

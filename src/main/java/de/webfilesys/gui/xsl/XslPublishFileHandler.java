@@ -16,6 +16,7 @@ import de.webfilesys.InvitationManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.mail.EmailUtils;
 import de.webfilesys.mail.SmtpEmail;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -190,6 +191,9 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(publishFileElement, "encodedPath", UTF8URLEncoder.encode(path), false);
 		XmlUtil.setChildText(publishFileElement, "publishPath", publishPath, false);
 		
+		String shortPath = CommonUtils.shortName(getHeadlinePath(publishPath), 50);		
+		XmlUtil.setChildText(publishFileElement, "shortPath", shortPath, false);
+		
 		if (WebFileSys.getInstance().getMailHost() != null)
 		{
 			XmlUtil.setChildText(publishFileElement, "mailEnabled", "true", false);
@@ -310,6 +314,9 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(publishFileElement, "encodedPath", UTF8URLEncoder.encode(path), false);
 		XmlUtil.setChildText(publishFileElement, "publishPath", publishPath, false);
 		XmlUtil.setChildText(publishFileElement, "secretURL", secretURL.toString(), false);
+
+		String shortPath = CommonUtils.shortName(getHeadlinePath(publishPath), 50);		
+		XmlUtil.setChildText(publishFileElement, "shortPath", shortPath, false);
 
 		addMsgResource("label.publishFile", getResource("label.publishFile","Publish File"));
 		addMsgResource("label.fileToPublish", getResource("label.fileToPublish","file to publish"));

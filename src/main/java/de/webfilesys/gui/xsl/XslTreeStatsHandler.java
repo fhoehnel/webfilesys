@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -46,24 +44,16 @@ public class XslTreeStatsHandler extends XslRequestHandlerBase
 		doc.insertBefore(xslRef, treeStatsElement);
 
 		XmlUtil.setChildText(treeStatsElement, "css", userMgr.getCSS(uid), false);
+	    XmlUtil.setChildText(treeStatsElement, "language", language, false);
 		XmlUtil.setChildText(treeStatsElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(treeStatsElement, "relativePath", this.getHeadlinePath(currentPath), false);
 		XmlUtil.setChildText(treeStatsElement, "shortPath", CommonUtils.shortName(this.getHeadlinePath(currentPath), 60), false);
 		
-		addMsgResource("label.subdirs", getResource("label.subdirs","subdirectories"));
-		addMsgResource("label.subdirlevels", getResource("label.subdirlevels","subdir levels"));
-		addMsgResource("label.firstlevelfiles", getResource("label.firstlevelfiles","files in first level"));
-		addMsgResource("label.firstlevelbytes", getResource("label.firstlevelbytes","bytes in first level"));
-		addMsgResource("label.treefiles", getResource("label.treefiles","files in tree"));
-		addMsgResource("label.treebytes", getResource("label.treebytes","bytes in tree"));
-
-		addMsgResource("button.closewin", getResource("button.closewin","Close Window"));
-
         long bytesInFirstLevel = 0l;
         
         int filesInFirstLevel = 0;
         
-        ArrayList folders = new ArrayList();
+        ArrayList<String> folders = new ArrayList<String>();
         
         File dirFile = new File(currentPath);
         
@@ -101,10 +91,7 @@ public class XslTreeStatsHandler extends XslRequestHandlerBase
 
                 treeStatsElement.appendChild(folderListElement);
  
-                Iterator iter = folders.iterator();
-                
-                while (iter.hasNext()) {
-                    String folderName = (String) iter.next();
+                for (String folderName : folders) {
                     
                     String shortFolderName = CommonUtils.shortName(folderName, 20);
                     
@@ -128,6 +115,6 @@ public class XslTreeStatsHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(treeStatsElement, "dirBytes", Long.toString(bytesInFirstLevel), false);
 
-		this.processResponse("treeStatistics.xsl", false);
+		processResponse("treeStatistics.xsl", false);
     }
 }

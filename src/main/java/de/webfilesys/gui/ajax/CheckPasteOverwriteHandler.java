@@ -50,6 +50,11 @@ public class CheckPasteOverwriteHandler extends XmlRequestHandlerBase {
             return;
 		}
 		
+		boolean isFolderCopy = false;
+		boolean destFolderFileConflict = false;
+		boolean targetEqualsSource = false;
+		boolean targetIsSubOfSource = false;
+		
 		ArrayList<String> conflictingFiles = new ArrayList<String>();
 		
 		ArrayList<String> clipFiles = clipBoard.getAllFiles();
@@ -62,6 +67,33 @@ public class CheckPasteOverwriteHandler extends XmlRequestHandlerBase {
 					conflictingFiles.add(clipFile);
 				}
 			}
+		} else {
+			ArrayList<String> clipDirs = clipBoard.getAllDirs();
+			if (clipDirs != null) {
+				for (String sourcePath : clipDirs) {
+					String sourceDir = sourcePath.substring(sourcePath.lastIndexOf(File.separatorChar) + 1);
+					
+					File destDirFile = new File(path, sourceDir);
+
+					if (sourcePath.equals(path)) {
+						targetEqualsSource = true;
+					} else {
+						if (path.startsWith(sourcePath) && (path.length() > sourcePath.length() + 1) && (path.charAt(sourcePath.length()) == File.separatorChar)) {
+							targetIsSubOfSource = true;
+						} else {
+							if (destDirFile.exists()) {
+								conflictingFiles.add(sourceDir);
+								
+								if (destDirFile.isFile()) {
+									destFolderFileConflict = true;
+								}
+							}
+						}
+					}
+					
+					isFolderCopy = true;
+				}
+			}
 		}
 		
 		Element resultElement = doc.createElement("result");
@@ -71,6 +103,22 @@ public class CheckPasteOverwriteHandler extends XmlRequestHandlerBase {
 			Element pathElem = doc.createElement("path");
 			XmlUtil.setElementText(pathElem, path);
 			resultElement.appendChild(pathElem);
+		}
+
+		if (isFolderCopy) {
+			XmlUtil.setChildText(resultElement, "folder", "true", false);
+		}
+		
+		if (destFolderFileConflict) {
+			XmlUtil.setChildText(resultElement, "destFolderFileConflict", "true", false);
+		}
+	
+		if (targetEqualsSource) {
+			XmlUtil.setChildText(resultElement, "targetEqualsSource", "true", false);
+		}
+
+		if (targetIsSubOfSource) {
+			XmlUtil.setChildText(resultElement, "targetIsSubOfSource", "true", false);
 		}
 		
 		int counter = 0;

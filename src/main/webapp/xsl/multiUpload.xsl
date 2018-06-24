@@ -18,14 +18,11 @@
        <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="css" />.css</xsl:attribute>
     </link>
        
-    <style type="text/css">
-      img.uploadPreview {height:100px;border:2px ridge #808080;margin:4px;}
-      div.dropZone {width:95%;min-height:112px;background-color:#e0e0e0;border:2px ridge #808080;}
-      div.dragDropHint {color:#808080;font-family:Arial,Helvetica;font-size:16pt;font-weight:bold;margin-top:45px;}
-      div#dragDropHint {position:relative;left:0px;top:0px;}
-      li.selectedFile {color:navy;font-family:Arial,Helvetica;font-size:10pt;}
-    </style>
-  
+    <xsl:if test="mobile">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+      <link rel="stylesheet" type="text/css" href="/webfilesys/styles/mobile.css" />
+    </xsl:if>
+
     <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
     <script language="JavaScript" src="/webfilesys/javascript/ajaxUpload.js" type="text/javascript"></script>
@@ -83,6 +80,9 @@
   </head>
 
   <body onload="prepareDropZone();hideBrowserSpecifics();positionStatusDiv();">
+    <xsl:if test="mobile">
+      <xsl:attribute name="class">mobile</xsl:attribute>
+    </xsl:if>
     
   <div class="headline" resource="headline.multiUpload"></div>
     
@@ -100,7 +100,7 @@
       </tr>
 
       <tr id="dropTarget">
-        <td colspan="2" style="text-align:center;padding:10px;">
+        <td colspan="2" class="dropTarget">
           <div id="dropZone" class="dropZone">
             <div id="dragDropHint"><div class="dragDropHint" resource="upload.dropZone"></div></div>
           </div>
@@ -109,7 +109,7 @@
 
       <tr id="lastUploaded">
         <td class="formParm1" resource="upload.lastSent"></td>
-        <td colspan="2" class="formParm2">
+        <td class="formParm2">
           <span id="lastUploadedFile"/>
         </td>
       </tr>
@@ -118,7 +118,8 @@
 
       <tr id="selectedForUpload">
         <td colspan="2" class="formParm1">
-          <span resource="upload.selectedFiles"></span>:
+          <span resource="upload.selectedFiles"></span>:&#160;
+          <span id="selectedFilesSize"></span>
           <ul id="uploadFiles"/>
         </td>
       </tr>
@@ -130,7 +131,7 @@
       </tr>
       <tr>
         <td colspan="2" class="formParm2">
-          <input type="file" id="uploadFiles" multiple="true" class="formParm1" style="width:400px;" onchange="handleFiles(this.files)" />        
+          <input type="file" id="uploadFiles" multiple="true" class="formParm1" style="max-width:400px;" onchange="handleFiles(this.files)" />        
         </td>
       </tr>
 
@@ -138,7 +139,7 @@
       
       <tr>
         <td class="formButton">
-          <input id="uploadButton" type="button" onclick="positionStatusDiv();sendFiles()" resource="button.startUpload" style="visibility:hidden;display:none;" />
+          <input id="uploadButton" type="button" onclick="positionStatusDiv();checkUploadFileConflicts()" resource="button.startUpload" style="visibility:hidden;display:none;" />
           <input id="doneButton" type="button" style="visibility:hidden" resource="upload.button.done"
                  onclick="window.location.href='/webfilesys/servlet?command=listFiles&amp;keepListStatus=true'" />
         </td>
@@ -154,11 +155,8 @@
   </body>
   
   <div id="uploadStatus" class="uploadStatus" style="visibility:hidden">
-    <table border="0" width="100%" cellpadding="2" cellspacing="0">
-      <tr>
-        <th class="headline" style="border-width:0;border-bottom-width:1px;" resource="label.uploadStatus"></th>
-      </tr>
-    </table>
+  
+    <div class="headline" resource="label.uploadStatus"></div>
 	
 	<div id="currentFile" class="uploadStatusCurrentFile"></div>
   

@@ -44,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.20.0 (04 Feb 2018)";
+	public static final String VERSION = "Version 2.21.0-beta7 (25 May 2018)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -530,6 +530,11 @@ public class WebFileSys
 
             clientUrl = config.getProperty("ClientURL");
 
+        } else {
+        	Logger.getLogger(getClass()).warn("SmtpMailHost not configured - WebFileSys will not send e-mails. It is strongly recommended to configure a mail server.");
+        	if (openRegistration) {
+            	Logger.getLogger(getClass()).warn("SmtpMailHost not configured - self registered users must be activated by an administrator");
+        	}
         }
 
         serverDNS = config.getProperty("serverDNS");

@@ -2,6 +2,7 @@ package de.webfilesys.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 
@@ -519,6 +520,10 @@ public class CommonUtils
             return part1 + part2;
         }
         return part1 + File.separatorChar + part2;
+    }
+    
+    public static String generateAccessCode() {
+        return UUID.randomUUID().toString();
     }
     
 }

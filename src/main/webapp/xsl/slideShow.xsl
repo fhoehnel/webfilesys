@@ -9,7 +9,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<html>
+<html style="height:100%">
 
 <head>
 
@@ -18,6 +18,7 @@
   <meta http-equiv="expires" content="0" />
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/slideShow/css" />.css</xsl:attribute>
@@ -56,7 +57,7 @@
   
 </head>
 
-<body style="margin:0px;border:0px;background-color:#c0c0c0;padding:0px;">
+<body class="slideshowFullscreen">
   <xsl:attribute name="onload">setTimeout('self.focus()', 500); initSlideshow(); loadImage();if (autoForward!='true') {showActionButtons();};</xsl:attribute>
 
   <xsl:apply-templates />
@@ -69,24 +70,40 @@
 
 <xsl:template match="slideShow">
 
-  <p id="centerDiv" width="100%" style="margin:0px;padding:0px;text-align:center;">
-    
-    <img id="slideShowImg0" border="0" class="thumb" style="position:absolute;opacity:1">
+  <div id="centerDiv" class="slideshowCont">
+
+    <xsl:if test="/slideShow/autoForward='false'">
+      <xsl:attribute name="onClick">stopAndGo()</xsl:attribute>
+    </xsl:if>
+
+    <img id="slideShowImg0" style="opacity:1">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
       <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
+      <xsl:if test="/slideShow/autoForward='true'">
+        <xsl:attribute name="class">slideshowImg thumb</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="/slideShow/autoForward='false'">
+        <xsl:attribute name="class">slideshowImg thumb slideshowNextPointer</xsl:attribute>
+      </xsl:if>
     </img>
 
-    <img id="slideShowImg1" border="0" class="thumb" style="position:absolute;opacity:0">
+    <img id="slideShowImg1" style="opacity:0">
       <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
       <xsl:attribute name="onMouseOver">javascript:showActionButtons()</xsl:attribute>
+      <xsl:if test="/slideShow/autoForward='true'">
+        <xsl:attribute name="class">slideshowImg thumb</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="/slideShow/autoForward='false'">
+        <xsl:attribute name="class">slideshowImg thumb slideshowNextPointer</xsl:attribute>
+      </xsl:if>
     </img>
       
-  </p>
+  </div>
   
   <!-- button div -->
 
   <div id="buttonDiv" 
-       style="position:absolute;top:6px;left:6px;width=76px;height=20px;padding:5px;background-color:ivory;text-align:center;border-style:solid;border-width:1px;border-color:#000000;visibility:hidden">
+       style="position:absolute;top:6px;left:6px;width=76px;height=20px;padding:5px;background-color:#ffffff;text-align:center;border-style:solid;border-width:1px;border-color:#000000;white-space:nowrap;visibility:hidden">
     
     <xsl:if test="/slideShow/autoForward='true'">
       <a href="javascript:hideActionButtons()">
@@ -98,34 +115,38 @@
     
     <xsl:if test="/slideShow/autoForward='false'">
       <a href="javascript:goBack()">
-        <img id="privious" src="/webfilesys/images/prev.png" border="0" width="22" height="22">
+        <img id="previous" src="/webfilesys/images/prev.png" class="slideshowControl">
           <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.back']/@value" /></xsl:attribute>
         </img>
       </a>
     </xsl:if>
 
-    <a href="javascript:self.close()">
-      <img src="/webfilesys/images/exit.gif" border="0">
-        <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.exitslideshow']/@value" /></xsl:attribute>
-      </img>
+    <a href="javascript:self.close()" class="icon-font icon-cancel icon-cancel-slideshow">
+      <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.exitslideshow']/@value" /></xsl:attribute>
     </a>
 
     <xsl:if test="/slideShow/autoForward">
       <a id="stopAndGoLink" href="javascript:stopAndGo()">
         <xsl:if test="/slideShow/autoForward='true'">
-          <img id="pauseGo" src="/webfilesys/images/pause.gif" border="0">
+          <img id="pauseGo" src="/webfilesys/images/pause.png" border="0" style="vertical-align:text-bottom">
             <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.pause']/@value" /></xsl:attribute>
           </img>
         </xsl:if>
           
         <xsl:if test="/slideShow/autoForward='false'">
-          <img id="pauseGo" src="/webfilesys/images/next.png" border="0" width="22" height="22">
+          <img id="pauseGo" src="/webfilesys/images/next.png" class="slideshowControl">
             <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.continue']/@value" /></xsl:attribute>
           </img>
         </xsl:if>
       </a>
     </xsl:if>
   </div>
+  
+  <a id="fullScreenButton" href="javascript:void(0)" onclick="javascript:makeSlideshowFullscreen()" style="position:absolute;top:10px;right:10px;">
+    <img src="/webfilesys/images/fullscreen.png">
+      <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='fullScreenMode']/@value" /></xsl:attribute>
+    </img>    
+  </a>
   
 </xsl:template>
 

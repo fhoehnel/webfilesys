@@ -195,7 +195,7 @@ function stopAndGo() {
         timeout = window.setTimeout('loadImage()', 1000);
 
         if (pauseGoImg) {
-            pauseGoImg.src = '/webfilesys/images/pause.gif';
+            pauseGoImg.src = '/webfilesys/images/pause.png';
 
             pauseGoImg.title = pauseTitle;            
         }
@@ -205,7 +205,7 @@ function stopAndGo() {
         clearTimeout(timeout);
         
         if (pauseGoImg) {
-            pauseGoImg.src = '/webfilesys/images/go.gif';
+            pauseGoImg.src = '/webfilesys/images/go.png';
             
             pauseGoImg.title = continueTitle;            
         }
@@ -354,4 +354,13 @@ function switchOpacity(pic1, pic2) {
 	}
 }
 
+function makeSlideshowFullscreen() {
+	document.getElementById("fullScreenButton").style.display = "none";
+    requestFullScreen(document.documentElement);
+    
+    setTimeout(function() {
+        rollBackImageIdx(2);
+        loadImageIgnorePrefetch();    
+    }, 500);
+}
     

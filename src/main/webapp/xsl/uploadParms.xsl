@@ -20,6 +20,11 @@
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="css" />.css</xsl:attribute>
   </link>
 
+  <xsl:if test="mobile">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="stylesheet" type="text/css" href="/webfilesys/styles/mobile.css" />
+  </xsl:if>
+
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
@@ -172,6 +177,9 @@
 </head>
 
 <body onload="showMultiUploadLink()">
+  <xsl:if test="mobile">
+    <xsl:attribute name="class">mobile</xsl:attribute>
+  </xsl:if>
 
   <div class="headline" resource="label.uploadfile"></div>
 

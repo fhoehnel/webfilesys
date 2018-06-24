@@ -22,6 +22,11 @@
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/bookmarkList/css" />.css</xsl:attribute>
   </link>
 
+  <xsl:if test="/bookmarkList/mobile">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <link rel="stylesheet" type="text/css" href="/webfilesys/styles/mobile.css" />
+  </xsl:if>
+
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
@@ -35,7 +40,10 @@
 </head>
 
 <body>
-
+  <xsl:if test="/bookmarkList/mobile">
+    <xsl:attribute name="class">mobile</xsl:attribute>
+  </xsl:if>
+  
 <xsl:apply-templates />
 
 </body>

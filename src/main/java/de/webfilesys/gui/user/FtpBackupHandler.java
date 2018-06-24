@@ -371,14 +371,14 @@ public class FtpBackupHandler extends UserRequestHandler
 		output.println("<tr><td colspan=\"2\">&nbsp;</td></tr>");
 
 		output.println("<tr>");
-		output.println("<td>");
+		output.println("<td class=\"formButton\">");
 		output.println("<input type=\"submit\" value=\"" + getResource("button.ftpBackup","Start FTP Backup") + "\">");
 		output.println("</td>");
-		output.println("<td align=\"right\">");
+		output.println("<td class=\"formButton\" align=\"right\">");
 		output.println("<input type=\"button\" value=\"" + getResource("button.cancel","Cancel") + "\" onclick=\"self.close()\">");
 		output.println("</td>");
 		output.println("</tr>");
-
+		
 		output.println("</table>");
 
 		output.println("</form>");

@@ -41,3 +41,9 @@ function selectPublicLink() {
     	publicLinkCont.select();
     }
 }
+
+function copyPublicUrl() {
+    document.getElementById("publicLinkCont").select();
+    document.execCommand("Copy");
+    self.close();
+}

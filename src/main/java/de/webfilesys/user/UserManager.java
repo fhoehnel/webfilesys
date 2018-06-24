@@ -11,6 +11,8 @@ public interface UserManager
 	
 	public static final int DEFAULT_THUMB_PAGE_SIZE = 12;
 
+	public static final long ACTIVATION_CODE_EXPIRATION = 5l * 24l * 60l * 60l * 1000l;
+
     /**
      * Returns the list of the userids of all registered users.
      *
@@ -294,5 +296,13 @@ public interface UserManager
      */
     public boolean isReadyForShutdown();
 
+    /**
+     * Activate a user account created by self-registration.
+     * 
+     * @param activationCode
+     *            the activation code
+     */
+    public void activateUser(String activationCode) throws UserMgmtException;
+    
 }
 
