@@ -196,6 +196,12 @@
                   <span resource="label.files"></span>
                 </td>
                 
+                <td class="mobileFolderMenu">
+                  <a class="icon-font icon-picture mobileMenuIcon" titleResource="menuThumbnails">
+                    <xsl:attribute name="href">/webfilesys/servlet?command=mobile&amp;cmd=folderPictures</xsl:attribute>
+                  </a>
+                </td> 
+                
                 <xsl:if test="fileList/file">
                   <td id="sortMenu" class="fileListFunct sepBottom" nowrap="nowrap">
 

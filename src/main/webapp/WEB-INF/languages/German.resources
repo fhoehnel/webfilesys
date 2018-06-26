@@ -978,10 +978,12 @@ menuRenameDir=Ordner umbenennen
 menuSearch=Suche
 menuCreateFile=neue Datei anlegen
 menuZipDir=Ordner in ZIP-Archiv
+menuThumbnails=Vorschaubilder
 folderIsEmpty=Ordner enthält keine Dateien oder Unterordner, die dem Filter entsprechen
 mobileFolderMenuHint=Menü für aktuellen Ordner
 mobileMainMenuHint=Hauptmenü
 showSortMenu=Sortiermenü anzeigen
+mobileFileList=Dateiliste
 
 # alert messages
 alert.regsuccess=Der neue Nutzer wurde erfolgreich registriert.

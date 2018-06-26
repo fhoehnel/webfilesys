@@ -17,6 +17,10 @@ function renameDir(path) {
     });
 }
 
+function showPictureThumbs() {
+	window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderPictures";
+}
+
 function zip(path)
 {
     window.location.href="/webfilesys/servlet?command=zipDir&actPath=" + encodeURIComponent(path);

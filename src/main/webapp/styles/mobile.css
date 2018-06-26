@@ -67,7 +67,10 @@
       text-decoration: none;
   }
   
-  a.fn:hover {color:green;text-decoration:underline;}
+  a.fn:hover {
+      color: green;
+      text-decoration: underline;
+  }
 
   a.link {
       font-size: 24px;
@@ -78,6 +81,19 @@
   }
   
   a.link:hover {color:blue;}
+
+  a.picName {
+      font-size: 14px;
+      color: navy;
+      font-family: Arial,Helvetica;
+      font-weight: bold;
+      text-decoration: none;
+  }
+  
+  a.picName:hover {
+      color:green;
+      text-decoration:underline;
+  }
 
   td.subFolderList {background-color:ivory;padding:0px;margin:0px;border-right-width:1px;border-right-style:solid;border-right-color:#b0b0b0;}
   td.fileList {background-color:ivory;padding:0px;margin:0px;}

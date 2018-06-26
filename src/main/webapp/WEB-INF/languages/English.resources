@@ -975,10 +975,12 @@ menuRenameDir=rename folder
 menuSearch=search
 menuCreateFile=create new file
 menuZipDir=create ZIP archive
+menuThumbnails=picture thumbnails
 folderIsEmpty=no files or subfolders in this directory matching the filter criteria
 mobileFolderMenuHint=current folder menu
 mobileMainMenuHint=main menu
 showSortMenu=show sort menu
+mobileFileList=file list
 
 # alert messages
 alert.regsuccess=New user has been registered successfully.

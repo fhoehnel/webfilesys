@@ -976,10 +976,12 @@ menuRenameDir=cambiar nombre
 menuSearch=buscar
 menuCreateFile=crear nuevo archivo
 menuZipDir=comprimir en ZIP
+menuThumbnails=miniaturas
 folderIsEmpty=no hay archivos que coincidan con este filtro
 mobileFolderMenuHint=menú de la carpeta
 mobileMainMenuHint=menú principal
 showSortMenu=ver menú de la ordenación
+mobileFileList=lista de archivos
 
 # alert messages
 alert.regsuccess=El nuevo usuario ha sido registrado correctamente.

@@ -193,6 +193,10 @@ a.icon-font {
 	content: '\f15d';
 }
 
+.icon-list:before {
+	content: '\f03a';
+}
+
 .icon-page-next,
 .icon-page-last {
     float: right;
