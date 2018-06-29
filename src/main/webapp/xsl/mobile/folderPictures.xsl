@@ -269,8 +269,8 @@
                 <br/>
               
                 <xsl:if test="@link">
-                  <a class="link">
-                    <xsl:attribute name="href">javascript:picLinkMenu('<xsl:value-of select="@nameForScript" />', '<xsl:value-of select="realPathForScript" />', '<xsl:value-of select="@id" />')</xsl:attribute>
+                  <a class="linkPicName">
+                    <xsl:attribute name="href">javascript:mobilePicturePopup('<xsl:value-of select="realPathForScript" />', '<xsl:value-of select="@id" />')</xsl:attribute>
                     <xsl:attribute name="title">
                       <xsl:value-of select="'--&gt; '"/>
                       <xsl:value-of select="realPath"/>
@@ -282,7 +282,7 @@
                 <xsl:if test="not(@link)">
                   <a class="picName">
                     <xsl:attribute name="id">fileName-<xsl:value-of select="@id" /></xsl:attribute>
-                    <xsl:attribute name="href">javascript:picContextMenu('<xsl:value-of select="@nameForScript" />', '<xsl:value-of select="@id" />')</xsl:attribute>
+                    <xsl:attribute name="href">javascript:mobilePicturePopup('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />', '<xsl:value-of select="@id" />')</xsl:attribute>
                     <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
                     <xsl:value-of select="displayName" />
                   </a>
