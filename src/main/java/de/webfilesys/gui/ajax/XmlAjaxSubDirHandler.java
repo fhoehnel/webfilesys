@@ -24,6 +24,7 @@ import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.StringComparator;
 import de.webfilesys.util.UTF8URLEncoder;
+import de.webfilesys.util.XmlUtil;
 
 /**
  * @author Frank Hoehnel
@@ -101,6 +102,8 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 		}
 
 		Element subFolderElement = dirSubTree(actPath, lastInLevel);
+		
+		XmlUtil.setChildText(subFolderElement, "css", userMgr.getCSS(uid), false);
 		
 		doc.appendChild(subFolderElement);
 		

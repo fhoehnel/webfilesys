@@ -39,7 +39,7 @@
 
 </head>
 
-<body>
+<body class="bookmarks">
   <xsl:if test="/bookmarkList/mobile">
     <xsl:attribute name="class">mobile</xsl:attribute>
   </xsl:if>
@@ -130,15 +130,14 @@
 
     <br/>
     
-    <a class="button" onclick="this.blur()"> 
+    <input type="button" resource="button.return">
       <xsl:if test="/bookmarkList/mobile">
-        <xsl:attribute name="href">/webfilesys/servlet?command=mobile&amp;cmd=folderFileList</xsl:attribute>
+        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=mobile&amp;cmd=folderFileList'</xsl:attribute>
       </xsl:if>
       <xsl:if test="not(/bookmarkList/mobile)">
-        <xsl:attribute name="href">javascript:document.bookmarkForm.submit()</xsl:attribute>
+        <xsl:attribute name="onclick">javascript:document.bookmarkForm.submit()</xsl:attribute>
       </xsl:if>
-      <span resource="button.return"></span>
-    </a>              
+    </input>              
 
   </form>
   

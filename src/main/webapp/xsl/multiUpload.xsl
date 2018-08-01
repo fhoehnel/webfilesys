@@ -79,7 +79,7 @@
     <script language="JavaScript" src="/webfilesys/javascript/multiUpload.js" type="text/javascript"></script>
   </head>
 
-  <body onload="prepareDropZone();hideBrowserSpecifics();positionStatusDiv();">
+  <body onload="prepareDropZone();hideBrowserSpecifics();positionStatusDiv();" class="upload">
     <xsl:if test="mobile">
       <xsl:attribute name="class">mobile</xsl:attribute>
     </xsl:if>

@@ -28,6 +28,14 @@ a.icon-font {
 	content: '\f02d';
 }
 
+.icon-computer:before {
+	content: '\f109';
+}
+
+.icon-archive:before {
+	content: '\f1c6';
+}
+
 .icon-calendar:before {
 	content: '\f073';
 }

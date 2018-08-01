@@ -162,7 +162,7 @@ public class SearchRequestHandler extends UserRequestHandler
 		
 		output.println("</head>");
 		
-		output.print("<body>");
+		output.print("<body class=\"search searchText\">");
 
 		headLine(getResource("label.searchresults","Search Results"));
 

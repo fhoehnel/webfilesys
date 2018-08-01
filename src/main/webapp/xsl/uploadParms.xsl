@@ -176,7 +176,7 @@
 
 </head>
 
-<body onload="showMultiUploadLink()">
+<body onload="showMultiUploadLink()" class="upload">
   <xsl:if test="mobile">
     <xsl:attribute name="class">mobile</xsl:attribute>
   </xsl:if>

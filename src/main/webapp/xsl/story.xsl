@@ -361,7 +361,9 @@
                 <xsl:if test="not(@link)">
                   <xsl:attribute name="href">javascript:comm<xsl:value-of select="@id" />()</xsl:attribute>
                 </xsl:if>
-                (<xsl:value-of select="comments" />)
+                <xsl:value-of select="comments" />
+                <xsl:text> </xsl:text>
+                <span resource="label.comments"></span>
               </a>
             </xsl:if>
           </div>  

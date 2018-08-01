@@ -645,7 +645,7 @@ div.fileListFolderDesc {
     box-sizing: border-box;
     padding: 2px 10px;
     margin-bottom: 5px;
-    font-size: 10px;
+    font-size: 12px;
     color: navy;
 }
 
@@ -2014,11 +2014,45 @@ li.selectedFile {
 	color: navy;
 }
 
+a.searchResultFolder {
+    font-size: 13px;
+    color: #808080;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 form.userData input[type="text"], 
 form.userData input[type="email"], 
 form.userData input[type="password"], 
 form.userData select {
     width: 240px;
+}
+
+.icon-computer:before {
+	color: #000000;
+	margin: 0 6px 0 6px
+}
+
+body.searchResult .icon-search {
+    margin: 0 6px 0 6px;
+}
+
+body.zipContent .icon-folderOpen {
+	color: #000000;
+	margin: 6px 6px 0 0;
+	font-size: 24px;
+}
+
+body.zipContent > a.dirtree {
+    vertical-align: baseline;	
+}
+
+div.iconSelection {
+    width: 300px;
+    height: 100px;
+    overflow-x: auto;
+    overflow-y: auto;
+    border:1px solid #a0a0a0;
 }
 
 @media (max-width: 400px) {

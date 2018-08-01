@@ -395,10 +395,10 @@
             <a href="/webfilesys/servlet?command=switchFileAgeColoring">
               <img border="0" width="13" height="13" style="vertical-align:middle;margin-left:8px" titleResource="switchfileAgeColoring">
                 <xsl:if test="/fileList/fileAgeColoring">
-                  <xsl:attribute name="src">/webfilesys/images/minusSmall.gif</xsl:attribute>
+                  <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/fileList/css" />/minusSmall.gif</xsl:attribute>                  
                 </xsl:if>
                 <xsl:if test="not(/fileList/fileAgeColoring)">
-                  <xsl:attribute name="src">/webfilesys/images/menuPlus.gif</xsl:attribute>
+                  <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/fileList/css" />/menuPlus.gif</xsl:attribute>                  
                 </xsl:if>
               </img>
             </a>

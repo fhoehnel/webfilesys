@@ -155,7 +155,7 @@
 
 </head>
 
-<body onload="setBundleResources()">
+<body onload="setBundleResources()" class="search">
 
   <div class="headline" resource="label.searchHead" />
   

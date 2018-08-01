@@ -15,6 +15,7 @@
   <meta http-equiv="expires" content="0" />
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/folderTree/css" />.css</xsl:attribute>
@@ -41,9 +42,8 @@
 
 <xsl:template match="folderTree">
 
-  <img src="images/space.gif" border="0" width="12" height="17" />
-  <img src="images/zip.gif" border="0" width="19" height="14" />
-  <img src="images/space.gif" border="0" width="4" height="1" />
+  <span class="icon-font icon-folderOpen"></span>
+  
   <a class="dirtree">
     <xsl:value-of select="/folderTree/shortZipFileName" />
   </a>
@@ -88,7 +88,9 @@
     </a>
     
     <xsl:if test="not(@folder)">
-      (<xsl:value-of select="@entrySize" /> / <xsl:value-of select="@compressedSize" /> bytes)
+      <span class="zipSize">
+        (<xsl:value-of select="@entrySize" /> / <xsl:value-of select="@compressedSize" /> bytes)
+      </span>
     </xsl:if>
 
     <xsl:if test="zipEntry">

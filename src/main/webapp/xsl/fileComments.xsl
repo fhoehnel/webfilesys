@@ -48,7 +48,7 @@
 
 </head>
 
-<body>
+<body class="comments">
 
   <div class="headline">
     <xsl:if test="/fileComments/shortPath">

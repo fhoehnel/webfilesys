@@ -105,9 +105,7 @@
 
   <xsl:if test="/fileList/description">
     <div class="fileListFolderDesc">
-      <font class="small">
-        <xsl:value-of select="/fileList/description" disable-output-escaping="yes" />
-      </font>
+      <xsl:value-of select="/fileList/description" disable-output-escaping="yes" />
     </div>
   </xsl:if>
 

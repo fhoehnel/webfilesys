@@ -17,6 +17,7 @@
     <meta http-equiv="expires" content="0" />
 
     <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+    <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
     <link rel="stylesheet" type="text/css">
       <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/folderTree/css" />.css</xsl:attribute>
@@ -165,8 +166,8 @@
 
 <xsl:template name="computer" match="computer"> 
 
-  <img src="/webfilesys/images/space.gif" style="border-style:none;width:10px;height:17px;" />
-  <img src="/webfilesys/images/computer.gif" class="computer" />
+  <span class="icon-font icon-computer"></span>
+  
   <a class="dirtree">
     <xsl:value-of select="@name" />
   </a>
@@ -193,10 +194,14 @@
          <xsl:attribute name="href">javascript:col('<xsl:value-of select="@id" />')</xsl:attribute>
 
          <xsl:if test="position()=last()">
-           <img src="/webfilesys/images/minusLast.gif" class="expCol" />
+           <img class="expCol">
+             <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/folderTree/css" />/minusLast.gif</xsl:attribute>
+           </img>
          </xsl:if>
          <xsl:if test="position()!=last()">
-           <img src="/webfilesys/images/minusMore.gif" class="expCol" />
+           <img class="expCol">
+             <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/folderTree/css" />/minusMore.gif</xsl:attribute>
+           </img>
          </xsl:if>
        </a>
      </xsl:if>
@@ -209,10 +214,15 @@
            <xsl:attribute name="href">javascript:exp('<xsl:value-of select="@id" />', '<xsl:value-of select="position()=last()" />')</xsl:attribute>
 
            <xsl:if test="position()=last()">
-             <img src="/webfilesys/images/plusLast.gif" class="expCol" />
+             <img class="expCol">
+               <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/folderTree/css" />/plusLast.gif</xsl:attribute>
+             </img>
            </xsl:if>
+           
            <xsl:if test="position()!=last()">
-             <img src="/webfilesys/images/plusMore.gif" class="expCol" />
+             <img class="expCol">
+               <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/folderTree/css" />/plusMore.gif</xsl:attribute>
+             </img>
            </xsl:if>
          </a>
 
