@@ -107,7 +107,7 @@ div.last {
 }
 
 a.dirtree {
-	color: #f0f0f0;
+	color: #d0d0d0;
 }
 
 a.dirtree:hover {
@@ -115,7 +115,7 @@ a.dirtree:hover {
 }
 
 a.fn {
-	color: #f0f0f0;
+	color: #d0d0d0;
 }
 
 a.fn:hover {
@@ -125,7 +125,7 @@ a.fn:hover {
 td.fileListSize  > font.fixed,
 td.fileListModified > font.fixed {
     font-size: 13px;
-    color: #f0f0f0;
+    color: #d0d0d0;
     font-family: monospace;
 }
 
