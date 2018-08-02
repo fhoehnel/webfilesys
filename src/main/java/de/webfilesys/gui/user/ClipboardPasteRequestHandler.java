@@ -87,7 +87,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 		output.println("</HEAD>");
 
-		output.println("<BODY>");
+		output.println("<BODY class=\"paste\">");
 
 		ClipBoard clipBoard = (ClipBoard) session.getAttribute("clipBoard");
 		
@@ -148,7 +148,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
         output.println("<tr>");
         output.println("<td class=\"formParm2\">");
         output.println("<div class=\"progressBar\">");
-        output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/images/bluedot.gif\" style=\"width:1px\" />");
+        output.println("<img id=\"copyProgressBar\" src=\"/webfilesys/img-skin/" + userMgr.getCSS(uid) + "/progressbar.gif\" style=\"width:1px\" />");
         output.println("</div>");
         output.println("</td>");
         output.println("</tr>");

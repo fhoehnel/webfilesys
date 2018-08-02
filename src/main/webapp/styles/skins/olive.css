@@ -55,6 +55,41 @@ body.statistics {
     margin: 0;
 }
 
+body.editPict {
+    background-color: #204020;
+    margin: 0;
+}
+
+body.cameraData {
+    background-color: #204020;
+    margin: 0;
+}
+
+body.categories {
+    background-color: #204020;
+    margin: 0;
+}
+
+body.publish {
+    background-color: #204020;
+    margin: 0;
+}
+
+body.paste {
+    background-color: #204020;
+    margin: 0;
+}
+
+body.synchronize {
+    background-color: #204020;
+    margin: 0;
+}
+
+body.diffTree {
+    background-color: #003000;
+    margin: 0;
+}
+
 body.bookmarks table {
     margin-left: 10px;
 }
@@ -265,7 +300,7 @@ table.dataForm {
 }
 
 table.formSection {
-    background-color:ivory;
+    background-color: #204020;
 }
 
 td.formParm1 {
@@ -287,6 +322,10 @@ td.formButton {
 table.dataForm {
     border-width: 0;
     border-collapse: collapse;
+}
+
+table.dataForm table.dataForm {
+	border: 1px solid #ffffff;
 }
 
 input.formParm1 {
@@ -344,7 +383,7 @@ div.pictureScrollContNoBorder {
 }
 
 img.thumb {
-	border: 1px solid #ffffff;
+	border: 1px solid #ffffa0;
     box-shadow: none;
 }
 
@@ -365,6 +404,7 @@ div.promptHead {
 
 div.promptBox {
     background-color: #204020;
+    border-color: #ffffff;
 }
 
 div.promptBox table {
@@ -456,4 +496,78 @@ div.slideShowText {
 
 .fileListScrollDiv td.fileList {
 	color: #f0f0f0;
+}
+
+body.fileListNoMargin img.slideShow {
+	border: 2px solid #ffffa0;
+	border-radius: 8px;
+}
+
+div.pagingPageCurrent {
+    background-color: #e0c080;
+    border-color: #e0c080;
+}
+
+body.editPict img.thumb {
+	margin-left: 10px;
+}
+
+body.editPict table.dataForm table {
+	margin-left: 10px;
+}
+
+a.link {
+	color: #ffffa0;
+}
+
+a.link:hover {
+	color: #e0c080;
+	text-decoration: underline;
+}
+
+.mapIcon img {
+	margin-right: 12px;
+}
+
+body.publish font.small {
+	color: #e0c080;
+}
+
+a.treeCompRemoved {
+	color: #ffa0a0;
+}
+
+a.treeCompNew {
+	color: #a0ffa0;
+}
+
+a.treeCompModified {
+	color: #a0c0ff;
+}
+
+a.treeCompPath {
+	color: #c0c0c0;
+}
+
+body.diffTree table.dataForm {
+	border-bottom: 1px solid #ffffff;
+}
+
+body.diffTree > div > span {
+	color: #ffffff;
+}
+
+font.error {
+	color: #ffa0a0;
+}
+
+th.syncListHead {
+    background-color: #606060;
+    color: #ffffff;
+}
+
+td.syncCompare {
+    background-color: #003000;
+    color: #ffffff;
+    padding: 3px 5px 3px 5px;
 }

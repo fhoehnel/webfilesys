@@ -52,6 +52,7 @@ public class XslCategoryHandler extends XslRequestHandlerBase
         
         if (filePath != null) {
             XmlUtil.setChildText(catListElement, "filePath", filePath);
+            XmlUtil.setChildText(catListElement, "filePathForScript", CommonUtils.escapeForJavascript(filePath));
             XmlUtil.setChildText(catListElement, "shortFilePath", UTF8URLEncoder.encode(CommonUtils.shortName(filePath,50)), false);
         }
 			

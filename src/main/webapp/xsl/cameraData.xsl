@@ -26,15 +26,11 @@
 
 </head>
 
-<body>
+<body class="cameraData">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="/cameraData/resources/msg[@key='alt.cameradata']/@value" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline">
+    <xsl:value-of select="/cameraData/resources/msg[@key='alt.cameradata']/@value" />
+  </div>
 
   <form accept-charset="utf-8" name="form1" style="padding-top:5px;">
 
@@ -47,7 +43,7 @@
       </tr>
 
       <tr>
-        <td colspan="2" class="formParm2">
+        <td colspan="2" class="formParm2" style="padding-left:16px">
           <xsl:value-of select="/cameraData/shortImgName" />
         </td>
       </tr>
@@ -230,13 +226,11 @@
       </xsl:if>
 
       <tr>
-        <td class="formButton" nowrap="nowrap">
-          <a class="button" onclick="this.blur();" style="float:right"> 
-            <xsl:attribute name="href">javascript:window.close()</xsl:attribute>
-            <span><xsl:value-of select="/cameraData/resources/msg[@key='button.closewin']/@value" /></span>
-          </a>              
+        <td class="formButton" colspan="2" style="text-align:center">
+          <input type="button" onclick="window.close()">
+            <xsl:attribute name="value"><xsl:value-of select="/cameraData/resources/msg[@key='button.closewin']/@value" /></xsl:attribute>
+          </input>
         </td>
-        <td>&#160;</td>
       </tr>
     </table>
     

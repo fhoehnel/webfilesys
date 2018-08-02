@@ -47,7 +47,7 @@
 
 </head>
 
-<body>
+<body class="categories">
 
 <xsl:apply-templates />
 
@@ -66,13 +66,9 @@
       <xsl:attribute name="value"><xsl:value-of select="filePath" /></xsl:attribute>
     </input>
 
-    <table border="0" width="100%" cellpadding="2" cellspacing="0">
-      <tr>
-        <th class="headline">
-          <xsl:value-of select="resources/msg[@key='label.assignCategories']/@value" />
-        </th>
-      </tr>
-    </table>
+    <div class="headline">
+      <xsl:value-of select="resources/msg[@key='label.assignCategories']/@value" />
+    </div>
 
     <br />
 
@@ -158,17 +154,13 @@
       </tr>
 
       <tr>
-        <td class="formButton">
-          <a class="button" onclick="this.blur();"> 
-            <xsl:attribute name="href">javascript:self.close()</xsl:attribute>
-            <span><xsl:value-of select="resources/msg[@key='button.ok']/@value" /></span>
-          </a>              
-        </td>
-        <td class="formButton" nowrap="nowrap" style="text-align:right">
-          <a class="button" onclick="this.blur();" style="float:right"> 
-            <xsl:attribute name="href">javascript:manageCategories()</xsl:attribute>
-            <span><xsl:value-of select="resources/msg[@key='button.manageCategories']/@value" /></span>
-          </a>       
+        <td class="formButton" colspan="2">
+          <input type="button" onclick="self.close()">
+            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.ok']/@value" /></xsl:attribute>
+          </input>
+          <input type="button" onclick="manageCategories()" style="float:right">
+            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.manageCategories']/@value" /></xsl:attribute>
+          </input>
         </td>
       </tr>
       

@@ -63,15 +63,11 @@
 
 </head>
 
-<body>
+<body class="synchronize">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="/synchronize/resources/msg[@key='headline.syncCompare']/@value" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline">
+    <xsl:value-of select="/synchronize/resources/msg[@key='headline.syncCompare']/@value" />
+  </div>
 
   <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet" style="margin-top:20px">
   
