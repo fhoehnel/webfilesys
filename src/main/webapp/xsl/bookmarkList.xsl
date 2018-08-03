@@ -17,6 +17,7 @@
   <meta http-equiv="expires" content="0" />
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/bookmarkList/css" />.css</xsl:attribute>
@@ -108,9 +109,8 @@
               <td style="width:30px;">&#160;</td>
               
               <td>
-                <a titleResource="label.deleteBookmark">
+                <a class="icon-font icon-delete" titleResource="label.deleteBookmark">
                   <xsl:attribute name="href">/webfilesys/servlet?command=bookmarks&amp;cmd=delete&amp;id=<xsl:value-of select="@id" /></xsl:attribute>
-                  <img src="/webfilesys/images/trash.gif" border="0" />
                 </a>
               </td>
             </xsl:if>

@@ -821,6 +821,19 @@ td.mapIcon {
     padding:0;
 }
 
+.mapIcon .icon-globe {
+    margin-right: 10px;	
+}
+
+.mapIcon .icon-globe:before {
+	color: #004000;
+	font-size: 32px;
+}
+
+.mapIcon a {
+	text-decoration: none;
+}
+
 div.more {
     padding-left:0px;
     padding-top:0px;
@@ -1532,6 +1545,11 @@ div.selectedFolder {
     border: 1px solid maroon;
 }
 
+div.currentFolder > a.dirtree {
+    background-color: #e0e0ff;
+	padding: 0 4px;
+}
+
 td.pagingIcon {
     padding: 0px;
 }
@@ -2053,6 +2071,15 @@ div.iconSelection {
     overflow-x: auto;
     overflow-y: auto;
     border:1px solid #a0a0a0;
+}
+
+body.bookmarks .icon-delete:before,
+body.folderWatch .icon-delete:before {
+	color: #a00000;
+}
+
+body.folderWatch .icon-folderClosed:before {
+	margin-right: 7px;
 }
 
 @media (max-width: 400px) {

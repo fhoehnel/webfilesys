@@ -133,6 +133,10 @@ a.icon-font {
 	content: '\f087';
 }
 
+.icon-globe:before {
+    content: '\f0ac'
+}
+
 .icon-help:before {
 	content: '\f059';
 }

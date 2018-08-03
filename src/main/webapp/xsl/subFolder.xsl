@@ -22,11 +22,18 @@
 
 <xsl:template name="parentFolder"> 
 
-  <div class="last">
+  <div>
 
       <xsl:attribute name="id"><xsl:value-of select="@id" /></xsl:attribute>
 
       <xsl:attribute name="path"><xsl:value-of select="@path" /></xsl:attribute>
+
+      <xsl:if test="@current">
+        <xsl:attribute name="class">last currentFolder</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not (@current)">
+        <xsl:attribute name="class">last</xsl:attribute>
+      </xsl:if>
 
       <xsl:variable name="pathForScript"><xsl:call-template name="insDoubleBackslash"><xsl:with-param name="string"><xsl:value-of select="@path" /></xsl:with-param></xsl:call-template></xsl:variable>
       
