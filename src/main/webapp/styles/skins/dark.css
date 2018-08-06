@@ -55,6 +55,11 @@ body.statistics {
     margin: 0;
 }
 
+body.treeStatistics {
+    background-color: #404040;
+    margin: 0;
+}
+
 body.folderWatch {
     background-color: #303030;
     margin: 0;
@@ -105,6 +110,11 @@ body.bookmarks input[type=button] {
 
 body.tail {
     background-color: #303030;
+}
+
+body.slideshowParam {
+    background-color: #404040;
+    margin: 0;
 }
 
 div.last {
@@ -625,3 +635,6 @@ body.folderWatch span {
 	color: #c0ffc0;
 }
 
+table.statsTable {
+    padding-left: 6px;
+}
