@@ -637,4 +637,18 @@ body.folderWatch span {
 
 table.statsTable {
     padding-left: 6px;
+    background-color: #c0c0c0;
+    border-color: #404040;
+}
+
+table.statsTable div.statsBar {
+    color: #000000;
+}
+
+a.statsFolderName {
+    color: #400040;
+}
+
+a.statsFolderName:hover {
+    color: #ffffff;
 }
