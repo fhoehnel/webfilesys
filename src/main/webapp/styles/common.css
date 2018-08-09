@@ -2082,6 +2082,12 @@ body.folderWatch .icon-folderClosed:before {
 	margin-right: 7px;
 }
 
+body.dirtree .icon-star,
+body.bookmarks .icon-star {
+	font-size: 20px;
+	color: #c08000;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

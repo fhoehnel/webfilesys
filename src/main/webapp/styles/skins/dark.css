@@ -652,3 +652,8 @@ a.statsFolderName {
 a.statsFolderName:hover {
     color: #ffffff;
 }
+
+body.dirtree .icon-star,
+body.bookmarks .icon-star {
+	color: #ffffa0;
+}

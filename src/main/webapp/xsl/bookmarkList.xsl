@@ -83,7 +83,7 @@
                   <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="icon" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="not(icon)">
-                  <xsl:attribute name="src">/webfilesys/images/bookmark.gif</xsl:attribute>
+                  <span class="icon-font icon-star"></span>
                 </xsl:if>
               </img>
             </td>
