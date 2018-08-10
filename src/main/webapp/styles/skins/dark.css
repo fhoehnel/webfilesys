@@ -158,7 +158,29 @@ div.msgBox {
 }
  
 div.uploadStatus {
-    background-color:lavender
+    background-color: #303030;
+    border: 2px ridge #c0c0c0;
+}
+
+div.uploadStatus #statusText {
+	color: #e0c080;
+	border-top: none;
+}
+
+div.uploadStatus td.fileListData {
+	background-color: #303030;
+}
+
+div.uploadStatusBar {
+	border-color: #ffc000;
+}
+
+div.uploadStatusText {
+    color: #e0c080;
+}
+
+div.uploadStatusCurrentFile {
+    color: #e0c080;
 }
 
 /* depreacted - replace with div.headline! */

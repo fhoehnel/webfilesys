@@ -287,7 +287,11 @@
   <br/><br/>
   <center>
 
-    <div style="width:302px;height:20px;border-style:solid;border-width:1px;border-color:blue;margin:0px;padding:0px;text-align:left;font-size:3px;"><img id="done" src="/webfilesys/images/bluedot.gif" width="1" height="20" border="0"/></div>
+    <div class="uploadStatusBar">
+      <img id="done" width="1" height="20" border="0">
+        <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/progressbar.gif</xsl:attribute>
+      </img>
+    </div>
 
     <br/>
 
