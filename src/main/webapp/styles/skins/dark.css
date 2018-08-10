@@ -70,6 +70,11 @@ body.folderWatch {
     margin: 0;
 }
 
+body.publishList {
+    background-color: #303030;
+    margin: 0;
+}
+
 body.editPict {
     background-color: #404040;
     margin: 0;
@@ -118,6 +123,16 @@ body.tail {
 }
 
 body.slideshowParam {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.ftp {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.editVideo {
     background-color: #404040;
     margin: 0;
 }
@@ -646,7 +661,8 @@ div.currentFolder > a.dirtree {
 	padding: 0 4px;
 }
 
-body.bookmarks .icon-delete:before {
+body.bookmarks .icon-delete:before,
+body.publishList .icon-delete:before {
 	color: #ffc0c0;
 }
 
@@ -683,4 +699,25 @@ a.statsFolderName:hover {
 body.dirtree .icon-star,
 body.bookmarks .icon-star {
 	color: #ffffa0;
+}
+
+body.publishList td.data {
+	background-color: #404040;
+	color: #ffffff;
+}
+
+span.publicUrl {
+	color: #ffffa0;
+}
+
+body.publishList a {
+	color: #ffffa0;
+}
+
+body.publishList span.plaintext {
+	margin-left: 10px;
+}
+
+body.publishList th.datahead {
+    background-color: #d0d0d0;
 }

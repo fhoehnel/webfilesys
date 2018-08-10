@@ -17,6 +17,7 @@
     <title resource="label.publishList" />
 
     <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+    <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
     <link rel="stylesheet" type="text/css">
       <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/publishList/css" />.css</xsl:attribute>
@@ -31,7 +32,7 @@
 	
   </head>
 
-  <body onload="setBundleResources()">
+  <body onload="setBundleResources()" class="publishList">
 
       <div class="headline" resource="label.publishList"></div>
 
@@ -66,9 +67,8 @@
               </td>
               
               <td class="data">
-                <a>
+                <a class="icon-font icon-delete" titleResource="label.cancelpublish">
                   <xsl:attribute name="href"><xsl:value-of select="cancelUrl" /></xsl:attribute>
-                  <img src="/webfilesys/images/trash.gif" titleResource="label.cancelpublish" />                
                 </a>
               </td>
             </tr>
@@ -81,7 +81,7 @@
     
       <xsl:if test="not(/publishList/publications/publication)">
         <br />
-        <span resource="nothingPublished"></span>
+        <span class="plaintext" resource="nothingPublished"></span>
         <br/><br/>
       </xsl:if>
 

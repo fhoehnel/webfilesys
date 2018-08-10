@@ -2074,7 +2074,8 @@ div.iconSelection {
 }
 
 body.bookmarks .icon-delete:before,
-body.folderWatch .icon-delete:before {
+body.folderWatch .icon-delete:before,
+body.publishList .icon-delete:before {
 	color: #a00000;
 }
 
@@ -2086,6 +2087,10 @@ body.dirtree .icon-star,
 body.bookmarks .icon-star {
 	font-size: 20px;
 	color: #c08000;
+}
+
+.dataForm textarea {
+	font-family: Arial,Helvetica,sans-serif;
 }
 
 @media (max-width: 400px) {
