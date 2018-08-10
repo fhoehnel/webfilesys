@@ -144,6 +144,15 @@ public class CameraExifData
         return(exifDirectory.getString(ExifDirectory.TAG_ISO_EQUIVALENT));
     }
 
+    public String getFocalLength() {
+        if (exifDirectory==null)
+        {
+            return("");
+        }
+        
+        return(exifDirectory.getString(ExifDirectory.TAG_FOCAL_LENGTH));
+    }
+    
     public Date getExposureDate()
     {
         if (exifDirectory==null)

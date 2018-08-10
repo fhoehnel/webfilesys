@@ -540,6 +540,7 @@ label.exposuretime=exposure time
 label.aperture=aperture
 label.isoValue=ISO equivalent
 label.flashfired=flash fired
+label.focalLength=focal length
 label.exposureBias=exposure correction
 apertureStops=aperture stops
 label.imgheight=image height (pixel)

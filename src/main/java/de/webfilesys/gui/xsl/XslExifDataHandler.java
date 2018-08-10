@@ -52,33 +52,18 @@ public class XslExifDataHandler extends XslRequestHandlerBase
 
         XmlUtil.setChildText(cameraDataElement, "css", userMgr.getCSS(uid), false);
 
+	    XmlUtil.setChildText(cameraDataElement, "language", language, false);
+        
         String shortImgName = CommonUtils.shortName(this.getHeadlinePath(imgFileName), 48);
         
 		XmlUtil.setChildText(cameraDataElement, "shortImgName", shortImgName, false);
-		
-        addMsgResource("alt.cameradata", getResource("alt.cameradata", "Camera Data"));
-		addMsgResource("alert.nocameradata", getResource("alert.nocameradata", "No camera data available"));
-		addMsgResource("label.picturefile", getResource("label.picturefile", "picture file"));
-        addMsgResource("label.manufacturer", getResource("label.manufacturer", "camera manufacturer"));
-        addMsgResource("label.cameramodel", getResource("label.cameramodel","camera model"));
-        addMsgResource("label.exposuredate", getResource("label.exposuredate", "exposure date"));
-        addMsgResource("label.exposuretime", getResource("label.exposuretime", "exposure time"));
-        addMsgResource("label.aperture", getResource("label.aperture", "aperture"));
-        addMsgResource("label.isoValue", getResource("label.isoValue", "ISO equivalent"));
-        addMsgResource("label.flashfired", getResource("label.flashfired", "flash fired"));
-        addMsgResource("label.exposureBias", getResource("label.exposureBias", "exposure correction"));
-        addMsgResource("apertureStops", getResource("apertureStops", "aperture stops"));
-        addMsgResource("label.imgwidth", getResource("label.imgwidth", "image width"));
-        addMsgResource("label.imgheight", getResource("label.imgheight", "image height"));
-        addMsgResource("label.thumbexists", getResource("label.thumbexists", "thumbnail included"));
-        addMsgResource("label.gpsLatitude", getResource("label.gpsLatitude", "GPS latitude")); 
-        addMsgResource("label.gpsLongitude", getResource("label.gpsLongitude", "GPS longitude")); 
-        addMsgResource("button.closewin", getResource("button.closewin", "Close Window"));
         
         CameraExifData exifData=new CameraExifData(imgFileName);
 
         if (exifData.hasExifData())
         {
+        	// exifData.printExifData();
+        	
             Element exifDataElement = doc.createElement("exifData");
             
             cameraDataElement.appendChild(exifDataElement);
@@ -127,6 +112,13 @@ public class XslExifDataHandler extends XslRequestHandlerBase
             if (isoValue != null)
             {
                 XmlUtil.setChildText(exifDataElement, "isoValue", isoValue);
+            }
+
+            String focalLength = exifData.getFocalLength();
+            
+            if (focalLength != null)
+            {
+                XmlUtil.setChildText(exifDataElement, "focalLength", focalLength);
             }
             
             int flashFired = exifData.getFlashFired();
@@ -203,13 +195,9 @@ public class XslExifDataHandler extends XslRequestHandlerBase
             if (orientation != CameraExifData.ORIENTATION_UNKNOWN)
             {
                 XmlUtil.setChildText(exifDataElement, "orientation", Integer.toString(orientation));
-                
-                addMsgResource("label.imgOrientation", getResource("label.imgOrientation", "orientation")); 
-                addMsgResource("orientation.landscape", getResource("orientation.landscape", "lanscape")); 
-                addMsgResource("orientation.portrait", getResource("orientation.portrait", "portrait")); 
             }
         }
 
-        this.processResponse("cameraData.xsl", false);
+        processResponse("cameraData.xsl", false);
 	}
 }

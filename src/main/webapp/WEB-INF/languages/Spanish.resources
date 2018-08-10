@@ -540,6 +540,7 @@ label.exposuretime=hora de exposición
 label.aperture=apertura
 label.isoValue=equivalente ISO
 label.flashfired=flash disparado
+label.focalLength=distancia focal
 label.exposureBias=corrección de la exposición
 apertureStops=abertura del diafragma
 label.imgheight=altura de imagen (píxeles)

@@ -542,6 +542,7 @@ label.exposuretime=Belichtungszeit
 label.aperture=Blende
 label.isoValue=ISO Empfindlichkeit
 label.flashfired=Blitzlicht
+label.focalLength=Brennweite
 label.exposureBias=Belichtungskorrektur
 apertureStops=Blendenstufen
 label.imgheight=image height (pixel)
