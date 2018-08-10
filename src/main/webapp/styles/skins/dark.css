@@ -40,6 +40,11 @@ body.zip {
     margin: 0;
 }
 
+body.zipResult {
+    background-color: #404040;
+    margin: 0;
+}
+
 body.zipContent {
     background-color: #303030;
     margin: 10px 0 10px 0;
