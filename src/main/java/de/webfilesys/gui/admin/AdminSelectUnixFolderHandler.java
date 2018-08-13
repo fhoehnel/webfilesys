@@ -48,7 +48,8 @@ public class AdminSelectUnixFolderHandler extends AdminSelectFolderHandler
 
 		XmlUtil.setChildText(folderTreeElement, "encodedPath", UTF8URLEncoder.encode(actPath));
 
-		XmlUtil.setChildText(folderTreeElement, "css", userMgr.getCSS(uid), false);
+		// XmlUtil.setChildText(folderTreeElement, "css", userMgr.getCSS(uid), false);
+		XmlUtil.setChildText(folderTreeElement, "css", "fmweb", false);
 
 		Element computerElement = doc.createElement("computer");
 

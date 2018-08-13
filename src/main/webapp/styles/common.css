@@ -2093,6 +2093,22 @@ body.bookmarks .icon-star {
 	font-family: Arial,Helvetica,sans-serif;
 }
 
+td.accountDiskUsage {
+    border: solid 1px #606060;	
+}
+
+td.accountDiskUsed {
+	background-color: #2020a0;
+}
+
+td.accountDiskOverdue {
+	background-color: #a02020;
+}
+
+td.accountDiskFree {
+	background-color: #ffffff;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

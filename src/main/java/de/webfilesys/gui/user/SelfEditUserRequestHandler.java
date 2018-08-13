@@ -61,7 +61,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
 		}
 
 		output.println("</head>");
-		output.println("<body>");
+		output.println("<body class=\"selfEditUser\">");
 
 		headLine(getResource("label.editregistration","edit user data"));
 

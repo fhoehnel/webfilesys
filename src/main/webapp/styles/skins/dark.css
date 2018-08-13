@@ -65,6 +65,11 @@ body.treeStatistics {
     margin: 0;
 }
 
+body.accountUsage {
+    background-color: #404040;
+    margin: 0;
+}
+
 body.folderWatch {
     background-color: #303030;
     margin: 0;
@@ -133,6 +138,11 @@ body.ftp {
 }
 
 body.editVideo {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.selfEditUser {
     background-color: #404040;
     margin: 0;
 }
@@ -720,4 +730,28 @@ body.publishList span.plaintext {
 
 body.publishList th.datahead {
     background-color: #d0d0d0;
+}
+
+body.accountUsage input[type=button] {
+	margin-left: 10px;
+}
+
+table.usageChart {
+	margin-left: 10px;
+}
+
+td.accountDiskUsage {
+    border: solid 1px #d0d0d0;	
+}
+
+td.accountDiskUsed {
+	background-color: #a0a0ff;
+}
+
+td.accountDiskOverdue {
+	background-color: #ffa0a0;
+}
+
+td.accountDiskFree {
+	background-color: #ffffff;
 }
