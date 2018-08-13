@@ -51,7 +51,7 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
 		output.println("<script src=\"/webfilesys/javascript/util.js\" type=\"text/javascript\"></script>");
 
 		output.println("</head>");
-		output.print("<body");
+		output.print("<body class=\"admin\"");
         if (File.separatorChar=='\\')
         {
         	output.print(" onload=\"switchAllDrivesAccess(document.getElementById('allDrives'), true)\"");

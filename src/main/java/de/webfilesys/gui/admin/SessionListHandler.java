@@ -53,6 +53,10 @@ public class SessionListHandler extends AdminRequestHandler
 
 		Enumeration sessionList = SessionHandler.getSessions();
 
+		if (!sessionList.hasMoreElements()) {
+			output.println("<tr><td colspan=\"7\" class=\"data\">currently there are no active sessions</td></tr>");
+		}
+		
 		while (sessionList.hasMoreElements())
 		{
 			HttpSession session =(HttpSession) sessionList.nextElement();

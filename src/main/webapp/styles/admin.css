@@ -21,3 +21,7 @@ td.formParm2 input[type="password"],
 td.formParm2 select {
     width: 260px;
 }
+
+body.admin table.dataForm td.formParm1 {
+    width: 200px;	
+}
