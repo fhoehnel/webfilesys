@@ -147,6 +147,12 @@ body.selfEditUser {
     margin: 0;
 }
 
+body.unixRights,
+body.unixCompress {
+    background-color: #404040;
+    margin: 0;
+}
+
 div.last {
     background-color: #303030;
 }
@@ -754,4 +760,8 @@ td.accountDiskOverdue {
 
 td.accountDiskFree {
 	background-color: #ffffff;
+}
+
+body.unixCompress input[type=button] {
+	margin-left: 10px;
 }

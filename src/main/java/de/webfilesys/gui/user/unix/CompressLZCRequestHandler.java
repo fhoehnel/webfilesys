@@ -50,7 +50,8 @@ public class CompressLZCRequestHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
-		output.println("</head><body>");
+		output.println("</head>");
+		output.println("<body class=\"unixCompress\">");
 
         if (fileNameExt.equals(".z"))
         {
