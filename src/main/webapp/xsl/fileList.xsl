@@ -107,11 +107,15 @@
         var padding = 240;
       </xsl:if>
       <xsl:if test="not(/fileList/description)">
-        var padding = 200;
+        var padding = 202;
       </xsl:if>
       
       <xsl:if test="/fileList/readonly">
         padding = padding - 20;
+      </xsl:if>
+
+      <xsl:if test="not(/fileList/file)">
+        padding = padding - 60;
       </xsl:if>
   
       document.getElementById('fileListTable').style.height = (windowHeight - padding) + 'px';
