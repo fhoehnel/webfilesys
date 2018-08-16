@@ -107,7 +107,7 @@
         var padding = 240;
       </xsl:if>
       <xsl:if test="not(/fileList/description)">
-        var padding = 202;
+        var padding = 204;
       </xsl:if>
       
       <xsl:if test="/fileList/readonly">

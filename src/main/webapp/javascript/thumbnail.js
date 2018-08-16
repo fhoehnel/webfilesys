@@ -564,7 +564,7 @@ function setThumbContHeightInternal() {
         windowHeight = document.documentElement.clientHeight;
     }
 
-    var offset = 185;
+    var offset = 187;
     
     var folderMetaInfElem = document.getElementById("folderMetaInf");
     if (folderMetaInfElem) {
