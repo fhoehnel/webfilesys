@@ -623,6 +623,8 @@ table.fileListButtonCont {
 
 table.fileListButtonCont2 {
 	width: 100%;
+	position: absolute;
+    bottom: 0;
 	border-spacing: 0;
     border: none;
 }

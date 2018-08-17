@@ -531,7 +531,7 @@
          
     </div>
 
-    <table cellspacing="0" class="fileListButtonCont2">
+    <table id="buttonCont" cellspacing="0" class="fileListButtonCont2">
 
       <xsl:if test="file">
 

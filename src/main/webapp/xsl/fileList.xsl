@@ -103,22 +103,20 @@
           windowHeight = document.documentElement.clientHeight;
       }
 
-      <xsl:if test="/fileList/description">
-        var padding = 240;
-      </xsl:if>
-      <xsl:if test="not(/fileList/description)">
-        var padding = 204;
-      </xsl:if>
-      
-      <xsl:if test="/fileList/readonly">
-        padding = padding - 20;
-      </xsl:if>
+      var buttonCont = document.getElementById("buttonCont");
+      var buttonContYPos = getAbsolutePos(buttonCont)[1];
 
-      <xsl:if test="not(/fileList/file)">
-        padding = padding - 60;
-      </xsl:if>
-  
-      document.getElementById('fileListTable').style.height = (windowHeight - padding) + 'px';
+      if (buttonContYPos == 0) {
+          var rect = buttonCont.getBoundingClientRect();
+          buttonContYPos = rect.top;
+      }
+
+      var fileListTable = document.getElementById('fileListTable');
+      var fileListYPos = getAbsolutePos(fileListTable)[1];
+      
+      var scrollContHeight = buttonContYPos - fileListYPos;
+      
+      fileListTable.style.height = scrollContHeight + "px";
   }
 
   <xsl:if test="/fileList/linksExist">
@@ -550,7 +548,7 @@
     
     <!-- function buttons and actions -->
     
-    <table class="fileListButtonCont2">
+    <table id="buttonCont" class="fileListButtonCont2">
 
       <xsl:if test="file">
 
