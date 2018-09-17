@@ -120,6 +120,8 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(slideShowElement, "css", userMgr.getCSS(uid), false);
 
+	    XmlUtil.setChildText(slideShowElement, "language", language, false);
+		
 		XmlUtil.setChildText(slideShowElement, "delay", Integer.toString(delay * 1000), false);
 
 		XmlUtil.setChildText(slideShowElement, "startIdx", Integer.toString(imageIdx), false);
@@ -142,14 +144,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(slideShowElement, "fadeInOut", "true", false);
 		}
 		
-		addMsgResource("label.slideshow", getResource("label.slideshow", "Picture Slideshow"));
-		addMsgResource("alt.exitslideshow", getResource("alt.exitslideshow","exit slideshow"));
-		addMsgResource("alt.pause", getResource("alt.pause","pause slideshow"));
-		addMsgResource("alt.continue", getResource("alt.continue","continue slideshow"));
-        addMsgResource("alt.back", getResource("alt.back","previous picture"));
-        addMsgResource("fullScreenMode", getResource("fullScreenMode", "fullscreen mode"));
-		
-		this.processResponse("slideShow.xsl", false);
+		processResponse("slideShow.xsl", false);
 	}
 	
     private int getStartFileIndex(String startFilePath) 

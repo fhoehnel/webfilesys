@@ -28,8 +28,7 @@
     <xsl:if test="/result/error">
       <tr>
         <td colspan="2">
-          <input type="button" style="float:right">
-            <xsl:attribute name="value"><xsl:value-of select="/result/resources/msg[@key='button.return']/@value" /></xsl:attribute>
+          <input type="button" resource="button.return" style="float:right">
             <xsl:attribute name="onclick">hidePrompt()</xsl:attribute>
           </input>
         </td>
@@ -39,15 +38,13 @@
     <xsl:if test="not(/result/error)">
       <tr>
         <td align="left">
-          <input type="button">
-            <xsl:attribute name="value"><xsl:value-of select="/result/resources/msg[@key='button.delete']/@value" /></xsl:attribute>
+          <input type="button" resource="button.delete">
             <xsl:attribute name="onclick">hidePrompt();removeDir('<xsl:value-of select="/result/folderPath" />')</xsl:attribute>
           </input>
         </td>
 
         <td align="right">
-          <input type="button">
-            <xsl:attribute name="value"><xsl:value-of select="/result/resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
+          <input type="button" resource="button.cancel">
             <xsl:attribute name="onclick">hidePrompt()</xsl:attribute>
           </input>
         </td>

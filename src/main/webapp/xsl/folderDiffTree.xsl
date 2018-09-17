@@ -145,7 +145,7 @@
   </xsl:if>
 
   <xsl:if test="not(folder)">
-    <span resource="sync.noDifference" style="margin-left:10px"></span>
+    <span class="diffTreeEmpty" resource="sync.noDifference" style="margin-left:10px"></span>
   </xsl:if>
 
 </xsl:template>

@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.util.CommonUtils;
+import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -84,8 +85,17 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
 				addMsgResource("sunburst.parentFolderLink", getResource("sunburst.parentFolderLink", "parent folder"));
 			}
 		}
+		
+		addMsgResource("sunburst.hideSubLink", getResource("sunburst.hideSubLink", "hide subfolders"));
+		addMsgResource("sunburst.showSubLink", getResource("sunburst.showSubLink", "show subfolders"));
 
 		XmlUtil.setChildText(folderStatsElement, "relativePath", CommonUtils.shortName(escapeForJavascript(getHeadlinePath(path)), 100));
+		
+		XmlUtil.setChildText(folderStatsElement, "encodedPath", UTF8URLEncoder.encode(path), false);
+		
+		if (getParameter("hideSubTrees") != null) {
+			XmlUtil.setChildText(folderStatsElement, "hideSubTrees", UTF8URLEncoder.encode(path), false);
+		}
 		
 		processResponse("sunburstChart.xsl", false);
 	}

@@ -631,6 +631,10 @@ body.diffTree > div > span {
 	color: #ffffff;
 }
 
+body.diffTree .diffTreeEmpty {
+    color: #a0c0ff;	
+}
+
 font.error {
 	color: #ffa0a0;
 }
@@ -765,3 +769,4 @@ td.accountDiskFree {
 body.unixCompress input[type=button] {
 	margin-left: 10px;
 }
+

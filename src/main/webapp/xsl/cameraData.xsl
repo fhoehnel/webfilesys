@@ -159,7 +159,7 @@
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/exposureBias" />
               <xsl:text> </xsl:text>
-              <xsl:value-of select="/cameraData/resources/msg[@key='apertureStops']/@value" />              
+              <span resource="apertureStops"></span>
             </td>
           </tr>
         </xsl:if>
