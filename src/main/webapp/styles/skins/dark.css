@@ -148,7 +148,8 @@ body.selfEditUser {
 }
 
 body.unixRights,
-body.unixCompress {
+body.unixCompress,
+body.unixCmdLine {
     background-color: #404040;
     margin: 0;
 }
@@ -770,3 +771,11 @@ body.unixCompress input[type=button] {
 	margin-left: 10px;
 }
 
+body.unixCmdLine #cmdOutput {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+body.unixCmdLine #cmdOutput pre {
+	color: #ffffff;
+}
