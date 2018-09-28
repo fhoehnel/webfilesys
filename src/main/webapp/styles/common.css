@@ -1555,11 +1555,6 @@ div.selectedFolder {
     border: 1px solid maroon;
 }
 
-div.currentFolder > a.dirtree {
-    background-color: #e0e0ff;
-	padding: 0 4px;
-}
-
 td.pagingIcon {
     padding: 0px;
 }

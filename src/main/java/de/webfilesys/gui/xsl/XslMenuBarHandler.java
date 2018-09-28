@@ -90,6 +90,11 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
         {
             XmlUtil.setChildText(menuBarElement, "calendarEnabled", "true", false);
         }
+
+        if (WebFileSys.getInstance().isOSShellCommandExcution())
+        {
+            XmlUtil.setChildText(menuBarElement, "cmdLine", "true", false);
+        }
         
 		processResponse("menuBar.xsl", false);
     }

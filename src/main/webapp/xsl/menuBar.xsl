@@ -124,11 +124,13 @@
   }
   
   <xsl:if test="/menubar/unixAdmin">
-    function unixCmdWin()
-    {
-        var unixCmdWin = window.open('/webfilesys/servlet?command=unixCmdLine','cmdPrompt','status=no,toolbar=no,menu=no,width=600,height=600,resizable=yes,scrollbars=yes,left=10,top=10,screenX=10,screenY=10');
-        unixCmdWin.focus();
-    }
+    <xsl:if test="/menubar/cmdLine">
+      function unixCmdWin()
+      {
+          var unixCmdWin = window.open('/webfilesys/servlet?command=unixCmdLine','cmdPrompt','status=no,toolbar=no,menu=no,width=600,height=600,resizable=yes,scrollbars=yes,left=10,top=10,screenX=10,screenY=10');
+          unixCmdWin.focus();
+      }
+    </xsl:if>
   </xsl:if>
   
   <xsl:if test="/menubar/queryDrives">
@@ -216,14 +218,16 @@
 				</div>
               </th>
 
-              <th>
-	            <div class="icon-button" onclick="unixCmdWin()">
-                  <xsl:attribute name="titleResource">label.oscmd</xsl:attribute>
-                  <a class="icon-font icon-console">
-                    <xsl:text> </xsl:text>
-                  </a>
-				</div>
-              </th>
+              <xsl:if test="/menubar/cmdLine">
+                <th>
+	              <div class="icon-button" onclick="unixCmdWin()">
+                    <xsl:attribute name="titleResource">label.oscmd</xsl:attribute>
+                    <a class="icon-font icon-console">
+                      <xsl:text> </xsl:text>
+                    </a>
+				  </div>
+                </th>
+              </xsl:if>
             </xsl:if>
 
             <xsl:if test="/menubar/role='admin'">
