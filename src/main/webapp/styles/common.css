@@ -634,6 +634,10 @@ table.fileListFunctCont {
 	border-spacing: 0;
 }
 
+table.storyButtonCont {
+	width: 100%;
+}
+
 div.fileListDesc {
     width: 100%;
     padding: 2px;

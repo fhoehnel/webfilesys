@@ -245,6 +245,7 @@ a.icon-darkgrey:before {
 	padding: 4px 2px 0 2px;
 	background-color: #e0e0e0;
 	cursor: pointer;
+	margin-right: 4px;
 }
 
 .icon-cancel-slideshow:before {

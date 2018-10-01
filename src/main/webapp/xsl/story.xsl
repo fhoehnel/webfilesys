@@ -376,7 +376,7 @@
   
   <xsl:if test="/fileList/file">
   
-    <table class="fileListButtonCont2" cellpadding="4" cellspacing="0">
+    <table class="storyButtonCont" cellpadding="4" cellspacing="0">
       <tr>
         <xsl:if test="paging/currentPage &gt; 1">
           <td class="fileListFunct" valign="center" nowrap="true">
