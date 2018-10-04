@@ -24,8 +24,6 @@ import de.webfilesys.util.XmlUtil;
 public class XslResizeParmsHandler extends XslRequestHandlerBase {
     private static final Logger LOG = Logger.getLogger(XslResizeParmsHandler.class);
 	
-    public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-
 	public XslResizeParmsHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,

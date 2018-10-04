@@ -16,8 +16,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslCoBrowsingClientHandler extends XslRequestHandlerBase
 {
-	public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-	
 	public static final String imgFileMasks[]={"*.gif","*.jpg","*.jpeg","*.png","*.bmp"};
 
 	public XslCoBrowsingClientHandler(

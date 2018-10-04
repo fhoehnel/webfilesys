@@ -2,8 +2,7 @@ package de.webfilesys.gui.ajax;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -12,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import de.webfilesys.graphics.ScaledImage;
+import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -19,8 +19,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XmlSlideShowImageHandler extends XmlRequestHandlerBase
 {
-	public static final String SESSION_KEY_SLIDESHOW_BUFFER = "slideshowBuffer";
-
 	public XmlSlideShowImageHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -33,7 +31,7 @@ public class XmlSlideShowImageHandler extends XmlRequestHandlerBase
 	
 	protected void process()
 	{
-		Vector imageFiles = (Vector) session.getAttribute(SESSION_KEY_SLIDESHOW_BUFFER);
+		ArrayList<String> imageFiles = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		
 		if (imageFiles == null)
 		{
@@ -57,7 +55,7 @@ public class XmlSlideShowImageHandler extends XmlRequestHandlerBase
             }
         }
         
-		String imgFileName = (String) imageFiles.elementAt(imgIdx);
+		String imgFileName = (String) imageFiles.get(imgIdx);
  
 		int screenWidth = 1024;
 		int screenHeight = 768;

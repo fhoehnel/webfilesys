@@ -10,6 +10,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.util.CommonUtils;
+import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -17,8 +18,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslSlideshowParmsHandler extends XslRequestHandlerBase
 {
-    public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-
 	public XslSlideshowParmsHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -38,7 +37,7 @@ public class XslSlideshowParmsHandler extends XslRequestHandlerBase
         int screenWidth = getIntParam("screenWidth", 1024);
         int screenHeight = getIntParam("screenHeight", 768);
         
-        session.removeAttribute(SLIDESHOW_BUFFER);
+        session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
 
         session.setAttribute("screenWidth", new Integer(screenWidth));
         session.setAttribute("screenHeight", new Integer(screenHeight));

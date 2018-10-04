@@ -3,8 +3,6 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,7 +16,7 @@ import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
-import de.webfilesys.util.CommonUtils;
+import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -26,8 +24,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslSlideShowHandler extends XslRequestHandlerBase
 {
-	public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-	
 	public static final String imgFileMasks[]={"*.gif","*.jpg","*.jpeg","*.png","*.bmp"};
 
 	public XslSlideShowHandler(
@@ -82,7 +78,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 
 		if (imageIdx<=0)
 		{
-			session.removeAttribute(SLIDESHOW_BUFFER);
+			session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
 			getImageTree(actPath, recurse, randomize);
 			if (startFilePath == null) {
 				imageIdx=0;
@@ -94,16 +90,16 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 		}
 		else
 		{
-			Vector imageFiles=(Vector) session.getAttribute(SLIDESHOW_BUFFER); 
+			ArrayList<String> imageFiles = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER); 
 			if ((imageFiles==null) || (imageIdx>=imageFiles.size()))
 			{
-				session.removeAttribute(SLIDESHOW_BUFFER);
+				session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
 				getImageTree(actPath, recurse, randomize);
 				imageIdx=0;
 			}
 		}
 
-		Vector imageFiles=(Vector) session.getAttribute(SLIDESHOW_BUFFER);
+		ArrayList<String> imageFiles = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		if ((imageFiles==null) || (imageFiles.size()==0))
 		{
             // todo: error handling
@@ -149,7 +145,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 	
     private int getStartFileIndex(String startFilePath) 
     {
-		Vector imageTree = (Vector) session.getAttribute(SLIDESHOW_BUFFER);
+    	ArrayList<String> imageTree = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		if (imageTree == null)
 		{
 			return 0;
@@ -157,7 +153,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 
 		for (int i = 0; i < imageTree.size(); i++) 
 		{
-			String fileName = (String) imageTree.elementAt(i);
+			String fileName = (String) imageTree.get(i);
 			if (fileName.equals(startFilePath))
 			{
 				return i;
@@ -180,11 +176,11 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 			pathWithSlash=actPath + File.separator;
 		}
 
-		Vector imageTree=(Vector) session.getAttribute(SLIDESHOW_BUFFER);
+		ArrayList<String> imageTree = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		if (imageTree==null)
 		{
-			imageTree=new Vector();
-			session.setAttribute(SLIDESHOW_BUFFER,imageTree);
+			imageTree = new ArrayList<String>();
+			session.setAttribute(SessionKey.SLIDESHOW_BUFFER,imageTree);
 		}
 
 		FileLinkSelector fileSelector=new FileLinkSelector(actPath,FileComparator.SORT_BY_FILENAME);
@@ -204,7 +200,7 @@ public class XslSlideShowHandler extends XslRequestHandlerBase
 			{
 				FileContainer fileCont = (FileContainer) imageFiles.get(i);
 				
-				imageTree.addElement(fileCont.getRealFile().getAbsolutePath());
+				imageTree.add(fileCont.getRealFile().getAbsolutePath());
 			}
 		}
 

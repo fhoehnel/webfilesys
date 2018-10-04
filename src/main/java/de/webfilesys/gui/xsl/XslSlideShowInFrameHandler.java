@@ -22,6 +22,7 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
+import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -30,8 +31,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
 {
-	public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-	
 	public XslSlideShowInFrameHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -185,7 +184,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
         
         if (imageIdx < 0)
         {
-            session.removeAttribute(SLIDESHOW_BUFFER);
+            session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
             getImageTree(actPath, recurse, randomize);
 
             String startFilePath = getParameter("startFilePath");
@@ -199,16 +198,16 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
         }
         else
         {
-            imageFiles = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER); 
+            imageFiles = (ArrayList) session.getAttribute(SessionKey.SLIDESHOW_BUFFER); 
             if ((imageFiles == null) || (imageIdx>=imageFiles.size()))
             {
-                session.removeAttribute(SLIDESHOW_BUFFER);
+                session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
                 getImageTree(actPath, recurse, randomize);
                 imageIdx=0;
             }
         }
 
-        imageFiles = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER); 
+        imageFiles = (ArrayList) session.getAttribute(SessionKey.SLIDESHOW_BUFFER); 
         
         XmlUtil.setChildText(slideShowElement, "imageCount", Integer.toString(imageFiles.size()), false);
         
@@ -330,11 +329,11 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
             pathWithSlash=actPath + File.separator;
         }
 
-        ArrayList imageTree = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER);
+        ArrayList<String> imageTree = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
         if (imageTree == null)
         {
-            imageTree = new ArrayList();
-            session.setAttribute(SLIDESHOW_BUFFER,imageTree);
+            imageTree = new ArrayList<String>();
+            session.setAttribute(SessionKey.SLIDESHOW_BUFFER,imageTree);
         }
 
         FileLinkSelector fileSelector=new FileLinkSelector(actPath,FileComparator.SORT_BY_FILENAME);
@@ -396,7 +395,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
     
     private int getStartFileIndex(String startFilePath) 
     {
-		ArrayList imageTree = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER);
+		ArrayList<String> imageTree = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		if (imageTree == null)
 		{
 			return 0;

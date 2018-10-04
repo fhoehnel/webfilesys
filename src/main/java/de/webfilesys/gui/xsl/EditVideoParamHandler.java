@@ -26,8 +26,6 @@ import de.webfilesys.util.XmlUtil;
 public class EditVideoParamHandler extends XslRequestHandlerBase {
     private static final Logger LOG = Logger.getLogger(EditVideoParamHandler.class);
 	
-    public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-
 	public EditVideoParamHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
