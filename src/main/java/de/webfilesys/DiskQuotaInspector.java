@@ -2,8 +2,6 @@ package de.webfilesys;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 
 import de.webfilesys.mail.MailTemplate;

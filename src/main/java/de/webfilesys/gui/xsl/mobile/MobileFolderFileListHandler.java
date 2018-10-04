@@ -9,8 +9,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -18,8 +16,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
-
-import com.sun.org.apache.xml.internal.security.utils.XMLUtils;
 
 import de.webfilesys.ClipBoard;
 import de.webfilesys.Constants;

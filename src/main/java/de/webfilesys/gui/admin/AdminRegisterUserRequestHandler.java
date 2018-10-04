@@ -2,8 +2,6 @@ package de.webfilesys.gui.admin;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -11,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.CSSManager;
-import de.webfilesys.util.CommonUtils;
 
 /**
  * Admin form to register a new user.

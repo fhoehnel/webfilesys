@@ -2,7 +2,6 @@ package de.webfilesys;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
 
 public class Paging
 {
