@@ -37,7 +37,8 @@ public class SessionListHandler extends AdminRequestHandler
 		output.print("<TITLE>" + title + "</TITLE>");
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
+		// output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/fmweb.css\">");
 
 		output.println("</HEAD>");
 		output.println("<BODY>");
@@ -52,6 +53,10 @@ public class SessionListHandler extends AdminRequestHandler
 
 		Enumeration sessionList = SessionHandler.getSessions();
 
+		if (!sessionList.hasMoreElements()) {
+			output.println("<tr><td colspan=\"7\" class=\"data\">currently there are no active sessions</td></tr>");
+		}
+		
 		while (sessionList.hasMoreElements())
 		{
 			HttpSession session =(HttpSession) sessionList.nextElement();

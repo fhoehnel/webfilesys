@@ -53,12 +53,14 @@ function positionMenuDiv(menuDiv, maxMenuHeight) {
     }
     
     var horizScrollbarWidth = 0;
-    if (document.documentElement.scrollWidth > document.documentElement.clientWidth) {
+    if ((document.documentElement.scrollWidth > document.documentElement.clientWidth) ||
+	    (document.body && (document.body.scrollWidth > document.documentElement.clientWidth))) {   // for Chrome
     	horizScrollbarWidth = 20;
     }
 
     var verticalScrollbarWidth = 0;
-    if (document.documentElement.scrollHeight > document.documentElement.clientHeight) {
+    if ((document.documentElement.scrollHeight > document.documentElement.clientHeight) || 
+    	(document.body && (document.body.scrollHeight > document.documentElement.clientHeight))) {   // for Chrome
     	verticalScrollbarWidth = 20;
     }
     
@@ -71,7 +73,7 @@ function positionMenuDiv(menuDiv, maxMenuHeight) {
 
 	var menuWidth = menuDiv.offsetWidth + 10;
     var menuXPos = clickXPos;
-
+    
     if (clickXPos > xScrolled + windowWidth - menuWidth - verticalScrollbarWidth) {
     	menuXPos = xScrolled + windowWidth - menuWidth - verticalScrollbarWidth;
     }

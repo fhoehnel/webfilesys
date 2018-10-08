@@ -79,7 +79,7 @@
     <script language="JavaScript" src="/webfilesys/javascript/multiUpload.js" type="text/javascript"></script>
   </head>
 
-  <body onload="prepareDropZone();hideBrowserSpecifics();positionStatusDiv();">
+  <body onload="prepareDropZone();hideBrowserSpecifics();positionStatusDiv();" class="upload">
     <xsl:if test="mobile">
       <xsl:attribute name="class">mobile</xsl:attribute>
     </xsl:if>
@@ -163,7 +163,9 @@
     <center>
 
       <div class="uploadStatusBar">
-        <img id="done" src="/webfilesys/images/bluedot.gif" width="1" height="20" border="0" />
+        <img id="done" width="1" height="20" border="0">
+          <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/progressbar.gif</xsl:attribute>
+        </img>
         <img id="todo" src="/webfilesys/images/space.gif" width="299" height="20" border="0" />  
       </div>
 
@@ -185,7 +187,9 @@
 	  </div>
 	  
       <div class="uploadStatusBar">
-        <img id="totalDone" src="/webfilesys/images/bluedot.gif" width="1" height="20" border="0" />
+        <img id="totalDone" src="/webfilesys/images/bluedot.gif" width="1" height="20" border="0">
+          <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/progressbar.gif</xsl:attribute>
+        </img>
         <img id="totalTodo" src="/webfilesys/images/space.gif" width="299" height="20" border="0" />  
       </div>
 

@@ -324,6 +324,8 @@ stats.age.years=years
 # sunburst chart
 sunburst.noSubFolders=This folder does not contain any subfolders!
 sunburst.parentFolderLink=parent folder
+sunburst.hideSubLink=hide subfolders
+sunburst.showSubLink=show subfolders
 
 # drive info labels
 label.driveinfo=Drive Properties
@@ -540,6 +542,7 @@ label.exposuretime=exposure time
 label.aperture=aperture
 label.isoValue=ISO equivalent
 label.flashfired=flash fired
+label.focalLength=focal length
 label.exposureBias=exposure correction
 apertureStops=aperture stops
 label.imgheight=image height (pixel)
@@ -975,10 +978,12 @@ menuRenameDir=rename folder
 menuSearch=search
 menuCreateFile=create new file
 menuZipDir=create ZIP archive
+menuThumbnails=picture thumbnails
 folderIsEmpty=no files or subfolders in this directory matching the filter criteria
 mobileFolderMenuHint=current folder menu
 mobileMainMenuHint=main menu
 showSortMenu=show sort menu
+mobileFileList=file list
 
 # alert messages
 alert.regsuccess=New user has been registered successfully.

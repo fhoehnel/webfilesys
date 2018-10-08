@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,6 +23,7 @@ import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
+import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -33,8 +32,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
 {
-	public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-	
 	public XslAlbumSlideShowHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -180,7 +177,7 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
         
         if (imageIdx < 0)
         {
-            session.removeAttribute(SLIDESHOW_BUFFER);
+            session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
             getImageTree(actPath, recurse);
 
             String startFilePath = getParameter("startFilePath");
@@ -194,16 +191,16 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
         }
         else
         {
-            imageFiles = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER); 
+            imageFiles = (ArrayList) session.getAttribute(SessionKey.SLIDESHOW_BUFFER); 
             if ((imageFiles == null) || (imageIdx>=imageFiles.size()))
             {
-                session.removeAttribute(SLIDESHOW_BUFFER);
+                session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
                 getImageTree(actPath,recurse);
                 imageIdx=0;
             }
         }
 
-        imageFiles = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER); 
+        imageFiles = (ArrayList) session.getAttribute(SessionKey.SLIDESHOW_BUFFER); 
         
         XmlUtil.setChildText(slideShowElement, "imageCount", Integer.toString(imageFiles.size()), false);
         
@@ -326,11 +323,11 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
             pathWithSlash=actPath + File.separator;
         }
 
-        ArrayList imageTree = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER);
+        ArrayList<String> imageTree = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
         if (imageTree == null)
         {
-            imageTree = new ArrayList();
-            session.setAttribute(SLIDESHOW_BUFFER,imageTree);
+            imageTree = new ArrayList<String>();
+            session.setAttribute(SessionKey.SLIDESHOW_BUFFER,imageTree);
         }
 
         FileLinkSelector fileSelector=new FileLinkSelector(actPath,FileComparator.SORT_BY_FILENAME);
@@ -387,7 +384,7 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
     
     private int getStartFileIndex(String startFilePath) 
     {
-		ArrayList imageTree = (ArrayList) session.getAttribute(SLIDESHOW_BUFFER);
+    	ArrayList<String> imageTree = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		if (imageTree == null)
 		{
 			return 0;

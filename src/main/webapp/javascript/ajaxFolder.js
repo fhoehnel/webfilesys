@@ -204,6 +204,10 @@ function col(domId)
                      }
                 }
             }
+            
+            if (parentDiv.classList) {
+            	parentDiv.classList.add("currentFolder");    
+            }
         }   
         
         currentDirId = domId;
@@ -264,7 +268,11 @@ function deselectCurrentDir()
                          }
                     }
                 }
-            }       
+            }  
+            
+            if (oldCurrentDirDiv.classList) {
+            	oldCurrentDirDiv.classList.remove("currentFolder");    
+            }
         }
     }
 }
@@ -290,6 +298,10 @@ function selectCurrentDir(parentDiv)
                   }
              }
          }
+    }
+    
+    if (parentDiv.classList) {
+    	parentDiv.classList.add("currentFolder");    
     }
 }
 

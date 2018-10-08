@@ -206,9 +206,9 @@
       
         <td style="width:90%">
           <xsl:if test="description">
-            <font class="small">
+            <div class="fileListFolderDesc">
               <xsl:value-of select="description" disable-output-escaping="yes" />
-            </font>
+            </div>
           </xsl:if>
         </td>
 
@@ -227,9 +227,13 @@
 
           <td id="mapIcon" class="mapIcon" valign="top">
             <a href="javascript:showMapSelection()">
+              <span class="icon-font icon-globe" titleResource="label.geoMapLink"></span>
+
+              <!--                
               <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0" style="float:right">
                 <xsl:attribute name="titleResource">label.geoMapLink</xsl:attribute>
               </img>
+              -->
             </a>
           </td>
 
@@ -527,7 +531,7 @@
          
     </div>
 
-    <table cellspacing="0" class="fileListButtonCont2">
+    <table id="buttonCont" cellspacing="0" class="fileListButtonCont2">
 
       <xsl:if test="file">
 

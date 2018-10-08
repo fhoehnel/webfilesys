@@ -237,7 +237,7 @@ public class TailRequestHandler extends UserRequestHandler
         output.println("</script>");
         
         output.println("</head>");
-        output.println("<body onload=\"startAutoRefresh()\">");
+        output.println("<body onload=\"startAutoRefresh()\" class=\"tail\">");
         
         headLine(getHeadlinePath(filePath));
         

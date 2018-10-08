@@ -3,8 +3,6 @@ package de.webfilesys.gui.user;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,6 +13,7 @@ import de.webfilesys.FileContainer;
 import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.graphics.ThumbnailThread;
+import de.webfilesys.util.SessionKey;
 
 /**
  * @author Frank Hoehnel
@@ -22,8 +21,6 @@ import de.webfilesys.graphics.ThumbnailThread;
  */
 public class SlideShowHandlerBase extends UserRequestHandler
 {
-	public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-	
     public SlideShowHandlerBase(
             HttpServletRequest req, 
             HttpServletResponse resp,
@@ -48,11 +45,11 @@ public class SlideShowHandlerBase extends UserRequestHandler
 			pathWithSlash=actPath + File.separator;
 		}
 
-		Vector imageTree = (Vector) session.getAttribute(SLIDESHOW_BUFFER);
+		ArrayList<String> imageTree = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		if (imageTree == null)
 		{
-			imageTree = new Vector();
-			session.setAttribute(SLIDESHOW_BUFFER,imageTree);
+			imageTree = new ArrayList<String>();
+			session.setAttribute(SessionKey.SLIDESHOW_BUFFER, imageTree);
 		}
 
 		FileLinkSelector fileSelector=new FileLinkSelector(actPath,FileComparator.SORT_BY_FILENAME);
@@ -67,7 +64,7 @@ public class SlideShowHandlerBase extends UserRequestHandler
 			{
 				FileContainer fileCont = (FileContainer) imageFiles.get(i);
 				
-				imageTree.addElement(fileCont.getRealFile().getAbsolutePath());
+				imageTree.add(fileCont.getRealFile().getAbsolutePath());
 			}
 		}
 

@@ -2,8 +2,6 @@ package de.webfilesys.gui.admin;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,7 +11,6 @@ import org.apache.log4j.Logger;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.gui.CSSManager;
 import de.webfilesys.user.TransientUser;
-import de.webfilesys.util.CommonUtils;
 
 /**
  * Administrator edits the account of an user.
@@ -54,13 +51,14 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/admin.css\">");
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
+		// output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/fmweb.css\">");
 
 		output.println("<script src=\"/webfilesys/javascript/admin.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/util.js\" type=\"text/javascript\"></script>");
 		
 		output.print("</head>");
-		output.print("<body");
+		output.print("<body class=\"admin\"");
         if (File.separatorChar=='\\')
         {
         	output.print(" onload=\"switchAllDrivesAccess(document.getElementById('allDrives'))\"");

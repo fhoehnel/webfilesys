@@ -1,0 +1,781 @@
+body.dirTree {
+    background-color: #303030;
+}
+	
+body.menubar {
+    background-color: #303030;
+}
+
+body.fileListNoMargin {
+    background-color: #404040;
+}
+
+body.metainf {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.comments {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.search {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.searchResult {
+    background-color: #303030;
+    margin: 10px 0 0 0;
+}
+
+body.upload {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.zip {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.zipResult {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.zipContent {
+    background-color: #303030;
+    margin: 10px 0 10px 0;
+}
+
+body.bookmarks {
+    background-color: #303030;
+    margin: 0;
+}
+
+body.statistics {
+    background-color: #303030;
+    margin: 0;
+}
+
+body.treeStatistics {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.accountUsage {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.folderWatch {
+    background-color: #303030;
+    margin: 0;
+}
+
+body.publishList {
+    background-color: #303030;
+    margin: 0;
+}
+
+body.editPict {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.cameraData {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.categories {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.publish {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.paste {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.synchronize {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.diffTree {
+    background-color: #303030;
+    margin: 0;
+}
+
+body.bookmarks table {
+    margin-left: 10px;
+}
+
+body.bookmarks input[type=button] {
+	margin-left: 10px;
+}
+
+body.tail {
+    background-color: #303030;
+}
+
+body.slideshowParam {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.ftp {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.editVideo {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.selfEditUser {
+    background-color: #404040;
+    margin: 0;
+}
+
+body.unixRights,
+body.unixCompress,
+body.unixCmdLine {
+    background-color: #404040;
+    margin: 0;
+}
+
+div.last {
+    background-color: #303030;
+}
+
+a.dirtree {
+	color: #c0ffc0;
+}
+
+a.dirtree:hover {
+    color: #ffffa0;
+}
+
+a.fn {
+	color: #c0ffc0;
+}
+
+a.fn:hover {
+    color: #ffffa0;
+}
+
+td.fileListSize  > font.fixed,
+td.fileListModified > font.fixed {
+    font-size: 13px;
+    color: #c0ffc0;
+    font-family: monospace;
+}
+
+table.fileList tr td {
+    background-color: #303030;
+}
+
+table.fileList tr td font.small {
+	color: #ffffa0;
+}
+
+div.msgBox {
+    background-color: ivory;
+    color: #000080;
+}
+ 
+div.uploadStatus {
+    background-color: #303030;
+    border: 2px ridge #c0c0c0;
+}
+
+div.uploadStatus #statusText {
+	color: #e0c080;
+	border-top: none;
+}
+
+div.uploadStatus td.fileListData {
+	background-color: #303030;
+}
+
+div.uploadStatusBar {
+	border-color: #ffc000;
+}
+
+div.uploadStatusText {
+    color: #e0c080;
+}
+
+div.uploadStatusCurrentFile {
+    color: #e0c080;
+}
+
+/* depreacted - replace with div.headline! */
+th.headline {
+    background-color:#c0c0ff;
+}
+ 
+div.headline {
+    background-color: #e0c080;
+    border-color: #604000;
+}
+ 
+body.search div.headline {
+	border-width: 0;
+}
+ 
+th.datahead {
+    background-color: #e0c080;
+}
+
+input,select,textarea {
+    background-color: #e0c080;
+    border-color: #e0c080;
+    color: #000000;
+}
+ 
+input.cb {
+    background-color:#e0e0ff;
+    border: none;
+}
+
+input.cb3 {
+    background-color:#b0b0ff;
+    border: none;
+}
+
+input.cb4 {
+    background-color:lavender;
+    border: none;
+}
+
+input.cb5 {
+    background-color:ivory;
+    border: none;
+}
+
+body.menu {
+    background-color:#c0c0e0;
+}
+
+td.menu {
+    background-color:#c0c0e0;
+}
+
+a.menuitem,
+span.menuitem {
+    color: #ffffa0;
+}
+
+a.menuitem:hover,
+span.menuitem:hover {
+    color: #ffffff;
+}
+
+a.menuitem:hover {
+    color:green;
+}
+
+td.jsmenu {
+    background-color: #204020;
+}
+
+td.jsmenu:hover {
+    background-color:#002000;
+}
+
+td.fileListFunct, td.fileListFunctCont {
+    background-color: #204020;
+    color: #ffffa0;
+}
+
+th.fileListHead {
+    background-color: #606060;
+    color: #ffffff;
+}
+
+a.listHead {
+	color: #d0d0ff;
+}
+
+a.listHead:hover {
+    color: #ffffa0;	
+}
+
+table.fileListButtonCont2 {
+    background-color: #204020;
+}
+
+td.fileListButton {
+    color: #ffffa0;
+}
+
+div.searchPath {
+    top: 165px;
+    background-color: #404040;
+}
+
+span.searchPath {
+    background-color: #404040;
+    color: #ffffa0;
+}  
+
+body.searchText a.fn {
+	display: inline-block;
+	margin-left: 10px;
+}
+
+body.searchText table.dataForm {
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ffffff;
+}
+
+body.searchText table.dataForm tr:last-child {
+    height: 30px;
+}
+
+body.searchText span.plaintext {
+	color: #e0c080;
+}
+
+td.tabActive {
+    background-color: #e0c080;
+    color: #303030;
+}
+ 
+td.tabInactive {
+    background-color: #606060;
+    border-bottom-color: #606060;
+}
+ 
+a.tab {
+    color: #ffffff; 
+}
+ 
+td.tabAlbum {   
+    background-color:ivory;
+}
+
+div.more {
+    background-color:#ffffff;
+} 
+
+table.dataForm {
+    background-color: #404040;
+}
+
+table.formSection {
+    background-color: #404040;
+}
+
+td.formParm1 {
+    background-color: #404040;
+    color: #ffffff;
+}
+
+td.formParm2 {
+    background-color: #404040;
+    color: #ffffff;
+}
+
+td.formButton {
+    background-color: #404040;
+    border-top: 1px solid #ffffff;
+    padding-top: 16px;
+}
+
+table.dataForm {
+    border-width: 0;
+    border-collapse: collapse;
+}
+
+table.dataForm table.dataForm {
+	border: 1px solid #ffffff;
+}
+
+input.formParm1 {
+    background-color: #e0c080;
+}
+
+div.hint {
+    background-color:#b0b0ff;
+}
+
+th.fileList {
+    background-color: #606060;
+    color: #ffffff;
+}
+
+div.fileListScrollDiv {
+    background-color: #404040;
+}
+
+table.contextMenu th {
+    background-color: #e0c080;
+}
+
+.icon-button a:before {
+	color: #404040;
+}
+
+span.fileAgeHour {
+	background-color: #c0ffff;
+}
+
+span.fileAgeDay {
+	background-color: #ffe080;
+}
+
+span.fileAgeWeek {
+	background-color: #ffe0e0;
+}
+
+span.fileAgeMonth {
+	background-color: #e0ffe0;
+}
+
+span.fileAgeYear {
+	background-color: #e0e0ff;
+}
+
+td.fileListFunctCont a.icon-paging:before,
+td.fileListFunct a.icon-paging:before {
+    color: #e0c080;
+}
+
+div.pictureScrollContNoBorder {
+    background-color: #404040;
+}
+
+img.thumb {
+	border: 1px solid #ffffff;
+    box-shadow: none;
+}
+
+div.thumbnailCont {
+	color: #c0ffc0;
+}
+
+td.story2 {
+    background-color: #002000;
+    color: #c0c0ff;
+    font-weight: bold;
+}
+
+div.promptHead {
+    background-color: #e0c080;
+    border-bottom-color: #604000;
+}
+
+div.promptBox {
+    background-color: #404040;
+    border-color: #ffffff;
+}
+
+div.promptBox table {
+    border-collapse: collapse;
+}
+
+div.promptBox td.formParm1 {
+	color: #e0c080;
+}
+
+body.zip td.formParm1 {
+	color: #e0c080;
+}
+
+td.fileListSelectedRow {
+    background-color: #707070!important;
+}
+
+body.searchResult .icon-search {
+    margin: 0 6px 0 6px;
+}
+	
+body.searchResult .icon-search:before {
+	color: #ffffff;
+}
+
+.plaintext {
+	color: #ffffff;
+}
+
+a.searchResultFolder {
+	color: #e0c080;
+}
+
+div.buttonCont input:last-child {
+	float: right;
+}
+
+.icon-computer:before {
+	color: #ffffff;
+	margin: 0 6px 0 6px
+}
+
+#selectedFilesSize {
+    color: #e0c080;
+}
+
+li.selectedFile {
+    color: #ffffa0;
+}
+
+span.zipSize {
+	color: #e0c080;
+}
+
+body.zipContent .icon-folderOpen {
+	color: #ffffff;
+	margin: 6px 6px 0 6px;
+}
+
+.fileAgeHour, 
+.fileAgeDay,
+.fileAgeWeek,
+.fileAgeMonth,
+.fileAgeYear {
+	color: #000000;
+}
+
+div.fileListFolderDesc {
+	color: #f0f0f0;
+}
+
+div.iconSelection {
+	background-color: #e0c080;
+}
+
+div.iconSelection td.formParm1 {
+	background-color: #e0c080;
+	color: black;
+}
+
+body.tail pre {
+	color: #f0f0f0;
+}
+
+div.slideShowText {
+	color: #f0f0f0;
+}
+
+.fileListScrollDiv td.fileList {
+	color: #f0f0f0;
+}
+
+body.fileListNoMargin img.slideShow {
+	border: 2px solid #ffffa0;
+	border-radius: 8px;
+}
+
+div.pagingPageCurrent {
+    background-color: #e0c080;
+    border-color: #e0c080;
+}
+
+body.editPict img.thumb {
+	margin-left: 10px;
+}
+
+body.editPict table.dataForm table {
+	margin-left: 10px;
+}
+
+a.link {
+	color: #ffffa0;
+}
+
+a.link:hover {
+	color: #e0c080;
+	text-decoration: underline;
+}
+
+.mapIcon img {
+	margin-right: 12px;
+}
+
+body.publish font.small {
+	color: #e0c080;
+}
+
+a.treeCompRemoved {
+	color: #ffa0a0;
+}
+
+a.treeCompNew {
+	color: #a0ffa0;
+}
+
+a.treeCompModified {
+	color: #a0c0ff;
+}
+
+a.treeCompPath {
+	color: #c0c0c0;
+}
+
+body.diffTree table.dataForm {
+	border-bottom: 1px solid #ffffff;
+}
+
+body.diffTree > div > span {
+	color: #ffffff;
+}
+
+body.diffTree .diffTreeEmpty {
+    color: #a0c0ff;	
+}
+
+font.error {
+	color: #ffa0a0;
+}
+
+th.syncListHead {
+    background-color: #606060;
+    color: #ffffff;
+}
+
+td.syncCompare {
+    background-color: #303030;
+    color: #ffffff;
+    padding: 3px 5px 3px 5px;
+}
+
+div.picInfoMenu td {
+    color: #ffffc0;
+}
+
+div.picInfoMenu {
+    background-color: #303030;
+    border-color: #ffffff;
+}
+
+div.picInfoMenu a {
+    color: #c0ffc0;
+}
+
+div.picInfoMenu a:hover {
+    color: #ffc0c0;
+}
+
+.mapIcon .icon-globe:before {
+	color: #c0ffc0;
+}
+
+div.selectedFolder {
+	border-color: #ffc0c0;
+}
+
+div.currentFolder > a.dirtree {
+    background-color: #303030;
+	border: 1px solid #c0c0ff;
+	padding: 0 4px;
+}
+
+body.bookmarks .icon-delete:before,
+body.publishList .icon-delete:before {
+	color: #ffc0c0;
+}
+
+body.folderWatch .icon-delete:before {
+	color: #ffc0c0;
+}
+
+body.folderWatch div.watchList {
+	padding: 16px;
+}
+
+body.folderWatch span {
+	color: #c0ffc0;
+}
+
+table.statsTable {
+    padding-left: 6px;
+    background-color: #c0c0c0;
+    border-color: #404040;
+}
+
+table.statsTable div.statsBar {
+    color: #000000;
+}
+
+a.statsFolderName {
+    color: #400040;
+}
+
+a.statsFolderName:hover {
+    color: #ffffff;
+}
+
+body.dirtree .icon-star,
+body.bookmarks .icon-star {
+	color: #ffffa0;
+}
+
+body.publishList td.data {
+	background-color: #404040;
+	color: #ffffff;
+}
+
+span.publicUrl {
+	color: #ffffa0;
+}
+
+body.publishList a {
+	color: #ffffa0;
+}
+
+body.publishList span.plaintext {
+	margin-left: 10px;
+}
+
+body.publishList th.datahead {
+    background-color: #d0d0d0;
+}
+
+body.accountUsage input[type=button] {
+	margin-left: 10px;
+}
+
+table.usageChart {
+	margin-left: 10px;
+}
+
+td.accountDiskUsage {
+    border: solid 1px #d0d0d0;	
+}
+
+td.accountDiskUsed {
+	background-color: #a0a0ff;
+}
+
+td.accountDiskOverdue {
+	background-color: #ffa0a0;
+}
+
+td.accountDiskFree {
+	background-color: #ffffff;
+}
+
+body.unixCompress input[type=button] {
+	margin-left: 10px;
+}
+
+body.unixCmdLine #cmdOutput {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+body.unixCmdLine #cmdOutput pre {
+	color: #ffffff;
+}

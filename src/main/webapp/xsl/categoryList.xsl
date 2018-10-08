@@ -65,7 +65,7 @@
 
 </head>
 
-<body>
+<body class="categories">
 
 <xsl:apply-templates />
 
@@ -77,13 +77,9 @@
 
 <xsl:template match="categoryList">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="resources/msg[@key='label.manageCategories']/@value" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline">
+    <xsl:value-of select="resources/msg[@key='label.manageCategories']/@value" />
+  </div>
 
   <br/>
 
@@ -108,10 +104,9 @@
           </input>
         </td>
         <td nowrap="nowrap">
-          <a class="button" onclick="this.blur();"> 
-            <xsl:attribute name="href">javascript:document.form0.submit()</xsl:attribute>
-            <span><xsl:value-of select="resources/msg[@key='button.createCategory']/@value" /></span>
-          </a>              
+          <input type="button" onclick="document.form0.submit()">
+            <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.createCategory']/@value" /></xsl:attribute>
+          </input>
         </td>
 
       </tr>
@@ -157,19 +152,20 @@
 
     <br/>
 
-    <xsl:if test="category">
-      <a class="button" onclick="this.blur();"> 
-        <xsl:attribute name="href">javascript:deleteSelected()</xsl:attribute>
-        <span><xsl:value-of select="resources/msg[@key='button.delete']/@value" /></span>
-      </a>              
-    </xsl:if>
+    <div class="buttonCont">
 
-    <a class="button" onclick="this.blur();"> 
-      <xsl:attribute name="href">/webfilesys/servlet?command=assignCategory&amp;filePath=<xsl:value-of select="/categoryList/filePath" /></xsl:attribute>
-      <span><xsl:value-of select="resources/msg[@key='button.return']/@value" /></span>
-    </a>              
+      <xsl:if test="category">
+        <input type="button" onclick="deleteSelected()">
+          <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.delete']/@value" /></xsl:attribute>
+        </input>
+      </xsl:if>
 
-    <br/>
+      <input type="button" style="float:right">
+        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=assignCategory&amp;filePath=<xsl:value-of select="/categoryList/filePathForScript" />'</xsl:attribute>
+        <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.return']/@value" /></xsl:attribute>
+      </input>
+    
+    </div>
 
   </form>
   

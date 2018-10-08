@@ -16,8 +16,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XmlCoBrowsingExitHandler extends XmlRequestHandlerBase
 {
-	public static final String SESSION_KEY_SLIDESHOW_BUFFER = "slideshowBuffer";
-
 	public XmlCoBrowsingExitHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,

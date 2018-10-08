@@ -82,7 +82,7 @@
 
 </head>
 
-<body>
+<body class="slideshowParam">
 
   <div class="headline" resource="label.slideparmhead"></div>
 

@@ -216,7 +216,7 @@
     <xsl:value-of select="/slideShow/shortPath"/>
   </div>
 
-  <div style="margin-top:20px;margin-bottom:20px;clear:both;">
+  <div style="margin-top:20px;margin-bottom:20px;clear:both;" class="plaintext">
     <xsl:value-of select="/slideShow/resources/msg[@key='alert.nopictures']/@value" />
   </div>
   

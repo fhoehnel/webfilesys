@@ -71,13 +71,12 @@
     </tr>
 
     <tr>
-      <td style="text-align:center">
+      <td>
         <input type="button">
           <xsl:attribute name="value"><xsl:value-of select="/compareFolder/resources/msg[@key='button.compare']/@value" /></xsl:attribute>
           <xsl:attribute name="onclick">openCompWindow();hidePrompt()</xsl:attribute>
         </input>
-        &#160;&#160;&#160;
-        <input type="button">
+        <input type="button" style="float:right">
           <xsl:attribute name="value"><xsl:value-of select="/compareFolder/resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
           <xsl:attribute name="onclick">cancelCompare();hidePrompt()</xsl:attribute>
         </input>

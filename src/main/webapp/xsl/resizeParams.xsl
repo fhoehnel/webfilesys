@@ -35,7 +35,7 @@
   
   </head>
 
-  <body>
+  <body class="editPict">
     <div class="headline" resource="label.resizetitle" />
     
     <br/>
@@ -242,7 +242,7 @@
                 <td class="formParm1">
                   <input type="submit" name="start" class="formButton" resource="button.start" />
                 </td>
-                <td class="formParm2" align="right">
+                <td class="formParm2" style="float:right">
                   <input type="button" class="formButton" name="cancel" resource="button.cancel">
                     <xsl:if test="/resizeParams/popup">
                       <xsl:attribute name="onclick">self.close()</xsl:attribute>

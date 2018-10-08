@@ -28,6 +28,14 @@ a.icon-font {
 	content: '\f02d';
 }
 
+.icon-computer:before {
+	content: '\f109';
+}
+
+.icon-archive:before {
+	content: '\f1c6';
+}
+
 .icon-calendar:before {
 	content: '\f073';
 }
@@ -125,6 +133,10 @@ a.icon-font {
 	content: '\f087';
 }
 
+.icon-globe:before {
+    content: '\f0ac'
+}
+
 .icon-help:before {
 	content: '\f059';
 }
@@ -193,6 +205,14 @@ a.icon-font {
 	content: '\f15d';
 }
 
+.icon-list:before {
+	content: '\f03a';
+}
+
+.icon-star:before {
+	content: '\f006';
+}
+
 .icon-page-next,
 .icon-page-last {
     float: right;
@@ -225,6 +245,7 @@ a.icon-darkgrey:before {
 	padding: 4px 2px 0 2px;
 	background-color: #e0e0e0;
 	cursor: pointer;
+	margin-right: 4px;
 }
 
 .icon-cancel-slideshow:before {

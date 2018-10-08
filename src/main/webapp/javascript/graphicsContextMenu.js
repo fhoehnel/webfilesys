@@ -297,9 +297,7 @@ function rotateFlipMenu(shortPath, path, fileName, imgType, domId)
     menuText = menuText 
                + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','180','" + fileName + "','" + domId + "')",resourceBundle["label.rotate180"]);
                
-    if ((imgType == '1')  &&        // JPEG
-        ((parent.serverOS == "win") || (jpegtranAvail == 'true')))
-    {
+    if (imgType == '1') {
         menuText = menuText 
                    + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Horizontal')",resourceBundle["label.mirrorhoriz"]);
 

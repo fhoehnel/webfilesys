@@ -15,6 +15,7 @@
   <meta http-equiv="expires" content="0" />
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/searchResult/css" />.css</xsl:attribute>
@@ -28,7 +29,7 @@
 
 </head>
 
-<body class="dirTree">
+<body class="dirTree searchResult">
 
 <xsl:apply-templates />
 
@@ -52,10 +53,9 @@
 <!-- end root node-->
 
 <xsl:template match="searchResult">
-
-  <img src="images/space.gif" border="0" width="12" height="17" />
-  <img src="images/searchResult.gif" border="0" width="16" height="16" />
-  <img src="images/space.gif" border="0" width="10" height="1" />
+  
+  <span class="icon-font icon-search"></span>
+  
   <span class="plaintext">
     <xsl:value-of select="matchCount" />
     <xsl:text> </xsl:text>
@@ -103,7 +103,7 @@
         <xsl:attribute name="href">/webfilesys/servlet?command=getFile&amp;filePath=<xsl:value-of select="@path"/></xsl:attribute>
       </xsl:if>
       <xsl:if test="not(@file)">
-        <xsl:attribute name="class">tab</xsl:attribute>
+        <xsl:attribute name="class">searchResultFolder</xsl:attribute>
       </xsl:if>
       <xsl:value-of select="@name" />
     </a>

@@ -13,7 +13,7 @@
 
 <head>
 
-  <title><xsl:value-of select="/slideShow/resources/msg[@key='label.slideshow']/@value" /></title>
+  <title resource="label.slideshow"></title>
 
   <meta http-equiv="expires" content="0" />
 
@@ -33,6 +33,11 @@
   <script src="javascript/slideshow.js" type="text/javascript"></script>
   <script src="javascript/slideShowActions.js" type="text/javascript"></script>
   
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/slideShow/language" /></xsl:attribute>
+  </script>
+  
   <script type="text/javascript">
     var imageIdx = <xsl:value-of select="/slideShow/startIdx" />;
 
@@ -40,13 +45,13 @@
 
     var autoForward = <xsl:value-of select="/slideShow/autoForward" />;
     
-    var pauseGoTitle = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.continue']/@value" />';
+    var pauseGoTitle = resourceBundle["alt.continue"];
   
     var slideShowDelay = <xsl:value-of select="/slideShow/delay" />;
     
-    var pauseTitle = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.pause']/@value" />';
+    var pauseTitle = resourceBundle["alt.pause"];
   
-    var continueTitle = '<xsl:value-of select="/slideShow/resources/msg[@key='alt.continue']/@value" />';
+    var continueTitle = resourceBundle["alt.continue"];  
     
     var fadeEnabled = false;
     <xsl:if test="/slideShow/fadeInOut">
@@ -63,6 +68,11 @@
   <xsl:apply-templates />
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
+
 </html>
 
 </xsl:template>
@@ -115,37 +125,27 @@
     
     <xsl:if test="/slideShow/autoForward='false'">
       <a href="javascript:goBack()">
-        <img id="previous" src="/webfilesys/images/prev.png" class="slideshowControl">
-          <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.back']/@value" /></xsl:attribute>
-        </img>
+        <img id="previous" src="/webfilesys/images/prev.png" class="slideshowControl" titleResource="alt.back"></img>
       </a>
     </xsl:if>
 
-    <a href="javascript:self.close()" class="icon-font icon-cancel icon-cancel-slideshow">
-      <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.exitslideshow']/@value" /></xsl:attribute>
-    </a>
+    <a href="javascript:self.close()" class="icon-font icon-cancel icon-cancel-slideshow" titleResource="alt.exitslideshow"></a>
 
     <xsl:if test="/slideShow/autoForward">
       <a id="stopAndGoLink" href="javascript:stopAndGo()">
         <xsl:if test="/slideShow/autoForward='true'">
-          <img id="pauseGo" src="/webfilesys/images/pause.png" border="0" style="vertical-align:text-bottom">
-            <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.pause']/@value" /></xsl:attribute>
-          </img>
+          <img id="pauseGo" src="/webfilesys/images/pause.png" border="0" style="vertical-align:text-bottom" titleResource="alt.pause"></img>
         </xsl:if>
           
         <xsl:if test="/slideShow/autoForward='false'">
-          <img id="pauseGo" src="/webfilesys/images/next.png" class="slideshowControl">
-            <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='alt.continue']/@value" /></xsl:attribute>
-          </img>
+          <img id="pauseGo" src="/webfilesys/images/next.png" class="slideshowControl" titleResource="alt.continue"></img>
         </xsl:if>
       </a>
     </xsl:if>
   </div>
   
   <a id="fullScreenButton" href="javascript:void(0)" onclick="javascript:makeSlideshowFullscreen()" style="position:absolute;top:10px;right:10px;">
-    <img src="/webfilesys/images/fullscreen.png">
-      <xsl:attribute name="title"><xsl:value-of select="/slideShow/resources/msg[@key='fullScreenMode']/@value" /></xsl:attribute>
-    </img>    
+    <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>    
   </a>
   
 </xsl:template>

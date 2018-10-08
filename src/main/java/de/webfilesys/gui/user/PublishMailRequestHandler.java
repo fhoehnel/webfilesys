@@ -3,8 +3,6 @@ package de.webfilesys.gui.user;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -337,7 +335,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println("<script src=\"/webfilesys/javascript/publish.js\" type=\"text/javascript\"></script>");
 		
 		output.println("</head>"); 
-		output.println("<body>");
+		output.println("<body class=\"publish\">");
 
 		headLine(getResource("label.published","Folder has been published"));
 
@@ -440,7 +438,7 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		
 		output.println("</head>"); 
 		
-		output.println("<BODY>");
+		output.println("<body class=\"publish\">");
 
 		headLine(getResource("label.publishhead","Publish folder content"));
         

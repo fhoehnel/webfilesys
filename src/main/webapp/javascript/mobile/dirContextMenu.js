@@ -17,6 +17,8 @@ function folderContextMenu(path, folderName) {
              + '</th>'
              + '</tr>';
 
+    menuText += menuEntry("showPictureThumbs()", resourceBundle["menuThumbnails"]);
+
     if (readonly != 'true') {
         menuText = menuText 
                  + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceBundle["menuCreateDir"]);

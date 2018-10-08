@@ -361,7 +361,9 @@
                 <xsl:if test="not(@link)">
                   <xsl:attribute name="href">javascript:comm<xsl:value-of select="@id" />()</xsl:attribute>
                 </xsl:if>
-                (<xsl:value-of select="comments" />)
+                <xsl:value-of select="comments" />
+                <xsl:text> </xsl:text>
+                <span resource="label.comments"></span>
               </a>
             </xsl:if>
           </div>  
@@ -374,7 +376,7 @@
   
   <xsl:if test="/fileList/file">
   
-    <table class="fileListButtonCont2" cellpadding="4" cellspacing="0">
+    <table class="storyButtonCont" cellpadding="4" cellspacing="0">
       <tr>
         <xsl:if test="paging/currentPage &gt; 1">
           <td class="fileListFunct" valign="center" nowrap="true">

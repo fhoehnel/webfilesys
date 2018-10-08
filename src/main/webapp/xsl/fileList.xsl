@@ -103,18 +103,20 @@
           windowHeight = document.documentElement.clientHeight;
       }
 
-      <xsl:if test="/fileList/description">
-        var padding = 240;
-      </xsl:if>
-      <xsl:if test="not(/fileList/description)">
-        var padding = 200;
-      </xsl:if>
+      var buttonCont = document.getElementById("buttonCont");
+      var buttonContYPos = getAbsolutePos(buttonCont)[1];
+
+      if (buttonContYPos == 0) {
+          var rect = buttonCont.getBoundingClientRect();
+          buttonContYPos = rect.top;
+      }
+
+      var fileListTable = document.getElementById('fileListTable');
+      var fileListYPos = getAbsolutePos(fileListTable)[1];
       
-      <xsl:if test="/fileList/readonly">
-        padding = padding - 20;
-      </xsl:if>
-  
-      document.getElementById('fileListTable').style.height = (windowHeight - padding) + 'px';
+      var scrollContHeight = buttonContYPos - fileListYPos;
+      
+      fileListTable.style.height = scrollContHeight + "px";
   }
 
   <xsl:if test="/fileList/linksExist">
@@ -395,10 +397,10 @@
             <a href="/webfilesys/servlet?command=switchFileAgeColoring">
               <img border="0" width="13" height="13" style="vertical-align:middle;margin-left:8px" titleResource="switchfileAgeColoring">
                 <xsl:if test="/fileList/fileAgeColoring">
-                  <xsl:attribute name="src">/webfilesys/images/minusSmall.gif</xsl:attribute>
+                  <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/fileList/css" />/minusSmall.gif</xsl:attribute>                  
                 </xsl:if>
                 <xsl:if test="not(/fileList/fileAgeColoring)">
-                  <xsl:attribute name="src">/webfilesys/images/menuPlus.gif</xsl:attribute>
+                  <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/fileList/css" />/menuPlus.gif</xsl:attribute>                  
                 </xsl:if>
               </img>
             </a>
@@ -546,7 +548,7 @@
     
     <!-- function buttons and actions -->
     
-    <table class="fileListButtonCont2">
+    <table id="buttonCont" class="fileListButtonCont2">
 
       <xsl:if test="file">
 

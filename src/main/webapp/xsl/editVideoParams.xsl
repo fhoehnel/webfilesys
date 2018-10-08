@@ -33,7 +33,7 @@
 
   </head>
 
-  <body onload="createVideoTimeRangeSelOptions()">
+  <body onload="createVideoTimeRangeSelOptions()" class="editVideo">
     <div class="headline" resource="titleEditVideo" />
     
     <br/>

@@ -20,7 +20,7 @@
   </link>
 
   <style type="text/css">
-    td.fileSysData {border:1px solid #808080;background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;padding:5px;}
+    td.fileSysData {border:1px solid #808080;background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;padding:5px;white-space:nowrap}
     td.fileSysDataNum {border:1px solid #808080;background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;text-align:right;padding-right:10px;padding:5px;}
     th.fileSysDataHead {border:1px solid #808080;background-color:#ffffe0;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;padding:5px;}
     table.fileSysStat {border-collapse:collapse;width:100%;margin-top:10px;}

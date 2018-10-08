@@ -3,8 +3,6 @@ package de.webfilesys;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 
 import de.webfilesys.util.PatternComparator;

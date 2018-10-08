@@ -32,20 +32,20 @@
     <xsl:if test="not(/result/error)">
       <tr>
         <td>
-          <a class="button" href="javascript:void(0)"> 
+          <input type="button"> 
             <xsl:if test="/result/writeProtected">
               <xsl:attribute  name="onclick">delFileAjax('<xsl:value-of select="/result/pathForScript" />', true)</xsl:attribute>
             </xsl:if>
             <xsl:if test="not(/result/writeProtected)">
               <xsl:attribute  name="onclick">delFileAjax('<xsl:value-of select="/result/pathForScript" />')</xsl:attribute>
             </xsl:if>
-            <span><xsl:value-of select="/result/resources/msg[@key='button.delete']/@value" /></span>
-          </a>              
+            <xsl:attribute name="value"><xsl:value-of select="/result/resources/msg[@key='button.delete']/@value" /></xsl:attribute>
+          </input>              
 
-          <a class="button" href="javascript:void(0)" style="float:right"> 
+          <input type="button" style="float:right"> 
             <xsl:attribute name="onclick">hidePrompt()</xsl:attribute>
-            <span><xsl:value-of select="/result/resources/msg[@key='button.cancel']/@value" /></span>
-          </a>              
+            <xsl:attribute name="value"><xsl:value-of select="/result/resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
+          </input>              
         </td>
       </tr>
     </xsl:if>

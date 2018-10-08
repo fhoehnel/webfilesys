@@ -50,7 +50,7 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("</head>");
-		output.println("<body>");
+		output.println("<body class=\"zipResult\">");
 
 		headLine(getResource("label.ziphead","Create ZIP archive"));
 

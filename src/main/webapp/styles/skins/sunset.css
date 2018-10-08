@@ -1,5 +1,5 @@
 body.menubar {
-    background-color: #e0e0e0;
+    background-color: #ffe0a0;
 }
 
 div.msgBox {
@@ -145,7 +145,7 @@ table.contextMenu th {
 }
 
 .icon-button a:before {
-	color: #ff8000;
+	color: #404040;
 }
 
 span.fileAgeHour {
@@ -173,3 +173,13 @@ td.fileListFunct a.icon-paging:before {
     color: #d05000;
 }
 
+.icon-button {
+    border: 3px ridge;
+    color: #4080c0;
+    border-color: #c06000;
+    background-color: #ff8000;
+}
+
+td.tabInactive {
+    background-color: #ffe0a0;
+}

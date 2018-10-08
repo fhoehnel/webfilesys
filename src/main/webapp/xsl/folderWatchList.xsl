@@ -15,6 +15,7 @@
     <meta http-equiv="expires" content="0" />
 
     <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+    <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
     <link rel="stylesheet" type="text/css">
       <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/watchList/css" />.css</xsl:attribute>
@@ -29,7 +30,7 @@
 	
   </head>
 
-  <body onload="setBundleResources()">
+  <body onload="setBundleResources()" class="folderWatch">
 
   <xsl:apply-templates />
 
@@ -43,54 +44,56 @@
 
   <div class="headline" resource="watchListHeadline"></div>
 
-  <xsl:if test="folder">
+  <div class="watchList">
 
-    <ul class="folderWatchList">
+    <xsl:if test="folder">
 
-      <xsl:for-each select="folder">
+      <ul class="folderWatchList">
+
+        <xsl:for-each select="folder">
 		
-        <li>
-          <img border="0" style="vertical-align:middle;margin-right:10px;">
+          <li>
             <xsl:if test="icon">
-              <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="icon" /></xsl:attribute>
+              <img border="0" style="vertical-align:middle;margin-right:10px;">
+                <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="icon" /></xsl:attribute>
+              </img>
             </xsl:if>
             <xsl:if test="not(icon)">
-              <xsl:attribute name="src">/webfilesys/images/folder.gif</xsl:attribute>
+               <span class="icon-font icon-folderClosed"></span>
             </xsl:if>
-          </img>
 
-	      <a class="dirtree" href="javascript:void(0)">
-            <xsl:if test="textColor">
-              <xsl:attribute name="style">color:<xsl:value-of select="textColor" /></xsl:attribute>
-            </xsl:if>
-            <xsl:attribute name="title"><xsl:value-of select="relativePath" /></xsl:attribute>
-		    <xsl:value-of select="shortPath" />
-          </a>
+	        <a class="dirtree" href="javascript:void(0)">
+              <xsl:if test="textColor">
+                <xsl:attribute name="style">color:<xsl:value-of select="textColor" /></xsl:attribute>
+              </xsl:if>
+              <xsl:attribute name="title"><xsl:value-of select="relativePath" /></xsl:attribute>
+		      <xsl:value-of select="shortPath" />
+            </a>
             
-          &#160;
+            &#160;
               
-          <a titleResource="button.stopWatch">
-            <xsl:attribute name="href">/webfilesys/servlet?command=watchList&amp;cmd=unwatch&amp;path=<xsl:value-of select="encodedPath" /></xsl:attribute>
-            <img src="/webfilesys/images/trash.gif" border="0" style="vertical-align:middle"/>
-          </a>
-        </li>
+            <a class="icon-font icon-delete" titleResource="button.stopWatch">
+              <xsl:attribute name="href">/webfilesys/servlet?command=watchList&amp;cmd=unwatch&amp;path=<xsl:value-of select="encodedPath" /></xsl:attribute>
+            </a>
+          </li>
             
-      </xsl:for-each>
+        </xsl:for-each>
       
-    </ul>
+      </ul>
     
-  </xsl:if>
+    </xsl:if>
     
-  <xsl:if test="not(folder)">
-    <br />
-    <span resource="watchListEmpty"></span>
-    <br/><br/>
-  </xsl:if>
+    <xsl:if test="not(folder)">
+      <span resource="watchListEmpty"></span>
+    </xsl:if>
+
+  </div>
 
   <div class="buttonCont">
     <input type="button" resource="button.return">
 	  <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=exp&amp;expandPath=<xsl:value-of select="/watchList/currentPathEncoded"/>'</xsl:attribute>
 	</input>
+	<input type="hidden"></input>
   </div>
   
 </xsl:template>

@@ -52,15 +52,11 @@
 
 </head>
 
-<body>
+<body class="publish">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="/publishFile/resources/msg[@key='label.publishFile']/@value" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline">
+    <xsl:value-of select="/publishFile/resources/msg[@key='label.publishFile']/@value" />
+  </div>
 
   <form accept-charset="utf-8" name="form1" method="get" action="/webfilesys/servlet">
 
@@ -196,17 +192,17 @@
       </tr>
 
       <tr>
-        <td class="formButton">
-          <a class="button" href="#"> 
-            <xsl:attribute name="onclick">this.blur();document.form1.submit()</xsl:attribute>
-            <span><xsl:value-of select="/publishFile/resources/msg[@key='button.publish']/@value" /></span>
-          </a>              
-        </td>
-        <td class="formButton" style="text-align:right">
-          <a class="button" href="#" style="float:right"> 
-            <xsl:attribute name="onclick">this.blur();self.close();</xsl:attribute>
-            <span><xsl:value-of select="/publishFile/resources/msg[@key='button.cancel']/@value" /></span>
-          </a>              
+        <td colspan="2" class="formParm1"></td>
+      </tr>
+
+      <tr>
+        <td class="formButton" colspan="2">
+          <input type="button" onclick="document.form1.submit()">
+            <xsl:attribute name="value"><xsl:value-of select="/publishFile/resources/msg[@key='button.publish']/@value" /></xsl:attribute>
+          </input>
+          <input type="button" onclick="self.close()" style="float:right">
+            <xsl:attribute name="value"><xsl:value-of select="/publishFile/resources/msg[@key='button.cancel']/@value" /></xsl:attribute>
+          </input>
         </td>
       </tr>
 

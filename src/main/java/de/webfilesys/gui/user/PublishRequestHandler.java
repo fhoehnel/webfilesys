@@ -2,8 +2,6 @@ package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -194,7 +192,7 @@ public class PublishRequestHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("</head>"); 
-		output.println("<body>");
+		output.println("<body class=\"publish\">");
 
 		headLine(getResource("label.published","Folder has been published"));
 
@@ -286,7 +284,7 @@ public class PublishRequestHandler extends UserRequestHandler
 		output.println("<script language=\"JavaScript\" src=\"javascript/fmweb.js\" type=\"text/javascript\"></script>"); 
 
 		output.println("</head>"); 
-		output.println("<body>");
+		output.println("<body class=\"publish\">");
 
 		headLine(getResource("label.publishhead","Publish folder content"));
         
@@ -412,11 +410,9 @@ public class PublishRequestHandler extends UserRequestHandler
 		output.println("<tr><td colspan=\"2\">&nbsp;</td></tr>");
 
 		output.println("<tr>");
-        output.println("<td class=\"formButton\">");
+        output.println("<td class=\"formButton\" colspan=\"2\">");
 		output.println("<input type=\"submit\" value=\"" + getResource("button.publish","Publish") + "\">");
-        output.println("</td>");
-        output.println("<td class=\"formParm2\" style=\"text-align:right\">");
-		output.println("<input type=\"button\" onclick=\"self.close();\" value=\"" + getResource("button.cancel","Cancel") + "\">");
+		output.println("<input type=\"button\" onclick=\"self.close();\" value=\"" + getResource("button.cancel","Cancel") + "\" style=\"float:right\">");
         output.println("</td>");
         output.println("</tr>");
 

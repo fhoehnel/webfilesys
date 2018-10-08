@@ -311,6 +311,12 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		String shortPath = CommonUtils.shortName(headLinePath, 50);
 		
+		if (folderOrFile.isDirectory()) {
+			if (shortPath.length() > 2) {
+				shortPath = shortPath.substring(0,  shortPath.length() - 2);
+			}
+		}
+		
 		Element metaInfElement = doc.createElement("metaInf");
 			
 		doc.appendChild(metaInfElement);

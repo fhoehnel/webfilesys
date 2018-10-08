@@ -101,7 +101,7 @@ public class FtpBackupHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 		output.println("</HEAD>");
 
-		output.println("<BODY>");
+		output.println("<BODY class=\"ftp\">");
 
 		headLine(getResource("label.ftpBackupHead","Backup to FTP Server"));
 
@@ -283,7 +283,7 @@ public class FtpBackupHandler extends UserRequestHandler
         }
 
 		output.println("</head>"); 
-		output.println("<body>");
+		output.println("<body class=\"ftp\">");
 
 		headLine(getResource("label.ftpBackupHead","Backup to FTP Server"));
 

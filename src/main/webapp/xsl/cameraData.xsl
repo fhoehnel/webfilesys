@@ -11,30 +11,32 @@
 <html>
 <head>
 
-<meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="0" />
 
-<link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
-<link rel="stylesheet" type="text/css">
-  <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/cameraData/css" />.css</xsl:attribute>
-</link>
+  <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+  
+  <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/cameraData/language" /></xsl:attribute>
+  </script>
 
-<title>
-  <xsl:value-of select="/cameraData/resources/msg[@key='alt.cameradata']/@value" />:
-  <xsl:value-of select="/cameraData/shortImgName" />
-</title>
+  <link rel="stylesheet" type="text/css">
+    <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/cameraData/css" />.css</xsl:attribute>
+  </link>
+
+  <title>
+    WebFileSys Exif Data: 
+    <xsl:value-of select="/cameraData/shortImgName" />
+  </title>
 
 </head>
 
-<body>
+<body class="cameraData">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="/cameraData/resources/msg[@key='alt.cameradata']/@value" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline" resource="alt.cameradata"></div>
 
   <form accept-charset="utf-8" name="form1" style="padding-top:5px;">
 
@@ -42,19 +44,19 @@
    
       <tr>
         <td colspan="2" class="formParm1">
-          <xsl:value-of select="/cameraData/resources/msg[@key='label.picturefile']/@value" />
+          <span resource="label.picturefile"></span>
         </td>
       </tr>
 
       <tr>
-        <td colspan="2" class="formParm2">
+        <td colspan="2" class="formParm2" style="padding-left:16px">
           <xsl:value-of select="/cameraData/shortImgName" />
         </td>
       </tr>
 
       <xsl:if test="not(/cameraData/exifData)">
         <script type="text/javascript">
-          alert('<xsl:value-of select="/cameraData/resources/msg[@key='alert.nocameradata']/@value" />');
+          alert(resourceBundle["alert.nocameradata"]);
           self.close();
         </script>
       </xsl:if>
@@ -64,7 +66,7 @@
         <xsl:if test="/cameraData/exifData/manufacturer">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.manufacturer']/@value" />
+              <span resource="label.manufacturer"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/manufacturer" />
@@ -75,7 +77,7 @@
         <xsl:if test="/cameraData/exifData/cameraModel">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.cameramodel']/@value" />
+              <span resource="label.cameramodel"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/cameraModel" />
@@ -86,7 +88,7 @@
         <xsl:if test="/cameraData/exifData/exposureDate">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.exposuredate']/@value" />
+              <span resource="label.exposuredate"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/exposureDate" />
@@ -97,7 +99,7 @@
         <xsl:if test="/cameraData/exifData/exposureTime">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.exposuretime']/@value" />
+              <span resource="label.exposuretime"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/exposureTime" />
@@ -108,7 +110,7 @@
         <xsl:if test="/cameraData/exifData/aperture">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.aperture']/@value" />
+              <span resource="label.aperture"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/aperture" />
@@ -119,7 +121,7 @@
         <xsl:if test="/cameraData/exifData/isoValue">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.isoValue']/@value" />
+              <span resource="label.isoValue"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/isoValue" />
@@ -127,10 +129,21 @@
           </tr>
         </xsl:if>
 
+        <xsl:if test="/cameraData/exifData/focalLength">
+          <tr>
+            <td class="formParm1">
+              <span resource="label.focalLength"></span>
+            </td>
+            <td class="formParm2">
+              <xsl:value-of select="/cameraData/exifData/focalLength" /> mm
+            </td>
+          </tr>
+        </xsl:if>
+
         <xsl:if test="/cameraData/exifData/flashFired">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.flashfired']/@value" />
+              <span resource="label.flashfired"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/flashFired" />
@@ -141,12 +154,12 @@
         <xsl:if test="/cameraData/exifData/exposureBias">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.exposureBias']/@value" />
+              <span resource="label.exposureBias"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/exposureBias" />
               <xsl:text> </xsl:text>
-              <xsl:value-of select="/cameraData/resources/msg[@key='apertureStops']/@value" />              
+              <span resource="apertureStops"></span>
             </td>
           </tr>
         </xsl:if>
@@ -154,7 +167,7 @@
         <xsl:if test="/cameraData/exifData/gpsLatitude">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.gpsLatitude']/@value" />
+              <span resource="label.gpsLatitude"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/gpsLatitude" />
@@ -165,7 +178,7 @@
         <xsl:if test="/cameraData/exifData/gpsLongitude">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.gpsLongitude']/@value" />
+              <span resource="label.gpsLongitude"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/gpsLongitude" />
@@ -176,7 +189,7 @@
         <xsl:if test="/cameraData/exifData/imgWidth">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.imgwidth']/@value" />
+              <span resource="label.imgwidth"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/imgWidth" />
@@ -187,7 +200,7 @@
         <xsl:if test="/cameraData/exifData/imgHeight">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.imgheight']/@value" />
+              <span resource="label.imgheight"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/imgHeight" />
@@ -198,7 +211,7 @@
         <xsl:if test="/cameraData/exifData/orientation">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.imgOrientation']/@value" />
+              <span resource="label.imgOrientation"></span>
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/orientation" />
@@ -209,7 +222,7 @@
         <xsl:if test="/cameraData/exifData/thumbnailPath">
           <tr>
             <td class="formParm1">
-              <xsl:value-of select="/cameraData/resources/msg[@key='label.thumbexists']/@value" />
+              <span resource="label.thumbexists"></span>
               
               <xsl:if test="/cameraData/exifData/thumbnailWidth">
                 <br/>&#160;
@@ -230,19 +243,19 @@
       </xsl:if>
 
       <tr>
-        <td class="formButton" nowrap="nowrap">
-          <a class="button" onclick="this.blur();" style="float:right"> 
-            <xsl:attribute name="href">javascript:window.close()</xsl:attribute>
-            <span><xsl:value-of select="/cameraData/resources/msg[@key='button.closewin']/@value" /></span>
-          </a>              
+        <td class="formButton" colspan="2" style="text-align:center">
+          <input type="button" onclick="window.close()" resource="button.closewin"></input>
         </td>
-        <td>&#160;</td>
       </tr>
     </table>
     
   </form>
 
 </body>
+
+<script type="text/javascript">
+  setBundleResources();
+</script>
 
 </html>
 

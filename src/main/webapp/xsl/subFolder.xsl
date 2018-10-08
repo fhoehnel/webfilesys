@@ -22,11 +22,18 @@
 
 <xsl:template name="parentFolder"> 
 
-  <div class="last">
+  <div>
 
       <xsl:attribute name="id"><xsl:value-of select="@id" /></xsl:attribute>
 
       <xsl:attribute name="path"><xsl:value-of select="@path" /></xsl:attribute>
+
+      <xsl:if test="@current">
+        <xsl:attribute name="class">last currentFolder</xsl:attribute>
+      </xsl:if>
+      <xsl:if test="not (@current)">
+        <xsl:attribute name="class">last</xsl:attribute>
+      </xsl:if>
 
       <xsl:variable name="pathForScript"><xsl:call-template name="insDoubleBackslash"><xsl:with-param name="string"><xsl:value-of select="@path" /></xsl:with-param></xsl:call-template></xsl:variable>
       
@@ -35,10 +42,14 @@
           <xsl:attribute name="href">javascript:col('<xsl:value-of select="@id" />', '<xsl:value-of select="@lastInLevel='true'" />')</xsl:attribute>
 
           <xsl:if test="@lastInLevel='true'">
-            <img src="/webfilesys/images/minusLast.gif" class="expCol" />
+            <img class="expCol">
+              <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/minusLast.gif</xsl:attribute>
+            </img>
           </xsl:if>
           <xsl:if test="not(@lastInLevel='true')">
-            <img src="/webfilesys/images/minusMore.gif" class="expCol" />
+            <img class="expCol">
+              <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/minusMore.gif</xsl:attribute>
+            </img>
           </xsl:if>
         </a>
       </xsl:if>
@@ -50,10 +61,14 @@
             <xsl:attribute name="href">javascript:exp('<xsl:value-of select="@id" />', '<xsl:value-of select="@lastInLevel='true'" />')</xsl:attribute>
 
             <xsl:if test="@lastInLevel='true'">
-              <img src="/webfilesys/images/plusLast.gif" class="expCol" />
+              <img class="expCol">
+                <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/plusLast.gif</xsl:attribute>
+              </img>
             </xsl:if>
             <xsl:if test="not(@lastInLevel='true')">
-              <img src="/webfilesys/images/plusMore.gif" class="expCol" />
+              <img class="expCol">
+                <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/plusMore.gif</xsl:attribute>
+              </img>
             </xsl:if>
           </a>
 
@@ -178,10 +193,14 @@
          <xsl:attribute name="href">javascript:exp('<xsl:value-of select="@id" />', '<xsl:value-of select="@lastInLevel='true'" />')</xsl:attribute>
 
          <xsl:if test="position()=last()">
-          <img src="/webfilesys/images/plusLast.gif" class="expCol" />
+          <img class="expCol">
+            <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/parentFolder/css" />/plusLast.gif</xsl:attribute>
+          </img>
         </xsl:if>
         <xsl:if test="position()!=last()">
-          <img src="/webfilesys/images/plusMore.gif" class="expCol" />
+          <img class="expCol">
+            <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/parentFolder/css" />/plusMore.gif</xsl:attribute>
+          </img>
         </xsl:if>
       </a>
 

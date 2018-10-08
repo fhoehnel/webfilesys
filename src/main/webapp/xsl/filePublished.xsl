@@ -28,15 +28,11 @@
 
 </head>
 
-<body onload="selectPublicLink()">
+<body onload="selectPublicLink()" class="publish">
 
-  <table border="0" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-      <th class="headline">
-        <xsl:value-of select="/publishFile/resources/msg[@key='label.publishFile']/@value" />
-      </th>
-    </tr>
-  </table>
+  <div class="headline">
+    <xsl:value-of select="/publishFile/resources/msg[@key='label.publishFile']/@value" />
+  </div>
 
   <br/>
  
@@ -54,7 +50,7 @@
     </tr>
 
     <tr>
-      <td colspan="2" class="formParm2">
+      <td colspan="2" class="formParm2" style="padding-left:20px">
         <xsl:value-of select="/publishFile/shortPath" />
       </td>
     </tr>
@@ -85,20 +81,9 @@
       
     <tr>
       <td colspan="2" class="formParm2" style="text-align:center">
-      
-        <table border="0" width="100%">
-          <tr>
-            <td width="40%">&#160;</td>
-            <td nowrap="nowrap" style="padding:10px">
-              <a class="button" href="#"> 
-                <xsl:attribute name="onclick">this.blur();self.close();</xsl:attribute>
-                <span><xsl:value-of select="/publishFile/resources/msg[@key='button.closewin']/@value" /></span>
-              </a>
-            </td>
-            <td width="40%">&#160;</td>
-          </tr>
-        </table>
-      
+        <input type="button" onclick="self.close()">
+          <xsl:attribute name="value"><xsl:value-of select="/publishFile/resources/msg[@key='button.closewin']/@value" /></xsl:attribute>        
+        </input>
       </td>
     </tr>
     

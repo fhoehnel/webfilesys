@@ -324,6 +324,8 @@ stats.age.years=Jahre
 # sunburst chart
 sunburst.noSubFolders=Dieser Ordner enthält keine Unterordner!
 sunburst.parentFolderLink=Übergeordneter Ordner
+sunburst.hideSubLink=Unterordner ausblenden
+sunburst.showSubLink=Unterordner einblenden
 
 # drive info labels
 label.driveinfo=Datenträger-Infos
@@ -542,6 +544,7 @@ label.exposuretime=Belichtungszeit
 label.aperture=Blende
 label.isoValue=ISO Empfindlichkeit
 label.flashfired=Blitzlicht
+label.focalLength=Brennweite
 label.exposureBias=Belichtungskorrektur
 apertureStops=Blendenstufen
 label.imgheight=image height (pixel)
@@ -746,7 +749,7 @@ changeType.dateChanged=Datei-Datum geändert
 changeType.sizeChanged=Datei-Größe geändert
 watchList=Überwachte Ordner
 watchListHeadline=auf Änderungen überwachte Ordner
-watchListEmpty=Aktuell werden keine Ordner überwacht. Die Änderungs-Überwachung eines Ordners wird mit der Option "Änderungen überwachen" im Conext-Menü des Ordners aktiviert!
+watchListEmpty=Aktuell werden keine Ordner überwacht. Die Änderungs-Überwachung eines Ordners wird mit der Option "Änderungen überwachen" im Kontext-Menü des Ordners aktiviert!
 
 # rating 
 rating.owner=Bewertung
@@ -978,10 +981,12 @@ menuRenameDir=Ordner umbenennen
 menuSearch=Suche
 menuCreateFile=neue Datei anlegen
 menuZipDir=Ordner in ZIP-Archiv
+menuThumbnails=Vorschaubilder
 folderIsEmpty=Ordner enthält keine Dateien oder Unterordner, die dem Filter entsprechen
 mobileFolderMenuHint=Menü für aktuellen Ordner
 mobileMainMenuHint=Hauptmenü
 showSortMenu=Sortiermenü anzeigen
+mobileFileList=Dateiliste
 
 # alert messages
 alert.regsuccess=Der neue Nutzer wurde erfolgreich registriert.

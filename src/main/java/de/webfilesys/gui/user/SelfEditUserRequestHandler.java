@@ -2,8 +2,6 @@ package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -61,7 +59,7 @@ public class SelfEditUserRequestHandler extends UserRequestHandler
 		}
 
 		output.println("</head>");
-		output.println("<body>");
+		output.println("<body class=\"selfEditUser\">");
 
 		headLine(getResource("label.editregistration","edit user data"));
 

@@ -623,6 +623,8 @@ table.fileListButtonCont {
 
 table.fileListButtonCont2 {
 	width: 100%;
+	position: absolute;
+    bottom: 0;
 	border-spacing: 0;
     border: none;
 }
@@ -630,6 +632,10 @@ table.fileListButtonCont2 {
 table.fileListFunctCont {
 	width: 100%;
 	border-spacing: 0;
+}
+
+table.storyButtonCont {
+	width: 100%;
 }
 
 div.fileListDesc {
@@ -645,7 +651,7 @@ div.fileListFolderDesc {
     box-sizing: border-box;
     padding: 2px 10px;
     margin-bottom: 5px;
-    font-size: 10px;
+    font-size: 12px;
     color: navy;
 }
 
@@ -819,6 +825,19 @@ td.mapIcon {
     text-align:right;
     width:1%;
     padding:0;
+}
+
+.mapIcon .icon-globe {
+    margin-right: 10px;	
+}
+
+.mapIcon .icon-globe:before {
+	color: #004000;
+	font-size: 32px;
+}
+
+.mapIcon a {
+	text-decoration: none;
 }
 
 div.more {
@@ -1393,14 +1412,22 @@ div.legendText {
     margin-left: 30px;
 }
   
-a.sunburstParentLink {
+a.sunburstParentLink,
+a.sunburstSubtreeLink {
     font-weight: bold;
     font-size: 12px;
     color: #404040;
     text-decoration: underline;
     position: absolute;
-    left: 30px;
     bottom: 40px;
+}
+
+a.sunburstParentLink {
+    left: 30px;
+}
+
+a.sunburstSubtreeLink {
+    right: 300px;	
 }
   
 div.sunburstText {
@@ -2014,11 +2041,81 @@ li.selectedFile {
 	color: navy;
 }
 
+a.searchResultFolder {
+    font-size: 13px;
+    color: #808080;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 form.userData input[type="text"], 
 form.userData input[type="email"], 
 form.userData input[type="password"], 
 form.userData select {
     width: 240px;
+}
+
+.icon-computer:before {
+	color: #000000;
+	margin: 0 6px 0 6px
+}
+
+body.searchResult .icon-search {
+    margin: 0 6px 0 6px;
+}
+
+body.zipContent .icon-folderOpen {
+	color: #000000;
+	margin: 6px 6px 0 0;
+	font-size: 24px;
+}
+
+body.zipContent > a.dirtree {
+    vertical-align: baseline;	
+}
+
+div.iconSelection {
+    width: 300px;
+    height: 100px;
+    overflow-x: auto;
+    overflow-y: auto;
+    border:1px solid #a0a0a0;
+}
+
+body.bookmarks .icon-delete:before,
+body.folderWatch .icon-delete:before,
+body.publishList .icon-delete:before {
+	color: #a00000;
+}
+
+body.folderWatch .icon-folderClosed:before {
+	margin-right: 7px;
+}
+
+body.dirtree .icon-star,
+body.bookmarks .icon-star {
+	font-size: 20px;
+	color: #c08000;
+}
+
+.dataForm textarea {
+	font-family: Arial,Helvetica,sans-serif;
+}
+
+td.accountDiskUsage {
+    border: solid 1px #606060;	
+}
+
+td.accountDiskUsed {
+	background-color: #2020a0;
+}
+
+td.accountDiskOverdue {
+	background-color: #a02020;
+}
+
+td.accountDiskFree {
+	background-color: #ffffff;
 }
 
 @media (max-width: 400px) {

@@ -84,7 +84,8 @@ public class AdminSelectWinFolderHandler extends AdminSelectFolderHandler
 			actPath=currentPath;
 		}
 
-		XmlUtil.setChildText(folderTreeElement, "css", userMgr.getCSS(uid), false);
+		// XmlUtil.setChildText(folderTreeElement, "css", userMgr.getCSS(uid), false);
+		XmlUtil.setChildText(folderTreeElement, "css", "fmweb", false);
 
         Element computerElement = doc.createElement("computer");
 

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +17,7 @@ import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.graphics.ThumbnailThread;
+import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.UTF8URLEncoder;
 
 /**
@@ -25,8 +25,6 @@ import de.webfilesys.util.UTF8URLEncoder;
  */
 public class SlideShowRequestHandler extends UserRequestHandler
 {
-	public static final String SLIDESHOW_BUFFER = "slideshowBuffer";
-
 	public static final String imgFileMasks[]={"*.gif","*.jpg","*.jpeg","*.png","*.bmp"};
 
 	public SlideShowRequestHandler(
@@ -89,16 +87,16 @@ public class SlideShowRequestHandler extends UserRequestHandler
 
 		if (imageIdx<=0)
 		{
-			session.removeAttribute(SLIDESHOW_BUFFER);
+			session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
 			getImageTree(actPath,recurse);
 			imageIdx=0;
 		}
 		else
 		{
-			Vector imageFiles=(Vector) session.getAttribute(SLIDESHOW_BUFFER); 
-			if ((imageFiles==null) || (imageIdx>=imageFiles.size()))
+			ArrayList<String> imageFiles = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER); 
+			if ((imageFiles == null) || (imageIdx >= imageFiles.size()))
 			{
-				session.removeAttribute(SLIDESHOW_BUFFER);
+				session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
 				getImageTree(actPath,recurse);
 				imageIdx=0;
 			}
@@ -107,8 +105,8 @@ public class SlideShowRequestHandler extends UserRequestHandler
 		output.println("<HTML>");
 		output.println("<HEAD>");
 		
-		Vector imageFiles=(Vector) session.getAttribute(SLIDESHOW_BUFFER);
-		if ((imageFiles==null) || (imageFiles.size()==0))
+		ArrayList<String> imageFiles = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
+		if ((imageFiles == null) || (imageFiles.size() == 0))
 		{
 			output.println("<script type=\"text/javascript\">");
 			output.println("alert('" + getResource("alert.nopictures","No picture files (JPG,GIF,PNG) exist in this directory") + "!');");
@@ -119,7 +117,7 @@ public class SlideShowRequestHandler extends UserRequestHandler
 			return;
 		}
 		
-		String imgFileName = (String) imageFiles.elementAt(imageIdx);
+		String imgFileName = (String) imageFiles.get(imageIdx);
         
 		String nextUrl = "/webfilesys/servlet?command=slideShow&imageIdx=" + (imageIdx+1) + "&delay=" + delay + "&recurse=" + recurseParm;
 
@@ -312,7 +310,7 @@ public class SlideShowRequestHandler extends UserRequestHandler
 		int screenWidth = getIntParam("screenWidth", 1024);
 		int screenHeight = getIntParam("screenHeight", 768);
 		
-		session.removeAttribute(SLIDESHOW_BUFFER);
+		session.removeAttribute(SessionKey.SLIDESHOW_BUFFER);
 
 		session.setAttribute("screenWidth", new Integer(screenWidth));
 		session.setAttribute("screenHeight", new Integer(screenHeight));
@@ -478,11 +476,11 @@ public class SlideShowRequestHandler extends UserRequestHandler
 			pathWithSlash=actPath + File.separator;
 		}
 
-		Vector imageTree=(Vector) session.getAttribute(SLIDESHOW_BUFFER);
+		ArrayList<String> imageTree = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		if (imageTree==null)
 		{
-			imageTree=new Vector();
-			session.setAttribute(SLIDESHOW_BUFFER,imageTree);
+			imageTree = new ArrayList<String>();
+			session.setAttribute(SessionKey.SLIDESHOW_BUFFER, imageTree);
 		}
 
 		FileLinkSelector fileSelector=new FileLinkSelector(actPath,FileComparator.SORT_BY_FILENAME);
@@ -497,7 +495,7 @@ public class SlideShowRequestHandler extends UserRequestHandler
 			{
 				FileContainer fileCont = (FileContainer) imageFiles.get(i);
 				
-				imageTree.addElement(fileCont.getRealFile().getAbsolutePath());
+				imageTree.add(fileCont.getRealFile().getAbsolutePath());
 			}
 		}
 

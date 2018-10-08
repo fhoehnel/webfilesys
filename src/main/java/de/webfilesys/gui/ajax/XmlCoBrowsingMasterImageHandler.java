@@ -2,8 +2,7 @@ package de.webfilesys.gui.ajax;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Vector;
-
+import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -13,6 +12,7 @@ import org.w3c.dom.Element;
 
 import de.webfilesys.CoBrowsingManager;
 import de.webfilesys.graphics.ScaledImage;
+import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -20,8 +20,6 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XmlCoBrowsingMasterImageHandler extends XmlRequestHandlerBase
 {
-	public static final String SESSION_KEY_SLIDESHOW_BUFFER = "slideshowBuffer";
-
 	public XmlCoBrowsingMasterImageHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -34,7 +32,7 @@ public class XmlCoBrowsingMasterImageHandler extends XmlRequestHandlerBase
 	
 	protected void process()
 	{
-		Vector imageFiles = (Vector) session.getAttribute(SESSION_KEY_SLIDESHOW_BUFFER);
+		ArrayList<String> imageFiles = (ArrayList<String>) session.getAttribute(SessionKey.SLIDESHOW_BUFFER);
 		
 		if (imageFiles == null)
 		{
@@ -58,7 +56,7 @@ public class XmlCoBrowsingMasterImageHandler extends XmlRequestHandlerBase
             }
         }
         
-		String imgPath = (String) imageFiles.elementAt(imgIdx);
+		String imgPath = (String) imageFiles.get(imgIdx);
  
 		int windowWidth = 1000;
 		int windowHeight = 720;

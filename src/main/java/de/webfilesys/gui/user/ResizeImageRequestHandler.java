@@ -226,7 +226,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         output.println("</script>");
 
         output.println("</head>");
-        output.println("<body>");
+        output.println("<body class=\"editPict\">");
 
         headLine(getResource("label.resizetitle", "resize images"));
 
@@ -370,6 +370,8 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         }
         else
         {
+        	output.println("<div class=\"buttonCont\">");
+        	
             output.println("<input type=\"button\" value=\""
                     + getResource("button.return", "Return")
                     + "\" onclick=\"returnToPictures()\">");
@@ -383,6 +385,8 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                                         "View Scaled Pictures")
                                 + "\" onclick=\"gotoScaledPictures()\">");
             }
+
+            output.println("</div>");
         }
 
         output.println("</form>");

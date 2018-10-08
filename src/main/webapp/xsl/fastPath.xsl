@@ -14,6 +14,7 @@
   <meta http-equiv="expires" content="0" />
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/folderTree/css" />.css</xsl:attribute>
@@ -75,7 +76,7 @@
     </xsl:if>
 
     <xsl:if test="@bookmark and @visited">
-      <img src="images/bookmark.gif" border="0" width="16" height="16" />
+      <span class="icon-font icon-star"></span>
     </xsl:if>
 
     <xsl:if test="not(@bookmark)">

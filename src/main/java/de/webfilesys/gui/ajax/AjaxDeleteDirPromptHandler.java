@@ -73,12 +73,7 @@ public class AjaxDeleteDirPromptHandler extends XmlRequestHandlerBase
         XmlUtil.setChildText(resultElement, "deletePromptMsg", deletePromptMsg);
         
         doc.appendChild(resultElement);
-
-        addMsgResource("checkbox.confirmdel", getResource("checkbox.confirmdel", "Confirm delete"));
-        addMsgResource("button.delete", getResource("button.delete", "Delete"));
-        addMsgResource("button.cancel", getResource("button.cancel", "Cancel"));
-        addMsgResource("button.return", getResource("button.return", "Return"));
 		
-		this.processResponse();
+		processResponse();
 	}
 }

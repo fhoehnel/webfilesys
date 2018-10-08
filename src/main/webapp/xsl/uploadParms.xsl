@@ -33,7 +33,7 @@
   
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
   <script type="text/javascript">
-    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
+    <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/upload/language" /></xsl:attribute>
   </script>
 
   <script language="javascript">
@@ -176,7 +176,7 @@
 
 </head>
 
-<body onload="showMultiUploadLink()">
+<body onload="showMultiUploadLink()" class="upload">
   <xsl:if test="mobile">
     <xsl:attribute name="class">mobile</xsl:attribute>
   </xsl:if>
@@ -287,7 +287,11 @@
   <br/><br/>
   <center>
 
-    <div style="width:302px;height:20px;border-style:solid;border-width:1px;border-color:blue;margin:0px;padding:0px;text-align:left;font-size:3px;"><img id="done" src="/webfilesys/images/bluedot.gif" width="1" height="20" border="0"/></div>
+    <div class="uploadStatusBar">
+      <img id="done" width="1" height="20" border="0">
+        <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/progressbar.gif</xsl:attribute>
+      </img>
+    </div>
 
     <br/>
 

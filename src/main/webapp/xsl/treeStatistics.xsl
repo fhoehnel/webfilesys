@@ -152,7 +152,7 @@
 
 </head>
 
-<body onload="getSubfolderStats()">
+<body onload="getSubfolderStats()" class="treeStatistics">
 
   <xsl:apply-templates />
 

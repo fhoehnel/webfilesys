@@ -281,6 +281,7 @@ import de.webfilesys.gui.xsl.album.XslPictureAlbumHandler;
 import de.webfilesys.gui.xsl.calendar.XslCalendarHandler;
 import de.webfilesys.gui.xsl.calendar.XslCalendarMonthHandler;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
+import de.webfilesys.gui.xsl.mobile.MobileFolderPictureHandler;
 import de.webfilesys.gui.xsl.mobile.MobileShowImageHandler;
 import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.user.UserManager;
@@ -2197,6 +2198,12 @@ public class WebFileSysServlet extends ServletBase
             if (cmd.equals("folderFileList")) 
             {
                 (new MobileFolderFileListHandler(req, resp, session, output, userid)).handleRequest(); 
+                return(true);
+            }
+
+            if (cmd.equals("folderPictures")) 
+            {
+                (new MobileFolderPictureHandler(req, resp, session, output, userid)).handleRequest(); 
                 return(true);
             }
             

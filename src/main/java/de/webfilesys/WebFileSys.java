@@ -44,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.21.0 (24 June 2018)";
+	public static final String VERSION = "Version 2.22.0 (10 Oct 2018)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -216,6 +216,11 @@ public class WebFileSys
      */
     private boolean reverseFileLinkingEnabled = false;
 
+    /**
+     * Unix only: enable OS shell command execution via WebFileSys web interface
+     */
+    private boolean osShellCommandExceution = false;
+    
     private DiskQuotaInspector quotaInspector = null;
 
     private boolean licensed = false;
@@ -592,7 +597,13 @@ public class WebFileSys
         {
             allowProcessKill = false;
         }
-
+        
+        temp = config.getProperty("OSShellCommandExceution", "false");
+        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
+        {
+        	osShellCommandExceution = true;
+        }
+        
 		temp = config.getProperty("DebugMail", "false");
 		if (temp.equalsIgnoreCase("true"))
 		{
@@ -1215,6 +1226,11 @@ public class WebFileSys
     public boolean isAllowProcessKill()
     {
     	return(allowProcessKill);
+    }
+    
+    public boolean isOSShellCommandExcution()
+    {
+    	return(osShellCommandExceution);
     }
     
     public boolean isSyncIgnoreOffsetDST()

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.WebFileSys;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -29,6 +30,10 @@ public class XslUnixCmdLineHandler extends XslRequestHandlerBase
 	  
 	protected void process()
 	{
+		if (!WebFileSys.getInstance().isOSShellCommandExcution()) {
+			return;
+		}
+		
         if ((!isAdminUser(false)) || (!userMgr.getDocumentRoot(uid).equals("/")))
 	    {
 	        Logger.getLogger(getClass()).warn("UNIX command line is only available for admin users with root access");

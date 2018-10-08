@@ -44,7 +44,7 @@
 
 </head>
 
-<body>
+<body class="unixCmdLine">
 
   <div class="headline">
     <xsl:value-of select="resources/msg[@key='label.cmdprompt']/@value" />

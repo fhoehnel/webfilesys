@@ -19,6 +19,7 @@
         <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
         <script src="/webfilesys/javascript/sunburstChart.js" type="text/javascript"></script>
         <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+        <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 	  
 	    <script type="text/javascript">
 	      var CLICK_TARGET = "/webfilesys/servlet?command=folderTreeStats&amp;path=";
@@ -29,8 +30,16 @@
           centerX = (windowHeight - 100) / 2 + 35;
           centerY = (windowHeight - 100) / 2 + 35;
 	    
-		  var innerCircleRadius = Math.round(((windowHeight - 100) / 2) / (1.2 * <xsl:value-of select="/folderStats/treeDepth" />)) + 40;
-		  var shellWidth = Math.round(((windowHeight - 100) - (innerCircleRadius * 2))  / (1.8 *(<xsl:value-of select="/folderStats/treeDepth" /> - 1)));
+	      var chartTreeDepth = <xsl:value-of select="/folderStats/treeDepth" />;
+	      <xsl:if test="/folderStats/hideSubTrees">
+	          chartTreeDepth = 1;
+	      </xsl:if>
+	    
+		  var innerCircleRadius = Math.round(((windowHeight - 100) / 2) / (1.2 * chartTreeDepth)) + 40;
+	      <xsl:if test="/folderStats/hideSubTrees">
+	          innerCircleRadius += 40;
+          </xsl:if>
+		  var shellWidth = Math.round(((windowHeight - 100) - (innerCircleRadius * 2))  / (1.8 *(chartTreeDepth - 1)));
 		  
 		  var colorCounter = 0;
 		  
@@ -87,7 +96,7 @@
 				var tooltipText = shortName + ':&lt;br/&gt;<xsl:value-of select="@formattedTreeSize" /> bytes&lt;br/&gt;<xsl:value-of select="@formattedTreeFileNum" /> files';
 				
 				var pathForScript = "";
-				var clickAction;
+				var clickAction = "";
 				<xsl:if test="folder">
 				    pathForScript = '<xsl:value-of select="@pathForScript" />';
 				    clickAction = CLICK_TARGET;
@@ -96,14 +105,25 @@
   	            pieChartSector(startAngle, endAngle, chartColors[colorCounter % chartColors.length], 
   	                           innerCircleRadius, tooltipText, pathForScript, clickAction); 
                 
-                if (endAngle - startAngle &gt; 15) {
+                var minAngelToShowLabelInsideCircle = 15;
+	            <xsl:if test="/folderStats/hideSubTrees">
+	                minAngelToShowLabelInsideCircle = 8;
+	            </xsl:if>
+                
+                if (endAngle - startAngle &gt; minAngelToShowLabelInsideCircle) {
 	                textOnCircle(startAngle, endAngle,
        	                         innerCircleRadius - 20, 
 					             shortName,
 					             8, "12px");	
-                <xsl:if test="not(folder)">								 
-                  } else if (endAngle - startAngle &gt; 5) {
-                      sectorLabel(startAngle, endAngle, innerCircleRadius, innerCircleRadius + shellWidth, "#000000", shortName, "12px");
+                <xsl:if test="not(/folderStats/hideSubTrees)">								 
+                  <xsl:if test="not(folder)">								 
+                    } else if (endAngle - startAngle &gt; 5) {
+                        sectorLabel(startAngle, endAngle, innerCircleRadius, innerCircleRadius + shellWidth, "#000000", shortName, "12px");
+                  </xsl:if>
+                </xsl:if>
+                <xsl:if test="/folderStats/hideSubTrees">								 
+                  } else {
+                      sectorLabel(startAngle, endAngle, innerCircleRadius / 3 * 2, innerCircleRadius, "#000000", shortName, "12px", true);
                 </xsl:if>
 				}
 				
@@ -130,11 +150,15 @@
 				  var sectorSize1 = sectorSize;
 			    </xsl:if>
 			   
- 			    <xsl:for-each select="folder">
-				  <xsl:call-template name="subfolder">
-				    <xsl:with-param name="level" select="'1'"/>
-				  </xsl:call-template>
-				</xsl:for-each>
+	            <xsl:if test="not(/folderStats/hideSubTrees)">
+			   
+ 			      <xsl:for-each select="folder">
+				    <xsl:call-template name="subfolder">
+				      <xsl:with-param name="level" select="'1'"/>
+				    </xsl:call-template>
+				  </xsl:for-each>
+			  
+			    </xsl:if>
 			  
 			    startAngle = endAngle;
 				
@@ -147,17 +171,38 @@
 			  
 			  pieChartSector(startAngle, endAngle, ROOT_FILES_COLOR, innerCircleRadius, tooltipText); 
 			  
-              if (endAngle - startAngle &gt; 15) {
-	              textOnCircle(startAngle, endAngle,
-       	                       innerCircleRadius - 20, 
-				               "files in root",
-					           5, "12px");			
-			  }
+              <xsl:if test="/folderStats/hideSubTrees">								 
+                sectorLabel(startAngle, endAngle, innerCircleRadius / 3 * 2, innerCircleRadius, "#000000", "files in root", "12px", true);
+              </xsl:if>
+              <xsl:if test="not(/folderStats/hideSubTrees)">								 
+                if (endAngle - startAngle &gt; 15) {
+	                textOnCircle(startAngle, endAngle,
+       	                         innerCircleRadius - 20, 
+				                 "files in root",
+					             5, "12px");			
+			    }
+			  </xsl:if>
 			  
 	          <xsl:if test="/folderStats/parentFolder">
-	            document.getElementById("parentFolderLink").setAttribute("href", "/webfilesys/servlet?command=folderTreeStats&amp;path=" + encodeURIComponent('<xsl:value-of select="/folderStats/parentFolder" />') + "&amp;random=" + (new Date()).getTime());
+	            document.getElementById("parentFolderLink").setAttribute("href", "javascript:oneLevelUp()");
 	          </xsl:if>
 		  }
+		  
+		  function oneLevelUp() {
+		      showHourGlass();
+              window.location.href = "/webfilesys/servlet?command=folderTreeStats&amp;path=" + encodeURIComponent('<xsl:value-of select="/folderStats/parentFolder" />') + "&amp;random=" + (new Date()).getTime();
+  		  }
+		  
+		  function showSubTrees() {
+		      showHourGlass();
+              window.location.href = '/webfilesys/servlet?command=folderTreeStats&amp;path=<xsl:value-of select="/folderStats/encodedPath" />';
+  		  }
+  		  
+		  function hideSubTrees() {
+		      showHourGlass();
+              window.location.href = '/webfilesys/servlet?command=folderTreeStats&amp;path=<xsl:value-of select="/folderStats/encodedPath" />&amp;hideSubTrees=true';
+  		  }
+  		  
 		</script>
 	  
 	  </head>
@@ -179,6 +224,17 @@
 	    <xsl:if test="/folderStats/parentFolder">
 	      <a id="parentFolderLink" class="sunburstParentLink"><xsl:value-of select="/folderStats/resources/msg[@key='sunburst.parentFolderLink']/@value" /></a>
 	    </xsl:if>
+
+        <a id="showHideSubLink" class="sunburstSubtreeLink">
+	      <xsl:if test="/folderStats/hideSubTrees">
+	        <xsl:attribute name="href">javascript:showSubTrees()</xsl:attribute>
+	        <xsl:value-of select="/folderStats/resources/msg[@key='sunburst.showSubLink']/@value" />
+          </xsl:if>
+	      <xsl:if test="not(/folderStats/hideSubTrees)">
+	        <xsl:attribute name="href">javascript:hideSubTrees()</xsl:attribute>
+	        <xsl:value-of select="/folderStats/resources/msg[@key='sunburst.hideSubLink']/@value" />
+          </xsl:if>
+	    </a>
 	  </body>
     </html>
 	
