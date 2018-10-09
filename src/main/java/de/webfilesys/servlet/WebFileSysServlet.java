@@ -214,6 +214,7 @@ import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
 import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.CompareImageSliderHandler;
+import de.webfilesys.gui.xsl.CompareImageTabHandler;
 import de.webfilesys.gui.xsl.EditVideoParamHandler;
 import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
 import de.webfilesys.gui.xsl.GPXViewHandler;
@@ -1276,7 +1277,8 @@ public class WebFileSysServlet extends ServletBase
         
         if (command.equals("compareImg"))
         {
-		    (new CompareImageRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+		    // (new CompareImageRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+		    (new CompareImageTabHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }

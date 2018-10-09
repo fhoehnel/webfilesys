@@ -428,7 +428,7 @@ label.savethumbs=Store Thumbnails
 label.invite=Send Invitation
 label.of=of
 label.pagesize=files per page
-error.compselect=Select at least 2 and not more than 8 pictures to compare!
+error.compselect=Select at least 2 pictures to compare!
 label.compare=Compare
 label.comparehead=Compare Images
 label.renameImage=rename picture file
@@ -447,6 +447,10 @@ button.rotateByExif=Rotate by Exif
 title.rotateByExif=rotate pictures according to the orientation value in the camera EXIF data
 confirm.rotateByExif=Pictures, whose orientation does not match the orientation value stored in the camera EXIF data will be rotated losslessly. Continue?
 rotateByExif.noop=No picture rotated!
+
+#picture comparision
+compImg.deleteTitle=delete picture file
+compImg.closeTitle=keep and close picture file
 
 # picture transformation
 label.rotateFlip=Rotate/Mirror

@@ -78,7 +78,7 @@ function viewQueuedPics() {
 function compare() {
 	var numChecked = getSelectedCheckboxCount();
 
-    if ((numChecked < 2) || (numChecked > 8)) {
+    if (numChecked < 2) {
         customAlert(resourceBundle["error.compselect"]);
         return;
     }

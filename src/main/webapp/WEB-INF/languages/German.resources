@@ -430,7 +430,7 @@ label.invite=Einladung senden
 alt.editdesc=Beschreibung editieren
 alt.imgtransform=Bild bearbeiten
 label.pagesize=Bilder je Seite
-error.compselect=Es müssen mindestens 2 und höchstens 8 Bilder zum Vergleichen ausgewählt werden.
+error.compselect=Es müssen mindestens 2 Bilder zum Vergleichen ausgewählt werden.
 label.compare=Vergleichen
 label.comparehead=Bildervergleich
 label.renameImage=Bilddatei umbenennen
@@ -449,6 +449,10 @@ button.rotateByExif=Exif-Rotation
 title.rotateByExif=Bilder entsprechend Hoch/Querformat-Wert in EXIF Daten rotieren
 confirm.rotateByExif=Bilder, deren Orientierung (Hoch-/Querformat) nicht mit dem durch die Kamera in den EXIF-Daten gespeicherten Orientierungs-Wert übereinstimmmt, werden verlustlos rotiert. Fortfahren?
 rotateByExif.noop=Es wurde kein Bild rotiert!
+
+#picture comparision
+compImg.deleteTitle=Bilddatei löschen
+compImg.closeTitle=Bild behalten und schliessen
 
 # picture transformation labels
 label.rotateFlip=Drehen/Spiegeln
