@@ -154,7 +154,14 @@ public class VideoConverterThread extends Thread {
                 }
             }
             
-        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + timeRangeParam + scaleFilter + codecFilter + frameRateFilter + " "  + targetFilePath;
+            String addParams = WebFileSys.getInstance().getFfmpegAddParams();
+            if (addParams == null) {
+            	addParams = "";
+            } else {
+            	addParams = " " + addParams;
+            }
+            
+        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + timeRangeParam + scaleFilter + codecFilter + frameRateFilter + addParams + " "  + targetFilePath;
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
                 Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
