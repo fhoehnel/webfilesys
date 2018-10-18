@@ -556,13 +556,6 @@ function setThumbContHeight() {
 }
 
 function setThumbContHeightInternal() {
-    var windowHeight;
-
-    if (browserFirefox || (browserChrome && osAndroid)) {
-        windowHeight = window.innerHeight;
-    } else {
-        windowHeight = document.documentElement.clientHeight;
-    }
     
     var buttonCont = document.getElementById("buttonCont");
     var buttonContYPos = getAbsolutePos(buttonCont)[1];
