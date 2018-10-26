@@ -428,7 +428,7 @@ label.savethumbs=Guardar miniaturas
 label.invite=Enviar invitación
 label.of=de
 label.pagesize=archivos por página
-error.compselect=Selecciona al menos dos y no más de ocho imágenes para comparar.
+error.compselect=Selecciona al menos dos imágenes para comparar.
 label.compare=Comparar
 label.comparehead=Comparar imágenes
 label.renameImage=Cambiar nombre de imagen
@@ -447,6 +447,10 @@ button.rotateByExif=girar by Exif
 title.rotateByExif=girar las imágenes de acuerdo con el valor de la orientación en los datos EXIF de la cámara
 confirm.rotateByExif=Imágenes, cuya orientación no coincide con el valor de orientación almacenada en los datos EXIF de la cámara se giran sin pérdidas. ¿Continuar?
 rotateByExif.noop=¡No hay imagen girada!
+
+#picture comparision
+compImg.deleteTitle=borrar archivo de imágen
+compImg.closeTitle=mantener y cerrar archivo de imagen
 
 # picture transformation
 label.rotateFlip=girar/reflejar

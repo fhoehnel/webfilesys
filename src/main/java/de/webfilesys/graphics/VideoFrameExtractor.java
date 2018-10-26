@@ -46,9 +46,9 @@ public class VideoFrameExtractor extends Thread
             String scaleFilter = null;
             
             if (width >= height) {
-            	scaleFilter = "scale=\"" + frameSize + ":-1\"";
+            	scaleFilter = "scale=" + frameSize + ":-1";
             } else {
-            	scaleFilter = "scale=\"-1:" + frameSize + "\"";
+            	scaleFilter = "scale=-1:" + frameSize;
             }
             
         	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -filter:v " + scaleFilter + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);

@@ -56,27 +56,22 @@
       }
   }
   
-  function setHeightInternal()
-  {
-      var windowHeight;
-      if (!browserFirefox)
-      {
-          // windowHeight = document.body.clientHeight;
-          windowHeight = document.documentElement.clientHeight;
+  function setHeightInternal() {
+
+      var buttonCont = document.getElementById("buttonCont");
+      var buttonContYPos = getAbsolutePos(buttonCont)[1];
+
+      if (buttonContYPos == 0) {
+          var rect = buttonCont.getBoundingClientRect();
+          buttonContYPos = rect.top;
       }
-      else
-      {
-          windowHeight = window.innerHeight;
-      }
+
+      var fileListTable = document.getElementById('fileListTable');
+      var fileListYPos = getAbsolutePos(fileListTable)[1];
       
-      <xsl:if test="/fileList/description">
-        var padding = 200;
-      </xsl:if>
-      <xsl:if test="not(/fileList/description)">
-        var padding = 150;
-      </xsl:if>
+      var scrollContHeight = buttonContYPos - fileListYPos;
       
-      document.getElementById('fileListTable').style.height = windowHeight - padding + 'px';
+      fileListTable.style.height = scrollContHeight + "px";
   }
 
   function setSortField(sortBy)
@@ -278,7 +273,7 @@
       
     </div>
     
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <table class="fileListButtonCont2" id="buttonCont">
       <tr>
         <td class="fileListButton">
           <div class="buttonCont">

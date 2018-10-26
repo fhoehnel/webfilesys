@@ -95,13 +95,6 @@
   }
 
   function setHeightInternal() {
-      var windowHeight;
-
-      if (browserFirefox || (browserChrome &amp;&amp; osAndroid)) {
-          windowHeight = window.innerHeight;
-      } else {
-          windowHeight = document.documentElement.clientHeight;
-      }
 
       var buttonCont = document.getElementById("buttonCont");
       var buttonContYPos = getAbsolutePos(buttonCont)[1];

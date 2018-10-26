@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.w3c.dom.Element;
 
 import de.webfilesys.ClipBoard;
+import de.webfilesys.DirTreeStatusInspector;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -113,5 +114,10 @@ public class XslUnixDirTreeHandler extends XslDirTreeHandler
 		}
 		
         processResponse("folderTree.xsl");
+        
+        if (pollInterval > 0) {
+            (new DirTreeStatusInspector(dirTreeStatus)).start();
+        }
+        
 	}
 }

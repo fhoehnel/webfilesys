@@ -78,7 +78,7 @@ function viewQueuedPics() {
 function compare() {
 	var numChecked = getSelectedCheckboxCount();
 
-    if ((numChecked < 2) || (numChecked > 8)) {
+    if (numChecked < 2) {
         customAlert(resourceBundle["error.compselect"]);
         return;
     }
@@ -556,13 +556,6 @@ function setThumbContHeight() {
 }
 
 function setThumbContHeightInternal() {
-    var windowHeight;
-
-    if (browserFirefox || (browserChrome && osAndroid)) {
-        windowHeight = window.innerHeight;
-    } else {
-        windowHeight = document.documentElement.clientHeight;
-    }
     
     var buttonCont = document.getElementById("buttonCont");
     var buttonContYPos = getAbsolutePos(buttonCont)[1];

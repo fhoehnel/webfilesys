@@ -2118,6 +2118,65 @@ td.accountDiskFree {
 	background-color: #ffffff;
 }
 
+body.compImg {
+	background-color: #808080;
+	margin-left: 4px;
+}
+
+div.imgCompThumbCont {
+	width: 210px;
+	overflow-y: auto;
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	bottom:0;
+    border-right: 2px solid #c0c0c0;
+}
+
+div.imgCompThumb {
+    padding: 2px 0px;
+    margin-bottom: 2px; 	
+}
+
+img.imgCompThumb {
+	border: 2px solid #ffffff;
+}
+
+a.imgCompThumbSelected img.imgCompThumb {
+	border: 2px solid #ff6060;
+}
+
+div.imgCompActionCont {
+	display: inline-block;
+	width: 20px;
+}
+
+div.imgCompPicCont {
+	display: inline-block;
+	width: auto;
+	margin-left: 215px;
+}
+
+img.imgCompPic {
+}
+
+a.imgCompButton {
+	float: right;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+a.imgCompButton:before {
+	color: #a0ffa0;
+    font-size: 20px;
+}
+
+a.imgCompButton.icon-delete:before {
+	color: #ff8080;
+    font-size: 22px;
+	margin-right: 2px;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

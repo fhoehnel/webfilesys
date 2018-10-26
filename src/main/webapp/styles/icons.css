@@ -213,6 +213,10 @@ a.icon-font {
 	content: '\f006';
 }
 
+.icon-check:before {
+	content: '\f00c';
+}
+
 .icon-page-next,
 .icon-page-last {
     float: right;

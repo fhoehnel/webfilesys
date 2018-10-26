@@ -205,7 +205,7 @@ public class XslWinDirTreeHandler extends XslDirTreeHandler
 		
         this.processResponse("folderTree.xsl");
 
-        if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
+        if (pollInterval > 0) {
         	(new DirTreeStatusInspector(dirTreeStatus)).start();
         }
 	}
