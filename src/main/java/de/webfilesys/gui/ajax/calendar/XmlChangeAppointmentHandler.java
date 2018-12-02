@@ -178,9 +178,9 @@ public class XmlChangeAppointmentHandler extends XmlRequestHandlerBase {
 		
 		appointment.setDuration(duration);
 		
-		appointment.setSubject(subject == null ? null : subject.replaceAll("'", "´"));
+		appointment.setSubject(subject == null ? null : subject.replaceAll("'", "Â´"));
 		
-		appointment.setContent(description == null ? null : description.replaceAll("'", "´"));
+		appointment.setContent(description == null ? null : description.replaceAll("'", "Â´"));
 		
 		appointment.setRepeatPeriod(repeatPeriod);
 		

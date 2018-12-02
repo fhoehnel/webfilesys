@@ -187,7 +187,7 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 	    XmlUtil.setChildText(markerElement, "longitude", Float.toString(longitude), false);
 
 	    if ((infoText != null) && (!infoText.isEmpty())) {
-            XmlUtil.setChildText(markerElement, "infoText", infoText.replace('\'',  '´'), false);
+            XmlUtil.setChildText(markerElement, "infoText", infoText.replace('\'', 'Â´'), false);
 	    }
 
 	    if (fileName != null) {
