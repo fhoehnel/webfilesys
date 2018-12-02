@@ -462,8 +462,9 @@ public class CommonUtils
 	           case 'Ü': sb.append("&Uuml;");break;
 	           case '®': sb.append("&reg;");break;         
 	           case '©': sb.append("&copy;");break;   
-	           case '': sb.append("&euro;"); break;
-           }
+	           case '\u20ac': sb.append("&euro;"); break;
+	           default:  sb.append(c); break;
+	       }
         }
         return sb.toString();
      }
