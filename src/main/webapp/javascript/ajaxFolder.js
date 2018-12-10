@@ -726,6 +726,8 @@ function selectCompFolderResult(req)
 
 function gotoBookmarkedFolder(encodedPath, mobile) {
 	
+	showHourGlass();
+	
     var url = "/webfilesys/servlet?command=ajaxRPC&method=existFolder&param1=" + encodedPath;
     
     xmlRequest(url, function(req) {
@@ -743,9 +745,11 @@ function gotoBookmarkedFolder(encodedPath, mobile) {
                 	}
                 	window.location.href = bookmarkUrl;
                 } else {
+                	hideHourGlass();
                 	toast(resourceBundle["bookmark.destFolderMissing"], 3000);
                 }
             } else {
+            	hideHourGlass();
                 alert(resourceBundle["alert.communicationFailure"]);
             }
         }

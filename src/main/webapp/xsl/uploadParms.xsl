@@ -17,7 +17,12 @@
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
   <link rel="stylesheet" type="text/css">
-    <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="css" />.css</xsl:attribute>
+    <xsl:if test="mobile">
+      <xsl:attribute name="href">/webfilesys/styles/skins/fmweb.css</xsl:attribute>
+    </xsl:if>
+    <xsl:if test="not(mobile)">
+      <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="css" />.css</xsl:attribute>
+    </xsl:if>
   </link>
 
   <xsl:if test="mobile">

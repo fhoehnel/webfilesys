@@ -433,6 +433,12 @@ function bookmark(path) {
     }
 }
 
+function fastpath(path) {
+	showHourGlass();
+
+	window.location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(path) + "&mask=*&fastPath=true";
+}
+
 function hidePrompt() {
      var promptBox = document.getElementById("prompt");
      
