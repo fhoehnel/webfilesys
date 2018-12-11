@@ -266,6 +266,7 @@ import de.webfilesys.gui.xsl.XslSlideShowHandler;
 import de.webfilesys.gui.xsl.XslSlideShowInFrameHandler;
 import de.webfilesys.gui.xsl.XslSlideshowParmsHandler;
 import de.webfilesys.gui.xsl.XslSyncCompareHandler;
+import de.webfilesys.gui.xsl.XslThumbnailExtractDescriptionHandler;
 import de.webfilesys.gui.xsl.XslThumbnailHandler;
 import de.webfilesys.gui.xsl.XslTreeStatSunburstHandler;
 import de.webfilesys.gui.xsl.XslTreeStatsHandler;
@@ -2430,6 +2431,13 @@ public class WebFileSysServlet extends ServletBase
 
 		    return(true);
         }
+        
+        if (command.equals("extractDescriptions"))
+		{
+			(new XslThumbnailExtractDescriptionHandler(req, resp, session, output, userid, false)).handleRequest();
+            
+            return(true);
+		}        
         
         if (command.equals("licenseReminder"))
         {
