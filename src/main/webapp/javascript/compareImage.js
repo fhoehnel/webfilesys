@@ -104,4 +104,8 @@ function compareImgClose(imgName) {
 	if (picture.src.endsWith(imgName)) {
 		picture.style.display = "none";
 	}
+	
+	if ($(".imgCompThumb").length == 0) {
+		setTimeout("self.close()", 50);
+	}
 }

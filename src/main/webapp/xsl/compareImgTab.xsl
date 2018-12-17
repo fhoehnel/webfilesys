@@ -69,6 +69,7 @@
                <xsl:attribute name="src"><xsl:value-of select="imgPath" /></xsl:attribute>
                <xsl:attribute name="width"><xsl:value-of select="thumbWidth"/></xsl:attribute>
                <xsl:attribute name="height"><xsl:value-of select="thumbHeight"/></xsl:attribute>
+               <xsl:attribute name="title"><xsl:value-of select="@name" /></xsl:attribute>
             </img>
           </a>
           
