@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -347,6 +348,10 @@ public class DecorationManager extends Thread {
     		{
     			availableIcons.add(iconFiles[i]);
     		}
+    	}
+    	
+    	if (availableIcons.size() > 1) {
+    		Collections.sort(availableIcons);
     	}
     	
     	return availableIcons;
