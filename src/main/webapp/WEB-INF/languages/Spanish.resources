@@ -150,6 +150,7 @@ label.encrypt=Cifrar (AES)
 label.decrypt=Descifrar (AES)
 label.tail=tail (últimas líneas)
 label.grep=grep (filtrar)
+label.copyPath=copiar ruta al portapapeles
 label.downloadFolder=Descargar como ZIP
 title.addCopyToClip=Añadir para copiar
 title.addMoveToClip=Añadir para mover
@@ -414,6 +415,7 @@ pasteOverwrite=Exagerar?
 destFolderFileConflict=La carpeta no se pudo copiar porque existe un archivo con el mismo nombre en la carpeta de destino.
 targetEqualsSource=La carpeta de destino debe ser diferente de la carpeta de origen.
 targetIsSubOfSource=La carpeta de destino no puede ser una subcarpeta de la carpeta de origen.
+pathCopiedToClip=La ruta se ha copiado al portapapeles.
 
 # remote editor labels
 saveSuccess=datos del editor guardado correctamente

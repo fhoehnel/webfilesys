@@ -780,3 +780,7 @@ body.unixCmdLine #cmdOutput {
 body.unixCmdLine #cmdOutput pre {
 	color: #ffffff;
 }
+
+.icon-copyToClip:before {
+    color: #000000;
+}

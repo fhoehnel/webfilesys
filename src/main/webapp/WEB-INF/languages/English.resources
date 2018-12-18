@@ -150,6 +150,7 @@ label.encrypt=Encrypt (AES)
 label.decrypt=Decrypt (AES)
 label.tail=tail (last lines)
 label.grep=grep (filter)
+label.copyPath=copy path to clipboard
 label.downloadFolder=download as zip
 title.addCopyToClip=Add to clipboard for copy operation
 title.addMoveToClip=Add to clipboard for move operation
@@ -414,6 +415,7 @@ pasteOverwrite=Overwrite?
 destFolderFileConflict=The folder could not be copied because a file with the same name exists in the target folder.
 targetEqualsSource=The target folder must be different from the source folder.
 targetIsSubOfSource=The target folder may not be a subdirectory of the source folder.
+pathCopiedToClip=path copied to clipboard
 
 # remote editor labels
 saveSuccess=editor data saved successfully

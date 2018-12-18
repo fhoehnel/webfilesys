@@ -252,6 +252,8 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 		XmlUtil.setChildText(fileListElement, "menuPath", insertDoubleBackslash(normalizedPath), false);
 
+		XmlUtil.setChildText(fileListElement, "relativePath", insertDoubleBackslash(getHeadlinePath(normalizedPath)), false);
+
 		XmlUtil.setChildText(fileListElement, "filter", mask, false);
 
 		XmlUtil.setChildText(fileListElement, "sortBy", Integer.toString(sortBy), false);

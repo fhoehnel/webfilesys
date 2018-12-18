@@ -18,6 +18,7 @@
 <meta http-equiv="Content-Type" name="text/html; charset=UTF-8" />
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
@@ -63,6 +64,8 @@
   var noFileSelected = resourceBundle["alert.nofileselected"];
   
   var path = '<xsl:value-of select="/fileList/menuPath" />';
+
+  var relativePath = '<xsl:value-of select="/fileList/relativePath" />';
   
   var addCopyAllowed = false;
   var addMoveAllowed = false;
@@ -267,6 +270,7 @@
                     <xsl:value-of select="filter" />
                   </xsl:attribute>
                 </input>
+                <a onclick="clearFilter()" class="icon-font icon-close iconClearInput"></a>
               </td>
 
               <td class="fileListFunct fileRefresh">

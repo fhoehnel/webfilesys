@@ -177,3 +177,6 @@ td.fileListFunct a.icon-paging:before {
     color: #404090;
 }
 
+.icon-copyToClip:before {
+    color: #000000;
+}

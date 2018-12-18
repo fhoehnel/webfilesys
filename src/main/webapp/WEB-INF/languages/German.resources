@@ -150,6 +150,7 @@ label.encrypt=Verschlüsseln (AES)
 label.decrypt=Entschlüsseln (AES)
 label.tail=tail (letzte Zeilen)
 label.grep=grep (Filtern)
+label.copyPath=Pfad in Zwischenablage
 label.downloadFolder=Download als ZIP-Archiv
 title.addCopyToClip=Zur Zwischenablage hinzufügen für Kopier-Operation
 title.addMoveToClip=Zur Zwischenablage hinzufügen für Verschiebe-Operation
@@ -414,6 +415,7 @@ pasteOverwrite=Überschreiben?
 destFolderFileConflict=Der Ordner konnte nicht kopiert werden weil eine Datei mit dem selben Namen im Zielordner existiert.
 targetEqualsSource=Quell- und Zielordner dürfen nicht identisch sein.
 targetIsSubOfSource=Der Zielordner darf kein Unterordner des Quellordners sein.
+pathCopiedToClip=Pfad in Zwischenablage kopiert
 
 # remote editor labels
 saveSuccess=Editor-Daten erfolgreich gespeichert

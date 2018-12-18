@@ -183,3 +183,7 @@ td.fileListFunct a.icon-paging:before {
 td.tabInactive {
     background-color: #ffe0a0;
 }
+
+.icon-copyToClip:before {
+    color: #000000;
+}

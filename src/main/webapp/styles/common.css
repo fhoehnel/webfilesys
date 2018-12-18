@@ -2177,6 +2177,33 @@ a.imgCompButton.icon-delete:before {
 	margin-right: 2px;
 }
 
+input.copyPathToClip {
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.icon-copyToClip:before {
+	margin-left: 16px;
+	font-size: 16px;
+}
+
+.iconClearInput {
+    cursor: pointer;
+}
+
+.iconClearInput:before {
+    position: relative;
+    left: -18px;
+    top: 2px;
+    color: #404040;
+    font-size: 18px;
+}
+
+input#fileMask {
+    width: 100px;
+    padding-right: 20px;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

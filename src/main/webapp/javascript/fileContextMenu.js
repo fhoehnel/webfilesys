@@ -316,6 +316,16 @@ function extendedFileMenu(shortFileName, path)
     menuText = menuText 
              + menuEntry("javascript:grep('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", resourceBundle["label.grep"]);
 
+	var relativeFilePath;
+    if (parent.serverOS == 'ix') {
+    	relativeFilePath = relativePath + "/" + scriptPreparedFile;
+    } else {
+    	relativeFilePath = insertDoubleBackslash(relativePath + "\\" + scriptPreparedFile);
+    }
+	
+    menuText = menuText 
+             + menuEntry("javascript:copyPathToClipboard('" + relativeFilePath + "')", resourceBundle["label.copyPath"]);
+    
     menuText = menuText + '</table>'; 
 
     menuDiv.innerHTML = menuText;
