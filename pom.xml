@@ -124,6 +124,7 @@
         <configuration>
           <source>1.6</source>
           <target>1.6</target>
+          <encoding>UTF-8</encoding>
 		  <!-- to prevent compile errors because of missing com.sun.image.codec.jpeg.* classes in Java 1.7 -->
           <compilerArgument>-XDignore.symbol.file=true</compilerArgument>
         </configuration>
