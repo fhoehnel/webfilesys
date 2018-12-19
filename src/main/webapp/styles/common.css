@@ -2180,6 +2180,9 @@ a.imgCompButton.icon-delete:before {
 input.copyPathToClip {
 	width: 100%;
 	margin-bottom: 10px;
+	border: 0;
+	color: #000000;
+	background-color: #e0e0e0;
 }
 
 .icon-copyToClip:before {

@@ -51,6 +51,8 @@
   var pathForScript = '<xsl:value-of select="/fileList/pathForScript" />';
   
   var path = '<xsl:value-of select="/fileList/menuPath" />';
+
+  var relativePath = '<xsl:value-of select="/fileList/relativePath" />';
   
   var lastScrollPos = 0;
   

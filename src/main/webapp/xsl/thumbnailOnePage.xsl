@@ -121,6 +121,7 @@
   </xsl:if>
   
   var path = '<xsl:value-of select="/fileList/menuPath" />';
+  var relativePath = '<xsl:value-of select="/fileList/relativePath" />';
   
   document.onkeypress = handleFileListKey;
   
