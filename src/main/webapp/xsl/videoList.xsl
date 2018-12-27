@@ -118,9 +118,9 @@
       
         <td style="width:90%">
           <xsl:if test="description">
-            <font class="small">
+            <div class="fileListFolderDesc">
               <xsl:value-of select="description" disable-output-escaping="yes" />
-            </font>
+            </div>
           </xsl:if>
         </td>
         
