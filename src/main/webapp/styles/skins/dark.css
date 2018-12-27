@@ -784,3 +784,8 @@ body.unixCmdLine #cmdOutput pre {
 .icon-copyToClip:before {
     color: #000000;
 }
+
+div.driveUsageBar {
+    border-color: #c0c0c0;
+    background-color: #202020;
+}
