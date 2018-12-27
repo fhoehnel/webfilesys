@@ -112,20 +112,10 @@
     </div>
   </xsl:for-each>
 
-  <xsl:if test="description or geoTag">
-    <table id="folderMetaInf" width="100%" border="0" cellpadding="2" cellspacing="0">
-      <tr>
-      
-        <td style="width:90%">
-          <xsl:if test="description">
-            <div class="fileListFolderDesc">
-              <xsl:value-of select="description" disable-output-escaping="yes" />
-            </div>
-          </xsl:if>
-        </td>
-        
-      </tr>
-    </table>
+  <xsl:if test="description">
+    <div class="fileListFolderDesc">
+      <xsl:value-of select="description" disable-output-escaping="yes" />
+    </div>
   </xsl:if>
 
   <!-- tabs start -->
