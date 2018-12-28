@@ -17,6 +17,8 @@ public class VideoConverterThread extends Thread {
     
     private String newCodec;
     
+    private String newContainerFormat;
+    
     private String newFps;
     
     private String startTime;
@@ -36,6 +38,8 @@ public class VideoConverterThread extends Thread {
     	videoFileExtensions = new HashMap<String, String>(5);
     	videoFileExtensions.put("h264", "mp4");
     	videoFileExtensions.put("mpeg2video", "mpeg");
+    	videoFileExtensions.put("mp4", "mp4");
+    	videoFileExtensions.put("mkv", "mkv");
     }
     
     public VideoConverterThread(String videoPath) {
@@ -48,6 +52,10 @@ public class VideoConverterThread extends Thread {
     
     public void setNewCodec(String newVal) {
     	newCodec = newVal;
+    }
+    
+    public void setNewContainerFormat(String newVal) {
+    	newContainerFormat = newVal;
     }
     
     public void setNewFps(String newVal) {
@@ -124,6 +132,16 @@ public class VideoConverterThread extends Thread {
             	}
             }
 
+            if (!CommonUtils.isEmpty(newContainerFormat)) {
+            	String newExt = videoFileExtensions.get(newContainerFormat);
+            	if (newExt != null) {
+            		int extIdx = targetFilePath.lastIndexOf(".");
+            		if (extIdx > 0) {
+                	    targetFilePath = targetFilePath.substring(0, extIdx) + "." + newExt;
+            		}
+            	}
+            }
+            
             boolean targetFileNameOk = true;
             do {
                 File existingTargetFile = new File(targetFilePath);
@@ -249,7 +267,9 @@ public class VideoConverterThread extends Thread {
                     } else if ((duration.length() == 0) && outLine.contains("_duration")) {
                         // streams_stream_0_duration="0:04:36.400000"
                         String[] tokens = outLine.split("=");
-                        duration = tokens[1].substring(1, 8);
+                        if (tokens[1].length() > 6) {
+                            duration = tokens[1].substring(1, 8);
+                        }
                     } else if ((oldFrameRate.length() == 0) && outLine.contains("_avg_frame_rate")) {
                         String[] tokens = outLine.split("=");
                         String averageFrameRate = tokens[1].substring(1, tokens[1].length() - 1);

@@ -166,7 +166,7 @@ function setVideoDimensions(pic) {
                 }
 			    
                 item = xmlDoc.getElementsByTagName("duration")[0];            
-                if (item) {
+                if (item && item.firstChild) {
                 	duration = item.firstChild.nodeValue;
                 }
 			    
@@ -450,26 +450,29 @@ function playVideoMaxSize(videoFilePath, videoFileName, isLink) {
 }
 
 function validateConvertVideoForm() {
-    var startHour = getSelectboxValueInt("startHour");
-    var startMin = getSelectboxValueInt("startMin");
-    var startSec = getSelectboxValueInt("startSec");
-    
-    var endHour = getSelectboxValueInt("endHour");
-    var endMin = getSelectboxValueInt("endMin");
-    var endSec = getSelectboxValueInt("endSec");
+	
+	if (document.getElementById("startHour")) {
+	    var startHour = getSelectboxValueInt("startHour");
+	    var startMin = getSelectboxValueInt("startMin");
+	    var startSec = getSelectboxValueInt("startSec");
+	    
+	    var endHour = getSelectboxValueInt("endHour");
+	    var endMin = getSelectboxValueInt("endMin");
+	    var endSec = getSelectboxValueInt("endSec");
 
-    var startTime = (startHour * 3600) + (startMin * 60) + startSec;
-    var endTime = (endHour * 3600) + (endMin * 60) + endSec;
+	    var startTime = (startHour * 3600) + (startMin * 60) + startSec;
+	    var endTime = (endHour * 3600) + (endMin * 60) + endSec;
 
-    if (startTime >= endTime) {
-        customAlert(resourceBundle["validationError.videoStartEndTime"]);
-        return false;
-    }
-    
-    if (endTime > durationSeconds) {
-        customAlert(resourceBundle["validationError.videoTimeRange"]);
-        return false;
-    }
+	    if (startTime >= endTime) {
+	        customAlert(resourceBundle["validationError.videoStartEndTime"]);
+	        return false;
+	    }
+	    
+	    if (endTime > durationSeconds) {
+	        customAlert(resourceBundle["validationError.videoTimeRange"]);
+	        return false;
+	    }
+	}
 
     return true;
 }

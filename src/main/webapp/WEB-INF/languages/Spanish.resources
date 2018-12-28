@@ -932,6 +932,7 @@ label.codec=codec
 label.newResolution=resolución nueva
 label.newFps=cuadros por segundo nuevos
 label.newCodec=codec nuevo
+label.newVideoContainerFormat=nuevo formato de contenedor
 keepOrigFrameRate=no cambio
 keepOrigCodec=no cambio
 label.timeRange=intervalo de tiempo (hh:mm:ss)

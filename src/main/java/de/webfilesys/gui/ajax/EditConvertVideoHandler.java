@@ -39,6 +39,8 @@ public class EditConvertVideoHandler extends XmlRequestHandlerBase {
 
 		String newCodec = getParameter("newCodec");
 
+		String newContainerFormat = getParameter("newContainer");
+		
         String startHourParam = getParameter("startHour");
         String startMinParam = getParameter("startMin");
         String startSecParam = getParameter("startSec");
@@ -59,6 +61,7 @@ public class EditConvertVideoHandler extends XmlRequestHandlerBase {
 		videoConverter.setNewSize(newSize);
 		videoConverter.setNewCodec(newCodec);
 		videoConverter.setNewFps(newFps);
+		videoConverter.setNewContainerFormat(newContainerFormat);
 
         DecimalFormat numFormat = new DecimalFormat("00");
         

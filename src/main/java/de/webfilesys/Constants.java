@@ -27,7 +27,7 @@ public interface Constants
 
     public static final String JPEG_FILE_MASKS[]={"*.jpg","*.jpeg"};
 
-    public static final String VIDEO_FILE_MASKS[] = {"*.mp4", "*.mpg", "*.mpeg", "*.mov"};
+    public static final String VIDEO_FILE_MASKS[] = {"*.mp4", "*.mpg", "*.mpeg", "*.mov", "*.mkv"};
     
 	public static final String UPLOAD_COUNTER = "uploadCounter";
 	public static final String UPLOAD_SIZE = "uploadSize";

@@ -188,7 +188,11 @@ public class GetVideoDimensionsHandler extends XmlRequestHandlerBase {
                     } else if ((duration.length() == 0) && outLine.contains("_duration")) {
                         // streams_stream_0_duration="0:04:36.400000"
                         String[] tokens = outLine.split("=");
-                        duration = tokens[1].substring(1, 8);
+                        if (tokens[1].length() < 7) {
+                        	duration = "";
+                        } else {
+                            duration = tokens[1].substring(1, 8);
+                        }
                     } else if ((frameRate.length() == 0) && outLine.contains("_avg_frame_rate")) {
                         String[] tokens = outLine.split("=");
                         String averageFrameRate = tokens[1].substring(1, tokens[1].length() - 1);
