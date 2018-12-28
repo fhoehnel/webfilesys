@@ -1956,6 +1956,17 @@ span.trackTime {
 	color: maroon;	
 }
 
+a.gpxSlowMotionLink {
+	color: maroon;
+	font-size: 13px;
+    text-decoration: underline;
+}
+
+a.gpxSlowMotionLink:hover {
+	color: #006000;
+    text-decoration: none;
+}
+
 div.gpsProfileCont {
 	width: 1100px;
 	margin-top: 20px;
