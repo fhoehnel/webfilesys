@@ -822,6 +822,8 @@ button.showMapInfo=Info-Text einblenden
 viewTrackOnMap=auf Karte anzeigen
 viewMultipleGPX=auf Karte anzeigen
 nonGPXFile=Diese Funktion ist nur für GPX-Dateien verfügbar (Dateinamen-Erweiterung .GPX).
+slowMotionLink=Zeitlupe
+slowMotionTitle=Track in Zeitlupe zeichnen
 
 # folder synchronization
 label.selectSyncSourceResult=Navigieren Sie zum Ziel-Ordner der Synchronisation und wählen Sie Synchronisieren im Kontext-Menü!

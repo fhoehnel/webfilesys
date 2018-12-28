@@ -821,6 +821,8 @@ button.showMapInfo=Mostrar texto de información
 viewTrackOnMap=mostrar en el mapa
 viewMultipleGPX=mostrar en el mapa
 nonGPXFile=Esta función solo se aplica a los archivos GPX (*.GPX).
+slowMotionLink=camara lenta
+slowMotionTitle=mostrar en camara lenta
 
 # folder synchronization
 label.selectSyncSourceResult=¡Selecciona la carpeta para sincronizar y elije sincronizar en el menú contextual!

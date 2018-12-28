@@ -196,8 +196,8 @@ function showTrackMetaData(response) {
 		   	slowMotionLink.id = "slowMotionLink-" + (globalTrackCounter - 1);
 		   	slowMotionLink.setAttribute("href", "javascript:showTrackInSlowMotion(" + (globalTrackCounter - 1) + ")");
 		   	slowMotionLink.setAttribute("class", "gpxSlowMotionLink");
-		   	slowMotionLink.setAttribute("title", "paint track in slow motion");
-		   	slowMotionLink.innerHTML = "slow motion";
+		   	slowMotionLink.setAttribute("title", resourceBundle["slowMotionTitle"]);
+		   	slowMotionLink.innerHTML = resourceBundle["slowMotionLink"];
 		   	trackElem.appendChild(slowMotionLink);
 	    }
 	}

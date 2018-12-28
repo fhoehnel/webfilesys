@@ -819,6 +819,8 @@ button.showMapInfo=Show Info Text
 viewTrackOnMap=show GPX track on map
 viewMultipleGPX=show GPX on map
 nonGPXFile=This function is only applicable to GPX files (filename extension .GPX).
+slowMotionLink=slow motion
+slowMotionTitle=paint track in slow motion
 
 # folder synchronization
 label.selectSyncSourceResult=Select the synchronization target folder and choose snychronize from the context menu!
