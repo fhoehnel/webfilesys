@@ -100,15 +100,11 @@
       <xsl:attribute name="href">javascript:fastpath('<xsl:value-of select="@pathForScript" />')</xsl:attribute>
 
       <xsl:if test="not(@visited)">
-        <xsl:attribute name="class">
-          <xsl:value-of select="'tab'"/>
-        </xsl:attribute>
+        <xsl:attribute name="class">fastpath</xsl:attribute>
       </xsl:if>
 
       <xsl:if test="@visited">
-        <xsl:attribute name="class">
-          <xsl:value-of select="'dirtree'"/>
-        </xsl:attribute>
+        <xsl:attribute name="class">dirtree</xsl:attribute>
         
         <xsl:if test="@textColor">
           <xsl:attribute name="style">color:<xsl:value-of select="@textColor" /></xsl:attribute>

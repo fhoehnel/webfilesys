@@ -789,3 +789,11 @@ div.driveUsageBar {
     border-color: #c0c0c0;
     background-color: #202020;
 }
+
+a.fastpath {
+    color:#c0c0c0;
+}
+
+a.fastpath:hover {
+    color: #ffffff;
+}
