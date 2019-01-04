@@ -1,3 +1,6 @@
+var MIN_VIEWPORT_WIDTH = 380;
+var MIN_VIEWPORT_HEIGHT = 300;
+
     function showPicInfoMenu() {
         document.getElementById("picInfoMenuCont").style.visibility = "visible";
     }
@@ -29,14 +32,16 @@
         var browserWidthForRealSize = picRealWidth + 20;
         var browserHeightForRealSize = picRealHeight + 80;
                
-        var pic = document.getElementById("picFullScreen");
-              
-        var picScaled = false;
-        
         if ((browserWidthForRealSize <= screenWidth) && (browserHeightForRealSize <= screenHeight)) {
-            resizeViewPort(picRealWidth + 1, picRealHeight + 1);
-            pic.style.width = picRealWidth + "px";
-            pic.style.height = picRealHeight + "px";
+            var viewPortWidth = picRealWidth + 4;
+            if (viewPortWidth < MIN_VIEWPORT_WIDTH) {
+            	viewPortWidth = MIN_VIEWPORT_WIDTH;
+            }
+            var viewPortHeight = picRealHeight + 4;
+            if (viewPortHeight < MIN_VIEWPORT_HEIGHT) {
+            	viewPortHeight = MIN_VIEWPORT_HEIGHT;
+            }
+        	resizeViewPort(viewPortWidth, viewPortHeight);
         } else {
         	var imgDisplayWidth;
         	var imgDisplayHeight;
@@ -44,24 +49,44 @@
             if (xRatio > yRatio) {
             	imgDisplayWidth = screenWidth - 20;
             	imgDisplayHeight = Math.round(imgDisplayWidth * picRealHeight / picRealWidth)
-                pic.style.width = imgDisplayWidth + "px";
-                pic.style.height = "auto";
             } else {
             	imgDisplayHeight = screenHeight - 80;
             	imgDisplayWidth = Math.round(imgDisplayHeight * picRealWidth / picRealHeight);
-                pic.style.height = imgDisplayHeight + "px";
-                pic.style.width = "auto";
             }
             resizeViewPort(imgDisplayWidth + 2, imgDisplayHeight + 2);
-
-            picScaled = true;
         }
         
-        pic.style.visibility = "visible";
+        setTimeout(function() {
+            var pic = document.getElementById("picFullScreen");
+            
+            var winWidth = getWinWidth();
+            var winHeight = getWinHeight();
+            
+            xRatio = picRealWidth * 1000 / winWidth;
+            yRatio = picRealHeight * 1000 / winHeight;
+            
+            if ((picRealWidth <= winWidth - 4) && (picRealHeight <= winHeight - 4)) {
+                pic.style.width = picRealWidth + "px";
+                pic.style.height = picRealHeight + "px";
+            } else {
+                if (xRatio > yRatio) {
+                	var imgDisplayWidth = winWidth - 4;
+                    pic.style.width = imgDisplayWidth + "px";
+                    pic.style.height = "auto";
+                } else {
+                	var imgDisplayHeight = winHeight - 4;
+                    pic.style.height = imgDisplayHeight + "px";
+                    pic.style.width = "auto";
+                }
+            }
+            
+            pic.style.visibility = "visible";
+            
+            if ((picRealWidth >= winWidth) || (picRealHeight >= winHeight)) {
+                document.getElementById("origSizeOption").style.display = "inline";
+            }
+        }, 300);
         
-        if (picScaled) {
-            document.getElementById("origSizeOption").style.display = "inline";
-        }
     }
 
 function deleteSelf(imgPath, imgName) {
