@@ -60,19 +60,22 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
         }
 
         try {
-        	// additional options:
-        	// -autoexit Exit when video is done playing.
-        	// -fs Start in fullscreen mode.
-        	// -noborder Borderless window.
-        	// -exitonkeydown Exit if any key is pressed.
+        	StringBuilder progNameAndParams = new StringBuilder(videoPlayerExePath);
         	
-        	String progNameAndParams = videoPlayerExePath + " -autoexit -fs -noborder -exitonkeydown " + videoFilePath;
+        	String addParams = WebFileSys.getInstance().getVideoPlayerAddParams();
+        	if (!CommonUtils.isEmpty(addParams)) {
+        		progNameAndParams.append(" ");
+        		progNameAndParams.append(addParams);
+        	}
+        	
+    		progNameAndParams.append(" ");
+    		progNameAndParams.append(videoFilePath);
 
         	if (Logger.getLogger(getClass()).isDebugEnabled()) {
         		Logger.getLogger(getClass()).debug("video player call with parameters: " + progNameAndParams);
         	}
         	
-			Process ffplayProcess = Runtime.getRuntime().exec(progNameAndParams);
+			Process ffplayProcess = Runtime.getRuntime().exec(progNameAndParams.toString());
 			
 	        DataInputStream ffplayOut = new DataInputStream(ffplayProcess.getErrorStream());
 	        
