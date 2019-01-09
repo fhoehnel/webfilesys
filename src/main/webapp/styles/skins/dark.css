@@ -147,6 +147,10 @@ body.selfEditUser {
     margin: 0;
 }
 
+body.remoteEditor {
+    background-color: #404040;
+}
+
 body.unixRights,
 body.unixCompress,
 body.unixCmdLine {

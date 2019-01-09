@@ -2230,6 +2230,15 @@ input#fileMask {
     padding-right: 20px;
 }
 
+div.editorButtonCont {
+    width: 98%;
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;
