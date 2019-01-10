@@ -394,6 +394,7 @@ div.alertTextCont {
 }
 
 span.alertText {
+    font-family: Arial,Helvetica;
 	font-size: 15px;
 }
 

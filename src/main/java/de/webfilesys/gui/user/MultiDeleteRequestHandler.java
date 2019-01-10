@@ -11,90 +11,69 @@ import org.apache.log4j.Logger;
 
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.graphics.ThumbnailThread;
-import de.webfilesys.util.UTF8URLEncoder;
+import de.webfilesys.gui.xsl.XslFileListHandler;
+import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 
 /**
  * @author Frank Hoehnel
  */
-public class MultiDeleteRequestHandler extends MultiFileRequestHandler
-{
-	public MultiDeleteRequestHandler(
-    		HttpServletRequest req, 
-    		HttpServletResponse resp,
-            HttpSession session,
-            PrintWriter output, 
-            String uid)
-	{
-        super(req, resp, session, output, uid);
+public class MultiDeleteRequestHandler extends MultiFileRequestHandler {
+	public MultiDeleteRequestHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
+			PrintWriter output, String uid) {
+		super(req, resp, session, output, uid);
 	}
 
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 
-		output.println("<HTML>");
-		output.println("<HEAD>");
+		StringBuffer errorMsg = new StringBuffer();
 
-		StringBuffer alertText = new StringBuffer();
+		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-        MetaInfManager metaInfMgr = MetaInfManager.getInstance();
+		for (int i = 0; i < selectedFiles.size(); i++) {
+			String filePath = null;
 
-        for (int i=0;i<selectedFiles.size();i++)
-        {
-            String filePath = null;
-            
-            if (actPath.endsWith(File.separator))
-            {
-                filePath = actPath + selectedFiles.elementAt(i);
-            }
-            else
-            {
-                filePath = actPath + File.separator + selectedFiles.elementAt(i);
-            }
-            
-            File delFile = new File(filePath);
+			if (actPath.endsWith(File.separator)) {
+				filePath = actPath + selectedFiles.elementAt(i);
+			} else {
+				filePath = actPath + File.separator + selectedFiles.elementAt(i);
+			}
 
-            if ((!delFile.canWrite()) || (!delFile.delete()))
-            {
-                alertText.append(getResource("alert.delete.failed","cannot delete file"));
-                alertText.append("\\n");
-                alertText.append(insertDoubleBackslash(filePath));
-                alertText.append("\\n");
-            }
-            else
-            {
-                metaInfMgr.removeMetaInf(actPath,(String) selectedFiles.elementAt(i));
+			File delFile = new File(filePath);
 
-                String thumbnailPath = ThumbnailThread.getThumbnailPath(filePath);
-            
-                File thumbnailFile = new File(thumbnailPath);
-            
-                if (thumbnailFile.exists())
-                {
-                    if (!thumbnailFile.delete())
-                    {
-                        Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
-                    }
-                }
-            }
-        }
+			if ((!delFile.canWrite()) || (!delFile.delete())) {
+				if (errorMsg.length() > 0) {
+					errorMsg.append("<br/>");
+				}
+				errorMsg.append(getResource("alert.delete.failed", "cannot delete file ") + "<br/>" + selectedFiles.elementAt(i));
+			} else {
+				metaInfMgr.removeMetaInf(actPath, (String) selectedFiles.elementAt(i));
 
-		String alert=alertText.toString();
+				String thumbnailPath = ThumbnailThread.getThumbnailPath(filePath);
 
-		if (alert.length()>0)
-		{
-			output.println("<script language=\"javascript\">");
-			output.println("alert('" + alert + "');");
-			output.println("</script>");
+				File thumbnailFile = new File(thumbnailPath);
+
+				if (thumbnailFile.exists()) {
+					if (!thumbnailFile.delete()) {
+						Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
+					}
+				}
+			}
 		}
 
-		output.println("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=/webfilesys/servlet?command=listFiles&actpath=" + UTF8URLEncoder.encode(actPath) +"&mask=*&keepListStatus=true\">");
-		output.println("</HEAD>");
-		output.println("</html>");
-		output.flush();
+		if (errorMsg.length() > 0) {
+			setParameter("errorMsg", errorMsg.toString());
+		}
+		
+		String mobile = (String) session.getAttribute("mobile");
+
+		if (mobile != null) {
+			(new MobileFolderFileListHandler(req, resp, session, output, uid)).handleRequest();
+		} else {
+		    (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
+		}
 	}
 
 }

@@ -16,93 +16,60 @@ import de.webfilesys.gui.xsl.XslThumbnailHandler;
 /**
  * @author Frank Hoehnel
  */
-public class MultiImageDeleteHandler extends MultiImageRequestHandler
-{
-    boolean clientIsLocal = false;
+public class MultiImageDeleteHandler extends MultiImageRequestHandler {
+	boolean clientIsLocal = false;
 
-    public MultiImageDeleteHandler(
-    		HttpServletRequest req, 
-    		HttpServletResponse resp,
-            HttpSession session,
-            PrintWriter output, 
-            String uid,
-            boolean clientIsLocal)
-    {
-        super(req, resp, session, output, uid);
+	public MultiImageDeleteHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
+			PrintWriter output, String uid, boolean clientIsLocal) {
+		super(req, resp, session, output, uid);
 
-        this.clientIsLocal = clientIsLocal;
-    }
+		this.clientIsLocal = clientIsLocal;
+	}
 
-    protected void process()
-    {
-        if (!checkWriteAccess())
-        {
-            return;
-        }
+	protected void process() {
+		if (!checkWriteAccess()) {
+			return;
+		}
 
-        StringBuffer alertText = new StringBuffer();
+		StringBuffer errorMsg = new StringBuffer();
 
-        MetaInfManager metaInfMgr = MetaInfManager.getInstance();
+		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-        for (int i = 0; i < selectedFiles.size(); i++)
-        {
-            String filePath = null;
-            
-            if (actPath.endsWith(File.separator))
-            {
-                filePath = actPath + selectedFiles.elementAt(i);
-            }
-            else
-            {
-                filePath = actPath + File.separator + selectedFiles.elementAt(i);
-            }
-            
-            File delFile = new File(filePath);
+		for (int i = 0; i < selectedFiles.size(); i++) {
+			String filePath = null;
 
-            if ((!delFile.canWrite()) || (!delFile.delete()))
-            {
-                alertText.append(getResource("alert.delete.failed","cannot delete file"));
-                alertText.append("\\n");
-                alertText.append(insertDoubleBackslash(filePath));
-                alertText.append("\\n");
-            }
-            else
-            {
-                metaInfMgr.removeMetaInf(actPath, (String) selectedFiles.elementAt(i));
-                
-                String thumbnailPath = ThumbnailThread.getThumbnailPath(filePath);
-            
-                File thumbnailFile = new File(thumbnailPath);
-            
-                if (thumbnailFile.exists())
-                {
-                    if (!thumbnailFile.delete())
-                    {
-                        Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
-                    }
-                }
-            }
-        }
+			if (actPath.endsWith(File.separator)) {
+				filePath = actPath + selectedFiles.elementAt(i);
+			} else {
+				filePath = actPath + File.separator + selectedFiles.elementAt(i);
+			}
 
-        String alert = alertText.toString();
+			File delFile = new File(filePath);
 
-        if (alert.length() > 0)
-        {
-            output.println("<HTML>");
-            output.println("<HEAD>");
+			if ((!delFile.canWrite()) || (!delFile.delete())) {
+				if (errorMsg.length() > 0) {
+					errorMsg.append("<br/>");
+				}
+				errorMsg.append(getResource("alert.delete.failed", "cannot delete file ") + "<br/>" + selectedFiles.elementAt(i));
+			} else {
+				metaInfMgr.removeMetaInf(actPath, (String) selectedFiles.elementAt(i));
 
-            this.javascriptAlert(alert);
+				String thumbnailPath = ThumbnailThread.getThumbnailPath(filePath);
 
-            output.println(
-                "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=/webfilesys/servlet?command=thumbnail\">");
-            output.println("</HEAD>");
-            output.println("</html>");
-            output.flush();
+				File thumbnailFile = new File(thumbnailPath);
 
-            return;
-        }
+				if (thumbnailFile.exists()) {
+					if (!thumbnailFile.delete()) {
+						Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
+					}
+				}
+			}
+		}
 
-	    (new XslThumbnailHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest(); 
-    }
+		if (errorMsg.length() > 0) {
+			setParameter("errorMsg", errorMsg.toString());
+		}
 
+		(new XslThumbnailHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest();
+	}
 }

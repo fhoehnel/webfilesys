@@ -150,7 +150,7 @@
 
 <xsl:if test="/fileList/errorMsg">
   <script language="javascript">
-    alert('<xsl:value-of select="/fileList/errorMsg" />');
+    customAlert('<xsl:value-of select="/fileList/errorMsg" />');
   </script>
 </xsl:if>
 

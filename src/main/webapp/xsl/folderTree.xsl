@@ -105,6 +105,12 @@
 
       document.onkeydown = handleFolderTreeKey;
 
+      <xsl:if test="/folderTree/errorMsg">
+        setTimeout(function() { 
+            customAlert('<xsl:value-of select="/folderTree/errorMsg" />');
+            }, 500);
+      </xsl:if>
+
     </script>
 
     <style type="text/css">

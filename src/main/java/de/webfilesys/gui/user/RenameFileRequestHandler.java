@@ -23,111 +23,86 @@ import de.webfilesys.util.CommonUtils;
 /**
  * @author Frank Hoehnel
  */
-public class RenameFileRequestHandler extends UserRequestHandler
-{
+public class RenameFileRequestHandler extends UserRequestHandler {
 	protected HttpServletRequest req = null;
 
 	protected HttpServletResponse resp = null;
 
-	public RenameFileRequestHandler(
-    		HttpServletRequest req, 
-    		HttpServletResponse resp,
-            HttpSession session,
-            PrintWriter output, 
-            String uid)
-	{
-        super(req, resp, session, output, uid);
-        
-        this.req = req;
-        
-        this.resp = resp;
+	public RenameFileRequestHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
+			PrintWriter output, String uid) {
+		super(req, resp, session, output, uid);
+
+		this.req = req;
+
+		this.resp = resp;
 	}
 
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 
 		String newFileName = getParameter("newFileName");
 
-		String oldFileName=getParameter("fileName");
+		String oldFileName = getParameter("fileName");
 
 		String path = getCwd();
 
-		String oldFilePath=null;
+		String oldFilePath = null;
 
-		String newFilePath=null;
+		String newFilePath = null;
 
-		if (path.endsWith(File.separator))
-		{
-			oldFilePath=path + oldFileName;     
+		if (path.endsWith(File.separator)) {
+			oldFilePath = path + oldFileName;
 
-			newFilePath=path + newFileName;     
-		}
-		else
-		{
-			oldFilePath=path + File.separator + oldFileName;
+			newFilePath = path + newFileName;
+		} else {
+			oldFilePath = path + File.separator + oldFileName;
 
-			newFilePath=path + File.separator + newFileName;
+			newFilePath = path + File.separator + newFileName;
 		}
 
-		if (!checkAccess(oldFilePath))
-		{
-			return;
-		}
-		
-        String mobile = getParameter("mobile");
-
-		File source=new File(oldFilePath);
-
-		File dest=new File(newFilePath);
-
-		if ((newFileName.indexOf("..") >= 0) || (!source.renameTo(dest)))
-		{
-			output.println("<html>");
-			output.println("<head>");
-			output.println("<script language=\"javascript\">");
-
-			String errorMsg=insertDoubleBackslash(oldFileName) + "\\n" 
-							+ getResource("error.renameFailed","could not be renamed to")
-							+ "\\n" + insertDoubleBackslash(newFileName);
-
-			output.println("alert('" + errorMsg + "');");
-			
-			if (mobile != null) 
-			{
-                output.println("window.location.href='/webfilesys/servlet?command=mobile&cmd=folderFileList';");
-			}
-			else
-			{
-	            output.println("window.location.href='/webfilesys/servlet?command=listFiles&keepListStatus=true';");
-			}
-			output.println("</script>");
-			output.println("</head>");
-			output.println("</html>");
-			output.flush();
+		if (!checkAccess(oldFilePath)) {
 			return;
 		}
 
-		MetaInfManager metaInfMgr=MetaInfManager.getInstance();
+		String mobile = getParameter("mobile");
 
-		String description=metaInfMgr.getDescription(oldFilePath);
+		File source = new File(oldFilePath);
 
-		if ((description!=null) && (description.trim().length()>0))
-		{
-			metaInfMgr.setDescription(newFilePath,description);
+		File dest = new File(newFilePath);
+
+		if ((newFileName.indexOf("..") >= 0) || (!source.renameTo(dest))) {
+			String errorMsg = oldFileName + "<br/>" + getResource("error.renameFailed", "could not be renamed to")
+					+ "<br/>" + newFileName;
+
+			if (errorMsg.length() > 0) {
+				setParameter("errorMsg", errorMsg);
+			}
+
+			if (mobile != null) {
+				(new MobileFolderFileListHandler(req, resp, session, output, uid)).handleRequest();
+			} else {
+				(new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
+			}
+
+			return;
 		}
-		
+
+		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
+
+		String description = metaInfMgr.getDescription(oldFilePath);
+
+		if ((description != null) && (description.trim().length() > 0)) {
+			metaInfMgr.setDescription(newFilePath, description);
+		}
+
 		ArrayList<Category> assignedCategories = metaInfMgr.getListOfCategories(oldFilePath);
-		
-		if (assignedCategories != null)
-		{
-			for (int i=0;i<assignedCategories.size();i++)
-			{
+
+		if (assignedCategories != null) {
+			for (int i = 0; i < assignedCategories.size(); i++) {
 				Category cat = (Category) assignedCategories.get(i);
-				
+
 				metaInfMgr.addCategory(newFilePath, cat);
 			}
 		}
@@ -143,45 +118,37 @@ public class RenameFileRequestHandler extends UserRequestHandler
 				metaInfMgr.addComment(newFilePath, comment);
 			}
 		}
-		
-        if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
-        {
-            metaInfMgr.updateLinksAfterMove(oldFilePath, newFilePath, uid);
-        }
-		
+
+		if (WebFileSys.getInstance().isReverseFileLinkingEnabled()) {
+			metaInfMgr.updateLinksAfterMove(oldFilePath, newFilePath, uid);
+		}
+
 		metaInfMgr.removeMetaInf(oldFilePath);
-		
+
 		String thumbnailPath = ThumbnailThread.getThumbnailPath(oldFilePath);
-				
+
 		File thumbnailFile = new File(thumbnailPath);
-				
-		if (thumbnailFile.exists())
-		{
-			if (!thumbnailFile.delete())
-			{
+
+		if (thumbnailFile.exists()) {
+			if (!thumbnailFile.delete()) {
 				Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
 			}
 		}
 
 		setParameter("actpath", getCwd());
 
-		setParameter("mask","*");
-		
-        if (mobile == null) 
-        {
-            (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
-        }
-        else
-        {
-            (new MobileFolderFileListHandler(req, resp, session, output, uid)).handleRequest(); 
-        }
-		
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
-		{
+		setParameter("mask", "*");
+
+		if (mobile == null) {
+			(new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
+		} else {
+			(new MobileFolderFileListHandler(req, resp, session, output, uid)).handleRequest();
+		}
+
+		if (WebFileSys.getInstance().isAutoCreateThumbs()) {
 			String ext = CommonUtils.getFileExtension(newFilePath);
 
-			if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png")))
-			{
+			if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png"))) {
 				AutoThumbnailCreator.getInstance().queuePath(newFilePath, AutoThumbnailCreator.SCOPE_FILE);
 			}
 		}

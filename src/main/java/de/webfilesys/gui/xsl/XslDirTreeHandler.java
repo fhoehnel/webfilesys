@@ -113,6 +113,13 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 			folderTreeElement.appendChild(xslEnabledElement);
 		}
 		
+		String errorMsg = getParameter("errorMsg");
+		
+	    if (errorMsg != null)
+		{
+		    XmlUtil.setChildText(folderTreeElement, "errorMsg", errorMsg, false);
+		}
+		
 		dirCounter=0;
 		currentDirNum=0;
 

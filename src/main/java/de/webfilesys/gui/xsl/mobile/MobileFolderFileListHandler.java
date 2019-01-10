@@ -318,6 +318,12 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(folderFileListElement, "serverOS", "ix");
 		}
 		
+		String errorMsg = getParameter("errorMsg");
+	    if (errorMsg != null)
+		{
+		    XmlUtil.setChildText(folderFileListElement, "errorMsg", errorMsg, false);
+		}
+		
 		// path section
 		Element currentPathElem = doc.createElement("currentPath");
 		

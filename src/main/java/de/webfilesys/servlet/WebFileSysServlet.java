@@ -1085,7 +1085,7 @@ public class WebFileSysServlet extends ServletBase
 
         if (command.equals("mkfile"))
         {
-		    (new CreateFileRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+		    (new CreateFileRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
 
             return(true);
         }
