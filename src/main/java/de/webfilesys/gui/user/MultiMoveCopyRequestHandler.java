@@ -50,9 +50,9 @@ public class MultiMoveCopyRequestHandler extends MultiFileRequestHandler
 			clipBoard.reset();
 		}
 
-		for (int i = 0; i < selectedFiles.size(); i++)
+		for (String selectedFile : selectedFiles) 
 		{
-			String sourceFilename=actPath + File.separator + selectedFiles.elementAt(i);
+			String sourceFilename=actPath + File.separator + selectedFile;
 			clipBoard.addFile(sourceFilename);
 		}
 

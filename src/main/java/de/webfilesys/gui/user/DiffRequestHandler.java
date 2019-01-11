@@ -24,8 +24,8 @@ public class DiffRequestHandler extends MultiFileRequestHandler
 
 	protected void process()
 	{
-        String file1Path = actPath + File.separator + selectedFiles.elementAt(1);
-        String file2Path = actPath + File.separator + selectedFiles.elementAt(0);
+        String file1Path = actPath + File.separator + selectedFiles.get(1);
+        String file2Path = actPath + File.separator + selectedFiles.get(0);
 
         setParameter("file1Path", file1Path);
         setParameter("file2Path", file2Path);

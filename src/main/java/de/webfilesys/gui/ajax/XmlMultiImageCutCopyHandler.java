@@ -64,9 +64,9 @@ public class XmlMultiImageCutCopyHandler extends XmlMultiImageRequestHandler
 			pathWithSlash = actPath + File.separator;
 		}
 		
-		for (int i = 0; i < selectedFiles.size(); i++)
+		for (String selectedFile : selectedFiles)
 		{
-			String sourceFilename = pathWithSlash + selectedFiles.elementAt(i);
+			String sourceFilename = pathWithSlash + selectedFile;
 			clipBoard.addFile(sourceFilename);
 		}
 

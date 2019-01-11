@@ -63,17 +63,15 @@ public class MultiTarArchiveHandler extends MultiFileRequestHandler
 
 	        byte [] buff = new byte[4096];
 
-	        for (int i = 0; i < selectedFiles.size(); i++)
+	        for (String selectedFile : selectedFiles)
 	        {
-                String fileName = (String) selectedFiles.elementAt(i);
-                
-                output.println("adding " + fileName + "<br/>");
+                output.println("adding " + selectedFile + "<br/>");
 
-                File input = new File(actPath, fileName);
+                File input = new File(actPath, selectedFile);
 
 	            TarEntry tarEntry = new TarEntry(input);
 
-	            tarEntry.setName(fileName);
+	            tarEntry.setName(selectedFile);
 	            
 	            tarFile.putNextEntry(tarEntry);
 	            

@@ -32,13 +32,13 @@ public class MultiDeleteRequestHandler extends MultiFileRequestHandler {
 
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-		for (int i = 0; i < selectedFiles.size(); i++) {
+		for (String selectedFile : selectedFiles) {
 			String filePath = null;
 
 			if (actPath.endsWith(File.separator)) {
-				filePath = actPath + selectedFiles.elementAt(i);
+				filePath = actPath + selectedFile;
 			} else {
-				filePath = actPath + File.separator + selectedFiles.elementAt(i);
+				filePath = actPath + File.separator + selectedFile;
 			}
 
 			File delFile = new File(filePath);
@@ -47,9 +47,9 @@ public class MultiDeleteRequestHandler extends MultiFileRequestHandler {
 				if (errorMsg.length() > 0) {
 					errorMsg.append("<br/>");
 				}
-				errorMsg.append(getResource("alert.delete.failed", "cannot delete file ") + "<br/>" + selectedFiles.elementAt(i));
+				errorMsg.append(getResource("alert.delete.failed", "cannot delete file ") + "<br/>" + selectedFile);
 			} else {
-				metaInfMgr.removeMetaInf(actPath, (String) selectedFiles.elementAt(i));
+				metaInfMgr.removeMetaInf(actPath, selectedFile);
 
 				String thumbnailPath = ThumbnailThread.getThumbnailPath(filePath);
 

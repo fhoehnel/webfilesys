@@ -1,9 +1,8 @@
 package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,7 +18,7 @@ public class MultiFileRequestHandler extends UserRequestHandler
 {
 	protected String actPath = null;
 	
-	protected Vector selectedFiles = null;
+	protected ArrayList<String> selectedFiles = null;
 
 	protected String cmd = null;
 	
@@ -32,9 +31,7 @@ public class MultiFileRequestHandler extends UserRequestHandler
 	{
         super(req, resp, session, output, uid);
         
-		selectedFiles = new Vector();
-
-		// Enumeration allKeys=requestParms.keys();
+		selectedFiles = new ArrayList<String>();
 
 		Enumeration allKeys = req.getParameterNames();
 		
