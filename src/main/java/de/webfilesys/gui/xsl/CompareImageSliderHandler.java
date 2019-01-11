@@ -15,8 +15,8 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.Constants;
 import de.webfilesys.graphics.ScaledImage;
-import de.webfilesys.gui.user.MultiImageRequestHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -155,14 +155,14 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 	private ArrayList<String> getSelectedFiles() {
 		ArrayList<String> selectedFiles = new ArrayList<String>();
 
-		int prefixLength = MultiImageRequestHandler.LIST_PREFIX.length();
+		int prefixLength = Constants.CHECKBOX_LIST_PREFIX.length();
 		
 		Enumeration allKeys = req.getParameterNames();
 
 		while (allKeys.hasMoreElements()) {
 			String parmKey = (String) allKeys.nextElement();
 
-            if (parmKey.startsWith(MultiImageRequestHandler.LIST_PREFIX)) {
+            if (parmKey.startsWith(Constants.CHECKBOX_LIST_PREFIX)) {
 				String fileName = parmKey.substring(prefixLength);
 				selectedFiles.add(fileName); 
             } 

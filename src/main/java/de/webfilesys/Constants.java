@@ -35,6 +35,8 @@ public interface Constants
 	public static final String UPLOAD_LIMIT_EXCEEDED = "uploadLimitExceeded";
 	public static final String UPLOAD_CANCELED = "uploadCanceled";
 	
+	public static final String CHECKBOX_LIST_PREFIX = "list-";
+	
 	/** 
 	 * Size in pixels of the larger dimension of picture thumbnails.
 	 * The thumbnails contained in the EXIF data of pictures from digital cameras

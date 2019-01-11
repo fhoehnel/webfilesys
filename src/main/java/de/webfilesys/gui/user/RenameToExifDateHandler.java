@@ -47,9 +47,9 @@ public class RenameToExifDateHandler extends MultiImageRequestHandler
 			return;
 		}
 
-		for (int i=0;i<selectedFiles.size();i++)
+		for (String selectedFile : selectedFiles)
 		{
-			String imgFileName=actPath + File.separator + selectedFiles.elementAt(i);
+			String imgFileName = actPath + File.separator + selectedFile;
 
 			String fileExt="";
 

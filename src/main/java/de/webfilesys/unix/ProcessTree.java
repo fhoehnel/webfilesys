@@ -1,8 +1,7 @@
 package de.webfilesys.unix;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Vector;
-
 import org.apache.log4j.Logger;
 
 public class ProcessTree
@@ -97,13 +96,11 @@ public class ProcessTree
         outBuffer.append("  ");
         outBuffer.append(actProcess.getCmd());
         outBuffer.append("\n");
-        Vector childList = actProcess.getChildren();
+        ArrayList<UnixProcess> childList = actProcess.getChildren();
 
-        for (int j=0;j<childList.size();j++)
+        for (UnixProcess childProcess : childList)
         {
-            UnixProcess actChild=(UnixProcess) childList.elementAt(j);
-            
-            treeToString(actChild,level+1);
+            treeToString(childProcess, level + 1);
         }
     }
 
@@ -183,14 +180,12 @@ public class ProcessTree
         outBuffer.append("<td class=\"processTTY\">" + actProcess.getTTY() + "</td>");
 
         outBuffer.append("</tr>\n");
+        
+        ArrayList<UnixProcess> childList = actProcess.getChildren();
 
-        Vector childList = actProcess.getChildren();
-
-        for (int j=0;j<childList.size();j++)
+        for (UnixProcess childProcess : childList)
         {
-            UnixProcess actChild=(UnixProcess) childList.elementAt(j);
-            
-            treeToHTML(actChild,level+1,allowKill);
+            treeToHTML(childProcess,level+1,allowKill);
         }
     }
 

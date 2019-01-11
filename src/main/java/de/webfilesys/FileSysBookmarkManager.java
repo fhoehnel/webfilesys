@@ -783,47 +783,5 @@ public class FileSysBookmarkManager extends Thread
 			}
 		}
 	}
-
-	/*
-	static public void main(String args[])
-	{
-		FileSysBookmarkManager mgr = FileSysBookmarkManager.getInstance();
-	
-	    for (int i=0; i < 20; i++)
-	    {
-	    	FileSysBookmark newBookmark = new FileSysBookmark();
-	    
-	    	newBookmark.setName("BookmarkName-" + i);
-
-	    	newBookmark.setName("BookmarkPath-" + i);
-	
-			mgr.createBookmark("testuser", newBookmark);	
-			
-			System.out.println("created bookmark" + newBookmark.getName());
-	    }
-
-		System.out.println("bookmarks of user testuser:");
-
-        Vector userBookmarks = mgr.getListOfBookmarks("testuser");
-        
-        for (int i = 0; i < userBookmarks.size(); i++)
-        {
-        	FileSysBookmark bookmark = (FileSysBookmark) userBookmarks.elementAt(i);
-        	
-			System.out.println("  " + bookmark.getName() + "  " + bookmark.getPath());
-        }
-	    
-	    while (true)
-	    {
-	    	try
-	    	{
-	    		sleep(1000);
-	    	}
-	    	catch (InterruptedException iex)
-	    	{
-	    	}
-	    }
-	}
-	*/
 	
 }

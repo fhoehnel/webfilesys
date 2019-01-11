@@ -128,13 +128,13 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 		
 		for (int i = 0; i < fileNum; i++)
 		{
-			String imgFileName = pathWithSlash + (String) selectedFiles.elementAt(i);
+			String imgFileName = pathWithSlash + (String) selectedFiles.get(i);
 
 			ScaledImage scaledImage=null;
 
 			try
 			{
-				scaledImage = new ScaledImage(imgFileName,displayWidth,displayHeight);
+				scaledImage = new ScaledImage(imgFileName, displayWidth, displayHeight);
 
 				imgWidth[i] = scaledImage.getRealWidth();
 
@@ -162,7 +162,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 		{
 			output.println("<td class=\"compareImg\">");
 
-			String imgFileName = pathWithSlash + (String) selectedFiles.elementAt(i);
+			String imgFileName = pathWithSlash + (String) selectedFiles.get(i);
 
 			ScaledImage scaledImage = null;
 
@@ -195,7 +195,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 
 		for (int i = 0; i < fileNum; i++)
 		{
-		    String imgFileName = (String) selectedFiles.elementAt(i);
+		    String imgFileName = (String) selectedFiles.get(i);
 		    
 			output.print("<td class=\"compareImg\"");
 			if (imgFileName.length() > 30) 

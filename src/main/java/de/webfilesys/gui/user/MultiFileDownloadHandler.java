@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -54,7 +53,7 @@ public class MultiFileDownloadHandler extends MultiFileRequestHandler
 		
 		if (actPath == null)
 		{
-			Logger.getLogger(getClass()).error("MultiDownloadRequestHandler: actPath is null");
+			Logger.getLogger(getClass()).error("MultiFileDownloadHandler: actPath is null");
 			
 			return;
 		}

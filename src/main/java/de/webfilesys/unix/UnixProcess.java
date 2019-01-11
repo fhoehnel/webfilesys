@@ -1,6 +1,6 @@
 package de.webfilesys.unix;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class UnixProcess
 {
@@ -13,7 +13,7 @@ public class UnixProcess
     private String startTime;
     private String cmdString;
 
-    public Vector childList=null;
+    public ArrayList<UnixProcess> childList = null;
 
     public UnixProcess()
     {
@@ -25,15 +25,15 @@ public class UnixProcess
         cpuTime="";
         startTime="";
         cmdString="";
-        childList=new Vector();
+        childList = new ArrayList<UnixProcess>();
     }
 
     public void addChild(UnixProcess newChild)
     {
-        childList.addElement(newChild);
+        childList.add(newChild);
     }
 
-    public Vector getChildren()
+    public ArrayList<UnixProcess> getChildren()
     {
         return(childList);
     }

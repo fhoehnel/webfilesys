@@ -1,27 +1,26 @@
 package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.Constants;
+
 /**
  * @author Frank Hoehnel
  */
 public class MultiImageRequestHandler extends UserRequestHandler
 {
-	public static final String LIST_PREFIX = "list-";
-	
-	private static final int prefixLength = LIST_PREFIX.length();
+	private static final int prefixLength = Constants.CHECKBOX_LIST_PREFIX.length();
 	
 	protected String actPath = null;
 	
-	protected Vector selectedFiles = null;
+	protected ArrayList<String> selectedFiles = null;
 
     protected String cmd = null;
 	
@@ -34,7 +33,7 @@ public class MultiImageRequestHandler extends UserRequestHandler
 	{
         super(req, resp, session, output, uid);
 		
-		selectedFiles=new Vector();
+		selectedFiles = new ArrayList<String>();
 
 		Enumeration allKeys = req.getParameterNames();
 
@@ -42,7 +41,7 @@ public class MultiImageRequestHandler extends UserRequestHandler
 		{
 			String parmKey=(String) allKeys.nextElement();
 
-            if (parmKey.startsWith(LIST_PREFIX))
+            if (parmKey.startsWith(Constants.CHECKBOX_LIST_PREFIX))
             {
 				String fileName = parmKey.substring(prefixLength);
 				
