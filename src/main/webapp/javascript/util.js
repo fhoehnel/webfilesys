@@ -294,7 +294,7 @@ function closeAlert() {
 	}
 }
 
-function customConfirm(confirmText, cancelButtonText, continueButtonText, continueCallback, cancelCallback) {
+function customConfirm(confirmText, cancelButtonText, continueButtonText, continueCallback, cancelCallback, warning) {
    	var mouseShield = document.createElement("div");
    	mouseShield.id = "mouseClickShield";
    	mouseShield.setAttribute("class", "mouseClickShield");
@@ -307,7 +307,11 @@ function customConfirm(confirmText, cancelButtonText, continueButtonText, contin
     mouseShield.style.height = window.innerHeight + "px";
     
     var alertCont = document.createElement("div");
-    alertCont.setAttribute("class", "alertCont");
+    if (warning) {
+        alertCont.setAttribute("class", "alertCont warning");
+    } else {
+        alertCont.setAttribute("class", "alertCont");
+    }
    	mouseShield.appendChild(alertCont);
 
     var alertTextCont = document.createElement("div");

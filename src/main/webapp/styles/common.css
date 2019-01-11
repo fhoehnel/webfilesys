@@ -1890,6 +1890,10 @@ div.alertCont {
     box-sizing: content-box;
 }
 
+div.alertCont.warning {
+	background-color: #ff8080;
+}
+
 div.alertTextCont {
 	max-height: 300px;
 	overflow-y: auto;

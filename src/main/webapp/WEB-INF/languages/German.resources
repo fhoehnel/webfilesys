@@ -447,6 +447,7 @@ confirm.copyLinks=Datei-Links durch eine Kopie der Original-Datei ersetzen?
 msg.createThumbsStarted=Speicherung von Vorschaubildern gestartet fuer Ordner
 msg.concurrentThumbThread=Vorschaubild-Speicherung fuer einen anderen Ordener läuft noch. Bitte später erneut versuchen!
 confirm.deleteImages=Ausgewählte Bilder wirklich löschen?
+confirm.deleteAllImages=Es sind alle Bilder ausgewählt. Wirklich löschen? 
 button.rotateByExif=Exif-Rotation
 title.rotateByExif=Bilder entsprechend Hoch/Querformat-Wert in EXIF Daten rotieren
 confirm.rotateByExif=Bilder, deren Orientierung (Hoch-/Querformat) nicht mit dem durch die Kamera in den EXIF-Daten gespeicherten Orientierungs-Wert übereinstimmmt, werden verlustlos rotiert. Fortfahren?
