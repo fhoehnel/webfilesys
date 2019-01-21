@@ -1,12 +1,12 @@
 package de.webfilesys.unix;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 public class ProcessTree
 {
-    private Hashtable processList=null;
+    private HashMap<String, UnixProcess> processList = null;
 
     private UnixProcess rootProcess=null;
 
@@ -17,7 +17,7 @@ public class ProcessTree
     public ProcessTree(String userid)
     {
         forUserid=userid;
-        processList = new Hashtable();
+        processList = new HashMap<String, UnixProcess>();
         readProcessList();
     }
 
@@ -26,17 +26,16 @@ public class ProcessTree
     {
     }
 
-
     protected void addProcessToTree(UnixProcess newProcess)
     {
         String pid=newProcess.getPid();
 
-        UnixProcess existingProcess=(UnixProcess) processList.get(pid);
+        UnixProcess existingProcess = processList.get(pid);
 
         if (existingProcess!=null)
         {
             newProcess.childList=existingProcess.childList;
-            processList.put(pid,newProcess);
+            processList.put(pid, newProcess);
 
             if ((rootProcess==null) || (existingProcess.getPid()==rootProcess.getPid()))
             {
@@ -46,18 +45,18 @@ public class ProcessTree
 
         String ppid=newProcess.getPPid();
 
-        UnixProcess parent=(UnixProcess) processList.get(ppid);
+        UnixProcess parent = processList.get(ppid);
 
         if (parent==null)
         {
             // System.out.println("adding placeholder parent " + ppid);
             parent=new UnixProcess();
             parent.setPid(ppid);
-            processList.put(ppid,parent);
+            processList.put(ppid, parent);
         }
 
         parent.addChild(newProcess);
-        processList.put(pid,newProcess);
+        processList.put(pid, newProcess);
         if (rootProcess==null)
         {
             rootProcess=newProcess;

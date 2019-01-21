@@ -432,4 +432,15 @@ div.toastBox span {
 
 body.mobile a.dirtree {
 	font-size: 24px;
+	color: maroon;
+}
+
+body.mobile .icon-delete:before {
+    color: #a00000;
+    font-size: 26px;
+}
+
+body.mobile .icon-star {
+    font-size: 26px;
+    color: #c08000;
 }
