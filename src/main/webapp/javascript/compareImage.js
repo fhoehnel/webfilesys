@@ -53,8 +53,8 @@ function compareImgLoadInitial() {
 }
 
 function compareImgDelete(picFilePath, picFileName) {
-
-    var nameForId = picFileName.replace(' ', '_');
+	
+    var nameForId = picFileName.replace(/ /g, '_');
     var thumbContId = "thumbCont-" + nameForId;
     var thumbContToDelete = document.getElementById(thumbContId);
 	
@@ -92,7 +92,8 @@ function compareImgDelete(picFilePath, picFileName) {
 }
 
 function compareImgClose(imgName) {
-    var nameForId = imgName.replace(' ', '_');
+
+	var nameForId = imgName.replace(/ /g, '_');
     var thumbContId = "thumbCont-" + nameForId;
     var thumbContToClose = document.getElementById(thumbContId);
     if (thumbContToClose) {
