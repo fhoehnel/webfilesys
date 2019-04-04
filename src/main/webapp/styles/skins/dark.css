@@ -123,6 +123,11 @@ body.bookmarks input[type=button] {
 	margin-left: 10px;
 }
 
+body.bookmarks span {
+	color: #ffc0c0;
+    margin-left: 20px;
+}
+
 body.tail {
     background-color: #303030;
 }
