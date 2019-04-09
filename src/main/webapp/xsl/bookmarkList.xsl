@@ -74,8 +74,6 @@
 
         <xsl:for-each select="bookmark">
         
-          <xsl:variable name="pathForScript"><xsl:call-template name="insDoubleBackslash"><xsl:with-param name="string"><xsl:value-of select="encodedPath" /></xsl:with-param></xsl:call-template></xsl:variable>
-        
           <tr>
             <td>
               <xsl:if test="icon">
@@ -94,10 +92,10 @@
                   <xsl:attribute name="style">color:<xsl:value-of select="textColor" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="/bookmarkList/mobile">
-                  <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="$pathForScript" />', true)</xsl:attribute>
+                  <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="encodedPath" />', true)</xsl:attribute>
                 </xsl:if>
                 <xsl:if test="not(/bookmarkList/mobile)">
-                  <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="$pathForScript" />', false)</xsl:attribute>
+                  <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="encodedPath" />', false)</xsl:attribute>
                 </xsl:if>
                 <xsl:attribute name="title"><xsl:value-of select="path" /></xsl:attribute>
     

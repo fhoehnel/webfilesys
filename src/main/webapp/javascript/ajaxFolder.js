@@ -743,7 +743,9 @@ function gotoBookmarkedFolder(encodedPath, mobile) {
                 	} else {
                 		bookmarkUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodedPath + "&mask=*&fastPath=true";
                 	}
-                	window.location.href = bookmarkUrl;
+                	setTimeout(function() { 
+                		window.location.href = bookmarkUrl;
+                	}, 50);
                 } else {
                 	hideHourGlass();
                 	toast(resourceBundle["bookmark.destFolderMissing"], 3000);
