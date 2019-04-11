@@ -221,6 +221,8 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 
 		XmlUtil.setChildText(fileListElement, "pathForScript", escapeForJavascript(pathWithSlash), false);
 
+		XmlUtil.setChildText(fileListElement, "relativePath", escapeForJavascript(getHeadlinePath(currentPath)), false);
+
 		XmlUtil.setChildText(fileListElement, "filter", mask, false);
 
 		XmlUtil.setChildText(fileListElement, "sortBy", Integer.toString(sortBy), false);

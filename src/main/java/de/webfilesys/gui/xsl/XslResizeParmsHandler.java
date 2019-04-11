@@ -2,9 +2,8 @@ package de.webfilesys.gui.xsl;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,7 +44,7 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 		if (imgFilePath == null) {
 			// save selected files in session
 			
-	        Vector selectedFiles = new Vector();
+	        ArrayList<String> selectedFiles = new ArrayList<String>();
 
 	        Enumeration allKeys = req.getParameterNames();
 

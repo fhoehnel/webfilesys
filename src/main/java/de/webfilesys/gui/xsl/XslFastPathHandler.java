@@ -18,6 +18,7 @@ import de.webfilesys.FileSysBookmark;
 import de.webfilesys.FileSysBookmarkManager;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -169,6 +170,8 @@ public class XslFastPathHandler extends XslRequestHandlerBase
                 	subFolderElem.setAttribute("name", partOfPath);
                 	
     				subFolderElem.setAttribute("path", encodedPath);  
+
+    				subFolderElem.setAttribute("pathForScript", CommonUtils.escapeForJavascript(path));  
     				
                     String lowerCasePartOfPath = partOfPath.toLowerCase();
                 	

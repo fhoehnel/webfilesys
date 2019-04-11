@@ -20,6 +20,11 @@
     
       <xsl:value-of select="@separator"/>
       <a class="currentTrail" href="javascript:void(0)"><xsl:value-of select="@mask"/></a>
+      
+      <a class="icon-font icon-copy icon-copyToClip" titleResource="label.copyPath">
+        <xsl:attribute name="href">javascript:copyPathToClipboard('<xsl:value-of select="/fileList/relativePath" />')</xsl:attribute>
+      </a>
+      
     </div>
   
   </xsl:template>

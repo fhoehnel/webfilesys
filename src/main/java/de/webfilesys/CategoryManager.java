@@ -747,44 +747,4 @@ public class CategoryManager extends Thread
 		}
 	}
 
-	static public void main(String args[])
-	{
-		/*
-		CategoryManager mgr = CategoryManager.getInstance();
-	
-	    for (int i=0; i < 20; i++)
-	    {
-			Category newCategory = new Category();
-	    
-			newCategory.setName("Testkategorie-" + i);
-	
-			mgr.createCategory("testuser", newCategory);	
-			
-			System.out.println("created category" + newCategory.getName());
-	    }
-
-		System.out.println("categories of user testuser:");
-
-        Vector userCategories = mgr.getListOfCategories("testuser");
-        
-        for (int i = 0; i < userCategories.size(); i++)
-        {
-        	Category cat = (Category) userCategories.elementAt(i);
-        	
-			System.out.println("  " + cat.getName());
-        }
-	    
-	    while (true)
-	    {
-	    	try
-	    	{
-	    		sleep(1000);
-	    	}
-	    	catch (InterruptedException iex)
-	    	{
-	    	}
-	    }
-	    */
-	}
-
 }

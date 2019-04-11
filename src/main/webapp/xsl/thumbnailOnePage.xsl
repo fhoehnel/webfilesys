@@ -121,6 +121,7 @@
   </xsl:if>
   
   var path = '<xsl:value-of select="/fileList/menuPath" />';
+  var relativePath = '<xsl:value-of select="/fileList/relativePath" />';
   
   document.onkeypress = handleFileListKey;
   
@@ -140,7 +141,7 @@
 
 <xsl:if test="/fileList/errorMsg">
   <script language="javascript">
-    alert('<xsl:value-of select="/fileList/errorMsg" />');
+    customAlert('<xsl:value-of select="/fileList/errorMsg" />');
   </script>
 </xsl:if>
 

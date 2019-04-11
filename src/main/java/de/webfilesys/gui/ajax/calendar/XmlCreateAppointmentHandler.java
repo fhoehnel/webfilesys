@@ -191,9 +191,9 @@ public class XmlCreateAppointmentHandler extends XmlRequestHandlerBase {
 		
 		newAppointment.setDuration(duration);
 		
-		newAppointment.setSubject(subject == null ? null : subject.replaceAll("'", "´"));
+		newAppointment.setSubject(subject == null ? null : subject.replaceAll("'", "Â´"));
 		
-		newAppointment.setContent(description == null ? null : description.replaceAll("'", "´"));
+		newAppointment.setContent(description == null ? null : description.replaceAll("'", "Â´"));
 		
 		newAppointment.setRepeatPeriod(repeatPeriod);
 		

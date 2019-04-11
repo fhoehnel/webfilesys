@@ -44,3 +44,30 @@ function handleCloseAfterSave(req) {
         }
     }
 }
+
+function setEditorHeight() {
+    if (browserMSIE) {
+        setTimeout('setEditorHeightInternal()', 200);
+    } else {
+    	setEditorHeightInternal();
+    }
+}
+
+function setEditorHeightInternal() {
+
+    var buttonCont = document.getElementById("editorButtonCont");
+    var buttonContYPos = getAbsolutePos(buttonCont)[1];
+
+    if (buttonContYPos == 0) {
+        var rect = buttonCont.getBoundingClientRect();
+        buttonContYPos = rect.top;
+    }
+
+    var textArea = document.getElementById("editorText");
+    var textAreaYPos = getAbsolutePos(textArea)[1];
+    
+    var textAreaHeight = buttonContYPos - textAreaYPos - 10;
+    
+    textArea.style.height = textAreaHeight + "px";
+}
+

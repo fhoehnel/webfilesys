@@ -52,7 +52,7 @@ public class ZipDirRequestHandler extends UserRequestHandler {
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("</head>");
-		output.println("<body>");
+		output.println("<body class=\"zip\">");
 
 		headLine(getResource("label.zippingdir","compressing directory"));
 

@@ -6,7 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -40,7 +40,7 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
 
 	protected void process()
 	{
-		Vector selectedFiles = (Vector) session.getAttribute("selectedFiles");
+		ArrayList<String> selectedFiles = (ArrayList<String>) session.getAttribute("selectedFiles");
 		
 		if ((selectedFiles == null) || (selectedFiles.size() == 0))
 		{
@@ -84,15 +84,15 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
 
 			byte buffer[] = new byte[16192];
 
-			for (int i = 0; i < selectedFiles.size(); i++)
+			for (String selectedFile : selectedFiles) 
 			{
 				FileInputStream inFile = null;
 				
 				try
 				{
-					zip_out.putNextEntry(new ZipEntry((String) selectedFiles.elementAt(i)));
+					zip_out.putNextEntry(new ZipEntry(selectedFile));
 
-					inFile = new FileInputStream(new File(actPath, (String) selectedFiles.elementAt(i)));
+					inFile = new FileInputStream(new File(actPath, selectedFile));
 
 					count=0;
 
@@ -149,17 +149,17 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
 			
 			if (WebFileSys.getInstance().isDownloadStatistics())
 			{
-				for (int i = 0; i < selectedFiles.size(); i++)
+				for (String selectedFile : selectedFiles) 
 				{
                     String fullPath = null;
                      
                     if (actPath.endsWith(File.separator))
                     {
-					    fullPath = actPath + selectedFiles.elementAt(i);
+					    fullPath = actPath + selectedFile;
                     }
                     else
                     {
-					    fullPath = actPath + File.separator + selectedFiles.elementAt(i);
+					    fullPath = actPath + File.separator + selectedFile;
                     }
 				
 				    MetaInfManager.getInstance().incrementDownloads(fullPath);

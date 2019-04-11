@@ -311,6 +311,11 @@ function extendedDirMenu(shortPath, path, domId, dirIsRoot)
     	}
     }
 
+    if (parent.webspaceUser != 'true') {
+        menuText = menuText 
+                 + menuEntry("javascript:copyPathToClipboard('" + scriptPreparedPath + "')", resourceBundle["label.copyPath"]);
+    }
+    
     menuText = menuText + '</table>'; 
 
     menuDiv.innerHTML = menuText;

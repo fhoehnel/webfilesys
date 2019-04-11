@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import de.webfilesys.ClipBoard;
@@ -16,7 +15,7 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XmlMultiCutCopyHandler extends XslMultiFileRequestHandler
+public class XmlMultiCutCopyHandler extends XmlMultiFileRequestHandler
 {
 	public XmlMultiCutCopyHandler(
     		HttpServletRequest req, 
@@ -65,9 +64,8 @@ public class XmlMultiCutCopyHandler extends XslMultiFileRequestHandler
 			pathWithSlash = actPath + File.separator;
 		}
 		
-		for (int i = 0; i < selectedFiles.size(); i++)
-		{
-			String sourceFilename = pathWithSlash + selectedFiles.elementAt(i);
+		for (String selectedFile : selectedFiles) {
+			String sourceFilename = pathWithSlash + selectedFile;
 			clipBoard.addFile(sourceFilename);
 		}
 

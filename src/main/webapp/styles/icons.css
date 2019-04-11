@@ -213,6 +213,10 @@ a.icon-font {
 	content: '\f006';
 }
 
+.icon-copy:before {
+	content: '\f0c5';
+}
+
 .icon-check:before {
 	content: '\f00c';
 }

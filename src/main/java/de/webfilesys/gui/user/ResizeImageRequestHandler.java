@@ -12,11 +12,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.Vector;
-
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -333,15 +332,13 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             {
                 // multiple selected files
 
-                Vector selectedFiles = (Vector) session
-                        .getAttribute("selectedFiles");
+                ArrayList<String> selectedFiles = (ArrayList<String>) session.getAttribute("selectedFiles");
 
                 if (selectedFiles != null)
                 {
-                    for (int i = 0; i < selectedFiles.size(); i++)
+                	for (String selectedFile : selectedFiles) 
                     {
-                        String actFileName = UTF8URLDecoder
-                                .decode((String) selectedFiles.elementAt(i));
+                        String actFileName = UTF8URLDecoder.decode(selectedFile);
 
                         if (createScaledImage(pathWithSlash, actFileName,
                                 outputFormat, newSize, copyRightText, copyRightPos,

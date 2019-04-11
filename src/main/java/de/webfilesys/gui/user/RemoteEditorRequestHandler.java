@@ -65,6 +65,7 @@ public class RemoteEditorRequestHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
+		output.println("<script src=\"javascript/browserCheck.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"javascript/remoteEditor.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"javascript/util.js\" type=\"text/javascript\"></script>");
@@ -84,7 +85,7 @@ public class RemoteEditorRequestHandler extends UserRequestHandler
 		else
 		{
 			output.println("</head>");
-			output.println("<body>");
+			output.println("<body class=\"remoteEditor\" onload=\"setEditorHeight()\">");
 			
             int textAreaHeight = 500;
 			
@@ -107,15 +108,13 @@ public class RemoteEditorRequestHandler extends UserRequestHandler
 	            }
 	        }
 			
-			output.println("<center>");
-
 			headLine(this.getHeadlinePath(editFile));
 
 			output.println("<form id=\"editForm\" accept-charset=\"utf-8\" method=\"post\" action=\"/webfilesys/servlet\" style=\"margin-top:20px\">");
 			output.println("<input type=\"hidden\" name=\"command\" value=\"saveEditor\">");
 			output.println("<input type=\"hidden\" name=\"actPath\" value=\"" + actPath + "\">");
 			output.println("<input type=\"hidden\" name=\"filename\" value=\"" + editFile + "\">");
-			output.print("<textarea name=\"text\" rows=\"18\" cols=\"60\" style=\"width:100%;height:" + textAreaHeight + "px;font-family:monospace;\" wrap=\"virtual\">");
+			output.print("<textarea id=\"editorText\" name=\"text\" rows=\"18\" cols=\"60\" style=\"width:100%;height:" + textAreaHeight + "px;font-family:monospace;\" wrap=\"virtual\">");
 
             req.getSession(true).removeAttribute(SESSION_KEY_FILE_ENCODING);
 
@@ -174,7 +173,7 @@ public class RemoteEditorRequestHandler extends UserRequestHandler
 
 			output.println("</textarea>");
 
-			output.println("<div style=\"padding-top:15px;\">");
+			output.println("<div id=\"editorButtonCont\" class=\"editorButtonCont\">");
 			
 			if (!readError) 
 			{
@@ -196,8 +195,6 @@ public class RemoteEditorRequestHandler extends UserRequestHandler
 			output.println("</div>");
 			output.println("</form>");
 
-			output.println("</center>");
-			
 			if (readError) 
 			{
 	            output.println("<script langauge=\"javascript\">");

@@ -6,7 +6,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,13 +14,17 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.ClipBoard;
 import de.webfilesys.Constants;
 import de.webfilesys.FastPathManager;
+import de.webfilesys.FileComparator;
 import de.webfilesys.FileContainer;
 import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
+import de.webfilesys.GeoTag;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
+import de.webfilesys.PictureRating;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -30,14 +33,14 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XslVideoListHandler extends XslFileListHandlerBase {
-	public XslVideoListHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
+public class XslThumbnailExtractDescriptionHandler extends XslFileListHandlerBase {
+	public XslThumbnailExtractDescriptionHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
 			PrintWriter output, String uid, boolean clientIsLocal) {
 		super(req, resp, session, output, uid);
 	}
 
 	protected void process() {
-		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_VIDEO));
+		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_THUMBS));
 
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
@@ -67,7 +70,7 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 			mask = "*";
 		}
 
-		String fileFilter[] = Constants.VIDEO_FILE_MASKS;
+		String fileFilter[] = Constants.imgFileMasks;
 
 		if (!mask.equals("*")) {
 			String maskFilter[] = new String[fileFilter.length];
@@ -102,7 +105,46 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 
 		boolean dirHasMetaInf = metaInfMgr.dirHasMetaInf(currentPath);
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/videoList.xsl\"");
+		int sortBy = FileComparator.SORT_BY_FILENAME;
+
+		String temp = getParameter("sortBy");
+		if ((temp != null) && (temp.length() > 0)) {
+			try {
+				sortBy = Integer.parseInt(temp);
+				session.setAttribute("sortField", new Integer(sortBy));
+			} catch (NumberFormatException nfe) {
+			}
+		} else {
+			Integer sessionSortField = (Integer) session.getAttribute("sortField");
+
+			if (sessionSortField != null) {
+				sortBy = sessionSortField.intValue();
+				if (sortBy > 7) {
+					sortBy = FileComparator.SORT_BY_FILENAME;
+				}
+			}
+		}
+
+		int rating = (-1);
+
+		temp = getParameter("rating");
+
+		if (temp != null) {
+			try {
+				rating = Integer.parseInt(temp);
+
+				session.setAttribute("rating", new Integer(rating));
+			} catch (NumberFormatException nfe) {
+			}
+		} else {
+			Integer sessionRating = (Integer) session.getAttribute("rating");
+
+			if (sessionRating != null) {
+				rating = sessionRating.intValue();
+			}
+		}
+
+		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/extractDescriptions.xsl\"");
 
 		Element fileListElement = doc.createElement("fileList");
 
@@ -115,6 +157,8 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 		if (errorMsg != null) {
 			XmlUtil.setChildText(fileListElement, "errorMsg", errorMsg, false);
 		}
+
+		ClipBoard clipBoard = (ClipBoard) session.getAttribute("clipBoard");
 
 		if (readonly) {
 			XmlUtil.setChildText(fileListElement, "readonly", "true", false);
@@ -139,10 +183,12 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {
 			Logger.getLogger(getClass()).warn("folder is not a readable directory: " + currentPath);
 			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
-			processResponse("videoList.xsl");
+			processResponse("xsl/folderTree.xsl");
 			return;
 		}
 
+		XmlUtil.setChildText(fileListElement, "dirModified", Long.toString(dirFile.lastModified()), false);
+		
 		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(currentPath), false);
 
 		String description = metaInfMgr.getDescription(currentPath, ".");
@@ -151,9 +197,9 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 			XmlUtil.setChildText(fileListElement, "description", description, true);
 		}
 
-		FileLinkSelector fileSelector = new FileLinkSelector(currentPath, 1, true);
+		FileLinkSelector fileSelector = new FileLinkSelector(currentPath, sortBy, true);
 
-		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileFilter, -1, 4096, 0);
+		FileSelectionStatus selectionStatus = fileSelector.selectFiles(fileFilter, rating, 4096, 0);
 
 		filterLinksOutsideDocRoot(selectionStatus);
 
@@ -175,9 +221,11 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 
 		XmlUtil.setChildText(fileListElement, "pathForScript", escapeForJavascript(pathWithSlash), false);
 
-		XmlUtil.setChildText(fileListElement, "relativePath", escapeForJavascript(getHeadlinePath(currentPath)), false);
-		
 		XmlUtil.setChildText(fileListElement, "filter", mask, false);
+
+		XmlUtil.setChildText(fileListElement, "sortBy", Integer.toString(sortBy), false);
+
+		XmlUtil.setChildText(fileListElement, "rating", Integer.toString(rating), false);
 
 		boolean linkFound = false;
 
@@ -205,7 +253,7 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 
 				fileElement.setAttribute("id", Integer.toString(i));
 
-				File videoFile = fileCont.getRealFile();
+				File pictureFile = fileCont.getRealFile();
 
 				if (fileCont.isLink()) {
 					fileElement.setAttribute("link", "true");
@@ -237,11 +285,11 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 					fileElement.setAttribute("linkMenuPath", escapeForJavascript(fileCont.getRealFile().getAbsolutePath()));
 				}
 
-				fileElement.setAttribute("lastModified", dateFormat.format(new Date(videoFile.lastModified())));
+				fileElement.setAttribute("lastModified", dateFormat.format(new Date(pictureFile.lastModified())));
 
 				long kBytes = 0L;
 
-				long fileSize = videoFile.length();
+				long fileSize = pictureFile.length();
 
 				if (fileSize > 0L) {
 					kBytes = fileSize / 1024L;
@@ -256,11 +304,34 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 				    sizeSum += fileSize;
 				}				
 				
-				String realPath = videoFile.getParent();
+				String realPath = pictureFile.getParent();
 
-				String realFileName = videoFile.getName();
+				String realFileName = pictureFile.getName();
 
-				String imgSrcPath = "/webfilesys/servlet?command=videoThumb&videoFile=" + UTF8URLEncoder.encode(fileCont.getName());
+				int commentCount = metaInfMgr.countComments(realPath, realFileName);
+
+				XmlUtil.setChildText(fileElement, "comments", Integer.toString(commentCount));
+
+				PictureRating pictureRating = metaInfMgr.getPictureRating(realPath, realFileName);
+
+				if (pictureRating != null) {
+					if (pictureRating.getNumberOfVotes() > 0) {
+						XmlUtil.setChildText(fileElement, "visitorRating",
+								Integer.toString(pictureRating.getAverageVisitorRating()));
+						XmlUtil.setChildText(fileElement, "numberOfVotes",
+								Integer.toString(pictureRating.getNumberOfVotes()));
+					}
+				}
+
+				if (!readonly) {
+					int ownerRating = metaInfMgr.getOwnerRating(pictureFile.getAbsolutePath());
+
+					if (ownerRating > (-1)) {
+						XmlUtil.setChildText(fileElement, "ownerRating", Integer.toString(ownerRating));
+					}
+				}
+
+				String imgSrcPath = "/webfilesys/servlet?command=picThumb&imgFile=" + UTF8URLEncoder.encode(fileCont.getName());
 
 				if (fileCont.isLink()) {
 					imgSrcPath += "&link=true";
@@ -275,14 +346,49 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 		}
 
 		if (!readonly) {
+			if ((clipBoard == null) || clipBoard.isEmpty()) {
+				XmlUtil.setChildText(fileListElement, "clipBoardEmpty", "true");
+			} else {
+				if (clipBoard.isCopyOperation()) {
+					XmlUtil.setChildText(fileListElement, "copyOperation", "true");
+				}
+			}
+
+			if (WebFileSys.getInstance().isAutoCreateThumbs()) {
+				XmlUtil.setChildText(fileListElement, "autoCreateThumbs", "true");
+			}
+
+			if (WebFileSys.getInstance().getMailHost() != null) {
+				XmlUtil.setChildText(fileListElement, "mailEnabled", "true");
+			}
+
 			if (linkFound) {
 				XmlUtil.setChildText(fileListElement, "linksExist", "true");
 			}
 		}
+
+		GeoTag geoTag = metaInfMgr.getGeoTag(currentPath, ".");
+
+		if (geoTag != null) {
+			XmlUtil.setChildText(fileListElement, "geoTag", "true", false);
+
+			// the reason for this is historic: previous google maps api version
+			// required an API key
+			XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
+		}
+
+		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		if (pollInterval > 0) {
+			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
+		}
+		
+        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+            XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
+        }
 		
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
-		processResponse("videoList.xsl", true);
+		processResponse("extractDescriptions.xsl", true);
 
 		FastPathManager.getInstance().queuePath(uid, currentPath);
 	}

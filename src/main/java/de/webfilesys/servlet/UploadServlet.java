@@ -659,7 +659,7 @@ public class UploadServlet extends WebFileSysServlet
         {
             char c = fileName.charAt(i);
             
-            if ((c == '\'') || (c == '#') || (c == '`') || (c == '%') || (c == '!') || (c == 'ง') || 
+            if ((c == '\'') || (c == '#') || (c == '`') || (c == '%') || (c == '!') || (c == 'ยง') || 
                 (c == '&') || (c == '[') || (c == ']') || (c == '\"'))
             {
                 c = '_';

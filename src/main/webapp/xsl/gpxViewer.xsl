@@ -24,7 +24,7 @@
 
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
     <script type="text/javascript">
-      <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
+      <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/gpx/language" /></xsl:attribute>
     </script>
 
     <script type="text/javascript">

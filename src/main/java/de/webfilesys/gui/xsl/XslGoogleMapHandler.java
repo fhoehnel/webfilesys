@@ -106,7 +106,7 @@ public class XslGoogleMapHandler extends XslRequestHandlerBase
 	        String infoText = geoTag.getInfoText();
 	        
 		    if ((infoText != null) && (!infoText.isEmpty())) {
-	            XmlUtil.setChildText(geoTagElement, "infoText", infoText.replace('\'', '´'), false);
+	            XmlUtil.setChildText(geoTagElement, "infoText", infoText.replace('\'', 'Â´'), false);
 		    }
 	        
 	        geoLocationDefined = true;

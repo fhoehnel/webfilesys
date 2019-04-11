@@ -1,9 +1,8 @@
 package de.webfilesys.gui.ajax;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -21,7 +20,7 @@ public class XmlMultiImageRequestHandler extends XmlRequestHandlerBase
 	
 	protected String actPath = null;
 	
-	protected Vector selectedFiles = null;
+	protected ArrayList<String> selectedFiles = null;
 
 	protected boolean delConfirmed = false;
     
@@ -36,7 +35,7 @@ public class XmlMultiImageRequestHandler extends XmlRequestHandlerBase
 	{
         super(req, resp, session, output, uid);
 		
-		selectedFiles=new Vector();
+		selectedFiles = new ArrayList<String>();
 
 		Enumeration allKeys = req.getParameterNames();
 

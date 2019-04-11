@@ -138,15 +138,15 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
         output.println("</table>");
         output.println("</form>");
 
-		for (int i = 0; i < selectedFiles.size(); i++)
+        for (String selectedFile : selectedFiles) 
 		{
             FileInputStream f_in = null;
 
             try
 			{
-				zip_out.putNextEntry(new ZipEntry((String) selectedFiles.elementAt(i)));
+				zip_out.putNextEntry(new ZipEntry(selectedFile));
 
-				String fullPath=pathWithSlash + selectedFiles.elementAt(i);
+				String fullPath=pathWithSlash + selectedFile;
 
 				output.println("<script language=\"javascript\">");
                 output.println("document.getElementById('currentFile').innerHTML=\"" + insertDoubleBackslash(CommonUtils.shortName(fullPath, 50)) + "\";");
@@ -193,17 +193,17 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
 			Logger.getLogger(getClass()).error(io4);
 		}
 
-		for (int i = 0; i < selectedFiles.size(); i++)
+        for (String selectedFile : selectedFiles) 
 		{
-			File temp_file = new File(pathWithSlash + selectedFiles.elementAt(i));
+			File temp_file = new File(pathWithSlash + selectedFile);
 			if (temp_file.delete()) 
 			{
 	            if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
 	            {
-	                MetaInfManager.getInstance().updateLinksAfterMove(pathWithSlash + selectedFiles.elementAt(i), null, uid);
+	                MetaInfManager.getInstance().updateLinksAfterMove(pathWithSlash + selectedFile, null, uid);
 	            }
 	            
-	            MetaInfManager.getInstance().removeMetaInf(actPath, (String) selectedFiles.elementAt(i));
+	            MetaInfManager.getInstance().removeMetaInf(actPath, selectedFile);
 			}
 			else
 			{

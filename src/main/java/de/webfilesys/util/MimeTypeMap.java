@@ -3,7 +3,7 @@ package de.webfilesys.util;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
@@ -12,15 +12,15 @@ import de.webfilesys.WebFileSys;
 
 public class MimeTypeMap 
 {
-    private Hashtable mimeTable;
+    private HashMap<String, String> mimeTable;
 
     static final public String MIME_FILE = "mimetypes.conf";
 
-    private static MimeTypeMap mimeMap=null;
+    private static MimeTypeMap mimeMap = null;
 
     private MimeTypeMap()
     {
-        mimeTable = new Hashtable();
+        mimeTable = new HashMap<String, String>();
 
         try
         {
@@ -75,7 +75,7 @@ public class MimeTypeMap
 
         String extension = fileName.substring(dotIndex+1).toUpperCase();
 
-        String type = (String) mimeTable.get(extension);
+        String type = mimeTable.get(extension);
 
         if (type == null)
         {

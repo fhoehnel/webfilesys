@@ -122,6 +122,17 @@ function anySelected() {
     return(false);
 }
 
+function allSelected() {
+    for (var i = document.form2.elements.length - 1; i >= 0; i--) {
+        if ((document.form2.elements[i].type == "checkbox") && 
+        	(document.form2.elements[i].name.indexOf("list-") === 0) && 
+        	!document.form2.elements[i].checked) {
+        	return false;
+        }
+    }
+    return true;
+}
+
 function getSelectedCheckboxCount() {
     var numChecked = 0;
     
@@ -165,7 +176,16 @@ function multiImageCopyMove() {
 
 function multiImageDelete() {
     if (anySelected()) {
-    	customConfirm(resourceBundle["confirm.deleteImages"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+
+    	var allFilesSelected = allSelected();
+    	var deleteMsg;
+    	if (allFilesSelected) {
+    		deleteMsg = resourceBundle["confirm.deleteAllImages"];
+    	} else {
+    		deleteMsg = resourceBundle["confirm.deleteImages"];
+    	}
+    	
+    	customConfirm(deleteMsg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
     			function() {
 	                document.form2.command.value = 'multiImageDelete';
                     document.form2.submit();
@@ -175,7 +195,8 @@ function multiImageDelete() {
     	            document.form2.cmd.selectedIndex = 0;
     	            resetSelected();
     	            closeAlert();
-    	        }
+    	        },
+    	        allFilesSelected
     	);
     } else {   
         customAlert(resourceBundle["alert.nofileselected"] + "!");

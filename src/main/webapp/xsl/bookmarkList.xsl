@@ -74,30 +74,28 @@
 
         <xsl:for-each select="bookmark">
         
-          <xsl:variable name="pathForScript"><xsl:call-template name="insDoubleBackslash"><xsl:with-param name="string"><xsl:value-of select="encodedPath" /></xsl:with-param></xsl:call-template></xsl:variable>
-        
           <tr>
             <td>
-              <img border="0">
-                <xsl:if test="icon">
+              <xsl:if test="icon">
+                <img border="0">
                   <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="icon" /></xsl:attribute>
-                </xsl:if>
-                <xsl:if test="not(icon)">
-                  <span class="icon-font icon-star"></span>
-                </xsl:if>
-              </img>
+                </img>
+              </xsl:if>
+              <xsl:if test="not(icon)">
+                <span class="icon-font icon-star"></span>
+              </xsl:if>
             </td>
           
             <td>
-              <a class="dirtree">
+              <a class="dirtree" style="cursor:pointer">
                 <xsl:if test="textColor">
                   <xsl:attribute name="style">color:<xsl:value-of select="textColor" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="/bookmarkList/mobile">
-                  <xsl:attribute name="href">javascript:gotoBookmarkedFolder('<xsl:value-of select="$pathForScript" />', true)</xsl:attribute>
+                  <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="encodedPath" />', true)</xsl:attribute>
                 </xsl:if>
                 <xsl:if test="not(/bookmarkList/mobile)">
-                  <xsl:attribute name="href">javascript:gotoBookmarkedFolder('<xsl:value-of select="$pathForScript" />', false)</xsl:attribute>
+                  <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="encodedPath" />', false)</xsl:attribute>
                 </xsl:if>
                 <xsl:attribute name="title"><xsl:value-of select="path" /></xsl:attribute>
     

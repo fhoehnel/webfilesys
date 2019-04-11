@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.ctc.wstx.util.StringUtil;
-import com.sun.xml.internal.ws.util.StringUtils;
 
 import de.webfilesys.mail.EmailUtils;
 import de.webfilesys.user.TransientUser;

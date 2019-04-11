@@ -7,6 +7,8 @@ var TRACK_COLORS = [
 var CANVAS_HEIGHT = 200;
 var CANVAS_WIDTH = 1000;
 
+var SLOWMOTION_DURATION = 10000;
+
 var globalTrackCounter = 0;
 
 var trackPointList = new Array();
@@ -14,6 +16,10 @@ var trackPointList = new Array();
 var bounds;
 
 var map;
+
+var globalTrackMap = new Object();
+
+var slowMotionTracks = new Array();
 
 function handleGoogleMapsApiReady() {
 
@@ -121,7 +127,7 @@ function loadAndShowMultipleGPXFiles() {
     });      
 }
 
-function showTrackOnMap(trackpoints) {
+function showTrackOnMap(trackpoints, trackCounter) {
 
 	trackPointList = new Array();
 	
@@ -146,6 +152,8 @@ function showTrackOnMap(trackpoints) {
     map.fitBounds(bounds);
     
     globalTrackCounter++;    
+    
+    globalTrackMap[globalTrackCounter - 1] = trackPath;
 }
 
 function showTrackMetaData(response) {
@@ -182,6 +190,16 @@ function showTrackMetaData(response) {
 	   	trackpointNumElem.setAttribute("class", "trackName");
 	   	trackpointNumElem.innerHTML = "(" + response.trackpoints.length + " trackpoints)";
 	   	trackElem.appendChild(trackpointNumElem);
+
+	    if (typeof(gpxFiles) == "undefined") {
+		   	var slowMotionLink = document.createElement("a");
+		   	slowMotionLink.id = "slowMotionLink-" + (globalTrackCounter - 1);
+		   	slowMotionLink.setAttribute("href", "javascript:showTrackInSlowMotion(" + (globalTrackCounter - 1) + ")");
+		   	slowMotionLink.setAttribute("class", "gpxSlowMotionLink");
+		   	slowMotionLink.setAttribute("title", resourceBundle["slowMotionTitle"]);
+		   	slowMotionLink.innerHTML = resourceBundle["slowMotionLink"];
+		   	trackElem.appendChild(slowMotionLink);
+	    }
 	}
 }
 
@@ -552,3 +570,68 @@ function drawSpeedProfile(response) {
     rowElem.appendChild(endTimeElem);
 }
  
+function showTrackInSlowMotion(trackId) {
+	document.getElementById("slowMotionLink-" + trackId).style.display = "none";
+	
+	globalTrackMap[trackId].setMap(null);	
+	
+	for (var t = slowMotionTracks.length - 1; t >= 0; t--) {
+		slowMotionTracks.pop().setMap(null);
+	}
+	
+    var url = "/webfilesys/servlet?command=gpxTrack&filePath=" + encodeURIComponent(filePath) + "&trackNumber=" + trackId;
+    
+    xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+            	var response = JSON.parse(req.responseText);
+            
+            	if (response.trackpoints && (response.trackpoints.length > 0)) {
+            		var pointsPerStep = response.trackpoints.length / 1000;
+            		if (pointsPerStep < 2) {
+            			pointsPerStep = 2;
+            		}
+            		var delay = SLOWMOTION_DURATION / (response.trackpoints.length / pointsPerStep);
+            		showTrackOnMapSlow(trackId, response.trackpoints, 0, TRACK_COLORS[(globalTrackCounter - 1) % TRACK_COLORS.length], delay, pointsPerStep);
+            	} else {
+            		customAlert("track " + (currentTrack + 1) + " not found in GPX file");
+            	}
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });      
+}
+
+function showTrackOnMapSlow(trackId, trackpoints, index, trackColor, delay, pointsPerStep) {
+	
+	if (index >= trackpoints.length - 1) {
+		document.getElementById("slowMotionLink-" + trackId).style.display = "inline";
+		return;
+	}
+
+	var idx = index;
+	
+	var trackPointList = new Array();
+
+	for (var p = 0; (p < pointsPerStep) && (idx < trackpoints.length); p++, idx++) {
+		var latLon = new google.maps.LatLng(trackpoints[idx].lat, trackpoints[idx].lon);
+	    trackPointList.push(latLon);
+	}
+
+    var trackPath = new google.maps.Polyline({
+        path: trackPointList,
+        strokeColor: trackColor,
+        strokeOpacity: 0.8,
+        strokeWeight: 4
+    });
+         
+    trackPath.setMap(map);
+    
+    slowMotionTracks.push(trackPath);
+    
+    setTimeout(function() {
+    	showTrackOnMapSlow(trackId, trackpoints, idx - 1, trackColor, delay, pointsPerStep);
+    }, delay);
+	
+}

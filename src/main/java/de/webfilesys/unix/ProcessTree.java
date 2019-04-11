@@ -1,13 +1,12 @@
 package de.webfilesys.unix;
 
-import java.util.Hashtable;
-import java.util.Vector;
-
+import java.util.ArrayList;
+import java.util.HashMap;
 import org.apache.log4j.Logger;
 
 public class ProcessTree
 {
-    private Hashtable processList=null;
+    private HashMap<String, UnixProcess> processList = null;
 
     private UnixProcess rootProcess=null;
 
@@ -18,7 +17,7 @@ public class ProcessTree
     public ProcessTree(String userid)
     {
         forUserid=userid;
-        processList = new Hashtable();
+        processList = new HashMap<String, UnixProcess>();
         readProcessList();
     }
 
@@ -27,17 +26,16 @@ public class ProcessTree
     {
     }
 
-
     protected void addProcessToTree(UnixProcess newProcess)
     {
         String pid=newProcess.getPid();
 
-        UnixProcess existingProcess=(UnixProcess) processList.get(pid);
+        UnixProcess existingProcess = processList.get(pid);
 
         if (existingProcess!=null)
         {
             newProcess.childList=existingProcess.childList;
-            processList.put(pid,newProcess);
+            processList.put(pid, newProcess);
 
             if ((rootProcess==null) || (existingProcess.getPid()==rootProcess.getPid()))
             {
@@ -47,18 +45,18 @@ public class ProcessTree
 
         String ppid=newProcess.getPPid();
 
-        UnixProcess parent=(UnixProcess) processList.get(ppid);
+        UnixProcess parent = processList.get(ppid);
 
         if (parent==null)
         {
             // System.out.println("adding placeholder parent " + ppid);
             parent=new UnixProcess();
             parent.setPid(ppid);
-            processList.put(ppid,parent);
+            processList.put(ppid, parent);
         }
 
         parent.addChild(newProcess);
-        processList.put(pid,newProcess);
+        processList.put(pid, newProcess);
         if (rootProcess==null)
         {
             rootProcess=newProcess;
@@ -97,13 +95,11 @@ public class ProcessTree
         outBuffer.append("  ");
         outBuffer.append(actProcess.getCmd());
         outBuffer.append("\n");
-        Vector childList = actProcess.getChildren();
+        ArrayList<UnixProcess> childList = actProcess.getChildren();
 
-        for (int j=0;j<childList.size();j++)
+        for (UnixProcess childProcess : childList)
         {
-            UnixProcess actChild=(UnixProcess) childList.elementAt(j);
-            
-            treeToString(actChild,level+1);
+            treeToString(childProcess, level + 1);
         }
     }
 
@@ -183,14 +179,12 @@ public class ProcessTree
         outBuffer.append("<td class=\"processTTY\">" + actProcess.getTTY() + "</td>");
 
         outBuffer.append("</tr>\n");
+        
+        ArrayList<UnixProcess> childList = actProcess.getChildren();
 
-        Vector childList = actProcess.getChildren();
-
-        for (int j=0;j<childList.size();j++)
+        for (UnixProcess childProcess : childList)
         {
-            UnixProcess actChild=(UnixProcess) childList.elementAt(j);
-            
-            treeToHTML(actChild,level+1,allowKill);
+            treeToHTML(childProcess,level+1,allowKill);
         }
     }
 

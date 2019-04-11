@@ -65,6 +65,10 @@
     
     var copyOperation = '<xsl:value-of select="/folderFileList/copyOperation" />';
     
+    <xsl:if test="/folderFileList/errorMsg">
+      customAlert('<xsl:value-of select="/folderFileList/errorMsg" />');
+    </xsl:if>
+
   </script>
 
 </head>

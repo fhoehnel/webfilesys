@@ -33,7 +33,11 @@
 
   </head>
 
-  <body onload="createVideoTimeRangeSelOptions()" class="editVideo">
+  <body class="editVideo">
+    <xsl:if test="/editParams/videoInfo/duration">
+      <xsl:attribute name="onload">createVideoTimeRangeSelOptions()</xsl:attribute>
+    </xsl:if>
+  
     <div class="headline" resource="titleEditVideo" />
     
     <br/>
@@ -137,19 +141,32 @@
               </tr>
 
               <tr>
-                <td class="formParm1"><span resource="label.timeRange"></span>:</td>
+                <td class="formParm1"><span resource="label.newVideoContainerFormat"></span>:</td>
                 <td class="formParm2">
-                  <select name="startHour" id="startHour" class="timeSel" /><b>:</b>&#160;
-                  <select name="startMin" id="startMin" class="timeSel" /><b>:</b>&#160;
-                  <select name="startSec" id="startSec" class="timeSel" />
-
-                  &#160;<span style="font-size:20px;font-weight:bold">&#8211;</span>&#160;&#160;
-
-                  <select name="endHour" id="endHour" class="timeSel" /><b>:</b>&#160; 
-                  <select name="endMin" id="endMin" class="timeSel" /><b>:</b>&#160;
-                  <select name="endSec" id="endSec" class="timeSel" />
+                  <select name="newContainer" size="1" style="width:140px;">
+                    <option value="" selected="selected" resource="keepOrigCodec"></option>
+                    <option value="mp4">MP4</option>
+                    <option value="mkv">MKV</option>
+                  </select>
                 </td>
               </tr>
+
+              <xsl:if test="/editParams/videoInfo/duration">
+                <tr>
+                  <td class="formParm1"><span resource="label.timeRange"></span>:</td>
+                  <td class="formParm2">
+                    <select name="startHour" id="startHour" class="timeSel" /><b>:</b>&#160;
+                    <select name="startMin" id="startMin" class="timeSel" /><b>:</b>&#160;
+                    <select name="startSec" id="startSec" class="timeSel" />
+
+                    &#160;<span style="font-size:20px;font-weight:bold">&#8211;</span>&#160;&#160;
+
+                    <select name="endHour" id="endHour" class="timeSel" /><b>:</b>&#160; 
+                    <select name="endMin" id="endMin" class="timeSel" /><b>:</b>&#160;
+                    <select name="endSec" id="endSec" class="timeSel" />
+                  </td>
+                </tr>
+              </xsl:if>
                 
               <tr><td colspan="2">&#160;</td></tr>  
                 

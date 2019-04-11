@@ -433,6 +433,12 @@ function bookmark(path) {
     }
 }
 
+function fastpath(path) {
+	showHourGlass();
+
+	window.location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(path) + "&mask=*&fastPath=true";
+}
+
 function hidePrompt() {
      var promptBox = document.getElementById("prompt");
      
@@ -564,4 +570,34 @@ function checkGrepParamsAndSubmit() {
         document.grepForm.submit();
         setTimeout('hidePrompt()', 1000);
     }
+}
+
+function copyPathToClipboard(path) {
+	
+   	var toastBox = document.createElement("div");
+   	toastBox.id = "toastBox";
+   	toastBox.setAttribute("class", "toastBox");
+   	document.documentElement.appendChild(toastBox);
+   	
+   	var pathInput = document.createElement("input");
+    pathInput.setAttribute("type", "text");
+    pathInput.setAttribute("value", path);
+    pathInput.setAttribute("class", "copyPathToClip")
+    toastBox.appendChild(pathInput);
+   	
+   	pathInput.select();
+    document.execCommand("Copy");
+   	
+   	var toastText = document.createElement("span");
+   	toastText.innerHTML = resourceBundle["pathCopiedToClip"];
+   	toastBox.appendChild(toastText);
+
+   	centerBox(toastBox);
+   	
+   	setTimeout(hideToast, 1500);
+}
+
+function clearFilter() {
+	document.getElementById("fileMask").value = "*";
+	document.sortform.submit();
 }

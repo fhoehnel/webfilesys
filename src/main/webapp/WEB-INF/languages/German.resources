@@ -150,6 +150,7 @@ label.encrypt=Verschlüsseln (AES)
 label.decrypt=Entschlüsseln (AES)
 label.tail=tail (letzte Zeilen)
 label.grep=grep (Filtern)
+label.copyPath=Pfad in Zwischenablage
 label.downloadFolder=Download als ZIP-Archiv
 title.addCopyToClip=Zur Zwischenablage hinzufügen für Kopier-Operation
 title.addMoveToClip=Zur Zwischenablage hinzufügen für Verschiebe-Operation
@@ -414,6 +415,7 @@ pasteOverwrite=Überschreiben?
 destFolderFileConflict=Der Ordner konnte nicht kopiert werden weil eine Datei mit dem selben Namen im Zielordner existiert.
 targetEqualsSource=Quell- und Zielordner dürfen nicht identisch sein.
 targetIsSubOfSource=Der Zielordner darf kein Unterordner des Quellordners sein.
+pathCopiedToClip=Pfad in Zwischenablage kopiert
 
 # remote editor labels
 saveSuccess=Editor-Daten erfolgreich gespeichert
@@ -445,6 +447,7 @@ confirm.copyLinks=Datei-Links durch eine Kopie der Original-Datei ersetzen?
 msg.createThumbsStarted=Speicherung von Vorschaubildern gestartet fuer Ordner
 msg.concurrentThumbThread=Vorschaubild-Speicherung fuer einen anderen Ordener läuft noch. Bitte später erneut versuchen!
 confirm.deleteImages=Ausgewählte Bilder wirklich löschen?
+confirm.deleteAllImages=Es sind alle Bilder ausgewählt. Wirklich löschen? 
 button.rotateByExif=Exif-Rotation
 title.rotateByExif=Bilder entsprechend Hoch/Querformat-Wert in EXIF Daten rotieren
 confirm.rotateByExif=Bilder, deren Orientierung (Hoch-/Querformat) nicht mit dem durch die Kamera in den EXIF-Daten gespeicherten Orientierungs-Wert übereinstimmmt, werden verlustlos rotiert. Fortfahren?
@@ -820,6 +823,8 @@ button.showMapInfo=Info-Text einblenden
 viewTrackOnMap=auf Karte anzeigen
 viewMultipleGPX=auf Karte anzeigen
 nonGPXFile=Diese Funktion ist nur für GPX-Dateien verfügbar (Dateinamen-Erweiterung .GPX).
+slowMotionLink=Zeitlupe
+slowMotionTitle=Track in Zeitlupe zeichnen
 
 # folder synchronization
 label.selectSyncSourceResult=Navigieren Sie zum Ziel-Ordner der Synchronisation und wählen Sie Synchronisieren im Kontext-Menü!
@@ -932,6 +937,7 @@ label.codec=Codec
 label.newResolution=neue Auflösung (Breite x Höhe)
 label.newFps=neue Bildrate
 label.newCodec=neuer Codec
+label.newVideoContainerFormat=neues Container-Format
 keepOrigFrameRate=beibehalten
 keepOrigCodec=beibehalten
 label.timeRange=Start-/Endezeit (hh:mm:ss)

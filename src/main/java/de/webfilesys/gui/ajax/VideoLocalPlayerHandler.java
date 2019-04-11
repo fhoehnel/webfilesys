@@ -60,13 +60,22 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
         }
 
         try {
-        	String progNameAndParams = videoPlayerExePath + " " + videoFilePath;
+        	StringBuilder progNameAndParams = new StringBuilder(videoPlayerExePath);
+        	
+        	String addParams = WebFileSys.getInstance().getVideoPlayerAddParams();
+        	if (!CommonUtils.isEmpty(addParams)) {
+        		progNameAndParams.append(" ");
+        		progNameAndParams.append(addParams);
+        	}
+        	
+    		progNameAndParams.append(" ");
+    		progNameAndParams.append(videoFilePath);
 
         	if (Logger.getLogger(getClass()).isDebugEnabled()) {
         		Logger.getLogger(getClass()).debug("video player call with parameters: " + progNameAndParams);
         	}
         	
-			Process ffplayProcess = Runtime.getRuntime().exec(progNameAndParams);
+			Process ffplayProcess = Runtime.getRuntime().exec(progNameAndParams.toString());
 			
 	        DataInputStream ffplayOut = new DataInputStream(ffplayProcess.getErrorStream());
 	        

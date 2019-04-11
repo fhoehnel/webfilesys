@@ -150,6 +150,7 @@ label.encrypt=Cifrar (AES)
 label.decrypt=Descifrar (AES)
 label.tail=tail (últimas líneas)
 label.grep=grep (filtrar)
+label.copyPath=copiar ruta al portapapeles
 label.downloadFolder=Descargar como ZIP
 title.addCopyToClip=Añadir para copiar
 title.addMoveToClip=Añadir para mover
@@ -414,6 +415,7 @@ pasteOverwrite=Exagerar?
 destFolderFileConflict=La carpeta no se pudo copiar porque existe un archivo con el mismo nombre en la carpeta de destino.
 targetEqualsSource=La carpeta de destino debe ser diferente de la carpeta de origen.
 targetIsSubOfSource=La carpeta de destino no puede ser una subcarpeta de la carpeta de origen.
+pathCopiedToClip=La ruta se ha copiado al portapapeles.
 
 # remote editor labels
 saveSuccess=datos del editor guardado correctamente
@@ -443,6 +445,7 @@ confirm.copyLinks=¿Reemplazar enlaces de archivos por una copia de los originale
 msg.createThumbsStarted=La creación de miniaturas permanentes ha comenzado para la carpeta
 msg.concurrentThumbThread=Otro proceso de creación de miniaturas esta trabajando. ¡Inténtalo más tarde!
 confirm.deleteImages=¿Borrar las imágenes seleccionadas?
+confirm.deleteAllImages=Todos los archivos de imagen se seleccionan para su eliminación. ¿Estás seguro?
 button.rotateByExif=girar by Exif
 title.rotateByExif=girar las imágenes de acuerdo con el valor de la orientación en los datos EXIF de la cámara
 confirm.rotateByExif=Imágenes, cuya orientación no coincide con el valor de orientación almacenada en los datos EXIF de la cámara se giran sin pérdidas. ¿Continuar?
@@ -819,6 +822,8 @@ button.showMapInfo=Mostrar texto de información
 viewTrackOnMap=mostrar en el mapa
 viewMultipleGPX=mostrar en el mapa
 nonGPXFile=Esta función solo se aplica a los archivos GPX (*.GPX).
+slowMotionLink=camara lenta
+slowMotionTitle=mostrar en camara lenta
 
 # folder synchronization
 label.selectSyncSourceResult=¡Selecciona la carpeta para sincronizar y elije sincronizar en el menú contextual!
@@ -930,6 +935,7 @@ label.codec=codec
 label.newResolution=resolución nueva
 label.newFps=cuadros por segundo nuevos
 label.newCodec=codec nuevo
+label.newVideoContainerFormat=nuevo formato de contenedor
 keepOrigFrameRate=no cambio
 keepOrigCodec=no cambio
 label.timeRange=intervalo de tiempo (hh:mm:ss)

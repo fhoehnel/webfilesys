@@ -83,18 +83,7 @@ public class CloneFileRequestHandler extends UserRequestHandler
 		
 		if (errorMsg != null)
 		{
-			output.println("<html>");
-			output.println("<head>");
-			output.println("<script language=\"javascript\">");
-
-			output.println("alert('" + errorMsg + "');");
-			
-            output.println("window.location.href='/webfilesys/servlet?command=listFiles&keepListStatus=true';");
-			output.println("</script>");
-			output.println("</head>");
-			output.println("</html>");
-			output.flush();
-			return;
+			setParameter("errorMsg", errorMsg);
 		}
 
 		setParameter("actpath", getCwd());

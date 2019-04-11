@@ -524,11 +524,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 	        metaInfElement.appendChild(availableIconsElement);
 			
-			Iterator<String> iconIter = DecorationManager.getInstance().getAvailableIcons().iterator();
-			
-			while (iconIter.hasNext()) 
-			{
-				String icon = iconIter.next();
+	        for (String icon : DecorationManager.getInstance().getAvailableIcons()) {
 				Element iconElement = doc.createElement("icon");
 				availableIconsElement.appendChild(iconElement);
 				XmlUtil.setElementText(iconElement, icon);

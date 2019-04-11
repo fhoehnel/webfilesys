@@ -1,9 +1,8 @@
 package de.webfilesys.gui.ajax;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Vector;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,17 +14,17 @@ import de.webfilesys.util.UTF8URLDecoder;
 /**
  * @author Frank Hoehnel
  */
-public class XslMultiFileRequestHandler extends XmlRequestHandlerBase
+public class XmlMultiFileRequestHandler extends XmlRequestHandlerBase
 {
 	String actPath = null;
 	
-	protected Vector selectedFiles = null;
+	protected ArrayList<String> selectedFiles = null;
 
 	boolean delConfirmed = false;
 	
 	protected String cmd = null;
 	
-	public XslMultiFileRequestHandler(
+	public XmlMultiFileRequestHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
@@ -34,7 +33,7 @@ public class XslMultiFileRequestHandler extends XmlRequestHandlerBase
 	{
         super(req, resp, session, output, uid);
 		
-		selectedFiles = new Vector();
+		selectedFiles = new ArrayList<String>();
 
 		// Enumeration allKeys=requestParms.keys();
 

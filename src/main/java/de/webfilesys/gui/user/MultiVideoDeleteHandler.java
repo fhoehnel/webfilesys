@@ -31,28 +31,28 @@ public class MultiVideoDeleteHandler extends MultiImageRequestHandler {
 			return;
 		}
 
-		StringBuffer alertText = new StringBuffer();
+		StringBuffer errorMsg = new StringBuffer();
 
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-		for (int i = 0; i < selectedFiles.size(); i++) {
+		for (String selectedFile : selectedFiles) {
 			String filePath = null;
 
 			if (actPath.endsWith(File.separator)) {
-				filePath = actPath + selectedFiles.elementAt(i);
+				filePath = actPath + selectedFile;
 			} else {
-				filePath = actPath + File.separator + selectedFiles.elementAt(i);
+				filePath = actPath + File.separator + selectedFile;
 			}
 
 			File delFile = new File(filePath);
 
 			if ((!delFile.canWrite()) || (!delFile.delete())) {
-				alertText.append(getResource("alert.delete.failed", "cannot delete file"));
-				alertText.append("\\n");
-				alertText.append(insertDoubleBackslash(filePath));
-				alertText.append("\\n");
+				if (errorMsg.length() > 0) {
+					errorMsg.append("<br/>");
+				}
+				errorMsg.append(getResource("alert.delete.failed", "cannot delete file ") + "<br/>" + selectedFile);
 			} else {
-				metaInfMgr.removeMetaInf(actPath, (String) selectedFiles.elementAt(i));
+				metaInfMgr.removeMetaInf(actPath, selectedFile);
 
 				String thumbnailPath = VideoThumbnailCreator.getThumbnailPath(filePath);
 
@@ -66,20 +66,8 @@ public class MultiVideoDeleteHandler extends MultiImageRequestHandler {
 			}
 		}
 
-		String alert = alertText.toString();
-
-		if (alert.length() > 0) {
-			output.println("<HTML>");
-			output.println("<HEAD>");
-
-			this.javascriptAlert(alert);
-
-			output.println("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=/webfilesys/servlet?command=listVideos\">");
-			output.println("</HEAD>");
-			output.println("</html>");
-			output.flush();
-
-			return;
+		if (errorMsg.length() > 0) {
+			setParameter("errorMsg", errorMsg.toString());
 		}
 
 		(new XslVideoListHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest();

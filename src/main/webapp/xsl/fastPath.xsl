@@ -25,6 +25,9 @@
   </style>
 
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
   <script type="text/javascript">
     <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/folderTree/language" /></xsl:attribute>
@@ -94,18 +97,14 @@
     <img src="images/space.gif" border="0" width="4" height="1" />
     
     <a class="dirtree">
-      <xsl:attribute name="href">/webfilesys/servlet?command=exp&amp;expandPath=<xsl:value-of select="@path" />&amp;mask=*&amp;fastPath=true</xsl:attribute>
+      <xsl:attribute name="href">javascript:fastpath('<xsl:value-of select="@pathForScript" />')</xsl:attribute>
 
       <xsl:if test="not(@visited)">
-        <xsl:attribute name="class">
-          <xsl:value-of select="'tab'"/>
-        </xsl:attribute>
+        <xsl:attribute name="class">fastpath</xsl:attribute>
       </xsl:if>
 
       <xsl:if test="@visited">
-        <xsl:attribute name="class">
-          <xsl:value-of select="'dirtree'"/>
-        </xsl:attribute>
+        <xsl:attribute name="class">dirtree</xsl:attribute>
         
         <xsl:if test="@textColor">
           <xsl:attribute name="style">color:<xsl:value-of select="@textColor" /></xsl:attribute>

@@ -8,8 +8,9 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Set;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,11 +29,11 @@ public class FileSysBookmarkManager extends Thread
 {
     public static final String BOOKMARK_DIR    = "bookmarks";
 	
-    Hashtable bookmarkTable = null;
+    HashMap<String, Element> bookmarkTable = null;
 
-    Hashtable indexTable = null;
+    HashMap<String, HashMap<String, Element>> indexTable = null;
 
-    Hashtable cacheDirty = null;
+    HashMap<String, Boolean> cacheDirty = null;
     
     DocumentBuilder builder = null;
     
@@ -48,11 +49,11 @@ public class FileSysBookmarkManager extends Thread
     {
     	bookmarkPath = WebFileSys.getInstance().getConfigBaseDir() + "/" + BOOKMARK_DIR;
     	
-        bookmarkTable = new Hashtable();
+        bookmarkTable = new HashMap<String, Element>();
         
-        indexTable = new Hashtable();
+        indexTable = new HashMap<String, HashMap<String, Element>>();
         
-        cacheDirty = new Hashtable();
+        cacheDirty = new HashMap<String, Boolean>();
 
         shutdownFlag = false;
         
@@ -83,7 +84,7 @@ public class FileSysBookmarkManager extends Thread
 
     public Element getBookmarkList(String userid)
     {
-        Element bookmarkList = (Element) bookmarkTable.get(userid);
+        Element bookmarkList = bookmarkTable.get(userid);
 
         if (bookmarkList!=null)
         {
@@ -181,7 +182,7 @@ public class FileSysBookmarkManager extends Thread
 
         int listLength = bookmarks.getLength();
 
-        Hashtable userIndex = new Hashtable();
+        HashMap<String, Element> userIndex = new HashMap<String, Element>();
 
         for (int i = 0; i < listLength; i++)
         {
@@ -200,7 +201,7 @@ public class FileSysBookmarkManager extends Thread
 
     public void disposeBookmarkList(String userid)
     {
-        Boolean dirtyFlag = (Boolean) cacheDirty.get(userid);
+        Boolean dirtyFlag = cacheDirty.get(userid);
 
         if ((dirtyFlag!=null) && dirtyFlag.booleanValue())
         {
@@ -220,8 +221,8 @@ public class FileSysBookmarkManager extends Thread
     {
         saveChangedUsers();
 
-        bookmarkTable = new Hashtable();
-        indexTable = new Hashtable();
+        bookmarkTable = new HashMap<String, Element>();
+        indexTable = new HashMap<String, HashMap<String, Element>>();
     }
 
     public ArrayList<String> getBookmarkIds(String userid)
@@ -391,7 +392,7 @@ public class FileSysBookmarkManager extends Thread
 
         Element bookmark = null;
 
-        Hashtable userIndex = (Hashtable) indexTable.get(userid);
+        HashMap<String, Element> userIndex = indexTable.get(userid);
 
         if (userIndex!=null)
         {
@@ -444,7 +445,7 @@ public class FileSysBookmarkManager extends Thread
 
         bookmarkTable.put(userid, bookmarkListElement);
 
-        indexTable.put(userid, new Hashtable());
+        indexTable.put(userid, new HashMap<String, Element>());
         
         return(bookmarkListElement);
     }
@@ -484,7 +485,7 @@ public class FileSysBookmarkManager extends Thread
             newBookmark.setId(newIdString);
             newElement.setAttribute("id", newIdString);
             
-            Hashtable userIndex = (Hashtable) indexTable.get(userid);
+            HashMap<String, Element> userIndex = indexTable.get(userid);
             userIndex.put(newIdString, newElement);
         }
 
@@ -656,7 +657,7 @@ public class FileSysBookmarkManager extends Thread
 
             if (bookmarkList!=null)
             {
-                Hashtable userIndex=(Hashtable) indexTable.get(userid);
+                HashMap<String, Element> userIndex = indexTable.get(userid);
                 userIndex.remove(bookmarkElement.getAttribute("id"));
                 
                 bookmarkList.removeChild(bookmarkElement);
@@ -720,18 +721,16 @@ public class FileSysBookmarkManager extends Thread
 
     public synchronized void saveChangedUsers()
     {
-        Enumeration cacheUserList = cacheDirty.keys();
+        Set<String> cacheUserList = cacheDirty.keySet();
 
-        while (cacheUserList.hasMoreElements())
-        {
-            String userid = (String) cacheUserList.nextElement();
+        for (String userid : cacheUserList) {
 
-            boolean dirtyFlag =((Boolean) cacheDirty.get(userid)).booleanValue();
+            boolean dirtyFlag = cacheDirty.get(userid).booleanValue();
 
             if (dirtyFlag)
             {
                 saveToFile(userid);
-                cacheDirty.put(userid,new Boolean(false));
+                cacheDirty.put(userid, new Boolean(false));
             }
         }
     }
@@ -783,47 +782,5 @@ public class FileSysBookmarkManager extends Thread
 			}
 		}
 	}
-
-	/*
-	static public void main(String args[])
-	{
-		FileSysBookmarkManager mgr = FileSysBookmarkManager.getInstance();
-	
-	    for (int i=0; i < 20; i++)
-	    {
-	    	FileSysBookmark newBookmark = new FileSysBookmark();
-	    
-	    	newBookmark.setName("BookmarkName-" + i);
-
-	    	newBookmark.setName("BookmarkPath-" + i);
-	
-			mgr.createBookmark("testuser", newBookmark);	
-			
-			System.out.println("created bookmark" + newBookmark.getName());
-	    }
-
-		System.out.println("bookmarks of user testuser:");
-
-        Vector userBookmarks = mgr.getListOfBookmarks("testuser");
-        
-        for (int i = 0; i < userBookmarks.size(); i++)
-        {
-        	FileSysBookmark bookmark = (FileSysBookmark) userBookmarks.elementAt(i);
-        	
-			System.out.println("  " + bookmark.getName() + "  " + bookmark.getPath());
-        }
-	    
-	    while (true)
-	    {
-	    	try
-	    	{
-	    		sleep(1000);
-	    	}
-	    	catch (InterruptedException iex)
-	    	{
-	    	}
-	    }
-	}
-	*/
 	
 }

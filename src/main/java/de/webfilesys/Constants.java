@@ -27,13 +27,15 @@ public interface Constants
 
     public static final String JPEG_FILE_MASKS[]={"*.jpg","*.jpeg"};
 
-    public static final String VIDEO_FILE_MASKS[] = {"*.mp4", "*.mpg", "*.mpeg", "*.mov"};
+    public static final String VIDEO_FILE_MASKS[] = {"*.mp4", "*.mpg", "*.mpeg", "*.mov", "*.mkv"};
     
 	public static final String UPLOAD_COUNTER = "uploadCounter";
 	public static final String UPLOAD_SIZE = "uploadSize";
 	public static final String UPLOAD_SUCCESS = "uploadSuccess";
 	public static final String UPLOAD_LIMIT_EXCEEDED = "uploadLimitExceeded";
 	public static final String UPLOAD_CANCELED = "uploadCanceled";
+	
+	public static final String CHECKBOX_LIST_PREFIX = "list-";
 	
 	/** 
 	 * Size in pixels of the larger dimension of picture thumbnails.

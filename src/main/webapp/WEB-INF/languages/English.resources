@@ -150,6 +150,7 @@ label.encrypt=Encrypt (AES)
 label.decrypt=Decrypt (AES)
 label.tail=tail (last lines)
 label.grep=grep (filter)
+label.copyPath=copy path to clipboard
 label.downloadFolder=download as zip
 title.addCopyToClip=Add to clipboard for copy operation
 title.addMoveToClip=Add to clipboard for move operation
@@ -414,6 +415,7 @@ pasteOverwrite=Overwrite?
 destFolderFileConflict=The folder could not be copied because a file with the same name exists in the target folder.
 targetEqualsSource=The target folder must be different from the source folder.
 targetIsSubOfSource=The target folder may not be a subdirectory of the source folder.
+pathCopiedToClip=path copied to clipboard
 
 # remote editor labels
 saveSuccess=editor data saved successfully
@@ -443,6 +445,7 @@ confirm.copyLinks=Replace all file links by a copy of the original files?
 msg.createThumbsStarted=Generation of permanent picture thumbnails has been started for folder
 msg.concurrentThumbThread=Another thumbnail creation thread is still running. Try again later!
 confirm.deleteImages=Delete selected picture files?
+confirm.deleteAllImages=You have selected all picture files for deletion. Are you sure?
 button.rotateByExif=Rotate by Exif
 title.rotateByExif=rotate pictures according to the orientation value in the camera EXIF data
 confirm.rotateByExif=Pictures, whose orientation does not match the orientation value stored in the camera EXIF data will be rotated losslessly. Continue?
@@ -817,6 +820,8 @@ button.showMapInfo=Show Info Text
 viewTrackOnMap=show GPX track on map
 viewMultipleGPX=show GPX on map
 nonGPXFile=This function is only applicable to GPX files (filename extension .GPX).
+slowMotionLink=slow motion
+slowMotionTitle=paint track in slow motion
 
 # folder synchronization
 label.selectSyncSourceResult=Select the synchronization target folder and choose snychronize from the context menu!
@@ -929,6 +934,7 @@ label.codec=codec
 label.newResolution=new resolution (width x height)
 label.newFps=new frame rate
 label.newCodec=new codec
+label.newVideoContainerFormat=new container format
 keepOrigFrameRate=no change
 keepOrigCodec=no change
 label.timeRange=time range (hh:mm:ss)

@@ -44,7 +44,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.22.0b (26 Oct 2018)";
+	public static final String VERSION = "Version 2.23.0 (10 Apr 2019)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -195,6 +195,8 @@ public class WebFileSys
     private String videoPlayerExePath = null;
 
     private String ffmpegAddParams = null;
+
+    private String videoPlayerAddParams = null;
     
     private String googleMapsAPIKeyHTTP;
     private String googleMapsAPIKeyHTTPS;
@@ -705,7 +707,9 @@ public class WebFileSys
 
         ffmpegAddParams = config.getProperty("ffmpegAddParams");
         
-		chmodAllowed = false;
+        videoPlayerAddParams = config.getProperty("videoPlayerAddParams");
+
+        chmodAllowed = false;
 		temp = config.getProperty("ChmodWebspace", "false");
 		if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
 		{
@@ -1285,6 +1289,10 @@ public class WebFileSys
 
     public String getFfmpegAddParams() {
     	return ffmpegAddParams;
+    }
+
+    public String getVideoPlayerAddParams() {
+    	return videoPlayerAddParams;
     }
 }
 
