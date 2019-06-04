@@ -632,10 +632,14 @@ function showTrackOnMapSlow(trackId, trackpoints, index, trackColor, delay, poin
 	var sectionStartTime = trackpoints[idx].time;
 	var sectionEndTime = trackpoints[idx].time;
 	
+	var sectionStartDist = trackpoints[idx].totalDist;
+	var sectionEndDist = sectionStartDist;
+	
 	for (var p = 0; (p < pointsPerStep) && (idx < trackpoints.length); p++, idx++) {
 		var latLon = new google.maps.LatLng(trackpoints[idx].lat, trackpoints[idx].lon);
 	    trackPointList.push(latLon);
 	    sectionEndTime = trackpoints[idx].time;
+	    sectionEndDist = trackpoints[idx].totalDist;
 	}
 
     var trackPath = new google.maps.Polyline({
@@ -654,11 +658,15 @@ function showTrackOnMapSlow(trackId, trackpoints, index, trackColor, delay, poin
     if (!invalidTime) {
     	var sectionDuration = sectionEndTime - sectionStartTime;
     	
-        var trackpointPercentage = trackPointList.length / trackpoints.length;
+		var trackLength = trackpoints[trackpoints.length -1].totalDist;
+		
+    	var sectionDist = sectionEndDist - sectionStartDist;
+    	
+        var distPercentage = sectionDist / trackLength;
         
         var durationPercentage = sectionDuration / trackDuration;
         
-        speedAdjustedDelay = delay * durationPercentage / trackpointPercentage;
+        speedAdjustedDelay = delay * durationPercentage / distPercentage;
     }
     
     setTimeout(function() {
