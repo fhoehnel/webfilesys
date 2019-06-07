@@ -7,7 +7,7 @@ function showResults() {
     if (mobile) {
         window.opener.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList&absPath=" + searchResultDir; 
     } else {
-        window.opener.parent.DirectoryPath.location.href = "/webfilesys/servlet?command=exp&expand=" + searchResultDir + "&fastPath=true"; 
+        window.opener.parent.DirectoryPath.location.href = "/webfilesys/servlet?command=exp&expandPath=" + searchResultDir + "&fastPath=true"; 
     }
 
 	setTimeout("self.close()", 1000);
