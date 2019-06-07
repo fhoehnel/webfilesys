@@ -16,7 +16,7 @@
   </input>
 
   <p style="margin:10px">
-    <span  resource="rotationHelp"></span>
+    <span resource="rotationHelp" class="plaintext"></span>
   </p>
   
   <table border="0" width="100%" cellpadding="10">
