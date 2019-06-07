@@ -4,6 +4,14 @@ var TRACK_COLORS = [
 	"#00c0ff" 
 ];
 
+var SLOW_MOTION_TRACK_COLORS = [
+   	"#b000b0", 
+   	"#ff4040", 
+   	"#ffff00", 
+   	"#00c0ff",
+   	"#0080a0" 
+];
+
 var CANVAS_HEIGHT = 200;
 var CANVAS_WIDTH = 1000;
 
@@ -642,17 +650,8 @@ function showTrackOnMapSlow(trackId, trackpoints, index, trackColor, delay, poin
 	    sectionEndDist = trackpoints[idx].totalDist;
 	}
 
-    var trackPath = new google.maps.Polyline({
-        path: trackPointList,
-        strokeColor: trackColor,
-        strokeOpacity: 0.8,
-        strokeWeight: 4
-    });
-         
-    trackPath.setMap(map);
-    
-    slowMotionTracks.push(trackPath);
-
+	var speedTrackColor = trackColor;
+	
     var speedAdjustedDelay = delay;
 
     if (!invalidTime) {
@@ -667,10 +666,39 @@ function showTrackOnMapSlow(trackId, trackpoints, index, trackColor, delay, poin
         var durationPercentage = sectionDuration / trackDuration;
         
         speedAdjustedDelay = delay * durationPercentage / distPercentage;
+        
+        speedTrackColor = calculateSpeedAdjustedTrackColor(delay, speedAdjustedDelay);
     }
+	
+    var trackPath = new google.maps.Polyline({
+        path: trackPointList,
+        strokeColor: speedTrackColor,
+        strokeOpacity: 0.8,
+        strokeWeight: 4
+    });
+         
+    trackPath.setMap(map);
     
+    slowMotionTracks.push(trackPath);
+
     setTimeout(function() {
     	showTrackOnMapSlow(trackId, trackpoints, idx - 1, trackColor, delay, pointsPerStep, trackDuration, invalidTime);
     }, speedAdjustedDelay);
 	
+}
+
+function calculateSpeedAdjustedTrackColor(delay, speedAdjustedDelay) {
+    if (speedAdjustedDelay < 0.25 * delay) {
+    	return SLOW_MOTION_TRACK_COLORS[0];
+    }
+    if (speedAdjustedDelay < 0.5 * delay) {
+    	return SLOW_MOTION_TRACK_COLORS[1];
+    }
+    if (speedAdjustedDelay > 4 * delay) {
+      	return SLOW_MOTION_TRACK_COLORS[4];
+    }
+    if (speedAdjustedDelay > 2 * delay) {
+    	return SLOW_MOTION_TRACK_COLORS[3];
+    }
+    return SLOW_MOTION_TRACK_COLORS[2];
 }
