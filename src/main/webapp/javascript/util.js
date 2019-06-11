@@ -56,6 +56,36 @@ function getVisualWinWidth() {
 	return getWinWidth();
 }
 
+function getNaturalWidth(pic) {
+    if (pic.naturalWidth) {
+        return pic.naturalWidth;
+    }
+
+    // workaround for MSIE
+    var origWidthAttrib = pic.getAttribute("origWidth");
+            
+    if (origWidthAttrib) {
+	    return parseInt(origWidthAttrib);
+    }
+    
+    return 0;
+}
+
+function getNaturalHeight(pic) {
+    if (pic.naturalHeight) {
+        return pic.naturalHeight;
+    }
+
+    // workaround for MSIE
+    var origHeightAttrib = pic.getAttribute("origHeight");
+            
+    if (origHeightAttrib) {
+	    return parseInt(origHeightAttrib);
+    }
+    
+    return 0;
+}
+
 /*
   Places a box centered vertically and horizontally on the browser window.
   @param box a DOM element of type div

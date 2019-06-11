@@ -2243,6 +2243,24 @@ div.editorButtonCont {
     text-align: center;
 }
 
+div.filePreviewCont {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 400px;
+    height: 400px;
+    border: 2px ridge #808080;
+    background-color: #e0e0e0;
+    padding: 10px;
+    box-sizing: content-box;
+    text-align: center;
+    overflow-y: auto;
+}
+
+div.filePreviewCont img {
+	display: none;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;
