@@ -65,6 +65,15 @@
     </filePatternList>
   </viewHandler>
 
+  <viewHandler>
+    <class>de.webfilesys.viewhandler.FontFileViewHandler</class>
+    <filePatternList>
+      <filePattern>*.woff</filePattern>
+      <filePattern>*.ttf</filePattern>
+      <filePattern>*.eot</filePattern>
+    </filePatternList>
+  </viewHandler>
+
   <!-- 
     This view handler for compiled Java class files requires the JAD decompiler.
     It works only on Windows and only for Java classes that do not use Java 1.5 or higher version language constructs.
