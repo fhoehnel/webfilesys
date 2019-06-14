@@ -472,6 +472,7 @@ label.mirrorvert=Spiegeln vertikal
 label.makethumb=Thumbnail erzeugen
 label.operation=Operation
 label.imgtransform=Bildbearbeitung
+label.picTransformed=Bilddatei skaliert/transformiert
 
 # view picture window labels
 alt.origsize=in Originalgrösse anzeigen

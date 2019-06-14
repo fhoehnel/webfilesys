@@ -145,6 +145,7 @@ public class SearchRequestHandler extends UserRequestHandler
 
 		output.println("<script src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");
+		output.println("<script src=\"/webfilesys/javascript/util.js\" type=\"text/javascript\"></script>");
 
         output.println("<script language=\"javascript\">"); 
 
@@ -338,10 +339,10 @@ public class SearchRequestHandler extends UserRequestHandler
 
 		output.println("document.form2.cancelButton.style.visibility='hidden';");
 
-		output.println("alert('" + hitNumber + " " + getResource("label.matches","matches found") + "');");
-		
 		output.println("scrollTo(1,50000);");
 
+		output.println("customAlert('" + hitNumber + " " + getResource("label.matches","matches found") + "', '" + getResource("button.ok","OK") + "');");
+		
 		output.println("</script>");
 
 		output.println("</body></html>");

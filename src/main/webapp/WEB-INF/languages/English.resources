@@ -470,6 +470,7 @@ label.mirrorvert=mirror vertical
 label.makethumb=create thumbnail
 label.operation=Operation
 label.imgtransform=Image Transformation
+label.picTransformed=picture file scaled/transformed
 
 # view picture window labels
 alt.origsize=view original size

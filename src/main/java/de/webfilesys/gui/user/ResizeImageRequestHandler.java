@@ -263,7 +263,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             }
             
             output.println("<tr><td colspan=\"2\"class=\"formParm1\">");
-            output.println(getResource("label.currentcopy", "current file") + ":");
+            output.println(getResource("label.picTransformed", "picture file scaled/transformed") + ":");
             output.println("</td></tr>");
 
             output.println("<tr><td colspan=\"2\" class=\"formParm2\">");
@@ -361,29 +361,36 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
         if (popup != null)
         {
-            output.println("<center><input type=\"button\" value=\""
+        	output.println("<div class=\"closeWinButtonCont\">");
+            output.println("<input type=\"button\" value=\""
                     + getResource("button.closewin", "Close Window")
-                    + "\" onclick=\"self.close()\"></center>");
+                    + "\" onclick=\"self.close()\"/>");
+        	output.println("</div>");
         }
         else
         {
-        	output.println("<div class=\"buttonCont\">");
-        	
-            output.println("<input type=\"button\" value=\""
-                    + getResource("button.return", "Return")
-                    + "\" onclick=\"returnToPictures()\">");
+            if (newSize == 0) {
+            	output.println("<script type=\"text/javascript\">");
+            	output.println("returnToPictures();");
+            	output.println("</script>");
+            } else {
+            	output.println("<div class=\"buttonCont\">");
+            	
+                output.println("<input type=\"button\" value=\""
+                        + getResource("button.return", "Return")
+                        + "\" onclick=\"returnToPictures()\">");
 
-            if ((newSize > 0) && (success))
-            {
-                output.println("&nbsp;&nbsp;&nbsp;");
-                output
-                        .println("<input type=\"button\" value=\""
-                                + getResource("button.gotoScaled",
-                                        "View Scaled Pictures")
-                                + "\" onclick=\"gotoScaledPictures()\">");
+                if ((newSize > 0) && (success)) {
+                    output.println("&nbsp;&nbsp;&nbsp;");
+                    output
+                            .println("<input type=\"button\" value=\""
+                                    + getResource("button.gotoScaled",
+                                            "View Scaled Pictures")
+                                    + "\" onclick=\"gotoScaledPictures()\">");
+                }
+
+                output.println("</div>");
             }
-
-            output.println("</div>");
         }
 
         output.println("</form>");
