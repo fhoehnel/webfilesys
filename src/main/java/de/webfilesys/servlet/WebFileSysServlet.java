@@ -193,7 +193,6 @@ import de.webfilesys.gui.user.ReturnToPrevDirHandler;
 import de.webfilesys.gui.user.RotatedExifThumbHandler;
 import de.webfilesys.gui.user.SearchRequestHandler;
 import de.webfilesys.gui.user.SelfChangeUserRequestHandler;
-import de.webfilesys.gui.user.SelfEditUserRequestHandler;
 import de.webfilesys.gui.user.SwitchFileAgeColoringHandler;
 import de.webfilesys.gui.user.SynchronizeRequestHandler;
 import de.webfilesys.gui.user.TailRequestHandler;
@@ -273,6 +272,7 @@ import de.webfilesys.gui.xsl.XslTreeStatsHandler;
 import de.webfilesys.gui.xsl.XslUnixCmdLineHandler;
 import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
 import de.webfilesys.gui.xsl.XslUploadParmsHandler;
+import de.webfilesys.gui.xsl.XslUserSettingsHandler;
 import de.webfilesys.gui.xsl.XslVideoListHandler;
 import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
 import de.webfilesys.gui.xsl.XslZipContentHandler;
@@ -2031,8 +2031,7 @@ public class WebFileSysServlet extends ServletBase
 
         if (command.equals("selfEditUser"))
         {
-			(new SelfEditUserRequestHandler(req, resp, session, output, userid, null)).handleRequest();
-			
+			(new XslUserSettingsHandler(req, resp, session, output, userid, null)).handleRequest();
             return(true);
         }
         

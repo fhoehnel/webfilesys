@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.gui.xsl.XslFileListHandler;
+import de.webfilesys.gui.xsl.XslUserSettingsHandler;
 import de.webfilesys.mail.EmailUtils;
 import de.webfilesys.user.TransientUser;
 import de.webfilesys.user.UserMgmtException;
@@ -45,15 +46,15 @@ public class SelfChangeUserRequestHandler extends UserRequestHandler {
 			(pwconfirm != null) && (pwconfirm.trim().length() > 0)) {
 			if ((password == null) || (password.trim().length() < 5)) {
 				temp=getResource("error.passwordlength","the minimum password length is 5 characters");
-				errorMsg.append(temp + "\\n");
+				errorMsg.append(temp + "<br/>");
 			} else {
 				if (password.indexOf(' ')>0) {
 					temp = getResource("error.spacesinpw","the password must not contain spaces");
-					errorMsg.append(temp + "\\n");
+					errorMsg.append(temp + "<br/>");
 				} else {
 					if ((pwconfirm == null) || (!pwconfirm.equals(password))) {
 						temp = getResource("error.pwmissmatch","the password and the password confirmation are not equal");
-						errorMsg.append(temp + "\\n");
+						errorMsg.append(temp + "<br/>");
 					}
 				}
 			}
@@ -77,15 +78,15 @@ public class SelfChangeUserRequestHandler extends UserRequestHandler {
 		if ((ropassword.length() > 0) || (ropwconfirm.length() > 0)) {
 			if (ropassword.length() < 5) {
 				temp=getResource("error.passwordlength", "the minimum password length is 5 characters");
-				errorMsg.append(temp + "\\n");
+				errorMsg.append(temp + "<br/>");
 			} else {
 				if (ropassword.indexOf(' ') >= 0) {
 					temp=getResource("error.spacesinpw", "the password must not contain spaces");
-					errorMsg.append(temp + "\\n");
+					errorMsg.append(temp + "<br/>");
 				} else {
 					if (!ropassword.equals(ropwconfirm)) {
 						temp=getResource("error.pwmissmatch", "password and password confirmation do not match");
-						errorMsg.append(temp + "\\n");
+						errorMsg.append(temp + "<br/>");
 					}
 				}
 			}
@@ -95,11 +96,11 @@ public class SelfChangeUserRequestHandler extends UserRequestHandler {
 
 		if ((email == null) || (!EmailUtils.emailSyntaxOk(email))) {
 			temp = getResource("error.email", "a valid e-mail address is required");
-			errorMsg.append(temp + "\\n");
+			errorMsg.append(temp + "<br/>");
 		}
 
 		if (errorMsg.length()>0) {
-			(new SelfEditUserRequestHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest();
+			(new XslUserSettingsHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest();
 
 			return;
 		}
@@ -109,7 +110,7 @@ public class SelfChangeUserRequestHandler extends UserRequestHandler {
 		if (changedUser == null) {
             Logger.getLogger(getClass()).error("user for update not found: " + login);
 			errorMsg.append("user for update not found: " + login);
-			(new SelfEditUserRequestHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest();
+			(new XslUserSettingsHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest();
 			return;
 		}
 		
@@ -158,11 +159,17 @@ public class SelfChangeUserRequestHandler extends UserRequestHandler {
 		} catch (UserMgmtException ex) {
             Logger.getLogger(getClass()).error("failed to update user " + login, ex);
 			errorMsg.append("failed to update user " + login);
-			(new SelfEditUserRequestHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest();
+			(new XslUserSettingsHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest();
 			return;
 		}
 		
-		(new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
+        output.println("<html>");
+        output.println("<head>");
+        output.println("<script type=\"text/javascript\">");
+        output.println("parent.parent.location.href = '/webfilesys/servlet';");
+        output.println("</script>");
+        output.println("</html>");
+        output.flush();
 	}
 
 }

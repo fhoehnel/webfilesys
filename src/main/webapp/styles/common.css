@@ -2269,6 +2269,15 @@ div.closeWinButtonCont {
     margin-bottom: 10px;
 }
 
+input.secure {
+    text-security: disc;
+    -webkit-text-security: disc;
+}
+
+.formParm2 input:invalid {
+    border: 1px solid red;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;
