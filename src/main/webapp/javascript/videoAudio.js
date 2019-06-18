@@ -1,3 +1,6 @@
+var lastPreviewStartTime = "";
+var lastPreviewEndTime = "";
+
 if (typeof String.prototype.endsWithIgnoreCase != 'function') {
     String.prototype.endsWithIgnoreCase = function( str ) {
         return this.substring(this.length - str.length, this.length).toLowerCase() === str.toLowerCase();
@@ -78,6 +81,13 @@ function loadVideoThumbnail(pic, thumbFileSrc) {
 
         checkVideoThumbnailsToLoad();
 	};
+	
+	pic.onerror = function() {
+		if (console) {
+			console.log("failed to get video thumbnail");
+		}
+        checkVideoThumbnailsToLoad();
+	};
 
 	pic.src = thumbFileSrc;
 }
@@ -101,9 +111,9 @@ function checkVideoThumbnailsToLoad() {
 	        		thumbnails.splice(i, 1);
 		    		
 	        		loadVideoThumbnail(pic, imgPath);
-	        		
+		        		
 	                setVideoDimensions(pic);
-	    
+	        		
 	                thumbLoadRunning = false;
 	                
 	                return;
@@ -143,6 +153,11 @@ function setVideoDimensions(pic) {
         if (req.readyState == 4) {
             if (req.status == 200) {
 			    var xmlDoc = req.responseXML;
+			    
+                var errorItem = xmlDoc.getElementsByTagName("error")[0];            
+                if (errorItem) {
+                	return;
+                }
 			    
 			    var videoWidth = null;
 			    var videoHeight = null;
@@ -571,7 +586,7 @@ function sendExtractVideoFrameForm() {
     });
 }
 
-function sendPreviewVideoFrameForm() {
+function videoFrameGrabPreview() {
     if (!validateExtractVideoFrameForm()) {
         return;
     }
@@ -581,25 +596,73 @@ function sendPreviewVideoFrameForm() {
 	showHourGlass();
 	
     var previewImg = document.getElementById("previewVideoFrame");
+    
+    var hour = document.getElementById("startHour").value;
+    var min = document.getElementById("startMin").value;
+    var sec = document.getElementById("startSec").value;
+    
+    fetchPreviewFrame(previewImg, hour, min, sec);    
+}
+
+function videoEditStartPreview() {
+    if (!validateConvertVideoForm()) {
+        return;
+    }
+
+    document.getElementById("previewButton").disabled = true;
+    
+	showHourGlass();
+	
+    var previewImg = document.getElementById("previewVideoStartFrame");
+    
+    var hour = document.getElementById("startHour").value;
+    var min = document.getElementById("startMin").value;
+    var sec = document.getElementById("startSec").value;
+    
+    if (lastPreviewStartTime != hour + min + sec) {
+        fetchPreviewFrame(previewImg, hour, min, sec, videoEditEndPreview);    
+        lastPreviewStartTime = hour + min + sec;
+    } else {
+    	videoEditEndPreview();
+    }
+}
+
+function videoEditEndPreview() {
+    var previewImg = document.getElementById("previewVideoEndFrame");
+    
+    var hour = document.getElementById("endHour").value;
+    var min = document.getElementById("endMin").value;
+    var sec = document.getElementById("endSec").value;
+
+    if (lastPreviewEndTime != hour + min + sec) {
+        fetchPreviewFrame(previewImg, hour, min, sec);    
+        lastPreviewEndTime = hour + min + sec;
+    } else {
+        document.getElementById("previewButton").disabled = false;
+    	hideHourGlass();
+    }    
+}
+
+function fetchPreviewFrame(previewImg, hour, min, sec, callBack) {
     previewImg.src = "/webfilesys/images/space.gif";
     
     var videoFileName = document.getElementById("videoFileName").value;
     var videoWidth = document.getElementById("videoWidth").value;
     var videoHeight = document.getElementById("videoHeight").value;
     
-    var hour = document.getElementById("startHour").value;
-    var min = document.getElementById("startMin").value;
-    var sec = document.getElementById("startSec").value;
-    
     previewImgUrl = "/webfilesys/servlet?command=video&cmd=previewFrame&videoFile=" + videoFileName + "&videoWidth=" + videoWidth + "&videoHeight=" + videoHeight + "&hour=" + hour + "&min=" + min + "&sec=" + sec;
 
     previewImg.src = previewImgUrl;
 
-	document.getElementById("previewVideoFrame").style.visibility = "visible";
+    previewImg.style.visibility = "visible";
     
     previewImg.onload = function() {
-        document.getElementById("previewButton").disabled = false;
-    	hideHourGlass();
+    	if (callBack) {
+    		callBack();
+    	} else {
+            document.getElementById("previewButton").disabled = false;
+        	hideHourGlass();
+    	}
     };
 }
 

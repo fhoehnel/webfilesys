@@ -169,13 +169,16 @@ public class GetVideoDimensionsHandler extends XmlRequestHandlerBase {
     			
     	        DataInputStream ffprobeOut = new DataInputStream(ffprobeProcess.getInputStream());
     	        
+    	        boolean outputEmpty = true;
+    	        
     	        String outLine = null;
     	        
     	        while ((outLine = ffprobeOut.readLine()) != null) {
                     if (Logger.getLogger(getClass()).isDebugEnabled()) {
                         Logger.getLogger(getClass()).debug("ffprobe output: " + outLine);
                     }
-
+                    outputEmpty = false;
+                    
                     if ((videoWidth.length() == 0) && outLine.contains("_width")) {
     	                String[] tokens = outLine.split("=");
     	                videoWidth = tokens[1];
@@ -220,6 +223,9 @@ public class GetVideoDimensionsHandler extends XmlRequestHandlerBase {
                     XmlUtil.setChildText(resultElement, "fps", frameRate);
     			} else {
     				Logger.getLogger(getClass()).warn("ffprobe returned error " + ffprobeResult);
+    			}
+    			if (outputEmpty) {
+    				XmlUtil.setChildText(resultElement, "error", "ffprobe result empty");
     			}
     		} catch (IOException ioex) {
     			Logger.getLogger(getClass()).error("failed to get video dimensions for video " + videoFile, ioex);

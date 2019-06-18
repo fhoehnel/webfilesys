@@ -2278,7 +2278,7 @@ input.secure {
     border: 1px solid red;
 }
 
-img#previewVideoFrame {
+img.previewVideoFrame {
 	visibility: hidden;
 }
 

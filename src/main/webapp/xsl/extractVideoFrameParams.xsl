@@ -125,7 +125,7 @@
                   <select name="startHour" id="startHour" class="timeSel" /><b>:</b>&#160;
                   <select name="startMin" id="startMin" class="timeSel" /><b>:</b>&#160;
                   <select name="startSec" id="startSec" class="timeSel" />
-                  <input type="button" id="previewButton" resource="button.previewVideoExtract" onclick="sendPreviewVideoFrameForm()" />
+                  <input type="button" id="previewButton" resource="button.previewVideoExtract" onclick="videoFrameGrabPreview()" />
                 </td>
               </tr>
                 
@@ -135,7 +135,7 @@
                 <td class="formParm1">
                 </td>
                 <td class="formParm2">
-                  <img id="previewVideoFrame" class="thumb" />
+                  <img id="previewVideoFrame" class="thumb previewVideoFrame" />
                 </td>
               </tr>
 
