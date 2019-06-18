@@ -2278,6 +2278,10 @@ input.secure {
     border: 1px solid red;
 }
 
+img#previewVideoFrame {
+	visibility: hidden;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

@@ -956,6 +956,7 @@ titleExtractVideoFrame=extract video frame
 label.frameResolution=frame resolution (width x height)
 label.extractFrameTime=time in video (hh:mm:ss)
 button.startExtract=Extract Frame
+button.previewVideoExtract=Preview
 videoFrameExtractionStarted=The extraction of the video frame has been started. This can take some time to complete. For the result file watch the subfolder
 validationError.videoFrameExtractTime=The selected time is outside the range of the video.
 

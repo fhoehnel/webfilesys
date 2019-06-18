@@ -133,7 +133,7 @@ public class VideoFrameExtractor extends Thread
         return basePath + FRAME_TARGET_DIR;
     }
     
-    private static String getFrameTargetPath(String videoPath) {
+    public static String getFrameTargetPath(String videoPath) {
         int sepIdx = videoPath.lastIndexOf(File.separator);
 
         if (sepIdx < 0) {

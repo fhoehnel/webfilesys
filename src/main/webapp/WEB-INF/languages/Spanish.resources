@@ -957,6 +957,7 @@ titleExtractVideoFrame=extraer cuadro de vídeo
 label.frameResolution=resolución del cuadro
 label.extractFrameTime=tiempo en vídeo (hh:mm:ss)
 button.startExtract=Extraer
+button.previewVideoExtract=vista anticipada
 videoFrameExtractionStarted=Se ha iniciado la extracción del cuadro del vídeo. Esto puede tomar algún tiempo para completar. Para el archivo de resultados, vea la subcarpeta
 validationError.videoFrameExtractTime=El tiempo seleccionado está fuera del rango del archivo de vídeo.
 

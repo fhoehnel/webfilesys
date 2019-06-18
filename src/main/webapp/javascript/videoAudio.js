@@ -571,22 +571,56 @@ function sendExtractVideoFrameForm() {
     });
 }
 
+function sendPreviewVideoFrameForm() {
+    if (!validateExtractVideoFrameForm()) {
+        return;
+    }
+
+    document.getElementById("previewButton").disabled = true;
+    
+	showHourGlass();
+	
+    var previewImg = document.getElementById("previewVideoFrame");
+    previewImg.src = "/webfilesys/images/space.gif";
+    
+    var videoFileName = document.getElementById("videoFileName").value;
+    var videoWidth = document.getElementById("videoWidth").value;
+    var videoHeight = document.getElementById("videoHeight").value;
+    
+    var hour = document.getElementById("startHour").value;
+    var min = document.getElementById("startMin").value;
+    var sec = document.getElementById("startSec").value;
+    
+    previewImgUrl = "/webfilesys/servlet?command=video&cmd=previewFrame&videoFile=" + videoFileName + "&videoWidth=" + videoWidth + "&videoHeight=" + videoHeight + "&hour=" + hour + "&min=" + min + "&sec=" + sec;
+
+    previewImg.src = previewImgUrl;
+
+	document.getElementById("previewVideoFrame").style.visibility = "visible";
+    
+    previewImg.onload = function() {
+        document.getElementById("previewButton").disabled = false;
+    	hideHourGlass();
+    };
+}
+
 function createVideoTimeRangeSelOptions() {
     createVideoTimeOptions(document.getElementById("startHour"), 0, 10);
     createVideoTimeOptions(document.getElementById("startMin"), 0, 59);
     createVideoTimeOptions(document.getElementById("startSec"), 0, 59);
     
-    var hourPreselect = Math.floor(durationSeconds / (60 * 60));
-    
-    createVideoTimeOptions(document.getElementById("endHour"), 0, 10, hourPreselect);
+    if (document.getElementById("endHour")) {
+        var hourPreselect = Math.floor(durationSeconds / (60 * 60));
+        
+        createVideoTimeOptions(document.getElementById("endHour"), 0, 10, hourPreselect);
 
-    var minutePreselect = Math.floor(durationSeconds % (60 * 60) / 60);
-    
-    createVideoTimeOptions(document.getElementById("endMin"), 0, 59, minutePreselect);
+        var minutePreselect = Math.floor(durationSeconds % (60 * 60) / 60);
+        
+        createVideoTimeOptions(document.getElementById("endMin"), 0, 59, minutePreselect);
 
-    var secondPreselect = Math.floor(durationSeconds % 60);
-    
-    createVideoTimeOptions(document.getElementById("endSec"), 0, 59, secondPreselect);
+        var secondPreselect = Math.floor(durationSeconds % 60);
+        
+        createVideoTimeOptions(document.getElementById("endSec"), 0, 59, secondPreselect);
+    }
 }
 
 function createVideoTimeOptions(selectBox, minVal, maxVal, preselectVal) {

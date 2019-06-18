@@ -201,6 +201,7 @@ import de.webfilesys.gui.user.TransformImageRequestHandler;
 import de.webfilesys.gui.user.URLFileRequestHandler;
 import de.webfilesys.gui.user.UntarRequestHandler;
 import de.webfilesys.gui.user.UserSettingsRequestHandler;
+import de.webfilesys.gui.user.VideoFramePreviewHandler;
 import de.webfilesys.gui.user.VideoThumbHandler;
 import de.webfilesys.gui.user.ZipContentFileRequestHandler;
 import de.webfilesys.gui.user.ZipDirRequestHandler;
@@ -2186,6 +2187,11 @@ public class WebFileSysServlet extends ServletBase
                     return(true);
                 }
                 
+                if (cmd.equals("previewFrame")) {
+        		    (new VideoFramePreviewHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
                 if (cmd.equals("renameVideo")) {
                     (new RenameVideoRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
                     return(true);

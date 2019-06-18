@@ -959,6 +959,7 @@ titleExtractVideoFrame=Video-Standbild extrahieren
 label.frameResolution=Auflösung des Bildes (Breite x Höhe)
 label.extractFrameTime=Zeitpunkt im Video (hh:mm:ss)
 button.startExtract=Extrahieren
+button.previewVideoExtract=Vorschau
 videoFrameExtractionStarted=Die Extrahierung des Standbildes wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 validationError.videoFrameExtractTime=Der gewählte Zeitpunkt liegt ausserhalb des Zeitbereiches des Videos.
 
