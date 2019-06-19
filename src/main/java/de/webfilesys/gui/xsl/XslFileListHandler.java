@@ -142,8 +142,6 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 		String errorMsg = getParameter("errorMsg");
 		
-	    XmlUtil.setChildText(fileListElement, "language", language, false);
-
 	    if (errorMsg != null)
 		{
 		    XmlUtil.setChildText(fileListElement, "errorMsg", errorMsg, false);
@@ -171,8 +169,6 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			}
 		}
 
-		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
-		
 		File dirFile = new File(actPath);
 		
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
@@ -445,7 +441,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 		
 		addCurrentTrail(fileListElement, actPath, docRoot, mask);		
 		
-		processResponse("fileList.xsl", true);
+		processResponse("fileList.xsl");
 
 		FastPathManager.getInstance().queuePath(uid,actPath);
 

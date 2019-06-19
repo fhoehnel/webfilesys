@@ -56,10 +56,6 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/editVideoParams.xsl\"");
 
 		doc.insertBefore(xslRef, editParamsElem);
-
-		XmlUtil.setChildText(editParamsElem, "css", userMgr.getCSS(uid), false);
-
-		XmlUtil.setChildText(editParamsElem, "language", language, false);
 		
 		XmlUtil.setChildText(editParamsElem, "videoFileName", videoFileName, false);
 		XmlUtil.setChildText(editParamsElem, "shortVideoFileName", CommonUtils.shortName(videoFileName, 40), false);
@@ -200,7 +196,7 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
     		}
         }        
 		
-		processResponse("editVideoParams.xsl", true);
+		processResponse("editVideoParams.xsl");
     }
 	
 	private void addTargetResolutionOption(Element targetResolutionElem, int maxDimension, int resolution) {

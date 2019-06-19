@@ -62,14 +62,10 @@ public class XslFolderWatchListHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, watchListElement);
 
-		XmlUtil.setChildText(watchListElement, "css", userMgr.getCSS(uid), false);
-
 		XmlUtil.setChildText(watchListElement, "currentPath", getCwd(), false);
 
 		XmlUtil.setChildText(watchListElement, "currentPathEncoded", UTF8URLEncoder.encode(getCwd()), false);
 
-	    XmlUtil.setChildText(watchListElement, "language", language, false);
-		
 	    ArrayList<String> watchedFolders = watchMgr.getWatchedFolders(uid);
 		
 		for (String watchedFolder : watchedFolders)
@@ -101,6 +97,6 @@ public class XslFolderWatchListHandler extends XslRequestHandlerBase
 			watchListElement.appendChild(folderElement);
 		}
 
-		processResponse("folderWatchList.xsl", true);
+		processResponse("folderWatchList.xsl");
     }
 }

@@ -56,9 +56,6 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, imageDataElement);
 
-		XmlUtil.setChildText(imageDataElement, "css", userMgr.getCSS(uid), false);
-	    XmlUtil.setChildText(imageDataElement, "language", language, false);
-		
 		XmlUtil.setChildText(imageDataElement, "imagePath", imgPath, false);
 		XmlUtil.setChildText(imageDataElement, "encodedPath", UTF8URLEncoder.encode(imgPath), false);
 		XmlUtil.setChildText(imageDataElement, "pathForScript", escapeForJavascript(imgPath), false);
@@ -98,7 +95,7 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		{
 			Logger.getLogger(getClass()).error(ioEx.toString());
 			XmlUtil.setChildText(imageDataElement, "error", ioEx.toString(), false);
-			processResponse("xsl/showImage.xsl", true);
+			processResponse("xsl/showImage.xsl");
 			return;
 		}
 
@@ -163,7 +160,7 @@ public class XslShowImageHandler extends XslRequestHandlerBase
         // the reason for this is historic: previous google maps api version required an API key
 		XmlUtil.setChildText(imageDataElement, "googleMaps", "true", false);
 		
-		processResponse("showImage.xsl", true);
+		processResponse("showImage.xsl");
     }
 	
 	private boolean hasGpsExifData(String path)

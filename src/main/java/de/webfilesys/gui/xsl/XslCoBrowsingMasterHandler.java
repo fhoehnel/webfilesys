@@ -77,8 +77,6 @@ public class XslCoBrowsingMasterHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, slideShowElement);
 
-		XmlUtil.setChildText(slideShowElement, "css", userMgr.getCSS(uid), false);
-
 		XmlUtil.setChildText(slideShowElement, "delay", Integer.toString(delay * 1000), false);
 
 		// TODO: remove this
@@ -103,7 +101,7 @@ public class XslCoBrowsingMasterHandler extends XslRequestHandlerBase
         addMsgResource("titleCoBrowsingMaster", getResource("titleCoBrowsingMaster","WebFileSys Co-Browsing (Master)"));
         addMsgResource("exitCoBrowsing", getResource("exitCoBrowsing","Stop Co-Browsing"));
                 
-		this.processResponse("coBrowsingMaster.xsl", false);
+		this.processResponse("coBrowsingMaster.xsl");
 	}
 	
 	public void getImageTree(String actPath, boolean recurse)

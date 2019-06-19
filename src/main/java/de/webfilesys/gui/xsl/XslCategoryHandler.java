@@ -87,8 +87,6 @@ public class XslCategoryHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, catListElement);
 
-		XmlUtil.setChildText(catListElement, "css", userMgr.getCSS(uid), false);
-
 		addMsgResource("label.manageCategories", getResource("label.manageCategories","Manage File Categories"));
 		addMsgResource("button.delete", getResource("button.delete","Delete"));
 		addMsgResource("confirm.delCategory", getResource("confirm.delCategory","You will not be able to find files via this category name. Delete anyway?"));
@@ -114,7 +112,7 @@ public class XslCategoryHandler extends XslRequestHandlerBase
 			catListElement.appendChild(catElement);
 		}
 
-		this.processResponse("categoryList.xsl", true);
+		this.processResponse("categoryList.xsl");
     }
 
 	private void newCategory(Element catListElement)

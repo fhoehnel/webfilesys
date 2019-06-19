@@ -235,10 +235,6 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			}
 		}
 
-		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
-		
-	    XmlUtil.setChildText(fileListElement, "language", language, false);
-		
 		File dirFile = new File(act_path);
 		
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
@@ -543,7 +539,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
         }
 		
-		processResponse(stylesheetName, false);
+		processResponse(stylesheetName);
 
 		FastPathManager.getInstance().queuePath(uid,act_path);
 	}

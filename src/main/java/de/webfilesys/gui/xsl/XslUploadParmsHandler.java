@@ -65,9 +65,6 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, uploadElement);
 
-		XmlUtil.setChildText(uploadElement, "css", userMgr.getCSS(uid), false);
-	    XmlUtil.setChildText(uploadElement, "language", language, false);
-
 		XmlUtil.setChildText(uploadElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(uploadElement, "shortPath", shortPath, false);
 		
@@ -98,6 +95,6 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
 		    XmlUtil.setChildText(uploadElement, "mobile", "true", false);
 		}
         
-		this.processResponse("uploadParms.xsl", true);
+		this.processResponse("uploadParms.xsl");
     }
 }

@@ -186,7 +186,6 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(publishFileElement, "errorMsg", getResource("alert.nosubject", "Enter a subject for the e-mail"), false);
 		}
 
-		XmlUtil.setChildText(publishFileElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(publishFileElement, "path", path, false);
 		XmlUtil.setChildText(publishFileElement, "encodedPath", UTF8URLEncoder.encode(path), false);
 		XmlUtil.setChildText(publishFileElement, "publishPath", publishPath, false);
@@ -222,7 +221,7 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 			addRequestParameter("expiration", expiration);
 		}
 
-		this.processResponse("publishFile.xsl", false);
+		this.processResponse("publishFile.xsl");
     }
     
     private void publishSecretURL(String path, String publishPath, String accessCode, String sendMail,
@@ -323,6 +322,6 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 		addMsgResource("label.filePublished", getResource("label.filePublished","The published file can be viewed via the URL"));
 		addMsgResource("button.closewin", getResource("button.closewin","Close Window"));
 		
-		this.processResponse("filePublished.xsl", false);
+		this.processResponse("filePublished.xsl");
     }
 }

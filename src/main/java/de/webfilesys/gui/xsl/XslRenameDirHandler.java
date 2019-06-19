@@ -78,7 +78,7 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 
 			XmlUtil.setChildText(errorElement, "currentPath", UTF8URLEncoder.encode(currentPath) , false);
 
-			this.processResponse("errorMsgFolder.xsl", false);
+			processResponse("errorMsgFolder.xsl");
 
             return;
 		}
@@ -212,6 +212,6 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(errorElement, "currentPath", UTF8URLEncoder.encode(currentPath) , false);
 
-		this.processResponse("errorMsgFolder.xsl", false);
+		this.processResponse("errorMsgFolder.xsl");
     }
 }

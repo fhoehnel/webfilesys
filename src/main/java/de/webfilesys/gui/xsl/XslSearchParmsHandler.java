@@ -63,11 +63,8 @@ public class XslSearchParmsHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, searchParmsElement);
 
-		XmlUtil.setChildText(searchParmsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(searchParmsElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(searchParmsElement, "relativePath", relativePath, false);
-		
-	    XmlUtil.setChildText(searchParmsElement, "language", language, false);
 		
 		CategoryManager catMgr = CategoryManager.getInstance();
         
@@ -99,6 +96,6 @@ public class XslSearchParmsHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(currentDateElement, "month", Integer.toString(now.getMonth() + 1));	
 		XmlUtil.setChildText(currentDateElement, "day", Integer.toString(now.getDate()));	
 			
-		this.processResponse("searchParms.xsl", true);
+		this.processResponse("searchParms.xsl");
     }
 }

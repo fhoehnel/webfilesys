@@ -388,7 +388,7 @@ public class XslThumbnailExtractDescriptionHandler extends XslFileListHandlerBas
 		
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
-		processResponse("extractDescriptions.xsl", true);
+		processResponse("extractDescriptions.xsl");
 
 		FastPathManager.getInstance().queuePath(uid, currentPath);
 	}

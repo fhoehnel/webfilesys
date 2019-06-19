@@ -92,7 +92,6 @@ public class XslCalendarMonthHandler extends XslCalendarHandlerBase
 
 		doc.insertBefore(xslRef, calendarElement);
 
-		XmlUtil.setChildText(calendarElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(calendarElement, "userid", uid, false);
 		
 		addCalendarResources();
@@ -315,7 +314,7 @@ public class XslCalendarMonthHandler extends XslCalendarHandlerBase
 			XmlUtil.setChildText(calendarElement, "appointmentToMove", appToMove);
 		}
 		
-		processResponse("calendar/calendarMonth.xsl", false);
+		processResponse("calendar/calendarMonth.xsl");
     }
 	
 	private void addAppointments(Calendar cal, Element dayElem)

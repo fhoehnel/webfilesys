@@ -63,38 +63,13 @@ public class XslMultiUploadHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, uploadElement);
 
-		XmlUtil.setChildText(uploadElement, "css", userMgr.getCSS(uid), false);
-
 		XmlUtil.setChildText(uploadElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(uploadElement, "shortPath", shortPath, false);
-		
-	    XmlUtil.setChildText(uploadElement, "language", language, false);
 		
 		if (session.getAttribute("mobile") != null) {
 		    XmlUtil.setChildText(uploadElement, "mobile", "true", false);
 		}
-	    
-	    /*
-		addMsgResource("headline.multiUpload", getResource("headline.multiUpload", "Extended Upload"));
-        addMsgResource("upload.selected.pictures", getResource("upload.selected.pictures", "pictures selected for upload"));
-        addMsgResource("upload.dropZone", getResource("upload.dropZone", "Drag and drop Image files for upload here!"));
-        addMsgResource("upload.lastSent", getResource("upload.lastSent", "last uploaded file"));
-        addMsgResource("upload.selectedFiles", getResource("upload.selectedFiles", "files selected for upload"));
-        addMsgResource("upload.selectFilePrompt", getResource("upload.selectFilePrompt", "select file(s)"));
-
-        addMsgResource("label.destdir", getResource("label.destdir","destination directory"));
-		addMsgResource("alert.nofileselected", getResource("alert.nofileselected","You did not select a file for upload"));
-
-        addMsgResource("button.startUpload", getResource("button.startUpload","Start Upload"));
-        addMsgResource("upload.button.done", getResource("upload.button.done","Done"));
-
-		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
-		addMsgResource("label.uploadStatus", getResource("label.uploadStatus","Upload Status"));
-        addMsgResource("label.of", getResource("label.of","of"));
-        addMsgResource("upload.file.too.large", getResource("upload.file.too.large","The file is too large for uploading with the extended upload function. Use the basic upload dialog for really big files!"));
-        addMsgResource("upload.file.exists", getResource("upload.file.exists","a file with this name already exists - overwrite?"));
-		*/
 		
-		this.processResponse("multiUpload.xsl", true);
+		this.processResponse("multiUpload.xsl");
     }
 }

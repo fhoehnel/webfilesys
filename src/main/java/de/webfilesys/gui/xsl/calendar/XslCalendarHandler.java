@@ -64,7 +64,6 @@ public class XslCalendarHandler extends XslCalendarHandlerBase
 
 		doc.insertBefore(xslRef, calendarElement);
 
-		XmlUtil.setChildText(calendarElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(calendarElement, "userid", uid, false);
 		
 		addCalendarResources();
@@ -176,7 +175,7 @@ public class XslCalendarHandler extends XslCalendarHandlerBase
 		XmlUtil.setChildText(calendarElement, "prevYear", Integer.toString(year - 1));
 		XmlUtil.setChildText(calendarElement, "nextYear", Integer.toString(year + 1));
 		
-		processResponse("calendar/sunburstCalendar.xsl", false);
+		processResponse("calendar/sunburstCalendar.xsl");
     }
 	
 	private int getLastDayOfMonth(Calendar cal) 

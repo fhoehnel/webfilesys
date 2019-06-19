@@ -82,10 +82,6 @@ public class XslFolderDiffTreeHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, compElement);
 
-		XmlUtil.setChildText(compElement, "css", userMgr.getCSS(uid), false);
-		
-	    XmlUtil.setChildText(compElement, "language", language, false);
-		
         XmlUtil.setChildText(compElement, "sourcePath", CommonUtils.shortName(getHeadlinePath(compSourcePath), 50), false);
         XmlUtil.setChildText(compElement, "targetPath", CommonUtils.shortName(getHeadlinePath(compTargetPath), 50), false);
 		
@@ -186,7 +182,7 @@ public class XslFolderDiffTreeHandler extends XslRequestHandlerBase
         session.removeAttribute(XmlSelectCompFolderHandler.SESSION_ATTRIB_COMP_TARGET);
         session.removeAttribute(XslSyncCompareHandler.SESSION_ATTRIB_SYNCHRONIZE_ITEMS);
         
-		processResponse("folderDiffTree.xsl", true);
+		processResponse("folderDiffTree.xsl");
     }
     
     private void addDifferencePath(Element differenceTreeElem, String diffPath, SyncItem syncItem)

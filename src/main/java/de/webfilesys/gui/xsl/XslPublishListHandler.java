@@ -56,10 +56,6 @@ public class XslPublishListHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, publishListElem);
 
-		XmlUtil.setChildText(publishListElem, "css", userMgr.getCSS(uid), false);
-
-	    XmlUtil.setChildText(publishListElem, "language", language, false);
-		
         Element publicationListElem = doc.createElement("publications");
         
         publishListElem.appendChild(publicationListElem);
@@ -149,7 +145,7 @@ public class XslPublishListHandler extends XslRequestHandlerBase {
 			}
         }
         
-		processResponse("publishList.xsl", false);
+		processResponse("publishList.xsl");
     }
 
 }

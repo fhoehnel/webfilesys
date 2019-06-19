@@ -96,8 +96,6 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, fileListElem);
 
-		XmlUtil.setChildText(fileListElem, "css", userMgr.getCSS(uid), false);
-	    XmlUtil.setChildText(fileListElem, "language", language, false);
 		XmlUtil.setChildText(fileListElem, "currentPath", currentPath, false);
     	XmlUtil.setChildText(fileListElem, "pathForScript", insertDoubleBackslash(currentPath));
 		XmlUtil.setChildText(fileListElem, "headLine", getHeadlinePath(currentPath), false);
@@ -193,7 +191,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(fileListElem, "videoEnabled", "true");
         }
 		
-		processResponse("fileListStats.xsl", false);
+		processResponse("fileListStats.xsl");
     }
 	
 }

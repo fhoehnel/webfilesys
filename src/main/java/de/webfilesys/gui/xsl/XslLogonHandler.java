@@ -62,6 +62,6 @@ public class XslLogonHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(loginElement, "openRegistration", "true", false);
 		}
 
-		processResponse("login.xsl", false);
+		processResponse("login.xsl");
     }
 }

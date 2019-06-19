@@ -64,9 +64,6 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
 
         doc.insertBefore(xslRef, slideShowElement);
 
-        XmlUtil.setChildText(slideShowElement, "css", userMgr.getCSS(uid), false);
-	    XmlUtil.setChildText(slideShowElement, "language", language, false);
-
         if (readonly)
         {
             XmlUtil.setChildText(slideShowElement, "readonly", "true", false);
@@ -207,7 +204,7 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
         if (imageFiles.size() == 0) {
             XmlUtil.setChildText(slideShowElement, "shortPath", getHeadlinePath(CommonUtils.shortName(actPath, 50)), false);
 
-            processResponse("album/albumSlideShow.xsl", false);
+            processResponse("album/albumSlideShow.xsl");
             return;
         }
         
@@ -306,7 +303,7 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(slideShowElement, "description", description, true);
         }
         
-		processResponse("album/albumSlideShow.xsl", false);
+		processResponse("album/albumSlideShow.xsl");
 	}
 
     public void getImageTree(String actPath,boolean recurse)

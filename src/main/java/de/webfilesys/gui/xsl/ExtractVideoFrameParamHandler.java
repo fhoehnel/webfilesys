@@ -57,10 +57,6 @@ public class ExtractVideoFrameParamHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, editParamsElem);
 
-		XmlUtil.setChildText(editParamsElem, "css", userMgr.getCSS(uid), false);
-
-		XmlUtil.setChildText(editParamsElem, "language", language, false);
-		
 		XmlUtil.setChildText(editParamsElem, "videoFileName", videoFileName, false);
 		XmlUtil.setChildText(editParamsElem, "shortVideoFileName", CommonUtils.shortName(videoFileName, 40), false);
 		XmlUtil.setChildText(editParamsElem, "videoFilePath", videoFilePath, false);
@@ -205,7 +201,7 @@ public class ExtractVideoFrameParamHandler extends XslRequestHandlerBase {
     		}
         }        
 		
-		processResponse("extractVideoFrameParams.xsl", true);
+		processResponse("extractVideoFrameParams.xsl");
     }
 	
 	private void addTargetResolutionOption(Element targetResolutionElem, int maxDimension, int resolution) {

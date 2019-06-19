@@ -38,12 +38,10 @@ public class XslCoBrowsingClientHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, slideShowElement);
 
-		XmlUtil.setChildText(slideShowElement, "css", userMgr.getCSS(uid), false);
-
         addMsgResource("titleCoBrowsingClient", getResource("titleCoBrowsingClient", "WebFileSys Co-Browsing (Client)"));
         addMsgResource("headCoBrowsingClient", getResource("headCoBrowsingClient", "WebFileSys Co-Browsing Slideshow: waiting for first picture"));
         
-		this.processResponse("coBrowsingClient.xsl", false);
+		this.processResponse("coBrowsingClient.xsl");
 	}
 
 }

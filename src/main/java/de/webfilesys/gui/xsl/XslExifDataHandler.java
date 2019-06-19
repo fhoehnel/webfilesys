@@ -49,10 +49,6 @@ public class XslExifDataHandler extends XslRequestHandlerBase
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/cameraData.xsl\"");
 
 		doc.insertBefore(xslRef, cameraDataElement);
-
-        XmlUtil.setChildText(cameraDataElement, "css", userMgr.getCSS(uid), false);
-
-	    XmlUtil.setChildText(cameraDataElement, "language", language, false);
         
         String shortImgName = CommonUtils.shortName(this.getHeadlinePath(imgFileName), 48);
         
@@ -198,6 +194,6 @@ public class XslExifDataHandler extends XslRequestHandlerBase
             }
         }
 
-        processResponse("cameraData.xsl", false);
+        processResponse("cameraData.xsl");
 	}
 }

@@ -67,10 +67,6 @@ public class CompareImageTabHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, compareImageElem);
 
-		XmlUtil.setChildText(compareImageElem, "css", userMgr.getCSS(uid), false);
-
-	    XmlUtil.setChildText(compareImageElem, "language", language, false);
-
 	    XmlUtil.setChildText(compareImageElem, "path", imgBasePath, false);
 
 	    XmlUtil.setChildText(compareImageElem, "pathForScript", escapeForJavascript(imgBasePath), false);
@@ -112,7 +108,7 @@ public class CompareImageTabHandler extends XslRequestHandlerBase {
 			}
 		}
         
-        processResponse(XSL_STYLESHEET_NAME, false);
+        processResponse(XSL_STYLESHEET_NAME);
     }
 
 	private ArrayList<String> getSelectedFiles() {

@@ -43,8 +43,6 @@ public class XslTreeStatsHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, treeStatsElement);
 
-		XmlUtil.setChildText(treeStatsElement, "css", userMgr.getCSS(uid), false);
-	    XmlUtil.setChildText(treeStatsElement, "language", language, false);
 		XmlUtil.setChildText(treeStatsElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(treeStatsElement, "relativePath", this.getHeadlinePath(currentPath), false);
 		XmlUtil.setChildText(treeStatsElement, "shortPath", CommonUtils.shortName(this.getHeadlinePath(currentPath), 60), false);
@@ -115,6 +113,6 @@ public class XslTreeStatsHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(treeStatsElement, "dirBytes", Long.toString(bytesInFirstLevel), false);
 
-		processResponse("treeStatistics.xsl", false);
+		processResponse("treeStatistics.xsl");
     }
 }

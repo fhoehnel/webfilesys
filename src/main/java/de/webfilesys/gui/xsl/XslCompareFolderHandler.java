@@ -56,7 +56,6 @@ public class XslCompareFolderHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, compElement);
 
-		XmlUtil.setChildText(compElement, "css", userMgr.getCSS(uid), false);
         XmlUtil.setChildText(compElement, "sourcePath", getHeadlinePath(compSourcePath), false);
         XmlUtil.setChildText(compElement, "targetPath", getHeadlinePath(compTargetPath), false);
 		
@@ -160,7 +159,7 @@ public class XslCompareFolderHandler extends XslRequestHandlerBase
             addMsgResource("sync.invisibleItems", getResource("sync.invisibleItems", "The number of files out of sync is rather large. Not all differences are shown here."));
         }
         
-		processResponse("compFolderResult.xsl", true);
+		processResponse("compFolderResult.xsl");
     }
     
     private String getForcedLineBreakPath(String path)

@@ -61,11 +61,7 @@ public class XslFileSysBookmarkHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, bookmarkListElement);
 
-		XmlUtil.setChildText(bookmarkListElement, "css", userMgr.getCSS(uid), false);
-
 		XmlUtil.setChildText(bookmarkListElement, "currentPath", this.getCwd(), false);
-		
-	    XmlUtil.setChildText(bookmarkListElement, "language", language, false);
 		
 		String mobile = (String) session.getAttribute("mobile");
 		
@@ -109,6 +105,6 @@ public class XslFileSysBookmarkHandler extends XslRequestHandlerBase
 			bookmarkListElement.appendChild(bookmarkElement);
 		}
 
-		this.processResponse("bookmarkList.xsl", true);
+		this.processResponse("bookmarkList.xsl");
     }
 }

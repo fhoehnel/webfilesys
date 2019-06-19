@@ -92,7 +92,6 @@ public class MobileShowImageHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, imageDataElement);
 
-		XmlUtil.setChildText(imageDataElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(imageDataElement, "relativePath", this.getHeadlinePath(imgPath), false);
 
 		String description = metaInfMgr.getDescription(imgPath);
@@ -170,7 +169,7 @@ public class MobileShowImageHandler extends XslRequestHandlerBase
 		catch (IOException io1)
 		{
 			Logger.getLogger(getClass()).error(io1.toString());
-			this.processResponse("xsl/mobile/showImage.xsl", true);
+			this.processResponse("xsl/mobile/showImage.xsl");
 			return;
 		}
 
@@ -199,7 +198,7 @@ public class MobileShowImageHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(imageDataElement, "scaled", "true", false);
         }
 		
-		this.processResponse("mobile/showImage.xsl", true);
+		this.processResponse("mobile/showImage.xsl");
     }
 	
 	private String getAdjacentPicture(String imgPath, int adjacentType)

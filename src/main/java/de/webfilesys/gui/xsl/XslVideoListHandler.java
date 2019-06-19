@@ -282,7 +282,7 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 		
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
-		processResponse("videoList.xsl", true);
+		processResponse("videoList.xsl");
 
 		FastPathManager.getInstance().queuePath(uid, currentPath);
 	}

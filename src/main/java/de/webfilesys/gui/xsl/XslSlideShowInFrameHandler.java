@@ -63,8 +63,6 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
 
         doc.insertBefore(xslRef, slideShowElement);
 
-        XmlUtil.setChildText(slideShowElement, "css", userMgr.getCSS(uid), false);
-
         if (readonly)
         {
             XmlUtil.setChildText(slideShowElement, "readonly", "true", false);
@@ -215,7 +213,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
             addMsgResource("alert.nopictures", getResource("alert.nopictures","No picture files (JPG,GIF,PNG) exist in this directory"));
             XmlUtil.setChildText(slideShowElement, "shortPath", getHeadlinePath(CommonUtils.shortName(actPath, 50)), false);
 
-            processResponse("slideShowInFrame.xsl", false);
+            processResponse("slideShowInFrame.xsl");
             return;
         }
         
@@ -312,7 +310,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(slideShowElement, "description", description, true);
         }
         
-		processResponse("slideShowInFrame.xsl", false);
+		processResponse("slideShowInFrame.xsl");
 	}
 
     public void getImageTree(String actPath, boolean recurse, boolean randomize)

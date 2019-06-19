@@ -58,8 +58,6 @@ public class XslZipContentHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, zipRootElement);
 
-		XmlUtil.setChildText(zipRootElement, "css", userMgr.getCSS(uid), false);
-
 		addMsgResource("label.viewzip", getResource("label.viewzip","zip file content"));
 		
 		String shortFileName = this.getHeadlinePath(filePath);
@@ -105,7 +103,7 @@ public class XslZipContentHandler extends XslRequestHandlerBase
 			return;
 		}
 		
-		this.processResponse("zipContent.xsl", false);
+		this.processResponse("zipContent.xsl");
 	}
 	
 	private void addZipPath(Element zipRootElement, String zipEntryPath, boolean isDirectory,

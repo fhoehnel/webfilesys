@@ -155,9 +155,6 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, imageDataElement);
 
-	    XmlUtil.setChildText(imageDataElement, "language", language, false);
-		
-		XmlUtil.setChildText(imageDataElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(imageDataElement, "imagePath", imgPath, false);
 		XmlUtil.setChildText(imageDataElement, "imageName", imgName, false);
 		XmlUtil.setChildText(imageDataElement, "encodedPath", UTF8URLEncoder.encode(imgPath), false);
@@ -283,7 +280,7 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 		catch (IOException io1)
 		{
 			Logger.getLogger(getClass()).error(io1.toString());
-			this.processResponse("xsl/showImage.xsl", true);
+			this.processResponse("xsl/showImage.xsl");
 			return;
 		}
 

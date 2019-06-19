@@ -183,10 +183,6 @@ public class XslPictureStoryOwnWindowHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, fileListElement);
 
-		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
-
-		XmlUtil.setChildText(fileListElement, "language", language, false);
-
 		File dirFile = new File(act_path);
 
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {
@@ -439,7 +435,7 @@ public class XslPictureStoryOwnWindowHandler extends XslRequestHandlerBase {
 			}
 		}
 
-		processResponse(stylesheetName, false);
+		processResponse(stylesheetName);
 
 		FastPathManager.getInstance().queuePath(uid, act_path);
 	}

@@ -69,10 +69,6 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, resizeParamsElement);
 
-		XmlUtil.setChildText(resizeParamsElement, "css", userMgr.getCSS(uid), false);
-
-		XmlUtil.setChildText(resizeParamsElement, "language", language, false);
-		
 		String popup = getParameter("popup");
 		
 		int fileNameDislayLength = (popup == null ? 80 : 50);
@@ -124,6 +120,6 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 			XmlUtil.setChildText(resizeParamsElement, "thumbnailHeight", Integer.toString(thumbnailHeight), false);
 		}
 		
-		processResponse("resizeParams.xsl", true);
+		processResponse("resizeParams.xsl");
     }
 }

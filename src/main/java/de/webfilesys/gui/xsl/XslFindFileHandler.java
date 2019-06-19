@@ -120,8 +120,6 @@ public class XslFindFileHandler extends XslRequestHandlerBase
 
         doc.insertBefore(xslRef, searchResultElement);
 
-        XmlUtil.setChildText(searchResultElement, "css", userMgr.getCSS(uid), false);
-
         addMsgResource("label.searchresults", getResource("label.searchresults", "Search Results"));
         addMsgResource("label.in", getResource("label.in", "in"));
         addMsgResource("button.closewin", getResource("button.closewin", "Close Window"));
@@ -138,7 +136,7 @@ public class XslFindFileHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(searchResultElement, "matchCount", Integer.toString(filesFoundNum));
 		
-        processResponse("findFileResult.xsl", false);
+        processResponse("findFileResult.xsl");
 	}
 	
 	public void findFile(String actPath, String fileNamePattern, boolean includeSubdirs, 

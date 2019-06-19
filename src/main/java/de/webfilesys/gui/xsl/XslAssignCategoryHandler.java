@@ -72,7 +72,6 @@ public class XslAssignCategoryHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, catListElement);
 
-		XmlUtil.setChildText(catListElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(catListElement, "filePath",filePath, false);
 		
 		String relativePath = this.getHeadlinePath(filePath);
@@ -133,7 +132,7 @@ public class XslAssignCategoryHandler extends XslRequestHandlerBase
 			addMsgResource("label.noCategoryDefined", getResource("label.noCategoryDefined","No categories has been defined."));
         }
 
-		this.processResponse("assignCategory.xsl", true);
+		this.processResponse("assignCategory.xsl");
     }
     
 	private void unassignCategory(Element catListElement, String filePath)

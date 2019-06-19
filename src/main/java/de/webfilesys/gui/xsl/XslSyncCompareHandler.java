@@ -55,7 +55,6 @@ public class XslSyncCompareHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, syncElement);
 
-		XmlUtil.setChildText(syncElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(syncElement, "syncSourcePath", getHeadlinePath(syncSourcePath), false);
 		XmlUtil.setChildText(syncElement, "syncTargetPath", getHeadlinePath(syncTargetPath), false);
 		
@@ -193,7 +192,7 @@ public class XslSyncCompareHandler extends XslRequestHandlerBase
             addMsgResource("sync.invisibleItems", getResource("sync.invisibleItems", "The number of files out of sync is rather large. Not all differences are shown here."));
         }
         
-		this.processResponse("syncCompare.xsl", true);
+		this.processResponse("syncCompare.xsl");
     }
     
 	private String getRelativePath(String basePath, String fullPath) {

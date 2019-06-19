@@ -213,22 +213,22 @@ public class XslRequestHandlerBase extends UserRequestHandler
 		processResponse(xslFile, false);
 	}
 
+	protected void addCommonSessionData() {
+		if (uid != null) {
+			XmlUtil.setChildText(doc.getDocumentElement(), "css", userMgr.getCSS(uid), false);
+		    XmlUtil.setChildText(doc.getDocumentElement(), "language", language, false);
+		}
+	}
+	
     /**
-     * This problem seems to be history with a current version of firefox:
-     * Mozilla browsers (Firefox, Netscape) have a very strange bug in the XSLT processor.
-     * HTML select boxes generated from XSL do not work in most cases, the selected value cannot
-     * be changed and the onchange() event handler is not called.
-     * 
-     * If the resulting HTML page contains a HTML select form element and the client is Mozilla,
-     * we have to do the XSL processing on the server.
-     * 
      * @param xslFile the name of the XSL file
-     * @param handleMozillaXslBug
+     * @param xsltAlwaysOnServer
      */
-	public void processResponse(String xslFile, boolean handleMozillaXslBug)
+	public void processResponse(String xslFile, boolean xsltAlwaysOnServer)
     {
-		if ((session != null) && isBrowserXslEnabled())
-		    // && ((!handleMozillaXslBug) || (browserManufacturer != BROWSER_MOZILLA)))
+		addCommonSessionData();
+		
+		if ((session != null) && (!xsltAlwaysOnServer) && isBrowserXslEnabled())
 		{
 			// Logger.getLogger(getClass()).debug("client-side XSLT: " + xslFile);
 			

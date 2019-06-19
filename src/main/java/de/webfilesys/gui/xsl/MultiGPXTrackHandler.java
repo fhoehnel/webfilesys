@@ -59,10 +59,6 @@ public class MultiGPXTrackHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, gpxTrackElem);
 
-		XmlUtil.setChildText(gpxTrackElem, "css", userMgr.getCSS(uid), false);
-
-		XmlUtil.setChildText(gpxTrackElem, "language", language, false);
-
 		Element gpxFileListElem = doc.createElement("gpxFiles");
 		
 		gpxTrackElem.appendChild(gpxFileListElem);
@@ -86,6 +82,6 @@ public class MultiGPXTrackHandler extends XslRequestHandlerBase {
 		XmlUtil.setElementText(apiKeyElem, googleMapsAPIKey);
 		gpxTrackElem.appendChild(apiKeyElem);
 		
-		processResponse("multiGPXTracks.xsl", true);
+		processResponse("multiGPXTracks.xsl");
 	}
 }

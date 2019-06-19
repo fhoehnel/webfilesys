@@ -44,9 +44,6 @@ public class XslUserSettingsHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, userSettingsElem);
 
-		XmlUtil.setChildText(userSettingsElem, "css", userMgr.getCSS(uid), false);
-		XmlUtil.setChildText(userSettingsElem, "language", language, false);
-
 		if (errorMsg != null) {
 			XmlUtil.setChildText(userSettingsElem, "errorMsg", errorMsg, false);
 		}
@@ -97,6 +94,6 @@ public class XslUserSettingsHandler extends XslRequestHandlerBase {
 			}
 		}
 		
-		processResponse("userSettings.xsl", false);
+		processResponse("userSettings.xsl");
 	}
 }

@@ -179,9 +179,6 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, imageDataElement);
 
-	    XmlUtil.setChildText(imageDataElement, "language", language, false);
-		
-		XmlUtil.setChildText(imageDataElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(imageDataElement, "imagePath", imgPath, false);
 		XmlUtil.setChildText(imageDataElement, "imageName", imgName, false);
 		XmlUtil.setChildText(imageDataElement, "encodedPath", UTF8URLEncoder.encode(imgPath), false);
@@ -281,7 +278,7 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 		catch (IOException io1)
 		{
 			Logger.getLogger(getClass()).error(io1.toString());
-			this.processResponse("album/albumPicture.xsl", true);
+			this.processResponse("album/albumPicture.xsl");
 			return;
 		}
 
@@ -464,7 +461,7 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(imageDataElement, "voteAccepted", "true", false);
         }
         
-		this.processResponse("album/albumPicture.xsl", true);
+		this.processResponse("album/albumPicture.xsl");
     }
 	
     private boolean hasGpsExifData(String path)
