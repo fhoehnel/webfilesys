@@ -252,7 +252,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
                             }
                             
                             if (sourceFile.getName().equals(MetaInfManager.METAINF_FILE)) {
-                            	MetaInfManager.getInstance().releaseMetaInf(destPath);
+                            	MetaInfManager.getInstance().releaseMetaInf(destPath, false);
                             }
                         } else {
                             copyError = true;
@@ -339,7 +339,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
         } 
         else 
         {
-            MetaInfManager.getInstance().releaseMetaInf(path);
+            MetaInfManager.getInstance().releaseMetaInf(path, false);
         }
 
         return(!(deleteError));

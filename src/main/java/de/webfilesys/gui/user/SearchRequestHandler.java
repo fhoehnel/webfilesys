@@ -449,7 +449,7 @@ public class SearchRequestHandler extends UserRequestHandler
             {
                 if (!act_path.equals(searchResultDir))
                 {
-                    metaInfMgr.releaseMetaInf(act_path);
+                    metaInfMgr.releaseMetaInf(act_path, false);
                 }
             }
 		}

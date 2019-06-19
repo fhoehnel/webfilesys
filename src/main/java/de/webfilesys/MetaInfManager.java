@@ -326,7 +326,7 @@ public class MetaInfManager extends Thread
             
             metaInfRoot.appendChild(metaInfElement);
 
-            cacheDirty.put(path, new Boolean(true));
+            cacheDirty.put(path, Boolean.TRUE);
 
             return(metaInfElement);
         }
@@ -412,7 +412,7 @@ public class MetaInfManager extends Thread
 
             XmlUtil.setChildText(metaInfElement,"description",newDescription,true);
             
-            cacheDirty.put(path,new Boolean(true));
+            cacheDirty.put(path,Boolean.TRUE);
             // saveMetaInfFile(path);
     	}
     }
@@ -427,7 +427,7 @@ public class MetaInfManager extends Thread
 
             XmlUtil.setChildText(metaInfElement, "titlePic", titlePicFileName);
             
-            cacheDirty.put(path, new Boolean(true));
+            cacheDirty.put(path, Boolean.TRUE);
     	}
     }
     
@@ -454,7 +454,7 @@ public class MetaInfManager extends Thread
             	metaInfElement.removeChild(titlePicElem);
             }
             
-            cacheDirty.put(path, new Boolean(true));
+            cacheDirty.put(path, Boolean.TRUE);
     	}
     }
     
@@ -476,7 +476,7 @@ public class MetaInfManager extends Thread
                 moved = true;
             }
             
-            cacheDirty.put(currentPath, new Boolean(true));
+            cacheDirty.put(currentPath, Boolean.TRUE);
             
             return moved;
     	}
@@ -512,7 +512,7 @@ public class MetaInfManager extends Thread
 
     			metaInfRoot.removeChild(metaInfElement);                
                     
-    			cacheDirty.put(path,new Boolean(true));
+    			cacheDirty.put(path,Boolean.TRUE);
         	}
     	}    	
     }
@@ -576,7 +576,7 @@ public class MetaInfManager extends Thread
             XmlUtil.setChildText(commentElement,"time",Long.toString(newComment.getCreationTime()),false);
             XmlUtil.setChildText(commentElement,"message",newComment.getMessage(),true);
             
-            cacheDirty.put(path,new Boolean(true));
+            cacheDirty.put(path,Boolean.TRUE);
     	}
     }
 
@@ -604,7 +604,7 @@ public class MetaInfManager extends Thread
 
             metaInfElement.removeChild(commentListElement);
 
-            cacheDirty.put(path,new Boolean(true));
+            cacheDirty.put(path,Boolean.TRUE);
     	}
     }
 
@@ -631,7 +631,7 @@ public class MetaInfManager extends Thread
     	
         commentListElement.setAttribute("seenByOwner", Boolean.toString(newVal));
 
-        cacheDirty.put(path, new Boolean(true));
+        cacheDirty.put(path, Boolean.TRUE);
     }
     
     public boolean isCommentsSeenByOwner(String absoluteFileName) {
@@ -786,7 +786,7 @@ public class MetaInfManager extends Thread
 
     		XmlUtil.setChildText(ratingElement, "owner", Integer.toString(rating));
             
-    		cacheDirty.put(path, new Boolean(true));
+    		cacheDirty.put(path, Boolean.TRUE);
     	}
 	}
 
@@ -957,7 +957,7 @@ public class MetaInfManager extends Thread
 
             XmlUtil.setElementText(voteElement, Integer.toString(rating));
 
-    		cacheDirty.put(path, new Boolean(true));
+    		cacheDirty.put(path, Boolean.TRUE);
     	}
 	}
 
@@ -1157,6 +1157,95 @@ public class MetaInfManager extends Thread
 		return starSum;
 	}
 	
+	public void removeTags(String path, String fileName) {
+		setTags(path, fileName, new String[0]);
+	}
+
+	public void setTags(String absoluteFileName, String[] newTags) {
+        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
+        setTags(partsOfPath[0], partsOfPath[1], newTags);
+	}
+	
+	public void setTags(String path, String fileName, String[] newTags) {
+		synchronized(this) {
+    		Element metaInfElement = getMetaInfElement(path, fileName);
+            
+    		if (metaInfElement == null) {
+    			metaInfElement=createMetaInfElement(path, fileName);
+    		}
+
+    		Document doc = metaInfElement.getOwnerDocument();
+
+    		Element tagListElem = XmlUtil.getChildByTagName(metaInfElement,"tags");
+
+    		boolean modified = false;
+    		
+    		if (tagListElem == null) {
+    			if (newTags.length > 0) {
+        			tagListElem = doc.createElement("tags");
+        			metaInfElement.appendChild(tagListElem);
+        			modified = true;
+    			}
+    		} else {
+    			NodeList existingTagList = tagListElem.getElementsByTagName("tag");    
+    			
+                int existingTagListLength = existingTagList.getLength();
+    			
+    			for (int i = existingTagListLength - 1; i >= 0; i--) {
+        			Element tagElem = (Element) existingTagList.item(i);
+        			tagListElem.removeChild(tagElem);
+        			modified = true;
+    			}
+    		}
+
+    		for (String newTag : newTags) {
+        		Element tagElem = doc.createElement("tag");
+        		XmlUtil.setElementText(tagElem, newTag.trim(), true);
+        		tagListElem.appendChild(tagElem);
+        		modified = true;
+    		}
+    		
+    		if (modified) {
+        		cacheDirty.put(path, Boolean.TRUE);
+    		}
+    	}
+	}
+	
+	public ArrayList<String> getTags(String absoluteFileName) {
+        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
+        return getTags(partsOfPath[0], partsOfPath[1]);
+	}
+	
+	public ArrayList<String> getTags(String path, String fileName) {
+		Element metaInfElement = getMetaInfElement(path,fileName);
+		if (metaInfElement == null) {
+			return null;
+		}
+
+		Element tagListElement = XmlUtil.getChildByTagName(metaInfElement, "tags");
+		if (tagListElement == null) {
+			return null;
+		}
+        
+		NodeList tagList = tagListElement.getElementsByTagName("tag");
+		if (tagList == null) {
+			return null ;
+		}
+
+		int listLength = tagList.getLength();
+		if (listLength == 0) {
+			return null;
+		}
+
+		ArrayList<String> listOfTags = new ArrayList<String>();
+
+		for (int i = 0; i < listLength; i++) {
+			listOfTags.add(XmlUtil.getElementText((Element) tagList.item(i)));
+		}
+
+		return(listOfTags);
+	}
+	
 	public void addCategory(String absoluteFileName, Category newCategory) {
         String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
         addCategory(partsOfPath[0], partsOfPath[1], newCategory);
@@ -1189,7 +1278,7 @@ public class MetaInfManager extends Thread
 
     		XmlUtil.setChildText(categoryElement,"name",newCategory.getName(),false);
             
-    		cacheDirty.put(path, new Boolean(true));
+    		cacheDirty.put(path, Boolean.TRUE);
     	}
 	}
 
@@ -1247,7 +1336,7 @@ public class MetaInfManager extends Thread
             {
     			catListElement.removeChild(categoryToRemove);
 
-    			cacheDirty.put(path, new Boolean(true));
+    			cacheDirty.put(path, Boolean.TRUE);
     			
     			return(true);
             }
@@ -1281,7 +1370,7 @@ public class MetaInfManager extends Thread
 
     		metaInfElement.removeChild(catListElement);
 
-    		cacheDirty.put(path, new Boolean(true));
+    		cacheDirty.put(path, Boolean.TRUE);
     	}
 	}
 
@@ -1423,7 +1512,7 @@ public class MetaInfManager extends Thread
                 XmlUtil.setChildText(geoTagElement, "infoText", newGeoTag.getInfoText(), true);
             }
             
-            cacheDirty.put(path, new Boolean(true));
+            cacheDirty.put(path, Boolean.TRUE);
     	}
     }
 
@@ -1451,7 +1540,7 @@ public class MetaInfManager extends Thread
 
             metaInfElement.removeChild(geoTagElement);
 
-            cacheDirty.put(path, new Boolean(true));
+            cacheDirty.put(path, Boolean.TRUE);
     	}
     }
 	
@@ -1544,7 +1633,7 @@ public class MetaInfManager extends Thread
     			}
     		}
     		
-    		cacheDirty.put(path,new Boolean(true));
+    		cacheDirty.put(path,Boolean.TRUE);
     	}
     		
 	}
@@ -1620,7 +1709,7 @@ public class MetaInfManager extends Thread
 
                 linkedByListElement.appendChild(linkedByElement);
                 
-                cacheDirty.put(CommonUtils.getParentDir(newLink.getDestPath()), new Boolean(true));
+                cacheDirty.put(CommonUtils.getParentDir(newLink.getDestPath()), Boolean.TRUE);
             }
     	}
     		
@@ -1683,7 +1772,7 @@ public class MetaInfManager extends Thread
                      {
                          metaInfElement.removeChild(linkedByElement);
 
-                         cacheDirty.put(CommonUtils.getParentDir(linkTargetPath), new Boolean(true));
+                         cacheDirty.put(CommonUtils.getParentDir(linkTargetPath), Boolean.TRUE);
                      }
                      return;
                  }
@@ -1809,7 +1898,7 @@ public class MetaInfManager extends Thread
                 linkedByListElement.appendChild(linkedByElement);
     	    }
     	    
-            cacheDirty.put(CommonUtils.getParentDir(path), new Boolean(true));
+            cacheDirty.put(CommonUtils.getParentDir(path), Boolean.TRUE);
     	}
     		
 	}
@@ -2019,7 +2108,7 @@ public class MetaInfManager extends Thread
 
                     linkListElement.removeChild(linkElement);
                 	
-    				cacheDirty.put(path,new Boolean(true));
+    				cacheDirty.put(path,Boolean.TRUE);
 
                 	return(true);
                 }
@@ -2071,7 +2160,7 @@ public class MetaInfManager extends Thread
     			{
     				XmlUtil.setChildText(linkElement, "name", newLinkName);
                 	
-    				cacheDirty.put(path,new Boolean(true));
+    				cacheDirty.put(path,Boolean.TRUE);
 
     				return(true);
     			}
@@ -2151,7 +2240,7 @@ public class MetaInfManager extends Thread
             
             XmlUtil.setChildText(metaInfElement,"downloads",Integer.toString(downloadNum),false);
             
-            cacheDirty.put(path,new Boolean(true));
+            cacheDirty.put(path,Boolean.TRUE);
             // saveMetaInfFile(path);
     	}
     }
@@ -2324,7 +2413,7 @@ public class MetaInfManager extends Thread
     			}
     		}
 
-    		cacheDirty.put(path,new Boolean(true));
+    		cacheDirty.put(path,Boolean.TRUE);
     	}
     }
     
@@ -2364,7 +2453,7 @@ public class MetaInfManager extends Thread
 
     		XmlUtil.setElementText(stagedPublicationElement, Boolean.toString(publicateStaged));
             
-    		cacheDirty.put(path, new Boolean(true));
+    		cacheDirty.put(path, Boolean.TRUE);
     	}
 	}
     
@@ -2413,7 +2502,7 @@ public class MetaInfManager extends Thread
 
     		XmlUtil.setElementText(statusElement, Integer.toString(newStatus));
             
-    		cacheDirty.put(path, new Boolean(true));
+    		cacheDirty.put(path, Boolean.TRUE);
     	}
 	}
 	
@@ -2422,20 +2511,24 @@ public class MetaInfManager extends Thread
      * Used in the search function which can cause hundreds of meta info files to get loaded.
      * 
      * @param dirPath the absolute path of the directory
+     * @param forceDirty release metainf even if it unsaved
      */
-    public void releaseMetaInf(String dirPath)
-    {
+    public void releaseMetaInf(String dirPath, boolean forceReleaseDirty) {
     	synchronized(this) {
-        	if (dirList.get(dirPath) != null)
-        	{
-        		dirList.remove(dirPath);
-            }
-        	
-        	if (cacheDirty.containsKey(dirPath)) {
-        	    cacheDirty.remove(dirPath);
+    		
+        	if ((!cacheDirty.containsKey(dirPath)) || forceReleaseDirty) {
+            	if (dirList.get(dirPath) != null) {
+            		dirList.remove(dirPath);
+            		// if (Logger.getLogger(getClass()).isDebugEnabled()) {
+            		//    Logger.getLogger(getClass()).debug("released metainf for path " + dirPath);
+                    // }
+                }
+            	
+                if (forceReleaseDirty && cacheDirty.containsKey(dirPath)) {
+                    cacheDirty.remove(dirPath);
+                }
         	}
     	}
-    		
     }
     
     public synchronized void run()

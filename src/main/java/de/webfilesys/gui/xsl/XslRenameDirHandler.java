@@ -125,7 +125,7 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 					}
 					else
 					{
-                        MetaInfManager.getInstance().releaseMetaInf(currentPath);
+                        MetaInfManager.getInstance().releaseMetaInf(currentPath, false);
                         
 					    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
 					    {

@@ -3,6 +3,7 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -187,6 +188,13 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		metaInfMgr.setDescription(path, description);
 		
+		String tags = req.getParameter("tags");
+		
+	    if (tags != null) {
+			String[] newTags = tags.trim().split(",");
+			metaInfMgr.setTags(path, newTags);
+	    }
+		
 		if (geoDataExist)
 		{
 			GeoTag geoTag = new GeoTag(latitude, longitude, zoomFactor);
@@ -368,6 +376,31 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		if (description != null)
 		{
 			XmlUtil.setChildText(metaInfElement, "description", description, true);
+		}
+		
+		if (folderOrFile.isFile()) {
+			String tags = "";
+			if (errorMsg != null) {
+				tags = req.getParameter("tags");
+			} else {
+				ArrayList<String> tagList = metaInfMgr.getTags(path);
+				if (tagList != null) {
+					StringBuilder buff = new StringBuilder();
+					boolean firstTag = true;
+				    for (String tag : tagList) {
+						if (firstTag) {
+							firstTag = false;
+						} else {
+							buff.append(", ");
+						}
+						buff.append(tag);
+					}
+				    tags = buff.toString();
+				}
+			}
+			Element tagsElem = doc.createElement("tags");
+			XmlUtil.setElementText(tagsElem, tags, true);
+		    metaInfElement.appendChild(tagsElem);
 		}
 		
         Element geoTagElement = doc.createElement("geoTag");

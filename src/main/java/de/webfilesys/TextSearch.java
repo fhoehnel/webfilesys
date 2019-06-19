@@ -247,7 +247,7 @@ public class TextSearch
                         }
                 	}
                 }
-                else
+                else // file
                 {
                     if ((tempFile.lastModified()>=fromDate) &&
                         (tempFile.lastModified()<=toDate))
@@ -266,12 +266,8 @@ public class TextSearch
 
 									if (metaInfOnly)
 									{
-										String description = metaInfMgr.getDescription(fullPath);
-
-										if ((description == null) ||
-											(description.toLowerCase().indexOf(searchArgs.get(j).toLowerCase()) < 0))
-										{
-											allWordsFound=false;
+										if (!searchInMetaInf(fullPath, searchArgs.get(j))) {
+											allWordsFound = false;
 										}
 									}
 									else
@@ -279,7 +275,7 @@ public class TextSearch
 										// if (includeMetaInf && metaInfMgr.isMetaInfFile(fullPath))
 										if (metaInfMgr.isMetaInfFile(fullPath))
 										{
-											allWordsFound=false;
+											allWordsFound = false;
 										}
 										else
 										{
@@ -289,16 +285,12 @@ public class TextSearch
 											{
 												if (!includeMetaInf)
 												{
-													allWordsFound=false;
+													allWordsFound = false;
 												}
 												else
 												{
-													String description=metaInfMgr.getDescription(fullPath);
-
-													if ((description==null) ||
-														(description.toLowerCase().indexOf(searchArgs.get(j).toLowerCase()) < 0))
-													{
-														allWordsFound=false;
+													if (!searchInMetaInf(fullPath, searchArgs.get(j))) {
+														allWordsFound = false;
 													}
 												}
 											}
@@ -357,7 +349,7 @@ public class TextSearch
             {
                 if (!act_path.equals(searchResultDir))
                 {
-                    metaInfMgr.releaseMetaInf(act_path);
+                    metaInfMgr.releaseMetaInf(act_path, false);
                 }
             }
         }
@@ -443,10 +435,65 @@ public class TextSearch
             if (firstMatchIdx[i] > 0)
             {
                 printHitEnvironment(fileName, searchArgs.get(i), firstMatchIdx[i]);
+            } else {
+            	if (includeMetaInf || metaInfOnly) {
+            		printMatchingDescription(fileName, searchArgs.get(i));
+            		printMatchingTags(fileName, searchArgs.get(i));
+            	}
             }
         }
     }
 
+    protected void printMatchingDescription(String filePath, String searchArg) {
+    	String description = metaInfMgr.getDescription(filePath);
+    	if (!CommonUtils.isEmpty(description)) {
+    		int matchIdx = description.toLowerCase().indexOf(searchArg.toLowerCase());
+    		if (matchIdx >= 0) {
+        		int prefixStartIdx = matchIdx - 10;
+        		if (prefixStartIdx < 0) {
+        			prefixStartIdx = 0;
+        		}
+        		int postFixEndIdx = matchIdx + searchArg.length() + 10;
+        		if (postFixEndIdx > description.length() - 1) {
+        			postFixEndIdx = description.length() - 1;
+        		}
+        		
+        		output.print("<span class=\"plaintext\" style=\"margin-left:30px;\">description: ");             		
+
+        		if (prefixStartIdx < matchIdx) {
+        			output.print("..." + description.substring(prefixStartIdx, matchIdx));
+        		}
+        		output.print("<b>");
+        		output.print(searchArg);
+        		output.print("</b>");
+        		if (postFixEndIdx >= matchIdx + searchArg.length()) {
+        			output.print(description.substring(matchIdx + searchArg.length(), postFixEndIdx) + "...");
+        		}
+        		
+        		output.println("</span>");
+                output.println("<br/>");
+    		}
+    	}
+    }
+    
+    protected void printMatchingTags(String filePath, String searchArg) {
+    	ArrayList<String> tags = metaInfMgr.getTags(filePath);
+        if (tags != null) {
+        	boolean anyTagMatches = false;
+        	for (String tag : tags) {
+        		if (tag.toLowerCase().indexOf(searchArg.toLowerCase()) >= 0) {
+            		output.print("<span class=\"plaintext\" style=\"margin-left:30px;\">tag: ");             		
+                    output.print(tag);
+            		output.println("</span>");
+            		anyTagMatches = true;
+        		}
+        	}
+        	if (anyTagMatches) {
+                output.println("<br/>");
+        	}
+        }
+    }
+    
     protected void printHitEnvironment(String fileName,String searched,int firstMatchIdx)
     {
         int searchLength = searched.length();
@@ -586,6 +633,24 @@ public class TextSearch
         		}
         	}
         }
+    }
+    
+    private boolean searchInMetaInf(String fullPath, String searchArg) {
+		ArrayList<String> tags = metaInfMgr.getTags(fullPath);
+		if (tags != null) {
+			for (String tag : tags) {
+				if (tag.toLowerCase().indexOf(searchArg.toLowerCase()) >= 0) {
+					return true;
+				}
+			}
+		}
+		
+		String description = metaInfMgr.getDescription(fullPath);
+		if ((description != null) &&
+			(description.toLowerCase().indexOf(searchArg.toLowerCase()) >= 0)) {
+			return true;
+		}
+		return false;
     }
     
 }

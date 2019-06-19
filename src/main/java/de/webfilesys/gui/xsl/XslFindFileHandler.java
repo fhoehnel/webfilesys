@@ -202,7 +202,7 @@ public class XslFindFileHandler extends XslRequestHandlerBase
 			
             if (category != null)
             {
-                metaInfMgr.releaseMetaInf(actPath);
+                metaInfMgr.releaseMetaInf(actPath, false);
             }
 		}
 		else
