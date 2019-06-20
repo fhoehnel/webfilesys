@@ -706,3 +706,35 @@ function createVideoTimeOptions(selectBox, minVal, maxVal, preselectVal) {
     }    
 }
                 
+function addAudioToVideo(videoFilePath) {
+    var url = "/webfilesys/servlet?command=video&cmd=addAudioToVideo&videoFilePath=" +  encodeURIComponent(videoFilePath);
+
+	xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+			    
+                var errorItem = xmlDoc.getElementsByTagName("error")[0];            
+                if (errorItem) {
+                	customAlert(errorItem.firstChild.nodeValue);
+                } else {
+                    var targetFolderItem = xmlDoc.getElementsByTagName("targetFolder")[0];            
+                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                    var targetPathItem = xmlDoc.getElementsByTagName("targetPath")[0];            
+                    var targetPath = targetPathItem.firstChild.nodeValue;
+                    
+                    customAlert(resourceBundle["addAudioToVideoStarted"] + " " + targetFolder + ".");
+                    
+                    setTimeout(function() {
+    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	                window.parent.frames[1].location.href = expUrl;
+                    } , 4000);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+	});
+	
+}

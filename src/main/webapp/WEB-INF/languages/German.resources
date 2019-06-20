@@ -965,6 +965,11 @@ button.previewVideoExtract=Vorschau
 videoFrameExtractionStarted=Die Extrahierung des Standbildes wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 validationError.videoFrameExtractTime=Der gewählte Zeitpunkt liegt ausserhalb des Zeitbereiches des Videos.
 
+# add audio to video
+contextMenuAddAudioToVideo=Audio aus MP3 hinzufügen
+errorMissingAudioInClipboard=Wählen sie die Audio-Dateien zum Kopieren aus vor Aufruf dieser Operation!
+addAudioToVideoStarted=Das Hinzufügen von Audio zu Video wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
+
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version
 label.bookmarksMobile=Ordner-Lesezeichen

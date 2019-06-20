@@ -48,6 +48,8 @@ function videoContextMenu(fileName, domId) {
         menuText += menuEntry("javascript:editConvertVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuEditVideo"]);
 
         menuText += menuEntry("javascript:extractVideoFrame('" + scriptPreparedFile + "')", resourceBundle["contextMenuExtractVideoFrame"]);
+
+        menuText += menuEntry("javascript:addAudioToVideo('" + scriptPreparedPath + "')", resourceBundle["contextMenuAddAudioToVideo"]);
     }
         
     menuText += menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);

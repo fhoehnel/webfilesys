@@ -962,6 +962,11 @@ button.previewVideoExtract=Preview
 videoFrameExtractionStarted=The extraction of the video frame has been started. This can take some time to complete. For the result file watch the subfolder
 validationError.videoFrameExtractTime=The selected time is outside the range of the video.
 
+# add audio to video
+contextMenuAddAudioToVideo=add audio from MP3
+errorMissingAudioInClipboard=Copy the audio file(s) to the clipboard before you call this operation!
+addAudioToVideoStarted=The video/audio mixing process has been start. This can take some time to complete. The result file will be created in the subfolder
+
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version
 label.bookmarksMobile=bookmarks

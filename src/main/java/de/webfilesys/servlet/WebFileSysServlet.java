@@ -57,6 +57,7 @@ import de.webfilesys.gui.admin.LoginLogoutHistoryHandler;
 import de.webfilesys.gui.admin.SessionListHandler;
 import de.webfilesys.gui.admin.UserListRequestHandler;
 import de.webfilesys.gui.admin.ViewLogRequestHandler;
+import de.webfilesys.gui.ajax.AddAudioToVideoHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFileChangeHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFileExistHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFolderExistHandler;
@@ -2194,6 +2195,11 @@ public class WebFileSysServlet extends ServletBase
 
                 if (cmd.equals("renameVideo")) {
                     (new RenameVideoRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
+                    return(true);
+                }
+
+                if (cmd.equals("addAudioToVideo")) {
+                    (new AddAudioToVideoHandler(req, resp, session, output, userid)).handleRequest();
                     return(true);
                 }
             }
