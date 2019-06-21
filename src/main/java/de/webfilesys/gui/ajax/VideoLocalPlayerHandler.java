@@ -3,6 +3,7 @@ package de.webfilesys.gui.ajax;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,22 +61,29 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
         }
 
         try {
-        	StringBuilder progNameAndParams = new StringBuilder(videoPlayerExePath);
+            ArrayList<String> progNameAndParams = new ArrayList<String>();
+            progNameAndParams.add(videoPlayerExePath);
         	
         	String addParams = WebFileSys.getInstance().getVideoPlayerAddParams();
-        	if (!CommonUtils.isEmpty(addParams)) {
-        		progNameAndParams.append(" ");
-        		progNameAndParams.append(addParams);
-        	}
-        	
-    		progNameAndParams.append(" ");
-    		progNameAndParams.append(videoFilePath);
+            if (addParams != null) {
+            	String[] params = addParams.split(" ");
+            	for (String param : params) {
+                    progNameAndParams.add(param);
+            	}
+            }
+            
+            progNameAndParams.add(videoFilePath);
 
-        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-        		Logger.getLogger(getClass()).debug("video player call with parameters: " + progNameAndParams);
-        	}
+            if (Logger.getLogger(getClass()).isDebugEnabled()) {
+            	StringBuilder buff = new StringBuilder();
+                for (String cmdToken : progNameAndParams) {
+                	buff.append(cmdToken);
+                	buff.append(' ');
+                }
+                Logger.getLogger(getClass()).debug("ffplay call with params: " + buff.toString());
+            }
         	
-			Process ffplayProcess = Runtime.getRuntime().exec(progNameAndParams.toString());
+			Process ffplayProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
 			
 	        DataInputStream ffplayOut = new DataInputStream(ffplayProcess.getErrorStream());
 	        

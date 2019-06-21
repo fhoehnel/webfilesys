@@ -175,14 +175,31 @@ public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
 			
 	        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
 			
-        	String progNameAndParams = ffmpegExePath + " -f concat -safe 0 -i " + ffmpegFileListFile.getAbsolutePath() + " -c copy " + targetFilePath;
-
+        	// String progNameAndParams = ffmpegExePath + " -f concat -safe 0 -i " + ffmpegFileListFile.getAbsolutePath() + " -c copy " + targetFilePath;
+            
+            ArrayList<String> progNameAndParams = new ArrayList<String>();
+            progNameAndParams.add(ffmpegExePath);
+            progNameAndParams.add("-f");
+            progNameAndParams.add("concat");
+            progNameAndParams.add("-safe");
+            progNameAndParams.add("0");
+            progNameAndParams.add("-i");
+            progNameAndParams.add(ffmpegFileListFile.getAbsolutePath());
+            progNameAndParams.add("-c");
+            progNameAndParams.add("copy");
+            progNameAndParams.add(targetFilePath);
+            
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
+            	StringBuilder buff = new StringBuilder();
+                for (String cmdToken : progNameAndParams) {
+                	buff.append(cmdToken);
+                	buff.append(' ');
+                }
+                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
             }
-        	
+            
 			try {
-				Process convertProcess = Runtime.getRuntime().exec(progNameAndParams);
+				Process convertProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
 				
 		        DataInputStream grabProcessOut = new DataInputStream(convertProcess.getErrorStream());
 		        

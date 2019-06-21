@@ -1,10 +1,8 @@
 package de.webfilesys.gui.xsl;
 
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,6 +13,8 @@ import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ScaledImage;
+import de.webfilesys.graphics.VideoInfo;
+import de.webfilesys.graphics.VideoInfoExtractor;
 import de.webfilesys.graphics.VideoThumbnailCreator;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -64,141 +64,53 @@ public class ExtractVideoFrameParamHandler extends XslRequestHandlerBase {
         String ffprobeExePath = WebFileSys.getInstance().getFfprobeExePath();
         
         if (!CommonUtils.isEmpty(ffprobeExePath)) {
-    		try {
+	        VideoInfoExtractor videoInfoExtractor = new VideoInfoExtractor();
+            VideoInfo videoInfo = videoInfoExtractor.getVideoInfo(videoFilePath);
 
-            	String progNameAndParams = ffprobeExePath +  " -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width,codec_name,duration,avg_frame_rate -sexagesimal " + videoFilePath;
-
-                if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                    Logger.getLogger(getClass()).debug("ffprobe call with params: " + progNameAndParams);
+            if (videoInfo.getFfprobeResult() == 0) {
+				Element videoInfoElem = doc.createElement("videoInfo");
+				editParamsElem.appendChild(videoInfoElem);
+				
+				XmlUtil.setChildText(videoInfoElem, "xpix", Integer.toString(videoInfo.getWidth()));
+    	        XmlUtil.setChildText(videoInfoElem, "ypix", Integer.toString(videoInfo.getHeight()));
+                XmlUtil.setChildText(videoInfoElem, "codec", videoInfo.getCodec());
+                XmlUtil.setChildText(videoInfoElem, "duration", videoInfo.getDuration());
+                XmlUtil.setChildText(videoInfoElem, "durationSeconds", Integer.toString(videoInfo.getDurationSeconds()));
+                XmlUtil.setChildText(videoInfoElem, "fps", Integer.toString(videoInfo.getFrameRate()));
+                
+                int maxDimension = videoInfo.getWidth();
+                if (videoInfo.getHeight() > videoInfo.getWidth()) {
+                	maxDimension = videoInfo.getHeight();
                 }
-            	
-                String videoWidth = "";
-                String videoHeight = "";
-                String codec = "";
-                String duration = "";
-                String frameRate = "";
-                int durationSeconds = 0;
-    			Process ffprobeProcess = Runtime.getRuntime().exec(progNameAndParams);
-    			
-    	        DataInputStream ffprobeOut = new DataInputStream(ffprobeProcess.getInputStream());
-    	        
-    	        String outLine = null;
-    	        
-    	        while ((outLine = ffprobeOut.readLine()) != null) {
-                    if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                        Logger.getLogger(getClass()).debug("ffprobe output: " + outLine);
-                    }
 
-                    if ((videoWidth.length() == 0) && outLine.contains("_width")) {
-    	                String[] tokens = outLine.split("=");
-    	                videoWidth = tokens[1];
-    	            } else if ((videoHeight.length() == 0) && outLine.contains("_height")) {
-                        String[] tokens = outLine.split("=");
-                        videoHeight = tokens[1];
-                    } else if ((codec.length() == 0) && outLine.contains("_codec")) {
-                        String[] tokens = outLine.split("=");
-                        codec = tokens[1].substring(1, tokens[1].length() - 1);
-                    } else if ((duration.length() == 0) && outLine.contains("_duration")) {
-                        // streams_stream_0_duration="0:04:36.400000"
-                        String[] tokens = outLine.split("=");
-                        duration = tokens[1].substring(1, 8);
-                        
-                        String[] partsOfDuration = duration.split(":");
-                        if (partsOfDuration.length == 3) {
-                            try {
-                                durationSeconds = (Integer.parseInt(partsOfDuration[0]) * 3600) + (Integer.parseInt(partsOfDuration[1]) * 60) + Integer.parseInt(partsOfDuration[2]);
-                            } catch (Exception ex) {
-                                Logger.getLogger(getClass()).warn("invalid video duration: " + duration);
-                            }
-                        }
-                    } else if ((frameRate.length() == 0) && outLine.contains("_avg_frame_rate")) {
-                        String[] tokens = outLine.split("=");
-                        String averageFrameRate = tokens[1].substring(1, tokens[1].length() - 1);
-                        tokens =  averageFrameRate.split("/");
-                        if (tokens.length == 2) {
-                            try {
-                                int frameRatePart1 = Integer.parseInt(tokens[0]);
-                                int frameRatePart2 = Integer.parseInt(tokens[1]);
-                                int fps = frameRatePart1 / frameRatePart2;
-                                frameRate = Integer.toString(fps);
-                            } catch (Exception ex) {
-                                Logger.getLogger(getClass()).warn("invalid frame rate for " + videoFilePath + ": " + averageFrameRate);
-                            }
-                        }
-                    }                    
-    	        }
-    			
-    			int ffprobeResult = ffprobeProcess.waitFor();
-    			
-    			if (ffprobeResult == 0) {
-    				Element videoInfoElem = doc.createElement("videoInfo");
-    				editParamsElem.appendChild(videoInfoElem);
-    				
-    				XmlUtil.setChildText(videoInfoElem, "xpix", videoWidth);
-        	        XmlUtil.setChildText(videoInfoElem, "ypix", videoHeight);
-                    XmlUtil.setChildText(videoInfoElem, "codec", codec);
-                    XmlUtil.setChildText(videoInfoElem, "duration", duration);
-                    XmlUtil.setChildText(videoInfoElem, "durationSeconds", Integer.toString(durationSeconds));
-                    XmlUtil.setChildText(videoInfoElem, "fps", frameRate);
-                    
-                    try {
-                    	int videoWidthInt = Integer.parseInt(videoWidth);
-                    	int videoHeightInt = Integer.parseInt(videoHeight);
-                        if (videoWidthInt >= videoHeightInt) {
-            				XmlUtil.setChildText(videoInfoElem, "sizeMaxDimension", videoWidth);
-                        } else {
-            				XmlUtil.setChildText(videoInfoElem, "sizeMaxDimension", videoHeight);
-                        }
-                    } catch (NumberFormatException numEx) {
-                    }
-                    
-                    try {
-                        int xResolution = Integer.parseInt(videoWidth);
-                        int yResolution = Integer.parseInt(videoHeight);
-                        
-                        int maxDimension = xResolution;
-                        if (yResolution > xResolution) {
-                        	maxDimension = yResolution;
-                        }
-                        
-        				Element targetResolutionElem = doc.createElement("targetResolution");
-        				editParamsElem.appendChild(targetResolutionElem);
-        				
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 1920);
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 1280);
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 1024);
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 800);
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 640);
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 400);
-        				addTargetResolutionOption(targetResolutionElem, maxDimension, 200);
-        				
-                    } catch (Exception ex) {
-                    	Logger.getLogger(getClass()).warn("invalid video resolution: " + videoWidth + " x " + videoHeight);
-                    }
-    			} else {
-    				Logger.getLogger(getClass()).warn("ffprobe returned error " + ffprobeResult);
-    			}
-    			
-    			XmlUtil.setChildText(editParamsElem, "videoFileName", videoFileName, false);
-    			
-    			XmlUtil.setChildText(editParamsElem, "thumbnailSource", "/webfilesys/servlet?command=videoThumb&videoFile=" + UTF8URLEncoder.encode(videoFileName), false);                    
-    			
-    			try {
-    				String videoThumbnailPath = VideoThumbnailCreator.getThumbnailPath(videoFilePath);
-    				
-    				ScaledImage scaledImage = new ScaledImage(videoThumbnailPath, 100, 100);
+				XmlUtil.setChildText(videoInfoElem, "sizeMaxDimension", Integer.toString(maxDimension));
+                
+				Element targetResolutionElem = doc.createElement("targetResolution");
+				editParamsElem.appendChild(targetResolutionElem);
+				
+				addTargetResolutionOption(targetResolutionElem, maxDimension, 1920);
+				addTargetResolutionOption(targetResolutionElem, maxDimension, 1280);
+				addTargetResolutionOption(targetResolutionElem, maxDimension, 1024);
+				addTargetResolutionOption(targetResolutionElem, maxDimension, 800);
+				addTargetResolutionOption(targetResolutionElem, maxDimension, 640);
+				addTargetResolutionOption(targetResolutionElem, maxDimension, 400);
+				addTargetResolutionOption(targetResolutionElem, maxDimension, 200);
+			}
+			
+			XmlUtil.setChildText(editParamsElem, "videoFileName", videoFileName, false);
+			
+			XmlUtil.setChildText(editParamsElem, "thumbnailSource", "/webfilesys/servlet?command=videoThumb&videoFile=" + UTF8URLEncoder.encode(videoFileName), false);                    
+			
+			try {
+				String videoThumbnailPath = VideoThumbnailCreator.getThumbnailPath(videoFilePath);
+				
+				ScaledImage scaledImage = new ScaledImage(videoThumbnailPath, 100, 100);
 
-        			XmlUtil.setChildText(editParamsElem, "thumbnailWidth", Integer.toString(scaledImage.getRealWidth()), false);                    
-        			XmlUtil.setChildText(editParamsElem, "thumbnailHeight", Integer.toString(scaledImage.getRealHeight()), false);                    
-    				
-    			} catch (IOException ioEx) {
-    				Logger.getLogger(getClass()).error(ioEx);
-    			}
-    		} catch (IOException ioex) {
-    			Logger.getLogger(getClass()).error("failed to get video dimensions for video " + videoFilePath, ioex);
-    		} catch (InterruptedException iex) {
-    			Logger.getLogger(getClass()).error("failed to get video dimensions for video " + videoFilePath, iex);
-    		}
+    			XmlUtil.setChildText(editParamsElem, "thumbnailWidth", Integer.toString(scaledImage.getRealWidth()), false);                    
+    			XmlUtil.setChildText(editParamsElem, "thumbnailHeight", Integer.toString(scaledImage.getRealHeight()), false);                    
+			} catch (IOException ioEx) {
+				Logger.getLogger(getClass()).error(ioEx);
+			}
         }        
 		
 		processResponse("extractVideoFrameParams.xsl");

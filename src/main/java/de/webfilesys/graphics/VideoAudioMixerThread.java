@@ -59,31 +59,36 @@ public class VideoAudioMixerThread extends Thread {
         String targetFilePath = targetPath + File.separator + sourceFileName;
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
-
-        	StringBuilder progNameAndParams = new StringBuilder(ffmpegExePath);
-            progNameAndParams.append(" -y");
-
-        	progNameAndParams.append(" -i ");
-        	progNameAndParams.append(videoFilePath);
-        	
-        	progNameAndParams.append(" -i ");
-        	progNameAndParams.append(audioFilePath);
-        	
-        	progNameAndParams.append(" -map 0:v");
-        	progNameAndParams.append(" -map " + 1 + ":a");
-        	progNameAndParams.append(" -strict -1");
-        	progNameAndParams.append(" -c copy");
-        	
-         	progNameAndParams.append(" -shortest ");
-        	
-        	progNameAndParams.append(targetFilePath);
-
+            
+            ArrayList<String> progNameAndParams = new ArrayList<String>();
+            progNameAndParams.add(ffmpegExePath);
+            progNameAndParams.add("-y");
+            progNameAndParams.add("-i");
+            progNameAndParams.add(videoFilePath);
+            progNameAndParams.add("-i");
+            progNameAndParams.add(audioFilePath);
+            progNameAndParams.add("-map");
+            progNameAndParams.add("0:v");
+            progNameAndParams.add("-map");
+            progNameAndParams.add("1:a");
+            progNameAndParams.add("-strict");
+            progNameAndParams.add("-1");
+            progNameAndParams.add("-c");
+            progNameAndParams.add("copy");
+            progNameAndParams.add("-shortest");
+            progNameAndParams.add(targetFilePath);
+            
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
+            	StringBuilder buff = new StringBuilder();
+                for (String cmdToken : progNameAndParams) {
+                	buff.append(cmdToken);
+                	buff.append(' ');
+                }
+                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
             }
-        	
+            
 			try {
-				Process convertProcess = Runtime.getRuntime().exec(progNameAndParams.toString());
+				Process convertProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
 				
 		        DataInputStream convertProcessOut = new DataInputStream(convertProcess.getErrorStream());
 		        
@@ -114,48 +119,55 @@ public class VideoAudioMixerThread extends Thread {
         }
         
         if (audioFiles.size() > 1) {
-        	// TODO: delete combined audio file
+        	File combinedAudioFile = new File(audioFilePath);
+        	if (!combinedAudioFile.delete()) {
+        		Logger.getLogger(getClass()).warn("failed to delete temporary combined audio file " + audioFilePath);
+        	}
         }
     }
    
     private String concatenateAudioFiles(ArrayList<String> audioFiles, String targetPath, String ffmpegExePath) {
     	
         String combinedAudioFilePath = targetPath + File.separator + "combinedAudio.mp3";
-    	
-    	// C:/Programs/ffmpeg/bin/ffmpeg.exe -i C:\temp\mp3-examples\SoundHelixSong-4b.mp3 -i C:\temp\mp3-examples\Vivaldi_Sonata_eminor.mp3 -i C:\temp\mp3-examples\Tchaikovsky_Nocturne.mp3 -filter_complex "[0:a:0][1:a:0][2:a:0]concat=n=3:v=0:a=1[outa]" -map "[outa]" C:\temp\mp3-examples\combined.mp3
-
-        StringBuilder progNameAndParams = new StringBuilder(ffmpegExePath);
-    	
-        progNameAndParams.append(" -y");
+        
+        ArrayList<String> progNameAndParams = new ArrayList<String>();
+        progNameAndParams.add(ffmpegExePath);
+        progNameAndParams.add("-y");
         
     	for (String audioFile: audioFiles) {
-        	progNameAndParams.append(" -i ");
-        	progNameAndParams.append(audioFile);
+        	progNameAndParams.add("-i");
+        	progNameAndParams.add(audioFile);
     	}
-
-    	progNameAndParams.append(" -filter_complex ");
-    	
-    	progNameAndParams.append("\"");
+        progNameAndParams.add("-filter_complex");
+        
+        StringBuilder buff = new StringBuilder();
+        buff.append("\"");
         int i = 0;
     	for (String audioFile: audioFiles) {
-    		progNameAndParams.append("[" + i + ":a:0]");
+    		buff.append("[" + i + ":a:0]");
     		i++;
     	}
-    	progNameAndParams.append("concat=n=");
-    	progNameAndParams.append(audioFiles.size());
-    	progNameAndParams.append(":v=0:a=1[outa]");
-    	progNameAndParams.append("\"");
-    	
-    	progNameAndParams.append(" -map \"[outa]\" ");
-    	
-    	progNameAndParams.append(combinedAudioFilePath);
-    	
+    	buff.append("concat=n=");
+    	buff.append(audioFiles.size());
+    	buff.append(":v=0:a=1[outa]");
+    	buff.append("\"");
+    	progNameAndParams.add(buff.toString());       
+        
+        progNameAndParams.add("-map");
+        progNameAndParams.add("\"[outa]\"");
+        progNameAndParams.add(combinedAudioFilePath);
+        
         if (Logger.getLogger(getClass()).isDebugEnabled()) {
-            Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
+        	buff = new StringBuilder();
+            for (String cmdToken : progNameAndParams) {
+            	buff.append(cmdToken);
+            	buff.append(' ');
+            }
+            Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
         }
-    	
+        
 		try {
-			Process convertProcess = Runtime.getRuntime().exec(progNameAndParams.toString());
+			Process convertProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
 			
 	        DataInputStream convertProcessOut = new DataInputStream(convertProcess.getErrorStream());
 	        

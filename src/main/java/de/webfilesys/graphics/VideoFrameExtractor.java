@@ -3,6 +3,8 @@ package de.webfilesys.graphics;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 import de.webfilesys.WebFileSys;
@@ -51,14 +53,31 @@ public class VideoFrameExtractor extends Thread
             	scaleFilter = "scale=-1:" + frameSize;
             }
             
-        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -filter:v " + scaleFilter + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
+            ArrayList<String> progNameAndParams = new ArrayList<String>();
+            progNameAndParams.add(ffmpegExePath);
+            progNameAndParams.add("-i");
+            progNameAndParams.add(videoFilePath);
+            progNameAndParams.add("-ss");
+            progNameAndParams.add(frameGrabTime);
+            progNameAndParams.add("-filter:v");
+            progNameAndParams.add(scaleFilter);
+            progNameAndParams.add("-vframes");
+            progNameAndParams.add("1");
+            progNameAndParams.add(getFfmpegOutputFileSpec(videoFilePath));
+            
+        	// String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -filter:v " + scaleFilter + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
 
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
+            	StringBuilder buff = new StringBuilder();
+                for (String cmdToken : progNameAndParams) {
+                	buff.append(cmdToken);
+                	buff.append(' ');
+                }
+                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
             }
         	
 			try {
-				Process grabProcess = Runtime.getRuntime().exec(progNameAndParams);
+				Process grabProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
 				
 		        DataInputStream grabProcessOut = new DataInputStream(grabProcess.getErrorStream());
 		        
@@ -104,6 +123,7 @@ public class VideoFrameExtractor extends Thread
         String thumbPath = basePath + FRAME_TARGET_DIR + File.separator;
 
         String imgFileName = videoPath.substring(sepIdx + 1);
+        // imgFileName = imgFileName.replace(' ', '_');
 
         return(thumbPath + "%01d"+ imgFileName + ".jpg");
     }

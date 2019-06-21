@@ -1,10 +1,7 @@
 package de.webfilesys.gui.ajax;
 
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -15,6 +12,8 @@ import org.w3c.dom.Element;
 import de.webfilesys.FileLink;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.graphics.VideoInfo;
+import de.webfilesys.graphics.VideoInfoExtractor;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
@@ -129,7 +128,7 @@ public class GetVideoDimensionsHandler extends XmlRequestHandlerBase {
         	FileLink fileLink = MetaInfManager.getInstance().getLink(path, fileName);
         	if (fileLink != null) {
         		if (!accessAllowed(fileLink.getDestPath())) {
-        			LOG.error("user " + uid + " tried to access a linked file outside his docuemnt root: " + fileLink.getDestPath());
+        			LOG.error("user " + uid + " tried to access a linked file outside the docuemnt root: " + fileLink.getDestPath());
         			return;
         		}
         		videoFile = new File(fileLink.getDestPath());
@@ -151,87 +150,21 @@ public class GetVideoDimensionsHandler extends XmlRequestHandlerBase {
         String ffprobeExePath = WebFileSys.getInstance().getFfprobeExePath();
         
         if (!CommonUtils.isEmpty(ffprobeExePath)) {
-    		try {
+        	// String progNameAndParams = ffprobeExePath +  " -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width,codec_name,duration,avg_frame_rate -sexagesimal " + videoFile.getAbsolutePath();
+            
+	        VideoInfoExtractor videoInfoExtractor = new VideoInfoExtractor();
+            VideoInfo videoInfo = videoInfoExtractor.getVideoInfo(videoFile.getAbsolutePath());
 
-            	String progNameAndParams = ffprobeExePath +  " -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width,codec_name,duration,avg_frame_rate -sexagesimal " + videoFile.getAbsolutePath();
-
-                if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                    Logger.getLogger(getClass()).debug("ffprobe call with params: " + progNameAndParams);
-                }
-            	
-                String videoWidth = "";
-                String videoHeight = "";
-                String codec = "";
-                String duration = "";
-                String frameRate = "";
-                
-    			Process ffprobeProcess = Runtime.getRuntime().exec(progNameAndParams);
-    			
-    	        DataInputStream ffprobeOut = new DataInputStream(ffprobeProcess.getInputStream());
-    	        
-    	        boolean outputEmpty = true;
-    	        
-    	        String outLine = null;
-    	        
-    	        while ((outLine = ffprobeOut.readLine()) != null) {
-                    if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                        Logger.getLogger(getClass()).debug("ffprobe output: " + outLine);
-                    }
-                    outputEmpty = false;
-                    
-                    if ((videoWidth.length() == 0) && outLine.contains("_width")) {
-    	                String[] tokens = outLine.split("=");
-    	                videoWidth = tokens[1];
-    	            } else if ((videoHeight.length() == 0) && outLine.contains("_height")) {
-                        String[] tokens = outLine.split("=");
-                        videoHeight = tokens[1];
-                    } else if ((codec.length() == 0) && outLine.contains("_codec")) {
-                        String[] tokens = outLine.split("=");
-                        codec = tokens[1].substring(1, tokens[1].length() - 1);
-                    } else if ((duration.length() == 0) && outLine.contains("_duration")) {
-                        // streams_stream_0_duration="0:04:36.400000"
-                        String[] tokens = outLine.split("=");
-                        if (tokens[1].length() < 7) {
-                        	duration = "";
-                        } else {
-                            duration = tokens[1].substring(1, 8);
-                        }
-                    } else if ((frameRate.length() == 0) && outLine.contains("_avg_frame_rate")) {
-                        String[] tokens = outLine.split("=");
-                        String averageFrameRate = tokens[1].substring(1, tokens[1].length() - 1);
-                        tokens =  averageFrameRate.split("/");
-                        if (tokens.length == 2) {
-                            try {
-                                int frameRatePart1 = Integer.parseInt(tokens[0]);
-                                int frameRatePart2 = Integer.parseInt(tokens[1]);
-                                int fps = frameRatePart1 / frameRatePart2;
-                                frameRate = Integer.toString(fps);
-                            } catch (Exception ex) {
-                                Logger.getLogger(getClass()).warn("invalid frame rate for " + videoFile + ": " + averageFrameRate);
-                            }
-                        }
-                    }                    
-    	        }
-    			
-    			int ffprobeResult = ffprobeProcess.waitFor();
-    			
-    			if (ffprobeResult == 0) {
-    				XmlUtil.setChildText(resultElement, "xpix", videoWidth);
-        	        XmlUtil.setChildText(resultElement, "ypix", videoHeight);
-                    XmlUtil.setChildText(resultElement, "codec", codec);
-                    XmlUtil.setChildText(resultElement, "duration", duration);
-                    XmlUtil.setChildText(resultElement, "fps", frameRate);
-    			} else {
-    				Logger.getLogger(getClass()).warn("ffprobe returned error " + ffprobeResult);
-    			}
-    			if (outputEmpty) {
-    				XmlUtil.setChildText(resultElement, "error", "ffprobe result empty");
-    			}
-    		} catch (IOException ioex) {
-    			Logger.getLogger(getClass()).error("failed to get video dimensions for video " + videoFile, ioex);
-    		} catch (InterruptedException iex) {
-    			Logger.getLogger(getClass()).error("failed to get video dimensions for video " + videoFile, iex);
-    		}
+            if (videoInfo.getFfprobeResult() == 0) {
+				XmlUtil.setChildText(resultElement, "xpix", Integer.toString(videoInfo.getWidth()));
+    	        XmlUtil.setChildText(resultElement, "ypix", Integer.toString(videoInfo.getHeight()));
+                XmlUtil.setChildText(resultElement, "codec", videoInfo.getCodec());
+                XmlUtil.setChildText(resultElement, "duration", videoInfo.getDuration());
+                XmlUtil.setChildText(resultElement, "fps", Integer.toString(videoInfo.getFrameRate()));
+			}
+			if (videoInfo.isFfprobeEmptyOutput()) {
+				XmlUtil.setChildText(resultElement, "error", "ffprobe result empty");
+			}
         }        
         	
         doc.appendChild(resultElement);
