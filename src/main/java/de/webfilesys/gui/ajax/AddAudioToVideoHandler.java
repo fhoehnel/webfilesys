@@ -3,6 +3,7 @@ package de.webfilesys.gui.ajax;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,6 +57,10 @@ public class AddAudioToVideoHandler extends XmlRequestHandlerBase {
 				}
 			}
 			
+			if (audioFiles.size() > 1) {
+			    Collections.sort(audioFiles);
+			}
+
 			if (audioFiles.size() > 0) {
 				VideoAudioMixerThread videoAudioMixer = new VideoAudioMixerThread(videoFilePath);
 				videoAudioMixer.setAudioFiles(audioFiles);

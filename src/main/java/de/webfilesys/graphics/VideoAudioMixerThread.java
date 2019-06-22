@@ -141,7 +141,9 @@ public class VideoAudioMixerThread extends Thread {
         progNameAndParams.add("-filter_complex");
         
         StringBuilder buff = new StringBuilder();
-        buff.append("\"");
+        if (File.separatorChar == '\\') {
+            buff.append("\"");
+        }
         int i = 0;
     	for (String audioFile: audioFiles) {
     		buff.append("[" + i + ":a:0]");
@@ -150,11 +152,19 @@ public class VideoAudioMixerThread extends Thread {
     	buff.append("concat=n=");
     	buff.append(audioFiles.size());
     	buff.append(":v=0:a=1[outa]");
-    	buff.append("\"");
+        if (File.separatorChar == '\\') {
+            buff.append("\"");
+        }
     	progNameAndParams.add(buff.toString());       
         
         progNameAndParams.add("-map");
-        progNameAndParams.add("\"[outa]\"");
+        
+        if (File.separatorChar == '\\') {
+            progNameAndParams.add("\"[outa]\"");
+        } else {
+            progNameAndParams.add("[outa]");
+        }
+        
         progNameAndParams.add(combinedAudioFilePath);
         
         if (Logger.getLogger(getClass()).isDebugEnabled()) {
