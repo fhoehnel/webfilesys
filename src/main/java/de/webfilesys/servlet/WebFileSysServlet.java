@@ -82,6 +82,7 @@ import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
+import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
 import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
 import de.webfilesys.gui.ajax.XformImageHandler;
@@ -1324,6 +1325,13 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("multiVideoConcat"))
         {
 		    (new MultiVideoConcatHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+
+            return(true);
+        }
+        
+        if (command.equals("multiImgToVideo"))
+        {
+		    (new SlideshowToVideoHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }

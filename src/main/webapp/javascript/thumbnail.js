@@ -26,6 +26,8 @@ function multiFileFunction() {
         renameToExifDate();
     } else if (cmd == 'view') {
         multiViewImage();
+    } else if (cmd == 'multiImgToVideo') {
+	    multiImgToVideo();
     }
      
     document.form2.cmd.selectedIndex = 0;
@@ -39,6 +41,73 @@ function resetSelected() {
 	        document.form2.elements[i].checked = false;
         }
     }
+}
+
+function multiImgToVideo() {
+
+	var numChecked = getSelectedCheckboxCount();
+
+    if (numChecked < 2) {
+        customAlert(resourceBundle["selectTwoOrMorePics"]);
+        document.form2.command.value = '';
+        document.form2.cmd.selectedIndex = 0;
+        return;
+    }	
+	
+    for (var i = document.form2.elements.length - 1; i >= 0; i--) {
+        if ((document.form2.elements[i].type == "checkbox") &&
+        	document.form2.elements[i].checked && 
+		    (document.form2.elements[i].name != "cb-setAll")) {
+
+        	 var fileNameExt = getFileNameExt(document.form2.elements[i].name)
+	         if ((fileNameExt != ".JPG") && (fileNameExt != ".JPEG")) {
+	             customAlert(resourceBundle["imgToVideoNoJPEG"]);
+	             document.form2.command.value = '';
+	             document.form2.cmd.selectedIndex = 0;
+	             return;
+	         }
+         }
+    }
+    
+	showHourGlass();
+    document.form2.command.value = 'multiImgToVideo';
+    
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var success = req.responseXML.getElementsByTagName("success")[0];
+                if (success) {
+                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                    var targetPath = targetPathItem.firstChild.nodeValue;
+                    
+                    customAlert(resourceBundle["slideshowToVideoStarted"] + " " + targetFolder + ".");
+                    
+                    setTimeout(function() {
+    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	                window.parent.frames[1].location.href = expUrl;
+                    } , 4000);
+                } else {
+	                var item = req.responseXML.getElementsByTagName("errorCode")[0];
+	                var errorCode = item.firstChild.nodeValue;
+	                if (errorCode == '1') {
+	                    customAlert(resourceBundle["slideshowVideoErrorMissmatch"]);
+	                } else if (errorCode == '2') {
+	                    customAlert(resourceBundle["slideshowVideoErrorProcess"]);
+	                }
+                }
+            } else {
+            	alert(resourceBundle["alert.communicationFailure"]);
+            }
+            
+            document.form2.command.value = '';
+            document.form2.cmd.selectedIndex = 0;
+
+            hideHourGlass();
+        }
+    });
 }
 
 function multiViewImage() {

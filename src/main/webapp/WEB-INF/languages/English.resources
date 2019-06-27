@@ -452,6 +452,12 @@ button.rotateByExif=Rotate by Exif
 title.rotateByExif=rotate pictures according to the orientation value in the camera EXIF data
 confirm.rotateByExif=Pictures, whose orientation does not match the orientation value stored in the camera EXIF data will be rotated losslessly. Continue?
 rotateByExif.noop=No picture rotated!
+multiImgToVideo=create slideshow video
+imgToVideoNoJPEG=A slideshow video can only be created from JPEG picture files.
+selectTwoOrMorePics=Select at least 2 JPEG picture files!
+slideshowToVideoStarted=The slideshow video creation has been started and will take some time to complete. The result video file is created in subfolder
+slideshowVideoErrorMissmatch=Please select only JPEG pictures with equal pixel resolution!
+slideshowVideoErrorProcess=Creation of the slideshow video has failed.
 
 #picture comparision
 compImg.deleteTitle=delete picture file
