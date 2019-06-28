@@ -26,7 +26,7 @@ function multiFileFunction() {
         renameToExifDate();
     } else if (cmd == 'view') {
         multiViewImage();
-    } else if (cmd == 'multiImgToVideo') {
+    } else if (cmd == 'slideshowVideoParams') {
 	    multiImgToVideo();
     }
      
@@ -69,10 +69,14 @@ function multiImgToVideo() {
          }
     }
     
+    document.form2.command.value = 'video';
+    document.form2.submit();
+} 
+
+function sendSlideshowVideoParams() {
 	showHourGlass();
-    document.form2.command.value = 'multiImgToVideo';
-    
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
+	
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function (req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
                 var success = req.responseXML.getElementsByTagName("success")[0];

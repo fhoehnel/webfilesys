@@ -282,7 +282,7 @@ function hideToast() {
 	}
 }
 
-function customAlert(alertText, buttonText) {
+function customAlert(alertText, buttonText, continueCallback) {
    	var mouseShield = document.createElement("div");
    	mouseShield.id = "mouseClickShield";
    	mouseShield.setAttribute("class", "mouseClickShield");
@@ -306,7 +306,14 @@ function customAlert(alertText, buttonText) {
     
     var confirmButtonElem = document.createElement("button");
     confirmButtonElem.setAttribute("class", "alertConfirmButton");
-    confirmButtonElem.setAttribute("onclick", "closeAlert()");
+    if (continueCallback) {
+        confirmButtonElem.onclick = function() {
+        	closeAlert();
+        	continueCallback();
+        };
+    } else {
+        confirmButtonElem.setAttribute("onclick", "closeAlert()");
+    }
     if (buttonText) {
         confirmButtonElem.innerHTML = buttonText;
     } else {

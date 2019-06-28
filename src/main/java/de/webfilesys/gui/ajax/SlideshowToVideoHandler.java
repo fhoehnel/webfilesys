@@ -18,6 +18,8 @@ import org.w3c.dom.Element;
 import de.webfilesys.Constants;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.graphics.SlideshowToVideoThread;
+import de.webfilesys.gui.xsl.SlideshowToVideoParamHandler;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -35,7 +37,6 @@ public class SlideshowToVideoHandler extends XmlRequestHandlerBase {
 	
 	private static final String FFMPEG_INPUT_LIST_FILE_NAME = "ffmpegInputFileList.txt";
 
-	private static final int ERROR_CODE_DIMENSION_MISSMATCH = 1;
 	private static final int ERROR_CODE_PROCESSING_FAILED = 2;
 	
 	private static final int MAX_VIDEO_RESOLUTION = 1920;
@@ -54,20 +55,41 @@ public class SlideshowToVideoHandler extends XmlRequestHandlerBase {
 		
         String targetPath = currentPath + File.separator + TARGET_VIDEO_SUBDIR;
 
-		ArrayList<String> selectedFiles = new ArrayList<String>();
+		ArrayList<String> selectedFiles = 
+				(ArrayList<String>) req.getSession().getAttribute(SlideshowToVideoParamHandler.SESSION_KEY_SELECTED_SLIDESHOW_VIDEO_FILES);
 
-        Enumeration allKeys = req.getParameterNames();
+		if (selectedFiles == null) {
+			LOG.error("missing selected picture files in session");
+			return;
+		}
 		
-		while (allKeys.hasMoreElements()) {
-			String paramKey = (String) allKeys.nextElement();
-
-            if (paramKey.startsWith(LIST_PREFIX)) {
-				selectedFiles.add(paramKey.substring(LIST_PREFIX_LENGTH)); 
-            }
+		req.getSession().removeAttribute(SlideshowToVideoParamHandler.SESSION_KEY_SELECTED_SLIDESHOW_VIDEO_FILES);
+		
+		int duration = 5;
+		String delay = getParameter("delay");
+		if (CommonUtils.isEmpty(delay)) {
+			delay = "5";
+		}
+		try {
+			duration = Integer.parseInt(delay);
+		} catch (NumberFormatException numEx) {
+			LOG.warn("invalid slideshow picture duration value");
 		}
 		
 		int videoResolutionWidth = 640;
 		int videoResolutionHeight = 480;
+		
+		String videoResolution = getParameter("videoSize");
+		if (!CommonUtils.isEmpty(videoResolution)) {
+			String[] params = videoResolution.split("x");
+			
+			try {
+				videoResolutionWidth = Integer.parseInt(params[0]);
+				videoResolutionHeight = Integer.parseInt(params[1]);
+			} catch (NumberFormatException ex) {
+				LOG.warn("invalid target video dimension " + params[0] + " " + params[1]);
+			}
+		}
 		
 		File ffmpegInputListFile = new File(currentPath, FFMPEG_INPUT_LIST_FILE_NAME);
 		
@@ -78,10 +100,7 @@ public class SlideshowToVideoHandler extends XmlRequestHandlerBase {
 		try {
 	        ffmpegInputFileListFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(ffmpegInputListFile), "UTF-8"));
 	        
-	        int commonImgWidth = 0;
-	        int commonImgHeight = 0;
-	        
-	        for (int i = 0; (errorCode == 0) && (i < selectedFiles.size()); i++) {
+	        for (int i = 0; i < selectedFiles.size(); i++) {
 	            String filePath = null;
 
 	            if (currentPath.endsWith(File.separator)) {
@@ -90,33 +109,15 @@ public class SlideshowToVideoHandler extends XmlRequestHandlerBase {
 	                filePath = currentPath + File.separator + selectedFiles.get(i);
 	            }
 	            
-	            ScaledImage scaledImg = new ScaledImage(filePath, MAX_VIDEO_RESOLUTION, MAX_VIDEO_RESOLUTION);
-	            
-	            if (commonImgWidth == 0) {
-	            	commonImgWidth = scaledImg.getRealWidth();
-	            	commonImgHeight = scaledImg.getRealHeight();
-	            	videoResolutionWidth = scaledImg.getScaledWidth();
-	            	videoResolutionHeight = scaledImg.getScaledHeight();
-	            } else {
-	            	if (scaledImg.getRealWidth() != commonImgWidth) {
-	            		errorCode = ERROR_CODE_DIMENSION_MISSMATCH;
-	            	}
-	            	if (scaledImg.getRealHeight() != commonImgHeight) {
-	            		errorCode = ERROR_CODE_DIMENSION_MISSMATCH;
-	            	}
+	            if (LOG.isDebugEnabled()) {
+		            LOG.debug("picture file to add to video: " + filePath);
 	            }
-
-	            if (errorCode == 0) {
-		            if (LOG.isDebugEnabled()) {
-			            LOG.debug("picture file to add to video: " + filePath);
-		            }
-		        
+	        
+	            ffmpegInputFileListFile.println("file " + '\'' +  filePath.replace('\\',  '/') + '\'');
+	            ffmpegInputFileListFile.println("duration " + delay);
+	            
+	            if (i == selectedFiles.size() - 1) {
 		            ffmpegInputFileListFile.println("file " + '\'' +  filePath.replace('\\',  '/') + '\'');
-		            ffmpegInputFileListFile.println("duration 5");
-		            
-		            if (i == selectedFiles.size() - 1) {
-			            ffmpegInputFileListFile.println("file " + '\'' +  filePath.replace('\\',  '/') + '\'');
-		            }
 	            }
 	        }
 		} catch (IOException ioex) {
@@ -132,7 +133,7 @@ public class SlideshowToVideoHandler extends XmlRequestHandlerBase {
 		}
 
 		if (errorCode == 0) {
-			(new SlideshowToVideoThread(ffmpegInputListFile.getAbsolutePath(), targetPath, videoResolutionWidth, videoResolutionHeight)).start();			
+			(new SlideshowToVideoThread(ffmpegInputListFile.getAbsolutePath(), targetPath, videoResolutionWidth, videoResolutionHeight, duration)).start();			
 		}
 		
 		Element resultElement = doc.createElement("result");

@@ -961,6 +961,14 @@ videoConcatErrorFrameRate=Zu verkettende Videos müssen die gleiche Framerate hab
 videoConcatErrorResolution=Zu verkettende Videos müssen die gleiche Breite und Höhe haben.
 videoConcatErrorProcess=Beim Verketten der Videos ist ein Fehler aufgetreten.
 
+# slideshow video
+titleSlideshowVideo=Slideshow-Video erstellen
+slideshowVideoResolution=Video-Auflösung
+videoResolutionFromPic=Auflösung von Bildern übernehmen
+slideshowVideoPicCount=Anzahl ausgewählte Bilder
+slideshowVideoDelay=Anzeigedauer für jedes Bild
+slideshowVideoPicDimensions=Auflösung der Bilder
+
 # extract video frame
 contextMenuExtractVideoFrame=Standbild extrahieren
 titleExtractVideoFrame=Video-Standbild extrahieren

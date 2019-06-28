@@ -221,6 +221,7 @@ import de.webfilesys.gui.xsl.EditVideoParamHandler;
 import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
 import de.webfilesys.gui.xsl.GPXViewHandler;
 import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
+import de.webfilesys.gui.xsl.SlideshowToVideoParamHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -1329,13 +1330,6 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
-        if (command.equals("multiImgToVideo"))
-        {
-		    (new SlideshowToVideoHandler(req, resp, session, output, userid)).handleRequest(); 
-
-            return(true);
-        }
-
         if (command.equals("multiImageExifRename"))
         {
 		    (new RenameToExifDateHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
@@ -2181,6 +2175,11 @@ public class WebFileSysServlet extends ServletBase
                     return(true);
                 }
 
+                if (cmd.equals("slideshowVideoParams")) {
+        		    (new SlideshowToVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
                 if (cmd.equals("editConvertVideo")) {
         		    (new EditConvertVideoHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
@@ -2208,6 +2207,11 @@ public class WebFileSysServlet extends ServletBase
 
                 if (cmd.equals("addAudioToVideo")) {
                     (new AddAudioToVideoHandler(req, resp, session, output, userid)).handleRequest();
+                    return(true);
+                }
+
+                if (cmd.equals("multiImgToVideo")) {
+        		    (new SlideshowToVideoHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
                 }
             }

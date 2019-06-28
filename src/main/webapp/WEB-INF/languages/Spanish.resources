@@ -959,6 +959,14 @@ videoConcatErrorFrameRate=La concatenación del los archivos de vídeo es possible
 videoConcatErrorResolution=La concatenación del los archivos de vídeo es possible solo si tienen lo mismo valor para anchura y altura.
 videoConcatErrorProcess=Error al concatenación del los archivos de vídeo.
 
+# slideshow video
+titleSlideshowVideo=Crear video de diapositivas
+slideshowVideoResolution=resolución del vídeo
+videoResolutionFromPic=tomar la resolución de las imágenes
+slideshowVideoPicCount=número de archivos de imagen seleccionados
+slideshowVideoDelay=duración de visualización para cada imagen
+slideshowVideoPicDimensions=resolución de las imágenes
+
 # extract video frame
 contextMenuExtractVideoFrame=extraer cuadro de vídeo
 titleExtractVideoFrame=extraer cuadro de vídeo

@@ -10,7 +10,8 @@ import de.webfilesys.WebFileSys;
 
 public class SlideshowToVideoThread extends Thread {
 	
-	private static final String TARGET_VIDEO_FILENAME = "slideshow.mp4";
+	private static final String TARGET_VIDEO_FILENAME = "slideshow";
+	private static final String TARGET_VIDEO_FILE_EXT = ".mp4";
 	
     String pictureListFilePath;
     
@@ -19,11 +20,14 @@ public class SlideshowToVideoThread extends Thread {
     int videoResolutionWidth;
     int videoResolutionHeight;
     
-    public SlideshowToVideoThread(String pictureListFilePath, String targetPath, int videoResolutionWidth, int videoResolutionHeight) {
+    int duration;
+    
+    public SlideshowToVideoThread(String pictureListFilePath, String targetPath, int videoResolutionWidth, int videoResolutionHeight, int duration) {
     	this.pictureListFilePath = pictureListFilePath;
     	this.targetPath = targetPath;
     	this.videoResolutionWidth = videoResolutionWidth;
     	this.videoResolutionHeight = videoResolutionHeight;
+    	this.duration = duration;
     }
 
     public void run() {
@@ -41,7 +45,7 @@ public class SlideshowToVideoThread extends Thread {
             }
         }
         
-        String targetFilePath = targetPath + File.separator + TARGET_VIDEO_FILENAME;
+        String targetFilePath = getTargetVideoFilePath();
 		
         String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
 		
@@ -52,10 +56,11 @@ public class SlideshowToVideoThread extends Thread {
         progNameAndParams.add("concat");
         progNameAndParams.add("-safe");
         progNameAndParams.add("0");
+        progNameAndParams.add("-y");
         progNameAndParams.add("-i");
         progNameAndParams.add(pictureListFilePath);
         progNameAndParams.add("-vf");
-        progNameAndParams.add("zoompan=d=6:s=" + videoResolutionWidth + "x" + videoResolutionHeight + ":fps=1,framerate=25:interp_start=0:interp_end=255:scene=100");
+        progNameAndParams.add("zoompan=d=" + (duration + 1) + ":s=" + videoResolutionWidth + "x" + videoResolutionHeight + ":fps=1,framerate=25:interp_start=0:interp_end=255:scene=100");
         progNameAndParams.add("-c:v");
         progNameAndParams.add("h264");
         progNameAndParams.add(targetFilePath);
@@ -105,5 +110,21 @@ public class SlideshowToVideoThread extends Thread {
     	}
     }
    
+    private String getTargetVideoFilePath() {
+        boolean fileNameConflict = false;
+        String targetFilePath = null;        
+        int i = 0;
+        do {
+        	fileNameConflict = false;
+            targetFilePath = targetPath + File.separator + TARGET_VIDEO_FILENAME + "_" + i + TARGET_VIDEO_FILE_EXT;
+            File testConflictFile = new File(targetFilePath);
+            if (testConflictFile.exists()) {
+            	fileNameConflict = true;
+            }
+            i++;
+    	} while (fileNameConflict);
+        
+    	return targetFilePath;
+    }
 }
 

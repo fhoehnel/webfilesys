@@ -958,6 +958,14 @@ videoConcatErrorFrameRate=Videos to be concatenated must have the same frame rat
 videoConcatErrorResolution=Videos to be concatenated must have the same dimensions.
 videoConcatErrorProcess=An error occured while concatenating the video files.
 
+# slideshow video
+titleSlideshowVideo=Create slideshow video
+slideshowVideoResolution=video resolution
+videoResolutionFromPic=keep resolution from pictures
+slideshowVideoPicCount=number of selected picture files
+slideshowVideoDelay=duration for each image
+slideshowVideoPicDimensions=picture resolution
+
 # extract video frame
 contextMenuExtractVideoFrame=extract video frame
 titleExtractVideoFrame=extract video frame
