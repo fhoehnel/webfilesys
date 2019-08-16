@@ -90,7 +90,7 @@ public class CloneFolderRequestHandler extends UserRequestHandler
 
 		output.println("</head>");
 
-		output.println("<body>");
+		output.println("<body class=\"paste\">");
 
 	    headLine(getResource("label.cloneFolderTitle","Cloning folder"));
 
