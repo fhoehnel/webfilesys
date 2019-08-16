@@ -524,6 +524,7 @@ label.colorGreen=verde
 label.colorYellow=amarillo
 label.colorWhite=blanco
 label.cropArea=seleccionar el área de recorte
+keepExifData=mantener datos EXIF si están presentes
 
 # slideshow labels and buttons
 label.slideparmhead=Parámetros de diapositivas

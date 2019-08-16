@@ -524,6 +524,7 @@ label.colorGreen=green
 label.colorYellow=yellow
 label.colorWhite=white
 label.cropArea=select crop area
+keepExifData=keep EXIF data if present
 
 # slideshow labels and buttons
 label.slideparmhead=Slideshow Parameters

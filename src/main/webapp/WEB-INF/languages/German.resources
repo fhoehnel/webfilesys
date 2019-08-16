@@ -526,6 +526,7 @@ label.colorGreen=grün
 label.colorYellow=gelb
 label.colorWhite=weiss
 label.cropArea=Bildausschnitt für Beschneiden auswählen
+keepExifData=EXIF-Daten behalten, wenn vorhanden
 
 # slideshow labels and buttons
 label.slideparmhead=Diashow Parameter
