@@ -345,7 +345,6 @@ label.searchPath=Search in Folder tree
 label.filemask=file name filter
 label.searcharg=text in file/meta info
 label.argdesc1=searches for files that contain all of the words above
-label.argdesc2=wrap search phrase containing spaces with quotation marks
 label.includeSubdirs=include subdirectories in search
 label.includemetainf=include meta info (description, tags) in search
 label.metainfonly=search in meta info (description, tags) only

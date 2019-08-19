@@ -338,6 +338,10 @@ span.searchPath {
     color: #ffffa0;
 }  
 
+span.searchMatchInContext {
+	color: #ffffa0;
+}
+
 body.searchText a.fn {
 	display: inline-block;
 	margin-left: 10px;

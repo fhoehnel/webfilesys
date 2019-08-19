@@ -25,16 +25,17 @@
 
 <title resource="label.searchTitle"></title>
 
+<script type="text/javascript" src="javascript/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="javascript/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+
 <script src="javascript/browserCheck.js" type="text/javascript"></script>
 <script src="javascript/ajaxCommon.js" type="text/javascript"></script>
 <script src="javascript/util.js" type="text/javascript"></script>
+<script src="javascript/search.js" type="text/javascript"></script>
 <script src="javascript/calendar/CalendarPopup.js" type="text/javascript"></script>
 <script src="javascript/calendar/AnchorPosition.js" type="text/javascript"></script>
 <script src="javascript/calendar/date.js" type="text/javascript"></script>
 <script src="javascript/calendar/PopupWindow.js" type="text/javascript"></script>
-
-<script type="text/javascript" src="javascript/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="javascript/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -43,115 +44,6 @@
 
 <style id="calendarStyle">
 </style>
-
-<script language="javascript">
-
-  var selectedFromDate = null;
-  var selectedUntilDate = null;
-
-  $(function() {
-
-      var dayNamesShort = [
-          resourceBundle["calendar.mon"], 
-          resourceBundle["calendar.tue"], 
-          resourceBundle["calendar.wed"], 
-          resourceBundle["calendar.thu"], 
-          resourceBundle["calendar.fri"], 
-          resourceBundle["calendar.sat"], 
-          resourceBundle["calendar.sun"] 
-      ]; 
-  
-      $("#dateRangeFrom").datepicker({
-          showButtonPanel: true,
-          showOtherMonths: true,
-          selectOtherMonths: true,
-          changeMonth: true,
-          changeYear: true,
-          dateFormat: resourceBundle["datePickerFormat"],
-          currentText: resourceBundle["calendar.today"],
-          closeText: resourceBundle["button.close"],
-          dayNamesMin: dayNamesShort,
-          onSelect: function(dateText, inst) { 
-                        selectedFromDate = $(this).datepicker('getDate'); 
-                    }
-      });
-      
-      $("#dateRangeUntil").datepicker({
-          showButtonPanel: true,
-          showOtherMonths: true,
-          selectOtherMonths: true,
-          changeMonth: true,
-          changeYear: true,
-          dateFormat: resourceBundle["datePickerFormat"],
-          currentText: resourceBundle["calendar.today"],
-          closeText: resourceBundle["button.close"],
-          dayNamesMin: dayNamesShort,
-          onSelect: function(dateText, inst) { 
-                        selectedUntilDate = $(this).datepicker('getDate'); 
-                    }
-      });
-  });
-
-  function openFromDateSelection() {
-      $("#dateRangeFrom").trigger("focus");
-  }
-
-  function openUntilDateSelection() {
-      $("#dateRangeUntil").trigger("focus");
-  }
-
-  function submitIfValid() {
-  
-      if ((selectedFromDate != null) &amp;&amp; (selectedUntilDate != null)) {
-          if (selectedFromDate.getTime() &gt; selectedUntilDate.getTime()) {
-              customAlert(resourceBundle["label.searchDateConflict"]);
-              return;
-          }
-      }
-      
-      showHourGlass();
-      
-      document.getElementById("searchButton").disabled = true;
-      document.getElementById("cancelButton").disabled = true;
-      
-      var resultAsTreeCheckbox = document.getElementById("resultAsTree");
-      
-      if (resultAsTreeCheckbox.checked) {
-          document.findform.command.value = "findFileTree";
-      }
-      
-      document.findform.submit();
-  }
-
-  function switchCheckboxes() 
-  {
-      var searchArgField = document.getElementById("searchArg");
-      
-      var resultAsTreeCheckbox = document.getElementById("resultAsTree");
-      var includeDescCheckbox = document.getElementById("includeDesc");
-      var descOnlyCheckbox = document.getElementById("descOnly");
-      
-      if (searchArgField.value.length == 0)
-      {
-          resultAsTreeCheckbox.disabled = false;
-          includeDescCheckbox.checked = false;
-          includeDescCheckbox.disabled = true;
-          descOnlyCheckbox.checked = false;
-          descOnlyCheckbox.disabled = true;
-      }
-      else
-      {
-          resultAsTreeCheckbox.checked = false;
-          resultAsTreeCheckbox.disabled = true;
-          includeDescCheckbox.disabled = false;
-          descOnlyCheckbox.disabled = false;
-      }
-  }
-
-  <xsl:if test="/folder/errorMsg">
-    alert('<xsl:value-of select="/folder/errorMsg" />');
-  </xsl:if>
-</script>
 
 </head>
 
@@ -186,17 +78,18 @@
 
       <tr>
         <td class="formParm1" resource="label.searcharg" />
-        <td class="formParm2">
-          <input id="searchArg" type="text" name="SearchArg" maxlength="256" 
-              style="width:250px" onchange="switchCheckboxes()" onkeyup="switchCheckboxes()" />
+        <td class="formParm2" id="searchTextList">
+          <div class="searchTextCont">
+            <input class="searchArg" type="text" name="searchText" maxlength="256" 
+              onchange="switchCheckboxes()" onkeyup="switchCheckboxes()" />
+            <input type="button" onclick="addSearchTextField()" class="addSearchTextButton" value="+" />
+          </div>
         </td>
       </tr>
 
       <tr>
         <td colspan="2" class="formParm2" style="padding-left:30px">
           <span resource="label.argdesc1" />
-          <br/>
-          <span resource="label.argdesc2" />
         </td>
       </tr>
 

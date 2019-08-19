@@ -345,7 +345,6 @@ label.searchPath=Suche in Ordner (inkl. Unterordner)
 label.filemask=Suchmaske für Dateinamen
 label.searcharg=enthaltener Text
 label.argdesc1=sucht nach Dateien, die alle diese Wörter enthalten
-label.argdesc2=Suchtext mit Leerzeichen durch Anführungszeichen umschliessen
 label.includeSubdirs=Unterverzeichnisse in Suche einbeziehen
 label.includemetainf=Meta-Infos (Beschreibung, Tags) in Suche einbeziehen
 label.metainfonly=nur in Meta-Infos (Beschreibung, Tags) suchen

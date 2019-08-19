@@ -22,10 +22,6 @@ import de.webfilesys.util.PatternComparator;
 
 public class TextSearch
 {
-    String root_dir;
-    String search_arg;
-    String full_path;
-    byte buffer[];
     PrintWriter output;
     int hitNum;
 
@@ -45,24 +41,23 @@ public class TextSearch
 
     MetaInfManager metaInfMgr=null;
 
-    ArrayList<String> searchArgs;
+    String[] searchArgs;
     
-    public TextSearch(String root_dir,String file_mask,String searchString,Date fromDate,Date toDate,
-               PrintWriter output, boolean includeSubdirs, boolean includeMetaInf,boolean metaInfOnly,
+    int dirCounter = 0;
+    
+    public TextSearch(String root_dir, String file_mask, String[] searchArguments, Date fromDate, Date toDate,
+               PrintWriter output, boolean includeSubdirs, boolean includeMetaInf, boolean metaInfOnly,
                Category category, String searchResultDir,
                HttpSession session, boolean readonly,
                String relativePath,
                String uid)
     {
-        this.root_dir=root_dir;
-        this.search_arg=searchString;
         this.output=output;
         this.searchResultDir = searchResultDir;
         this.session=session;
         this.readonly = readonly;
         this.uid = uid;
 
-        buffer = new byte[4096];
         hitNum = 0;
 
         metaInfMgr = MetaInfManager.getInstance();
@@ -73,12 +68,11 @@ public class TextSearch
         
         this.category = category;
 
-        getSearchArgs(searchString);
+        searchArgs = filterEmptySearchArguments(searchArguments);
 
         search_tree(root_dir,file_mask,fromDate.getTime(),toDate.getTime(), relativePath);
 
-        if (hitNum > 0) 
-        {
+        if (hitNum > 0) {
         	Decoration deco = new Decoration();
         	deco.setIcon("search.gif");
         	deco.setTextColor("#808080");
@@ -88,103 +82,60 @@ public class TextSearch
         output.flush();
     }
 
-    public int getHitNumber()
-    {
+    String[] filterEmptySearchArguments(String[] searchArguments) {
+    	ArrayList<String> filteredList = new ArrayList<String>();
+    	for (int i = 0; i < searchArguments.length; i++) {
+    		if (!CommonUtils.isEmpty(searchArguments[i])) {
+    			filteredList.add(searchArguments[i]);
+    		}
+    	}
+    	return filteredList.toArray(new String[0]);
+    }
+    
+    public int getHitNumber() {
         return(hitNum);
     }
 
-    public void getSearchArgs(String searchedText)
-    {
-        searchArgs = new ArrayList<String>();
-
-        boolean quoted=false;
-        boolean wordStopped=true;
-
-        StringBuffer searchWord=new StringBuffer();
-
-        for (int i=0;i<searchedText.length();i++)
-        {
-            char actChar=searchedText.charAt(i);
-
-            if (actChar=='\"')
-            {
-                if (quoted)
-                {
-                    searchArgs.add(searchWord.toString());
-                    quoted=false;
-                    wordStopped=true;
-                }
-                else
-                {
-                    quoted=true;
-                }
-            }
-            else
-            {
-                if (actChar==' ')
-                {
-                    if (quoted)
-                    {
-                        searchWord.append(actChar);
-                    }
-                    else
-                    {
-                        if (!wordStopped)
-                        {
-                            searchArgs.add(searchWord.toString());
-                            wordStopped=true;
-                        }
-                    }
-                }
-                else
-                {
-                    if (wordStopped)
-                    {
-                        searchWord=new StringBuffer();
-                        wordStopped=false;
-                    }
-                    searchWord.append(actChar);
-                }
-            }
-        }
-
-        if (!wordStopped)
-        {
-            searchArgs.add(searchWord.toString());
-        }
-    }
-
     public void search_tree(String act_path,String file_mask, long fromDate, long toDate,
-                            String relativePath)
-    {
-        if (session.getAttribute("searchCanceled")!=null)
-        {
+                            String relativePath) {
+        if (session.getAttribute("searchCanceled")!=null) {
             return;
         }
 
         String shortPath = CommonUtils.shortName(relativePath, 70);
         
-        if (session.getAttribute("searchCanceled") == null)
-        {
-			output.println("<div class=\"searchPath\"><span class=\"searchPath\">" + shortPath + "</span></div>");
-            output.flush();
+        if (session.getAttribute("searchCanceled") == null) {
+        	dirCounter++;
+        	
+        	boolean printPath = true;
+        	if (dirCounter > 10000) {
+        		printPath = (dirCounter % 50 == 0);
+        	} else if (dirCounter > 5000) {
+        		printPath = (dirCounter % 20 == 0);
+        	} else if (dirCounter > 1000) {
+        		printPath = (dirCounter % 10 == 0);
+        	} else if (dirCounter > 500) {
+        		printPath = (dirCounter % 5 == 0);
+        	} else if (dirCounter > 100) {
+        		printPath = (dirCounter % 3 == 0);
+        	}
+        	
+        	if (printPath) {
+    			output.println("<div class=\"searchPath\"><span class=\"searchPath\">" + shortPath + "</span></div>");
+                output.flush();
+        	}
         }
 
         File dirFile = new File(act_path);
         File[] fileList = dirFile.listFiles();
 
-        if (fileList != null)
-        {
-            for (int i = 0; (session.getAttribute("searchCanceled") == null) && (i < fileList.length); i++)
-            {
+        if (fileList != null) {
+            for (int i = 0; (session.getAttribute("searchCanceled") == null) && (i < fileList.length); i++) {
                 String relativeFile = null;
 
-                if (act_path.endsWith(File.separator))
-                {
+                if (act_path.endsWith(File.separator)) {
                     relativeFile = relativePath + fileList[i].getName();
-                }
-                else
-                {
+                } else {
 					relativeFile = relativePath + File.separator + fileList[i].getName();
                 }
                 
@@ -192,8 +143,7 @@ public class TextSearch
 
             	String fullPath = tempFile.getAbsolutePath();
             	
-                if (tempFile.isDirectory())
-                {
+                if (tempFile.isDirectory()) {
                 	if (includeMetaInf) {
                 		// search in metainfo of folder
 
@@ -202,8 +152,8 @@ public class TextSearch
 
     						if (description != null) {
     							boolean allWordsFound = true;
-    							for (int j = 0; allWordsFound && (j < searchArgs.size()); j++) {
-    								if (description.toLowerCase().indexOf(searchArgs.get(j).toLowerCase()) < 0) {
+    							for (int j = 0; allWordsFound && (j < searchArgs.length); j++) {
+    								if (description.toLowerCase().indexOf(searchArgs[j].toLowerCase()) < 0) {
     								    allWordsFound = false;
     								}
     							}
@@ -219,24 +169,18 @@ public class TextSearch
                 		}
                 	}
                 	
-                	if (includeSubdirs)
-                	{
-                        if (!CommonUtils.dirIsLink(tempFile))
-                        {
-    						if (!fileList[i].getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR))
-    						{
+                	if (includeSubdirs) {
+                        if (!CommonUtils.dirIsLink(tempFile)) {
+    						if (!fileList[i].getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
     							String relativeSubPath = null;
     							
     					        String subDir;
     							
-    							if (act_path.endsWith(File.separator))
-    							{
+    							if (act_path.endsWith(File.separator)) {
     								subDir = act_path + fileList[i].getName();
     								
     								relativeSubPath = relativePath + fileList[i].getName();
-    							}
-    							else
-    							{
+    							} else {
     								subDir = act_path + File.separator + fileList[i].getName();
 
     								relativeSubPath = relativePath + File.separator + fileList[i].getName();
@@ -246,11 +190,9 @@ public class TextSearch
     						}
                         }
                 	}
-                }
-                else // file
-                {
-                    if ((tempFile.lastModified()>=fromDate) &&
-                        (tempFile.lastModified()<=toDate))
+                } else {                                             // file
+                    if ((tempFile.lastModified() >= fromDate) &&
+                        (tempFile.lastModified() <= toDate))
                     {
                         if (PatternComparator.patternMatch(fileList[i].getName(), file_mask))
                         {
@@ -258,38 +200,26 @@ public class TextSearch
                         	{
 								boolean allWordsFound = true;
 
-								int firstMatchIdx[]=new int[searchArgs.size()];
+								int firstMatchIdx[] = new int[searchArgs.length];
 
-								for (int j=0;(j<searchArgs.size()) && allWordsFound;j++)
-								{
-									firstMatchIdx[j]=(-1);
+								for (int j = 0; (j < searchArgs.length) && allWordsFound; j++) {
+									firstMatchIdx[j] = (-1);
 
-									if (metaInfOnly)
-									{
-										if (!searchInMetaInf(fullPath, searchArgs.get(j))) {
+									if (metaInfOnly) {
+										if (!searchInMetaInf(fullPath, searchArgs[j])) {
 											allWordsFound = false;
 										}
-									}
-									else
-									{
-										// if (includeMetaInf && metaInfMgr.isMetaInfFile(fullPath))
-										if (metaInfMgr.isMetaInfFile(fullPath))
-										{
+									} else {
+										if (metaInfMgr.isMetaInfFile(fullPath)) {
 											allWordsFound = false;
-										}
-										else
-										{
-											firstMatchIdx[j]=locateTextInFile(tempFile.toString(), searchArgs.get(j));
+										} else {
+											firstMatchIdx[j]=locateTextInFile(tempFile.toString(), searchArgs[j]);
                                         
-											if (firstMatchIdx[j] < 0)
-											{
-												if (!includeMetaInf)
-												{
+											if (firstMatchIdx[j] < 0) {
+												if (!includeMetaInf) {
 													allWordsFound = false;
-												}
-												else
-												{
-													if (!searchInMetaInf(fullPath, searchArgs.get(j))) {
+												} else {
+													if (!searchInMetaInf(fullPath, searchArgs[j])) {
 														allWordsFound = false;
 													}
 												}
@@ -298,24 +228,18 @@ public class TextSearch
 									}
 								}
                             
-								if (allWordsFound)
-								{
+								if (allWordsFound) {
                                     String viewLink = null;
-                                    try
-                                    {
+                                    try {
                                         viewLink = "/webfilesys/servlet?command=getFile&filePath=" + URLEncoder.encode(fullPath, "UTF-8");
-                                    }
-                                    catch (UnsupportedEncodingException uex)
-                                    {
+                                    } catch (UnsupportedEncodingException uex) {
                                         // should never happen
                                     }
 
-									if (session.getAttribute("searchCanceled")==null)
-									{
+									if (session.getAttribute("searchCanceled")==null) {
                                         String iconImg = "doc.gif";
 
-                                        if (WebFileSys.getInstance().isShowAssignedIcons())
-                                        {
+                                        if (WebFileSys.getInstance().isShowAssignedIcons()) {
                                             iconImg = IconManager.getInstance().getIconForFileName(fileList[i].getName());
                                         }
 									    
@@ -326,14 +250,10 @@ public class TextSearch
 
 										printMatches(fullPath,firstMatchIdx);
 										
-										if (!readonly)
-										{
-											try
-											{
+										if (!readonly) {
+											try {
 												metaInfMgr.createLink(searchResultDir, new FileLink(fileList[i].getName(), fullPath, uid), true);
-											}
-											catch (FileNotFoundException nfex)
-											{
+											} catch (FileNotFoundException nfex) {
 												Logger.getLogger(getClass()).error(nfex);
 											}
 										}
@@ -345,16 +265,12 @@ public class TextSearch
                 }
             }
 
-            if ((category != null) || includeMetaInf || metaInfOnly)
-            {
-                if (!act_path.equals(searchResultDir))
-                {
+            if ((category != null) || includeMetaInf || metaInfOnly) {
+                if (!act_path.equals(searchResultDir)) {
                     metaInfMgr.releaseMetaInf(act_path, false);
                 }
             }
-        }
-        else
-        {
+        } else {
             output.println("cannot get dir entries for " + act_path);
             output.println("<br/>");
             output.flush();
@@ -387,6 +303,8 @@ public class TextSearch
 
         try
         {
+            byte[] buffer = new byte[4096];
+
             while (( count = file_input.read(buffer))>=0 )
             {
                 for (int i = 0; i < count; i++)
@@ -430,15 +348,15 @@ public class TextSearch
 
     protected void printMatches(String fileName,int firstMatchIdx[])
     {
-        for (int i = 0; i < searchArgs.size(); i++)
+        for (int i = 0; i < searchArgs.length; i++)
         {
             if (firstMatchIdx[i] > 0)
             {
-                printHitEnvironment(fileName, searchArgs.get(i), firstMatchIdx[i]);
+                printHitEnvironment(fileName, searchArgs[i], firstMatchIdx[i]);
             } else {
             	if (includeMetaInf || metaInfOnly) {
-            		printMatchingDescription(fileName, searchArgs.get(i));
-            		printMatchingTags(fileName, searchArgs.get(i));
+            		printMatchingDescription(fileName, searchArgs[i]);
+            		printMatchingTags(fileName, searchArgs[i]);
             	}
             }
         }
@@ -532,6 +450,8 @@ public class TextSearch
             	}
             }
 
+            byte[] buffer = new byte[4096];
+
             while ((matchCounter < 5) && ((count = fin.read(buffer))>=0))
             {
                 for (int i=0;(matchCounter < 5) && (i<count);i++)
@@ -567,12 +487,12 @@ public class TextSearch
 
                             output.print(CommonUtils.escapeHTML(prefix));
 
-                            output.print("<b>");
+                            output.print("<span class=\"searchMatchInContext\">");
 
                             String matchText = new String(resultBuff, resultBuff.length-searchLength, searchLength);
                             output.print(CommonUtils.escapeHTML(matchText));
 
-                            output.print("</b>");
+                            output.print("</span>");
 
                             StringBuffer postfix = new StringBuffer();
                             

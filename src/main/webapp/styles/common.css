@@ -680,6 +680,21 @@ span.searchPath
     color:navy;
 }  
 
+input.searchArg {
+	width: 204px;
+	margin-bottom: 10px;
+}
+
+span.searchMatchInContext {
+	font-weight: bold;
+}
+
+input[type="button"].addSearchTextButton,
+input[type="button"].removeSearchTextButton {
+	width: 36px;
+	margin-left: 10px;
+}
+
 input[type="submit"], input[type="button"], input.roundedButton {
     height: 24px;
     color: black;

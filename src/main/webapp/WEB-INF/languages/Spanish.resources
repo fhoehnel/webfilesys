@@ -345,7 +345,6 @@ label.searchPath=Buscar en árbol de carpeta
 label.filemask=filtro para nombre de archivo
 label.searcharg=texto en archivo
 label.argdesc1=busca archivos que contienen todas estas palabras
-label.argdesc2=búsqueda de frases incluyendo espacios
 label.includeSubdirs=incluir subcarpetas en la búsqueda
 label.includemetainf=incluir meta info (descripción, etiquetas) en la búsqueda
 label.metainfonly=buscar en meta info (descripción, etiquetas) solo
