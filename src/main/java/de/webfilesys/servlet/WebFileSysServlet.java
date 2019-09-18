@@ -40,7 +40,7 @@ import de.webfilesys.CategoryManager;
 import de.webfilesys.Constants;
 import de.webfilesys.ResourceBundleHandler;
 import de.webfilesys.SubdirExistCache;
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailGarbageCollector;
 import de.webfilesys.gui.admin.AdminAddUserRequestHandler;
@@ -1772,8 +1772,8 @@ public class WebFileSysServlet extends ServletBase
 
             SubdirExistCache.getInstance().cleanupExistSubdir(path);
             
-            (new TestSubDirThread(path)).start();
-
+	        SubdirExistTester.getInstance().queuePath(path, 1, true);	        
+            
             try
             {
                 Thread.sleep(1000);

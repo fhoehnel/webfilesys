@@ -15,7 +15,7 @@ import de.webfilesys.DirTreeStatus;
 import de.webfilesys.FastPathManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.SubdirExistCache;
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -109,7 +109,7 @@ public class XmlRemoveDirHandler extends XmlRequestHandlerBase
                 // even if only a part of the tree could be deleted we have to refresh the
                 // subdir status
                 
-                (new TestSubDirThread(parentDir.getAbsolutePath())).start();
+    	        SubdirExistTester.getInstance().queuePath(parentDir.getAbsolutePath(), 1, true);	        
 			}
 		}
 		

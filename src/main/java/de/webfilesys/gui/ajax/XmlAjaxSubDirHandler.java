@@ -16,7 +16,7 @@ import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.DirTreeStatusInspector;
 import de.webfilesys.SubdirExistCache;
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.WinDriveManager;
 import de.webfilesys.decoration.Decoration;
@@ -128,7 +128,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 
 		if (subdirExist == null)
 		{
-	        (new TestSubDirThread(parentPath)).start();
+	        SubdirExistTester.getInstance().queuePath(parentPath, 1, false);	        
 		}
 		else
 		{
@@ -285,11 +285,6 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 			Element folderElement = null;
 
 			subdirExist = SubdirExistCache.getInstance().existsSubdir(subdirPath);
-
-			if (subdirExist == null)
-			{
-		        (new TestSubDirThread(subdirPath)).start();
-			}
 
             folderElement = doc.createElement("folder");
             

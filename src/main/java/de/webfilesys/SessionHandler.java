@@ -116,6 +116,11 @@ implements HttpSessionListener, ServletContextListener
         InvitationManager.getInstance().interrupt();
 
         FileSysBookmarkManager.getInstance().interrupt();
+  
+		if (SubdirExistTester.instanceCreated())
+        {
+            SubdirExistTester.getInstance().interrupt();
+        }
         
         if (WebFileSys.getInstance().getDiskQuotaInspector() != null)
 		{
