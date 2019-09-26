@@ -16,7 +16,14 @@ function getUploadStatus() {
                 item = responseXml.getElementsByTagName("percent")[0];            
                 var percent = item.firstChild.nodeValue;
 
-                document.getElementById("statusText").innerHTML = bytesUploaded + " " + resourceLabelOf + " " + fileSize + " bytes (" + percent + "%)";
+                var statusText;
+                if (fileSize > 0) {
+                	statusText = bytesUploaded + " " + resourceLabelOf + " " + fileSize + " bytes (" + percent + "%)";
+                } else {
+                	statusText = bytesUploaded  + " bytes";
+                }
+                
+                document.getElementById("statusText").innerHTML = statusText;
 
                 document.getElementById("done").width = 3 * percent;
 

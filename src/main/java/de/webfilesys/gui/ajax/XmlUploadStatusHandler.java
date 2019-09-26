@@ -35,31 +35,31 @@ public class XmlUploadStatusHandler extends XmlRequestHandlerBase
 			return;
 		}
 		
-		DecimalFormat numFormat = new DecimalFormat("#,###,###,###");
+		DecimalFormat numFormat = new DecimalFormat("##,###,###,###");
 		
-		int fileSize = 0;
+		long fileSize = 0;
 		
-		Integer uploadSize = (Integer) session.getAttribute(Constants.UPLOAD_SIZE);
+		Long uploadSize = (Long) session.getAttribute(Constants.UPLOAD_SIZE);
 		
 		if (uploadSize != null)
 		{
-			fileSize = uploadSize.intValue();
+			fileSize = uploadSize.longValue();
 		}
 		
-		int bytesUploaded = 0;
+		long bytesUploaded = 0;
 		
-		Integer uploadCounter = (Integer) session.getAttribute(Constants.UPLOAD_COUNTER);
+		Long uploadCounter = (Long) session.getAttribute(Constants.UPLOAD_COUNTER);
 
 		if (uploadCounter != null)
 		{
-			bytesUploaded = uploadCounter.intValue();
+			bytesUploaded = uploadCounter.longValue();
 		}
 
-		int percentUploaded = 0;
+		long percentUploaded = 0;
 
         if (fileSize > 0)
         {
-			percentUploaded = (int) ( (((long) bytesUploaded) * 100) / ((long) fileSize) );
+			percentUploaded = (bytesUploaded * 100) / fileSize;
         }
 
         Boolean uploadSuccess = (Boolean) session.getAttribute(Constants.UPLOAD_SUCCESS);       
@@ -68,7 +68,7 @@ public class XmlUploadStatusHandler extends XmlRequestHandlerBase
 		
 		XmlUtil.setChildText(resultElement, "fileSize", numFormat.format(fileSize));
 		XmlUtil.setChildText(resultElement, "bytesUploaded", numFormat.format(bytesUploaded));
-		XmlUtil.setChildText(resultElement, "percent", Integer.toString(percentUploaded));
+		XmlUtil.setChildText(resultElement, "percent", Long.toString(percentUploaded));
 
 		XmlUtil.setChildText(resultElement, "success", Boolean.toString((uploadSuccess != null) && uploadSuccess.booleanValue()));
 			

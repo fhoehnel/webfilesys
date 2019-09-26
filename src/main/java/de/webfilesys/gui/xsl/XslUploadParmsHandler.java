@@ -51,7 +51,7 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
 			return;
 		}
 
-		session.setAttribute(Constants.UPLOAD_SIZE, new Integer(0));
+		session.setAttribute(Constants.UPLOAD_SIZE, new Long(0l));
 
 		String relativePath = this.getHeadlinePath(currentPath);
 
