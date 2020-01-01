@@ -117,20 +117,20 @@
     <div style="float:right">
       <img src="images/folderNew.gif" border="0" width="17" height="14" />
       <img src="images/docNew.gif" border="0" width="15" height="16" />
-      = <span resource="folderDiffNew"></span>
-      (<xsl:value-of select="/folderDiff/missingSourceFolders" />/<xsl:value-of select="/folderDiff/missingSourceFiles" />)
+      <span>=</span> <span resource="folderDiffNew"></span>
+      <span>(<xsl:value-of select="/folderDiff/missingSourceFolders" />/<xsl:value-of select="/folderDiff/missingSourceFiles" />)</span>
       <br/>
 
       <img src="images/folderRemoved.gif" border="0" width="17" height="14" />
       <img src="images/docRemoved.gif" border="0" width="15" height="16" />
-      = <span resource="folderDiffRemoved"></span>
-      (<xsl:value-of select="/folderDiff/missingTargetFolders" />/<xsl:value-of select="/folderDiff/missingTargetFiles" />)
+      <span>=</span> <span resource="folderDiffRemoved"></span>
+      <span>(<xsl:value-of select="/folderDiff/missingTargetFolders" />/<xsl:value-of select="/folderDiff/missingTargetFiles" />)</span>
       <br/>
 
       <img src="images/space.gif" border="0" width="17" height="14" />
       <img src="images/docChanged.gif" border="0" width="15" height="16" />
-      = <span resource="folderDiffModified"></span>
-      (<xsl:value-of select="/folderDiff/modifiedFiles" />)
+      <span>=</span> <span resource="folderDiffModified"></span>
+      <span>(<xsl:value-of select="/folderDiff/modifiedFiles" />)</span>
     </div>
   
     <img src="images/space.gif" border="0" width="12" height="17" />
