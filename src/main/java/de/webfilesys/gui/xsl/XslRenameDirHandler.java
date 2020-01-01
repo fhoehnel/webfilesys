@@ -164,8 +164,6 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 							setParameter("fastPath",  "true");
 						}
 						
-						SubdirExistCache.getInstance().setExistsSubdir(newPath, new Integer(0));
-						
 						SubdirExistCache.getInstance().cleanupExistSubdir(currentPath);
 						
 						FastPathManager.getInstance().removeTree(uid, currentPath);
