@@ -71,6 +71,7 @@ import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.CheckUploadConflictHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
+import de.webfilesys.gui.ajax.DeshakeVideoHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.EditConvertVideoHandler;
 import de.webfilesys.gui.ajax.ExtractVideoFrameHandler;
@@ -2212,6 +2213,11 @@ public class WebFileSysServlet extends ServletBase
 
                 if (cmd.equals("multiImgToVideo")) {
         		    (new SlideshowToVideoHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("deshakeVideo")) {
+        		    (new DeshakeVideoHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
                 }
             }

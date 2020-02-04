@@ -50,6 +50,8 @@ function videoContextMenu(fileName, domId) {
         menuText += menuEntry("javascript:extractVideoFrame('" + scriptPreparedFile + "')", resourceBundle["contextMenuExtractVideoFrame"]);
 
         menuText += menuEntry("javascript:addAudioToVideo('" + scriptPreparedPath + "')", resourceBundle["contextMenuAddAudioToVideo"]);
+        
+        menuText += menuEntry("javascript:deshakeVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuDeshakeVideo"]);
     }
         
     menuText += menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
@@ -203,6 +205,40 @@ function playVideoLocal(path) {
                 // no response if external videoplayer is not closed by user
                 // alert(resourceBundle["alert.communicationFailure"]);
             }
+        }
+	});
+}
+
+function deshakeVideo(fileName) {
+    var url = "/webfilesys/servlet?command=video&cmd=deshakeVideo&videoFileName=" + encodeURIComponent(fileName);
+	
+	xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+
+			    var item = xmlDoc.getElementsByTagName("success")[0];            
+                if (item) {
+                    var success = item.firstChild.nodeValue;
+                    if (success != "true") {
+                    	customAlert(resourceBundle["errorVideoDeshake"]);
+                    } else {
+                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                        var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                        var targetPath = targetPathItem.firstChild.nodeValue;
+                        
+                        customAlert(resourceBundle["videoDeshakeStarted"] + " " + targetFolder + ".");
+                        
+                        setTimeout(function() {
+                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                        }, 6000);
+                    }
+                } else {
+                	customAlert(resourceBundle["errorVideoDeshake"]);
+                }
+            } 
         }
 	});
 }

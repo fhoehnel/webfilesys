@@ -937,6 +937,7 @@ grepReadError=einige Zeilen der Datei konnten nicht gelesen werden
 
 # edit/convert video
 contextMenuEditVideo=editieren/konvertieren
+contextMenuDeshakeVideo=stabilisieren
 titleEditVideo=Video editieren/konvertieren
 label.videoFile=Video-Datei
 label.videoResolution=Auflösung (Breite x Höhe)
@@ -960,6 +961,8 @@ videoConcatErrorCodec=Zu verkettende Videos müssen den gleichen Codec benutzen.
 videoConcatErrorFrameRate=Zu verkettende Videos müssen die gleiche Framerate haben.
 videoConcatErrorResolution=Zu verkettende Videos müssen die gleiche Breite und Höhe haben.
 videoConcatErrorProcess=Beim Verketten der Videos ist ein Fehler aufgetreten.
+videoDeshakeStarted=Die Stabilisierung des Videos wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
+errorVideoDeshake=Beim Stabilisieren des Videos ist ein Fehler aufgetreten.
 
 # slideshow video
 titleSlideshowVideo=Slideshow-Video erstellen

@@ -934,6 +934,7 @@ grepReadError=some lines of the file could not be read
 
 # edit/convert video
 contextMenuEditVideo=edit/convert video
+contextMenuDeshakeVideo=stabilize video
 titleEditVideo=edit/convert video
 label.videoFile=video file
 label.videoResolution=resolution (width x height)
@@ -957,6 +958,8 @@ videoConcatErrorCodec=Videos to be concatenated must use the same codec.
 videoConcatErrorFrameRate=Videos to be concatenated must have the same frame rate.
 videoConcatErrorResolution=Videos to be concatenated must have the same dimensions.
 videoConcatErrorProcess=An error occured while concatenating the video files.
+videoDeshakeStarted=The stabilization of the video has been started. This can take some time to complete. For the result file watch the subfolder
+errorVideoDeshake=Failed to stabilize video.
 
 # slideshow video
 titleSlideshowVideo=Create slideshow video

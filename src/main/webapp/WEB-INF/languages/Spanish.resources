@@ -935,6 +935,7 @@ grepReadError=unas líneas del archivo no son legible
 
 # edit/convert video
 contextMenuEditVideo=editar/convertir
+contextMenuDeshakeVideo=estabilizar video
 titleEditVideo=editar/convertir el vídeo
 label.videoFile=archivo de vídeo
 label.videoResolution=resolución
@@ -958,6 +959,8 @@ videoConcatErrorCodec=La concatenación del los archivos de vídeo es possible sol
 videoConcatErrorFrameRate=La concatenación del los archivos de vídeo es possible solo si tienen lo mismo valor para cuadros por segundo.
 videoConcatErrorResolution=La concatenación del los archivos de vídeo es possible solo si tienen lo mismo valor para anchura y altura.
 videoConcatErrorProcess=Error al concatenación del los archivos de vídeo.
+videoDeshakeStarted=Se ha iniciado la estabilización del vídeo. Esto puede tomar algún tiempo para completar. Para el archivo de resultados, vea la subcarpeta 
+errorVideoDeshake=Error al estabilización del archivo de vídeo.
 
 # slideshow video
 titleSlideshowVideo=Crear video de diapositivas
