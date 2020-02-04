@@ -64,13 +64,13 @@ function handleDirRemoved(req)
             }       
             else
             {
-                alert(message);
-                var pathItem = req.responseXML.getElementsByTagName("path")[0]; 
-                if (pathItem) 
-                {
-                    var path = pathItem.firstChild.nodeValue;
-                    window.location.href = "/webfilesys/servlet?command=exp&actPath=" + path + "&expand=" + path + "&fastPath=true";
-                }           
+                customAlert(message, null, function() {
+                    var pathItem = req.responseXML.getElementsByTagName("path")[0]; 
+                    if (pathItem) {
+                        var path = pathItem.firstChild.nodeValue;
+                        window.location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(path) + "&expand=" + encodeURIComponent(path) + "&fastPath=true";
+                    }           
+                });
             }
         }
     }
