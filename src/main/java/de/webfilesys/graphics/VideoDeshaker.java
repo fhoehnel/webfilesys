@@ -27,7 +27,7 @@ public class VideoDeshaker extends Thread {
         String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
-            
+        	
             String targetVideoPath = getTargetPath(videoFilePath);
             File targetVideoDir = new File(targetVideoPath);
             if (!targetVideoDir.exists()) {
@@ -37,6 +37,12 @@ public class VideoDeshaker extends Thread {
                 }
             }
 
+            File transformFile = new File(getTransformFilePath(targetVideoPath));
+            if (transformFile.exists()) {
+                Logger.getLogger(getClass()).error("transform file for video deshaking still exists: " + transformFile + " - an other deshaking process seems to be running");
+                return;
+            }
+            
             if (prepareStabilizer(targetVideoPath)) {
             	runStabilizer(targetVideoPath);
             	
@@ -136,10 +142,9 @@ public class VideoDeshaker extends Thread {
         progNameAndParams.add("copy");
         
     	String[] partsOfPath = CommonUtils.splitPath(videoFilePath);
-    	String sourcePath = partsOfPath[0];
     	String sourceFileName = partsOfPath[1];
-        
-        String targetFilePath = targetVideoPath + File.separator + sourceFileName;
+    	
+        String targetFilePath = CommonUtils.getNonConflictingTargetFilePath(targetVideoPath + File.separator + sourceFileName);
         
         progNameAndParams.add(targetFilePath);
         
