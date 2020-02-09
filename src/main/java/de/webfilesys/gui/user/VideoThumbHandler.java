@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 import de.webfilesys.FileLink;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
-import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.graphics.VideoThumbnailCreator;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.MimeTypeMap;
@@ -104,6 +103,7 @@ public class VideoThumbHandler extends UserRequestHandler
 				return;
 			}
 			Logger.getLogger(getClass()).error("new created video thumbnail file not found: " + thumbnailPath);
+			throw new RuntimeException("failed to create video thumbnail");
 		} catch (InterruptedException ex) {
 			Logger.getLogger(getClass()).error("error occured while waiting for video thumbnail creator thread for video file " + videoPath, ex);
 		}

@@ -97,7 +97,7 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(folderStatsElement, "hideSubTrees", UTF8URLEncoder.encode(path), false);
 		}
 		
-		processResponse("sunburstChart.xsl", false);
+		processResponse("sunburstChart.xsl");
 	}
 
 	private FolderInfo processFolder(Element parentFolderElem, String path, int level) {

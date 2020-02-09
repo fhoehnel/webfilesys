@@ -32,6 +32,8 @@
   <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 </xsl:if>
 
+<script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
+
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
@@ -49,6 +51,7 @@
 </xsl:if>
 <script src="/webfilesys/javascript/crypto.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/videoAudio.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/previewFile.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
   <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
@@ -160,6 +163,7 @@
   <xsl:attribute name="onload">
     setFileListHeight();addDeselectHandler();
     <xsl:if test="/fileList/pollInterval">delayedPollForDirChanges();</xsl:if>
+    addPreviewHandler();
   </xsl:attribute>
 
 <xsl:apply-templates />

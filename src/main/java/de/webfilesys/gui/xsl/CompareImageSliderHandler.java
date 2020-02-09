@@ -109,10 +109,6 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, compareImageElem);
 
-		XmlUtil.setChildText(compareImageElem, "css", userMgr.getCSS(uid), false);
-
-	    XmlUtil.setChildText(compareImageElem, "language", language, false);
-		
         Element img1Elem = doc.createElement("image1");
 
         compareImageElem.appendChild(img1Elem);
@@ -149,7 +145,7 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 	    XmlUtil.setChildText(compareImageElem, "maxWidth", Integer.toString(maxWidth), false);
 	    XmlUtil.setChildText(compareImageElem, "maxHeight", Integer.toString(maxHeight), false);
         
-        processResponse("compareImage.xsl", false);
+        processResponse("compareImage.xsl");
     }
 
 	private ArrayList<String> getSelectedFiles() {

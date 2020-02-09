@@ -585,6 +585,11 @@
                     </xsl:if>
                    
                     <option value="download" resource="button.downloadAsZip" />
+                    
+                    <xsl:if test="/fileList/videoEnabled">
+                      <option value="slideshowVideoParams" resource="multiImgToVideo" />
+                    </xsl:if>
+
                   </select>
                 </td>
                 

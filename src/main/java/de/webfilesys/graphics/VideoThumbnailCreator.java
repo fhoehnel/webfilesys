@@ -3,6 +3,8 @@ package de.webfilesys.graphics;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import org.apache.log4j.Logger;
 
 import de.webfilesys.WebFileSys;
@@ -51,14 +53,31 @@ public class VideoThumbnailCreator extends Thread
                 frameGrabTime = "00:00:02.00";
             }
             
-        	String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -filter:v scale=160:-1" + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
-
+        	// String progNameAndParams = ffmpegExePath + " -i " + videoFilePath + " -ss " + frameGrabTime + " -filter:v scale=160:-1" + " -vframes 1 " + getFfmpegOutputFileSpec(videoFilePath);
+            
+            ArrayList<String> progNameAndParams = new ArrayList<String>();
+            progNameAndParams.add(ffmpegExePath);
+            progNameAndParams.add("-i");
+            progNameAndParams.add(videoFilePath);
+            progNameAndParams.add("-ss");
+            progNameAndParams.add(frameGrabTime);
+            progNameAndParams.add("-filter:v");
+            progNameAndParams.add("scale=160:-1");
+            progNameAndParams.add("-vframes");
+            progNameAndParams.add("1");
+            progNameAndParams.add(getFfmpegOutputFileSpec(videoFilePath));
+            
             if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + progNameAndParams);
+            	StringBuilder buff = new StringBuilder();
+                for (String cmdToken : progNameAndParams) {
+                	buff.append(cmdToken);
+                	buff.append(' ');
+                }
+                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
             }
-        	
+            
 			try {
-				Process grabProcess = Runtime.getRuntime().exec(progNameAndParams);
+				Process grabProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
 				
 		        DataInputStream grabProcessOut = new DataInputStream(grabProcess.getErrorStream());
 		        

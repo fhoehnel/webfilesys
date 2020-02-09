@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.util.CommonUtils;
@@ -231,8 +231,7 @@ public class ZipFileRequestHandler extends UserRequestHandler {
 			}
 
 			if (dirCreated) {
-		        TestSubDirThread subDirThread = new TestSubDirThread(getCwd());
-		        subDirThread.start();
+    	        SubdirExistTester.getInstance().queuePath(getCwd(), 1, true);	        
 			}
 
 			String zipFileName = filePath.substring(filePath.lastIndexOf(File.separator)+1);

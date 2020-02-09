@@ -255,7 +255,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(rootElement, "activationByAdminRequired", "true", false);
         }
         
-        processResponse("registrationConfirmation.xsl", false);
+        processResponse("registrationConfirmation.xsl");
 	}
 	  
 	protected void selfRegistrationForm(HttpServletRequest req, HttpSession session)
@@ -449,6 +449,6 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 									   "user role"));
 		
 		
-		processResponse("registerUser.xsl", true);
+		processResponse("registerUser.xsl");
     }
 }

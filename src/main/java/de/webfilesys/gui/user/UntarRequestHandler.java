@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import com.ice.tar.TarEntry;
 import com.ice.tar.TarInputStream;
 
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.util.CommonUtils;
@@ -178,9 +178,7 @@ public class UntarRequestHandler extends UserRequestHandler
 
         if (dirCreated)
         {
-            TestSubDirThread subDirThread = new TestSubDirThread(getCwd());
-
-            subDirThread.start();
+	        SubdirExistTester.getInstance().queuePath(getCwd(), 1, true);	        
         }
 
         String filenameWithoutPath = filePath.substring(filePath.lastIndexOf(File.separator)+1);

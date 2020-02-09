@@ -51,10 +51,6 @@ public class XslFastPathHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, fastPathElement);
 
-		XmlUtil.setChildText(fastPathElement, "css", userMgr.getCSS(uid), false);
-
-	    XmlUtil.setChildText(fastPathElement, "language", language, false);
-		
 		int docRootTokenCount = getDocRootTokenCount();
 		
 		ArrayList<FileSysBookmark> bookmarkList = FileSysBookmarkManager.getInstance().getListOfBookmarks(uid);
@@ -73,7 +69,7 @@ public class XslFastPathHandler extends XslRequestHandlerBase
         	addFastPath(fastPathElement, (String) fastPathList.get(i), docRootTokenCount, PATH_TYPE_VISITED);
         }
 		
-		this.processResponse("fastPath.xsl", false);
+		this.processResponse("fastPath.xsl");
     }
 	
 	private void addFastPath(Element fastPathElement, String fastPath, int docRootTokenCount, int pathType)

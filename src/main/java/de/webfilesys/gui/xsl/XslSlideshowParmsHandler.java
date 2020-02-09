@@ -52,7 +52,6 @@ public class XslSlideshowParmsHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, slideShowParmsElement);
 
-		XmlUtil.setChildText(slideShowParmsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(slideShowParmsElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(slideShowParmsElement, "shortPath", shortPath, false);
 
@@ -63,6 +62,6 @@ public class XslSlideshowParmsHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(slideShowParmsElement, "encodedStartPath", insertDoubleBackslash(startPath), false);
 		}
 			
-		processResponse("slideShowParms.xsl", true);
+		processResponse("slideShowParms.xsl");
     }
 }

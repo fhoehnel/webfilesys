@@ -68,11 +68,17 @@ public class SearchRequestHandler extends UserRequestHandler
 			file_mask="*";
 		}
 
-		String search_arg=getParameter("SearchArg");
-		if ((search_arg!=null) && (search_arg.length()==0))
-		{
-			search_arg=null;
+		
+		StringBuilder searchTextBuff = new StringBuilder();
+		String[] searchArguments = req.getParameterValues("searchText");
+		
+		for (int i = 0; i < searchArguments.length; i++) {
+			if (!CommonUtils.isEmpty(searchArguments[i])) {
+				searchTextBuff.append(searchArguments[i]);
+				searchTextBuff.append(" ");
+			}
 		}
+		String searchText = searchTextBuff.toString();
 
 		String includeSubdirs = getParameter("includeSubdirs");
 		String includeDesc=getParameter("includeDesc");
@@ -131,13 +137,13 @@ public class SearchRequestHandler extends UserRequestHandler
 
 		output.print("<html>");
 		output.print("<head>");
-		if (search_arg == null) 
+		if (CommonUtils.isEmpty(searchText))
 		{
 			output.print("<title>" + getResource("label.searchresults","Search Results") + ": " + file_mask + " </title>");
 		}
 		else
 		{
-			output.print("<title>" + getResource("label.searchresults","Search Results") + ": " + search_arg + " </title>");
+			output.print("<title>" + getResource("label.searchresults","Search Results") + ": " + searchText + " </title>");
 		}
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
@@ -145,6 +151,7 @@ public class SearchRequestHandler extends UserRequestHandler
 
 		output.println("<script src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");
+		output.println("<script src=\"/webfilesys/javascript/util.js\" type=\"text/javascript\"></script>");
 
         output.println("<script language=\"javascript\">"); 
 
@@ -193,13 +200,13 @@ public class SearchRequestHandler extends UserRequestHandler
 		output.println("</td>");
 		output.println("</tr>");
 
-		if (search_arg!=null)
+		if (!CommonUtils.isEmpty(searchText))
 		{
 			output.println("<tr><td class=\"formParm1\">");
 			output.println(getResource("label.searcharg","search argument") + ":");
 			output.println("</td>");
 			output.println("<td colspan=\"2\" class=\"formParm2\">");
-			output.println(CommonUtils.escapeHTML(search_arg));
+			output.println(CommonUtils.escapeHTML(searchText));
 			output.println("</td></tr>");
 		}
 
@@ -227,7 +234,7 @@ public class SearchRequestHandler extends UserRequestHandler
 			output.println("</td></tr>");
         }
         
-		if (search_arg!=null)
+		if (!CommonUtils.isEmpty(searchText))
 		{
 			output.println("<tr><td class=\"formParm1\" colspan=\"3\">");
 			output.println(getResource("label.currentSearchDir","searching in folder") + ":");
@@ -257,9 +264,9 @@ public class SearchRequestHandler extends UserRequestHandler
 
 				searchArgText.append(": \"");
 
-				if (search_arg != null)
+				if (!CommonUtils.isEmpty(searchText)) 
 				{
-					searchArgText.append(search_arg);
+					searchArgText.append(searchText);
 					searchArgText.append("\" ");
 					searchArgText.append(getResource("label.in","in"));
 					searchArgText.append(" \"");
@@ -283,9 +290,9 @@ public class SearchRequestHandler extends UserRequestHandler
 
         int hitNumber = 0;
         
-		if (search_arg!=null)
+		if (!CommonUtils.isEmpty(searchText)) 
 		{
-			TextSearch textSearch = new TextSearch(act_path, file_mask,search_arg, fromDate, toDate,
+			TextSearch textSearch = new TextSearch(act_path, file_mask, searchArguments, fromDate, toDate,
 			                                       output, (includeSubdirs != null),
 			                                       (includeDesc != null), (descOnly != null),
 			                                       category, searchResultDir, session, readonly,
@@ -338,10 +345,10 @@ public class SearchRequestHandler extends UserRequestHandler
 
 		output.println("document.form2.cancelButton.style.visibility='hidden';");
 
-		output.println("alert('" + hitNumber + " " + getResource("label.matches","matches found") + "');");
-		
 		output.println("scrollTo(1,50000);");
 
+		output.println("customAlert('" + hitNumber + " " + getResource("label.matches","matches found") + "', '" + getResource("button.ok","OK") + "');");
+		
 		output.println("</script>");
 
 		output.println("</body></html>");
@@ -448,7 +455,7 @@ public class SearchRequestHandler extends UserRequestHandler
             {
                 if (!act_path.equals(searchResultDir))
                 {
-                    metaInfMgr.releaseMetaInf(act_path);
+                    metaInfMgr.releaseMetaInf(act_path, false);
                 }
             }
 		}

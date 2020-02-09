@@ -40,6 +40,8 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 		String currentPath = getCwd();
 
 		String imgFilePath = getParameter("imgFile");
+
+		boolean anyJpegFileSelected = false;
 		
 		if (imgFilePath == null) {
 			// save selected files in session
@@ -59,6 +61,12 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 	        }
 
 	        session.setAttribute("selectedFiles", selectedFiles);
+
+	        for (String imgFile : selectedFiles) {
+	        	if (imgFile.toLowerCase().endsWith("jpg") || imgFile.toLowerCase().endsWith("jpeg")) {
+	        		anyJpegFileSelected = true;
+	        	}
+	        }
 		}
 		
 		Element resizeParamsElement = doc.createElement("resizeParams");
@@ -69,10 +77,6 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, resizeParamsElement);
 
-		XmlUtil.setChildText(resizeParamsElement, "css", userMgr.getCSS(uid), false);
-
-		XmlUtil.setChildText(resizeParamsElement, "language", language, false);
-		
 		String popup = getParameter("popup");
 		
 		int fileNameDislayLength = (popup == null ? 80 : 50);
@@ -116,14 +120,20 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 	            ScaledImage scaledImage = new ScaledImage(imgFilePath, 400, 400);
 	            thumbnailWidth = scaledImage.getScaledWidth();
 	    		thumbnailHeight = scaledImage.getScaledHeight();
+
+	    		XmlUtil.setChildText(resizeParamsElement, "imageType", Integer.toString(scaledImage.getImageType()), false);
 	        } catch (IOException ioEx) {
 	            LOG.error("failed to get image dimensions", ioEx);
 	        }
 	        
 			XmlUtil.setChildText(resizeParamsElement, "thumbnailWidth", Integer.toString(thumbnailWidth), false);
 			XmlUtil.setChildText(resizeParamsElement, "thumbnailHeight", Integer.toString(thumbnailHeight), false);
+		} else {
+			if (anyJpegFileSelected) {
+	    		XmlUtil.setChildText(resizeParamsElement, "imageType", Integer.toString(ScaledImage.IMG_TYPE_JPEG), false);
+			}
 		}
 		
-		processResponse("resizeParams.xsl", true);
+		processResponse("resizeParams.xsl");
     }
 }

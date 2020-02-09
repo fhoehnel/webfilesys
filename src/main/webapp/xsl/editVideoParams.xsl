@@ -46,8 +46,14 @@
       <input type="hidden" name="command" value="video" />
       <input type="hidden" name="cmd" value="editConvertVideo" />
       
-      <input type="hidden" name="videoFileName">
+      <input type="hidden" id="videoFileName" name="videoFileName">
         <xsl:attribute name="value"><xsl:value-of select="/editParams/videoFileName" /></xsl:attribute>
+      </input>
+      <input type="hidden" id="videoWidth" name="videoWidth">
+        <xsl:attribute name="value"><xsl:value-of select="/editParams/videoInfo/xpix" /></xsl:attribute>
+      </input>
+      <input type="hidden" id="videoHeight" name="videoHeight">
+        <xsl:attribute name="value"><xsl:value-of select="/editParams/videoInfo/ypix" /></xsl:attribute>
       </input>
 
       <table class="dataForm" border="0" width="100%">
@@ -166,6 +172,22 @@
                     <select name="endSec" id="endSec" class="timeSel" />
                   </td>
                 </tr>
+                
+                <tr>
+                  <td></td>
+                  <td style="text-align:center">
+                    <input type="button" id="previewButton" resource="button.previewVideoExtract" onclick="videoEditStartPreview()" />
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td></td>
+                  <td class="formParm2">
+                    <img id="previewVideoStartFrame" class="thumb previewVideoFrame"/>
+                    <img id="previewVideoEndFrame" class="thumb previewVideoFrame" style="float:right" />
+                  </td>
+                </tr>
+                
               </xsl:if>
                 
               <tr><td colspan="2">&#160;</td></tr>  

@@ -711,7 +711,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             }
         }
 		
-	    processResponse("mobile/folderFileList.xsl", false);
+	    processResponse("mobile/folderFileList.xsl");
 
 	    if (!"\\".equals(currentPath)) {
 			FastPathManager.getInstance().queuePath(uid, currentPath);

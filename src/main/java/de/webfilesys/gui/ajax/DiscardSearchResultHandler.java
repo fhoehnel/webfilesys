@@ -53,7 +53,7 @@ public class DiscardSearchResultHandler extends XmlRequestHandlerBase
 		
 		boolean success = CommonUtils.deleteDirTree(searchResultDir);
 		
-		MetaInfManager.getInstance().releaseMetaInf(searchResultDir);
+		MetaInfManager.getInstance().releaseMetaInf(searchResultDir, true);
 		
 		Element resultElement = doc.createElement("result");
 		

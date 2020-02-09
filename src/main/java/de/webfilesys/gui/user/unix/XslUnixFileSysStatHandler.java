@@ -90,7 +90,7 @@ public class XslUnixFileSysStatHandler extends XslRequestHandlerBase
                 XmlUtil.setChildText(filesysElement, "free", numFormat.format(newFileSysInfo.free));
             }
 
-            processResponse("unixFileSysStat.xsl", false);
+            processResponse("unixFileSysStat.xsl");
         }
 	}
 	

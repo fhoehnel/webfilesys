@@ -56,8 +56,7 @@
 
       <xsl:if test="not(/cameraData/exifData)">
         <script type="text/javascript">
-          alert(resourceBundle["alert.nocameradata"]);
-          self.close();
+          toast(resourceBundle["alert.nocameradata"], 5000);
         </script>
       </xsl:if>
 

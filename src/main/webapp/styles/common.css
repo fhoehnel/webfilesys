@@ -680,6 +680,21 @@ span.searchPath
     color:navy;
 }  
 
+input.searchArg {
+	width: 204px;
+	margin-bottom: 10px;
+}
+
+span.searchMatchInContext {
+	font-weight: bold;
+}
+
+input[type="button"].addSearchTextButton,
+input[type="button"].removeSearchTextButton {
+	width: 36px;
+	margin-left: 10px;
+}
+
 input[type="submit"], input[type="button"], input.roundedButton {
     height: 24px;
     color: black;
@@ -2241,6 +2256,45 @@ div.editorButtonCont {
     padding: 10px;
     box-sizing: border-box;
     text-align: center;
+}
+
+div.filePreviewCont {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 400px;
+    height: 400px;
+    border: 2px ridge #808080;
+    background-color: #e0e0e0;
+    padding: 10px;
+    box-sizing: content-box;
+    text-align: center;
+    overflow-y: auto;
+}
+
+div.filePreviewCont img {
+	display: none;
+}
+
+div.closeWinButtonCont {
+    width: 100px;	
+	margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+    margin-bottom: 10px;
+}
+
+input.secure {
+    text-security: disc;
+    -webkit-text-security: disc;
+}
+
+.formParm2 input:invalid {
+    border: 1px solid red;
+}
+
+img.previewVideoFrame {
+	visibility: hidden;
 }
 
 @media (max-width: 400px) {

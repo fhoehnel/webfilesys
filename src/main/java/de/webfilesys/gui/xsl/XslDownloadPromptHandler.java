@@ -50,6 +50,6 @@ public class XslDownloadPromptHandler extends XslRequestHandlerBase
 		addMsgResource("label.download.text2", getResource("label.download.text2","Close this window after the download has finished."));
 		addMsgResource("button.closewin", getResource("button.closewin","Close Window"));
 
-		this.processResponse("download.xsl", true);
+		this.processResponse("download.xsl");
     }
 }

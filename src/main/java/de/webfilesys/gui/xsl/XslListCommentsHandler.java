@@ -62,9 +62,7 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, fileCommentsElement);
 
-		XmlUtil.setChildText(fileCommentsElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(fileCommentsElement, "path", actPath, false);
-	    XmlUtil.setChildText(fileCommentsElement, "language", language, false);
 		
 		if (shortPath != null) {
 			XmlUtil.setChildText(fileCommentsElement, "shortPath", shortPath, false);
@@ -161,6 +159,6 @@ public class XslListCommentsHandler extends XslRequestHandlerBase
 			}
 		}
 			
-		this.processResponse("fileComments.xsl", false);
+		this.processResponse("fileComments.xsl");
     }
 }

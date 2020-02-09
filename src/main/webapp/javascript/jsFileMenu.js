@@ -247,7 +247,7 @@ function startProgramResult(req) {
              if (success != 'true') {
                  var msgItem = req.responseXML.getElementsByTagName("message")[0];            
                  var message = msgItem.firstChild.nodeValue;
-                 alert(message);
+                 customAlert(message);
              }             
         }
     }

@@ -41,14 +41,14 @@
     <form accept-charset="utf-8" name="form1" method="get" action="/webfilesys/servlet">
       <input type="hidden" name="command" value="video" />
       <input type="hidden" name="cmd" value="extractVideoFrame" />
-      <input type="hidden" name="videoWidth">
+      <input type="hidden" id="videoWidth" name="videoWidth">
         <xsl:attribute name="value"><xsl:value-of select="/editParams/videoInfo/xpix" /></xsl:attribute>
       </input>
-      <input type="hidden" name="videoHeight">
+      <input type="hidden" id="videoHeight" name="videoHeight">
         <xsl:attribute name="value"><xsl:value-of select="/editParams/videoInfo/ypix" /></xsl:attribute>
       </input>
       
-      <input type="hidden" name="videoFileName">
+      <input type="hidden" id="videoFileName" name="videoFileName">
         <xsl:attribute name="value"><xsl:value-of select="/editParams/videoFileName" /></xsl:attribute>
       </input>
 
@@ -125,11 +125,20 @@
                   <select name="startHour" id="startHour" class="timeSel" /><b>:</b>&#160;
                   <select name="startMin" id="startMin" class="timeSel" /><b>:</b>&#160;
                   <select name="startSec" id="startSec" class="timeSel" />
+                  <input type="button" id="previewButton" resource="button.previewVideoExtract" onclick="videoFrameGrabPreview()" />
                 </td>
               </tr>
                 
               <tr><td colspan="2">&#160;</td></tr>  
                 
+              <tr>
+                <td class="formParm1">
+                </td>
+                <td class="formParm2">
+                  <img id="previewVideoFrame" class="thumb previewVideoFrame" />
+                </td>
+              </tr>
+
               <tr>
                 <td class="formParm1">
                   <input type="button" class="formButton" resource="button.startExtract" onclick="sendExtractVideoFrameForm()" />

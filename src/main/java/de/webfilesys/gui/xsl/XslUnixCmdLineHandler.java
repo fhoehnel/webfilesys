@@ -48,7 +48,6 @@ public class XslUnixCmdLineHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, cmdLineElement);
 
-		XmlUtil.setChildText(cmdLineElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(cmdLineElement, "userid", uid, false);
 
 		addMsgResource("label.cmdhead", getResource("label.cmdhead","execute OS command"));
@@ -57,6 +56,6 @@ public class XslUnixCmdLineHandler extends XslRequestHandlerBase
 		addMsgResource("button.run", getResource("button.run","Run"));
 		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
 
-		processResponse("unixCmdLine.xsl", false);
+		processResponse("unixCmdLine.xsl");
     }
 }

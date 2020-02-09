@@ -68,49 +68,11 @@ public class XslOpenStreetMapFilesHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, geoTagElement);
 
-		XmlUtil.setChildText(geoTagElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(geoTagElement, "path", path, false);
 		XmlUtil.setChildText(geoTagElement, "pathForScript", insertDoubleBackslash(path), false);
 		XmlUtil.setChildText(geoTagElement, "shortPath", shortPath, false);
 		
-		processResponse("openStreetMapFiles.xsl");
+		processResponse("openStreetMapFiles.xsl", true);
     }
 	
-	/**
-	 * We have to do the XSLT processing always on server side.
-     * Client-side XSLT does not work in Firefox for Open Street Maps.
-	 */
-	public void processResponse(String xslFile)
-    {
-		String xslPath = WebFileSys.getInstance().getWebAppRootDir() + "xsl" + File.separator + xslFile;
-    	
-		TransformerFactory tf = TransformerFactory.newInstance();
-	
-		try
-		{
-			Transformer t =
-					 tf.newTransformer(new StreamSource(new File(xslPath)));
-
-			long start = System.currentTimeMillis();
-
-			t.transform(new DOMSource(doc),
-						new StreamResult(output));
-	 		    
-			long end = System.currentTimeMillis();
-    
-			if (Logger.getLogger(getClass()).isDebugEnabled()) {
-				Logger.getLogger(getClass()).debug("XSLTC transformation in " + (end - start) + " ms");
-			}
-		}
-		catch (TransformerConfigurationException tex)
-		{
-			Logger.getLogger(getClass()).warn(tex);
-		}
-		catch (TransformerException tex)
-		{
-			Logger.getLogger(getClass()).warn(tex);
-		}
-
-		output.flush();
-    }
 }

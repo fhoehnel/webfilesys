@@ -270,7 +270,7 @@
     </table>
   </xsl:if>
   
-  <div style="margin-left:auto;margin-right:auto;margin-top:16px;width:100px;">
+  <div class="closeWinButtonCont">
     <input type="button" resource="button.closewin">
       <xsl:attribute name="onclick">self.close();</xsl:attribute>
     </input>

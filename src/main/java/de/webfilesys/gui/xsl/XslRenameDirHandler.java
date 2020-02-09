@@ -78,7 +78,7 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 
 			XmlUtil.setChildText(errorElement, "currentPath", UTF8URLEncoder.encode(currentPath) , false);
 
-			this.processResponse("errorMsgFolder.xsl", false);
+			processResponse("errorMsgFolder.xsl");
 
             return;
 		}
@@ -125,7 +125,7 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 					}
 					else
 					{
-                        MetaInfManager.getInstance().releaseMetaInf(currentPath);
+                        MetaInfManager.getInstance().releaseMetaInf(currentPath, false);
                         
 					    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
 					    {
@@ -163,8 +163,6 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 						if ((cwd != null) && cwd.equals(currentPath)) {
 							setParameter("fastPath",  "true");
 						}
-						
-						SubdirExistCache.getInstance().setExistsSubdir(newPath, new Integer(0));
 						
 						SubdirExistCache.getInstance().cleanupExistSubdir(currentPath);
 						
@@ -212,6 +210,6 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(errorElement, "currentPath", UTF8URLEncoder.encode(currentPath) , false);
 
-		this.processResponse("errorMsgFolder.xsl", false);
+		this.processResponse("errorMsgFolder.xsl");
     }
 }

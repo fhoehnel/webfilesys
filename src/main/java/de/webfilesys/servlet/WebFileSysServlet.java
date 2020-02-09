@@ -40,7 +40,7 @@ import de.webfilesys.CategoryManager;
 import de.webfilesys.Constants;
 import de.webfilesys.ResourceBundleHandler;
 import de.webfilesys.SubdirExistCache;
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailGarbageCollector;
 import de.webfilesys.gui.admin.AdminAddUserRequestHandler;
@@ -57,6 +57,7 @@ import de.webfilesys.gui.admin.LoginLogoutHistoryHandler;
 import de.webfilesys.gui.admin.SessionListHandler;
 import de.webfilesys.gui.admin.UserListRequestHandler;
 import de.webfilesys.gui.admin.ViewLogRequestHandler;
+import de.webfilesys.gui.ajax.AddAudioToVideoHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFileChangeHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFileExistHandler;
 import de.webfilesys.gui.ajax.AjaxCheckFolderExistHandler;
@@ -70,6 +71,7 @@ import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.CheckUploadConflictHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
+import de.webfilesys.gui.ajax.DeshakeVideoHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
 import de.webfilesys.gui.ajax.EditConvertVideoHandler;
 import de.webfilesys.gui.ajax.ExtractVideoFrameHandler;
@@ -81,6 +83,7 @@ import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
+import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
 import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
 import de.webfilesys.gui.ajax.XformImageHandler;
@@ -193,7 +196,6 @@ import de.webfilesys.gui.user.ReturnToPrevDirHandler;
 import de.webfilesys.gui.user.RotatedExifThumbHandler;
 import de.webfilesys.gui.user.SearchRequestHandler;
 import de.webfilesys.gui.user.SelfChangeUserRequestHandler;
-import de.webfilesys.gui.user.SelfEditUserRequestHandler;
 import de.webfilesys.gui.user.SwitchFileAgeColoringHandler;
 import de.webfilesys.gui.user.SynchronizeRequestHandler;
 import de.webfilesys.gui.user.TailRequestHandler;
@@ -202,6 +204,7 @@ import de.webfilesys.gui.user.TransformImageRequestHandler;
 import de.webfilesys.gui.user.URLFileRequestHandler;
 import de.webfilesys.gui.user.UntarRequestHandler;
 import de.webfilesys.gui.user.UserSettingsRequestHandler;
+import de.webfilesys.gui.user.VideoFramePreviewHandler;
 import de.webfilesys.gui.user.VideoThumbHandler;
 import de.webfilesys.gui.user.ZipContentFileRequestHandler;
 import de.webfilesys.gui.user.ZipDirRequestHandler;
@@ -219,6 +222,7 @@ import de.webfilesys.gui.xsl.EditVideoParamHandler;
 import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
 import de.webfilesys.gui.xsl.GPXViewHandler;
 import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
+import de.webfilesys.gui.xsl.SlideshowToVideoParamHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -273,6 +277,7 @@ import de.webfilesys.gui.xsl.XslTreeStatsHandler;
 import de.webfilesys.gui.xsl.XslUnixCmdLineHandler;
 import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
 import de.webfilesys.gui.xsl.XslUploadParmsHandler;
+import de.webfilesys.gui.xsl.XslUserSettingsHandler;
 import de.webfilesys.gui.xsl.XslVideoListHandler;
 import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
 import de.webfilesys.gui.xsl.XslZipContentHandler;
@@ -1325,7 +1330,7 @@ public class WebFileSysServlet extends ServletBase
 
             return(true);
         }
-
+        
         if (command.equals("multiImageExifRename"))
         {
 		    (new RenameToExifDateHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
@@ -1768,8 +1773,8 @@ public class WebFileSysServlet extends ServletBase
 
             SubdirExistCache.getInstance().cleanupExistSubdir(path);
             
-            (new TestSubDirThread(path)).start();
-
+	        SubdirExistTester.getInstance().queuePath(path, 1, true);	        
+            
             try
             {
                 Thread.sleep(1000);
@@ -2031,8 +2036,7 @@ public class WebFileSysServlet extends ServletBase
 
         if (command.equals("selfEditUser"))
         {
-			(new SelfEditUserRequestHandler(req, resp, session, output, userid, null)).handleRequest();
-			
+			(new XslUserSettingsHandler(req, resp, session, output, userid, null)).handleRequest();
             return(true);
         }
         
@@ -2172,6 +2176,11 @@ public class WebFileSysServlet extends ServletBase
                     return(true);
                 }
 
+                if (cmd.equals("slideshowVideoParams")) {
+        		    (new SlideshowToVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
                 if (cmd.equals("editConvertVideo")) {
         		    (new EditConvertVideoHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
@@ -2187,8 +2196,28 @@ public class WebFileSysServlet extends ServletBase
                     return(true);
                 }
                 
+                if (cmd.equals("previewFrame")) {
+        		    (new VideoFramePreviewHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
                 if (cmd.equals("renameVideo")) {
                     (new RenameVideoRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
+                    return(true);
+                }
+
+                if (cmd.equals("addAudioToVideo")) {
+                    (new AddAudioToVideoHandler(req, resp, session, output, userid)).handleRequest();
+                    return(true);
+                }
+
+                if (cmd.equals("multiImgToVideo")) {
+        		    (new SlideshowToVideoHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("deshakeVideo")) {
+        		    (new DeshakeVideoHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
                 }
             }

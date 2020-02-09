@@ -222,8 +222,6 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
             
 		XmlUtil.setChildText(fileListElem, "userid", uid, false);
 		
-	    XmlUtil.setChildText(fileListElem, "language", language, false);
-		
         File dirFile = new File(currentPath);
 	    
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {
@@ -399,6 +397,6 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
             }
         }
 		
-	    processResponse("mobile/folderPictures.xsl", false);
+	    processResponse("mobile/folderPictures.xsl");
 	}
 }

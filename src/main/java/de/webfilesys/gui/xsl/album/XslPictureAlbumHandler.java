@@ -207,8 +207,6 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase {
 
         doc.insertBefore(xslRef, albumElement);
 
-        XmlUtil.setChildText(albumElement, "language", language, false);
-
         // path section
         Element currentPathElem = doc.createElement("currentPath");
 
@@ -307,8 +305,6 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase {
         if (readonly) {
             XmlUtil.setChildText(albumElement, "readonly", "true", false);
         }
-
-        XmlUtil.setChildText(albumElement, "css", userMgr.getCSS(uid), false);
 
         XmlUtil.setChildText(albumElement, "userid", uid, false);
 
@@ -475,7 +471,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase {
             XmlUtil.setChildText(albumElement, "googleMaps", "true", false);
         }
 
-        this.processResponse("album/pictureAlbum.xsl", true);
+        this.processResponse("album/pictureAlbum.xsl");
 
         FastPathManager.getInstance().queuePath(uid, actPath);
     }

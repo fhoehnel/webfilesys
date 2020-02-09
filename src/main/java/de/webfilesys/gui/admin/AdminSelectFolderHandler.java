@@ -16,7 +16,7 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
@@ -219,7 +219,7 @@ public class AdminSelectFolderHandler extends XslRequestHandlerBase
 
 				if (subdirExist == null)
 				{
-			        (new TestSubDirThread(subdirPath)).start();
+			        SubdirExistTester.getInstance().queuePath(subdirPath, 1, false);	        
 				}
 				else
 				{

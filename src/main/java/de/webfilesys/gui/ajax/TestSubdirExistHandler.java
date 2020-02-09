@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.SubdirExistCache;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
@@ -60,7 +61,13 @@ public class TestSubdirExistHandler extends XmlRequestHandlerBase {
         } else {
         	LOG.warn("folder to check for subdirs is not a readable directory: " + path);
         }
-        	
+
+        if (subdirExists) {
+    	    SubdirExistCache.getInstance().setExistsSubdir(folder.getAbsolutePath(), Integer.valueOf(1));
+        } else {
+    	    SubdirExistCache.getInstance().setExistsSubdir(folder.getAbsolutePath(), Integer.valueOf(0));
+        }
+        
         Element resultElement = doc.createElement("result");
         
         XmlUtil.setElementText(resultElement, Boolean.toString(subdirExists));

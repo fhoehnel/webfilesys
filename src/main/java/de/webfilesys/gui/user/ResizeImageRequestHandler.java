@@ -15,6 +15,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -26,11 +27,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
+import de.webfilesys.graphics.ExifUtil;
 import de.webfilesys.graphics.GifQuantizer;
 import de.webfilesys.graphics.ImageTextStamp;
 import de.webfilesys.graphics.ImageTransform;
@@ -126,6 +129,8 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             invalidNewSize = true;
         }
 
+        boolean keepExifData = getParameter("keepExifData") != null;
+        
         String copyRightText = getParameter("copyRightText");
 
         int copyRightPos = ImageTextStamp.TEXT_POS_LOWER_RIGHT;
@@ -263,7 +268,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             }
             
             output.println("<tr><td colspan=\"2\"class=\"formParm1\">");
-            output.println(getResource("label.currentcopy", "current file") + ":");
+            output.println(getResource("label.picTransformed", "picture file scaled/transformed") + ":");
             output.println("</td></tr>");
 
             output.println("<tr><td colspan=\"2\" class=\"formParm2\">");
@@ -325,7 +330,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                 }
                 
                 success = createScaledImage(pathWithSlash, imgFile, outputFormat,
-                        newSize, copyRightText, copyRightPos, copyRightColor,
+                        newSize, keepExifData, copyRightText, copyRightPos, copyRightColor,
                         copyRightFontSize, cropLeft, cropTop, cropWidth, cropHeight);
             }
             else
@@ -341,7 +346,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                         String actFileName = UTF8URLDecoder.decode(selectedFile);
 
                         if (createScaledImage(pathWithSlash, actFileName,
-                                outputFormat, newSize, copyRightText, copyRightPos,
+                                outputFormat, newSize, keepExifData, copyRightText, copyRightPos,
                                 copyRightColor, copyRightFontSize, 
                                 cropLeft, cropTop, cropWidth, cropHeight))
                         {
@@ -361,29 +366,36 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
         if (popup != null)
         {
-            output.println("<center><input type=\"button\" value=\""
+        	output.println("<div class=\"closeWinButtonCont\">");
+            output.println("<input type=\"button\" value=\""
                     + getResource("button.closewin", "Close Window")
-                    + "\" onclick=\"self.close()\"></center>");
+                    + "\" onclick=\"self.close()\"/>");
+        	output.println("</div>");
         }
         else
         {
-        	output.println("<div class=\"buttonCont\">");
-        	
-            output.println("<input type=\"button\" value=\""
-                    + getResource("button.return", "Return")
-                    + "\" onclick=\"returnToPictures()\">");
+            if (newSize == 0) {
+            	output.println("<script type=\"text/javascript\">");
+            	output.println("returnToPictures();");
+            	output.println("</script>");
+            } else {
+            	output.println("<div class=\"buttonCont\">");
+            	
+                output.println("<input type=\"button\" value=\""
+                        + getResource("button.return", "Return")
+                        + "\" onclick=\"returnToPictures()\">");
 
-            if ((newSize > 0) && (success))
-            {
-                output.println("&nbsp;&nbsp;&nbsp;");
-                output
-                        .println("<input type=\"button\" value=\""
-                                + getResource("button.gotoScaled",
-                                        "View Scaled Pictures")
-                                + "\" onclick=\"gotoScaledPictures()\">");
+                if ((newSize > 0) && (success)) {
+                    output.println("&nbsp;&nbsp;&nbsp;");
+                    output
+                            .println("<input type=\"button\" value=\""
+                                    + getResource("button.gotoScaled",
+                                            "View Scaled Pictures")
+                                    + "\" onclick=\"gotoScaledPictures()\">");
+                }
+
+                output.println("</div>");
             }
-
-            output.println("</div>");
         }
 
         output.println("</form>");
@@ -393,7 +405,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
     }
 
     protected boolean createScaledImage(String actPath, String fileName,
-            String format, int newSize, String copyRightText, int copyRightPos,
+            String format, int newSize, boolean keepExifData, String copyRightText, int copyRightPos,
             Color copyRightColor, int copyRightFontSize,
             int cropAreaLeft, int cropAreaTop, int cropAreaWidth, int cropAreaHeight)
     {
@@ -769,6 +781,14 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             }
         }
 
+        if (keepExifData) {
+        	if (format.equals("JPEG")) {
+                File sourceFile = new File(imgFileName);
+                File destFile = new File(thumbFileName);
+                ExifUtil.copyExifData(sourceFile, destFile, null);        
+        	}
+        }
+        
         if (WebFileSys.getInstance().isAutoCreateThumbs())
         {
             if (format.equals("JPEG") || format.equals("PNG"))

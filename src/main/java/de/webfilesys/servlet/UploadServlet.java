@@ -76,7 +76,7 @@ public class UploadServlet extends WebFileSysServlet
 		resp.setContentType("text/html");
 		resp.setCharacterEncoding("UTF-8");
 		
-		int contentLength = req.getContentLength();
+		long contentLength = req.getContentLength();
 		
 		// System.out.println("content length: " + contentLength);
 		
@@ -93,10 +93,10 @@ public class UploadServlet extends WebFileSysServlet
 
         int bytesUploaded = 0;
 
-        Integer uploadCounter = new Integer(bytesUploaded);
+        Long uploadCounter = new Long(bytesUploaded);
 
         session.setAttribute(Constants.UPLOAD_COUNTER, uploadCounter);
-        session.setAttribute(Constants.UPLOAD_SIZE, new Integer(0));
+        session.setAttribute(Constants.UPLOAD_SIZE, new Long(0));
 
         Boolean uploadSuccess = Boolean.valueOf(false);
 
@@ -114,7 +114,7 @@ public class UploadServlet extends WebFileSysServlet
 
         String xferMode = null;
 
-        int prefixLength = 0;
+        long prefixLength = 0;
 
 		boolean uploadLimitExceeded = false;
 
@@ -242,7 +242,7 @@ public class UploadServlet extends WebFileSysServlet
         {
             session.setAttribute(
                 Constants.UPLOAD_SIZE,
-                new Integer(contentLength - prefixLength - compare_length));
+                new Long(contentLength - prefixLength - ((long) compare_length)));
         }
 
         String out_file_name = null;
@@ -437,7 +437,7 @@ public class UploadServlet extends WebFileSysServlet
                             }
                         }
 
-                        uploadCounter = new Integer(bytesUploaded);
+                        uploadCounter = new Long(bytesUploaded);
                         session.setAttribute(
                             Constants.UPLOAD_COUNTER,
                             uploadCounter);

@@ -49,8 +49,6 @@ public class XslDriveInfoRequestHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, driveInfoElement);
 		
-		XmlUtil.setChildText(driveInfoElement, "css", userMgr.getCSS(uid), false);
-
 		WinDiskUsage diskUsage = new WinDiskUsage(path);
 		
 		DecimalFormat numFormat = new DecimalFormat("#,###,###,###,###");

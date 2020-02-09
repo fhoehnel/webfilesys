@@ -51,7 +51,7 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
 			return;
 		}
 
-		session.setAttribute(Constants.UPLOAD_SIZE, new Integer(0));
+		session.setAttribute(Constants.UPLOAD_SIZE, new Long(0l));
 
 		String relativePath = this.getHeadlinePath(currentPath);
 
@@ -64,9 +64,6 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/uploadParms.xsl\"");
 
 		doc.insertBefore(xslRef, uploadElement);
-
-		XmlUtil.setChildText(uploadElement, "css", userMgr.getCSS(uid), false);
-	    XmlUtil.setChildText(uploadElement, "language", language, false);
 
 		XmlUtil.setChildText(uploadElement, "currentPath", currentPath, false);
 		XmlUtil.setChildText(uploadElement, "shortPath", shortPath, false);
@@ -98,6 +95,6 @@ public class XslUploadParmsHandler extends XslRequestHandlerBase
 		    XmlUtil.setChildText(uploadElement, "mobile", "true", false);
 		}
         
-		this.processResponse("uploadParms.xsl", true);
+		this.processResponse("uploadParms.xsl");
     }
 }

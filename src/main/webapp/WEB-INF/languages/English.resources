@@ -16,6 +16,8 @@ label.pictures=pictures
 label.videos=videos
 label.mask=Mask
 label.description=description
+label.tags=tags
+label.tags2=(comma-separated)
 label.directory=folder
 label.path=path
 label.oldName=old name
@@ -343,10 +345,9 @@ label.searchPath=Search in Folder tree
 label.filemask=file name filter
 label.searcharg=text in file/meta info
 label.argdesc1=searches for files that contain all of the words above
-label.argdesc2=wrap search phrase containing spaces with quotation marks
 label.includeSubdirs=include subdirectories in search
-label.includemetainf=include meta info/description in search
-label.metainfonly=search in meta info/description only
+label.includemetainf=include meta info (description, tags) in search
+label.metainfonly=search in meta info (description, tags) only
 label.dateRangeFrom=modification date from
 label.dateRangeUntil=modification date until
 label.dateRange=modification date range
@@ -450,6 +451,12 @@ button.rotateByExif=Rotate by Exif
 title.rotateByExif=rotate pictures according to the orientation value in the camera EXIF data
 confirm.rotateByExif=Pictures, whose orientation does not match the orientation value stored in the camera EXIF data will be rotated losslessly. Continue?
 rotateByExif.noop=No picture rotated!
+multiImgToVideo=create slideshow video
+imgToVideoNoJPEG=A slideshow video can only be created from JPEG picture files.
+selectTwoOrMorePics=Select at least 2 JPEG picture files!
+slideshowToVideoStarted=The slideshow video creation has been started and will take some time to complete. The result video file is created in subfolder
+slideshowVideoErrorMissmatch=Please select only JPEG pictures with equal pixel resolution!
+slideshowVideoErrorProcess=Creation of the slideshow video has failed.
 
 #picture comparision
 compImg.deleteTitle=delete picture file
@@ -470,6 +477,7 @@ label.mirrorvert=mirror vertical
 label.makethumb=create thumbnail
 label.operation=Operation
 label.imgtransform=Image Transformation
+label.picTransformed=picture file scaled/transformed
 
 # view picture window labels
 alt.origsize=view original size
@@ -515,6 +523,7 @@ label.colorGreen=green
 label.colorYellow=yellow
 label.colorWhite=white
 label.cropArea=select crop area
+keepExifData=keep EXIF data if present
 
 # slideshow labels and buttons
 label.slideparmhead=Slideshow Parameters
@@ -925,6 +934,7 @@ grepReadError=some lines of the file could not be read
 
 # edit/convert video
 contextMenuEditVideo=edit/convert video
+contextMenuDeshakeVideo=stabilize video
 titleEditVideo=edit/convert video
 label.videoFile=video file
 label.videoResolution=resolution (width x height)
@@ -948,6 +958,16 @@ videoConcatErrorCodec=Videos to be concatenated must use the same codec.
 videoConcatErrorFrameRate=Videos to be concatenated must have the same frame rate.
 videoConcatErrorResolution=Videos to be concatenated must have the same dimensions.
 videoConcatErrorProcess=An error occured while concatenating the video files.
+videoDeshakeStarted=The stabilization of the video has been started. This can take some time to complete. For the result file watch the subfolder
+errorVideoDeshake=Failed to stabilize video.
+
+# slideshow video
+titleSlideshowVideo=Create slideshow video
+slideshowVideoResolution=video resolution
+videoResolutionFromPic=keep resolution from pictures
+slideshowVideoPicCount=number of selected picture files
+slideshowVideoDelay=duration for each image
+slideshowVideoPicDimensions=picture resolution
 
 # extract video frame
 contextMenuExtractVideoFrame=extract video frame
@@ -955,8 +975,14 @@ titleExtractVideoFrame=extract video frame
 label.frameResolution=frame resolution (width x height)
 label.extractFrameTime=time in video (hh:mm:ss)
 button.startExtract=Extract Frame
+button.previewVideoExtract=Preview
 videoFrameExtractionStarted=The extraction of the video frame has been started. This can take some time to complete. For the result file watch the subfolder
 validationError.videoFrameExtractTime=The selected time is outside the range of the video.
+
+# add audio to video
+contextMenuAddAudioToVideo=add audio from MP3
+errorMissingAudioInClipboard=Copy the audio file(s) to the clipboard before you call this operation!
+addAudioToVideoStarted=The video/audio mixing process has been start. This can take some time to complete. The result file will be created in the subfolder
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile version

@@ -87,6 +87,19 @@
         </td>
       </tr>
 
+      <xsl:if test="/metaInf/tags">
+        <tr>
+          <td class="formParm1" nowrap="nowrap">
+            <span resource="label.tags"></span>
+            <br/>
+            <span resource="label.tags2"></span>
+          </td>
+          <td class="formParm2" width="80%">
+            <textarea name="tags" style="width:100%;height:40px;"><xsl:value-of select="/metaInf/tags" /></textarea>
+          </td>
+        </tr>
+      </xsl:if>
+
       <xsl:if test="/metaInf/geoTag/mapSelection">
         <tr>
           <td class="formParm1" nowrap="nowrap">

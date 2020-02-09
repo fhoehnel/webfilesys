@@ -16,6 +16,8 @@ label.pictures=Bilder
 label.videos=Videos
 label.mask=Filter
 label.description=Beschreibung
+label.tags=Tags
+label.tags2=(durch Komma getrennt)
 label.directory=Ordner
 label.path=Pfad
 label.oldName=alter Name
@@ -343,10 +345,9 @@ label.searchPath=Suche in Ordner (inkl. Unterordner)
 label.filemask=Suchmaske für Dateinamen
 label.searcharg=enthaltener Text
 label.argdesc1=sucht nach Dateien, die alle diese Wörter enthalten
-label.argdesc2=Suchtext mit Leerzeichen durch Anführungszeichen umschliessen
 label.includeSubdirs=Unterverzeichnisse in Suche einbeziehen
-label.includemetainf=Meta-Infos (Beschreibung) in Suche einbeziehen
-label.metainfonly=nur in Meta-Infos (Beschreibung) suchen
+label.includemetainf=Meta-Infos (Beschreibung, Tags) in Suche einbeziehen
+label.metainfonly=nur in Meta-Infos (Beschreibung, Tags) suchen
 label.dateRangeFrom=Änderungsdatum vom
 label.dateRangeUntil=Änderungsdatum bis
 label.dateRange=Änderungsdatums-Bereich
@@ -452,6 +453,12 @@ button.rotateByExif=Exif-Rotation
 title.rotateByExif=Bilder entsprechend Hoch/Querformat-Wert in EXIF Daten rotieren
 confirm.rotateByExif=Bilder, deren Orientierung (Hoch-/Querformat) nicht mit dem durch die Kamera in den EXIF-Daten gespeicherten Orientierungs-Wert übereinstimmmt, werden verlustlos rotiert. Fortfahren?
 rotateByExif.noop=Es wurde kein Bild rotiert!
+multiImgToVideo=Slideshow-Video generieren
+imgToVideoNoJPEG=Ein Slideshow-Video kann nur aus JPEG-Bildern erstellt werden.
+selectTwoOrMorePics=Wählen Sie mindestens 2 JPEG Bilder aus!
+slideshowToVideoStarted=Die Generierung des Slideshow-Videos kann einige Zeit dauern. Die Video-Datei wird gespeichert im Unterordner
+slideshowVideoErrorMissmatch=Bitte nur JPEG Bilder mit gleicher Auflösung auswählen!
+slideshowVideoErrorProcess=Es ist ein Fehler bei der Generierung des Slideshow-Videos aufgetreten.
 
 #picture comparision
 compImg.deleteTitle=Bilddatei löschen
@@ -472,6 +479,7 @@ label.mirrorvert=Spiegeln vertikal
 label.makethumb=Thumbnail erzeugen
 label.operation=Operation
 label.imgtransform=Bildbearbeitung
+label.picTransformed=Bilddatei skaliert/transformiert
 
 # view picture window labels
 alt.origsize=in Originalgrösse anzeigen
@@ -517,6 +525,7 @@ label.colorGreen=grün
 label.colorYellow=gelb
 label.colorWhite=weiss
 label.cropArea=Bildausschnitt für Beschneiden auswählen
+keepExifData=EXIF-Daten behalten, wenn vorhanden
 
 # slideshow labels and buttons
 label.slideparmhead=Diashow Parameter
@@ -928,6 +937,7 @@ grepReadError=einige Zeilen der Datei konnten nicht gelesen werden
 
 # edit/convert video
 contextMenuEditVideo=editieren/konvertieren
+contextMenuDeshakeVideo=stabilisieren
 titleEditVideo=Video editieren/konvertieren
 label.videoFile=Video-Datei
 label.videoResolution=Auflösung (Breite x Höhe)
@@ -951,6 +961,16 @@ videoConcatErrorCodec=Zu verkettende Videos müssen den gleichen Codec benutzen.
 videoConcatErrorFrameRate=Zu verkettende Videos müssen die gleiche Framerate haben.
 videoConcatErrorResolution=Zu verkettende Videos müssen die gleiche Breite und Höhe haben.
 videoConcatErrorProcess=Beim Verketten der Videos ist ein Fehler aufgetreten.
+videoDeshakeStarted=Die Stabilisierung des Videos wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
+errorVideoDeshake=Beim Stabilisieren des Videos ist ein Fehler aufgetreten.
+
+# slideshow video
+titleSlideshowVideo=Slideshow-Video erstellen
+slideshowVideoResolution=Video-Auflösung
+videoResolutionFromPic=Auflösung von Bildern übernehmen
+slideshowVideoPicCount=Anzahl ausgewählte Bilder
+slideshowVideoDelay=Anzeigedauer für jedes Bild
+slideshowVideoPicDimensions=Auflösung der Bilder
 
 # extract video frame
 contextMenuExtractVideoFrame=Standbild extrahieren
@@ -958,8 +978,14 @@ titleExtractVideoFrame=Video-Standbild extrahieren
 label.frameResolution=Auflösung des Bildes (Breite x Höhe)
 label.extractFrameTime=Zeitpunkt im Video (hh:mm:ss)
 button.startExtract=Extrahieren
+button.previewVideoExtract=Vorschau
 videoFrameExtractionStarted=Die Extrahierung des Standbildes wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 validationError.videoFrameExtractTime=Der gewählte Zeitpunkt liegt ausserhalb des Zeitbereiches des Videos.
+
+# add audio to video
+contextMenuAddAudioToVideo=Audio aus MP3 hinzufügen
+errorMissingAudioInClipboard=Wählen sie die Audio-Dateien zum Kopieren aus vor Aufruf dieser Operation!
+addAudioToVideoStarted=Das Hinzufügen von Audio zu Video wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 
 # mobile version
 label.mobileWindowTitle=WebFileSys mobile Version

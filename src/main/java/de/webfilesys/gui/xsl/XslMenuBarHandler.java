@@ -38,13 +38,10 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
 
 		doc.insertBefore(xslRef, menuBarElement);
 
-		XmlUtil.setChildText(menuBarElement, "css", userMgr.getCSS(uid), false);
 		XmlUtil.setChildText(menuBarElement, "userid", uid, false);
 		XmlUtil.setChildText(menuBarElement, "role", userMgr.getRole(uid), false);
 		XmlUtil.setChildText(menuBarElement, "helpLanguage", userMgr.getLanguage(uid), false);
 		
-	    XmlUtil.setChildText(menuBarElement, "language", language, false);
-	    
 	    XmlUtil.setChildText(menuBarElement, "hostname", WebFileSys.getInstance().getLocalHostName(), false);		
 		
 	    if (((File.separatorChar == '/') && isAdminUser(false)) ||
@@ -96,6 +93,6 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(menuBarElement, "cmdLine", "true", false);
         }
         
-		processResponse("menuBar.xsl", false);
+		processResponse("menuBar.xsl");
     }
 }

@@ -69,8 +69,6 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 
 		doc.insertBefore(xslRef, geoDataElement);
 
-		XmlUtil.setChildText(geoDataElement, "css", userMgr.getCSS(uid), false);
-
 		Element mapDataElement = doc.createElement("mapData");
 
 		geoDataElement.appendChild(mapDataElement);
@@ -175,7 +173,7 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 		// when loading the Google maps API Javascript functions from the Google server
 		// so we have to do the XSLT processing always on server side
 		
-		processResponse("googleMapMulti.xsl");
+		processResponse("googleMapMulti.xsl", true);
     }
 	
 	private void addMarker(Element markersElement, float latitude, float longitude, String infoText, String fileName) {
@@ -194,37 +192,6 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 		    XmlUtil.setChildText(markerElement, "fileName", fileName, false);
 	    }
 	}
-	
-	/**
-	 * We have to do the XSLT processing always on server side. See explanation above.
-	 */
-	public void processResponse(String xslFile) {
-		String xslPath = WebFileSys.getInstance().getWebAppRootDir() + "xsl" + File.separator + xslFile;
-    	
-		TransformerFactory tf = TransformerFactory.newInstance();
-	
-		try {
-			Transformer t =
-					 tf.newTransformer(new StreamSource(new File(xslPath)));
-
-			long start = System.currentTimeMillis();
-
-			t.transform(new DOMSource(doc),
-						new StreamResult(output));
-	 		    
-			long end = System.currentTimeMillis();
-    
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("XSLTC transformation in " + (end - start) + " ms");
-			}
-		} catch (TransformerConfigurationException tex) {
-			LOG.warn(tex);
-		} catch (TransformerException tex) {
-			LOG.warn(tex);
-		}
-
-		output.flush();
-    }
 	
 	private String removeEmojis(String infoText) {
 		if ((infoText.indexOf('{') < 0) || (infoText.indexOf('}') < 0)) {

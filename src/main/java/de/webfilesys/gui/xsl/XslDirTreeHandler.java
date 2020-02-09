@@ -16,7 +16,7 @@ import org.w3c.dom.ProcessingInstruction;
 import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
 import de.webfilesys.SubdirExistCache;
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
@@ -219,7 +219,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 
 				if (subdirExist == null)
 				{
-			        (new TestSubDirThread(subdirPath)).start();
+			        SubdirExistTester.getInstance().queuePath(subdirPath, 1, false);	        
 				}
 
                 folderElement = doc.createElement("folder");

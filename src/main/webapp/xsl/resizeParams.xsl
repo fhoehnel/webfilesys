@@ -172,6 +172,15 @@
                 </td>
               </tr>
 
+              <xsl:if test="/resizeParams/imageType = 1">
+                <tr>
+                  <td class="formParm1" colspan="2">
+                    <input type="checkbox" name="keepExifData" class="formParm1" />
+                    <span resource="keepExifData"></span>
+                  </td>
+                </tr>
+              </xsl:if>
+
               <tr>
                 <td colspan="2">
                   <table class="formSection">

@@ -395,7 +395,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
         
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
-		processResponse("thumbnailOnePage.xsl", true);
+		processResponse("thumbnailOnePage.xsl");
 
 		FastPathManager.getInstance().queuePath(uid, currentPath);
 	}

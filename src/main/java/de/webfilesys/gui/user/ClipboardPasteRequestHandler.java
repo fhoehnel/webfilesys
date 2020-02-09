@@ -17,12 +17,11 @@ import de.webfilesys.CopyStatus;
 import de.webfilesys.FileSysStat;
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
-import de.webfilesys.TestSubDirThread;
+import de.webfilesys.SubdirExistTester;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.graphics.VideoThumbnailCreator;
-import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 
@@ -419,19 +418,16 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
                             
                             if (parentOfSourceDir != null) 
                             {
-                                TestSubDirThread subDirThread = new TestSubDirThread(parentOfSourceDir);
-                                subDirThread.start();
+                    	        SubdirExistTester.getInstance().queuePath(parentOfSourceDir, 1, true);	        
                             }
                         }
 
-                        (new TestSubDirThread(destSubdir)).start();
+            	        SubdirExistTester.getInstance().queuePath(destSubdir, 1, true);	        
                     }
                 }
 			}     
 
-	        TestSubDirThread subDirThread = new TestSubDirThread(actPath);
-
-	        subDirThread.start();
+	        SubdirExistTester.getInstance().queuePath(actPath, 1, true);	        
 		}
 
 		output.println("<script language=\"javascript\">");
