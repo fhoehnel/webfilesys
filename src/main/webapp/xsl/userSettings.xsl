@@ -99,7 +99,7 @@
 				<td class="formParm1"><b><span resource="label.language"></span></b></td>
 				<td class="formParm2">
 				  <select name="language" size="1">
-				    <xsl:for-each select="/userSettings/availableLanguages/language">
+				    <xsl:for-each select="/userSettings/availableLanguages/lang">
 				      <option>
 				        <xsl:attribute name="value"><xsl:value-of select="."/></xsl:attribute>
 				        <xsl:if test="@selected"> 

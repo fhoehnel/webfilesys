@@ -72,7 +72,7 @@ public class XslUserSettingsHandler extends XslRequestHandlerBase {
 		userSettingsElem.appendChild(availableLanguagesElem);
 		
 		for (String availableLanguage : LanguageManager.getInstance().getAvailableLanguages()) {
-			Element languageElem = doc.createElement("language");
+			Element languageElem = doc.createElement("lang");
 			XmlUtil.setElementText(languageElem, availableLanguage);
 			availableLanguagesElem.appendChild(languageElem);
 			if (availableLanguage.equals(selectedLanguage)) {
