@@ -121,6 +121,15 @@ public class SlideshowToVideoParamHandler extends XslRequestHandlerBase {
 			videoParamsElem.appendChild(targetResolutionElem);
 			
 			addTargetResolutionOption(targetResolutionElem, commonImgWidth, commonImgHeight, aspectRatio, 1920);
+			
+			if ((commonImgWidth >= 1920) && (commonImgHeight >= 1080)) {
+				Element resolutionOptionElem = doc.createElement("option");
+				XmlUtil.setChildText(resolutionOptionElem, "width", "1920");
+				XmlUtil.setChildText(resolutionOptionElem, "height", "1080");
+				XmlUtil.setChildText(resolutionOptionElem, "hint", "full HD");
+				targetResolutionElem.appendChild(resolutionOptionElem);
+			}
+			
 			addTargetResolutionOption(targetResolutionElem, commonImgWidth, commonImgHeight, aspectRatio, 1024);
 			addTargetResolutionOption(targetResolutionElem, commonImgWidth, commonImgHeight, aspectRatio, 800);
 			addTargetResolutionOption(targetResolutionElem, commonImgWidth, commonImgHeight, aspectRatio, 640);

@@ -13,45 +13,56 @@ import de.webfilesys.util.CommonUtils;
 public class VideoDeshaker extends Thread {
 	public static final String DESHAKE_TARGET_DIR = "_stabilized"; 
 	
-    String videoFilePath;
+	private ArrayList<String> processQueue = null;
+	
+    public VideoDeshaker(String videoFilePath) {
+    	processQueue = new ArrayList<String>();
+    	processQueue.add(videoFilePath);
+    }
     
-    public VideoDeshaker(String videoPath) {
-    	videoFilePath = videoPath;
+    public VideoDeshaker(ArrayList<String> videoFilePathList) {
+    	processQueue = videoFilePathList;
     }
 
     public void run() {
         if (Logger.getLogger(getClass()).isDebugEnabled()) {
-            Logger.getLogger(getClass()).debug("starting video deshaker thread for video file " + videoFilePath);
+            Logger.getLogger(getClass()).debug("starting video deshaker thread for " + processQueue.size() + " video files");
         }
         
         String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
         	
-            String targetVideoPath = getTargetPath(videoFilePath);
-            File targetVideoDir = new File(targetVideoPath);
-            if (!targetVideoDir.exists()) {
-                if (!targetVideoDir.mkdir()) {
-                    Logger.getLogger(getClass()).error("failed to create target directory for deshaked video " + targetVideoPath);
+        	for (String videoFilePath : processQueue) {
+        		String targetVideoPath = getTargetPath(videoFilePath);
+                File targetVideoDir = new File(targetVideoPath);
+                if (!targetVideoDir.exists()) {
+                    if (!targetVideoDir.mkdir()) {
+                        Logger.getLogger(getClass()).error("failed to create target directory for deshaked video " + targetVideoPath);
+                        return;
+                    }
+                }
+
+                File transformFile = new File(getTransformFilePath(targetVideoPath));
+                if (transformFile.exists()) {
+                    Logger.getLogger(getClass()).error("transform file for video deshaking still exists: " + transformFile + " - an other deshaking process seems to be running");
                     return;
                 }
-            }
 
-            File transformFile = new File(getTransformFilePath(targetVideoPath));
-            if (transformFile.exists()) {
-                Logger.getLogger(getClass()).error("transform file for video deshaking still exists: " + transformFile + " - an other deshaking process seems to be running");
-                return;
-            }
-            
-            if (prepareStabilizer(targetVideoPath)) {
-            	runStabilizer(targetVideoPath);
-            	
-            	removeTransformFile(targetVideoPath);
-            }
+                if (Logger.getLogger(getClass()).isDebugEnabled()) {
+                    Logger.getLogger(getClass()).debug("starting video deshaking for file " + videoFilePath);
+                }
+                
+                if (prepareStabilizer(videoFilePath, targetVideoPath)) {
+                	runStabilizer(videoFilePath, targetVideoPath);
+                	
+                	removeTransformFile(targetVideoPath);
+                }
+        	}
         }
     }
 
-    private boolean prepareStabilizer(String targetVideoPath) {
+    private boolean prepareStabilizer(String videoFilePath, String targetVideoPath) {
         
     	// ffmpeg -i original.mp4 -vf vidstabdetect=stepsize=5:shakiness=7:accuracy=15:result=transform.trf -f null -
         
@@ -114,7 +125,7 @@ public class VideoDeshaker extends Thread {
 		return false;
     }
 
-    private boolean runStabilizer(String targetVideoPath) {
+    private boolean runStabilizer(String videoFilePath, String targetVideoPath) {
         
     	// ffmpeg -i original.mp4 -vf vidstabtransform=input="transform.trf":zoom=2:smoothing=12,unsharp=5:5:0.8:3:3:0.4 -vcodec libx264 -preset slow -tune film -crf 18 -acodec copy stabilisiert.mp4
         

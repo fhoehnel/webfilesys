@@ -59,10 +59,29 @@ public class SlideshowToVideoThread extends Thread {
         progNameAndParams.add("-y");
         progNameAndParams.add("-i");
         progNameAndParams.add(pictureListFilePath);
+
         progNameAndParams.add("-vf");
-        progNameAndParams.add("zoompan=d=" + (duration + 1) + ":s=" + videoResolutionWidth + "x" + videoResolutionHeight + ":fps=1,framerate=25:interp_start=0:interp_end=255:scene=100");
+
+        // with fade in/out but does not keep aspect ratio
+        // progNameAndParams.add("zoompan=d=" + (duration + 1) + ":s=" + videoResolutionWidth + "x" + videoResolutionHeight + ":fps=1,framerate=25:interp_start=0:interp_end=255:scene=100");
+        
+        // scaled with correct aspect ratio but no fade in/out
+        // progNameAndParams.add("scale=" + videoResolutionWidth + ":" + videoResolutionHeight + ":force_original_aspect_ratio=decrease,pad=" + videoResolutionWidth + ":" + videoResolutionHeight + ":(ow-iw)/2:(oh-ih)/2,setsar=1");
+
+        // with fade in/fade out and keeps aspect ratio
+        progNameAndParams.add("scale=" + videoResolutionWidth + ":" + videoResolutionHeight + ":force_original_aspect_ratio=decrease,pad=" + videoResolutionWidth + ":" + videoResolutionHeight + ":(ow-iw)/2:(oh-ih)/2,zoompan=d=" + (duration + 1) + ":s=" + videoResolutionWidth + "x" + videoResolutionHeight + ":fps=1,framerate=25:interp_start=0:interp_end=255:scene=100");
+        
         progNameAndParams.add("-c:v");
         progNameAndParams.add("h264");
+
+        // required to run on Samsung TV
+        progNameAndParams.add("-profile:v");
+        progNameAndParams.add("high");
+        progNameAndParams.add("-level:v");
+        progNameAndParams.add("4.0");
+        progNameAndParams.add("-pix_fmt");
+        progNameAndParams.add("yuv420p");
+        
         progNameAndParams.add(targetFilePath);
         
         if (Logger.getLogger(getClass()).isDebugEnabled()) {

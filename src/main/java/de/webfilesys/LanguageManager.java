@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -155,13 +156,13 @@ public class LanguageManager
     protected synchronized boolean loadResources(String configFilename, Properties langResources,
     	String language)
     {
-        FileInputStream configFile = null;
+        InputStreamReader configFile = null;
 
         Logger.getLogger(getClass()).info("Loading Resources from " + configFilename);
 
         try
         {
-            configFile = new FileInputStream(configFilename);
+            configFile = new InputStreamReader(new FileInputStream(configFilename), "UTF-8");
 
             langResources.load(configFile);
             

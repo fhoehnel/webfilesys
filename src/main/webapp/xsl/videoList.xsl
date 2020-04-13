@@ -268,6 +268,9 @@
                   <xsl:if test="@link">
                     <xsl:attribute name="disabled">true</xsl:attribute>
                   </xsl:if>
+                  <xsl:if test="not(@link)">
+                    <xsl:attribute name="onclick">handleThumbRangeSelection(event)</xsl:attribute>
+                  </xsl:if>
                 </input>
               
                 <xsl:if test="@link">
@@ -328,8 +331,12 @@
     </div>
 
     <table id="buttonCont" cellspacing="0" class="fileListButtonCont2">
-
       <tr>
+        <td class="fileListButton sepTop" style="white-space:nowrap">
+            <input type="checkbox" class="cb3" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" style="vertical-align:middle;"/>
+            <label for="cb-setAll" resource="checkbox.selectall"></label>
+        </td>
+      
         <td class="fileListButton sepTop">
         
           <div class="buttonCont">
@@ -372,6 +379,7 @@
               <option value="copy" resource="label.copyToClip" />
               <option value="move" resource="label.cutToClip" />
               <option value="concat" resource="concatVideos" />
+              <option value="deshake" resource="contextMenuDeshakeVideo" />
             </select>
           </td>
 

@@ -945,9 +945,11 @@ label.newResolution=new resolution (width x height)
 label.newFps=new frame rate
 label.newCodec=new codec
 label.newVideoContainerFormat=new container format
+label.reencode=re-encode with profile high
 keepOrigFrameRate=no change
 keepOrigCodec=no change
 label.timeRange=time range (hh:mm:ss)
+label.videoHeightAuto=auto height (keep aspect ratio)
 videoConversionStarted=The conversion of the video has been started. This can take some time to complete. For the result file watch the subfolder 
 validationError.videoStartEndTime=The end time may not be before the start time.
 validationError.videoTimeRange=The selected time range is outside the range of the video.
@@ -958,7 +960,7 @@ videoConcatErrorCodec=Videos to be concatenated must use the same codec.
 videoConcatErrorFrameRate=Videos to be concatenated must have the same frame rate.
 videoConcatErrorResolution=Videos to be concatenated must have the same dimensions.
 videoConcatErrorProcess=An error occured while concatenating the video files.
-videoDeshakeStarted=The stabilization of the video has been started. This can take some time to complete. For the result file watch the subfolder
+videoDeshakeStarted=The stabilization of the video(s) has been started. This can take some time to complete. For the result file watch the subfolder
 errorVideoDeshake=Failed to stabilize video.
 
 # slideshow video

@@ -254,6 +254,8 @@ function multiVideoFunction() {
         multiVideoDelete();
     } else if (cmd == 'concat') {
         multiVideoConcat();
+    } else if (cmd == 'deshake') {
+        multiVideoDeshake();
     }
      
     document.form2.cmd.selectedIndex = 0;
@@ -325,6 +327,47 @@ function multiVideoConcat() {
 	    });
     } else {   
         customAlert(resourceBundle["selectTwoOrMoreVideoFiles"] + "!");
+        document.form2.command.value = '';
+        document.form2.cmd.selectedIndex = 0;
+    }
+}
+
+function multiVideoDeshake() {
+    if (anySelected()) {
+    	showHourGlass();
+	    document.form2.command.value = 'multiVideoDeshake';
+	    
+	    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
+	        if (req.readyState == 4) {
+	            if (req.status == 200) {
+	                var success = req.responseXML.getElementsByTagName("success")[0];
+	                if (success) {
+                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                        var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                        var targetPath = targetPathItem.firstChild.nodeValue;
+                        
+                        customAlert(resourceBundle["videoDeshakeStarted"] + " " + targetFolder + ".");
+                        
+                        setTimeout(function() {
+                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                        }, 6000);
+	                } else {
+	                    customAlert(resourceBundle["errorVideoDeshake"]);
+	                }
+	            } else {
+	            	alert(resourceBundle["alert.communicationFailure"]);
+	            }
+	            
+	            document.form2.command.value = '';
+	            document.form2.cmd.selectedIndex = 0;
+
+	            hideHourGlass();
+	        }
+	    });
+    } else {   
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
         document.form2.command.value = '';
         document.form2.cmd.selectedIndex = 0;
     }
@@ -572,8 +615,8 @@ function sendExtractVideoFrameForm() {
                     customAlert(resourceBundle["videoFrameExtractionStarted"] + " " + targetFolder + ".");
                     
                     setTimeout(function() {
-                        window.location.href = "/webfilesys/servlet?command=listVideos";
-                    }, 4000);
+                    	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true&viewMode=2";
+                    }, 5000);
                 } else {
                     var messageItem = req.responseXML.getElementsByTagName("message")[0];            
                     var message = messageItem.firstChild.nodeValue;
@@ -736,5 +779,19 @@ function addAudioToVideo(videoFilePath) {
             }
         }
 	});
-	
+}
+
+function initialSetReencodeCheckboxState(codec) {
+	if (codec == "h264") { 
+		document.getElementById("re-encodeCont").style.display = "inline";
+	}
+}
+
+function setReencodeCheckboxState() {
+	var newCodec = document.getElementById("newCodec").value;
+	if ((newCodec == "h264") || ((newCodec == "") && (oldCodec == "h264"))) {
+		document.getElementById("re-encodeCont").style.display = "inline";
+	} else {
+		document.getElementById("re-encodeCont").style.display = "none";
+	}
 }
