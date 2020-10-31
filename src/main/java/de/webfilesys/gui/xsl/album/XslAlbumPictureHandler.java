@@ -461,6 +461,13 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(imageDataElement, "voteAccepted", "true", false);
         }
         
+        String folderDescription = metaInfMgr.getDescription(actPath, ".");
+
+        if ((folderDescription != null) && (folderDescription.trim().length() > 0))
+        {
+            XmlUtil.setChildText(imageDataElement, "folderDescription", folderDescription, true);
+        }
+        
 		this.processResponse("album/albumPicture.xsl");
     }
 	

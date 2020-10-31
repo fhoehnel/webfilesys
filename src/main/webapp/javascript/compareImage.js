@@ -49,7 +49,10 @@ function markSelectedThumbnail(clickTarget) {
 
 function compareImgLoadInitial() {
 	var firstThumbCont = document.getElementById(firstImageThumbContId);
-    compareShowImage(firstImagePath, $(firstThumbCont).children("a")[0]);
+	
+	setTimeout(() => {
+        compareShowImage(firstImagePath, $(firstThumbCont).children("a")[0]);
+	}, 100);
 }
 
 function compareImgDelete(picFilePath, picFileName) {
@@ -110,3 +113,73 @@ function compareImgClose(imgName) {
 		setTimeout("self.close()", 50);
 	}
 }
+
+function sizeCompareImagesToFit() {
+
+	const pic1 = document.getElementById("picture1");
+	const pic1Width = pic1.naturalWidth;
+	const pic1Height = pic1.naturalHeight;
+
+	const pic2 = document.getElementById("picture2")
+	const pic2Width = pic2.naturalWidth;
+	const pic2Height = pic2.naturalHeight;
+	
+	const picWidth = pic1Width > pic2Width ? pic1Width : pic2Width;
+	const picHeight = pic1Height > pic2Height ? pic1Height : pic2Height;
+	
+	let windowWidth = screen.availWidth - 10;
+	let windowHeight = screen.availHeight - 60;
+	
+	if (windowWidth > picWidth + 60) {
+		windowWidth = picWidth + 10;
+	}
+	if (windowHeight > picHeight + 10) {
+		windowHeight = picHeigth + 10;
+	}
+	
+	window.moveTo((screen.availWidth - windowWidth) / 2, (screen.availHeight - windowHeight) / 2);
+	window.resizeTo(windowWidth, windowHeight);
+	
+	sizeImageToFit(pic1, windowWidth, windowHeight);
+	sizeImageToFit(pic2, windowWidth, windowHeight);
+	
+	const picture1Width = document.getElementById("picture1").width;
+	const compImgCont = document.getElementById("compImgCont");
+	compImgCont.style.width = picture1Width + "px";
+	
+	const script = document.createElement('script');
+	script.src = "/webfilesys/javascript/imgCompSlider/imgCompSlider.js";
+    document.head.appendChild(script);
+}
+
+function sizeImageToFit(picture, windowWidth, windowHeight) {
+	
+	var picAreaWidth = windowWidth - 10;
+	var picAreaHeight = windowHeight - 42;
+	
+	var picAreaRatio = picAreaWidth / picAreaHeight;
+	
+	var picWidth = picture.naturalWidth;
+	var picHeight = picture.naturalHeight;
+		
+	var picRatio = picWidth / picHeight;
+		
+	var margin;
+
+	if (picAreaRatio > picRatio) {
+		picture.style.height = picAreaHeight + "px";
+		picture.style.width = "auto";
+		margin = 0;
+	} else {
+		picture.style.width = picAreaWidth + "px";
+		picture.style.height = "auto";
+		margin = Math.round((picAreaHeight - (picAreaWidth / picRatio)) / 2);
+	}
+	picture.style.marginTop = margin + "px";
+	picture.style.display = "inline";
+}
+
+function confirmDelImg(imgFileName) {
+    deleteSelf(null, imgFileName);
+}          
+

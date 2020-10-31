@@ -43,7 +43,7 @@
     <xsl:value-of select="/metaInf/shortPath" />
   </div>  
 
-  <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet">
+  <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet" style="margin-bottom:0">
   
     <input type="hidden" name="command" value="editMetaInf" />
     

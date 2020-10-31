@@ -301,7 +301,17 @@ function multiVideoConcat() {
 	            if (req.status == 200) {
 	                var success = req.responseXML.getElementsByTagName("success")[0];
 	                if (success) {
-		                toast(resourceBundle["videoConcatStarted"], 5000);
+                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                        var targetFolder = targetFolderItem.firstChild.nodeValue;
+		                
+                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                        var targetPath = targetPathItem.firstChild.nodeValue;
+                        
+                        customAlert(resourceBundle["videoConcatStarted"] + " " + targetFolder + ".");
+                        
+                        setTimeout(function() {
+                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                        }, 6000);
 	                } else {
 		                var item = req.responseXML.getElementsByTagName("errorCode")[0];
 		                var errorCode = item.firstChild.nodeValue;
@@ -561,6 +571,91 @@ function sendEditConvertForm() {
                     var targetPath = targetPathItem.firstChild.nodeValue;
                     
                     customAlert(resourceBundle["videoConversionStarted"] + " " + targetFolder + ".");
+                    
+                    setTimeout(function() {
+    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	                window.parent.frames[1].location.href = expUrl;
+                    } , 4000);
+                    
+                } else {
+                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
+                    var message = messageItem.firstChild.nodeValue;
+                    customAlert(message);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
+}
+
+function sendTextOnVideoForm() {
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.textOnVideoForm), function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var successItem = req.responseXML.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
+                
+                if (success == "true") {
+                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                    var targetPath = targetPathItem.firstChild.nodeValue;
+                    
+                    customAlert(resourceBundle["textOnVideoStarted"] + " " + targetFolder + ".");
+                    
+                    setTimeout(function() {
+    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	                window.parent.frames[1].location.href = expUrl;
+                    } , 4000);
+                    
+                } else {
+                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
+                    var message = messageItem.firstChild.nodeValue;
+                    customAlert(message);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
+}
+
+function sendFadeAudioForm() {
+	var fadeInDuration = document.fadeAudioForm.fadeInDuration.value;
+	var fadeOutDuration = document.fadeAudioForm.fadeOutDuration.value;
+	
+	if (fadeInDuration.length > 0) {
+		var fadeInSeconds = parseInt(fadeInDuration);
+		if ((fadeInDuration % 1 != 0) || (fadeInSeconds > videoDuration)) {
+			customAlert(resourceBundle['fadeInValueInvalid']);
+			return;
+		}
+	}
+	
+	if (fadeOutDuration.length > 0) {
+		var fadeOutSeconds = parseInt(fadeOutDuration);
+		if ((fadeOutDuration % 1 != 0) || (fadeOutSeconds > videoDuration)) {
+			customAlert(resourceBundle['fadeOutValueInvalid']);
+			return;
+		}
+	}
+
+	xmlRequestPost("/webfilesys/servlet", getFormData(document.fadeAudioForm), function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var successItem = req.responseXML.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
+                
+                if (success == "true") {
+                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                    var targetPath = targetPathItem.firstChild.nodeValue;
+                    
+                    customAlert(resourceBundle["videoFadeAudioStarted"] + " " + targetFolder + ".");
                     
                     setTimeout(function() {
     	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";

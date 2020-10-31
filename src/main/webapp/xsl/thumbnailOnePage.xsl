@@ -450,7 +450,7 @@
                   </img>
                 </a>
                 <br/>
-                <input type="checkbox" class="cb2">
+                <input type="checkbox" class="big">
                   <xsl:attribute name="name">list-<xsl:value-of select="@name" /></xsl:attribute>
                   <xsl:attribute name="id">cb-<xsl:value-of select="@id" /></xsl:attribute>
                   <xsl:attribute name="onclick">handleThumbRangeSelection(event)</xsl:attribute>
@@ -543,7 +543,7 @@
 
               <tr>
                 <td align="left" class="fileListButton" nowrap="true">
-                  <input type="checkbox" class="cb3" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" style="vertical-align:middle;"/>
+                  <input type="checkbox" class="big" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" />
                   <label for="cb-setAll" resource="checkbox.selectall"></label>
                 </td>
               

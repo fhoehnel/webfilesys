@@ -210,6 +210,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 	}
 	
 	private void serveImageFromExifThumb(String imgPath, CameraExifData exifData) {
+		
 		byte imgData[] = exifData.getThumbnailData();
 
 		if (imgData == null) {
@@ -238,6 +239,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 	}
 	
 	private void serveImageFromRotatedExifThumb(String imgPath, CameraExifData exifData) {
+		
 		byte imgData[] = exifData.getThumbnailData();
 
 		if (imgData == null) {
@@ -245,12 +247,6 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 			return;
 		}
 
-		/*
-		if (Logger.getLogger(getClass()).isDebugEnabled()) {
-			Logger.getLogger(getClass()).debug("serving rotated Exif thumbnail");
-		}
-		*/
-		
 		resp.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
 		resp.setDateHeader("expires", 0l); 
 		

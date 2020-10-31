@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
+import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -118,8 +119,16 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 			
 	        try {
 	            ScaledImage scaledImage = new ScaledImage(imgFilePath, 400, 400);
-	            thumbnailWidth = scaledImage.getScaledWidth();
-	    		thumbnailHeight = scaledImage.getScaledHeight();
+	            
+				CameraExifData exifData = new CameraExifData(imgFilePath);
+				if ((exifData.getThumbnailLength() <= 0) && 
+	                ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8))) {
+		            thumbnailWidth = scaledImage.getScaledHeight();
+		    		thumbnailHeight = scaledImage.getScaledWidth();
+	            } else {
+		            thumbnailWidth = scaledImage.getScaledWidth();
+		    		thumbnailHeight = scaledImage.getScaledHeight();
+	            }
 
 	    		XmlUtil.setChildText(resizeParamsElement, "imageType", Integer.toString(scaledImage.getImageType()), false);
 	        } catch (IOException ioEx) {

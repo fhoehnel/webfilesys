@@ -302,6 +302,13 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
         {
             XmlUtil.setChildText(slideShowElement, "description", description, true);
         }
+
+        String folderDescription = metaInfMgr.getDescription(actPath, ".");
+
+        if ((folderDescription != null) && (folderDescription.trim().length() > 0))
+        {
+            XmlUtil.setChildText(slideShowElement, "folderDescription", folderDescription, true);
+        }
         
 		processResponse("album/albumSlideShow.xsl");
 	}

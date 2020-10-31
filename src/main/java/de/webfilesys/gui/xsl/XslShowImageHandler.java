@@ -101,8 +101,23 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(imageDataElement, "imageType", Integer.toString(scaledImage.getImageType()), false);
 		
-		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(scaledImage.getRealWidth()), false);
-		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(scaledImage.getRealHeight()), false);
+		
+		int imageWidth = scaledImage.getRealWidth();
+		int imageHeight = scaledImage.getRealHeight();
+
+		if (scaledImage.getImageType() == ScaledImage.IMG_TYPE_JPEG) {
+        	CameraExifData exifData = new CameraExifData(imgPath);
+            int orientation = exifData.getOrientation();
+            if (orientation == 6 || orientation == 8) {
+            	// the browser will rotate the picture for display, so we have to shape the browser window accordingly
+            	int swap = imageWidth;
+            	imageWidth = imageHeight;
+            	imageHeight = swap;
+            }
+		}		
+		
+		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(imageWidth), false);
+		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(imageHeight), false);
 
         PictureRating pictureRating = metaInfMgr.getPictureRating(imgPath);
         

@@ -27,6 +27,7 @@
     <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/showImage.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/compareImage.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
 
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
@@ -34,32 +35,22 @@
       <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/compareImage/language" /></xsl:attribute>
     </script>
 
-    <script type="text/javascript">
-        var newWinWidth = <xsl:value-of select="/compareImage/maxWidth" /> ;
-        var newWinHeight = <xsl:value-of select="/compareImage/maxHeight" />;
-        if (browserEdge) {
-            newWinHeight += 20;
-            newWinWidth += 20;
-        }
-        resizeViewPort(newWinWidth, newWinHeight);
-        window.moveTo(screen.availWidth / 2 - (newWinWidth / 2), 1);
-        
-        function confirmDelImg(imgFileName) {
-            deleteSelf(null, imgFileName);
-        }          
-    </script>
-
   </head>
 
   <body class="compImg">
-
+    <xsl:attribute name="onload">sizeCompareImagesToFit()</xsl:attribute>
 	<figure class="cd-image-container">
+	    <xsl:attribute name="id">compImgCont</xsl:attribute>
+	    <!--  
 	    <xsl:attribute name="style">width:<xsl:value-of select="/compareImage/maxWidth" />px</xsl:attribute>
+		-->
 		
 		<img>
+		  <xsl:attribute name="id">picture1</xsl:attribute>
 		  <xsl:attribute name="src"><xsl:value-of select="/compareImage/image1/path" /></xsl:attribute>
-		  <xsl:attribute name="width"><xsl:value-of select="/compareImage/image1/displayWidth" /></xsl:attribute>
-		  <xsl:attribute name="height"><xsl:value-of select="/compareImage/image1/displayHeight" /></xsl:attribute>
+		  <xsl:attribute name="width">1</xsl:attribute>
+		  <xsl:attribute name="height">1</xsl:attribute>
+	      <xsl:attribute name="style">display:none</xsl:attribute>
 		</img>
 		
 		<span class="cd-image-label" data-type="original"><xsl:value-of select="/compareImage/image1/name" /></span>
@@ -72,9 +63,11 @@
 
 		<div class="cd-resize-img">
 	      <img>
+		    <xsl:attribute name="id">picture2</xsl:attribute>
 		    <xsl:attribute name="src"><xsl:value-of select="/compareImage/image2/path" /></xsl:attribute>
-		    <xsl:attribute name="width"><xsl:value-of select="/compareImage/image2/displayWidth" /></xsl:attribute>
-		    <xsl:attribute name="height"><xsl:value-of select="/compareImage/image2/displayHeight" /></xsl:attribute>
+		    <xsl:attribute name="width">1</xsl:attribute>
+		    <xsl:attribute name="height">1</xsl:attribute>
+		    <xsl:attribute name="style">display:none</xsl:attribute>
 		  </img>
 		  
 		  <span class="cd-image-label" data-type="modified"><xsl:value-of select="/compareImage/image2/name" /></span>
@@ -89,7 +82,9 @@
 		<span class="cd-handle"></span>
 	</figure>
 
+    <!-- done later in onload Javascript  
     <script src="/webfilesys/javascript/imgCompSlider/imgCompSlider.js"></script>
+    -->
 
   </body>
 

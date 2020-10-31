@@ -263,7 +263,7 @@
                   </img>
                 </a>
                 <br/>
-                <input type="checkbox" class="cb2">
+                <input type="checkbox" class="big">
                   <xsl:attribute name="name">list-<xsl:value-of select="@name" /></xsl:attribute>
                   <xsl:if test="@link">
                     <xsl:attribute name="disabled">true</xsl:attribute>
@@ -333,7 +333,7 @@
     <table id="buttonCont" cellspacing="0" class="fileListButtonCont2">
       <tr>
         <td class="fileListButton sepTop" style="white-space:nowrap">
-            <input type="checkbox" class="cb3" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" style="vertical-align:middle;"/>
+            <input type="checkbox" class="big" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" />
             <label for="cb-setAll" resource="checkbox.selectall"></label>
         </td>
       

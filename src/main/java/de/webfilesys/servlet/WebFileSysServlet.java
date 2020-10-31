@@ -86,6 +86,8 @@ import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
+import de.webfilesys.gui.ajax.TextOnVideoHandler;
+import de.webfilesys.gui.ajax.VideoFadeAudioHandler;
 import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
 import de.webfilesys.gui.ajax.XformImageHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
@@ -223,6 +225,8 @@ import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
 import de.webfilesys.gui.xsl.GPXViewHandler;
 import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
 import de.webfilesys.gui.xsl.SlideshowToVideoParamHandler;
+import de.webfilesys.gui.xsl.TextOnVideoParamHandler;
+import de.webfilesys.gui.xsl.VideoFadeAudioParamHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -2225,6 +2229,26 @@ public class WebFileSysServlet extends ServletBase
 
                 if (cmd.equals("deshakeVideo")) {
         		    (new DeshakeVideoHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("textOnVideoParams")) {
+        		    (new TextOnVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("textOnVideo")) {
+        		    (new TextOnVideoHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("fadeAudioParams")) {
+        		    (new VideoFadeAudioParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("fadeAudio")) {
+        		    (new VideoFadeAudioHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
                 }
             }

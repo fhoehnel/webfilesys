@@ -226,7 +226,12 @@
       <xsl:if test="not(/slideShow/imageCount = 0)">
 
         <div class="slideShowHeadline">
-          <span resource="slideshowHeadline"></span>
+          <xsl:if test="/slideShow/folderDescription">
+            <xsl:value-of select="/slideShow/folderDescription" disable-output-escaping="yes" />
+          </xsl:if>
+          <xsl:if test="not(/slideShow/folderDescription)">
+            <span resource="slideshowHeadline"></span>
+          </xsl:if>
           <xsl:text>: </xsl:text>
           <xsl:value-of select="/slideShow/shortImgName"/>
         </div>

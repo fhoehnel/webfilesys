@@ -37,7 +37,7 @@
 <body class="cameraData">
 
   <div class="headline" resource="alt.cameradata"></div>
-
+  
   <form accept-charset="utf-8" name="form1" style="padding-top:5px;">
 
     <table class="dataForm" width="100%">
@@ -229,7 +229,11 @@
                 x
                 <xsl:value-of select="/cameraData/exifData/thumbnailHeight" />)
               </xsl:if>
-              
+              <xsl:if test="/cameraData/exifData/thumbnailOrientation">
+                <br/>&#160;
+                <span resource="label.imgOrientation"></span>:
+                <xsl:value-of select="/cameraData/exifData/thumbnailOrientation" />
+              </xsl:if>
             </td>
             <td class="formParm2">
               <img border="0">

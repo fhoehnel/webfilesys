@@ -15,6 +15,11 @@ body.metainf {
     margin: 0;
 }
 
+body.imgTransform {
+    background-color: #404040;
+    margin: 0;
+}
+
 body.comments {
     background-color: #404040;
     margin: 0;
@@ -250,6 +255,10 @@ input,select,textarea {
     background-color: #e0c080;
     border-color: #e0c080;
     color: #000000;
+}
+
+select {
+    -moz-appearance: none;
 }
  
 input.cb {
