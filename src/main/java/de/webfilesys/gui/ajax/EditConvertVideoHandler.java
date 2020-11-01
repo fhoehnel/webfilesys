@@ -3,8 +3,6 @@ package de.webfilesys.gui.ajax;
 import java.io.File;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.text.MessageFormat;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,6 +32,8 @@ public class EditConvertVideoHandler extends XmlRequestHandlerBase {
 		String videoFileName = getParameter("videoFileName");
 
 		String newSize = getParameter("newSize");
+		
+		String newHeight = getParameter("newHeight");
 
 		String newFps = getParameter("newFps");
 
@@ -49,6 +49,8 @@ public class EditConvertVideoHandler extends XmlRequestHandlerBase {
         String endMinParam = getParameter("endMin");
         String endSecParam = getParameter("endSec");
 		
+        String reencode = getParameter("re-encode");
+        
 		String videoFilePath = getCwd();
 		if (videoFilePath.endsWith(File.separator)) {
 			videoFilePath = videoFilePath + videoFileName;
@@ -59,9 +61,11 @@ public class EditConvertVideoHandler extends XmlRequestHandlerBase {
 		VideoConverterThread videoConverter = new VideoConverterThread(videoFilePath);
 		
 		videoConverter.setNewSize(newSize);
+		videoConverter.setNewHeight(newHeight);
 		videoConverter.setNewCodec(newCodec);
 		videoConverter.setNewFps(newFps);
 		videoConverter.setNewContainerFormat(newContainerFormat);
+		videoConverter.setReencode(reencode != null);
 
         DecimalFormat numFormat = new DecimalFormat("00");
         

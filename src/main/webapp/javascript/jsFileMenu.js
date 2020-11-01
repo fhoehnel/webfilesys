@@ -110,11 +110,11 @@ function viewFile(path)
     
     if (path.charAt(0) == '/')
     {
-       viewPath = '/webfilesys/servlet' + encodeURI(path);
+       viewPath = '/webfilesys/servlet' + encodeURI(path) + "?viewHandler=true";
     }
     else
     {
-       viewPath = '/webfilesys/servlet/' + URLEncode(path);
+       viewPath = '/webfilesys/servlet/' + URLEncode(path)  + "?viewHandler=true";
     }
     
     window.open(viewPath,"_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");

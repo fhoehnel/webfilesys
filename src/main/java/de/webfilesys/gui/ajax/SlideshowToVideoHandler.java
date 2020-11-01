@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import de.webfilesys.Constants;
-import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.graphics.SlideshowToVideoThread;
 import de.webfilesys.gui.xsl.SlideshowToVideoParamHandler;
 import de.webfilesys.util.CommonUtils;
@@ -114,10 +112,8 @@ public class SlideshowToVideoHandler extends XmlRequestHandlerBase {
 	            }
 	        
 	            ffmpegInputFileListFile.println("file " + '\'' +  filePath.replace('\\',  '/') + '\'');
-	            ffmpegInputFileListFile.println("duration " + delay);
-	            
-	            if (i == selectedFiles.size() - 1) {
-		            ffmpegInputFileListFile.println("file " + '\'' +  filePath.replace('\\',  '/') + '\'');
+	            if (i < selectedFiles.size() - 1) {
+	            	ffmpegInputFileListFile.println("duration " + delay);
 	            }
 	        }
 		} catch (IOException ioex) {

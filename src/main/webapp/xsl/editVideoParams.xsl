@@ -29,13 +29,19 @@
     
     <script type="text/javascript">
         var durationSeconds = parseInt("<xsl:value-of select="/editParams/videoInfo/durationSeconds" />");
+        
+        var oldCodec = '<xsl:value-of select="/editParams/videoInfo/codec" />';
     </script>    
 
   </head>
 
   <body class="editVideo">
+
+    <xsl:if test="not(/editParams/videoInfo/duration)">
+      <xsl:attribute name="onload">initialSetReencodeCheckboxState('<xsl:value-of select="/editParams/videoInfo/codec" />')</xsl:attribute>
+    </xsl:if>
     <xsl:if test="/editParams/videoInfo/duration">
-      <xsl:attribute name="onload">createVideoTimeRangeSelOptions()</xsl:attribute>
+      <xsl:attribute name="onload">createVideoTimeRangeSelOptions();initialSetReencodeCheckboxState('<xsl:value-of select="/editParams/videoInfo/codec" />')</xsl:attribute>
     </xsl:if>
   
     <div class="headline" resource="titleEditVideo" />
@@ -118,6 +124,16 @@
                       </option>
                     </xsl:for-each>
                   </select>
+                  &#160;
+                  <select name="newHeight" size="1" style="width:260px;">
+                    <option value="" selected="selected" resource="label.videoHeightAuto"></option>
+                    <xsl:for-each select="/editParams/targetHeight/option">
+                      <option>
+                        <xsl:attribute name="value"><xsl:value-of select="." /></xsl:attribute>
+                        <xsl:value-of select="." />
+                      </option>
+                    </xsl:for-each>
+                  </select>
                 </td>
               </tr>
 
@@ -138,11 +154,15 @@
               <tr>
                 <td class="formParm1"><span resource="label.newCodec"></span>:</td>
                 <td class="formParm2">
-                  <select name="newCodec" size="1" style="width:140px;">
+                  <select id="newCodec" name="newCodec" size="1" style="width:140px;" onchange="setReencodeCheckboxState()">
                     <option value="" selected="selected" resource="keepOrigCodec"></option>
                     <option value="h264">h264</option>
                     <option value="mpeg2video">mpeg2</option>
                   </select>
+                  &#160;
+                  <div id="re-encodeCont" style="display:none">
+                    <input id="re-encode" name="re-encode" type="checkbox"/><label for="re-encode" resource="label.reencode"></label>
+                  </div>
                 </td>
               </tr>
 

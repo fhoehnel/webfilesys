@@ -1,12 +1,16 @@
 package de.webfilesys.graphics;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -59,9 +63,11 @@ public class ThumbnailCreatorBase
             return;
         }
 
+        CameraExifData exifData = null;
+
         if (scaledImg.getImageType() == ScaledImage.IMG_TYPE_JPEG)
         {
-            CameraExifData exifData = new CameraExifData(imgFileName);
+            exifData = new CameraExifData(imgFileName);
 
             if (exifData.getThumbnailLength() > 0)
             {
@@ -155,6 +161,11 @@ public class ThumbnailCreatorBase
         
         if (scaledImg.getImageType() == ScaledImage.IMG_TYPE_JPEG)
         {
+        	if ((exifData.getThumbnailLength() <= 0) && 
+        		((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8))) {
+        		bufferedImg = rotateThumbnail(bufferedImg, exifData);
+        	}
+        	
             // JPEG thumbnails
             boolean success = false;
             BufferedOutputStream thumbOut = null;
@@ -272,6 +283,50 @@ public class ThumbnailCreatorBase
         origImage.flush();
     }
 
+    private BufferedImage rotateThumbnail(BufferedImage sourceImg, CameraExifData exifData) {
+        float degrees = 90;
+		if (exifData.getOrientation() == 6) {
+        	degrees = 270;
+        } 
+		
+		int newWidth = sourceImg.getHeight();
+		int newHeight = sourceImg.getWidth();
+		
+        Canvas dummyComponent = new Canvas();
+        MediaTracker tracker = new MediaTracker(dummyComponent);
+		
+        Image rotatedImg;
+
+        try {
+            ImageFilter filter = new RotateFilter((Math.PI / 180) * degrees);
+            ImageProducer producer = new FilteredImageSource(sourceImg.getSource(), filter);
+            rotatedImg = dummyComponent.createImage(producer);
+
+            tracker.addImage (rotatedImg,1);
+
+            try {
+                tracker.waitForAll();
+            } catch(InterruptedException intEx2) {
+               Logger.getLogger(getClass()).error("failed to rotate thumbnail image", intEx2);
+            }
+
+            tracker.removeImage(rotatedImg);
+
+            sourceImg.flush();
+            
+            BufferedImage bufferedImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+            Graphics g = bufferedImg.getGraphics();
+            g.drawImage(rotatedImg, 0, 0, null);
+            g.dispose();
+
+            rotatedImg.flush();
+            return bufferedImg;
+        } catch (Exception ex) {
+            Logger.getLogger(getClass()).error("failed to rotate thumbnail image", ex);
+		}
+    	return null;
+    }
+    
     public boolean thumbnailUpToDate(String imgPath)
     {
         File imgFile=new File(imgPath);

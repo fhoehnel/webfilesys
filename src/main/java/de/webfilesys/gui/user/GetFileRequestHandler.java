@@ -97,20 +97,21 @@ public class GetFileRequestHandler extends UserRequestHandler
 
         String disposition = getParameter("disposition");
 
-        if (disposition == null)
-        {
-        	ViewHandlerConfig viewHandlerConfig = ViewHandlerManager.getInstance().getViewHandlerConfig(fileToSend.getName());
+        if (disposition == null) {
+        	if ("true".equals(getParameter("viewHandler"))) {
+            	ViewHandlerConfig viewHandlerConfig = ViewHandlerManager.getInstance().getViewHandlerConfig(fileToSend.getName());
 
-        	if (viewHandlerConfig != null)
-        	{
-            	String viewHandlerClassName = viewHandlerConfig.getHandlerClass();
-            	
-                if (viewHandlerClassName != null)
+            	if (viewHandlerConfig != null)
             	{
-            		if (delegateToViewHandler(viewHandlerConfig, filePath, null))
-            		{
-                        return;
-            		}
+                	String viewHandlerClassName = viewHandlerConfig.getHandlerClass();
+                	
+                    if (viewHandlerClassName != null)
+                	{
+                		if (delegateToViewHandler(viewHandlerConfig, filePath, null))
+                		{
+                            return;
+                		}
+                	}
             	}
         	}
         }

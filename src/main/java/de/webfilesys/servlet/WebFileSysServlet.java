@@ -79,12 +79,15 @@ import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
 import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
 import de.webfilesys.gui.ajax.MultiVideoConcatHandler;
+import de.webfilesys.gui.ajax.MultiVideoDeshakeHandler;
 import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
+import de.webfilesys.gui.ajax.TextOnVideoHandler;
+import de.webfilesys.gui.ajax.VideoFadeAudioHandler;
 import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
 import de.webfilesys.gui.ajax.XformImageHandler;
 import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
@@ -143,7 +146,6 @@ import de.webfilesys.gui.user.CancelPublishRequestHandler;
 import de.webfilesys.gui.user.ClipboardPasteRequestHandler;
 import de.webfilesys.gui.user.CloneFileRequestHandler;
 import de.webfilesys.gui.user.CloneFolderRequestHandler;
-import de.webfilesys.gui.user.CompareImageRequestHandler;
 import de.webfilesys.gui.user.CopyLinkRequestHandler;
 import de.webfilesys.gui.user.CreateDirRequestHandler;
 import de.webfilesys.gui.user.CreateFileRequestHandler;
@@ -223,6 +225,8 @@ import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
 import de.webfilesys.gui.xsl.GPXViewHandler;
 import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
 import de.webfilesys.gui.xsl.SlideshowToVideoParamHandler;
+import de.webfilesys.gui.xsl.TextOnVideoParamHandler;
+import de.webfilesys.gui.xsl.VideoFadeAudioParamHandler;
 import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
 import de.webfilesys.gui.xsl.XslAlbumImageHandler;
 import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
@@ -1326,7 +1330,14 @@ public class WebFileSysServlet extends ServletBase
         
         if (command.equals("multiVideoConcat"))
         {
-		    (new MultiVideoConcatHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+		    (new MultiVideoConcatHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+        
+        if (command.equals("multiVideoDeshake"))
+        {
+		    (new MultiVideoDeshakeHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }
@@ -2218,6 +2229,26 @@ public class WebFileSysServlet extends ServletBase
 
                 if (cmd.equals("deshakeVideo")) {
         		    (new DeshakeVideoHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("textOnVideoParams")) {
+        		    (new TextOnVideoParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("textOnVideo")) {
+        		    (new TextOnVideoHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("fadeAudioParams")) {
+        		    (new VideoFadeAudioParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("fadeAudio")) {
+        		    (new VideoFadeAudioHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
                 }
             }

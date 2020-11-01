@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.apache.log4j.Logger;
 
+import de.webfilesys.SubdirExistCache;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 
@@ -16,6 +17,8 @@ public class VideoConverterThread extends Thread {
     
     private String newSize;
     
+    private String newHeight;
+    
     private String newCodec;
     
     private String newContainerFormat;
@@ -23,7 +26,9 @@ public class VideoConverterThread extends Thread {
     private String newFps;
     
     private String startTime;
-    private String endTime;     
+    private String endTime;    
+    
+    private boolean reencode;
     
     private static HashMap<String, String> videoFileExtensions;
     
@@ -41,6 +46,10 @@ public class VideoConverterThread extends Thread {
 
     public void setNewSize(String newVal) {
     	newSize = newVal;
+    }
+    
+    public void setNewHeight(String newVal) {
+    	newHeight = newVal;
     }
     
     public void setNewCodec(String newVal) {
@@ -61,6 +70,14 @@ public class VideoConverterThread extends Thread {
     
     public void setEndTime(String newVal) {
         endTime = newVal;
+    }
+    
+    public void setReencode(boolean newVal) {
+    	reencode = newVal;
+    }
+    
+    public boolean getReencode() {
+    	return reencode;
     }
     
     public void run() {
@@ -129,6 +146,7 @@ public class VideoConverterThread extends Thread {
                 if ((!CommonUtils.isEmpty(startTime)) && (!CommonUtils.isEmpty(endTime))) {
                     if (CommonUtils.isEmpty(newSize) && 
                     	(CommonUtils.isEmpty(newCodec) || newCodec.equals(sourceVideoInfo.getCodec())) && 
+                    	((!("h264".equals(newCodec) || CommonUtils.isEmpty(newCodec) && "h264".equals(sourceVideoInfo.getCodec()))) || !reencode) && 
                     	(CommonUtils.isEmpty(newFps) || newFps.equals(sourceVideoInfo.getFrameRate()))) {
                         // timeRangeParam = " -c copy -ss " + startTime + " -to " + endTime;
                         progNameAndParams.add("-c");
@@ -142,10 +160,14 @@ public class VideoConverterThread extends Thread {
                 
                 if (!CommonUtils.isEmpty(newSize)) {
                     progNameAndParams.add("-vf");
-                    if (sourceVideoInfo.getWidth() > sourceVideoInfo.getHeight()) {
-                        progNameAndParams.add("scale=" + newSize + ":-1");
+                    if (!CommonUtils.isEmpty(newHeight)) {
+                        progNameAndParams.add("scale=" + newSize + ":" + newHeight + ":force_original_aspect_ratio=decrease,pad=" + newSize + ":" + newHeight + ":(ow-iw)/2:(oh-ih)/2");
                     } else {
-                        progNameAndParams.add("scale=-1:" + newSize);
+                        if (sourceVideoInfo.getWidth() > sourceVideoInfo.getHeight()) {
+                            progNameAndParams.add("scale=" + newSize + ":-1");
+                        } else {
+                            progNameAndParams.add("scale=-1:" + newSize);
+                        }
                     }
                 }
                 
@@ -169,6 +191,19 @@ public class VideoConverterThread extends Thread {
                         progNameAndParams.add("-r");
                         progNameAndParams.add(newFps);
                     }
+                }
+                
+                if ("h264".equals(newCodec) ||
+                	CommonUtils.isEmpty(newCodec) && "h264".equals(sourceVideoInfo.getCodec()))	{
+                	if (reencode) {
+                        // required to run on Samsung TV
+                        progNameAndParams.add("-profile:v");
+                        progNameAndParams.add("high");
+                        progNameAndParams.add("-level:v");
+                        progNameAndParams.add("4.0");
+                        progNameAndParams.add("-pix_fmt");
+                        progNameAndParams.add("yuv420p");
+                	}
                 }
                 
                 String addParams = WebFileSys.getInstance().getFfmpegAddParams();
@@ -209,10 +244,10 @@ public class VideoConverterThread extends Thread {
     				
     				if (convertResult == 0) {
     					File resultFile = new File(targetFilePath);
-    					
     					if (!resultFile.exists()) {
     	                    Logger.getLogger(getClass()).error("result file from ffmpeg video conversion not found: " + targetFilePath);
     					}
+    					SubdirExistCache.getInstance().setExistsSubdir(sourcePath, new Integer(1));
     				} else {
     					Logger.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
     				}

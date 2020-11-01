@@ -1,7 +1,6 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,8 +15,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.Constants;
-import de.webfilesys.graphics.ScaledImage;
-import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -58,49 +55,6 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 		String img1Path = imgBasePath + selectedFiles.get(0);
 		String img2Path = imgBasePath + selectedFiles.get(1);
 		
-		int displayWidth = 770;
-
-		String screenWidthParam = getParameter("screenWidth");
-		if (!CommonUtils.isEmpty(screenWidthParam)) {
-		    try {
-		        session.setAttribute("screenWidth", new Integer(Integer.parseInt(screenWidthParam)));
-		    } catch (Exception numEx) {
-		    }
-		}
-
-        String screenHeightParam = getParameter("screenHeight");
-        if (!CommonUtils.isEmpty(screenHeightParam)) {
-            try {
-                session.setAttribute("screenHeight", new Integer(Integer.parseInt(screenHeightParam)));
-            } catch (Exception numEx) {
-            }
-        }
-		
-		Integer screenWidth = (Integer) session.getAttribute("screenWidth");
-		
-		if (screenWidth != null) {
-			displayWidth = screenWidth.intValue() - 28;
-		}
-		
-		int displayHeight = 520;
-
-		Integer screenHeight = (Integer) session.getAttribute("screenHeight");
-		
-		if (screenHeight != null) {
-			displayHeight = screenHeight.intValue() - 120;
-		}
-		
-		ScaledImage scaledImage1 = null;
-		ScaledImage scaledImage2 = null;
-
-		try {
-			scaledImage1 = new ScaledImage(img1Path, displayWidth, displayHeight);
-			scaledImage2 = new ScaledImage(img2Path, displayWidth, displayHeight);
-		} catch (IOException io1) {
-			Logger.getLogger(getClass()).error("failed to determine image size for image comparision", io1);
-			return;
-		}
-		
 		Element compareImageElem = doc.createElement("compareImage");
 			
 		doc.appendChild(compareImageElem);
@@ -117,8 +71,6 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
         
         XmlUtil.setChildText(img1Elem, "path", img1Src);
         XmlUtil.setChildText(img1Elem, "name", selectedFiles.get(0));
-        XmlUtil.setChildText(img1Elem, "displayWidth", Integer.toString(scaledImage1.getScaledWidth()));
-        XmlUtil.setChildText(img1Elem, "displayHeight", Integer.toString(scaledImage1.getScaledHeight()));
         
         Element img2Elem = doc.createElement("image2");
 
@@ -128,22 +80,6 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 
 		XmlUtil.setChildText(img2Elem, "path", img2Src);
         XmlUtil.setChildText(img2Elem, "name", selectedFiles.get(1));
-        XmlUtil.setChildText(img2Elem, "displayWidth", Integer.toString(scaledImage2.getScaledWidth()));
-        XmlUtil.setChildText(img2Elem, "displayHeight", Integer.toString(scaledImage2.getScaledHeight()));
-
-		int maxWidth; 
-		int maxHeight; 
-		
-		if (scaledImage1.getRealHeight() > scaledImage2.getRealWidth()) {
-			maxWidth = scaledImage1.getScaledWidth();
-			maxHeight = scaledImage1.getScaledHeight();
-		} else {
-			maxWidth = scaledImage2.getScaledWidth();
-			maxHeight = scaledImage1.getScaledHeight();
-		}
-		
-	    XmlUtil.setChildText(compareImageElem, "maxWidth", Integer.toString(maxWidth), false);
-	    XmlUtil.setChildText(compareImageElem, "maxHeight", Integer.toString(maxHeight), false);
         
         processResponse("compareImage.xsl");
     }

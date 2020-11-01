@@ -52,6 +52,10 @@ function videoContextMenu(fileName, domId) {
         menuText += menuEntry("javascript:addAudioToVideo('" + scriptPreparedPath + "')", resourceBundle["contextMenuAddAudioToVideo"]);
         
         menuText += menuEntry("javascript:deshakeVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuDeshakeVideo"]);
+
+        menuText += menuEntry("javascript:textOnVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuTextOnVideo"]);
+
+        menuText += menuEntry("javascript:fadeAudio('" + scriptPreparedFile + "')", resourceBundle["contextMenuFadeAdioInOut"]);
     }
         
     menuText += menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
@@ -149,8 +153,16 @@ function editConvertVideo(fileName) {
 	window.location.href = "/webfilesys/servlet?command=video&cmd=editVideoParams&videoFile=" + encodeURIComponent(fileName);
 }
 
-function extractVideoFrame(fileName) {
-	window.location.href = "/webfilesys/servlet?command=video&cmd=extractVideoFrameParams&videoFile=" + encodeURIComponent(fileName);
+function textOnVideo(fileName) {
+	window.location.href = "/webfilesys/servlet?command=video&cmd=textOnVideoParams&videoFile=" + encodeURIComponent(fileName);
+}
+
+function textOnVideo(fileName) {
+	window.location.href = "/webfilesys/servlet?command=video&cmd=textOnVideoParams&videoFile=" + encodeURIComponent(fileName);
+}
+
+function fadeAudio(fileName) {
+	window.location.href = "/webfilesys/servlet?command=video&cmd=fadeAudioParams&videoFile=" + encodeURIComponent(fileName);
 }
 
 function editVideoDesc(path) {

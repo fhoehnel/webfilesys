@@ -176,9 +176,14 @@
   <div class="albumDetailCont">
   
     <div class="pictureAlbumHeadline">
-      <span resource="label.albumTitle"></span>
-      <xsl:text> </xsl:text>
-      <xsl:value-of select="userid" />
+      <xsl:if test="/imageData/folderDescription">
+        <xsl:value-of select="/imageData/folderDescription" disable-output-escaping="yes" />
+      </xsl:if>
+      <xsl:if test="not(/imageData/folderDescription)">
+        <span resource="label.albumTitle"></span>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="userid" />
+      </xsl:if>
       <xsl:text>: </xsl:text>
       <xsl:value-of select="imageName" />
     </div>

@@ -63,6 +63,9 @@
                       <option>
                         <xsl:attribute name="value"><xsl:value-of select="width" />x<xsl:value-of select="height" /></xsl:attribute>
                         <xsl:value-of select="width" /> x <xsl:value-of select="height" />
+                        <xsl:if test="hint">
+                          (<xsl:value-of select="hint"/>)
+                        </xsl:if>
                       </option>
                     </xsl:for-each>
                   </select>

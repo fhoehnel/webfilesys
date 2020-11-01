@@ -24,10 +24,10 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class EditVideoParamHandler extends XslRequestHandlerBase {
-    private static final Logger LOG = Logger.getLogger(EditVideoParamHandler.class);
+public class VideoFadeAudioParamHandler extends XslRequestHandlerBase {
+    private static final Logger LOG = Logger.getLogger(VideoFadeAudioParamHandler.class);
 	
-	public EditVideoParamHandler(
+	public VideoFadeAudioParamHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
@@ -54,7 +54,7 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
 			
 		doc.appendChild(editParamsElem);
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/editVideoParams.xsl\"");
+		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/videoFadeAudioParams.xsl\"");
 
 		doc.insertBefore(xslRef, editParamsElem);
 		
@@ -80,37 +80,6 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
                     XmlUtil.setChildText(videoInfoElem, "durationSeconds", Integer.toString(videoInfo.getDurationSeconds()));
                 }
                 XmlUtil.setChildText(videoInfoElem, "fps", Integer.toString(videoInfo.getFrameRate()));
-                
-                try {
-                    int xResolution = videoInfo.getWidth();
-                    int yResolution = videoInfo.getHeight();
-                    
-                    int maxDimension = xResolution;
-                    if (yResolution > xResolution) {
-                    	maxDimension = yResolution;
-                    }
-                    
-    				Element targetResolutionElem = doc.createElement("targetResolution");
-    				editParamsElem.appendChild(targetResolutionElem);
-    				
-    				addTargetResolutionOption(targetResolutionElem, maxDimension, 1920);
-    				addTargetResolutionOption(targetResolutionElem, maxDimension, 1280);
-    				addTargetResolutionOption(targetResolutionElem, maxDimension, 1024);
-    				addTargetResolutionOption(targetResolutionElem, maxDimension, 800);
-    				addTargetResolutionOption(targetResolutionElem, maxDimension, 640);
-    				addTargetResolutionOption(targetResolutionElem, maxDimension, 380);
-    				addTargetResolutionOption(targetResolutionElem, maxDimension, 260);
-
-    				Element targetHeightElem = doc.createElement("targetHeight");
-    				editParamsElem.appendChild(targetHeightElem);
-    				
-    				addTargetResolutionOption(targetHeightElem, maxDimension, 1080);
-    				addTargetResolutionOption(targetHeightElem, maxDimension, 720);
-    				addTargetResolutionOption(targetHeightElem, maxDimension, 600);
-    				addTargetResolutionOption(targetHeightElem, maxDimension, 480);
-                } catch (Exception ex) {
-                	Logger.getLogger(getClass()).warn("invalid video resolution: " + videoInfo.getWidth() + " x " + videoInfo.getHeight());
-                }
 			}
 			
 			XmlUtil.setChildText(editParamsElem, "videoFileName", videoFileName, false);
@@ -130,14 +99,6 @@ public class EditVideoParamHandler extends XslRequestHandlerBase {
 			}
         }        
 		
-		processResponse("editVideoParams.xsl");
+		processResponse("videoFadeAudioParams.xsl");
     }
-	
-	private void addTargetResolutionOption(Element targetResolutionElem, int maxDimension, int resolution) {
-		if (maxDimension >= resolution) {
-			Element resolutionOptionElem = doc.createElement("option");
-			XmlUtil.setElementText(resolutionOptionElem, Integer.toString(resolution));
-			targetResolutionElem.appendChild(resolutionOptionElem);
-		}
-	}
 }

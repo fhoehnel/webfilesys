@@ -27,6 +27,8 @@ public class FontFileViewHandler implements ViewHandler {
 			HttpServletResponse resp) {
 		
 		try {
+			resp.setContentType("text/html");
+			
 			PrintWriter output = resp.getWriter();
 
 			output.println("<html>");

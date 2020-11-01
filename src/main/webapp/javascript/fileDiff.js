@@ -1,3 +1,20 @@
+function resizeToFitScreen() {
+	window.moveTo(0, 0);
+	window.resizeTo(screen.availWidth, screen.availHeight);
+	
+    const compareResultWidth = (screen.availWidth - 60) / 2;
+    const compareSourceWidth = (screen.availWidth - 60 - compareResultWidth) / 2;
+    const compareHeight = screen.availHeight - 105;
+    
+    document.getElementById("file1Cont").style.width = compareSourceWidth + "px";
+    document.getElementById("file2Cont").style.width = compareSourceWidth + "px";
+    document.getElementById("diffCont").style.width = compareResultWidth + "px";
+    
+    document.getElementById("file1Cont").style.height = compareHeight + "px";
+    document.getElementById("file2Cont").style.height = compareHeight + "px";
+    document.getElementById("diffCont").style.height = compareHeight + "px";
+}
+
 function addScrollListener() {
     var file1Div = document.getElementById('file1Cont');
     var file2Div = document.getElementById('file2Cont');

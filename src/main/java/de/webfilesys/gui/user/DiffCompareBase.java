@@ -61,6 +61,7 @@ public class DiffCompareBase extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
         output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
+		output.println("<script src=\"javascript/util.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"javascript/fileDiff.js\" type=\"text/javascript\"></script>");
         
         File file1 = new File(file1Path);
@@ -99,15 +100,6 @@ public class DiffCompareBase extends UserRequestHandler
             }
         }
         
-        int screenWidth = getScreenWidth();
-
-        int screenHeight = getScreenHeight();
-        
-        int compareResultWidth = (screenWidth - 60) / 2;
-        int compareSourceWidth = (screenWidth - 60 - compareResultWidth) / 2;
-        
-        int compareHeight = screenHeight - 130;
-            
         output.println("</head>");
         output.println("<body class=\"diff\" onload=\"addScrollListener()\">");
         
@@ -115,11 +107,11 @@ public class DiffCompareBase extends UserRequestHandler
         output.println("<tr>");
         output.println("<td class=\"diff\">");
         
-        output.println("<span class=\"diff\">");
+        output.println("<span class=\"diff\" title=\"" + file1.getAbsolutePath() + "\">");
         output.println(CommonUtils.shortName(getHeadlinePath(file1.getAbsolutePath()), 36));
         output.println("</span>");
        
-        output.println("<div id=\"file1Cont\" class=\"diff\" style=\"width:" + compareSourceWidth + "px;height:" + compareHeight + "px;\">");
+        output.println("<div id=\"file1Cont\" class=\"diff\">");
         
         output.println("<pre>");
 
@@ -162,7 +154,7 @@ public class DiffCompareBase extends UserRequestHandler
             output.println("<a href=\"javascript:gotoLastDiff()\"><img src=\"/webfilesys/images/last.gif\"></a>");
         }
         
-        output.println("<div id=\"diffCont\" class=\"diff\" style=\"width:" + compareResultWidth + "px;height:" + compareHeight + "px;\">");
+        output.println("<div id=\"diffCont\" class=\"diff\">");
         
         output.println("<pre>");
         
@@ -219,11 +211,11 @@ public class DiffCompareBase extends UserRequestHandler
 
         output.println("</td>");
         output.println("<td class=\"diff\">");
-        output.println("<span class=\"diff\">");
+        output.println("<span class=\"diff\" title=\"" + file2.getAbsolutePath() + "\">");
         output.println(CommonUtils.shortName(getHeadlinePath(file2.getAbsolutePath()), 36));
         output.println("</span>");
         
-        output.println("<div id=\"file2Cont\" class=\"diff\" style=\"width:" + compareSourceWidth + "px;height:" + compareHeight + "px;\">");
+        output.println("<div id=\"file2Cont\" class=\"diff\">");
 
         output.println("<pre>");
 
@@ -251,13 +243,15 @@ public class DiffCompareBase extends UserRequestHandler
         output.println("</tr>");
         output.println("</table>");
         
-        if (diffCount == 0) {
-            output.println("<script type=\"text/javascript\">");
-            output.println("alert('" + getResource("noDifferences", "No differences found.") + "');");
-            output.println("</script>");
-        }
-
         output.println("</body>");
+        
+    	output.println("<script type=\"text/javascript\">");
+    	output.println("resizeToFitScreen();");
+    	if (diffCount == 0) {
+            output.println("customAlert('" + getResource("noDifferences", "No differences found.") + "');");
+        }
+        output.println("</script>");
+
         output.println("</html>");
         output.flush();
     }

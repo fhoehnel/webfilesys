@@ -33,6 +33,10 @@
       <script src="/webfilesys/javascript/crop.js" type="text/javascript"></script>
     </xsl:if>
   
+    <script type="text/javascript">
+      var thumbnailWidth = <xsl:value-of select="/resizeParams/thumbnailWidth" />
+      var thumbnailHeight = <xsl:value-of select="/resizeParams/thumbnailHeight" />
+    </script>
   </head>
 
   <body class="editPict">
@@ -107,6 +111,20 @@
                         <xsl:attribute name="onclick">switchCrop()</xsl:attribute>
                       </input>
                       <span resource="label.cropArea" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" class="formParm1">
+                      &#160;&#160;
+                      <input type="checkbox" id="cropAreaQuadratic" name="quadratic" class="formParm1" disabled="disabled">
+                        <xsl:attribute name="onclick">setCropQuadratic()</xsl:attribute>
+                      </input>
+                      <span resource="label.cropAreaQuadratic" />
+                      &#160;&#160;
+                      <input type="checkbox" id="cropAreaKeepAspectRatio" name="keepAspectRation" class="formParm1" disabled="disabled">
+                        <xsl:attribute name="onclick">setCropKeepAspectRatio()</xsl:attribute>
+                      </input>
+                      <span resource="label.cropKeepAspectRatio" />
                     </td>
                   </tr>
                   <tr>

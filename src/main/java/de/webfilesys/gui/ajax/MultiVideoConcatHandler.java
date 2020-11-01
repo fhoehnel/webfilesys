@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +17,7 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
 import de.webfilesys.WebFileSys;
+import de.webfilesys.graphics.VideoDeshaker;
 import de.webfilesys.graphics.VideoInfo;
 import de.webfilesys.graphics.VideoInfoExtractor;
 import de.webfilesys.util.XmlUtil;
@@ -24,28 +25,22 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
+public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
 	
 	private static Logger LOG = Logger.getLogger(MultiVideoConcatHandler.class);
 	
-	public static final String LIST_PREFIX = "list-";
-	
-	private static final int LIST_PREFIX_LENGTH = LIST_PREFIX.length();
-	
 	private static final String FFMPEG_INPUT_LIST_FILE_NAME = "ffmpegInputFileList.txt";
+	
+	private static final String TARGET_FOLDER = "_converted";
 	
 	private static final int ERROR_CODE_FRAMERATE_MISSMATCH = 1;
 	private static final int ERROR_CODE_CODEC_MISSMATCH = 2;
 	private static final int ERROR_CODE_RESOLUTION_MISSMATCH = 3;
 	private static final int ERROR_CODE_CONVERSION_FAILED = 4;
 	
-	boolean clientIsLocal = false;
-
 	public MultiVideoConcatHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
-			PrintWriter output, String uid, boolean clientIsLocal) {
+			PrintWriter output, String uid) {
 		super(req, resp, session, output, uid);
-
-		this.clientIsLocal = clientIsLocal;
 	}
 
 	protected void process() {
@@ -55,18 +50,8 @@ public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
 		
 		String currentPath = getCwd();
 
-		ArrayList<String> selectedFiles = new ArrayList<String>();
+		List<String> selectedFiles = getSelectedFiles();
 
-        Enumeration allKeys = req.getParameterNames();
-		
-		while (allKeys.hasMoreElements()) {
-			String paramKey =(String) allKeys.nextElement();
-
-            if (paramKey.startsWith(LIST_PREFIX)) {
-				selectedFiles.add(paramKey.substring(LIST_PREFIX_LENGTH)); 
-            }
-		}
-		
 		boolean videoParameterMissmatch = false;
 		
 		int errorCode = 0;
@@ -154,8 +139,10 @@ public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
 		    }
 		}
 
+        String targetPath = null;
+		
 		if (!videoParameterMissmatch) {
-            String targetPath = currentPath + File.separator + "_converted";
+            targetPath = currentPath + File.separator + TARGET_FOLDER;
         	
             File targetDirFile = new File(targetPath);
             if (!targetDirFile.exists()) {
@@ -170,9 +157,20 @@ public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
             String fileNameOnly = firstFileName.substring(0,  firstFileName.lastIndexOf('.'));
             String ext = firstFileName.substring(firstFileName.lastIndexOf('.') + 1);
             String targetFileName = fileNameOnly + "_concat." + ext;
-            
             String targetFilePath = targetPath + File.separator + targetFileName;
-			
+            
+            boolean targetFileNameOk = true;
+            do {
+                File existingTargetFile = new File(targetFilePath);
+                if (existingTargetFile.exists()) {
+                    targetFileNameOk = false;
+                    int dotIdx = targetFilePath.lastIndexOf(".");
+                    targetFilePath = targetFilePath.substring(0, dotIdx) + "-1" + targetFilePath.substring(dotIdx);
+                } else {
+                    targetFileNameOk = true;
+                }
+            } while (!targetFileNameOk);
+            
 	        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
 			
         	// String progNameAndParams = ffmpegExePath + " -f concat -safe 0 -i " + ffmpegFileListFile.getAbsolutePath() + " -c copy " + targetFilePath;
@@ -222,6 +220,10 @@ public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
 				} else {
 					Logger.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
 				}
+				
+				if (!ffmpegFileListFile.delete()) {
+					Logger.getLogger(getClass()).warn("failed to delete ffmpeg input file list file");
+				}
 			} catch (IOException ioex) {
 				Logger.getLogger(getClass()).error("failed to concatente videos", ioex);
 				errorCode = ERROR_CODE_CONVERSION_FAILED;
@@ -237,6 +239,8 @@ public class MultiVideoConcatHandler extends XmlRequestHandlerBase {
 			XmlUtil.setChildText(resultElement, "errorCode", Integer.toString(errorCode));
 		} else {
 			XmlUtil.setChildText(resultElement, "success", Boolean.toString(true));
+			XmlUtil.setChildText(resultElement, "targetFolder", TARGET_FOLDER);
+			XmlUtil.setChildText(resultElement, "targetPath", targetPath);
 		}
 		
 		doc.appendChild(resultElement);

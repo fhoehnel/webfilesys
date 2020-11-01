@@ -279,7 +279,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 					XmlUtil.setChildText(fileElement, "description", description, true);
 				}
 
-				String displayName = CommonUtils.shortName(picFilename, 22);
+				String displayName = CommonUtils.shortName(picFilename, 21);
 
 				XmlUtil.setChildText(fileElement, "displayName", displayName);
 

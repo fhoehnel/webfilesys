@@ -20,6 +20,7 @@ import de.webfilesys.SubdirExistTester;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.StringComparator;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -94,6 +95,14 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 
         if (actPath == null) {
         	actPath = getCwd();
+        }
+        
+        String viewModeParam = getParameter("viewMode");
+        if (!CommonUtils.isEmpty(viewModeParam)) {
+        	try {
+    			session.setAttribute("viewMode", new Integer(Integer.parseInt(viewModeParam)));
+        	} catch (Exception ex) {
+        	}
         }
         
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/folderTree.xsl\"");

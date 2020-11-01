@@ -17,7 +17,7 @@ function getUploadStatus() {
                 var percent = item.firstChild.nodeValue;
 
                 var statusText;
-                if (fileSize > 0) {
+                if (fileSize != "0") {
                 	statusText = bytesUploaded + " " + resourceLabelOf + " " + fileSize + " bytes (" + percent + "%)";
                 } else {
                 	statusText = bytesUploaded  + " bytes";

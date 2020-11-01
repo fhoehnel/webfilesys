@@ -163,7 +163,11 @@ function compare() {
         document.form2.command.value = 'compareImg';
     }
     
-    var compareWin = window.open('/webfilesys/servlet?command=blank','compareWin','scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
+    // only for firefox:
+    var outerWindowWidth = screen.availWidth - 2;
+    var outerWindowHeight = screen.availHeight - 2;
+    
+    var compareWin = window.open("/webfilesys/servlet?command=blank", "compareWin", "scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0,outerWidth=" + outerWindowWidth + ",outerHeight=" + outerWindowHeight);
     
     if (!compareWin) {
     	customAlert(resourceBundle["alert.enablePopups"]);

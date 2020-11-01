@@ -4,7 +4,7 @@
   <groupId>de.webfilesys</groupId>
   <artifactId>webfilesys</artifactId>
   <packaging>war</packaging>
-  <version>2.24.0</version>
+  <version>2.26.0</version>
   <name>webfilesys Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
@@ -66,9 +66,9 @@
       <scope>provided</scope>
     </dependency>  
     <dependency>
-      <groupId>com.drew</groupId>
+      <groupId>com.drewnoakes</groupId>
       <artifactId>metadata-extractor</artifactId>
-      <version>2.3.1</version>
+      <version>2.15.0</version>
     </dependency>  
     <dependency>
       <groupId>com.ice.tar</groupId>
