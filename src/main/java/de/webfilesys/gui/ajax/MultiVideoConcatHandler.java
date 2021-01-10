@@ -68,8 +68,6 @@ public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
 		try {
 	        ffmpegInputFileListFile = new PrintWriter(new OutputStreamWriter(new FileOutputStream(ffmpegFileListFile), "UTF-8"));
 	        
-	        VideoInfoExtractor videoInfoExtractor = new VideoInfoExtractor();
-	        
 	        for (int i = 0; i < selectedFiles.size(); i++) {
 	            String filePath = null;
 
@@ -79,6 +77,8 @@ public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
 	                filePath = currentPath + File.separator + selectedFiles.get(i);
 	            }
 	            
+		        VideoInfoExtractor videoInfoExtractor = new VideoInfoExtractor();
+		        
 	            VideoInfo videoInfo = videoInfoExtractor.getVideoInfo(filePath);
 	            
 	            if (codec == null) {

@@ -162,6 +162,7 @@ function setVideoDimensions(pic) {
 			    var videoWidth = null;
 			    var videoHeight = null;
                 var codec = null;
+                var audioCodec = null;
                 var duration = null;
                 var fps = null;
 			    
@@ -178,6 +179,11 @@ function setVideoDimensions(pic) {
                 item = xmlDoc.getElementsByTagName("codec")[0];            
                 if (item) {
                 	codec = item.firstChild.nodeValue;
+                }
+			    
+                item = xmlDoc.getElementsByTagName("audioCodec")[0];            
+                if (item) {
+                	audioCodec = item.firstChild.nodeValue;
                 }
 			    
                 item = xmlDoc.getElementsByTagName("duration")[0];            
@@ -218,6 +224,12 @@ function setVideoDimensions(pic) {
                             }
 			        		// pic.setAttribute("fps", fps);
 			        	}
+			        	if (audioCodec) {
+                            var audioCodecCont = document.getElementById("audioCodec-" + picId.substring(4));
+                            if (audioCodecCont) {
+                            	audioCodecCont.innerHTML = audioCodec;
+                            }
+			        	}
 			        } 
 			    }
             } else {
@@ -254,6 +266,8 @@ function multiVideoFunction() {
         multiVideoDelete();
     } else if (cmd == 'concat') {
         multiVideoConcat();
+    } else if (cmd == 'join') {
+        multiVideoJoinParams();
     } else if (cmd == 'deshake') {
         multiVideoDeshake();
     }
@@ -340,6 +354,52 @@ function multiVideoConcat() {
         document.form2.command.value = '';
         document.form2.cmd.selectedIndex = 0;
     }
+}
+
+function multiVideoJoinParams() {
+    if (checkTwoOrMoreFilesSelected()) {
+    	document.form2.command.value = "video";
+        document.form2.submit();
+    } else {   
+        customAlert(resourceBundle["selectTwoOrMoreVideoFiles"] + "!");
+        document.form2.command.value = '';
+        document.form2.cmd.selectedIndex = 0;
+    }
+}
+
+function sendConcatForm() {
+	showHourGlass();
+    
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function (req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var success = req.responseXML.getElementsByTagName("success")[0];
+                if (success) {
+                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+	                
+                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                    var targetPath = targetPathItem.firstChild.nodeValue;
+                    
+                    customAlert(resourceBundle["videoConcatStarted"] + " " + targetFolder + ".");
+                    
+                    setTimeout(function() {
+                    	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                    }, 6000);
+                } else {
+	                var item = req.responseXML.getElementsByTagName("errorCode")[0];
+	                var errorCode = item.firstChild.nodeValue;
+                    if (errorCode == '4') {
+	                    customAlert(resourceBundle["videoConcatErrorProcess"]);
+	                }
+                }
+            } else {
+            	alert(resourceBundle["alert.communicationFailure"]);
+            }
+            
+            hideHourGlass();
+        }
+    });
 }
 
 function multiVideoDeshake() {

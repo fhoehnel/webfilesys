@@ -167,8 +167,8 @@ function rotateFreeAngle(path) {
 
 function jsEditDesc(path)
 {
-    var windowWidth = 640;
-    var windowHeight = 480;
+    var windowWidth = 700;
+    var windowHeight = 520;
     
     var xpos = (screen.width - windowWidth) / 2;
     var ypos = (screen.height - windowHeight) / 2;

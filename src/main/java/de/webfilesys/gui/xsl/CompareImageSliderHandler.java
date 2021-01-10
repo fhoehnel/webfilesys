@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,7 +38,7 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 		
 		String currentPath = getCwd();
 
-		ArrayList<String> selectedFiles = getSelectedFiles();
+		List<String> selectedFiles = getSelectedFiles();
 		
 		if (selectedFiles.size() != 2) {
 		    LOG.error("this image comparision requires two selected pictures");
@@ -84,22 +85,4 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
         processResponse("compareImage.xsl");
     }
 
-	private ArrayList<String> getSelectedFiles() {
-		ArrayList<String> selectedFiles = new ArrayList<String>();
-
-		int prefixLength = Constants.CHECKBOX_LIST_PREFIX.length();
-		
-		Enumeration allKeys = req.getParameterNames();
-
-		while (allKeys.hasMoreElements()) {
-			String parmKey = (String) allKeys.nextElement();
-
-            if (parmKey.startsWith(Constants.CHECKBOX_LIST_PREFIX)) {
-				String fileName = parmKey.substring(prefixLength);
-				selectedFiles.add(fileName); 
-            } 
-		}
-		return selectedFiles;
-	}
-	
 }

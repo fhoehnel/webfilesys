@@ -147,18 +147,16 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                 currentPath = relativePath;
             }
         }
-        else
-        {
-            if (docRootOS.endsWith(File.separator) || (relativePath.charAt(0) == File.separatorChar))
-            {
+        else {
+            if (docRootOS.endsWith(File.separator) && (relativePath.charAt(0) == File.separatorChar)) {
+                currentPath = docRootOS + relativePath.substring(1);
+            } else if (docRootOS.endsWith(File.separator) || (relativePath.charAt(0) == File.separatorChar)) {
                 currentPath = docRootOS + relativePath;
-            }
-            else
-            {
+            } else {
                 currentPath = docRootOS + File.separator + relativePath;
             }
 	    }
-
+        
 		session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
 
         boolean maskChanged = false;

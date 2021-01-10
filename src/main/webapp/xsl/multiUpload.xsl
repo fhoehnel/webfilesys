@@ -14,9 +14,11 @@
   
     <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
   
-    <link rel="stylesheet" type="text/css">
-       <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="css" />.css</xsl:attribute>
-    </link>
+    <xsl:if test="not(mobile)">
+      <link rel="stylesheet" type="text/css">
+        <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="css" />.css</xsl:attribute>
+      </link>
+    </xsl:if>
        
     <xsl:if test="mobile">
       <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />

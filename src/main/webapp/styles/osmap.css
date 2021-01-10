@@ -1,0 +1,23 @@
+.olPopup {
+	border: 2px ridge #a0a0a0!important;
+}
+
+.olPopupContent {
+	padding: 10px;
+	background-color: ivory;
+}
+
+.olPopupContent h2 {
+	font-size: 12px;
+	font-family: Arial,Helvetica,sans-serif;
+	color: navy;
+	text-align: center;
+	margin-top: 0;
+}
+
+.olPopupContent p {
+	font-size: 10px;
+	font-family: Arial,Helvetica,sans-serif;
+	color: maroon;
+	text-align: center;
+}

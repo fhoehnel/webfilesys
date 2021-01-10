@@ -63,12 +63,12 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 		
         String expand = getParameter("expand");
 
-        // fastpath - expand complete path from root dir and collapse all other
         String expandPath = getParameter("expandPath");
         
         if (expandPath != null)
         {
-            dirTreeStatus.collapseAll();
+            // expand complete path from root dir and keep other expanded open
+        	// dirTreeStatus.collapseAll();
 
             dirTreeStatus.expandPath(expandPath);
 
