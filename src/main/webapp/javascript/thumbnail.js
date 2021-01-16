@@ -789,6 +789,7 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                 	var fileNameElem = document.getElementById("fileName-" + domId);
                 	if (fileNameElem) {
                 		fileNameElem.innerHTML = abbrevText(newFileName, 23);
+                		fileNameElem.setAttribute("title", newFileName);
                 	}
 
                     var checkboxElem = document.getElementById("cb-" + domId);
@@ -811,9 +812,9 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                     	contextMenuLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
                     }
                 	
-                	var thumbContElem = document.getElementById("thumbCont-" + oldFileName);
+                	var thumbContElem = document.getElementById("thumbCont-" + escapeForId(oldFileName));
                 	if (thumbContElem) {
-                	    thumbContElem.id = "thumbCont-" + newFileName;
+                	    thumbContElem.id = "thumbCont-" + escapeForId(newFileName);
                 	}
                 } else {
                 	customAlert(oldFileName + " " + resourceBundle["error.renameFailed"] + " " + newFileName);
