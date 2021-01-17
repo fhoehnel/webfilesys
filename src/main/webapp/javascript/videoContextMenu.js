@@ -56,6 +56,8 @@ function videoContextMenu(fileName, domId) {
         menuText += menuEntry("javascript:textOnVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuTextOnVideo"]);
 
         menuText += menuEntry("javascript:fadeAudio('" + scriptPreparedFile + "')", resourceBundle["contextMenuFadeAdioInOut"]);
+
+        menuText += menuEntry("javascript:addSilentAudio('" + scriptPreparedFile + "')", resourceBundle["contextMenuAddSilentAudio"]);
     }
         
     menuText += menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
@@ -249,6 +251,40 @@ function deshakeVideo(fileName) {
                     }
                 } else {
                 	customAlert(resourceBundle["errorVideoDeshake"]);
+                }
+            } 
+        }
+	});
+}
+
+function addSilentAudio(fileName) {
+    var url = "/webfilesys/servlet?command=video&cmd=addSilentAudio&videoFileName=" + encodeURIComponent(fileName);
+	
+	xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+			    var xmlDoc = req.responseXML;
+
+			    var item = xmlDoc.getElementsByTagName("success")[0];            
+                if (item) {
+                    var success = item.firstChild.nodeValue;
+                    if (success != "true") {
+                    	customAlert(resourceBundle["errorAddSilentAudio"]);
+                    } else {
+                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                        var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                        var targetPath = targetPathItem.firstChild.nodeValue;
+                        
+                        customAlert(resourceBundle["addSilentAudioStarted"] + " " + targetFolder + ".");
+                        
+                        setTimeout(function() {
+                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                        }, 6000);
+                    }
+                } else {
+                	customAlert(resourceBundle["errorAddSilentAudio"]);
                 }
             } 
         }

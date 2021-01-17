@@ -100,6 +100,8 @@ function loadAndShowTrack() {
                 	
                 	if (currentTrack < trackNumber) {
                 		loadAndShowTrack();
+                	} else {
+                		loadAndShowWayPoints();
                 	}
             	} else {
             		customAlert("track " + (currentTrack + 1) + " not found in GPX file");
@@ -133,6 +135,40 @@ function loadAndShowMultipleGPXFiles() {
             }
         }
     });      
+}
+
+function loadAndShowWayPoints() {
+	
+    var url = "/webfilesys/servlet?command=gpxWayPoints&filePath=" + encodeURIComponent(filePath);
+    
+    xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+            	var response = JSON.parse(req.responseText);
+            	if (response.waypoints && (response.waypoints.length > 0)) {
+                	showWayPointsOnMap(response.waypoints);
+            	}
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });      
+}
+
+function showWayPointsOnMap(wayPoints) {
+    for (let i = 0; i < wayPoints.length; i++) {
+    	
+    	new google.maps.Marker({
+    	    position: new google.maps.LatLng(wayPoints[i].lat, wayPoints[i].lon),
+    	    label: {
+    	        color: "#c0f0f0", // <= HERE
+    	        fontSize: '13px',
+    	        fontWeight: '900',
+    	        text: wayPoints[i].name
+    	    },
+    	    map: map,
+    	});    
+    }
 }
 
 function showTrackOnMap(trackpoints, trackCounter) {
@@ -375,10 +411,12 @@ function drawAltDistProfile(response) {
     minElem.innerHTML = "min: " + minElevation + " m";
     rowElem.appendChild(minElem);
 
+    const dist = formatDecimalNumber(Math.ceil(maxTotalDist));
+    
     var distanceElem = document.createElement("td");
     distanceElem.setAttribute("class", "gpsChartText");
     distanceElem.style.textAlign = "right";
-    distanceElem.innerHTML = "distance: " + formatDecimalNumber(Math.ceil(maxTotalDist)) + " km";
+    distanceElem.innerHTML = "distance: " + dist + " " + (dist.indexOf(".") >= 0 ? "km" : "m");
     rowElem.appendChild(distanceElem);
 }
 
@@ -666,6 +704,12 @@ function showTrackOnMapSlow(trackId, trackpoints, index, trackColor, delay, poin
         var durationPercentage = sectionDuration / trackDuration;
         
         speedAdjustedDelay = delay * durationPercentage / distPercentage;
+        
+        if (speedAdjustedDelay > delay * 10) {
+        	speedAdjustedDelay = delay * 10;
+        } else if (speedAdjustedDelay < delay / 10) {
+        	speedAdjustedDelay = delay / 10;
+        }
         
         speedTrackColor = calculateSpeedAdjustedTrackColor(delay, speedAdjustedDelay);
     }

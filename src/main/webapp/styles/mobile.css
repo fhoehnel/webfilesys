@@ -430,6 +430,10 @@ div.toastBox span {
     color: #000000;
 }
 
+table.dataForm {
+    background-color: #ffffe0;
+}
+
 body.mobile a.dirtree {
 	font-size: 24px;
 	color: maroon;

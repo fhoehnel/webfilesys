@@ -5,7 +5,7 @@ function ajaxRotate(fileName, degrees, domId) {
 
     var xslUrl = "/webfilesys/xsl/xformImageResult.xsl";
 
-    var thumbCont = document.getElementById("thumbCont-" + fileName);
+    var thumbCont = document.getElementById("thumbCont-" + fileName.replaceAll(" ", "_"));
         
     if (thumbCont) {
         htmlFragmentByXslt(xmlUrl, xslUrl, thumbCont, null, true);

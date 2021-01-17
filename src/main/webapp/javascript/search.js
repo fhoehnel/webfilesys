@@ -87,13 +87,13 @@ var selectedUntilDate = null;
 
 $(document).ready(function() {
 	var dayNamesShort = [
+        resourceBundle["calendar.sun"], 
         resourceBundle["calendar.mon"], 
         resourceBundle["calendar.tue"], 
         resourceBundle["calendar.wed"], 
         resourceBundle["calendar.thu"], 
         resourceBundle["calendar.fri"], 
-        resourceBundle["calendar.sat"], 
-        resourceBundle["calendar.sun"] 
+        resourceBundle["calendar.sat"]
     ]; 
 
     $("#dateRangeFrom").datepicker({

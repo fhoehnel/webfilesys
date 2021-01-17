@@ -15,13 +15,10 @@
 <meta http-equiv="expires" content="0" />
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
-
-<link rel="stylesheet" type="text/css">
-  <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/metaInf/css" />.css</xsl:attribute>
-</link>
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/osmap.css" />
   
 <script type="text/javascript">
-  <xsl:attribute name="src">http://www.openlayers.org/api/OpenLayers.js</xsl:attribute>
+  <xsl:attribute name="src">/webfilesys/javascript/openStreetMaps/OpenLayers.js</xsl:attribute>
 </script>
 
 <title>
@@ -49,7 +46,11 @@
         var lonLat = new OpenLayers.LonLat(longitude, latitude);
         lonLat.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
                          map.getProjectionObject()); // to Spherical Mercator Projection
-        map.setCenter(lonLat, zoomFactor);      
+        map.setCenter(lonLat, zoomFactor); 
+        
+        // TODO:
+        // bounds = new OpenLayers.Bounds(2996.2336935074995, 56840.21183910011, 1777863.3259255073, 1312326.8861909)
+        // map.zoomToExtent(bounds);   
     }  
 
 </script>

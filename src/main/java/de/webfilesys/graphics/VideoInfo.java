@@ -10,6 +10,8 @@ public class VideoInfo {
     
     private String codec;
     
+    private String audioCodec;
+    
     private String duration;
     
     private int durationSeconds;
@@ -48,6 +50,14 @@ public class VideoInfo {
     
     public String getCodec() {
         return codec;
+    }
+    
+    public void setAudioCodec(String newVal) {
+        audioCodec = newVal;
+    }
+    
+    public String getAudioCodec() {
+        return audioCodec;
     }
     
     public void setDuration(String newVal) {

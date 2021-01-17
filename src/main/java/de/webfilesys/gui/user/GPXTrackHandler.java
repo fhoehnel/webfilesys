@@ -116,7 +116,9 @@ public class GPXTrackHandler extends UserRequestHandler {
 			
 			boolean hasSpeed = false;
 			
-			while (!documentEnd) {
+			boolean fatalError = false;
+			
+			while (!documentEnd && !fatalError) {
 				try {
 					int event = parser.next();
 
@@ -411,6 +413,7 @@ public class GPXTrackHandler extends UserRequestHandler {
 					}
 				} catch (WstxParsingException epex) {
 					Logger.getLogger(getClass()).warn("GPX parsing error", epex);
+					fatalError = true;
 				}
 			}
 

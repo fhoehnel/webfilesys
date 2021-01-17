@@ -161,6 +161,9 @@ public class GetVideoDimensionsHandler extends XmlRequestHandlerBase {
                 XmlUtil.setChildText(resultElement, "codec", videoInfo.getCodec());
                 XmlUtil.setChildText(resultElement, "duration", videoInfo.getDuration());
                 XmlUtil.setChildText(resultElement, "fps", Integer.toString(videoInfo.getFrameRate()));
+                if (videoInfo.getAudioCodec() != null) {
+                    XmlUtil.setChildText(resultElement, "audioCodec", videoInfo.getAudioCodec());
+                }
 			}
 			if (videoInfo.isFfprobeEmptyOutput()) {
 				XmlUtil.setChildText(resultElement, "error", "ffprobe result empty");

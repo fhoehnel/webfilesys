@@ -15,13 +15,14 @@
 <meta http-equiv="expires" content="0" />
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/osmap.css" />
 
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/metaInf/css" />.css</xsl:attribute>
 </link>
   
 <script type="text/javascript">
-  <xsl:attribute name="src">http://www.openlayers.org/api/OpenLayers.js</xsl:attribute>
+  <xsl:attribute name="src">/webfilesys/javascript/openStreetMaps/OpenLayers.js</xsl:attribute>
 </script>
 
 <title>

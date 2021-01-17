@@ -67,6 +67,7 @@ import de.webfilesys.gui.ajax.AjaxDeleteDirPromptHandler;
 import de.webfilesys.gui.ajax.AjaxDeleteFilePromptHandler;
 import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
 import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
+import de.webfilesys.gui.ajax.AnyVideoConcatHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.CheckUploadConflictHandler;
@@ -87,6 +88,7 @@ import de.webfilesys.gui.ajax.RenamePictureHandler;
 import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
 import de.webfilesys.gui.ajax.TextOnVideoHandler;
+import de.webfilesys.gui.ajax.VideoAddSilentAudioHandler;
 import de.webfilesys.gui.ajax.VideoFadeAudioHandler;
 import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
 import de.webfilesys.gui.ajax.XformImageHandler;
@@ -165,6 +167,7 @@ import de.webfilesys.gui.user.ExecProgramRequestHandler;
 import de.webfilesys.gui.user.ExifThumbRequestHandler;
 import de.webfilesys.gui.user.FtpBackupHandler;
 import de.webfilesys.gui.user.GPXTrackHandler;
+import de.webfilesys.gui.user.GPXWayPointHandler;
 import de.webfilesys.gui.user.GUnzipRequestHandler;
 import de.webfilesys.gui.user.GetFileRequestHandler;
 import de.webfilesys.gui.user.GetThumbRequestHandler;
@@ -218,6 +221,7 @@ import de.webfilesys.gui.user.unix.ProcessListRequestHandler;
 import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
 import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
+import de.webfilesys.gui.xsl.AnyVideoConcatParamHandler;
 import de.webfilesys.gui.xsl.CompareImageSliderHandler;
 import de.webfilesys.gui.xsl.CompareImageTabHandler;
 import de.webfilesys.gui.xsl.EditVideoParamHandler;
@@ -1287,7 +1291,6 @@ public class WebFileSysServlet extends ServletBase
         
         if (command.equals("compareImg"))
         {
-		    // (new CompareImageRequestHandler(req, resp, session, output, userid)).handleRequest(); 
 		    (new CompareImageTabHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
@@ -1334,7 +1337,7 @@ public class WebFileSysServlet extends ServletBase
 
             return(true);
         }
-        
+
         if (command.equals("multiVideoDeshake"))
         {
 		    (new MultiVideoDeshakeHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -2167,6 +2170,11 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
+        if (command.equals("gpxWayPoints")) {
+            (new GPXWayPointHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
         if (command.equals("playVideoLocal")) {
             (new VideoLocalPlayerHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
             return(true);
@@ -2249,6 +2257,23 @@ public class WebFileSysServlet extends ServletBase
 
                 if (cmd.equals("fadeAudio")) {
         		    (new VideoFadeAudioHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("addSilentAudio")) {
+        		    (new VideoAddSilentAudioHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("join"))
+                {
+        		    (new AnyVideoConcatParamHandler(req, resp, session, output, userid)).handleRequest(); 
+                    return(true);
+                }
+
+                if (cmd.equals("multiVideoJoin"))
+                {
+        		    (new AnyVideoConcatHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
                 }
             }

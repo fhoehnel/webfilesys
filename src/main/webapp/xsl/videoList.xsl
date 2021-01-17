@@ -321,6 +321,10 @@
                   <span>
                     <xsl:attribute name="id">fps-<xsl:value-of select="@id" /></xsl:attribute>
                   </span>
+                  &#160;
+                  <span>
+                    <xsl:attribute name="id">audioCodec-<xsl:value-of select="@id" /></xsl:attribute>
+                  </span>
                 </div>
                 
               </div>
@@ -379,6 +383,7 @@
               <option value="copy" resource="label.copyToClip" />
               <option value="move" resource="label.cutToClip" />
               <option value="concat" resource="concatVideos" />
+              <option value="join" resource="joinVideos" />
               <option value="deshake" resource="contextMenuDeshakeVideo" />
             </select>
           </td>

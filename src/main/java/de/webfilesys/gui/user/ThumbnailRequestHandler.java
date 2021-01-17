@@ -120,6 +120,12 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 				return;
 			}
 			
+			if (picOrientationAndThumbOrientationRotated(scaledImage, exifData)) {
+				// orientation flag on picture equals orientation flag on thumbnail and is 6 (rotated)
+				serveImageFromRotatedExifThumb(imgPath, exifData);
+				return;
+			}
+			
 			int orientationMissmatchResult = checkOrientationMissmatch(scaledImage, exifData);
 			
 			if (orientationMissmatchResult < 0) {
@@ -343,10 +349,19 @@ public class ThumbnailRequestHandler extends UserRequestHandler
         }
 	}
 	
+	private boolean picOrientationAndThumbOrientationRotated(ScaledImage scaledImage, CameraExifData exifData) {
+		if (scaledImage.getRealWidth() > scaledImage.getRealHeight()) {
+			if ((exifData.getOrientation() == 6) && (exifData.getThumbnailOrientation() == 6)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private int checkOrientationMissmatch(ScaledImage scaledImage, CameraExifData exifData) {
         boolean orientationMissmatch = false;
 
-        if (scaledImage.getRealWidth() < scaledImage.getRealHeight()) {
+    	if (scaledImage.getRealWidth() < scaledImage.getRealHeight()) {
             // portrait orientation
             
 			if (exifData.getThumbOrientation() != CameraExifData.ORIENTATION_PORTRAIT) {
@@ -374,13 +389,13 @@ public class ThumbnailRequestHandler extends UserRequestHandler
         			Logger.getLogger(getClass()).debug("Exif thumbnail not usable because of wrong orientation data");
         		}
         		*/
-            	
-                return (-1);
+
+	        	return (-1);
             }
             
-            return 1;
+        	return 1;
         }
         
-        return 0;
+    	return 0;
 	}
 }

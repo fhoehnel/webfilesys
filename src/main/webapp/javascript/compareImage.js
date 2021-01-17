@@ -115,7 +115,6 @@ function compareImgClose(imgName) {
 }
 
 function sizeCompareImagesToFit() {
-
 	const pic1 = document.getElementById("picture1");
 	const pic1Width = pic1.naturalWidth;
 	const pic1Height = pic1.naturalHeight;
@@ -127,21 +126,11 @@ function sizeCompareImagesToFit() {
 	const picWidth = pic1Width > pic2Width ? pic1Width : pic2Width;
 	const picHeight = pic1Height > pic2Height ? pic1Height : pic2Height;
 	
-	let windowWidth = screen.availWidth - 10;
-	let windowHeight = screen.availHeight - 60;
+	const winWidth = window.innerWidth;
+	const winHeight = window.innerHeight;
 	
-	if (windowWidth > picWidth + 60) {
-		windowWidth = picWidth + 10;
-	}
-	if (windowHeight > picHeight + 10) {
-		windowHeight = picHeigth + 10;
-	}
-	
-	window.moveTo((screen.availWidth - windowWidth) / 2, (screen.availHeight - windowHeight) / 2);
-	window.resizeTo(windowWidth, windowHeight);
-	
-	sizeImageToFit(pic1, windowWidth, windowHeight);
-	sizeImageToFit(pic2, windowWidth, windowHeight);
+	sizeImageToFit(pic1, winWidth, winHeight);
+	sizeImageToFit(pic2, winWidth, winHeight);
 	
 	const picture1Width = document.getElementById("picture1").width;
 	const compImgCont = document.getElementById("compImgCont");
@@ -155,7 +144,7 @@ function sizeCompareImagesToFit() {
 function sizeImageToFit(picture, windowWidth, windowHeight) {
 	
 	var picAreaWidth = windowWidth - 10;
-	var picAreaHeight = windowHeight - 42;
+	var picAreaHeight = windowHeight - 10;
 	
 	var picAreaRatio = picAreaWidth / picAreaHeight;
 	
@@ -183,3 +172,13 @@ function confirmDelImg(imgFileName) {
     deleteSelf(null, imgFileName);
 }          
 
+function resizeCompareThumb(picture) {
+	if (picture.naturalHeight > picture.naturalWidth) {
+		picture.style.height = "160px";
+		picture.style.width = "auto";
+	} else {
+		picture.style.width = "160px";
+		picture.style.height = "auto";
+	}
+	picture.style.display = "inline";
+}

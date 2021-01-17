@@ -163,11 +163,10 @@ function compare() {
         document.form2.command.value = 'compareImg';
     }
     
-    // only for firefox:
     var outerWindowWidth = screen.availWidth - 2;
     var outerWindowHeight = screen.availHeight - 2;
     
-    var compareWin = window.open("/webfilesys/servlet?command=blank", "compareWin", "scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0,outerWidth=" + outerWindowWidth + ",outerHeight=" + outerWindowHeight);
+    var compareWin = window.open("/webfilesys/servlet?command=blank", "compareWin", "scrollbars=no,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0,width=" + outerWindowWidth + ",height=" + outerWindowHeight);
     
     if (!compareWin) {
     	customAlert(resourceBundle["alert.enablePopups"]);
@@ -371,7 +370,10 @@ function filesOSMap() {
     checkGeoDataExist(
         function() {
             hideHourGlass();
-            var mapWin = window.open('/webfilesys/servlet?command=osMapFiles&path=' + encodeURIComponent(pathForScript),'mapWin','status=no,toolbar=no,location=no,menu=no,width=600,height=400,resizable=yes,left=20,top=20,screenX=20,screenY=20');
+            var mapWinWidth =  screen.availWidth - 20;
+            var mapWinHeight = screen.availHeight - 80;
+
+            var mapWin = window.open('/webfilesys/servlet?command=osMapFiles&path=' + encodeURIComponent(pathForScript),'mapWin','status=no,toolbar=no,location=no,menu=no,width=' + mapWinWidth + ',height=' + mapWinHeight + ',resizable=yes,left=2,top=2,screenX=2,screenY=2');
             mapWin.focus();
         },
         function() {
@@ -787,6 +789,7 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                 	var fileNameElem = document.getElementById("fileName-" + domId);
                 	if (fileNameElem) {
                 		fileNameElem.innerHTML = abbrevText(newFileName, 23);
+                		fileNameElem.setAttribute("title", newFileName);
                 	}
 
                     var checkboxElem = document.getElementById("cb-" + domId);
@@ -809,9 +812,9 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                     	contextMenuLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
                     }
                 	
-                	var thumbContElem = document.getElementById("thumbCont-" + oldFileName);
+                	var thumbContElem = document.getElementById("thumbCont-" + escapeForId(oldFileName));
                 	if (thumbContElem) {
-                	    thumbContElem.id = "thumbCont-" + newFileName;
+                	    thumbContElem.id = "thumbCont-" + escapeForId(newFileName);
                 	}
                 } else {
                 	customAlert(oldFileName + " " + resourceBundle["error.renameFailed"] + " " + newFileName);

@@ -2163,6 +2163,8 @@ td.accountDiskFree {
 body.compImg {
 	background-color: #808080;
 	margin-left: 4px;
+	margin-top: 2px;
+	margin-bottom: 2px;
 }
 
 div.imgCompThumbCont {
@@ -2176,12 +2178,13 @@ div.imgCompThumbCont {
 }
 
 div.imgCompThumb {
-    padding: 2px 0px;
+    padding: 1px 0px;
     margin-bottom: 2px; 	
 }
 
 img.imgCompThumb {
 	border: 2px solid #ffffff;
+	display: none;
 }
 
 a.imgCompThumbSelected img.imgCompThumb {

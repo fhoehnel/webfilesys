@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -83,11 +84,7 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
         		float latitude = Float.NEGATIVE_INFINITY;
         		float longitude = Float.NEGATIVE_INFINITY;
         		String infoText = null;
-        		String description = metaInfMgr.getDescription(imgFile.getAbsolutePath());
-        		if ((description == null) || (description.trim().length() == 0)) {
-        			description = fileCont.getName();
-        		}
-        		
+
         		if (geoTag != null)
         		{
         	        latitude = geoTag.getLatitude();
@@ -137,13 +134,20 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
         		
                 if (geoDataExist)
                 {
+                    String descrText = "<img src=\"/webfilesys/servlet?command=picThumb&amp;imgFile=" + URLEncoder.encode(imgFile.getName()) + "\" style=\"max-width:160px;display:inline;\">";  
+                    
+            		String description = metaInfMgr.getDescription(imgFile.getAbsolutePath());
+            		if (!CommonUtils.isEmpty(description)) {
+            			descrText += "<p>" + CommonUtils.escapeHTML(description) + "</p>";
+            		}
+            		
                     output.print(latitude);
                     output.print('\t');
                     output.print(longitude);
                     output.print('\t');
                     output.print(infoText);
                     output.print('\t');
-                    output.print(description);
+                    output.print(descrText);
                     output.print('\t');
                     output.print("/webfilesys/images/OSMaps.png");
                     output.print('\t');

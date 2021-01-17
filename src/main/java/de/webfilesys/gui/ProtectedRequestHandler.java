@@ -7,6 +7,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -27,6 +30,10 @@ import de.webfilesys.util.HTTPUtils;
 public class ProtectedRequestHandler extends RequestHandler {  
     private static final Logger LOG = Logger.getLogger(ProtectedRequestHandler.class);
 	
+	public static final String LIST_PREFIX = "list-";
+	
+	private static final int LIST_PREFIX_LENGTH = LIST_PREFIX.length();
+
     public String uid = null;
      
     protected long treeFileSize = 0L;
@@ -329,4 +336,19 @@ public class ProtectedRequestHandler extends RequestHandler {
     {
     	return(uid);
     }
+    
+	protected List<String> getSelectedFiles() {
+		ArrayList<String> selectedFiles = new ArrayList<String>();
+
+        Enumeration allKeys = req.getParameterNames();
+		
+		while (allKeys.hasMoreElements()) {
+			String paramKey =(String) allKeys.nextElement();
+
+            if (paramKey.startsWith(LIST_PREFIX)) {
+				selectedFiles.add(paramKey.substring(LIST_PREFIX_LENGTH)); 
+            }
+		}
+		return selectedFiles;
+	}
 }
