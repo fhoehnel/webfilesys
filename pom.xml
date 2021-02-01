@@ -110,13 +110,11 @@
       <artifactId>commons-imaging</artifactId>
       <version>1.0-alpha1</version>
     </dependency>   
-    <!--  
     <dependency>
-      <groupId>procyon</groupId>
-      <artifactId>procyon-decompiler</artifactId>
-      <version>0.5.21</version>
-    </dependency> 
-    -->
+      <groupId>org.bitbucket.mstrobel</groupId>
+      <artifactId>procyon-compilertools</artifactId>
+      <version>0.5.36</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>webfilesys</finalName>
