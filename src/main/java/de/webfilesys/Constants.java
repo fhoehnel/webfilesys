@@ -24,6 +24,8 @@ public interface Constants
 	public static final int DEFAULT_LIST_PAGE_SIZE = 20;
 	
 	public static final String imgFileMasks[]={"*.gif","*.jpg","*.jpeg","*.png","*.bmp"};
+	
+	public static final String PICTURE_FILE_MASKS[] = { "*.gif", "*.jpg", "*.jpeg", "*.png", "*.bmp", "*.svg" };
 
     public static final String JPEG_FILE_MASKS[]={"*.jpg","*.jpeg"};
 

@@ -12,6 +12,7 @@ public class ScaledImage
     public static final int IMG_TYPE_GIF     = 2;
     public static final int IMG_TYPE_PNG     = 3;
     public static final int IMG_TYPE_BMP     = 4;
+    public static final int IMG_TYPE_SVG     = 5;
     
     /** maximum size (width or height) of a thumbnail contained in the EXIF data */
     private static final int MAX_EXIF_THUMBNAIL_SIZE = 640;
@@ -96,17 +97,20 @@ public class ScaledImage
                         last = ch;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 int byte3 = imgFile.read();
                 int byte4 = imgFile.read();
                 int byte5 = imgFile.read();
                 int byte6 = imgFile.read();
 
-                if ((byte1==137) && (byte2==80) && (byte3==78) && (byte4==71) &&
-                    (byte5==13) && (byte6==10) && (imgFile.read()==26) && (imgFile.read()==10))            // PNG
-                {
+                if (byte1 == '<' && byte2 == 's' && byte3 == 'v' && byte4 == 'g') {  
+                	// SVG
+                    imageType = IMG_TYPE_SVG;
+                    xSize = 1;
+                    ySize = 1;
+                } else if ((byte1==137) && (byte2==80) && (byte3==78) && (byte4==71) &&
+                    (byte5==13) && (byte6==10) && (imgFile.read()==26) && (imgFile.read()==10)) {  
+                	// PNG
                     imageType=IMG_TYPE_PNG;
                     
                     for (int i = 0; i < 8; i++)
@@ -114,11 +118,9 @@ public class ScaledImage
 
                     xSize=(imgFile.read()<<24) + (imgFile.read()<<16) + (imgFile.read()<<8) + imgFile.read();               
                     ySize=(imgFile.read()<<24) + (imgFile.read()<<16) + (imgFile.read()<<8) + imgFile.read();               
-                }
-                else
-                {
-                    if ((byte1==0x42) && (byte2==0x4D))   // BMP
-                    {
+                } else {
+                    if ((byte1==0x42) && (byte2==0x4D)) {  
+                    	// BMP
                         imageType=IMG_TYPE_BMP;
 
                         for (int k=7;k<19;k++)
@@ -137,9 +139,8 @@ public class ScaledImage
                         xSize=(byte20 << 8) + byte19;
                         ySize=(byte24 << 8) + byte23;
                         
-                    }
-                    else // GIF
-                    {
+                    } else { 
+                    	// GIF
                         imageType=IMG_TYPE_GIF;
 
                         xSize=imgFile.read() + (imgFile.read()<<8);

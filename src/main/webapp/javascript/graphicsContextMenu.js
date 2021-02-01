@@ -68,10 +68,12 @@ function jsContextMenu(fileName, imgType, domId)
         
         menuText = menuText 
                  + menuEntry("javascript:jsEditDesc('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"]);
-
-        menuText = menuText 
-                 + menuEntry("javascript:jsResizeParms('" + scriptPreparedPath + "')",resourceBundle["label.editPicture"]);
-
+        
+        if (imgType != '5') { 
+        	// not SVG
+            menuText = menuText 
+            + menuEntry("javascript:jsResizeParms('" + scriptPreparedPath + "')",resourceBundle["label.editPicture"]);
+        }
     }
 
     if (imgType == '1') // JPEG
@@ -116,11 +118,13 @@ function jsContextMenu(fileName, imgType, domId)
         
         menuText = menuText 
                  + menuEntry("javascript:publishFile('" + scriptPreparedPath + "')",resourceBundle["label.publish"]);
-        
     }
 
-    menuText = menuText 
-             + menuEntry("javascript:startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')",resourceBundle["startSlideshowHere"]);
+    if (imgType != '5') { 
+    	// not SVG
+        menuText = menuText 
+        + menuEntry("javascript:startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')",resourceBundle["startSlideshowHere"]);
+    }
         
     menuText = menuText + '</table>'; 
 
