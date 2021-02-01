@@ -187,6 +187,24 @@ a.fn:hover {
     color: #ffffa0;
 }
 
+div.fastpathHeadline span+span {
+    color: #ffffa0;
+}
+
+div.fastpathHeadline span:before {
+	color: #a0ffff;
+}
+
+a.folderTreeIcon span.icon-font:before,
+div.fastpath.last span.icon-font:before,
+div.findFileResult span.icon-font {
+	color: #ffffa0;
+}
+
+a.folderTreeIcon span.icon-font.folderCurrent:before {
+	color: #a0ffff;
+}
+
 td.fileListSize  > font.fixed,
 td.fileListModified > font.fixed {
     font-size: 13px;

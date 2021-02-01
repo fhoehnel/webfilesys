@@ -397,7 +397,7 @@ function drawAltDistProfile(response) {
         legendElevation += elevationLegendStep;
     }
     
-    maxValueCont.innerHTML = "max: " + maxElevation + " m";
+    maxValueCont.innerHTML = "max: " + Math.round(maxElevation) + " m";
     
     var tableElem = document.createElement("table");
     tableElem.style.width = CANVAS_WIDTH + "px";
@@ -408,7 +408,7 @@ function drawAltDistProfile(response) {
     
     var minElem = document.createElement("td");
     minElem.setAttribute("class", "gpsChartText");
-    minElem.innerHTML = "min: " + minElevation + " m";
+    minElem.innerHTML = "min: " + Math.round(minElevation) + " m";
     rowElem.appendChild(minElem);
 
     const dist = formatDecimalNumber(Math.ceil(maxTotalDist));

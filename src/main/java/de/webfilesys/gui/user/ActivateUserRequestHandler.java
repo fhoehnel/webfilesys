@@ -1,6 +1,8 @@
 package de.webfilesys.gui.user;
 
 import java.io.IOException;
+import java.util.Enumeration;
+import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +37,15 @@ public class ActivateUserRequestHandler extends UserRequestHandler {
             Logger.getLogger(getClass()).warn("missing activation code");
             return;
         }
-
+        
+        String userAgent = req.getHeader("user-agent");
+        if ((userAgent != null) && userAgent.contains("BingPreview")) {
+            // the hotmail/outlook web client fetches the activation link automatically when opening the registration e-mail
+            // the user's click on the activation link is the second one - and fails
+            // what a bullshit!
+        	return;
+        }
+        
         UserManager userMgr = WebFileSys.getInstance().getUserMgr();
 
         try {
@@ -56,9 +66,6 @@ public class ActivateUserRequestHandler extends UserRequestHandler {
         } catch (UserMgmtException ex) {
             Logger.getLogger(getClass()).warn("user activation attempt failed", ex);
 
-            // the hotmail web client fetches the activation link automatically when opening the registration e-mail
-            // the user's click on the activation link is the second one - and fails
-            // what a bullshit!
             /*
             try {
                 resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);

@@ -4,9 +4,9 @@ function jsContextMenu(fileName, imgType, domId)
         
     shortFileName = fileName;
     
-    if (fileName.length > 24)
+    if (fileName.length > 23)
     {
-        shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 14, fileName.length);
+        shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 13, fileName.length);
     }    
 
     fileNameExt = getFileNameExt(fileName);

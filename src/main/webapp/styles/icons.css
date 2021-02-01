@@ -88,12 +88,20 @@ a.icon-font {
 	content: '\f0ac';
 }
 
+.icon-folder:before {
+	content: '\f07b';
+}
+
 .icon-folderClosed:before {
 	content: '\f114';
 }
 
 .icon-folderOpen:before {
 	content: '\f115';
+}
+
+.icon-folderOpenFilled:before {
+	content: '\f07c';
 }
 
 .icon-mobilePhone:before {

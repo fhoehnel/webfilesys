@@ -86,15 +86,11 @@
   </viewHandler>
   -->
   
-  <!-- 
-    This view handler for compiled Java class files requires the WebFileSys server to run on JDK version 1.7.
-    It uses the Procyon Java Decompiler (procyon-decompiler-0.5.21.jar is required on the classpath).
   <viewHandler>
     <class>de.webfilesys.viewhandler.JavaClassProcyonViewHandler</class>
     <filePatternList>
       <filePattern>*.class</filePattern>
     </filePatternList>
   </viewHandler>
-  -->
   
 </viewHandlerRegistry>

@@ -2014,6 +2014,7 @@ canvas.gpsProfileLegend {
 	height: 200px;
 }
 
+div.gpsChartText,
 td.gpsChartText {
     font-size: 13px;
     font-family: Arial,Helvetica;
@@ -2331,6 +2332,54 @@ input[type=checkbox].big:checked:after {
 	top: -2px;
 	left: 1px;
 	color: #606060;
+}
+
+div.fastpathHeadline span+span {
+	font-size: 13px;
+    color: maroon;
+    font-weight: bold;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+div.fastpathHeadline span:before {
+	font-size: 16px;
+	font-weight: bold;
+    color: #806000;
+    margin-right: 4px;
+    margin-left: 8px;
+}
+
+a.folderTreeIcon {
+    text-decoration: none;
+}
+	
+a.folderTreeIcon span.icon-font,
+div.fastpath.last span.icon-font,
+div.findFileResult span.icon-font {
+	vertical-align: bottom;
+	margin-right: 2px;
+}
+	
+a.folderTreeIcon span.icon-font:before,
+div.fastpath.last span.icon-font:before,
+div.findFileResult span.icon-font {
+	font-size: 16px;
+	font-weight: bold;
+    color: #806000;
+}
+
+a.folderTreeIcon span.icon-font.folderCurrent:before {
+	color: #4060a0;
+}
+
+.publicUrlCont {
+	width: 300px;
+	height: 50px;
+}
+
+body.publishList .icon-copy:before {
+    margin: 0 8px 0 4px;
 }
 
 @media (max-width: 400px) {

@@ -84,7 +84,7 @@
         </xsl:if>
       </xsl:if>
 
-    <a>
+    <a class="folderTreeIcon">
       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />')</xsl:attribute>
       
       <xsl:if test="@type='drive'">
@@ -111,10 +111,20 @@
         </xsl:if>
         <xsl:if test="not(@icon)">
           <xsl:if test="@current">
-            <img src="/webfilesys/images/folder1.gif" class="folder" />
+             <xsl:if test="folder">
+               <span class="icon-font icon-folderOpenFilled folderCurrent"></span>
+             </xsl:if>
+             <xsl:if test="not(folder)">
+               <span class="icon-font icon-folder folderCurrent"></span>
+             </xsl:if>
           </xsl:if>
           <xsl:if test="not(@current)">
-            <img src="/webfilesys/images/folder.gif" class="folder" />
+             <xsl:if test="folder">
+               <span class="icon-font icon-folderOpenFilled"></span>
+             </xsl:if>
+             <xsl:if test="not(folder)">
+               <span class="icon-font icon-folder"></span>
+             </xsl:if>
           </xsl:if>
         </xsl:if>
       </xsl:if>
@@ -215,7 +225,7 @@
       </xsl:if>
     </xsl:if>
 
-    <a>
+    <a class="folderTreeIcon">
       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />')</xsl:attribute>
 
       <xsl:if test="@icon">
@@ -224,7 +234,12 @@
         </img>
       </xsl:if>
       <xsl:if test="not(@icon)">
-        <img src="/webfilesys/images/folder.gif" class="folder" />
+        <xsl:if test="folder">
+          <span class="icon-font icon-folderOpenFilled"></span>
+        </xsl:if>
+        <xsl:if test="not(folder)">
+          <span class="icon-font icon-folder"></span>
+        </xsl:if>
       </xsl:if>
     </a>
 

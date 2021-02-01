@@ -47,3 +47,12 @@ function copyPublicUrl() {
     document.execCommand("Copy");
     self.close();
 }
+
+function copyUrlToClip(copyLink, urlInputId) {
+    let urlInput = document.getElementById(urlInputId);
+    urlInput.focus;
+    urlInput.select();
+    document.execCommand("Copy");
+    customAlert(resourceBundle["publicUrlCopied"]);
+    urlInput.selectionEnd = urlInput.selectionStart;
+}

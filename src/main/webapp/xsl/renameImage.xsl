@@ -40,15 +40,12 @@
 
     <tr>
       <td colspan="2">
-        <a class="button" onclick="this.blur();"> 
-          <xsl:attribute name="href">javascript:validateNewFileNameAndRename('<xsl:value-of select="/renameFile/oldFileNameForScript" />', resourceBundle["alert.destEqualsSource"], resourceBundle["alert.illegalCharInFilename"])</xsl:attribute>
-          <span resource="button.rename"></span>
-        </a>              
-
-        <a class="button" onclick="this.blur();" style="float:right"> 
-          <xsl:attribute name="href">javascript:hidePrompt()</xsl:attribute>
-          <span resource="button.cancel"></span>
-        </a>              
+        <input type="button" resource="button.rename">
+          <xsl:attribute name="onclick">validateNewFileNameAndRename('<xsl:value-of select="/renameFile/oldFileNameForScript" />', resourceBundle["alert.destEqualsSource"], resourceBundle["alert.illegalCharInFilename"])</xsl:attribute>
+        </input> 
+        <input type="button" resource="button.cancel" style="float:right">
+          <xsl:attribute name="onclick">hidePrompt()</xsl:attribute>
+        </input> 
       </td>
     </tr>
 

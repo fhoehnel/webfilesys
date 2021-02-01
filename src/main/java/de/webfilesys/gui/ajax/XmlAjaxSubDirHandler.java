@@ -185,7 +185,9 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 			parentElement.setAttribute("leaf", "true");    
 		}
 
-		parentElement.setAttribute("current","true");
+		if (parentPath.equals(getCwd())) {
+			parentElement.setAttribute("current", "true");
+		}
 		
 		DecorationManager decoMgr = DecorationManager.getInstance();
 

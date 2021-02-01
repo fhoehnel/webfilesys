@@ -105,10 +105,14 @@
           <xsl:attribute name="onclick">javascript:collapseFolder(decodeURIComponent('<xsl:value-of select="@path" />'))</xsl:attribute>
 
           <xsl:if test="position()=last()">
-            <img src="/webfilesys/images/minusLast.gif" border="0" width="15" height="17" />
+            <img src="" border="0" width="15" height="17">
+              <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/folderTree/css" />/minusLast.gif</xsl:attribute>
+            </img>
           </xsl:if>
           <xsl:if test="position()!=last()">
-            <img src="/webfilesys/images/minusMore.gif" border="0" width="15" height="17" />
+            <img src="" border="0" width="15" height="17">
+              <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/folderTree/css" />/minusMore.gif</xsl:attribute>
+            </img>
           </xsl:if>
         </a>
       </xsl:if>
@@ -121,10 +125,14 @@
             <xsl:attribute name="onclick">expandFolder(decodeURIComponent('<xsl:value-of select="@path" />'))</xsl:attribute>
 
             <xsl:if test="position()=last()">
-              <img src="/webfilesys/images/plusLast.gif" border="0" width="15" height="17" />
+              <img src="" border="0" width="15" height="17">
+                <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/folderTree/css" />/plusLast.gif</xsl:attribute>
+              </img>
             </xsl:if>
             <xsl:if test="position()!=last()">
-              <img src="/webfilesys/images/plusMore.gif" border="0" width="15" height="17" />
+              <img src="" border="0" width="15" height="17">
+                <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="/folderTree/css" />/plusMore.gif</xsl:attribute>
+              </img>
             </xsl:if>
           </a>
 

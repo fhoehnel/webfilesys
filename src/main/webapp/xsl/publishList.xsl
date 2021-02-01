@@ -24,6 +24,8 @@
     </link>
 
     <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/publish.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 	<script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -55,18 +57,16 @@
               <td class="data"><xsl:value-of select="expires" /></td>
               
               <td class="data">
-                <xsl:if test="type!='tree'">
-                  <a target="_blank">
-                    <xsl:attribute name="href"><xsl:value-of select="secretUrl" /></xsl:attribute>
-                    <span class="publicUrl"><xsl:value-of select="secretUrl" /></span>
-                  </a> 
-                </xsl:if>
-                <xsl:if test="type='tree'">
-                  <span class="publicUrl"><xsl:value-of select="secretUrl" /></span>
-                </xsl:if>
+                <textarea class="publicUrlCont" readonly="readonly">
+                  <xsl:attribute name="id">urlInput-<xsl:value-of select="position()" /></xsl:attribute>
+                  <xsl:value-of select="secretUrl" />
+                </textarea> 
               </td>
               
               <td class="data">
+                <a class="icon-font icon-copy" titleResource="copyPublicUrl">
+                  <xsl:attribute name="onclick">copyUrlToClip(this, 'urlInput-<xsl:value-of select="position()" />')</xsl:attribute>
+                </a>
                 <a class="icon-font icon-delete" titleResource="label.cancelpublish">
                   <xsl:attribute name="href"><xsl:value-of select="cancelUrl" /></xsl:attribute>
                 </a>
