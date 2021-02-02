@@ -453,6 +453,7 @@ confirm.rotateByExif=Imágenes, cuya orientación no coincide con el valor de or
 rotateByExif.noop=¡No hay imagen girada!
 multiImgToVideo=crear video de diapositivas
 imgToVideoNoJPEG=Un video de presentación de diapositivas solo se puede crear a partir de archivos de imagen JPEG.
+opOnlySupportedOnTypes=La operación seleccionada solo está disponible para archivos de los siguientes tipos:
 selectTwoOrMorePics=Seleccione al menos 2 archivos de imagen JPEG!
 slideshowToVideoStarted=La creación del video de presentación de diapositivas se ha iniciado y llevará algún tiempo completarlo. El archivo de video resultante se crea en la subcarpeta
 slideshowVideoErrorMissmatch=Seleccione solo imágenes JPEG con la misma resolución!

@@ -453,6 +453,7 @@ confirm.rotateByExif=Pictures, whose orientation does not match the orientation 
 rotateByExif.noop=No picture rotated!
 multiImgToVideo=create slideshow video
 imgToVideoNoJPEG=A slideshow video can only be created from JPEG picture files.
+opOnlySupportedOnTypes=The selected operation is only available for files of the following type(s):
 selectTwoOrMorePics=Select at least 2 JPEG picture files!
 slideshowToVideoStarted=The slideshow video creation has been started and will take some time to complete. The result video file is created in subfolder
 slideshowVideoErrorMissmatch=Please select only JPEG pictures with equal pixel resolution!

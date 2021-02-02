@@ -95,31 +95,6 @@
       publishWin.focus();
   }
   
-  function showImage(imgPath) {
-      var randNum = (new Date()).getTime();
-      picWin = window.open('/webfilesys/servlet?command=showImg&amp;imgname=' + encodeURIComponent(imgPath), 'picWin' + randNum, 'status=no,toolbar=no,location=no,menu=no,width=400,height=300,resizable=yes,left=1,top=1,screenX=1,screenY=1');
-      picWin.focus();
-  }
-  
-  function setRating() {
-      document.sortform.rating.value = document.form2.minRating.value;
-      document.sortform.submit();
-  }
-  
-  function pasteLinks() {
-      document.form2.command.value = 'pasteLinks';
-      document.form2.submit();
-  }
-
-  <xsl:if test="/fileList/linksExist">
-    function copyLinks() {
-        if (confirm(resourceBundle["confirm.copyLinks"])) {
-            document.form2.command.value = 'copyLinks';
-            document.form2.submit();
-        }
-    }
-  </xsl:if>
-  
   var path = '<xsl:value-of select="/fileList/menuPath" />';
   var relativePath = '<xsl:value-of select="/fileList/relativePath" />';
   
@@ -431,11 +406,11 @@
                 <a>
                   <xsl:attribute name="id">thumb-<xsl:value-of select="@id" /></xsl:attribute>
                   <xsl:if test="@link">
-                    <xsl:attribute name="href">javascript:showImage('<xsl:value-of select="realPathForScript" />');hidePopupPicture()</xsl:attribute>
+                    <xsl:attribute name="href">javascript:showImgFromThumb('<xsl:value-of select="realPathForScript" />');hidePopupPicture()</xsl:attribute>
                     <xsl:attribute name="oncontextmenu">picturePopupInFrame('<xsl:value-of select="realPathForScript" />', '<xsl:value-of select="@id" />');return false;</xsl:attribute>
                   </xsl:if>
                   <xsl:if test="not(@link)">
-                    <xsl:attribute name="href">javascript:showImage('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />');hidePopupPicture()</xsl:attribute>
+                    <xsl:attribute name="href">javascript:showImgFromThumb('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />');hidePopupPicture()</xsl:attribute>
                     <xsl:attribute name="oncontextmenu">picturePopupInFrame('<xsl:value-of select="/fileList/pathForScript" /><xsl:value-of select="@nameForScript" />', '<xsl:value-of select="@id" />');return false;</xsl:attribute>
                   </xsl:if>
                   <img class="thumb" border="0" style="visibility:hidden">

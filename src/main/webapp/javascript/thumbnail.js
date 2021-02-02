@@ -10,10 +10,19 @@ function multiFileFunction() {
     if (cmd == 'compare') {
 	    compare();
     } else if (cmd == 'rotateLeft') {
+        if (!ensureOnlySupportedTypesSelected(["jpg", "jpeg", "png", "gif"])) {
+        	return;
+        }
         rotate('270');
     } else if (cmd == 'rotateRight') {
+        if (!ensureOnlySupportedTypesSelected(["jpg", "jpeg", "png", "gif"])) {
+        	return;
+        }
         rotate('90');
     } else if (cmd == 'resize') {
+        if (!ensureOnlySupportedTypesSelected(["jpg", "jpeg", "png", "gif"])) {
+        	return;
+        }
         resize();
     } else if ((cmd == 'copy') || (cmd == 'move') || (cmd == 'copyAdd') || (cmd == 'moveAdd')) {
         multiImageCopyMove();
@@ -23,6 +32,9 @@ function multiFileFunction() {
     } else if (cmd == 'download') {
         multiImageDownload();
     } else if (cmd == 'exifRename') {
+        if (!ensureOnlySupportedTypesSelected(["jpg", "jpeg"])) {
+        	return;
+        }
         renameToExifDate();
     } else if (cmd == 'view') {
         multiViewImage();
@@ -43,6 +55,43 @@ function resetSelected() {
     }
 }
 
+function ensureOnlySupportedTypesSelected(supportedTypes, unsupportedMessageKey) {
+    let unsupportedFileType = false;
+    
+    Array.from(document.form2.elements).forEach(formElem => {
+		if ((formElem.type == "checkbox") && formElem.checked && (formElem.name != "cb-setAll")) {
+
+       	    const fileNameExt = getFileNameExt(formElem.name)
+	       
+       	    let supported = false;
+       	    supportedTypes.forEach(type => {
+         		if ("." + type.toUpperCase() === fileNameExt) {
+       			    supported = true;
+       		    } 
+       	    });
+       	    if (!supported) {
+       		    unsupportedFileType = true;
+       	    }
+		}
+    });
+	 
+    if (unsupportedFileType) {
+    	if (unsupportedMessageKey) {
+            customAlert(resourceBundle[unsupportedMessageKey]);
+    	} else {
+    		let message = resourceBundle["opOnlySupportedOnTypes"];
+    		supportedTypes.forEach((type, idx)  => { 
+    			message = message + (idx === 0 ? " " : ", ") + type;
+    		});
+            customAlert(message);
+    	}
+        document.form2.command.value = '';
+        document.form2.cmd.selectedIndex = 0;
+        return false;;
+    }
+    return true;
+}
+
 function multiImgToVideo() {
 
 	var numChecked = getSelectedCheckboxCount();
@@ -54,19 +103,8 @@ function multiImgToVideo() {
         return;
     }	
 	
-    for (var i = document.form2.elements.length - 1; i >= 0; i--) {
-        if ((document.form2.elements[i].type == "checkbox") &&
-        	document.form2.elements[i].checked && 
-		    (document.form2.elements[i].name != "cb-setAll")) {
-
-        	 var fileNameExt = getFileNameExt(document.form2.elements[i].name)
-	         if ((fileNameExt != ".JPG") && (fileNameExt != ".JPEG")) {
-	             customAlert(resourceBundle["imgToVideoNoJPEG"]);
-	             document.form2.command.value = '';
-	             document.form2.cmd.selectedIndex = 0;
-	             return;
-	         }
-         }
+    if (!ensureOnlySupportedTypesSelected(["jpg", "jpeg"], "imgToVideoNoJPEG")) {
+    	return;
     }
     
     document.form2.command.value = 'video';
@@ -929,3 +967,31 @@ function scrollToPicture(picId) {
 	    }
 	}, 200);
 }
+
+function showImgFromThumb(imgPath) {
+    const fileNameExt = getFileNameExt(imgPath);
+	if (fileNameExt.toLowerCase() === ".svg") {
+	    return;
+	}
+    var randNum = (new Date()).getTime();
+    picWin = window.open('/webfilesys/servlet?command=showImg&imgname=' + encodeURIComponent(imgPath), 'picWin' + randNum, 'status=no,toolbar=no,location=no,menu=no,width=400,height=300,resizable=yes,left=1,top=1,screenX=1,screenY=1');
+    picWin.focus();
+}
+
+function pasteLinks() {
+    document.form2.command.value = 'pasteLinks';
+    document.form2.submit();
+}
+
+function copyLinks() {
+    if (confirm(resourceBundle["confirm.copyLinks"])) {
+        document.form2.command.value = 'copyLinks';
+        document.form2.submit();
+    }
+}
+
+function setRating() {
+    document.sortform.rating.value = document.form2.minRating.value;
+    document.sortform.submit();
+}
+
