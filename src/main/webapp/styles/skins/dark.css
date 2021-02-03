@@ -718,7 +718,6 @@ div.selectedFolder {
 div.currentFolder > a.dirtree {
     background-color: #303030;
 	border: 1px solid #c0c0ff;
-	padding: 0 4px;
 }
 
 body.bookmarks .icon-delete:before,
@@ -835,4 +834,8 @@ a.fastpath {
 
 a.fastpath:hover {
     color: #ffffff;
+}
+
+span.fileIcon:before {
+	color: #ffffa0;
 }

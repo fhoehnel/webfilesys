@@ -1,0 +1,68 @@
+.icon-file:before {
+	content: '\f016';
+}
+
+.icon-file-pic:before {
+	content: '\f1c5';
+}
+
+.icon-file-pdf:before {
+	content: '\f1c1';
+}
+
+.icon-file-doc:before {
+	content: '\f1c2';
+}
+
+.icon-file-xls:before {
+	content: '\f1c3';
+}
+
+.icon-file-mov:before {
+	content: '\f1c8';
+}
+
+.icon-file-zip:before {
+	content: '\f1c6';
+}
+
+.icon-file-xml:before {
+	content: '\f1c9';
+}
+
+.icon-file-audio:before {
+	content: '\f001';
+}
+
+.icon-file-txt:before {
+	content: '\f0f6';
+}
+
+.icon-file-map:before {
+	content: '\f041';
+}
+
+.icon-file-globe:before {
+	content: '\f0ac';
+}
+
+.icon-file-font:before {
+	content: '\f031';
+}
+
+.icon-file-log:before {
+	content: '\f1c0';
+}
+
+.icon-file-java:before {
+	content: '\f0f4';
+}
+
+.icon-file-camera:before {
+	content: '\f030';
+}
+
+.icon-file-conf:before {
+	content: '\f058';
+}
+

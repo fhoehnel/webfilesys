@@ -88,6 +88,14 @@ a.icon-font {
 	content: '\f0ac';
 }
 
+.icon-hddrive:before {
+	content: '\f1c0';
+}
+
+.icon-floppy:before {
+	content: '\f0c7';
+}
+
 .icon-folder:before {
 	content: '\f07b';
 }

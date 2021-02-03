@@ -83,7 +83,7 @@
           
         </td>
         <td class="formParm2" width="80%">
-          <textarea name="description" style="width:100%;height:140px;" wrap="virtual"><xsl:value-of select="/metaInf/description" /></textarea>
+          <textarea name="description" style="width:100%;height:120px;" wrap="virtual"><xsl:value-of select="/metaInf/description" /></textarea>
         </td>
       </tr>
 

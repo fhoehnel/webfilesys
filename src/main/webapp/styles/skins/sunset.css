@@ -205,3 +205,12 @@ div.findFileResult span.icon-font {
 a.folderTreeIcon span.icon-font.folderCurrent:before {
 	color: #ff8000;
 }
+
+span.fileIcon:before {
+	color: #a03000;
+}
+
+div.currentFolder > a.dirtree {
+	border: 1px solid #b06000;
+}
+

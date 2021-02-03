@@ -19,6 +19,7 @@
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/fileIcons.css" />
 
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
@@ -447,9 +448,19 @@
   
             <td>
               <xsl:attribute name="class">fileListIcon</xsl:attribute>
-              <img border="0" width="16" height="16">
-                <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon" /></xsl:attribute>
-              </img>
+              <xsl:if test="@icon">
+                <img border="0" width="16" height="16">
+                  <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon" /></xsl:attribute>
+                </img>
+              </xsl:if>
+              <xsl:if test="@iconFont">
+                <span class="">
+                  <xsl:attribute name="class">icon-font fileIcon icon-file-<xsl:value-of select="@iconFont" /></xsl:attribute>
+                </span>
+              </xsl:if>
+              <xsl:if test="not(@icon) and not(@iconFont)">
+                <span class="icon-font fileIcon icon-file"></span>
+              </xsl:if>
             </td>
             
             <td>

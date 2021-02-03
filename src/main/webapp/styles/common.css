@@ -2118,8 +2118,8 @@ body.zipContent > a.dirtree {
 }
 
 div.iconSelection {
-    width: 300px;
-    height: 100px;
+    width: 260px;
+    height: 160px;
     overflow-x: auto;
     overflow-y: auto;
     border:1px solid #a0a0a0;
@@ -2350,6 +2350,11 @@ div.fastpathHeadline span:before {
     margin-left: 8px;
 }
 
+span.fileIcon:before {
+	font-size: 18px;
+	color: navy;
+}
+
 a.folderTreeIcon {
     text-decoration: none;
 }
@@ -2380,6 +2385,11 @@ a.folderTreeIcon span.icon-font.folderCurrent:before {
 
 body.publishList .icon-copy:before {
     margin: 0 8px 0 4px;
+}
+
+div.currentFolder > a.dirtree {
+	border: 1px solid #4060a0;
+	padding: 0 4px;
 }
 
 @media (max-width: 400px) {

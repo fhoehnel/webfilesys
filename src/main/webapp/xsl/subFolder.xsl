@@ -88,19 +88,19 @@
       <xsl:attribute name="href">javascript:dirContextMenu('<xsl:value-of select="@id" />')</xsl:attribute>
       
       <xsl:if test="@type='drive'">
-        <img src="/webfilesys/images/miniDisk.gif" border="0" width="17" height="14">
+        <span class="icon-font icon-hddrive">
           <xsl:if test="@label">
-            <xsl:attribute name="title"><xsl:value-of select="@label"/></xsl:attribute>
+            <xsl:attribute name="title"><xsl:value-of select="@label" /></xsl:attribute>
           </xsl:if>
-        </img>
+        </span>
       </xsl:if>
 
       <xsl:if test="@type='floppy'">
-        <img src="/webfilesys/images/miniFloppy.gif" border="0" width="18" height="16">
+        <span class="icon-font icon-floppy">
           <xsl:if test="@label">
-            <xsl:attribute name="title"><xsl:value-of select="@label"/></xsl:attribute>
+            <xsl:attribute name="title"><xsl:value-of select="@label" /></xsl:attribute>
           </xsl:if>
-        </img>
+        </span>
       </xsl:if>
 
       <xsl:if test="not(@type)">

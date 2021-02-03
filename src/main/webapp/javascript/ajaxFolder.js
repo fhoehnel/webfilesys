@@ -251,7 +251,11 @@ function deselectCurrentDir() {
                          if (subChildren[k].nodeName.toLowerCase() === "span") {
                         	 let currentStyle = subChildren[k].getAttribute("class");
                         	 if (currentStyle && currentStyle.indexOf("folderCurrent") >= 0) {
-                        		 subChildren[k].setAttribute("class", "icon-font icon-folder");
+                            	 if (currentStyle.indexOf("icon-hddrive") >= 0) {
+                            		 subChildren[k].setAttribute("class", "icon-font icon-hddrive");
+                            	 } else {
+                            		 subChildren[k].setAttribute("class", "icon-font icon-folder");
+                            	 }
                         	 }
                          } else if (subChildren[k].nodeName.toLowerCase() === "img") {
                              if (subChildren[k].src.indexOf('folder1.gif') > 0) {
