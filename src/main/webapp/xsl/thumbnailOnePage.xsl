@@ -480,12 +480,12 @@
                   &#160;
 
                   <xsl:if test="ownerRating or visitorRating">
-                    <a class="dirtree">
+                    <span class="thumbRating">
                       <xsl:attribute name="title">
                         <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
                         <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
                       </xsl:attribute>
-                      <img src="images/star.gif" border="0" style="vertical-align:bottom" />
+                      <span class="icon-font icon-star ratingStar"></span>
                       <xsl:if test="ownerRating">
                         <xsl:value-of select="ownerRating" />
                         <xsl:if test="visitorRating">/</xsl:if>
@@ -493,7 +493,7 @@
                       <xsl:if test="visitorRating">
                         <xsl:value-of select="visitorRating" />
                       </xsl:if>
-                    </a>
+                    </span>
                     <xsl:if test="visitorRating">
                       (<xsl:value-of select="numberOfVotes" />)
                     </xsl:if>

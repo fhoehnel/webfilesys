@@ -2402,6 +2402,17 @@ a.fileAgeColor span:before {
 	margin-left: 10px;
 }
 
+span.thumbRating {
+	color: navy;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+span.ratingStar {
+	color: gold;
+	margin-right: 4px;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

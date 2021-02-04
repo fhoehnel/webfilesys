@@ -843,3 +843,7 @@ span.fileIcon:before {
 a.fileAgeColor span:before {
 	color: #ffffa0;
 }
+
+span.thumbRating {
+	color: #ffffa0;
+}
