@@ -839,3 +839,7 @@ a.fastpath:hover {
 span.fileIcon:before {
 	color: #ffffa0;
 }
+
+a.fileAgeColor span:before {
+	color: #ffffa0;
+}

@@ -20,6 +20,14 @@ a.icon-font {
 	content: '\f002';
 }
 
+.icon-plus:before {
+	content: '\f0fe';
+}
+
+.icon-minus:before {
+	content: '\f146';
+}
+
 .icon-picture:before {
 	content: '\f03e';
 }
