@@ -70,6 +70,8 @@ public class IconManager {
     	fileIconFontMap.put(".otf", "font");
     	fileIconFontMap.put(".conf", "conf");
     	fileIconFontMap.put(".properties", "conf");
+    	fileIconFontMap.put(".html", "html");
+    	fileIconFontMap.put(".htm", "html");
     }
     
     public static IconManager getInstance() {
