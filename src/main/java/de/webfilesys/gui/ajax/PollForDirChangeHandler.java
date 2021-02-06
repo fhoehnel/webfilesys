@@ -63,7 +63,7 @@ public class PollForDirChangeHandler extends XmlRequestHandlerBase
         
         if (isThumbnailView) {
         	if (fileMask.equals("*")) {
-        		filterMasks = Constants.imgFileMasks;
+        		filterMasks = Constants.PICTURE_FILE_MASKS;
         	}
         }
         

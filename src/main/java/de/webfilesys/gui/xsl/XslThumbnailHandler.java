@@ -70,7 +70,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			mask = "*";
 		}
 
-		String fileFilter[] = Constants.imgFileMasks;
+		String fileFilter[] = Constants.PICTURE_FILE_MASKS;
 
 		if (!mask.equals("*")) {
 			String maskFilter[] = new String[fileFilter.length];

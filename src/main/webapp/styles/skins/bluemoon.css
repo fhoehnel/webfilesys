@@ -180,3 +180,22 @@ td.fileListFunct a.icon-paging:before {
 .icon-copyToClip:before {
     color: #000000;
 }
+
+div.fastpathHeadline span+span {
+    color: navy;
+}
+
+div.fastpathHeadline span:before {
+	color: #a0a0e0;
+}
+
+a.folderTreeIcon span.icon-font:before,
+div.fastpath.last span.icon-font:before,
+div.findFileResult span.icon-font {
+	color: #6060a0;
+}
+
+a.folderTreeIcon span.icon-font.folderCurrent:before {
+	color: #a0a0e0;
+}
+

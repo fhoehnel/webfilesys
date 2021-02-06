@@ -50,7 +50,7 @@
   
   function publishList()
   {
-      window.open('/webfilesys/servlet?command=publishList&amp;random=' + new Date().getTime(),'PublishList','scrollbars=yes,resizable=yes,width=740,height=300,left=20,top=100,screenX=50,screenY=100');
+      window.open('/webfilesys/servlet?command=publishList&amp;random=' + new Date().getTime(),'PublishList','scrollbars=yes,resizable=yes,width=800,height=400,left=20,top=100,screenX=20,screenY=100');
   }
   
   function diskQuota() 

@@ -172,7 +172,7 @@ function col(domId)
     {
         urlEncodedPath = parentDiv.getAttribute("path");
     
-        deselectCurrentDir();
+        // deselectCurrentDir();
         
         // first change minus sign into plus sign
         
@@ -205,12 +205,14 @@ function col(domId)
                 }
             }
             
+            /*
             if (parentDiv.classList) {
             	parentDiv.classList.add("currentFolder");    
             }
+            */
         }   
         
-        currentDirId = domId;
+        // currentDirId = domId;
 
         // and now remove the divs of the subfolders
 
@@ -234,34 +236,32 @@ function dummy()
 {
 }
 
-function deselectCurrentDir()
-{
-    if (currentDirId != '')
-    {
+function deselectCurrentDir() {
+    if (currentDirId != '') {
         oldCurrentDirDiv = document.getElementById(currentDirId);
 
-        if (oldCurrentDirDiv)
-        {
+        if (oldCurrentDirDiv) {
             children = oldCurrentDirDiv.childNodes;
 
-            for (i = 0; i < children.length; i++)
-            {
-                if (children[i].nodeName.toLowerCase()  == 'a')
-                {
+            for (i = 0; i < children.length; i++) {
+                if (children[i].nodeName.toLowerCase()  == 'a') {
                     subChildren = children[i].childNodes;
         
-                    for (k = 0; k < subChildren.length; k++)
-                    {
-                         if (subChildren[k].nodeName.toLowerCase()  == 'img')
-                         {
-                             if (subChildren[k].src.indexOf('folder1.gif') > 0)
-                             {
+                    for (k = 0; k < subChildren.length; k++) {
+                         if (subChildren[k].nodeName.toLowerCase() === "span") {
+                        	 let currentStyle = subChildren[k].getAttribute("class");
+                        	 if (currentStyle && currentStyle.indexOf("folderCurrent") >= 0) {
+                            	 if (currentStyle.indexOf("icon-hddrive") >= 0) {
+                            		 subChildren[k].setAttribute("class", "icon-font icon-hddrive");
+                            	 } else {
+                            		 subChildren[k].setAttribute("class", "icon-font icon-folder");
+                            	 }
+                        	 }
+                         } else if (subChildren[k].nodeName.toLowerCase() === "img") {
+                             if (subChildren[k].src.indexOf('folder1.gif') > 0) {
                                  subChildren[k].src = subChildren[k].src.replace('folder1.gif', 'folder.gif');
-                             }
-                             else
-                             {
-                                 if (subChildren[k].src.indexOf('miniDisk') > 0)
-                                 {
+                             } else {
+                                 if (subChildren[k].src.indexOf('miniDisk') > 0) {
                                      subChildren[k].src = subChildren[k].src.replace('miniDisk2.gif', 'miniDisk.gif');
                                  }
                              }            
@@ -277,22 +277,22 @@ function deselectCurrentDir()
     }
 }
 
-function selectCurrentDir(parentDiv)
-{
+function selectCurrentDir(parentDiv) {
     children = parentDiv.childNodes;
         
-    for (i = 0; i < children.length; i++)
-    {
-         if (children[i].nodeName.toLowerCase()  == 'a')
-         {
+    for (i = 0; i < children.length; i++) {
+         if (children[i].nodeName.toLowerCase()  == 'a') {
              subChildren = children[i].childNodes;
          
-             for (k = 0; k < subChildren.length; k++)
-             {
-                  if (subChildren[k].nodeName.toLowerCase()  == 'img')
-                  {
-                      if (subChildren[k].src.indexOf('folder.gif') > 0)
-                      {
+             for (k = 0; k < subChildren.length; k++) {
+            	 
+                 if (subChildren[k].nodeName.toLowerCase() === "span") {
+                	 let currentStyle = subChildren[k].getAttribute("class");
+                	 if (currentStyle && currentStyle.indexOf("folderCurrent") < 0) {
+                		 subChildren[k].setAttribute("class", currentStyle + " folderCurrent");
+                	 }
+                 } else if (subChildren[k].nodeName.toLowerCase()  == 'img') {
+                      if (subChildren[k].src.indexOf('folder.gif') > 0) {
                           subChildren[k].src = subChildren[k].src.replace('folder.gif', 'folder1.gif');
                       }            
                   }
@@ -338,10 +338,12 @@ function exp(parentDivId, lastInLevel)
         return;
     }
    
+    /*
     if (parentDivId != currentDirId)
     {
         deselectCurrentDir();
     }
+    */
 
     var urlEncodedPath = parentDiv.getAttribute("path");
 
@@ -398,9 +400,12 @@ function expMozilla(parentDiv, xmlUrl, xslUrl) {
                             var fragment = xsltProcessor.transformToFragment(xmlDoc, document);
        
                             parentDiv.innerHTML = '';
-
-                            currentDirId = fragment.childNodes[0].id;
-
+                            
+                            let divClass = parentDiv.getAttribute("class");
+                            if (divClass && divClass.indexOf("currentFolder") > 0) {
+                                currentDirId = fragment.childNodes[0].id;
+                            }
+                            
                             parentDiv.parentNode.replaceChild(fragment, parentDiv);
                             
                             hideHourGlass();
@@ -478,7 +483,7 @@ function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) {
 
                             parentDiv.outerHTML = html;
     
-                            currentDirId = newId;
+                            // currentDirId = newId;
 
                             setTimeout('setTooltips()', 500);
                             

@@ -15,7 +15,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -27,7 +26,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.SubdirExistCache;

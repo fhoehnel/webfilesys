@@ -298,7 +298,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
                     linkFound = true;
 				}
 
-				String docImage="doc.gif";
+				String docImage = null;
 
 				if (WebFileSys.getInstance().isShowAssignedIcons())
 				{
@@ -306,11 +306,18 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 					if ((extIdx > 0) && (extIdx < (fileName.length() - 1)))
 					{
-						docImage=iconMgr.getAssignedIcon(fileName.substring(extIdx + 1));
+						docImage = iconMgr.getFileIconNoDefault(fileName);
 					}
 				}
 
-                fileElement.setAttribute("icon", docImage);
+				if (docImage != null) {
+	                fileElement.setAttribute("icon", docImage);
+				} else {
+					String docImageIconFont = iconMgr.getFileIconFont(fileName); 
+					if (docImageIconFont != null) {
+		                fileElement.setAttribute("iconFont", docImageIconFont);
+					}
+				}
 
                 description = null;
 

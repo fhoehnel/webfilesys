@@ -3,21 +3,77 @@ package de.webfilesys;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+
+import de.webfilesys.util.CommonUtils;
 
 public class IconManager {
     private static final String ICON_FILE = "iconAssignment.conf";
 
     public static final String DEFAULT_ICON = "doc.gif";
 
+    private static final HashMap<String, String> fileIconFontMap;
+    
     private Properties iconTable=null;
 
     private static IconManager iconMgr=null;
     
     private String iconFilePath = null;
 
+    static {
+    	fileIconFontMap = new HashMap<>();
+    	fileIconFontMap.put(".jpg", "camera");
+    	fileIconFontMap.put(".jpeg", "camera");
+    	fileIconFontMap.put(".png", "pic");
+    	fileIconFontMap.put(".gif", "pic");
+    	fileIconFontMap.put(".bmp", "pic");
+    	fileIconFontMap.put(".pdf", "pdf");
+    	fileIconFontMap.put(".doc", "doc");
+    	fileIconFontMap.put(".docx", "doc");
+    	fileIconFontMap.put(".xlsm", "xls");
+    	fileIconFontMap.put(".xlsx", "xls");
+    	fileIconFontMap.put(".xlsb", "xls");
+    	fileIconFontMap.put(".mov", "mov");
+    	fileIconFontMap.put(".mp4", "mov");
+    	fileIconFontMap.put(".mpg", "mov");
+    	fileIconFontMap.put(".mpeg", "mov");
+    	fileIconFontMap.put(".ogg", "mov");
+    	fileIconFontMap.put(".webm", "mov");
+    	fileIconFontMap.put(".avi", "mov");
+    	fileIconFontMap.put(".flv", "mov");
+    	fileIconFontMap.put(".mkv", "mov");
+    	fileIconFontMap.put(".3gp", "mov");
+    	fileIconFontMap.put(".zip", "zip");
+    	fileIconFontMap.put(".gzip", "zip");
+    	fileIconFontMap.put(".gz", "zip");
+    	fileIconFontMap.put(".jar", "zip");
+    	fileIconFontMap.put(".war", "zip");
+    	fileIconFontMap.put(".ear", "zip");
+    	fileIconFontMap.put(".tar", "zip");
+    	fileIconFontMap.put(".xml", "xml");
+    	fileIconFontMap.put(".xsl", "xml");
+    	fileIconFontMap.put(".xsd", "xml");
+    	fileIconFontMap.put(".wsdl", "xml");
+    	fileIconFontMap.put(".mp3", "audio");
+    	fileIconFontMap.put(".txt", "txt");
+    	fileIconFontMap.put(".gpx", "map");
+    	fileIconFontMap.put(".kml", "map");
+    	fileIconFontMap.put(".kmz", "map");
+    	fileIconFontMap.put(".log", "log");
+    	fileIconFontMap.put(".java", "java");
+    	fileIconFontMap.put(".eot", "font");
+    	fileIconFontMap.put(".ttf", "font");
+    	fileIconFontMap.put(".woff", "font");
+    	fileIconFontMap.put(".otf", "font");
+    	fileIconFontMap.put(".conf", "conf");
+    	fileIconFontMap.put(".properties", "conf");
+    	fileIconFontMap.put(".html", "html");
+    	fileIconFontMap.put(".htm", "html");
+    }
+    
     public static IconManager getInstance() {
         if (iconMgr == null) {
             iconMgr = new IconManager();
@@ -74,6 +130,24 @@ public class IconManager {
         
         return iconImg;
     }
+
+    public String getFileIconNoDefault(String fileName) {
+        String iconImg = null;
+        
+        String fileExt = CommonUtils.getFileExtension(fileName);
+
+        if (fileExt.length() > 0) {
+        	iconImg = iconTable.getProperty(fileExt.substring(1));
+        }
+        
+        return iconImg;
+    }
+    
+    public String getFileIconFont(String fileName) {
+    	String fileExt = CommonUtils.getFileExtension(fileName);
+    	return fileIconFontMap.get(fileExt);
+    }
+
 }
 
 

@@ -76,7 +76,7 @@
 
 <xsl:template name="folder"> 
 
-  <div class="last">
+  <div class="last findFileResult">
       
     <xsl:if test="position()=last()">
       <img src="images/branchLast.gif" border="0" width="15" height="17" />
@@ -91,7 +91,7 @@
       </img>
     </xsl:if>
     <xsl:if test="not(@file)">
-      <img src="images/folder.gif" border="0" width="17" height="14" />
+      <span class="icon-font icon-folder"></span>
     </xsl:if>
 
     <img src="images/space.gif" border="0" width="4" height="1" />

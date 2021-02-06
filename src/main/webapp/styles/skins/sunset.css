@@ -187,3 +187,30 @@ td.tabInactive {
 .icon-copyToClip:before {
     color: #000000;
 }
+
+div.fastpathHeadline span+span {
+    color: maroon;
+}
+
+div.fastpathHeadline span:before {
+	color: #ff8000;
+}
+
+a.folderTreeIcon span.icon-font:before,
+div.fastpath.last span.icon-font:before,
+div.findFileResult span.icon-font {
+	color: #b06000;
+}
+
+a.folderTreeIcon span.icon-font.folderCurrent:before {
+	color: #ff8000;
+}
+
+span.fileIcon:before {
+	color: #a03000;
+}
+
+div.currentFolder > a.dirtree {
+	border: 1px solid #b06000;
+}
+

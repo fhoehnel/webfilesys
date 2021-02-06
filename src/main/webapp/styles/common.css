@@ -2014,6 +2014,7 @@ canvas.gpsProfileLegend {
 	height: 200px;
 }
 
+div.gpsChartText,
 td.gpsChartText {
     font-size: 13px;
     font-family: Arial,Helvetica;
@@ -2117,8 +2118,8 @@ body.zipContent > a.dirtree {
 }
 
 div.iconSelection {
-    width: 300px;
-    height: 100px;
+    width: 260px;
+    height: 160px;
     overflow-x: auto;
     overflow-y: auto;
     border:1px solid #a0a0a0;
@@ -2331,6 +2332,85 @@ input[type=checkbox].big:checked:after {
 	top: -2px;
 	left: 1px;
 	color: #606060;
+}
+
+div.fastpathHeadline span+span {
+	font-size: 13px;
+    color: maroon;
+    font-weight: bold;
+    text-decoration: none;
+    vertical-align: middle;
+}
+
+div.fastpathHeadline span:before {
+	font-size: 16px;
+	font-weight: bold;
+    color: #806000;
+    margin-right: 4px;
+    margin-left: 8px;
+}
+
+span.fileIcon:before {
+	font-size: 18px;
+	color: navy;
+}
+
+a.folderTreeIcon {
+    text-decoration: none;
+}
+	
+a.folderTreeIcon span.icon-font,
+div.fastpath.last span.icon-font,
+div.findFileResult span.icon-font {
+	vertical-align: bottom;
+	margin-right: 2px;
+}
+	
+a.folderTreeIcon span.icon-font:before,
+div.fastpath.last span.icon-font:before,
+div.findFileResult span.icon-font {
+	font-size: 16px;
+	font-weight: bold;
+    color: #806000;
+}
+
+a.folderTreeIcon span.icon-font.folderCurrent:before {
+	color: #4060a0;
+}
+
+.publicUrlCont {
+	width: 300px;
+	height: 50px;
+}
+
+body.publishList .icon-copy:before {
+    margin: 0 8px 0 4px;
+}
+
+div.currentFolder > a.dirtree {
+	border: 1px solid #4060a0;
+	padding: 0 4px;
+}
+
+a.fileAgeColor {
+	text-decoration: none;
+}
+
+a.fileAgeColor span:before {
+	font-size: 16px;
+	color: #606060;
+	margin-left: 10px;
+}
+
+span.thumbRating {
+	color: navy;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+span.ratingStar {
+	color: gold;
+	margin-right: 4px;
 }
 
 @media (max-width: 400px) {

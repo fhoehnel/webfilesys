@@ -54,12 +54,10 @@
 
 <xsl:template match="folderTree">
 
-  <img src="images/space.gif" border="0" width="12" height="17" />
-  <img src="images/fastpath.gif" border="0" width="19" height="14" />
-  <img src="images/space.gif" border="0" width="4" height="1" />
-  <a class="dirtree">
+  <div class="fastpathHeadline">
+    <span class="icon-font icon-folderOpenFilled"></span>
     <span resource="label.fastpath"></span>
-  </a>
+  </div>
   
   <xsl:for-each select="folder">
     <xsl:call-template name="folder" />
@@ -69,7 +67,7 @@
 
 <xsl:template name="folder"> 
 
-  <div class="last">
+  <div class="fastpath last">
       
     <xsl:if test="position()=last()">
       <img src="images/branchLast.gif" border="0" width="15" height="17" />
@@ -90,7 +88,12 @@
       </xsl:if>
     
       <xsl:if test="not(@icon)">
-        <img src="images/folder.gif" border="0" width="17" height="14" />
+        <xsl:if test="folder">
+          <span class="icon-font icon-folderOpenFilled"></span>
+        </xsl:if>
+        <xsl:if test="not(folder)">
+          <span class="icon-font icon-folder"></span>
+        </xsl:if>
       </xsl:if>
     </xsl:if>
 
