@@ -72,7 +72,7 @@ public class XmlRemoveDirHandler extends XmlRequestHandlerBase
 				
 			    success = "error";
 
-			    resultMsg = getResource("alert.delDirError", "could not be deleted!");
+			    resultMsg = getResource("alert.removeDirError", "Directory could not be deleted!");
 			}
 			else
 			{

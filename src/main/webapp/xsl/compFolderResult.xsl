@@ -15,6 +15,7 @@
   <meta http-equiv="expires" content="0" />
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/compareFolder/css" />.css</xsl:attribute>
@@ -26,10 +27,11 @@
 
   <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 
 </head>
 
-<body>
+<body class="compFolderResult">
 
   <div class="headline">
         <xsl:value-of select="/compareFolder/resources/msg[@key='headline.compareFolders']/@value" />
@@ -113,13 +115,13 @@
           
           <td class="syncCompare">
             <xsl:if test="(diffType='1')">
-              <img src="/webfilesys/images/checked.gif" width="18" height="15" border="0" />
+              <span class="icon-font icon-check compare-exist"></span>
             </xsl:if>
             <xsl:if test="(diffType='2')">
               <xsl:value-of select="/compareFolder/resources/msg[@key='sync.missing']/@value" />
             </xsl:if>
             <xsl:if test="(diffType='3')">
-              <img src="/webfilesys/images/checked.gif" width="18" height="15" border="0" />
+              <span class="icon-font icon-check compare-exist"></span>
             </xsl:if>
             <xsl:if test="(diffType='4')">
               <xsl:value-of select="/compareFolder/resources/msg[@key='sync.missing']/@value" />
@@ -159,13 +161,13 @@
               <xsl:value-of select="/compareFolder/resources/msg[@key='sync.missing']/@value" />
             </xsl:if>
             <xsl:if test="(diffType='2')">
-              <img src="/webfilesys/images/checked.gif" width="18" height="15" border="0" />
+              <span class="icon-font icon-check compare-exist"></span>
             </xsl:if>
             <xsl:if test="(diffType='3')">
               <xsl:value-of select="/compareFolder/resources/msg[@key='sync.missing']/@value" />
             </xsl:if>
             <xsl:if test="(diffType='4')">
-              <img src="/webfilesys/images/checked.gif" width="18" height="15" border="0" />
+              <span class="icon-font icon-check compare-exist"></span>
             </xsl:if>
             <xsl:if test="(diffType='5')">
               <xsl:value-of select="target/size" />

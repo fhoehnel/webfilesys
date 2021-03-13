@@ -200,6 +200,8 @@ public class XslExifDataHandler extends XslRequestHandlerBase
             {
                 XmlUtil.setChildText(exifDataElement, "thumbnailOrientation", Integer.toString(thumbnailOrientation));
             }
+            
+            XmlUtil.setChildText(exifDataElement, "imgPathForScript", insertDoubleBackslash(imgFileName));
         }
 
         processResponse("cameraData.xsl");

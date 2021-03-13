@@ -1,11 +1,11 @@
 function ajaxRotate(fileName, degrees, domId) {
     hideMenu();
 
-    var xmlUrl = '/webfilesys/servlet?command=xformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(fileName) + "&domId=" + domId;
+    const xmlUrl = '/webfilesys/servlet?command=xformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(fileName) + "&domId=" + domId;
 
-    var xslUrl = "/webfilesys/xsl/xformImageResult.xsl";
+    const xslUrl = "/webfilesys/xsl/xformImageResult.xsl";
 
-    var thumbCont = document.getElementById("thumbCont-" + fileName.replaceAll(" ", "_"));
+    const thumbCont = document.getElementById("thumbCont-" + fileName.replaceAll(" ", "_"));
         
     if (thumbCont) {
         htmlFragmentByXslt(xmlUrl, xslUrl, thumbCont, null, true);
@@ -52,3 +52,20 @@ function autoImgRotateResult(req) {
     }
 }
 
+function resetExifOrientation(imgPath) {
+	
+    const parameters = { "imgPath": imgPath };
+    
+	xmlPostRequest("resetExifOrientation", parameters, function(responseXml) {
+	
+        const resultElem = responseXml.getElementsByTagName("result")[0];            
+        const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+        if (success === "true") {
+          	customAlert(resourceBundle["resetExifOrientationSuccess"], null, function() {
+          	    window.close();
+            });
+        } else {
+           	customAlert(resourceBundle["resetExifOrientationFailed"]);
+        }
+	});
+}

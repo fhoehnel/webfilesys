@@ -139,25 +139,18 @@ function tail(path)
 }
 
 function grep(path, fileName) {
-    var url = "/webfilesys/servlet?command=ajaxRPC&method=grepAllowed&param1=" + encodeURIComponent(path);
-
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                var resultItem = responseXml.getElementsByTagName("result")[0];            
-                if (resultItem) {
-                    var checkResult = resultItem.firstChild.nodeValue;
-                    if (checkResult == 'true') {
-                        centeredDialog('/webfilesys/servlet?command=ajaxRPC&method=grepParams&param1=' + encodeURIComponent(fileName), '/webfilesys/xsl/grepParams.xsl', 320, 130, function() {
-                            document.getElementById("grepFilter").focus();
-                        });
-                    } else {
-                        customAlert(checkResult);
-                    }
-                }
+    const parameters = { "method": "grepAllowed", "param1": encodeURIComponent(path) };
+    
+	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
+        var resultItem = responseXml.getElementsByTagName("result")[0];            
+        if (resultItem) {
+            var checkResult = resultItem.firstChild.nodeValue;
+            if (checkResult == 'true') {
+                centeredDialog('/webfilesys/servlet?command=ajaxRPC&method=grepParams&param1=' + encodeURIComponent(fileName), '/webfilesys/xsl/grepParams.xsl', 320, 130, function() {
+                    document.getElementById("grepFilter").focus();
+                });
             } else {
-                alert(resourceBundle["alert.communicationFailure"]);
+                customAlert(checkResult);
             }
         }
     });

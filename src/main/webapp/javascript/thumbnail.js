@@ -367,25 +367,17 @@ function setAllSelected() {
 }
 
 function checkGeoDataExist(callbackExist, callbackNotExist) {
-    showHourGlass();
-       
-    var url = "/webfilesys/servlet?command=ajaxRPC&method=checkForGeoData";
+	
+    const parameters = { "method": "checkForGeoData" };
     
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                var resultItem = responseXml.getElementsByTagName("result")[0];
-                var result = resultItem.firstChild.nodeValue;  
+	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
+        var resultItem = responseXml.getElementsByTagName("result")[0];
+        var result = resultItem.firstChild.nodeValue;  
                 
-                if (result && (result == "true")) {
-                    callbackExist();
-                } else {
-                    callbackNotExist();
-                }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+        if (result && (result == "true")) {
+            callbackExist();
+        } else {
+            callbackNotExist();
         }
     });          
 } 
@@ -840,7 +832,7 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
                 	
                 	var thumbLink = document.getElementById("thumb-" + domId);
                 	if (thumbLink) {
-                		thumbLink.setAttribute("href", "javascript:showImage('" + insertDoubleBackslash(newFilePath) + "');hidePopupPicture()");
+                		thumbLink.setAttribute("href", "javascript:showImgFromThumb('" + insertDoubleBackslash(newFilePath) + "');hidePopupPicture()");
                 	    thumbLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
                 	}
                 	

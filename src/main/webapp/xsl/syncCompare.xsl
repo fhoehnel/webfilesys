@@ -52,6 +52,7 @@
 </script>
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/synchronize/css" />.css</xsl:attribute>
@@ -242,13 +243,13 @@
           
           <td class="syncCompare">
             <xsl:if test="(diffType='1')">
-              <img src="/webfilesys/images/checked.gif" width="18" height="15" border="0" />
+              <span class="icon-font icon-check compare-exist"></span>
             </xsl:if>
             <xsl:if test="(diffType='2')">
               <xsl:value-of select="/synchronize/resources/msg[@key='sync.missing']/@value" />
             </xsl:if>
             <xsl:if test="(diffType='3')">
-              <img src="/webfilesys/images/checked.gif" width="18" height="15" border="0" />
+              <span class="icon-font icon-check compare-exist"></span>
             </xsl:if>
             <xsl:if test="(diffType='4')">
               <xsl:value-of select="/synchronize/resources/msg[@key='sync.missing']/@value" />
@@ -288,13 +289,13 @@
               <xsl:value-of select="/synchronize/resources/msg[@key='sync.missing']/@value" />
             </xsl:if>
             <xsl:if test="(diffType='2')">
-              <img src="/webfilesys/images/checked.gif" width="18" height="15" border="0" />
+              <span class="icon-font icon-check compare-exist"></span>
             </xsl:if>
             <xsl:if test="(diffType='3')">
               <xsl:value-of select="/synchronize/resources/msg[@key='sync.missing']/@value" />
             </xsl:if>
             <xsl:if test="(diffType='4')">
-              <img src="/webfilesys/images/checked.gif" width="18" height="15" border="0" />
+              <span class="icon-font icon-check compare-exist"></span>
             </xsl:if>
             <xsl:if test="(diffType='5')">
               <xsl:value-of select="target/size" />

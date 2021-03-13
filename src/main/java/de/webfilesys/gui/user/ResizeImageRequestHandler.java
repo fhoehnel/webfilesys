@@ -31,6 +31,7 @@ import org.apache.log4j.Logger;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
+import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ExifUtil;
 import de.webfilesys.graphics.GifQuantizer;
 import de.webfilesys.graphics.ImageTextStamp;
@@ -567,6 +568,22 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                     int croppedImgWidth = cropAreaWidth * cropSrcImg.getRealWidth() / cropSrcImg.getScaledWidth();
                     int croppedImgHeight = cropAreaHeight * cropSrcImg.getRealHeight() / cropSrcImg.getScaledHeight();
 
+    				CameraExifData exifData = new CameraExifData(imgFileName);
+    				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+    					int savedWith = croppedImgWidth;
+    					croppedImgWidth = croppedImgHeight;
+    					croppedImgHeight = savedWith;
+    				}
+    				if (exifData.getOrientation() == 6) {
+                        int savedCroppedImgLeft = croppedImgLeft;
+                        croppedImgLeft = croppedImgTop;
+    					croppedImgTop = cropSrcImg.getRealHeight() - savedCroppedImgLeft;
+    				} else if (exifData.getOrientation() == 8) {
+    					int savedCroppedImgLeft = croppedImgLeft;
+                        croppedImgLeft = cropSrcImg.getRealWidth() - croppedImgTop - croppedImgWidth;
+    					croppedImgTop = savedCroppedImgLeft;
+    				}
+    				
                     bufferedImg = new BufferedImage(croppedImgWidth, croppedImgHeight, BufferedImage.TYPE_INT_RGB);
 
                     bufferedImg.getGraphics().drawImage(origImage, 

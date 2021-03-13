@@ -85,6 +85,7 @@ import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
+import de.webfilesys.gui.ajax.ResetExifOrientationHandler;
 import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
 import de.webfilesys.gui.ajax.TextOnVideoHandler;
@@ -1781,6 +1782,11 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
 
+        if (command.equals("resetExifOrientation")) {
+            (new ResetExifOrientationHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+        
         if (command.equals("refresh"))
     	{
             String path = req.getParameter("path");

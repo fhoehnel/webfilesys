@@ -148,6 +148,16 @@ table.contextMenu th {
     background-color: silver;
 }
 
+div.contextMenuItem {
+    background-color: #c0c0e0;
+    color: #000080;
+}
+
+div.contextMenuItem:hover {
+    background-color: #d0d0f0;
+    color: #000000;
+}
+
 .icon-button a:before {
 	color: #8080e0;
 }

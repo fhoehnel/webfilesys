@@ -10,7 +10,7 @@ body.fileListNoMargin {
     background-color: #404040;
 }
 
-body.metainf {
+body.metainf, body.compFolderResult {
     background-color: #404040;
     margin: 0;
 }
@@ -461,6 +461,20 @@ div.fileListScrollDiv {
 
 table.contextMenu th {
     background-color: #e0c080;
+}
+
+div.contextMenuHead {
+    background-color: #e0c080;
+}  
+
+div.contextMenuItem {
+    background-color: #204020;
+    color: #ffffa0;
+}
+
+div.contextMenuItem:hover {
+    background-color: #002000;
+    color: #ffffff;
 }
 
 .icon-button a:before {

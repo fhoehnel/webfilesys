@@ -85,11 +85,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 				return;
 			}
 		} else {
-			if (currentPath.endsWith(File.separator)) {
-				imgPath = currentPath + imgFileName;
-			} else {
-				imgPath = currentPath + File.separator + imgFileName;
-			}
+			imgPath = CommonUtils.joinFilesysPath(currentPath, imgFileName);
 		}
 		
 		String thumbnailPath = ThumbnailThread.getThumbnailPath(imgPath);
@@ -352,6 +348,9 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 	private boolean picOrientationAndThumbOrientationRotated(ScaledImage scaledImage, CameraExifData exifData) {
 		if (scaledImage.getRealWidth() > scaledImage.getRealHeight()) {
 			if ((exifData.getOrientation() == 6) && (exifData.getThumbnailOrientation() == 6)) {
+				return true;
+			}
+			if ((exifData.getOrientation() == 8) && (exifData.getThumbnailOrientation() == 8)) {
 				return true;
 			}
 		}

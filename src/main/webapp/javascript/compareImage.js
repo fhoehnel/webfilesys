@@ -65,30 +65,24 @@ function compareImgDelete(picFilePath, picFileName) {
 	
 	customConfirm(resourceBundle["confirm.delfile"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
    	    function() {
-	        var url = "/webfilesys/servlet?command=delFile&filePath=" + encodeURIComponent(picFilePath + picFileName);
+		
+	        const parameters = { "filePath": encodeURIComponent(picFilePath + picFileName) };
 	    
-	        xmlRequest(url, function(req) {
-	            if (req.readyState == 4) {
-	                if (req.status == 200) {
-	                    var responseXml = req.responseXML;
-	                    var successItem = responseXml.getElementsByTagName("success")[0];
-	                    var success = successItem.firstChild.nodeValue;  
+		    xmlPostRequest("delFile", parameters, function(responseXml) {
+		
+	            const successItem = responseXml.getElementsByTagName("success")[0];
+	            const success = successItem.firstChild.nodeValue;  
 	                
-	                    if (success == "true") {
-	                        var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
-	                        var deletedFile = deletedFileItem.firstChild.nodeValue; 
+	            if (success == "true") {
+	                var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
+	                var deletedFile = deletedFileItem.firstChild.nodeValue; 
 	                    
-	                        compareImgClose(deletedFile);
+	                compareImgClose(deletedFile);
 	                        
-                            window.opener.removeDeletedFile(deletedFile);
-	                        
-	                    } else {
-	                        customAlert(resourceBundle["alert.delFileError"]);
-	                    }
-	                } else {
-	                    customAlert(resourceBundle["alert.communicationFailure"]);
-	                }
-	            }
+                    window.opener.removeDeletedFile(deletedFile);
+	             } else {
+	                customAlert(resourceBundle["alert.delFileError"]);
+	             }
 	        });          
 	    }
 	);

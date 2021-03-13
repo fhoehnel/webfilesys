@@ -1,5 +1,12 @@
 function videoContextMenu(fileName, domId) {
-    var shortFileName = fileName;
+	
+    const menuDiv = document.getElementById('contextMenu');    
+    
+    menuDiv.style.visibility = 'hidden';
+
+    menuDiv.innerHTML = "";
+	
+    let shortFileName = fileName;
     
     if (fileName.length > 24) {
         shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 14, fileName.length);
@@ -21,74 +28,68 @@ function videoContextMenu(fileName, domId) {
         }
     }
 
-    var scriptPreparedPath = insertDoubleBackslash(fullPath);
+    const scriptPreparedPath = insertDoubleBackslash(fullPath);
 
-    var scriptPreparedFile = insertDoubleBackslash(fileName);
+    const scriptPreparedFile = insertDoubleBackslash(fileName);
         
-    var menuText = '<table class="contextMenu">'
-                 + '<tr>'
-                 + '<th>'
-                 + shortFileName
-                 + '</th>'
-                 + '</tr>';
+    addContextMenuHead(menuDiv, shortFileName);
 
-    menuText += menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
+	addContextMenuEntry(menuDiv, "playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
 
     if (parent.readonly != 'true') {
-    	menuText += menuEntry("javascript:delVideo('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
+    	addContextMenuEntry(menuDiv, "delVideo('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
 
-        menuText += menuEntry("javascript:renameVideo('" + scriptPreparedFile + "', '" + domId + "')", resourceBundle["label.renameFile"]);
+    	addContextMenuEntry(menuDiv, "renameVideo('" + scriptPreparedFile + "', '" + domId + "')", resourceBundle["label.renameFile"]);
+ 
+    	addContextMenuEntry(menuDiv, "copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.copyToClip"]);
 
-        menuText += menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.copyToClip"]);
+    	addContextMenuEntry(menuDiv, "cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.cutToClip"]);
 
-        menuText += menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.cutToClip"]);
+    	addContextMenuEntry(menuDiv, "editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
 
-        menuText += menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
+    	addContextMenuEntry(menuDiv, "editConvertVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuEditVideo"]);
 
-        menuText += menuEntry("javascript:editConvertVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuEditVideo"]);
+    	addContextMenuEntry(menuDiv, "extractVideoFrame('" + scriptPreparedFile + "')", resourceBundle["contextMenuExtractVideoFrame"]);
 
-        menuText += menuEntry("javascript:extractVideoFrame('" + scriptPreparedFile + "')", resourceBundle["contextMenuExtractVideoFrame"]);
-
-        menuText += menuEntry("javascript:addAudioToVideo('" + scriptPreparedPath + "')", resourceBundle["contextMenuAddAudioToVideo"]);
+    	addContextMenuEntry(menuDiv, "addAudioToVideo('" + scriptPreparedPath + "')", resourceBundle["contextMenuAddAudioToVideo"]);
         
-        menuText += menuEntry("javascript:deshakeVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuDeshakeVideo"]);
+    	addContextMenuEntry(menuDiv, "deshakeVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuDeshakeVideo"]);
 
-        menuText += menuEntry("javascript:textOnVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuTextOnVideo"]);
+    	addContextMenuEntry(menuDiv, "textOnVideo('" + scriptPreparedFile + "')", resourceBundle["contextMenuTextOnVideo"]);
 
-        menuText += menuEntry("javascript:fadeAudio('" + scriptPreparedFile + "')", resourceBundle["contextMenuFadeAdioInOut"]);
+    	addContextMenuEntry(menuDiv, "fadeAudio('" + scriptPreparedFile + "')", resourceBundle["contextMenuFadeAdioInOut"]);
 
-        menuText += menuEntry("javascript:addSilentAudio('" + scriptPreparedFile + "')", resourceBundle["contextMenuAddSilentAudio"]);
+    	addContextMenuEntry(menuDiv, "addSilentAudio('" + scriptPreparedFile + "')", resourceBundle["contextMenuAddSilentAudio"]);
     }
         
-    menuText += menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
+	addContextMenuEntry(menuDiv, "videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
     
-    menuText += '</table>'; 
-
-    var menuDiv = document.getElementById('contextMenu');    
-    
-    menuDiv.innerHTML = menuText;
-
-    menuDiv.style.bgcolor = '#c0c0c0';
-    
-    var maxMenuHeight = 240;
+    let maxMenuHeight = 240;
     if (parent.readonly == 'true') {
         maxMenuHeight = 120;
     } 
     
     positionMenuDiv(menuDiv, maxMenuHeight);
+    menuDiv.style.visibility = 'visible';
 }
 
 function videoLinkMenu(linkName, realPath, domId) {
         
-    var shortLinkName = linkName;
+    const menuDiv = document.getElementById('contextMenu');    
+    
+    menuDiv.style.visibility = 'hidden';
+
+    menuDiv.innerHTML = "";
+	
+    let shortLinkName = linkName;
     
     if (shortLinkName.length > 24) {
     	shortLinkName = linkName.substring(0,7) + "..." + linkName.substring(linkName.length - 14, linkName.length);
     }    
 
-    var scriptPreparedPath = insertDoubleBackslash(realPath);
+    const scriptPreparedPath = insertDoubleBackslash(realPath);
 
-    var scriptPreparedFile = insertDoubleBackslash(linkName);
+    const scriptPreparedFile = insertDoubleBackslash(linkName);
         
     var realDir;
     if (parent.serverOS == 'win') {
@@ -102,40 +103,29 @@ function videoLinkMenu(linkName, realPath, domId) {
             realDir = "/";
         }
     }
+    
+    addContextMenuHead(menuDiv, shortLinkName);
 
-    var menuText = '<table class="contextMenu">'
-                 + '<tr>'
-                 + '<th>'
-                 + shortLinkName
-                 + '</th>'
-                 + '</tr>';
-
-    menuText += menuEntry("javascript:playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
+	addContextMenuEntry(menuDiv, "playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
     
     if (parent.readonly != 'true') {
-        menuText += menuEntry("javascript:editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
+    	addContextMenuEntry(menuDiv, "editVideoDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
         
-        menuText += menuEntry("javascript:renameLink('" + linkName + "')", resourceBundle["label.renameLink"]);
+    	addContextMenuEntry(menuDiv, "renameLink('" + linkName + "')", resourceBundle["label.renameLink"]);
     }
 
-    menuText += menuEntry("javascript:videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
+	addContextMenuEntry(menuDiv, "videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
     
-    menuText += menuEntry("javascript:gotoOrigDir('" + insertDoubleBackslash(realDir) + "')", resourceBundle["label.origDir"]);
+	addContextMenuEntry(menuDiv, "gotoOrigDir('" + insertDoubleBackslash(realDir) + "')", resourceBundle["label.origDir"]);
     
-    menuText += '</table>'; 
-
-    var menuDiv = document.getElementById('contextMenu');    
-
-    menuDiv.innerHTML = menuText;
-
-    menuDiv.style.bgcolor = '#c0c0c0';
-    
-    var maxMenuHeight = 200;
+    let maxMenuHeight = 200;
     if (parent.readonly == 'true') {
         maxMenuHeight = 100;
     }
     
     positionMenuDiv(menuDiv, maxMenuHeight);
+    
+    menuDiv.style.visibility = 'visible';
 }
 
 function delVideo(fileName) {
@@ -167,16 +157,20 @@ function fadeAudio(fileName) {
 	window.location.href = "/webfilesys/servlet?command=video&cmd=fadeAudioParams&videoFile=" + encodeURIComponent(fileName);
 }
 
-function editVideoDesc(path) {
-    var windowWidth = 600;
-    var windowHeight = 450;
-    
-    var xpos = (screen.width - windowWidth) / 2;
-    var ypos = (screen.height - windowHeight) / 2;
+function extractVideoFrame(fileName) {
+	window.location.href = "/webfilesys/servlet?command=video&cmd=extractVideoFrameParams&videoFile=" + encodeURIComponent(fileName);
+}
 
-    descWin=window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&geoTag=true&random=" + new Date().getTime(),"descWin","status=no,toolbar=no,location=no,menu=no,width=" + windowWidth + ",height=" + windowHeight + ",resizable=yes,left=" + xpos + ",top=" + ypos + ",screenX=" + xpos + ",screenY=" + ypos);
+function editVideoDesc(path) {
+    const windowWidth = 680;
+    const windowHeight = 520;
+    
+    const xpos = (screen.width - windowWidth) / 2;
+    const ypos = (screen.height - windowHeight) / 2;
+
+    descWin = window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&geoTag=true&random=" + new Date().getTime(),"descWin","status=no,toolbar=no,location=no,menu=no,width=" + windowWidth + ",height=" + windowHeight + ",resizable=yes,left=" + xpos + ",top=" + ypos + ",screenX=" + xpos + ",screenY=" + ypos);
     descWin.focus();
-    descWin.opener=self;
+    descWin.opener = self;
 }
 
 function copyToClipboard(fileName) {
@@ -224,35 +218,29 @@ function playVideoLocal(path) {
 }
 
 function deshakeVideo(fileName) {
-    var url = "/webfilesys/servlet?command=video&cmd=deshakeVideo&videoFileName=" + encodeURIComponent(fileName);
 	
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
+    const parameters = { "cmd": "deshakeVideo", "videoFileName": encodeURIComponent(fileName) };
+    
+	xmlPostRequest("video", parameters, function(responseXml) {
+	
+	    const item = responseXml.getElementsByTagName("success")[0];            
+        if (item) {
+            const success = item.firstChild.nodeValue;
+            if (success != "true") {
+               	customAlert(resourceBundle["errorVideoDeshake"]);
+            } else {
+                const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];            
+                const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-			    var item = xmlDoc.getElementsByTagName("success")[0];            
-                if (item) {
-                    var success = item.firstChild.nodeValue;
-                    if (success != "true") {
-                    	customAlert(resourceBundle["errorVideoDeshake"]);
-                    } else {
-                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                        var targetFolder = targetFolderItem.firstChild.nodeValue;
-
-                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                        var targetPath = targetPathItem.firstChild.nodeValue;
+                const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];            
+                const targetPath = targetPathItem.firstChild.nodeValue;
                         
-                        customAlert(resourceBundle["videoDeshakeStarted"] + " " + targetFolder + ".");
+                customAlert(resourceBundle["videoDeshakeStarted"] + " " + targetFolder + ".");
                         
-                        setTimeout(function() {
-                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
-                        }, 6000);
-                    }
-                } else {
-                	customAlert(resourceBundle["errorVideoDeshake"]);
-                }
-            } 
+                setTimeout(function() {
+                  	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                }, 6000);
+            }
         }
 	});
 }

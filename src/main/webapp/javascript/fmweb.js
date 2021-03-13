@@ -301,24 +301,14 @@ function validateCloneFolderName() {
                 var sourceFolderParentPath = sourceFolderPath.substring(0, sourceFolderPath.lastIndexOf(pathSeparator));
                 var targetFolderPath = sourceFolderParentPath + pathSeparator + newFolderName;
                 
-                var ajaxUrl = "/webfilesys/servlet?command=ajaxRPC&method=existFolder&param1=" + encodeURIComponent(targetFolderPath);
+                const parameters = { "method": "existFolder", "param1": encodeURIComponent(targetFolderPath) };
                 
-                showHourGlass();                
-                
-            	xmlRequest(ajaxUrl, function(req) {
-                    if (req.readyState == 4) {
-                        if (req.status == 200) {
-                            var subdirExists = req.responseXML.getElementsByTagName("result")[0].firstChild.nodeValue;        
-                            if (subdirExists == "false") {
-                                document.renameForm.submit();
-                            } else {
-               	                customAlert(resourceBundle["alert.cloneTargetFolderExists"]);
-               	                hideHourGlass();
-                            }
-                        } else {
-                            alert(resourceBundle["alert.communicationFailure"]);
-                            hideHourGlass();
-        	            }
+            	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
+                    var subdirExists = responseXml.getElementsByTagName("result")[0].firstChild.nodeValue;        
+                    if (subdirExists == "false") {
+                        document.renameForm.submit();
+                    } else {
+       	                customAlert(resourceBundle["alert.cloneTargetFolderExists"]);
                     }
             	});
             }

@@ -529,6 +529,9 @@ label.cropArea=Bildausschnitt für Beschneiden auswählen
 label.cropAreaQuadratic=quadratisch
 label.cropKeepAspectRatio=Seitenverhältnis beibehalten
 keepExifData=EXIF-Daten behalten, wenn vorhanden
+resetExifOrientation=Orientierung auf 1 setzen
+resetExifOrientationSuccess=Orientierung in EXIF Daten wurde geändert
+resetExifOrientationFailed=Fehler beim Ändern der Orientierung in EXIF Daten
 
 # slideshow labels and buttons
 label.slideparmhead=Diashow Parameter

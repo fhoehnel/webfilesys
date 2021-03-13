@@ -20,60 +20,49 @@ function moveDirToClip(path, domId)
     xmlRequest(url, showXmlResult);
 }
 
-function removeDir(path)
-{
-    url = "/webfilesys/servlet?command=removeDir&path=" + path;
-    delDirStarted = true;
-    xmlRequest(url, handleDirRemoved);
-    setTimeout("checkLongRunningDelDir()", 3000);
-}
-
-function checkLongRunningDelDir()
-{
-    if (delDirStarted)
-    {
+function checkLongRunningDelDir() {
+    if (delDirStarted) {
         toast(resourceBundle["msg.delDirStarted"], 4000);
     }
 }
 
-function handleDirRemoved(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            delDirStarted = false;
-            
-            var successItem = req.responseXML.getElementsByTagName("success")[0];            
-            var success = successItem.firstChild.nodeValue;
-                 
-            var messageItem = req.responseXML.getElementsByTagName("message")[0];            
-            var message = "";
-             
-            if (messageItem.firstChild)
-            {
-                message = messageItem.firstChild.nodeValue;
-            }
-             
-            if (success == "deleted")
-            {
-                var pathItem = req.responseXML.getElementsByTagName("parentPath")[0];            
-                var parentPath = pathItem.firstChild.nodeValue;
+function removeDir(path) {
+	
+    delDirStarted = true;
 
-                window.location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(parentPath) + "&expand=" + encodeURIComponent(parentPath) + "&fastPath=true";
-            }       
-            else
-            {
-                customAlert(message, null, function() {
-                    var pathItem = req.responseXML.getElementsByTagName("path")[0]; 
-                    if (pathItem) {
-                        var path = pathItem.firstChild.nodeValue;
-                        window.location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(path) + "&expand=" + encodeURIComponent(path) + "&fastPath=true";
-                    }           
-                });
-            }
+    setTimeout("checkLongRunningDelDir()", 3000);
+
+    const parameters = { "path": path };
+    
+    xmlPostRequest("removeDir", parameters, function(responseXml) {
+	
+        delDirStarted = false;
+            
+        var successItem = responseXml.getElementsByTagName("success")[0];            
+        var success = successItem.firstChild.nodeValue;
+                 
+        var messageItem = responseXml.getElementsByTagName("message")[0];            
+        var message = "";
+             
+        if (messageItem.firstChild) {
+            message = messageItem.firstChild.nodeValue;
         }
-    }
+             
+        if (success == "deleted") {
+            var pathItem = responseXml.getElementsByTagName("parentPath")[0];            
+            var parentPath = pathItem.firstChild.nodeValue;
+
+            window.location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(parentPath) + "&expand=" + encodeURIComponent(parentPath) + "&fastPath=true";
+        } else {
+            customAlert(message, null, function() {
+                var pathItem = responseXml.getElementsByTagName("path")[0]; 
+                if (pathItem) {
+                    var path = pathItem.firstChild.nodeValue;
+                    window.location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(path) + "&expand=" + encodeURIComponent(path) + "&fastPath=true";
+                }           
+            });
+        }
+    });
 }
 
 function cancelSearch()
@@ -636,16 +625,31 @@ function cancelSynchronize() {
     });
 }
 
-function compareFolders(path, domId)
-{
+function compareFolders(path, domId) {
     parent.compStarted = !parent.compStarted;
 	
 	deselectFolder();
 	selectFolder(domId);
 
-    url = "/webfilesys/servlet?command=selectCompFolder&path=" + encodeURIComponent(path);
+    const parameters = { "path": encodeURIComponent(path) };
+    
+	xmlGetRequest("selectCompFolder", parameters, function(responseXml) {
+        var item = responseXml.getElementsByTagName("success")[0];            
+        var result = item.firstChild.nodeValue;
+        
+        hideMenu();
 
-    xmlRequest(url, selectCompFolderResult);
+        if (result == 'targetSelected') {
+		    deselectFolder();
+            compFolderParms();
+            return;
+        }
+
+        item = responseXml.getElementsByTagName("message")[0];            
+        var message = item.firstChild.nodeValue;
+        
+        toast(message, 4000);
+	});
 }
 
 function cancelCompare()
@@ -667,22 +671,12 @@ function cancelCompare()
     });
 }
 
-function deselectCompFolders()
-{
-    url = "/webfilesys/servlet?command=selectCompFolder&cmd=deselect";
+function deselectCompFolders() {
+    const parameters = { "cmd": "deselect" };
     
-    xmlRequest(url, deselectCompFolderResult);
-}
-
-function deselectCompFolderResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            setTimeout("self.close()", 100);
-        }
-    }
+	xmlGetRequest("selectCompFolder", parameters, function(responseXml) {
+        setTimeout("self.close()", 100);
+	});	
 }
 
 function compFolderParms() {
@@ -703,62 +697,23 @@ function openCompWindow()
     compWin.focus();
 }
 
-function selectCompFolderResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var item = req.responseXML.getElementsByTagName("success")[0];            
-             var result = item.firstChild.nodeValue;
-             
-             hideMenu();
-
-             if (result == 'targetSelected')
-             {
-			     deselectFolder();
-                 compFolderParms();
-                 return;
-             }
-
-             item = req.responseXML.getElementsByTagName("message")[0];            
-             var message = item.firstChild.nodeValue;
-             
-             toast(message, 4000);
-        }
-    }
-}
-
-function gotoBookmarkedFolder(encodedPath, mobile) {
+function gotoBookmarkedFolder(encodedPath) {
 	
-	showHourGlass();
-	
-    var url = "/webfilesys/servlet?command=ajaxRPC&method=existFolder&param1=" + encodedPath;
+    const parameters = { "method": "existFolder", "param1": encodedPath };
     
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                var resultItem = responseXml.getElementsByTagName("result")[0];
-                var result = resultItem.firstChild.nodeValue;            
-                if (result == "true") {
-                	var bookmarkUrl; 
-                	if (mobile) {
-                		bookmarkUrl = "/webfilesys/servlet?command=mobile&cmd=folderFileList&absPath=" + encodedPath;
-                	} else {
-                		bookmarkUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodedPath + "&mask=*&fastPath=true";
-                	}
-                	setTimeout(function() { 
-                		window.location.href = bookmarkUrl;
-                	}, 50);
-                } else {
-                	hideHourGlass();
-                	toast(resourceBundle["bookmark.destFolderMissing"], 3000);
-                }
-            } else {
-            	hideHourGlass();
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
+        var resultItem = responseXml.getElementsByTagName("result")[0];
+        var result = resultItem.firstChild.nodeValue;            
+        if (result === "true") {
+          	let bookmarkUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodedPath + "&mask=*&fastPath=true"; 
+           	if (mobile) {
+           		bookmarkUrl = "/webfilesys/servlet?command=mobile&cmd=folderFileList&absPath=" + encodedPath;
+           	} 
+           	setTimeout(function() { 
+           		window.location.href = bookmarkUrl;
+           	}, 50);
+        } else {
+           	toast(resourceBundle["bookmark.destFolderMissing"], 3000);
         }
     });
 }

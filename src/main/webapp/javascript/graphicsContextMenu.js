@@ -1,11 +1,13 @@
-function jsContextMenu(fileName, imgType, domId)
-{
+function jsContextMenu(fileName, imgType, domId) {
     menuDiv = document.getElementById('contextMenu');    
+    
+    menuDiv.style.visibility = 'hidden';
+
+    menuDiv.innerHTML = "";
         
     shortFileName = fileName;
     
-    if (fileName.length > 23)
-    {
+    if (fileName.length > 23) {
         shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 13, fileName.length);
     }    
 
@@ -13,18 +15,12 @@ function jsContextMenu(fileName, imgType, domId)
     
     lastPathChar = path.charAt(path.length - 1);
     
-    if ((lastPathChar == '/') || (lastPathChar == '\\'))
-    {
+    if ((lastPathChar == '/') || (lastPathChar == '\\')) {
         fullPath = path + fileName;
-    }
-    else
-    {
-        if (parent.serverOS == 'ix')
-        {
+    } else {
+        if (parent.serverOS == 'ix') {
             fullPath = path + '/' + fileName;
-        }
-        else
-        {
+        } else {
             fullPath = path + '\\' + fileName;
         }
     }
@@ -33,115 +29,72 @@ function jsContextMenu(fileName, imgType, domId)
 
     scriptPreparedFile = insertDoubleBackslash(fileName);
         
-    menuText = '<table class="contextMenu">'
-             + '<tr>'
-             + '<th>'
-             + shortFileName
-             + '</th>'
-             + '</tr>';
+    addContextMenuHead(menuDiv, shortFileName);
+    
+    if (parent.readonly != 'true') {
+    	
+    	addContextMenuEntry(menuDiv, "delImg('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
 
-    if (parent.readonly != 'true')
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:delImg('" + scriptPreparedFile + "')",resourceBundle["label.delete"]);
+    	addContextMenuEntry(menuDiv, "jsRenameImg('" + scriptPreparedFile + "', '" + domId + "')", resourceBundle["label.renameFile"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:jsRenameImg('" + scriptPreparedFile + "', '" + domId + "')",resourceBundle["label.renameFile"]);
-
-        menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"]);
-
-        if (addCopyAllowed) 
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:addCopyToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.copyToClip"] + " +");
+    	addContextMenuEntry(menuDiv, "copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.copyToClip"]);
+    	
+    	if (addCopyAllowed) {
+        	addContextMenuEntry(menuDiv, "addCopyToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.copyToClip"] + " +");
         }
         
-        menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"]);
+    	addContextMenuEntry(menuDiv, "cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.cutToClip"]);
 
-        if (addMoveAllowed) 
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:addMoveToClipboard('" + scriptPreparedFile + "')",resourceBundle["label.cutToClip"] + " +");
+        if (addMoveAllowed) {
+        	addContextMenuEntry(menuDiv, "addMoveToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.cutToClip"] + " +");
         }
         
-        menuText = menuText 
-                 + menuEntry("javascript:jsEditDesc('" + scriptPreparedPath + "')",resourceBundle["label.editMetaInfo"]);
+    	addContextMenuEntry(menuDiv, "jsEditDesc('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
         
         if (imgType != '5') { 
         	// not SVG
-            menuText = menuText 
-            + menuEntry("javascript:jsResizeParms('" + scriptPreparedPath + "')",resourceBundle["label.editPicture"]);
+        	addContextMenuEntry(menuDiv, "jsResizeParms('" + scriptPreparedPath + "')", resourceBundle["label.editPicture"]);
         }
     }
 
-    if (imgType == '1') // JPEG
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:jsExifData('" + scriptPreparedPath + "')",resourceBundle["alt.cameradata"]);
+    if (imgType == '1') {  // JPEG 
+    	addContextMenuEntry(menuDiv, "jsExifData('" + scriptPreparedPath + "')", resourceBundle["alt.cameradata"]);
     }
 
-    if (parent.readonly != 'true')
-    {
+    if (parent.readonly != 'true') {
         if ((imgType == '1') ||   // JPEG
             (imgType == '2') ||   // GIF
-            (imgType == '3'))    // PNG
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:rotateFlipMenu('" + shortFileName + "', '" + scriptPreparedPath + "', '" + scriptPreparedFile + "', '" + imgType + "', '" + domId + "')",resourceBundle["label.rotateFlip"] + ' >');
+            (imgType == '3')) {   // PNG
+        	addContextMenuEntry(menuDiv, "rotateFlipMenu('" + shortFileName + "', '" + scriptPreparedPath + "', '" + scriptPreparedFile + "', '" + imgType + "', '" + domId + "')", resourceBundle["label.rotateFlip"]);
         }
-
-        /*
-        if ((imgType == '1') ||   // JPEG
-            (imgType == '3'))     // PNG
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:jsMakeThumb('" + scriptPreparedPath + "')",resourceBundle["label.makethumb"]);
-        }
-        */
     }
 
-    menuText = menuText 
-             + menuEntry("javascript:jsComments('" + scriptPreparedPath + "')",resourceBundle["label.comments"]);
+	addContextMenuEntry(menuDiv, "jsComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
 
-    if (parent.readonly != 'true')
-    { 
-        menuText = menuText 
-                 + menuEntry("javascript:categories('" + scriptPreparedPath + "')",resourceBundle["label.assignCategories"]);
+    if (parent.readonly != 'true') { 
 
-        if (parent.mailEnabled == 'true')
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:jsSendFile('" + scriptPreparedFile + "')",resourceBundle["label.sendfile"]);
+    	addContextMenuEntry(menuDiv, "categories('" + scriptPreparedPath + "')", resourceBundle["label.assignCategories"]);
+
+        if (parent.mailEnabled == 'true') {
+        	addContextMenuEntry(menuDiv, "jsSendFile('" + scriptPreparedFile + "')", resourceBundle["label.sendfile"]);
         }
         
-        menuText = menuText 
-                 + menuEntry("javascript:publishFile('" + scriptPreparedPath + "')",resourceBundle["label.publish"]);
+    	addContextMenuEntry(menuDiv, "publishFile('" + scriptPreparedPath + "')", resourceBundle["label.publish"]);
     }
 
     if (imgType != '5') { 
     	// not SVG
-        menuText = menuText 
-        + menuEntry("javascript:startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')",resourceBundle["startSlideshowHere"]);
+    	addContextMenuEntry(menuDiv, "startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')", resourceBundle["startSlideshowHere"]);
     }
-        
-    menuText = menuText + '</table>'; 
-
-    menuDiv.innerHTML = menuText;
-
-    menuDiv.style.bgcolor = '#c0c0c0';
     
-    if (parent.readonly == 'true')
-    {
+    if (parent.readonly == 'true') {
         maxMenuHeight = 120;
-    }
-    else
-    {
+    } else {
         maxMenuHeight = 380;
     }
     
     positionMenuDiv(menuDiv, maxMenuHeight);
+    menuDiv.style.visibility = 'visible';
 }
 
 function delImg(fileName) {
@@ -182,9 +135,8 @@ function jsEditDesc(path)
     descWin.opener=self;
 }
 
-function categories(path)
-{
-    catWin=window.open("/webfilesys/servlet?command=assignCategory&filePath=" + encodeURIComponent(path) + "&random=" + new Date().getTime(),"catWin","status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=480,height=400,resizable=yes,left=100,top=30,screenX=100,screenY=30");
+function categories(path) {
+    catWin = window.open("/webfilesys/servlet?command=assignCategory&filePath=" + encodeURIComponent(path) + "&random=" + new Date().getTime(), "catWin", "status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=520,height=400,resizable=yes,left=100,top=30,screenX=100,screenY=30");
     catWin.focus();
 }
 
@@ -195,27 +147,21 @@ function jsResizeParms(path)
 
 function jsExifData(path)
 {
-    exifWin = window.open('/webfilesys/servlet?command=exifData&imgFile=' + encodeURIComponent(path),'exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=400,height=540,left=200,top=20,screenX=200,screenY=20,resizable=no');
+    exifWin = window.open('/webfilesys/servlet?command=exifData&imgFile=' + encodeURIComponent(path),'exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=500,height=560,left=100,top=20,screenX=100,screenY=20,resizable=no');
     exifWin.focus();
 }
 
 function jsRotate(path, degrees, fileName, domId) {
-    var xmlUrl = '/webfilesys/servlet?command=checkLossless&imgPath=' + encodeURIComponent(path);
-
-	xmlRequest(xmlUrl, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var responseXml = req.responseXML;
+    const parameters = { "imgPath": encodeURIComponent(path) };
     
-                var losslessItem = responseXml.getElementsByTagName("lossless")[0];            
-                var lossless = losslessItem.firstChild.nodeValue;
+	xmlGetRequest("checkLossless", parameters, function(responseXml) {
+        const losslessItem = responseXml.getElementsByTagName("lossless")[0];            
+        const lossless = losslessItem.firstChild.nodeValue;
                  
-                if (lossless == "true") {
-                    ajaxRotate(fileName, degrees, domId);
-                } else {
-                    window.location.href = '/webfilesys/servlet?command=transformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(path);
-                }
-            }
+        if (lossless === "true") {
+            ajaxRotate(fileName, degrees, domId);
+        } else {
+            window.location.href = '/webfilesys/servlet?command=transformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(path);
         }
     });    
 }
@@ -275,8 +221,7 @@ function publishFile(path)
     publishWin = window.open("/webfilesys/servlet?command=publishFile&publishPath=" + encodeURIComponent(path),"publish","status=no,toolbar=no,menu=no,width=550,height=" + windowHeight + ",resizable=no,scrollbars=no,left=80,top=" + ypos + ",screenX=80,screenY=" + ypos);
 }
 
-function rotateFlipMenu(shortPath, path, fileName, imgType, domId)
-{
+function rotateFlipMenu(shortPath, path, fileName, imgType, domId) {
     stopMenuClose = true;
 
     var scriptPreparedPath = insertDoubleBackslash(path);
@@ -285,40 +230,26 @@ function rotateFlipMenu(shortPath, path, fileName, imgType, domId)
 
     menuDiv.style.visibility = 'hidden';
 
-    var menuText = '<table class="contextMenu">'
-                 + '<tr>'
-                 + '<th>'
-                 + shortPath
-                 + '</th>'
-                 + '</tr>';
+    menuDiv.innerHTML = "";
 
-    menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','90','" + fileName + "','" + domId + "')",resourceBundle["label.rotateright"]);
+    addContextMenuHead(menuDiv, shortPath);
+    
+	addContextMenuEntry(menuDiv, "jsRotate('" + scriptPreparedPath + "','90','" + fileName + "','" + domId + "')", resourceBundle["label.rotateright"]);
 
-    menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','270','" + fileName + "','" + domId + "')",resourceBundle["label.rotateleft"]);
+	addContextMenuEntry(menuDiv, "jsRotate('" + scriptPreparedPath + "','270','" + fileName + "','" + domId + "')", resourceBundle["label.rotateleft"]);
 
-    menuText = menuText 
-               + menuEntry("javascript:jsRotate('" + scriptPreparedPath + "','180','" + fileName + "','" + domId + "')",resourceBundle["label.rotate180"]);
+	addContextMenuEntry(menuDiv, "jsRotate('" + scriptPreparedPath + "','180','" + fileName + "','" + domId + "')", resourceBundle["label.rotate180"]);
                
     if (imgType == '1') {
-        menuText = menuText 
-                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Horizontal')",resourceBundle["label.mirrorhoriz"]);
+    	addContextMenuEntry(menuDiv, "jsFlip('" + scriptPreparedPath + "','Horizontal')", resourceBundle["label.mirrorhoriz"]);
 
-        menuText = menuText 
-                   + menuEntry("javascript:jsFlip('" + scriptPreparedPath + "','Vertical')",resourceBundle["label.mirrorvert"]);
+    	addContextMenuEntry(menuDiv, "jsFlip('" + scriptPreparedPath + "','Vertical')", resourceBundle["label.mirrorvert"]);
     }
 
 
-    if ((imgType == '1') || (imgType == '3')) // JPEG or PNG
-    {
-        menuText = menuText 
-                   + menuEntry("javascript:rotateFreeAngle('" + scriptPreparedPath + "')", resourceBundle["label.rotateFreeAngle"]);
+    if ((imgType == '1') || (imgType == '3')) { // JPEG or PNG
+    	addContextMenuEntry(menuDiv, "rotateFreeAngle('" + scriptPreparedPath + "')", resourceBundle["label.rotateFreeAngle"]);
     }
-
-    menuText = menuText + '</table>'; 
-
-    menuDiv.innerHTML = menuText;
     
     menuDiv.style.visibility = 'visible';
 }

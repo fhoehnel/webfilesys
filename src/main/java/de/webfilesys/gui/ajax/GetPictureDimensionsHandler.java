@@ -43,7 +43,7 @@ public class GetPictureDimensionsHandler extends XmlRequestHandlerBase {
         
         String path = getCwd();
         
-        File picFile = new File(path, fileName);
+        File picFile = null;
 
         String isLink = getParameter("link");
         if (!CommonUtils.isEmpty(isLink)) {
