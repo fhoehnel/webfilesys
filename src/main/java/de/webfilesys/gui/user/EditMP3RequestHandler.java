@@ -85,7 +85,7 @@ public class EditMP3RequestHandler extends UserRequestHandler
 		}
 
 		tmp=getParameter("genre");
-		if (tmp!=null)
+		if (!CommonUtils.isEmpty(tmp))
 		{
 			try
 			{
@@ -162,10 +162,15 @@ public class EditMP3RequestHandler extends UserRequestHandler
 		output.println("<TITLE>" + getResource("label.editmp3","Edit MP3 Tags") + "</TITLE>");
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
-		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
+		
+		if (isMobile()) {
+			output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/mobile.css\">");
+		} else {
+			output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
+		}
 
 		output.println("</HEAD>"); 
-		output.println("<BODY>");
+		output.println("<body class=\"popup\">");
 
 		headLine(CommonUtils.shortName(this.getHeadlinePath(path), 50));
 
@@ -233,6 +238,7 @@ public class EditMP3RequestHandler extends UserRequestHandler
 		output.println(getResource("label.mp3genre","Genre"));
 		output.println("</td><td class=\"formParm2\">");
 		output.println("<select name=\"genre\" size=\"1\">");
+		output.print("<option value=\"\"> - </option>");
 		for (int i=0;i<genreList.length;i++)
 		{
 			output.print("<option value=\"" + i + "\"");
@@ -286,7 +292,7 @@ public class EditMP3RequestHandler extends UserRequestHandler
 		output.println("</table>");
 		output.println("</form>");
 
-		output.println("</BODY></html>");
+		output.println("</body></html>");
 		output.flush();
 	}
 }

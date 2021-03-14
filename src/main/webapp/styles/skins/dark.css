@@ -10,7 +10,9 @@ body.fileListNoMargin {
     background-color: #404040;
 }
 
-body.metainf, body.compFolderResult {
+body.popup,
+body.metainf, 
+body.compFolderResult {
     background-color: #404040;
     margin: 0;
 }

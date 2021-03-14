@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -602,19 +603,23 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
 				fileElement.setAttribute("id", Integer.toString(i));
 				
-                if (WebFileSys.getInstance().isShowAssignedIcons())
-                {
-                    String docImage = "doc.gif";
+				String docImage = null;
 
-                    int extIdx = fileName.lastIndexOf('.');
+				if (WebFileSys.getInstance().isShowAssignedIcons()) {
+					int extIdx = fileName.lastIndexOf('.');
+					if ((extIdx > 0) && (extIdx < (fileName.length() - 1))) {
+						docImage = iconMgr.getFileIconNoDefault(fileName);
+					}
+				}
 
-                    if ((extIdx > 0) && (extIdx < (fileName.length() - 1)))
-                    {
-                        docImage = iconMgr.getAssignedIcon(fileName.substring(extIdx + 1));
-                    }
-
-                    fileElement.setAttribute("icon", docImage);
-                }
+				if (docImage != null) {
+	                fileElement.setAttribute("icon", docImage);
+				} else {
+					String docImageIconFont = iconMgr.getFileIconFont(fileName); 
+					if (docImageIconFont != null) {
+		                fileElement.setAttribute("iconFont", docImageIconFont);
+					}
+				}
 				
 				File tempFile = fileCont.getRealFile();
 

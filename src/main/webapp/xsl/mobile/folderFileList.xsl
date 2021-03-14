@@ -19,6 +19,7 @@
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/mobile.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/fileIcons.css" />
 
   <title resource="label.mobileWindowTitle"></title>
 
@@ -29,6 +30,7 @@
   <script src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/mobileCommon.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/contextMenuCommon.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/fileContextMenu.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/mobile/linkContextMenu.js" type="text/javascript"></script>
@@ -333,9 +335,19 @@
             </td>
   
             <td class="fileListData fileListIcon">
-              <img border="0" width="16" height="16">
-                <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon" /></xsl:attribute>
-              </img>
+              <xsl:if test="@icon">
+                <img border="0" width="16" height="16">
+                  <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon" /></xsl:attribute>
+                </img>
+              </xsl:if>
+              <xsl:if test="@iconFont">
+                <span>
+                  <xsl:attribute name="class">icon-font mobileFileIcon icon-file-<xsl:value-of select="@iconFont" /></xsl:attribute>
+                </span>
+              </xsl:if>
+              <xsl:if test="not(@icon) and not(@iconFont)">
+                <i class="icon-font icon-file mobileFileIcon"></i>
+              </xsl:if>
             </td>
             
             <td class="fileListData" style="width:95%">
