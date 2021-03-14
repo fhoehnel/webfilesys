@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
@@ -105,14 +105,10 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
         	}
         }
         
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/folderTree.xsl\"");
-
 		folderTreeElement = doc.createElement("folderTree");
 			
 		doc.appendChild(folderTreeElement);
 			
-		doc.insertBefore(xslRef, folderTreeElement);
-		
 		if (this.isBrowserXslEnabled())
 		{
 			Element xslEnabledElement = doc.createElement("browserXslEnabled");

@@ -4,22 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
@@ -328,10 +319,6 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		Element metaInfElement = doc.createElement("metaInf");
 			
 		doc.appendChild(metaInfElement);
-
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/editMetaInf.xsl\"");
-
-		doc.insertBefore(xslRef, metaInfElement);
 
         XmlUtil.setChildText(metaInfElement, "path", path, false);
 		

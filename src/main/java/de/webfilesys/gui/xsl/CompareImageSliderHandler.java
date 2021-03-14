@@ -2,9 +2,7 @@ package de.webfilesys.gui.xsl;
 
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +11,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Constants;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -60,10 +56,6 @@ public class CompareImageSliderHandler extends XslRequestHandlerBase {
 			
 		doc.appendChild(compareImageElem);
 			
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/compareImage.xsl\"");
-
-		doc.insertBefore(xslRef, compareImageElem);
-
         Element img1Elem = doc.createElement("image1");
 
         compareImageElem.appendChild(img1Elem);

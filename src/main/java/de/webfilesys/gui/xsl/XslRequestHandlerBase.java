@@ -22,6 +22,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.user.UserRequestHandler;
@@ -224,22 +225,19 @@ public class XslRequestHandlerBase extends UserRequestHandler
      * @param xslFile the name of the XSL file
      * @param xsltAlwaysOnServer
      */
-	public void processResponse(String xslFile, boolean xsltAlwaysOnServer)
-    {
+	public void processResponse(String xslFile, boolean xsltAlwaysOnServer) {
 		addCommonSessionData();
 		
-		if ((session != null) && (!xsltAlwaysOnServer) && isBrowserXslEnabled())
-		{
-			// Logger.getLogger(getClass()).debug("client-side XSLT: " + xslFile);
+		if ((session != null) && (!xsltAlwaysOnServer) && isBrowserXslEnabled()) {
+			ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/" + xslFile + "\"");
+			doc.insertBefore(xslRef, doc.getDocumentElement());
 			
 			resp.setContentType("text/xml");
 
 			BufferedWriter xmlOutFile = new BufferedWriter(output);
                 
 			XmlUtil.writeToStream(doc, xmlOutFile);
-		}
-        else
-        { 
+		} else { 
     		resp.setContentType("text/html");
         	
 			String xslPath = WebFileSys.getInstance().getWebAppRootDir() + "xsl" + File.separator + xslFile;
@@ -248,8 +246,7 @@ public class XslRequestHandlerBase extends UserRequestHandler
 
 			TransformerFactory tf = TransformerFactory.newInstance();
 		
-			try
-			{
+			try {
 				Transformer transformer =
 						 tf.newTransformer(new StreamSource(new File(xslPath)));
 
@@ -261,17 +258,12 @@ public class XslRequestHandlerBase extends UserRequestHandler
 		 		    
 				long end = System.currentTimeMillis();
         
-				if (LOG.isDebugEnabled()) 
-				{
+				if (LOG.isDebugEnabled()) {
 					LOG.debug("server-side XSL transformation in " + (end - start) + " ms");
 				}
-			}
-			catch (TransformerConfigurationException tex)
-			{
+			} catch (TransformerConfigurationException tex) {
 				LOG.warn(tex);
-			}
-			catch (TransformerException tex)
-			{
+			} catch (TransformerException tex) {
 				LOG.warn(tex);
 			}
         }

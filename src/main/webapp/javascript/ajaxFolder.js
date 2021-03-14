@@ -316,48 +316,30 @@ function listFiles(id)
     selectCurrentDir(parentDiv);
 }
 
-function exp(parentDivId, lastInLevel)
-{
-    var parentDiv = document.getElementById(parentDivId);
+function exp(parentDivId, lastInLevel) {
+    const parentDiv = document.getElementById(parentDivId);
    
-    if (!parentDiv)
-    {
-        alert('Element with id ' + parentDivId + ' not found');
-
+    if (!parentDiv) {
+        console.error("Element with id " + parentDivId + " not found");
         return;
     }
    
-    /*
-    if (parentDivId != currentDirId)
-    {
-        deselectCurrentDir();
-    }
-    */
+    const urlEncodedPath = parentDiv.getAttribute("path");
 
-    var urlEncodedPath = parentDiv.getAttribute("path");
+    const xmlUrl = "/webfilesys/servlet?command=ajaxExp&path=" + urlEncodedPath + "&lastInLevel=" + lastInLevel;
 
-    var xmlUrl = "/webfilesys/servlet?command=ajaxExp&path=" + urlEncodedPath + "&lastInLevel=" + lastInLevel;
+    const xslUrl = "/webfilesys/xsl/subFolder.xsl";
 
-    var xslUrl = "/webfilesys/xsl/subFolder.xsl";
-
-    if (window.ActiveXObject !== undefined) 
-    {
+    if (window.ActiveXObject !== undefined) {
         // MSIE  
 
         expMSIE(parentDiv, xmlUrl, xslUrl);
-    }
-    else
-    {
-        if (browserIsFirefox || browserIsChrome)
-        { 
+    } else {
+        if (browserIsFirefox || browserIsChrome) { 
             // Firefox & Chrome
-
             expMozilla(parentDiv, xmlUrl, xslUrl);
-        }
-        else
-        {
+        } else {
             // XSLT with Javascript (google ajaxslt)
-            
             expJavascriptXslt(parentDiv, xmlUrl, xslUrl)
         }
     }
