@@ -45,7 +45,7 @@ function paste(path)
 
 function statistics(path)
 {
-    var statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=treeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=600,height=590");
+    var statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=treeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=610,height=590");
     statWin.focus();
 }
 

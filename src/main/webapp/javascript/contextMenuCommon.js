@@ -1,14 +1,5 @@
-function menuEntry(href, label)
-{
-    return('<tr>'
-             + '<td class="jsmenu" onclick="' + href + '">'
-             + '<span class="menuitem">' + label + '</span>'
-             + '</td>'
-             + '</tr>');
-}
-
 function addContextMenuEntry(contextMenuCont, onClick, label) {
-   	menuEntry = document.createElement("div");
+   	const menuEntry = document.createElement("div");
    	menuEntry.setAttribute("class", "contextMenuItem");
    	menuEntry.setAttribute("onclick", onClick);
    	const textNode = document.createTextNode(label);
@@ -24,8 +15,7 @@ function addContextMenuHead(menuDiv, headerText) {
    	menuDiv.appendChild(menuHead);
 }
 
-function hideMenu()
-{
+function hideMenu() {
     document.getElementById('contextMenu').style.visibility = 'hidden';
 }
 

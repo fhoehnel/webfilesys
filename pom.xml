@@ -23,6 +23,12 @@
       <groupId>xalan</groupId>
       <artifactId>xalan</artifactId>
       <version>2.6.0</version>
+      <exclusions>
+        <exclusion>
+          <artifactId>xml-apis</artifactId>
+          <groupId>xml-apis</groupId>
+        </exclusion>
+      </exclusions>
     </dependency>  
     <dependency>
       <groupId>xerces</groupId>
@@ -124,8 +130,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.0.2</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
           <encoding>UTF-8</encoding>
 		  <!-- to prevent compile errors because of missing com.sun.image.codec.jpeg.* classes in Java 1.7 -->
           <compilerArgument>-XDignore.symbol.file=true</compilerArgument>

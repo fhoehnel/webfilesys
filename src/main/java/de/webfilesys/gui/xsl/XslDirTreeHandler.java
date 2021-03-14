@@ -21,7 +21,6 @@ import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
-import de.webfilesys.util.StringComparator;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -194,14 +193,12 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 			}
 		}
 
-		if (subdirList.size()==0)
-		{
+		if (subdirList.size() == 0) {
 			return;
 		}
 
-		if (subdirList.size()>1)
-		{
-			Collections.sort(subdirList,new StringComparator(StringComparator.SORT_IGNORE_CASE));
+		if (subdirList.size() > 1) {
+			Collections.sort(subdirList, (folder1, folder2) -> folder1.compareToIgnoreCase(folder2));
 		}
 
 		DecorationManager decoMgr = DecorationManager.getInstance();
