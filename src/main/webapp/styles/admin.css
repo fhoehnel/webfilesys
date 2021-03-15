@@ -25,3 +25,24 @@ td.formParm2 select {
 body.admin table.dataForm td.formParm1 {
     width: 200px;	
 }
+
+table.userList {
+	width: 100%;
+    border-collapse: collapse;
+}
+
+table.userList td,
+table.userList th {
+	border: 1px solid #80a0a0;
+	padding: 4px;
+}
+
+table.userList a {
+    text-decoration: none;
+}
+	
+.iconUserAdmin:before {
+	font-size: 20px;
+	color: navy;
+	margin-right: 4px;
+}

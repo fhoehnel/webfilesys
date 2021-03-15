@@ -52,10 +52,9 @@ public class UserListRequestHandler extends AdminRequestHandler {
 		output.print("<title> WebFileSys User Administration </title>");
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/admin.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/icons.css\">");
 		
-		// output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/"
-		//		+ userMgr.getCSS(uid) + ".css\">");
-
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/fmweb.css\">");
 		
 		output.println("</head>");
@@ -225,7 +224,7 @@ public class UserListRequestHandler extends AdminRequestHandler {
 		output.println("</td></tr></table>");
 		output.println("</form>");
 
-		output.println("<table width=\"100%\" border=\"1\" cellspacing=\"0\">");
+		output.println("<table class=\"userList\">");
 		output.println("<tr bgcolor=lavender>");
 		output.println("<th class=\"datahead\">&nbsp;</th><th class=\"datahead\">userid/login</th><th class=\"datahead\">activated</th><th class=\"datahead\">document root</th><th class=\"datahead\">readonly</th><th class=\"datahead\">role</th><th class=\"datahead\">language</th><th class=\"datahead\">last name, first name</th><th class=\"datahead\">e-mail</th><th class=\"datahead\">last login</th></tr>");
 
@@ -268,15 +267,15 @@ public class UserListRequestHandler extends AdminRequestHandler {
 			output.print("<td class=\"data\" align=\"left\" valign=\"top\" nowrap>");
 			output.print("<a href=\"javascript:confirmDelete('"
 					+ actUser.getUserid()
-					+ "')\"><img src=\"images/trash.gif\" alt=\"Delete User\" border=\"0\"></a>");
+					+ "')\"><span class=\"icon-font icon-delete iconUserAdmin\" title=\"Delete User\"></span></a>");
 			output.print("<a href=\"/webfilesys/servlet?command=admin&cmd=editUser&username="
 					+ UTF8URLEncoder.encode(actUser.getUserid())
-					+ "\"><img src=\"images/edit2.gif\" alt=\"Edit User\" border=0></a>");
+					+ "\"><span class=\"icon-font icon-edit iconUserAdmin\" title=\"Edit User\"></span></a>");
 
 			if (actUser.getDiskQuota() > 0) {
 				output.print("<a href=\"javascript:diskQuota('"
 						+ actUser.getUserid()
-						+ "')\"><img src=\"images/barGraph.gif\" alt=\"Disk Quota Usage\" border=0></a>");
+						+ "')\"><span class=\"icon-font icon-stats iconUserAdmin\" title=\"Disk Quota Usage\"></span></a>");
 			}
 
 			output.println("</td>");

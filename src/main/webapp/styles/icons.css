@@ -245,6 +245,10 @@ a.icon-font {
 	content: '\f00c';
 }
 
+.icon-stats:before {
+	content: '\f080';
+}
+
 .icon-page-next,
 .icon-page-last {
     float: right;
