@@ -46,3 +46,27 @@ table.userList a {
 	color: navy;
 	margin-right: 4px;
 }
+
+.iconAdminMenu:before {
+	font-size: 32px;
+	color: #6080c0;
+    width: 50px;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+div.adminMenuEntry {
+    margin: 6px 0;
+}
+
+div.adminMenuEntry a {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 24px;
+	color: #6080c0;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+div.adminMenuEntry a:hover {
+	color: #4060a0;
+}

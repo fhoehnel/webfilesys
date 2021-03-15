@@ -16,6 +16,14 @@ a.icon-font {
 	text-decoration: none;
 }
 
+.icon-mail:before {
+	content: '\f0e0';
+}
+
+.icon-tool:before {
+	content: '\f0ad';
+}
+
 .icon-search:before {
 	content: '\f002';
 }
