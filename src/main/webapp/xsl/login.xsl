@@ -53,15 +53,9 @@
       document.passwordform.userid.focus();
   }
 
-  document.cookie = 'CookieTest=1;';
-  var idx = document.cookie.indexOf("CookieTest=") + 11;
-  var cookieValue = '';
-  if (idx >= 0) {
-      cookieValue = document.cookie.substring(idx, idx + 1);
-  }
-    
-  if (cookieValue != '1') {
-      alert('Cookies must be enabled to login to this web site!');
+  function doLogin() {
+      document.getElementById("screenWidth").value = screen.availWidth;
+      document.passwordform.submit();
   }
 
   <xsl:if test="/login/activationSuccess">
@@ -87,6 +81,7 @@
         <td>
           <form accept-charset="utf-8" name="passwordform" method="post" action="/webfilesys/servlet">
             <input type="hidden" name="command" value="login" />
+            <input type="hidden" id="screenWidth" name="screenWidth" value="" />
           
             <table border="0" cellpadding="5" cellspacing="0" width="100%">
               <tr>
@@ -115,7 +110,7 @@
                   &#160;
                 </td>
                 <td>
-                  <input type="submit" name="logonbutton" resource="label.logon" class="loginButton" />
+                  <input type="button" onclick="doLogin()" resource="label.logon" class="loginButton" />
                 </td>
               </tr>
               <tr>
