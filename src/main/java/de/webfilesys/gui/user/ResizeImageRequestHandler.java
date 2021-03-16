@@ -3,11 +3,15 @@ package de.webfilesys.gui.user;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -36,6 +41,7 @@ import de.webfilesys.graphics.ExifUtil;
 import de.webfilesys.graphics.GifQuantizer;
 import de.webfilesys.graphics.ImageTextStamp;
 import de.webfilesys.graphics.ImageTransform;
+import de.webfilesys.graphics.RotateFilter;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLDecoder;
@@ -504,56 +510,20 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
             Canvas imgObserver = new Canvas();
 
-            /*
-             * if (newSize == 0) { scaledImage =
-             * Toolkit.getDefaultToolkit().createImage(imgFileName); } else {
-             * origImage = Toolkit.getDefaultToolkit().createImage(imgFileName);
-             * 
-             * scaledImage = origImage.getScaledInstance( scaledWidth,
-             * scaledHeight, Image.SCALE_SMOOTH); }
-             */
-
             origImage = Toolkit.getDefaultToolkit().createImage(imgFileName);
 
-            imgObserver.prepareImage(origImage, imgObserver);
+            Canvas dummyComponent = new Canvas();
 
-            Thread t = Thread.currentThread();
+            MediaTracker tracker = new MediaTracker(dummyComponent);
+            tracker.addImage (origImage, 0);
 
-            int timeoutCounter = 900;
-
-            while ((imgObserver.checkImage(origImage, imgObserver) & ImageObserver.ALLBITS) != ImageObserver.ALLBITS)
-            {
-                try
-                {
-                    t.sleep(100);
-
-                    timeoutCounter--;
-
-                    if (timeoutCounter == 0)
-                    {
-                        output
-                                .println("<br><font class=\"small\">picture modification timeout for image "
-                                        + imgFileName + "</font>");
-                        output.flush();
-
-                        Logger.getLogger(getClass()).error(
-                                "picture modification timeout for image "
-                                        + imgFileName);
-
-                        if (origImage != null)
-                        {
-                            origImage.flush();
-                        }
-                        origImage.flush();
-
-                        return (false);
-                    }
-                }
-                catch (InterruptedException iex)
-                {
-        			Logger.getLogger(getClass()).error(iex);
-                }
+            try {
+                tracker.waitForAll();
+            } catch (Exception ex) {
+                Logger.getLogger(getClass()).warn("failed to load image " + imgFileName, ex);
             }
+
+            tracker.removeImage(origImage);
 
             long endTime;
 
@@ -589,7 +559,19 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                     bufferedImg.getGraphics().drawImage(origImage, 
                                                         0, 0, croppedImgWidth -1, croppedImgHeight - 1, 
                                                         croppedImgLeft, croppedImgTop, croppedImgLeft + croppedImgWidth, croppedImgTop + croppedImgHeight,
-                                                        Color.white, imgObserver);
+                                                        Color.white, null);
+                    
+    				if (exifData.getOrientation() == 6) {
+    					bufferedImg = rotateImage(bufferedImg, 270);
+    				} else if (exifData.getOrientation() == 8) {
+    					bufferedImg = rotateImage(bufferedImg, 90);
+    				}
+
+    				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+    					int savedWith = croppedImgWidth;
+    					croppedImgWidth = croppedImgHeight;
+    					croppedImgHeight = savedWith;
+    				}
                     
                     if ((croppedImgWidth < newSize) && (croppedImgHeight < newSize))
                     {
@@ -643,17 +625,6 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
             if (format.equals("JPEG"))
             {
-                /*
-                 * JPEGImageEncoder encoder =
-                 * JPEGCodec.createJPEGEncoder(thumbFile); JPEGEncodeParam param =
-                 * encoder.getDefaultJPEGEncodeParam(bufferedImg);
-                 * param.setQuality(0.85f, false);
-                 * 
-                 * encoder.encode(bufferedImg, param);
-                 */
-
-                // ImageIO.write(bufferedImg, "jpg", thumbFile);
-                
                 Iterator iter = ImageIO.getImageWritersByFormatName("jpg");
                 ImageWriter imgWriter = (ImageWriter) iter.next();
                 ImageOutputStream ios = ImageIO
@@ -718,8 +689,6 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
                 output.flush();
                 bufferedImg.flush();
-
-                // end PNG verson
             }
 
             if (format.equals("GIF"))
@@ -745,8 +714,6 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
                 output.flush();
                 bufferedImg.flush();
-
-                // end GIF verson
             }
 
         }
@@ -851,5 +818,46 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         }
 
         return (modifiedFileName);
+    }
+    
+    private BufferedImage rotateImage(BufferedImage origImage, double degree) {
+    	
+    	int newWidth = origImage.getHeight();
+    	int newHeight = origImage.getWidth();
+    	
+        try {
+            ImageFilter filter = new RotateFilter((Math.PI / 180) * degree);
+            ImageProducer producer = new FilteredImageSource(origImage.getSource(), filter);
+            Canvas dummyComponent = new Canvas();
+            Image rotatedImg = dummyComponent.createImage(producer);
+
+            MediaTracker tracker = new MediaTracker(dummyComponent);
+            tracker.addImage(rotatedImg, 1);
+
+            try {
+                tracker.waitForAll();
+            } catch(InterruptedException ex) {
+               Logger.getLogger(getClass()).error("failed to rotate image", ex);
+            }
+
+            tracker.removeImage(rotatedImg);
+
+            origImage.flush();
+            
+            BufferedImage bufferedImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+
+            Graphics g = bufferedImg.getGraphics();
+                
+            g.drawImage(rotatedImg, 0, 0, dummyComponent);
+
+            g.dispose();
+
+            rotatedImg.flush();
+
+            return bufferedImg;
+        } catch (OutOfMemoryError memErr) {
+            Logger.getLogger(getClass()).error("not enough memory for image rotation", memErr);
+            return null;
+        }
     }
 }
