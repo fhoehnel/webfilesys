@@ -577,7 +577,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
     				if (exifData.getOrientation() == 6) {
                         int savedCroppedImgLeft = croppedImgLeft;
                         croppedImgLeft = croppedImgTop;
-    					croppedImgTop = cropSrcImg.getRealHeight() - savedCroppedImgLeft;
+    					croppedImgTop = cropSrcImg.getRealHeight() - savedCroppedImgLeft - croppedImgHeight;
     				} else if (exifData.getOrientation() == 8) {
     					int savedCroppedImgLeft = croppedImgLeft;
                         croppedImgLeft = cropSrcImg.getRealWidth() - croppedImgTop - croppedImgWidth;

@@ -19,6 +19,7 @@ import javax.mail.internet.MimeMultipart;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.WebFileSys;
+import de.webfilesys.util.CommonUtils;
 
 public class SmtpEmail extends Thread {
 	
@@ -123,6 +124,10 @@ public class SmtpEmail extends Thread {
 
             if (attachmentFile == null) {
                 if (messageText != null) {
+                	String clientUrl = WebFileSys.getInstance().getClientUrl();
+                	if (!CommonUtils.isEmpty(clientUrl)) {
+                		messageText += "\r\n\r\n" + clientUrl;
+                	}
                 	msg.setContent(messageText, CONTENT_TYPE_PLAINTEXT);
                 }
             } else {
