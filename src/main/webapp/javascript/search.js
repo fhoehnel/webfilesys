@@ -18,17 +18,11 @@ function discardSearchResults() {
         return;
     }
 
-    var discardURL = "/webfilesys/servlet?command=discardSearchResults&resultDir=" + searchResultDir;
+    const parameters = { "resultDir": searchResultDir };
     
-	xmlRequest(discardURL, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                resultsDiscarded = true;
-                setTimeout("self.close()", 1000); 
-            } else {
-                alert('communication error');
-            }
-        }
+	xmlPostRequest("discardSearchResults", parameters, function(responseXml) {
+        resultsDiscarded = true;
+        setTimeout("self.close()", 1000); 
     });
 }
 

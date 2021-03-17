@@ -3,21 +3,31 @@ var browserIsFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1
         
 var browserIsChrome = navigator.userAgent.toLowerCase().indexOf('chrome') > -1;
 
-function copyDirToClip(path)
-{
-    url = "/webfilesys/servlet?command=copyDir&path=" + encodeURIComponent(path);
-
-    xmlRequest(url, showXmlResult);
+function copyDirToClip(path) {
+    const parameters = { "path": encodeURIComponent(path) };
+    
+	xmlGetRequest("copyDir", parameters, function(responseXml) {
+        const item = responseXml.getElementsByTagName("message")[0];            
+        const message = item.firstChild.nodeValue;
+        hideMenu();
+        clipboardEmpty = false;
+        toast(message, 2500);
+	});
 }
 
-function moveDirToClip(path, domId)
-{
+function moveDirToClip(path, domId) {
     deselectFolder();
 	selectFolder(domId);
 
-    url = "/webfilesys/servlet?command=moveDir&path=" + encodeURIComponent(path);
-
-    xmlRequest(url, showXmlResult);
+    const parameters = { "path": encodeURIComponent(path) };
+    
+	xmlGetRequest("moveDir", parameters, function(responseXml) {
+        const item = responseXml.getElementsByTagName("message")[0];            
+        const message = item.firstChild.nodeValue;
+        hideMenu();
+        clipboardEmpty = false;
+        toast(message, 2500);
+	});
 }
 
 function checkLongRunningDelDir() {
@@ -72,18 +82,26 @@ function cancelSearch()
     xmlRequest(url, handleSearchCanceled);
 }
 
-function clearThumbs(path)
-{
-    url = "/webfilesys/servlet?command=clearThumbs&path=" + encodeURIComponent(path);
-
-    xmlRequest(url, showXmlResult);
+function clearThumbs(path) {
+    const parameters = { "path": encodeURIComponent(path) };
+    
+	xmlGetRequest("clearThumbs", parameters, function(responseXml) {
+        const item = responseXml.getElementsByTagName("message")[0];            
+        const message = item.firstChild.nodeValue;
+        hideMenu();
+        toast(message, 2500);
+	});
 }
 
-function createThumbs(path)
-{
-    url = "/webfilesys/servlet?command=createThumbs&path=" + encodeURIComponent(path);
-
-    xmlRequest(url, showXmlResult);
+function createThumbs(path) {
+    const parameters = { "path": encodeURIComponent(path) };
+    
+	xmlGetRequest("createThumbs", parameters, function(responseXml) {
+        const item = responseXml.getElementsByTagName("message")[0];            
+        const message = item.firstChild.nodeValue;
+        hideMenu();
+        toast(message, 2500);
+	});
 }
 
 function winCmdLine(path)
@@ -91,26 +109,6 @@ function winCmdLine(path)
     url = "/webfilesys/servlet?command=winCmdLine&path=" + encodeURIComponent(path);
 
     xmlRequest(url, handleCmdLineResult);
-}
-
-function showXmlResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var item = req.responseXML.getElementsByTagName("message")[0];            
-             var message = item.firstChild.nodeValue;
-             
-             hideMenu();
-             
-             clipboardEmpty = false;
-
-             toast(message, 2500);
-             
-             setTimeout("hideMsg()", 2000);
-        }
-    }
 }
 
 function hideMsg()

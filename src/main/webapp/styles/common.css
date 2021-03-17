@@ -2476,6 +2476,21 @@ textarea.metaInfTag {
     height: 40px;
 }
 
+body.zipContent span.icon-folderOpen:before,
+div.zipEntry span.icon-folderOpenFilled:before {
+	font-size: 16px;
+    color: #806000;
+}
+
+div.zipEntry span.icon-font:before {
+	font-size: 16px;
+	margin-right: 4px;
+}
+
+div.zipEntry img {
+	margin-right: 4px;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;

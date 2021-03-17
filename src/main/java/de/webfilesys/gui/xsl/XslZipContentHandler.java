@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.IconManager;
+import de.webfilesys.WebFileSys;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -195,7 +196,15 @@ public class XslZipContentHandler extends XslRequestHandlerBase
 
 				subFolderElem.setAttribute("compressedSize", numFormat.format(compressedSize));
 				
-				subFolderElem.setAttribute("icon" , getFileIcon(partOfPath));
+				String fileIcon = getFileIcon(partOfPath);
+				if (fileIcon != null) {
+					subFolderElem.setAttribute("icon", fileIcon);
+				} else {
+					String fileIconFont = getFileIconFont(partOfPath);
+					if (fileIconFont != null) {
+						subFolderElem.setAttribute("iconFont", fileIconFont);
+					}
+				}
 
                 String lowerCasePartOfPath = partOfPath.toLowerCase();
             	
@@ -235,16 +244,22 @@ public class XslZipContentHandler extends XslRequestHandlerBase
         }
 	}
 	
-	private String getFileIcon(String filePath)
-	{
-		int extIdx = filePath.lastIndexOf('.');
+	private String getFileIcon(String filePath) {
+		String docImage = null;
 
-		if ((extIdx > 0) && (extIdx < (filePath.length() - 1)))
-		{
-			return(IconManager.getInstance().getAssignedIcon(filePath.substring(extIdx + 1)));
+		if (WebFileSys.getInstance().isShowAssignedIcons()) {
+			int extIdx = filePath.lastIndexOf('.');
+
+			if ((extIdx > 0) && (extIdx < (filePath.length() - 1))) {
+				docImage = IconManager.getInstance().getFileIconNoDefault(filePath);
+			}
 		}
-		
-		return(IconManager.DEFAULT_ICON);
+        return docImage;
 	}
 
+	private String getFileIconFont(String filePath) {
+		String fileIconFont = IconManager.getInstance().getFileIconFont(filePath); 
+        return fileIconFont;
+	}
+	
 }

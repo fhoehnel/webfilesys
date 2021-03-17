@@ -209,3 +209,7 @@ a.folderTreeIcon span.icon-font.folderCurrent:before {
 	color: #a0a0e0;
 }
 
+body.zipContent span.icon-folderOpen:before,
+div.zipEntry span.icon-folderOpenFilled:before {
+	color: #6060a0;
+}

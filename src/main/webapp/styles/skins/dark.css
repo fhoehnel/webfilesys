@@ -858,3 +858,8 @@ a.fileAgeColor span:before {
 span.thumbRating {
 	color: #ffffa0;
 }
+
+body.zipContent span.icon-folderOpen:before,
+div.zipEntry span.icon-folderOpenFilled:before {
+	color: #ffffa0;
+}

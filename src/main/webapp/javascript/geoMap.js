@@ -165,18 +165,13 @@
     	
     	var picFileName = picOnMapElem.getAttribute("picFileName");
     	
-        var ajaxUrl = "/webfilesys/servlet?command=getFileDesc&fileName=" + encodeURIComponent(picFileName);
-        
-    	xmlRequest(ajaxUrl, function(req) {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    var fileDescription = req.responseXML.getElementsByTagName("result")[0].firstChild.nodeValue;        
-                    if (fileDescription && (fileDescription.length > 0)) {
-                        picOnMapElem.setAttribute("title", fileDescription);
-                    }
-                } else {
-                    alert(resourceBundle["alert.communicationFailure"]);
-	            }
+        const parameters = { "fileName": encodeURIComponent(picFileName) };
+    
+	    xmlGetRequest("getFileDesc", parameters, function(responseXml) {
+
+            const fileDescription = responseXml.getElementsByTagName("result")[0].firstChild.nodeValue;        
+            if (fileDescription && (fileDescription.length > 0)) {
+                picOnMapElem.setAttribute("title", fileDescription);
             }
     	});
     }
