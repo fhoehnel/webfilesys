@@ -122,17 +122,16 @@ function rotateFreeAngle(path) {
     });
 }
 
-function jsEditDesc(path)
-{
-    var windowWidth = 700;
-    var windowHeight = 520;
+function jsEditDesc(path) {
+    const windowWidth = 700;
+    const windowHeight = 520;
     
-    var xpos = (screen.width - windowWidth) / 2;
-    var ypos = (screen.height - windowHeight) / 2;
+    const xpos = Math.round((screen.availWidth - windowWidth) / 2);
+    const ypos = Math.round((screen.availHeight - windowHeight) / 2);
 
-    descWin=window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&geoTag=true&random=" + new Date().getTime(),"descWin","status=no,toolbar=no,location=no,menu=no,width=" + windowWidth + ",height=" + windowHeight + ",resizable=yes,left=" + xpos + ",top=" + ypos + ",screenX=" + xpos + ",screenY=" + ypos);
+    const descWin = window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&geoTag=true","descWin","status=no,toolbar=no,location=no,menu=no,width=" + windowWidth + ",height=" + windowHeight + ",resizable=yes,left=" + xpos + ",top=" + ypos + ",screenX=" + xpos + ",screenY=" + ypos);
     descWin.focus();
-    descWin.opener=self;
+    descWin.opener = self;
 }
 
 function categories(path) {

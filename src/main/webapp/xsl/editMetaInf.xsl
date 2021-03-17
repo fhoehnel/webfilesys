@@ -83,7 +83,7 @@
           
         </td>
         <td class="formParm2" width="80%">
-          <textarea name="description" style="width:100%;height:120px;" wrap="virtual"><xsl:value-of select="/metaInf/description" /></textarea>
+          <textarea name="description" class="metaInfDesc"><xsl:value-of select="/metaInf/description" /></textarea>
         </td>
       </tr>
 
@@ -95,7 +95,7 @@
             <span resource="label.tags2"></span>
           </td>
           <td class="formParm2" width="80%">
-            <textarea name="tags" style="width:100%;height:40px;"><xsl:value-of select="/metaInf/tags" /></textarea>
+            <textarea name="tags" class="metaInfTag"><xsl:value-of select="/metaInf/tags" /></textarea>
           </td>
         </tr>
       </xsl:if>

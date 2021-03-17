@@ -15,17 +15,11 @@
 <meta http-equiv="expires" content="0" />
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/registration.css" />
 
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/registration/css" />.css</xsl:attribute>
 </link>
-
-<style type="text/css">
-  div.registrationBox {width:520px;height:420px;position:relative;top:-230px;left:-260px;background-color:#ffffe0;border-style:solid;border-width:1px;border-color:black;padding-top:20px;}
-
-  td.formError {background-color:#ffffe0;color:#b00000;font-size:10pt;font-family:Arial,Helvetica;vertical-align:top;padding:8px;padding-top:4px;padding-bottom:4px;}
-
-</style>
 
 <link rel="shortcut icon" href="/webfilesys/images/favicon.ico" />
 
@@ -63,7 +57,7 @@
               <table border="0" cellpadding="0" cellspacing="0">
                 <xsl:for-each select="validation/error">
                   <tr> 
-                    <td class="formError" style="padding-left:0px;padding-right:0px;">
+                    <td class="regValidationError">
                       <xsl:if test="@message">
                         <xsl:value-of select="@message" />
                       </xsl:if>
@@ -92,7 +86,7 @@
                   <xsl:if test="not(validation/error[@field='username'])">
                     <xsl:attribute name="class">formParm1</xsl:attribute>
                   </xsl:if>  
-                  <b><xsl:value-of select="resources/msg[@key='label.login']/@value" /></b>
+                  <xsl:value-of select="resources/msg[@key='label.login']/@value" />
                 </td>
                 <td class="formParm2">
                   <input type="text" name="username" size="20" maxlength="30" style="width:150px">
@@ -111,7 +105,7 @@
                   <xsl:if test="not(validation/error[@field='password'])">
                     <xsl:attribute name="class">formParm1</xsl:attribute>
                   </xsl:if>  
-                  <b><xsl:value-of select="resources/msg[@key='label.password']/@value" /></b>
+                  <xsl:value-of select="resources/msg[@key='label.password']/@value" />
                 </td>
                 <td class="formParm2">
                   <input type="password" name="password" size="20" maxlength="30" style="width:150px"> 
@@ -130,7 +124,7 @@
                   <xsl:if test="not(validation/error[@field='pwconfirm'])">
                     <xsl:attribute name="class">formParm1</xsl:attribute>
                   </xsl:if>  
-                  <b><xsl:value-of select="resources/msg[@key='label.passwordconfirm']/@value" /></b>
+                  <xsl:value-of select="resources/msg[@key='label.passwordconfirm']/@value" />
                 </td>
                 <td class="formParm2">
                   <input type="password" name="pwconfirm" size="20" maxlength="30" style="width:150px">
@@ -213,7 +207,7 @@
                   <xsl:if test="not(validation/error[@field='email'])">
                     <xsl:attribute name="class">formParm1</xsl:attribute>
                   </xsl:if>  
-                  <b><xsl:value-of select="resources/msg[@key='label.email']/@value" /></b>
+                  <xsl:value-of select="resources/msg[@key='label.email']/@value" />
                 </td>
                 <td class="formParm2">
                   <input type="text" name="email" size="20" maxlength="120" style="width:150px">
@@ -245,7 +239,7 @@
                   <xsl:if test="not(validation/error[@field='language'])">
                     <xsl:attribute name="class">formParm1</xsl:attribute>
                   </xsl:if>  
-                  <b><xsl:value-of select="resources/msg[@key='label.language']/@value" /></b>
+                  <xsl:value-of select="resources/msg[@key='label.language']/@value" />
                 </td>
                 <td class="formParm2">
                   <select name="language" size="1">

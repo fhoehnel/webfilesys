@@ -92,17 +92,6 @@
         var pollInterval = <xsl:value-of select="/folderTree/pollInterval" />;
       </xsl:if>
 
-      <!-- create Stylesheet-Processor for MSIE and precompile stylesheet -->  
-      if (window.ActiveXObject !== undefined) 
-      {
-          var xsl = new ActiveXObject('MSXML2.FreeThreadedDOMDocument.3.0');
-          xsl.async = false;
-          xsl.load("/webfilesys/xsl/subFolder.xsl");
-
-          xslTemplate = new ActiveXObject("Msxml2.XSLTemplate.3.0");
-          xslTemplate.stylesheet = xsl;
-      }
-
       document.onkeydown = handleFolderTreeKey;
 
       <xsl:if test="/folderTree/errorMsg">
@@ -143,9 +132,9 @@
   <div id="prompt" class="promptBox" />
 
   <xsl:if test="folderTree/loginEvent">
-    <div id="hint" class="hint" style="position:absolute;top:10px;left:50%;width:40%;">
-      <xsl:attribute name="onClick">javascript:hideHint()</xsl:attribute>
-      <img src="/webfilesys/images/winClose.gif" border="0" style="float:right;" />
+    <div id="hint" class="hint">
+      <xsl:attribute name="onClick">hideHint()</xsl:attribute>
+      <img src="/webfilesys/images/winClose.gif" border="0" class="closeIcon" />
       <span resource="label.loginHint"></span>
     </div>
   </xsl:if>
