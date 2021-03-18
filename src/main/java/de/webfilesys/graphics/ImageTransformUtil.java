@@ -3,10 +3,14 @@ package de.webfilesys.graphics;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
 import java.awt.image.ImageObserver;
+import java.awt.image.ImageProducer;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -179,5 +183,50 @@ public class ImageTransformUtil {
         
         return success;
 	}
+	
+    public static BufferedImage rotateImage(BufferedImage origImage, double degree) {
+    	
+    	int newWidth = origImage.getWidth();
+    	int newHeight = origImage.getHeight();
+    	if ((degree == 90) || (degree == 270)) {
+        	newWidth = origImage.getHeight();
+        	newHeight = origImage.getWidth();
+    	}
+    	
+        try {
+            ImageFilter filter = new RotateFilter((Math.PI / 180) * degree);
+            ImageProducer producer = new FilteredImageSource(origImage.getSource(), filter);
+            Canvas dummyComponent = new Canvas();
+            Image rotatedImg = dummyComponent.createImage(producer);
+
+            MediaTracker tracker = new MediaTracker(dummyComponent);
+            tracker.addImage(rotatedImg, 1);
+
+            try {
+                tracker.waitForAll();
+            } catch(InterruptedException ex) {
+               Logger.getLogger(ImageTransformUtil.class).error("failed to rotate image", ex);
+            }
+
+            tracker.removeImage(rotatedImg);
+
+            origImage.flush();
+            
+            BufferedImage bufferedImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+
+            Graphics g = bufferedImg.getGraphics();
+                
+            g.drawImage(rotatedImg, 0, 0, dummyComponent);
+
+            g.dispose();
+
+            rotatedImg.flush();
+
+            return bufferedImg;
+        } catch (OutOfMemoryError memErr) {
+            Logger.getLogger(ImageTransformUtil.class).error("not enough memory for image rotation", memErr);
+            return null;
+        }
+    }
 
 }

@@ -652,11 +652,13 @@
                       </input> 
                     </xsl:if>
 
+                    <!--
                     <xsl:if test="/fileList/file">
                       <input type="button" resource="button.rotateByExif" titleResource="title.rotateByExif">
                         <xsl:attribute name="onclick">javascript:autoImgRotate()</xsl:attribute>
                       </input> 
                     </xsl:if>
+                    -->
                   </xsl:if>
                   
                   <xsl:if test="/fileList/file">

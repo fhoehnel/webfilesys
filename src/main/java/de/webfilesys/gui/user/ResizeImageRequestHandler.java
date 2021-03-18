@@ -41,6 +41,7 @@ import de.webfilesys.graphics.ExifUtil;
 import de.webfilesys.graphics.GifQuantizer;
 import de.webfilesys.graphics.ImageTextStamp;
 import de.webfilesys.graphics.ImageTransform;
+import de.webfilesys.graphics.ImageTransformUtil;
 import de.webfilesys.graphics.RotateFilter;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
@@ -565,11 +566,11 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                                                         Color.white, null);
                     
     				if (exifData.getOrientation() == 6) {
-    					bufferedImg = rotateImage(bufferedImg, 270);
+    					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 270);
     				} else if (exifData.getOrientation() == 8) {
-    					bufferedImg = rotateImage(bufferedImg, 90);
+    					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 90);
     				} else if (exifData.getOrientation() == 3) {
-    					bufferedImg = rotateImage(bufferedImg, 180);
+    					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 180);
     				}
 
     				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
@@ -825,48 +826,4 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         return (modifiedFileName);
     }
     
-    private BufferedImage rotateImage(BufferedImage origImage, double degree) {
-    	
-    	int newWidth = origImage.getWidth();
-    	int newHeight = origImage.getHeight();
-    	if ((degree == 90) || (degree == 270)) {
-        	newWidth = origImage.getHeight();
-        	newHeight = origImage.getWidth();
-    	}
-    	
-        try {
-            ImageFilter filter = new RotateFilter((Math.PI / 180) * degree);
-            ImageProducer producer = new FilteredImageSource(origImage.getSource(), filter);
-            Canvas dummyComponent = new Canvas();
-            Image rotatedImg = dummyComponent.createImage(producer);
-
-            MediaTracker tracker = new MediaTracker(dummyComponent);
-            tracker.addImage(rotatedImg, 1);
-
-            try {
-                tracker.waitForAll();
-            } catch(InterruptedException ex) {
-               Logger.getLogger(getClass()).error("failed to rotate image", ex);
-            }
-
-            tracker.removeImage(rotatedImg);
-
-            origImage.flush();
-            
-            BufferedImage bufferedImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
-
-            Graphics g = bufferedImg.getGraphics();
-                
-            g.drawImage(rotatedImg, 0, 0, dummyComponent);
-
-            g.dispose();
-
-            rotatedImg.flush();
-
-            return bufferedImg;
-        } catch (OutOfMemoryError memErr) {
-            Logger.getLogger(getClass()).error("not enough memory for image rotation", memErr);
-            return null;
-        }
-    }
 }

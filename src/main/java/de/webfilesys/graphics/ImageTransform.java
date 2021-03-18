@@ -109,8 +109,9 @@ public class ImageTransform
             CameraExifData origExifData = new CameraExifData(sourceFilePath);
             
             if (origExifData.getOrientation() != CameraExifData.ORIENTATION_UNKNOWN) {
-            	if (rotateExifOrientationOnly(origExifData, degrees)) {
-                    return CommonUtils.extractFileName(sourceFilePath);
+            	String resultFileName = rotateExifOrientationOnly(origExifData, degrees);
+                if (resultFileName != null) {
+                	return resultFileName;
             	}
             }    	
         	
@@ -231,14 +232,23 @@ public class ImageTransform
         return(resultFileName);
     }
 
-    private boolean rotateExifOrientationOnly(CameraExifData origExifData, String degrees) {
+    private String rotateExifOrientationOnly(CameraExifData origExifData, String degrees) {
     	
-    	int newOrientationValue = calculateNewExifOrientation(origExifData.getOrientation(), degrees);
-        if (!ExifUtil.setExifOrientation(new File(sourceFilePath), newOrientationValue)) {
+        File sourceFile = new File(sourceFilePath);
+
+        int newOrientationValue = calculateNewExifOrientation(origExifData.getOrientation(), degrees);
+        if (!ExifUtil.setExifOrientation(sourceFile, newOrientationValue)) {
         	Logger.getLogger(getClass()).error("failed to set exif orientation for file " + sourceFilePath);
-            return false;
+            return null;
         }
-        return true;
+        
+        String targetPath = sourceFilePath.substring(0, sourceFilePath.lastIndexOf('.')) + "-r" + degrees + sourceFilePath.substring(sourceFilePath.lastIndexOf('.'));
+        File targetFile = new File(targetPath);
+        if (!sourceFile.renameTo(targetFile)) {
+        	Logger.getLogger(getClass()).error("failed to rename rotated picture file to " + targetPath);
+        }
+        
+        return CommonUtils.extractFileName(targetPath);
     }
 
     private int calculateNewExifOrientation(int oldOrientation, String degrees) {
