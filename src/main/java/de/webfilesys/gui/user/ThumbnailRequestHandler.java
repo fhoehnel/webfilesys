@@ -116,6 +116,13 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 				return;
 			}
 			
+			if (exifData.getOrientation() > 1) {
+				if (exifData.getThumbnailOrientation() == exifData.getOrientation()) {
+					serveImageFromRotatedExifThumb(imgPath, exifData);
+					return;
+				}
+			}
+			
 			if (picOrientationAndThumbOrientationRotated(scaledImage, exifData)) {
 				// orientation flag on picture equals orientation flag on thumbnail and is 6 (rotated)
 				serveImageFromRotatedExifThumb(imgPath, exifData);
@@ -124,6 +131,8 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 			
 			int orientationMissmatchResult = checkOrientationMissmatch(scaledImage, exifData);
 			
+			Logger.getLogger(getClass()).debug("orientationMissmatch for file " + imgFileName + " : " + orientationMissmatchResult);
+
 			if (orientationMissmatchResult < 0) {
 				serveImageFromFile(imgPath, false);
 				return;
@@ -134,6 +143,11 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 				return;
 			}
 
+			if (exifData.getOrientation() == 3) {
+				// rotated by 180 degree
+				serveImageFromRotatedExifThumb(imgPath, exifData);
+			}
+			
 			serveImageFromExifThumb(imgPath, exifData);
 				
 		} catch (IOException io1) {
@@ -265,13 +279,20 @@ public class ThumbnailRequestHandler extends UserRequestHandler
         } else if (orientation == 8) {
             degree = 90;
         } else if (orientation == 3) {
-            degree = 270;
+            degree = 180;
         } else {
             degree = 0;
         }
         
-        int newWidth = exifData.getThumbHeight();
-        int newHeight = exifData.getThumbWidth();
+        int newWidth;
+        int newHeight;
+        if (orientation == 3) {
+            newWidth = exifData.getThumbWidth();
+            newHeight = exifData.getThumbHeight();
+        } else {
+            newWidth = exifData.getThumbHeight();
+            newHeight = exifData.getThumbWidth();
+        }
         
         Image origImage = Toolkit.getDefaultToolkit().createImage(imgData);
 

@@ -118,7 +118,10 @@ public class ExifUtil {
 	}
 
 	public static boolean resetExifOrientation(File imgFile) {
+		return setExifOrientation(imgFile, 1);
+	}
 		
+	public static boolean setExifOrientation(File imgFile, int newOrientation) {
 		String tempFileName = imgFile.getAbsolutePath() + ".tmp";
 		File tempFile = null;
 		OutputStream tempStream = null;
@@ -135,7 +138,7 @@ public class ExifUtil {
 					if (field.tagInfo.tag == TAG_ORIENTATION) {
 					
 				        byte[] orientationValue = new byte[1];
-				        orientationValue[0] = 1;
+				        orientationValue[0] = (byte) newOrientation;
 				        
 				        TiffOutputField orientationField =  new TiffOutputField(field.tagInfo, field.fieldType, field.count, orientationValue);		
 				        

@@ -552,6 +552,9 @@ public class ResizeImageRequestHandler extends UserRequestHandler
     					int savedCroppedImgLeft = croppedImgLeft;
                         croppedImgLeft = cropSrcImg.getRealWidth() - croppedImgTop - croppedImgWidth;
     					croppedImgTop = savedCroppedImgLeft;
+    				} else if (exifData.getOrientation() == 3) {
+                        croppedImgLeft = cropSrcImg.getRealWidth() - croppedImgLeft - croppedImgWidth;
+    					croppedImgTop = cropSrcImg.getRealHeight() - croppedImgTop - croppedImgHeight;
     				}
     				
                     bufferedImg = new BufferedImage(croppedImgWidth, croppedImgHeight, BufferedImage.TYPE_INT_RGB);
@@ -565,6 +568,8 @@ public class ResizeImageRequestHandler extends UserRequestHandler
     					bufferedImg = rotateImage(bufferedImg, 270);
     				} else if (exifData.getOrientation() == 8) {
     					bufferedImg = rotateImage(bufferedImg, 90);
+    				} else if (exifData.getOrientation() == 3) {
+    					bufferedImg = rotateImage(bufferedImg, 180);
     				}
 
     				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
@@ -822,8 +827,12 @@ public class ResizeImageRequestHandler extends UserRequestHandler
     
     private BufferedImage rotateImage(BufferedImage origImage, double degree) {
     	
-    	int newWidth = origImage.getHeight();
-    	int newHeight = origImage.getWidth();
+    	int newWidth = origImage.getWidth();
+    	int newHeight = origImage.getHeight();
+    	if ((degree == 90) || (degree == 270)) {
+        	newWidth = origImage.getHeight();
+        	newHeight = origImage.getWidth();
+    	}
     	
         try {
             ImageFilter filter = new RotateFilter((Math.PI / 180) * degree);

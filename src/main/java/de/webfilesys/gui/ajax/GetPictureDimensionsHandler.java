@@ -13,6 +13,7 @@ import org.w3c.dom.Element;
 
 import de.webfilesys.FileLink;
 import de.webfilesys.MetaInfManager;
+import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
@@ -72,8 +73,21 @@ public class GetPictureDimensionsHandler extends XmlRequestHandlerBase {
 		try {
 			ScaledImage scaledImage = new ScaledImage(picFile.getAbsolutePath(), 100, 100);
 
-	        XmlUtil.setChildText(resultElement, "xpix", Integer.toString(scaledImage.getRealWidth()));
-	        XmlUtil.setChildText(resultElement, "ypix", Integer.toString(scaledImage.getRealHeight()));
+            CameraExifData exifData = new CameraExifData(picFile.getAbsolutePath());
+            
+            int picWidth;
+            int picHeight;
+            if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+                // rotated
+            	picWidth = scaledImage.getRealHeight();
+            	picHeight = scaledImage.getRealWidth();
+            } else {
+            	picWidth = scaledImage.getRealWidth();
+            	picHeight = scaledImage.getRealHeight();
+            }
+			
+	        XmlUtil.setChildText(resultElement, "xpix", Integer.toString(picWidth));
+	        XmlUtil.setChildText(resultElement, "ypix", Integer.toString(picHeight));
 	        XmlUtil.setChildText(resultElement, "imageType", Integer.toString(scaledImage.getImageType()));
 		} catch (IOException ioex) {
 			Logger.getLogger(getClass()).error("failed to create scaled image " + picFile.getAbsolutePath(), ioex);
