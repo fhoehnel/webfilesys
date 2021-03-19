@@ -109,9 +109,10 @@ public class ImageTransform
             CameraExifData origExifData = new CameraExifData(sourceFilePath);
             
             if (origExifData.getOrientation() != CameraExifData.ORIENTATION_UNKNOWN) {
-            	String resultFileName = rotateExifOrientationOnly(origExifData, degrees);
-                if (resultFileName != null) {
-                	return resultFileName;
+            	String resultFilePath = rotateExifOrientationOnly(origExifData, degrees);
+                if (resultFilePath != null) {
+                	replaceOldExternalThumbnail(resultFilePath, false);
+                    return CommonUtils.extractFileName(resultFilePath);
             	}
             }    	
         	
@@ -170,7 +171,7 @@ public class ImageTransform
             output = new BufferedOutputStream(new FileOutputStream(destFilePath));
             llj.save(output, LLJTran.OPT_WRITE_ALL);
             
-            Logger.getLogger(getClass()).debug("successfull image transformation for " + destFilePath);
+        	replaceOldExternalThumbnail(destFilePath, false);
         } catch (LLJTranException ex) {
         	Logger.getLogger(getClass()).error("failed to transform image " + sourceFilePath, ex);
         } catch (IOException ioex) {
@@ -188,14 +189,6 @@ public class ImageTransform
         	}
         }
 
-        /*
-        if ((origExifData.getOrientation() != CameraExifData.ORIENTATION_UNKNOWN) && (origExifData.getOrientation() != 1)) {
-            if (!ExifUtil.resetExifOrientation(new File(destFilePath))) {
-            	Logger.getLogger(getClass()).error("failed to reset exif orientation for file " + destFilePath);
-            }
-        }
-        */
-        
         if (!keepSource)
         {
             if ((sourceImage.getRealWidth() % 8 == 0) &&
@@ -248,7 +241,7 @@ public class ImageTransform
         	Logger.getLogger(getClass()).error("failed to rename rotated picture file to " + targetPath);
         }
         
-        return CommonUtils.extractFileName(targetPath);
+        return targetPath;
     }
 
     private int calculateNewExifOrientation(int oldOrientation, String degrees) {
@@ -340,13 +333,14 @@ public class ImageTransform
             }
         }
 
-        String destFileName=actPath + File.separator + resultFileName;
+        String destFilePath = actPath + File.separator + resultFileName;
 
-        rotateImage(sourceFilePath, destFileName, numericDegrees);
+        rotateImage(sourceFilePath, destFilePath , numericDegrees);
 
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
-		{
-			AutoThumbnailCreator.getInstance().queuePath(destFileName, AutoThumbnailCreator.SCOPE_FILE);
+		if (WebFileSys.getInstance().isAutoCreateThumbs()) {
+			AutoThumbnailCreator.getInstance().queuePath(destFilePath , AutoThumbnailCreator.SCOPE_FILE);
+		} else {
+        	replaceOldExternalThumbnail(destFilePath, true);
 		}
 
         return(resultFileName);
@@ -596,4 +590,27 @@ public class ImageTransform
 
         return ret;
     }
+    
+	private boolean replaceOldExternalThumbnail(String targetFilePath, boolean keepOld) {
+		String thumbnailFilePath = ThumbnailCreatorBase.getThumbnailPath(sourceFilePath);
+		if (thumbnailFilePath == null) {
+			return false;
+		}
+		
+		File thumbnailFile = new File(thumbnailFilePath);
+		if (!thumbnailFile.exists() || !thumbnailFile.isFile()) {
+			return false;
+		}
+		if (!keepOld) {
+			if (!thumbnailFile.delete()) {
+	            Logger.getLogger(getClass()).warn("failed to delete old thumbnail file " + thumbnailFile.getAbsolutePath());
+				return false;
+			}
+		}
+		
+		AutoThumbnailCreator.getInstance().queuePath(targetFilePath, AutoThumbnailCreator.SCOPE_FILE);
+		
+		return true;
+	}
+
 }
