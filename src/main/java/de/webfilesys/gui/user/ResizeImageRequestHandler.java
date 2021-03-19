@@ -528,7 +528,9 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
             long endTime;
 
-            if (cropAreaTop >= 0) {
+			CameraExifData exifData = new CameraExifData(imgFileName);
+
+			if (cropAreaTop >= 0) {
                 
                 try
                 {
@@ -539,7 +541,6 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                     int croppedImgWidth = cropAreaWidth * cropSrcImg.getRealWidth() / cropSrcImg.getScaledWidth();
                     int croppedImgHeight = cropAreaHeight * cropSrcImg.getRealHeight() / cropSrcImg.getScaledHeight();
 
-    				CameraExifData exifData = new CameraExifData(imgFileName);
     				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
     					int savedWith = croppedImgWidth;
     					croppedImgWidth = croppedImgHeight;
@@ -605,12 +606,24 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             } 
             else
             {
-                bufferedImg = new BufferedImage(scaledImg.getRealWidth(),
-                        scaledImg.getRealHeight(), 
-                        BufferedImage.TYPE_INT_RGB);
+            	bufferedImg = new BufferedImage(scaledImg.getRealWidth(), scaledImg.getRealHeight(), BufferedImage.TYPE_INT_RGB);
 
                 bufferedImg.getGraphics().drawImage(origImage, 0, 0,
                         imgObserver);
+                
+				if (exifData.getOrientation() == 6) {
+					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 270);
+				} else if (exifData.getOrientation() == 8) {
+					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 90);
+				} else if (exifData.getOrientation() == 3) {
+					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 180);
+				}
+
+                if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+                	int savedScaledWidth = scaledWidth;
+                	scaledWidth = scaledHeight;
+                	scaledHeight = savedScaledWidth;
+                }
             }
             
             if (newSize != 0)
