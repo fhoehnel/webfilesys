@@ -88,12 +88,16 @@ function loadAndShowTrack() {
                     	drawAltDistProfile(response);
                 	}
                 	
-                	if (response.hasSpeed) {
-                		if (!response.invalidTime) {
-                        	drawSpeedProfile(response);
-                		} else {
-                			customAlert("GPX file contains invalid time data - omitting speed profile")
-                		}
+                	if (response.hasRecordedSpeed) {
+                		drawSpeedProfile(response, "recordedSpeed", "averageRecordedSpeedInMotion");
+                	} else {
+                    	if (response.hasSpeed) {
+                    		if (!response.invalidTime) {
+                            	drawSpeedProfile(response, "speed", "averageCalculatedSpeedInMotion");
+                    		} else {
+                    			customAlert("GPX file contains invalid time data - omitting speed profile")
+                    		}
+                    	}
                 	}
                 	
                 	currentTrack++;
@@ -161,7 +165,7 @@ function showWayPointsOnMap(wayPoints) {
     	new google.maps.Marker({
     	    position: new google.maps.LatLng(wayPoints[i].lat, wayPoints[i].lon),
     	    label: {
-    	        color: "#c0f0f0", // <= HERE
+    	        color: "#c0f0f0",
     	        fontSize: '13px',
     	        fontWeight: '900',
     	        text: wayPoints[i].name
@@ -420,7 +424,7 @@ function drawAltDistProfile(response) {
     rowElem.appendChild(distanceElem);
 }
 
-function drawSpeedProfile(response) {
+function drawSpeedProfile(response, speedProperty, averageSpeedInMotionProp) {
 	var canvasCont = document.createElement("div");
 	canvasCont.setAttribute("class", "gpsProfileCont");
     document.getElementsByTagName("body")[0].appendChild(canvasCont);    
@@ -478,10 +482,10 @@ function drawSpeedProfile(response) {
     var trackpoints = response.trackpoints;
     
     for (var i = 0; i < trackpoints.length; i++) {
-    	if (trackpoints[i].speed && (trackpoints[i].time)) {
+    	if (trackpoints[i][speedProperty] && (trackpoints[i].time)) {
     		var mapEntry = [];
     		
-    		var speed = parseFloat(trackpoints[i].speed);
+    		var speed = parseFloat(trackpoints[i][speedProperty]);
     		var time = parseInt(trackpoints[i].time);
     		
     		mapEntry[0] = speed;
@@ -599,6 +603,10 @@ function drawSpeedProfile(response) {
     rowElem.appendChild(minElem);
 
     var emptyElem = document.createElement("td");
+    if (response[averageSpeedInMotionProp]) {
+    	emptyElem.setAttribute("class", "gpsChartText");
+    	emptyElem.innerHTML = "average speed in motion: " + (response[averageSpeedInMotionProp]  * 3.6).toFixed(2) + " km/h";
+    }
     rowElem.appendChild(emptyElem);
 
     rowElem = document.createElement("tr");
