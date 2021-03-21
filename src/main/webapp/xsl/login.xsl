@@ -57,6 +57,12 @@
       document.getElementById("screenWidth").value = screen.availWidth;
       document.passwordform.submit();
   }
+  
+  document.onkeypress = function(evt) {
+      if (evt.key == "Enter") {
+          doLogin();
+      }  
+  }
 
   <xsl:if test="/login/activationSuccess">
     customAlert(resourceBundle["activationSuccessful"]);
