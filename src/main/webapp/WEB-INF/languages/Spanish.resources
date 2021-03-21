@@ -527,6 +527,9 @@ label.cropArea=seleccionar el área de recorte
 label.cropAreaQuadratic=cuadrático
 label.cropKeepAspectRatio=mantener la relación de aspecto
 keepExifData=mantener datos EXIF si están presentes
+resetExifOrientation=establecer la orientación en 1
+resetExifOrientationSuccess=la orientación en los datos EXIF se ha cambiado
+resetExifOrientationFailed=no se pudo cambiar la orientación EXIF
 
 # slideshow labels and buttons
 label.slideparmhead=Parámetros de diapositivas

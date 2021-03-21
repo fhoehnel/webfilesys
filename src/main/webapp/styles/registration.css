@@ -1,0 +1,31 @@
+td.formError {
+	background-color: #ffffe0;
+	color: #b00000;
+	font-size: 10pt;
+	font-family: Arial,Helvetica;
+	font-weight: bold;
+	vertical-align: top;
+	padding: 4px 8px;
+}
+
+td.regValidationError {
+	background-color: #ffffe0;
+	color: #b00000;
+	font-size: 10pt;
+	font-family: Arial,Helvetica;
+	vertical-align: top;
+	padding: 4px 0;
+}
+
+div.registrationBox {
+	width: 520px;
+	height: 420px;
+	position: relative;
+	top: -230px;
+	left: -260px;
+	background-color: #ffffe0;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	padding-top: 20px;
+}

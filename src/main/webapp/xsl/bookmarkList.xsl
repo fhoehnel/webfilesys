@@ -37,6 +37,13 @@
   <script type="text/javascript">
     <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/bookmarkList/language" /></xsl:attribute>
   </script>
+  
+  <script type="text/javascript">
+    var mobile = false;
+    <xsl:if test="/bookmarkList/mobile">
+      mobile = true;
+    </xsl:if>
+  </script>
 
 </head>
 
@@ -91,12 +98,7 @@
                 <xsl:if test="textColor">
                   <xsl:attribute name="style">color:<xsl:value-of select="textColor" /></xsl:attribute>
                 </xsl:if>
-                <xsl:if test="/bookmarkList/mobile">
-                  <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="encodedPath" />', true)</xsl:attribute>
-                </xsl:if>
-                <xsl:if test="not(/bookmarkList/mobile)">
-                  <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="encodedPath" />', false)</xsl:attribute>
-                </xsl:if>
+                <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="encodedPath" />')</xsl:attribute>
                 <xsl:attribute name="title"><xsl:value-of select="path" /></xsl:attribute>
     
                 <xsl:value-of select="name" />
@@ -130,7 +132,7 @@
     
     <input type="button" resource="button.return">
       <xsl:if test="/bookmarkList/mobile">
-        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=mobile&amp;cmd=folderFileList'</xsl:attribute>
+        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=mobile&amp;cmd=folderFileList&amp;relPath=/'</xsl:attribute>
       </xsl:if>
       <xsl:if test="not(/bookmarkList/mobile)">
         <xsl:attribute name="onclick">javascript:document.bookmarkForm.submit()</xsl:attribute>

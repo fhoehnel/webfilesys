@@ -17,6 +17,8 @@
 
   <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
   <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+  <script src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></script>
   
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
   <script type="text/javascript">
@@ -246,7 +248,17 @@
       </xsl:if>
 
       <tr>
-        <td class="formButton" colspan="2" style="text-align:center">
+        <xsl:if test="/cameraData/exifData/orientation and (/cameraData/exifData/orientation != '1')">
+          <td class="formButton" style="text-align:center">
+            <input type="button" resource="resetExifOrientation">
+              <xsl:attribute name="onclick">resetExifOrientation('<xsl:value-of select="/cameraData/exifData/imgPathForScript" />')</xsl:attribute>
+            </input>
+          </td>
+        </xsl:if>
+        <td class="formButton" style="text-align:center">
+          <xsl:if test="not(/cameraData/exifData/orientation) or (/cameraData/exifData/orientation = '1')">
+            <xsl:attribute name="colspan">2</xsl:attribute>
+          </xsl:if>
           <input type="button" onclick="window.close()" resource="button.closewin"></input>
         </td>
       </tr>

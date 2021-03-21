@@ -109,7 +109,7 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
 		}
 
         output.println("<tr>");
-        output.println("<td class=\"formParm1\"><b>document root</b></td>");
+        output.println("<td class=\"formParm1\"><b>home directory / document root</b></td>");
 		output.println("<td class=\"formParm2\"><input type=\"text\" id=\"documentRoot\" name=\"documentRoot\" maxlength=\"255\" value=\"" + val + "\">");
 		output.print("&nbsp;");
 		output.println("<input type=\"button\" id=\"docRootButton\" value=\" ... \" onclick=\"javascript:selectDocRoot()\"></td>");

@@ -16,6 +16,14 @@ a.icon-font {
 	text-decoration: none;
 }
 
+.icon-mail:before {
+	content: '\f0e0';
+}
+
+.icon-tool:before {
+	content: '\f0ad';
+}
+
 .icon-search:before {
 	content: '\f002';
 }
@@ -243,6 +251,10 @@ a.icon-font {
 
 .icon-check:before {
 	content: '\f00c';
+}
+
+.icon-stats:before {
+	content: '\f080';
 }
 
 .icon-page-next,

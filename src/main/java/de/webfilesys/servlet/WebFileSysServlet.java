@@ -85,6 +85,7 @@ import de.webfilesys.gui.ajax.PollForDirChangeHandler;
 import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
 import de.webfilesys.gui.ajax.RefreshDriveListHandler;
 import de.webfilesys.gui.ajax.RenamePictureHandler;
+import de.webfilesys.gui.ajax.ResetExifOrientationHandler;
 import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
 import de.webfilesys.gui.ajax.TextOnVideoHandler;
@@ -300,6 +301,7 @@ import de.webfilesys.gui.xsl.mobile.MobileFolderPictureHandler;
 import de.webfilesys.gui.xsl.mobile.MobileShowImageHandler;
 import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.user.UserManager;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLDecoder;
 
 /**
@@ -313,6 +315,8 @@ public class WebFileSysServlet extends ServletBase
 	// we are open source now!
 	// private static char lic[] = {'l','i','c','e','n','s','e','.','t','x','t'};
 
+	private static final int MIN_SCREEN_WIDTH_FOR_DESKTOP_VERSION = 1024;
+	
 	private Properties configProperties = null;
 	
 	static boolean initialized = false;
@@ -1781,6 +1785,11 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
 
+        if (command.equals("resetExifOrientation")) {
+            (new ResetExifOrientationHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+        
         if (command.equals("refresh"))
     	{
             String path = req.getParameter("path");
@@ -2624,7 +2633,16 @@ public class WebFileSysServlet extends ServletBase
         		}
         		else
         		{
-        		    if (isMobileClient(browserType)) 
+        			int screenWidth = 100000;
+        			String screenWithParam = req.getParameter("screenWidth");
+        			if (!CommonUtils.isEmpty(screenWithParam)) {
+        				try {
+        					screenWidth = Integer.parseInt(screenWithParam);
+        				} catch (Exception ex) {
+        				}
+        			}
+        			
+        		    if ((screenWidth < MIN_SCREEN_WIDTH_FOR_DESKTOP_VERSION) && isMobileClient(browserType)) 
         		    {
         		        req.setAttribute("initial", "true");
                         (new MobileFolderFileListHandler(req, resp, session, output, userid)).handleRequest(); 
@@ -2802,11 +2820,7 @@ public class WebFileSysServlet extends ServletBase
                 i++;        		
         	}
 
-    	    // System.out.println("execute on Login cmd: " + executeOnLoginCmd);
-    	    
     	    String originalURL = req.getRequestURI();
-    	    
-    	    // System.out.println("original URL: " + originalURL);
     	    
     	    redirectURL = new StringBuffer();
     	    
@@ -2815,8 +2829,6 @@ public class WebFileSysServlet extends ServletBase
     	    redirectURL.append('?');
     	    
             redirectURL.append(executeOnLoginCmd.toString());
-            
-    	    // System.out.println("redirect URL: " + redirectURL);
     	}
     	
         UserManager userMgr = WebFileSys.getInstance().getUserMgr();
@@ -2988,8 +3000,6 @@ public class WebFileSysServlet extends ServletBase
             return;
         }
 
-        // logon(true);
-        
 	    (new XslLogonHandler(req, resp, session, output, true)).handleRequest(); 
     }
     
@@ -3011,24 +3021,11 @@ public class WebFileSysServlet extends ServletBase
 		output.flush();
     }
     
-    private boolean isMobileClient(String browserType)
-    {
-        if (browserType == null)
-        {
+    private boolean isMobileClient(String browserType) {
+        if (browserType == null) {
             return false;
         }
-        
-        /* 
-           tablets and high density smartphones should see the desktop GUI after login!
-           let the user decide to use the mobile GUI
-           
-        if (browserType.indexOf("Android") >= 0)
-        {
-            return true;
-        }
-        */
-        
-        return false;
+        return (browserType.indexOf("Android") >= 0);
     }
 }
 

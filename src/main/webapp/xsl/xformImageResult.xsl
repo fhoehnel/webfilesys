@@ -11,7 +11,7 @@
     <a>
       <xsl:attribute name="id">thumb-<xsl:value-of select="@id" /></xsl:attribute>
 
-      <xsl:attribute name="href">javascript:showImage('<xsl:value-of select="pathForScript" />');hidePopupPicture()</xsl:attribute>
+      <xsl:attribute name="href">javascript:showImgFromThumb('<xsl:value-of select="pathForScript" />');hidePopupPicture()</xsl:attribute>
 
       <xsl:attribute name="oncontextmenu">picturePopupInFrame('<xsl:value-of select="pathForScript" />', '<xsl:value-of select="@id" />');return false;</xsl:attribute>
                   

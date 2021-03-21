@@ -1,27 +1,66 @@
-// TODO: replace this global var by local var
-var req;
-
 function xmlRequest(url, callBackFunction) {
-    var req = new XMLHttpRequest();
-        
-    if (req) {
-        req.onreadystatechange = function() {callBackFunction(req)};
-	    req.open("GET", url, true);
-	    req.send("");
-    } 
+    const req = new XMLHttpRequest();
+    req.onreadystatechange = function() {callBackFunction(req)};
+    req.open("GET", url, true);
+	req.send("");
 }
 
 function xmlRequestPost(url, params, callBackFunction) {
-    var req = new XMLHttpRequest();
-        
-    if (req) {
-        req.onreadystatechange = function() {callBackFunction(req)};
-	    req.open("POST", url, true);
+    const req = new XMLHttpRequest();
+    req.onreadystatechange = function() {callBackFunction(req)};
+    req.open("POST", url, true);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	req.send(params);
+}
 
-        req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        
-	    req.send(params);
-    } 
+function xmlGetRequest(command, parameters, successCallBack, failureCallBack) {
+	showHourGlass();
+    
+    let url = "/webfilesys/servlet?command=" + command;
+    for (const key in parameters) {
+        url = url + "&" + key + "=" + parameters[key];
+   	}
+	
+    xmlRequest(url, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+            	successCallBack(req.responseXML);
+                hideHourGlass();
+            } else {
+            	hideHourGlass();
+            	if (typeof failureCallback !== 'undefined') {
+            		failureCallback();
+            	} else {
+                    customAlert(resourceBundle["alert.communicationFailure"]);
+            	}
+            }
+        }
+    });
+}
+
+function xmlPostRequest(command, parameters, successCallBack, failureCallBack) {
+	showHourGlass();
+
+	let postData = "command=" + command;
+    for (const key in parameters) {
+    	postData = postData + "&" + key + "=" + parameters[key];
+   	}
+	
+	xmlRequestPost("/webfilesys/servlet", postData, function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+            	successCallBack(req.responseXML);
+                hideHourGlass();
+            } else {
+            	hideHourGlass();
+            	if (typeof failureCallback !== 'undefined') {
+            		failureCallback();
+            	} else {
+                    customAlert(resourceBundle["alert.communicationFailure"]);
+            	}
+            }
+        }
+    });
 }
 
 function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
@@ -230,19 +269,8 @@ function showHourGlass() {
     waitDivElem.setAttribute("id", "waitDiv");
     
     var hourGlassElem = document.createElement('img');
-    
     hourGlassElem.setAttribute("src", "/webfilesys/images/hourglass.gif");
-    hourGlassElem.setAttribute("width", "32");
-    hourGlassElem.setAttribute("height", "32");
-    hourGlassElem.setAttribute("border", "0");
-    
     waitDivElem.appendChild(hourGlassElem);
-    
-    var divWidth = 60;
-    var divHeight = 30;
-	
-    waitDivElem.style.width = divWidth + "px";
-    waitDivElem.style.height = divHeight + "px";
 
     document.getElementsByTagName('body')[0].appendChild(waitDivElem);    
 	

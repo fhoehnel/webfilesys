@@ -3,11 +3,15 @@ package de.webfilesys.gui.user;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MediaTracker;
 import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
+import java.awt.image.FilteredImageSource;
+import java.awt.image.ImageFilter;
+import java.awt.image.ImageProducer;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -31,10 +36,13 @@ import org.apache.log4j.Logger;
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
+import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ExifUtil;
 import de.webfilesys.graphics.GifQuantizer;
 import de.webfilesys.graphics.ImageTextStamp;
 import de.webfilesys.graphics.ImageTransform;
+import de.webfilesys.graphics.ImageTransformUtil;
+import de.webfilesys.graphics.RotateFilter;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLDecoder;
@@ -503,60 +511,26 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
             Canvas imgObserver = new Canvas();
 
-            /*
-             * if (newSize == 0) { scaledImage =
-             * Toolkit.getDefaultToolkit().createImage(imgFileName); } else {
-             * origImage = Toolkit.getDefaultToolkit().createImage(imgFileName);
-             * 
-             * scaledImage = origImage.getScaledInstance( scaledWidth,
-             * scaledHeight, Image.SCALE_SMOOTH); }
-             */
-
             origImage = Toolkit.getDefaultToolkit().createImage(imgFileName);
 
-            imgObserver.prepareImage(origImage, imgObserver);
+            Canvas dummyComponent = new Canvas();
 
-            Thread t = Thread.currentThread();
+            MediaTracker tracker = new MediaTracker(dummyComponent);
+            tracker.addImage (origImage, 0);
 
-            int timeoutCounter = 900;
-
-            while ((imgObserver.checkImage(origImage, imgObserver) & ImageObserver.ALLBITS) != ImageObserver.ALLBITS)
-            {
-                try
-                {
-                    t.sleep(100);
-
-                    timeoutCounter--;
-
-                    if (timeoutCounter == 0)
-                    {
-                        output
-                                .println("<br><font class=\"small\">picture modification timeout for image "
-                                        + imgFileName + "</font>");
-                        output.flush();
-
-                        Logger.getLogger(getClass()).error(
-                                "picture modification timeout for image "
-                                        + imgFileName);
-
-                        if (origImage != null)
-                        {
-                            origImage.flush();
-                        }
-                        origImage.flush();
-
-                        return (false);
-                    }
-                }
-                catch (InterruptedException iex)
-                {
-        			Logger.getLogger(getClass()).error(iex);
-                }
+            try {
+                tracker.waitForAll();
+            } catch (Exception ex) {
+                Logger.getLogger(getClass()).warn("failed to load image " + imgFileName, ex);
             }
+
+            tracker.removeImage(origImage);
 
             long endTime;
 
-            if (cropAreaTop >= 0) {
+			CameraExifData exifData = new CameraExifData(imgFileName);
+
+			if (cropAreaTop >= 0) {
                 
                 try
                 {
@@ -567,12 +541,44 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                     int croppedImgWidth = cropAreaWidth * cropSrcImg.getRealWidth() / cropSrcImg.getScaledWidth();
                     int croppedImgHeight = cropAreaHeight * cropSrcImg.getRealHeight() / cropSrcImg.getScaledHeight();
 
+    				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+    					int savedWith = croppedImgWidth;
+    					croppedImgWidth = croppedImgHeight;
+    					croppedImgHeight = savedWith;
+    				}
+    				if (exifData.getOrientation() == 6) {
+                        int savedCroppedImgLeft = croppedImgLeft;
+                        croppedImgLeft = croppedImgTop;
+    					croppedImgTop = cropSrcImg.getRealHeight() - savedCroppedImgLeft - croppedImgHeight;
+    				} else if (exifData.getOrientation() == 8) {
+    					int savedCroppedImgLeft = croppedImgLeft;
+                        croppedImgLeft = cropSrcImg.getRealWidth() - croppedImgTop - croppedImgWidth;
+    					croppedImgTop = savedCroppedImgLeft;
+    				} else if (exifData.getOrientation() == 3) {
+                        croppedImgLeft = cropSrcImg.getRealWidth() - croppedImgLeft - croppedImgWidth;
+    					croppedImgTop = cropSrcImg.getRealHeight() - croppedImgTop - croppedImgHeight;
+    				}
+    				
                     bufferedImg = new BufferedImage(croppedImgWidth, croppedImgHeight, BufferedImage.TYPE_INT_RGB);
 
                     bufferedImg.getGraphics().drawImage(origImage, 
                                                         0, 0, croppedImgWidth -1, croppedImgHeight - 1, 
                                                         croppedImgLeft, croppedImgTop, croppedImgLeft + croppedImgWidth, croppedImgTop + croppedImgHeight,
-                                                        Color.white, imgObserver);
+                                                        Color.white, null);
+                    
+    				if (exifData.getOrientation() == 6) {
+    					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 270);
+    				} else if (exifData.getOrientation() == 8) {
+    					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 90);
+    				} else if (exifData.getOrientation() == 3) {
+    					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 180);
+    				}
+
+    				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+    					int savedWith = croppedImgWidth;
+    					croppedImgWidth = croppedImgHeight;
+    					croppedImgHeight = savedWith;
+    				}
                     
                     if ((croppedImgWidth < newSize) && (croppedImgHeight < newSize))
                     {
@@ -600,12 +606,24 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             } 
             else
             {
-                bufferedImg = new BufferedImage(scaledImg.getRealWidth(),
-                        scaledImg.getRealHeight(), 
-                        BufferedImage.TYPE_INT_RGB);
+            	bufferedImg = new BufferedImage(scaledImg.getRealWidth(), scaledImg.getRealHeight(), BufferedImage.TYPE_INT_RGB);
 
                 bufferedImg.getGraphics().drawImage(origImage, 0, 0,
                         imgObserver);
+                
+				if (exifData.getOrientation() == 6) {
+					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 270);
+				} else if (exifData.getOrientation() == 8) {
+					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 90);
+				} else if (exifData.getOrientation() == 3) {
+					bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 180);
+				}
+
+                if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+                	int savedScaledWidth = scaledWidth;
+                	scaledWidth = scaledHeight;
+                	scaledHeight = savedScaledWidth;
+                }
             }
             
             if (newSize != 0)
@@ -626,17 +644,6 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
             if (format.equals("JPEG"))
             {
-                /*
-                 * JPEGImageEncoder encoder =
-                 * JPEGCodec.createJPEGEncoder(thumbFile); JPEGEncodeParam param =
-                 * encoder.getDefaultJPEGEncodeParam(bufferedImg);
-                 * param.setQuality(0.85f, false);
-                 * 
-                 * encoder.encode(bufferedImg, param);
-                 */
-
-                // ImageIO.write(bufferedImg, "jpg", thumbFile);
-                
                 Iterator iter = ImageIO.getImageWritersByFormatName("jpg");
                 ImageWriter imgWriter = (ImageWriter) iter.next();
                 ImageOutputStream ios = ImageIO
@@ -701,8 +708,6 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
                 output.flush();
                 bufferedImg.flush();
-
-                // end PNG verson
             }
 
             if (format.equals("GIF"))
@@ -728,8 +733,6 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
                 output.flush();
                 bufferedImg.flush();
-
-                // end GIF verson
             }
 
         }
@@ -835,4 +838,5 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
         return (modifiedFileName);
     }
+    
 }

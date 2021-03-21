@@ -2,7 +2,9 @@ package de.webfilesys;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+
 import org.apache.log4j.Logger;
 
 import de.webfilesys.util.PatternComparator;
@@ -54,9 +56,7 @@ public class FileLinkSelector
 
 		int selectedFileNumber=0;
 
-		for (int i=0;i<filesAndLinks.size();i++)
-		{
-			FileContainer fileCont = (FileContainer) filesAndLinks.get(i);
+		for (FileContainer fileCont : filesAndLinks) {
 
 			String fileName = fileCont.getName();
 
@@ -258,10 +258,7 @@ public class FileLinkSelector
 
 		int selectedFileNumber=0;
 
-		for (int i=0;i<filesAndLinks.size();i++)
-		{
-			FileContainer fileCont = (FileContainer) filesAndLinks.get(i);
-
+		for (FileContainer fileCont : filesAndLinks) {
 			String fileName = fileCont.getName();
 
 			if ((!hideMetaInf) || (fileName.charAt(0)!='_') ||
@@ -367,31 +364,18 @@ public class FileLinkSelector
 		return(selectionStatus);
 	}
 
-    private ArrayList<FileContainer> getFilesAndLinks()
-    {
+    private ArrayList<FileContainer> getFilesAndLinks() {
     	ArrayList<FileContainer> filesAndLinks = new ArrayList<FileContainer>();
     	
-		File dirFile=new File(path);
+		File dirFile = new File(path);
 
-		if ((!dirFile.exists()) || (!dirFile.canRead()))
-		{
+		if ((!dirFile.exists()) || (!dirFile.canRead())) {
 			return(filesAndLinks);
 		}
-
-		String fileList[] = dirFile.list();
-
-		if ((fileList != null))
-		{
-            for (int i=0;i<fileList.length;i++)
-            {
-            	File tempFile = new File(path, fileList[i]);
-            	
-            	if (tempFile.isFile() && (tempFile.canRead()))
-            	{
-					filesAndLinks.add(new FileContainer(fileList[i],tempFile));
-            	}
-            }
-		}
+		
+    	Arrays.stream(dirFile.listFiles())
+            .filter(file -> file.isFile() && file.canRead())
+ 	        .forEach(file -> filesAndLinks.add(new FileContainer(file.getName(), file)));
 
 		ArrayList<FileLink> linkList = MetaInfManager.getInstance().getListOfLinks(path);
         

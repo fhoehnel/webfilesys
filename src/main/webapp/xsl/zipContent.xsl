@@ -16,6 +16,7 @@
 
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
   <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
+  <link rel="stylesheet" type="text/css" href="/webfilesys/styles/fileIcons.css" />
 
   <link rel="stylesheet" type="text/css">
     <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/folderTree/css" />.css</xsl:attribute>
@@ -56,7 +57,7 @@
 
 <xsl:template name="zipEntry"> 
 
-  <div class="last">
+  <div class="last zipEntry">
       
     <xsl:if test="position()=last()">
       <img src="images/branchLast.gif" border="0" width="15" height="17" />
@@ -66,17 +67,25 @@
     </xsl:if>
 
     <xsl:if test="@folder">
-      <img src="images/folder.gif" border="0" width="17" height="14" />
+      <span class="icon-font icon-folderOpenFilled"></span>
     </xsl:if>
 
     <xsl:if test="not(@folder)">
-      <img border="0" width="16" height="16">
-        <xsl:attribute name="src">icons/<xsl:value-of select="@icon" /></xsl:attribute>
-      </img>
+      <xsl:if test="@icon">
+        <img border="0" width="16" height="16">
+          <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon" /></xsl:attribute>
+        </img>
+      </xsl:if>
+      <xsl:if test="@iconFont">
+        <span>
+          <xsl:attribute name="class">icon-font fileIcon icon-file-<xsl:value-of select="@iconFont" /></xsl:attribute>
+        </span>
+      </xsl:if>
+      <xsl:if test="not(@icon) and not(@iconFont)">
+        <span class="icon-font fileIcon icon-file"></span>
+      </xsl:if>
     </xsl:if>
 
-    <img src="images/space.gif" border="0" width="4" height="1" />
-    
     <a class="dirtree">
       <xsl:attribute name="href">/webfilesys/servlet?command=getZipContentFile&amp;zipFilePath=<xsl:value-of select="/folderTree/zipFileEncodedPath" />&amp;zipContentPath=<xsl:value-of select="@path" /></xsl:attribute>
       <xsl:attribute name="target">_blank</xsl:attribute>

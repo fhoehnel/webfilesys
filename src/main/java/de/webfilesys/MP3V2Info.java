@@ -11,6 +11,7 @@ import org.farng.mp3.id3.AbstractID3v2;
 import org.farng.mp3.id3.ID3v1;
 import org.farng.mp3.id3.ID3v2_2;
 import org.farng.mp3.id3.ID3v2_2Frame;
+import org.farng.mp3.id3.ID3v2_4;
 
 public class MP3V2Info
 {
@@ -330,25 +331,30 @@ public class MP3V2Info
             
             mp3file.setID3v1Tag(id3v1);
 
+            boolean existingV2TagNotSupported = false;
+            
             AbstractID3v2 id3v2 = null;
 
-            if (mp3file.hasID3v2Tag())
-            {
+            if (mp3file.hasID3v2Tag()) {
                 id3v2 = mp3file.getID3v2Tag();
-            }
-            else
-            {
+                if (id3v2 instanceof ID3v2_4) {
+                    Logger.getLogger(getClass()).debug("cannot use existing ID3v2 tag of class : " + id3v2.getClass().getName());
+                    existingV2TagNotSupported = true;
+                }
+            } else {
                 id3v2 = new ID3v2_2();
             }
             
-            id3v2.setSongTitle(title);
-            id3v2.setLeadArtist(artist);
-            id3v2.setAlbumTitle(album);
-            id3v2.setYearReleased(publishYear);
-            id3v2.setSongComment(comment);
-            id3v2.setSongGenre(getGenre());
-            
-            mp3file.setID3v2Tag(id3v2);
+            if (!existingV2TagNotSupported) {
+                id3v2.setSongTitle(title);
+                id3v2.setLeadArtist(artist);
+                id3v2.setAlbumTitle(album);
+                id3v2.setYearReleased(publishYear);
+                id3v2.setSongComment(comment);
+                id3v2.setSongGenre(getGenre());
+                
+                mp3file.setID3v2Tag(id3v2);
+            }
             
             mp3file.save();
         }

@@ -1,12 +1,12 @@
 function description(path)
 {
-    var windowWidth = 600;
-    var windowHeight = 300;
+    const windowWidth = 600;
+    const windowHeight = 300;
     
-    var xpos = (screen.width - windowWidth) / 2;
-    var ypos = (screen.height - windowHeight) / 2;
+    const xpos = Math.round((screen.availWidth - windowWidth) / 2);
+    const ypos = Math.round((screen.availHeight - windowHeight) / 2);
 
-    descWin=window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&random=" + new Date().getTime(),"descWin","status=no,toolbar=no,location=no,menu=no,width=" + windowWidth + ",height=" + windowHeight + ",resizable=yes,left=" + xpos + ",top=" + ypos + ",screenX=" + xpos + ",screenY=" + ypos);
+    const descWin = window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path), "descWin", "status=no,toolbar=no,location=no,menu=no,width=" + windowWidth + ",height=" + windowHeight + ",resizable=yes,left=" + xpos + ",top=" + ypos + ",screenX=" + xpos + ",screenY=" + ypos);
     descWin.focus();
     descWin.opener=self;
 }
@@ -139,25 +139,18 @@ function tail(path)
 }
 
 function grep(path, fileName) {
-    var url = "/webfilesys/servlet?command=ajaxRPC&method=grepAllowed&param1=" + encodeURIComponent(path);
-
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                var resultItem = responseXml.getElementsByTagName("result")[0];            
-                if (resultItem) {
-                    var checkResult = resultItem.firstChild.nodeValue;
-                    if (checkResult == 'true') {
-                        centeredDialog('/webfilesys/servlet?command=ajaxRPC&method=grepParams&param1=' + encodeURIComponent(fileName), '/webfilesys/xsl/grepParams.xsl', 320, 130, function() {
-                            document.getElementById("grepFilter").focus();
-                        });
-                    } else {
-                        customAlert(checkResult);
-                    }
-                }
+    const parameters = { "method": "grepAllowed", "param1": encodeURIComponent(path) };
+    
+	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
+        var resultItem = responseXml.getElementsByTagName("result")[0];            
+        if (resultItem) {
+            var checkResult = resultItem.firstChild.nodeValue;
+            if (checkResult == 'true') {
+                centeredDialog('/webfilesys/servlet?command=ajaxRPC&method=grepParams&param1=' + encodeURIComponent(fileName), '/webfilesys/xsl/grepParams.xsl', 320, 130, function() {
+                    document.getElementById("grepFilter").focus();
+                });
             } else {
-                alert(resourceBundle["alert.communicationFailure"]);
+                customAlert(checkResult);
             }
         }
     });

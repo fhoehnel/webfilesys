@@ -204,12 +204,6 @@
           <td id="mapIcon" class="mapIcon" valign="top">
             <a href="javascript:showMapSelection()">
               <span class="icon-font icon-globe" titleResource="label.geoMapLink"></span>
-
-              <!--                
-              <img src="/webfilesys/images/geoTag.gif" width="30" height="30" border="0" style="float:right">
-                <xsl:attribute name="titleResource">label.geoMapLink</xsl:attribute>
-              </img>
-              -->
             </a>
           </td>
 
@@ -658,11 +652,13 @@
                       </input> 
                     </xsl:if>
 
+                    <!--
                     <xsl:if test="/fileList/file">
                       <input type="button" resource="button.rotateByExif" titleResource="title.rotateByExif">
                         <xsl:attribute name="onclick">javascript:autoImgRotate()</xsl:attribute>
                       </input> 
                     </xsl:if>
+                    -->
                   </xsl:if>
                   
                   <xsl:if test="/fileList/file">

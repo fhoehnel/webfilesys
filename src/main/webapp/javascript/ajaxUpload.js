@@ -43,30 +43,23 @@ function getUploadStatus() {
 }
 
 function checkUploadTargetExists(targetFileName, callback) {
-    var url = "/webfilesys/servlet?command=ajaxRPC&method=existFile&param1=" + encodeURIComponent(targetFileName);
+	
+    const parameters = { "method": "existFile", "param1": encodeURIComponent(targetFileName) };
     
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                var resultItem = responseXml.getElementsByTagName("result")[0];
-                var result = resultItem.firstChild.nodeValue;  
+	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
+        const resultItem = responseXml.getElementsByTagName("result")[0];
+        const result = resultItem.firstChild.nodeValue;  
                 
-                if (result && (result == "true")) {
-                    var confirmMsg = targetFileName + " - " + resourceBundle["upload.file.exists"];
-                	customConfirm(confirmMsg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
-                			function() {
-                                callback();
-                	        }
-                	);
-                    return;
-                }
-
-                callback();
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+        if (result && (result == "true")) {
+            var confirmMsg = targetFileName + " - " + resourceBundle["upload.file.exists"];
+          	customConfirm(confirmMsg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+       			function() {
+                    callback();
+       	        }
+           	);
+            return;
         }
+        callback();
     });          
 }
 

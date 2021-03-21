@@ -32,13 +32,14 @@ import mediautil.image.jpeg.LLJTranException;
 import org.apache.log4j.Logger;
 
 import de.webfilesys.WebFileSys;
+import de.webfilesys.util.CommonUtils;
 
 /**
  * Lossless image transformation using mediautil (http://mediachest.sourceforge.net/mediautil).
  */
 public class ImageTransform
 {
-    private String sourceFileName;
+    private String sourceFilePath;
 
     private String action;
 
@@ -46,14 +47,14 @@ public class ImageTransform
 
     ScaledImage sourceImage=null;
     
-    public ImageTransform(String sourceFileName)
+    public ImageTransform(String sourceFilePath)
     {
-        this.sourceFileName = sourceFileName;
+        this.sourceFilePath = sourceFilePath;
     }
 
     public ImageTransform(String sourceFileName, String action, String degrees)
     {
-        this.sourceFileName=sourceFileName;
+        this.sourceFilePath=sourceFileName;
         this.action=action;
         this.degrees=degrees;
     }
@@ -72,7 +73,7 @@ public class ImageTransform
     {
         try
         {
-            sourceImage=new ScaledImage(sourceFileName,1000,1000);
+            sourceImage=new ScaledImage(sourceFilePath,1000,1000);
         }
         catch (IOException ioex)
         {
@@ -82,7 +83,7 @@ public class ImageTransform
 
         if (sourceImage.getImageType()==ScaledImage.IMG_TYPE_BMP)
         {
-            Logger.getLogger(getClass()).debug("ImageTransformation: ignoring BMP file " + sourceFileName);
+            Logger.getLogger(getClass()).debug("ImageTransformation: ignoring BMP file " + sourceFilePath);
             return(null);
         }
         
@@ -105,6 +106,16 @@ public class ImageTransform
 
         int operation = 0;
         if (action.equals("rotate")) {
+            CameraExifData origExifData = new CameraExifData(sourceFilePath);
+            
+            if (origExifData.getOrientation() != CameraExifData.ORIENTATION_UNKNOWN) {
+            	String resultFilePath = rotateExifOrientationOnly(origExifData, degrees);
+                if (resultFilePath != null) {
+                	replaceOldExternalThumbnail(resultFilePath, false);
+                    return CommonUtils.extractFileName(resultFilePath);
+            	}
+            }    	
+        	
         	if (degrees.equals("90")) {
         		operation = 5;
         	} else if (degrees.equals("180")) {
@@ -121,11 +132,11 @@ public class ImageTransform
             fileNameAppendix = "-fv";
         }
         
-        File sourceFile = new File(sourceFileName);
+        File sourceFile = new File(sourceFilePath);
 
-        String actPath = sourceFileName.substring(0,sourceFileName.lastIndexOf(File.separatorChar));
+        String actPath = sourceFilePath.substring(0,sourceFilePath.lastIndexOf(File.separatorChar));
 
-        String fileName = sourceFileName.substring(sourceFileName.lastIndexOf(File.separatorChar)+1);
+        String fileName = sourceFilePath.substring(sourceFilePath.lastIndexOf(File.separatorChar)+1);
 
         int extIdx=fileName.lastIndexOf(".");
 
@@ -140,8 +151,9 @@ public class ImageTransform
              resultFileName=fileName.substring(0,extIdx) + fileNameAppendix + fileName.substring(extIdx);
         }
 
-        String destFileName=actPath + File.separator + resultFileName;
+        String destFilePath = actPath + File.separator + resultFileName;
 
+        
         BufferedOutputStream output = null;
         LLJTran llj = null;
         
@@ -151,18 +163,19 @@ public class ImageTransform
             // loaded and hence will not be written.
             llj.read(LLJTran.READ_ALL, true);
             
-            int options = LLJTran.OPT_DEFAULTS | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL ;
+            // int options = LLJTran.OPT_DEFAULTS | LLJTran.OPT_XFORM_ORIENTATION | LLJTran.OPT_XFORM_THUMBNAIL ;
+            int options = LLJTran.OPT_DEFAULTS | LLJTran.OPT_XFORM_THUMBNAIL ;
             
             llj.transform(operation, options);    
             
-            output = new BufferedOutputStream(new FileOutputStream(destFileName));
+            output = new BufferedOutputStream(new FileOutputStream(destFilePath));
             llj.save(output, LLJTran.OPT_WRITE_ALL);
             
-            Logger.getLogger(getClass()).debug("successfull image transformation for " + destFileName);
+        	replaceOldExternalThumbnail(destFilePath, false);
         } catch (LLJTranException ex) {
-        	Logger.getLogger(getClass()).error("failed to transform image " + sourceFileName, ex);
+        	Logger.getLogger(getClass()).error("failed to transform image " + sourceFilePath, ex);
         } catch (IOException ioex) {
-        	Logger.getLogger(getClass()).error("failed to transform image " + sourceFileName, ioex);
+        	Logger.getLogger(getClass()).error("failed to transform image " + sourceFilePath, ioex);
         } finally {
             if (output != null) {
             	try {
@@ -183,7 +196,7 @@ public class ImageTransform
             {
                 try
                 {
-                    ScaledImage destImage=new ScaledImage(destFileName,1000,1000);
+                    ScaledImage destImage=new ScaledImage(destFilePath,1000,1000);
 
                     if (((sourceImage.getRealWidth() == destImage.getRealHeight()) &&
                          (sourceImage.getRealHeight() == destImage.getRealWidth())) ||
@@ -192,7 +205,7 @@ public class ImageTransform
                     {
                         if (!sourceFile.delete())
                         {
-                            Logger.getLogger(getClass()).error("cannot delete source file " + sourceFileName + " after transformation");
+                            Logger.getLogger(getClass()).error("cannot delete source file " + sourceFilePath + " after transformation");
                         }
                     }
                 }
@@ -206,12 +219,75 @@ public class ImageTransform
 
 		if (WebFileSys.getInstance().isAutoCreateThumbs())
 		{
-			AutoThumbnailCreator.getInstance().queuePath(destFileName, AutoThumbnailCreator.SCOPE_FILE);
+			AutoThumbnailCreator.getInstance().queuePath(destFilePath, AutoThumbnailCreator.SCOPE_FILE);
 		}
 
         return(resultFileName);
     }
 
+    private String rotateExifOrientationOnly(CameraExifData origExifData, String degrees) {
+    	
+        File sourceFile = new File(sourceFilePath);
+
+        int newOrientationValue = calculateNewExifOrientation(origExifData.getOrientation(), degrees);
+        if (!ExifUtil.setExifOrientation(sourceFile, newOrientationValue)) {
+        	Logger.getLogger(getClass()).error("failed to set exif orientation for file " + sourceFilePath);
+            return null;
+        }
+        
+        String targetPath = sourceFilePath.substring(0, sourceFilePath.lastIndexOf('.')) + "-r" + degrees + sourceFilePath.substring(sourceFilePath.lastIndexOf('.'));
+        File targetFile = new File(targetPath);
+        if (!sourceFile.renameTo(targetFile)) {
+        	Logger.getLogger(getClass()).error("failed to rename rotated picture file to " + targetPath);
+        }
+        
+        return targetPath;
+    }
+
+    private int calculateNewExifOrientation(int oldOrientation, String degrees) {
+    	if ("270".equals(degrees)) {
+    		if (oldOrientation == 1) {
+    			return 8;
+    		}
+    		if (oldOrientation == 6) {
+    			return 1;
+    		}
+    		if (oldOrientation == 3) {
+    			return 6;
+    		}
+    		if (oldOrientation == 8) {
+    			return 3;
+    		}
+    	} else if ("90".equals(degrees)) {
+    		if (oldOrientation == 1) {
+    			return 6;
+    		}
+    		if (oldOrientation == 6) {
+    			return 3;
+    		}
+    		if (oldOrientation == 3) {
+    			return 8;
+    		}
+    		if (oldOrientation == 8) {
+    			return 1;
+    		}
+    	} else if ("180".equals(degrees)) {
+    		if (oldOrientation == 1) {
+    			return 3;
+    		}
+    		if (oldOrientation == 6) {
+    			return 8;
+    		}
+    		if (oldOrientation == 3) {
+    			return 1;
+    		}
+    		if (oldOrientation == 8) {
+    			return 6;
+    		}
+    	} 
+  		return oldOrientation;
+    }
+    
     protected String rotateLossy()
     {
         String fileNameAppendix = "-r" + degrees;
@@ -224,9 +300,9 @@ public class ImageTransform
             return null;
         }
     	
-        String actPath=sourceFileName.substring(0,sourceFileName.lastIndexOf(File.separatorChar));
+        String actPath=sourceFilePath.substring(0,sourceFilePath.lastIndexOf(File.separatorChar));
 
-        String fileName=sourceFileName.substring(sourceFileName.lastIndexOf(File.separatorChar)+1);
+        String fileName=sourceFilePath.substring(sourceFilePath.lastIndexOf(File.separatorChar)+1);
 
         int extIdx=fileName.lastIndexOf(".");
 
@@ -257,13 +333,14 @@ public class ImageTransform
             }
         }
 
-        String destFileName=actPath + File.separator + resultFileName;
+        String destFilePath = actPath + File.separator + resultFileName;
 
-        rotateImage(sourceFileName, destFileName, numericDegrees);
+        rotateImage(sourceFilePath, destFilePath , numericDegrees);
 
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
-		{
-			AutoThumbnailCreator.getInstance().queuePath(destFileName, AutoThumbnailCreator.SCOPE_FILE);
+		if (WebFileSys.getInstance().isAutoCreateThumbs()) {
+			AutoThumbnailCreator.getInstance().queuePath(destFilePath , AutoThumbnailCreator.SCOPE_FILE);
+		} else {
+        	replaceOldExternalThumbnail(destFilePath, true);
 		}
 
         return(resultFileName);
@@ -513,4 +590,27 @@ public class ImageTransform
 
         return ret;
     }
+    
+	private boolean replaceOldExternalThumbnail(String targetFilePath, boolean keepOld) {
+		String thumbnailFilePath = ThumbnailCreatorBase.getThumbnailPath(sourceFilePath);
+		if (thumbnailFilePath == null) {
+			return false;
+		}
+		
+		File thumbnailFile = new File(thumbnailFilePath);
+		if (!thumbnailFile.exists() || !thumbnailFile.isFile()) {
+			return false;
+		}
+		if (!keepOld) {
+			if (!thumbnailFile.delete()) {
+	            Logger.getLogger(getClass()).warn("failed to delete old thumbnail file " + thumbnailFile.getAbsolutePath());
+				return false;
+			}
+		}
+		
+		AutoThumbnailCreator.getInstance().queuePath(targetFilePath, AutoThumbnailCreator.SCOPE_FILE);
+		
+		return true;
+	}
+
 }

@@ -67,8 +67,6 @@ public class RotatedExifThumbHandler extends UserRequestHandler
         
         int orientation = exifData.getOrientation();
 
-        // System.out.println("img: " + imgFileName + " orientation: " + orientation);
-        
         double degree;
 
         if ((orientation == 6)) 
@@ -78,11 +76,10 @@ public class RotatedExifThumbHandler extends UserRequestHandler
         else if (orientation == 8)
         {
             degree = 90;
-            // degree = 270;
         }
         else if (orientation == 3)
         {
-            degree = 270;
+            degree = 180;
         }
         else 
         {

@@ -3,9 +3,7 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,9 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Constants;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -64,10 +60,6 @@ public class CompareImageTabHandler extends XslRequestHandlerBase {
 			
 		doc.appendChild(compareImageElem);
 			
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/" + XSL_STYLESHEET_NAME + "\"");
-
-		doc.insertBefore(xslRef, compareImageElem);
-
 	    XmlUtil.setChildText(compareImageElem, "path", imgBasePath, false);
 
 	    XmlUtil.setChildText(compareImageElem, "pathForScript", escapeForJavascript(imgBasePath), false);

@@ -1,118 +1,78 @@
-function jsLinkMenu(linkName, realPath)
-{
-    menuDiv = document.getElementById('contextMenu');    
+function jsLinkMenu(linkName, realPath) {
         
-    shortFileName = linkName;
+    let shortFileName = linkName;
     
-    if (linkName.length > 24)
-    {
-        shortFileName = linkName.substring(0,7) + "..." + linkName.substring(linkName.length - 14, linkName.length);
+    if (linkName.length > 22) {
+        shortFileName = linkName.substring(0,7) + "..." + linkName.substring(linkName.length - 12, linkName.length);
     }    
 
-    fileNameExt = getFileNameExt(linkName);
+    const fileNameExt = getFileNameExt(linkName);
 
-    scriptPreparedPath = insertDoubleBackslash(realPath);
+    const scriptPreparedPath = insertDoubleBackslash(realPath);
 
-    menuText = '<table style="width:100%">'
-             + '<tr>'
-             + '<th class="datahead" style="padding-left:5px;padding-right:5px;padding-top:4px;padding-bottom:4px;text-align:left;border-bottom-width:1px;border-bottom-style:solid;border-bottom-color:black;">'
-             + shortFileName
-             + '</th>'
-             + '</tr>';
+    const menuDiv = document.getElementById('contextMenu');    
+    
+    menuDiv.style.visibility = 'hidden';
 
+    menuDiv.innerHTML = "";
 
-    if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR")
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')",resourceBundle["menuViewZip"]);
-    }
-    else
-    {
-	if (fileExt == ".URL")
-	{
-            menuText = menuText 
-                     + menuEntry("javascript:openUrlFile('" + scriptPreparedPath + "')",resourceBundle["menuView"]);
-	}
-	else
-	{
-	    if (fileExt != ".MP3") 
-	    {
-                menuText = menuText 
-                         + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')",resourceBundle["menuView"]);
-	    }
-	}
+    addContextMenuHead(menuDiv, shortFileName);
+
+    if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR") {
+    	addContextMenuEntry(menuDiv, "viewZip('" + scriptPreparedPath + "')", resourceBundle["menuViewZip"]);
+    } else {
+	    if (fileExt == ".URL") {
+	    	addContextMenuEntry(menuDiv, "openUrlFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
+	    } else {
+	        if (fileExt != ".MP3") {
+		    	addContextMenuEntry(menuDiv, "viewFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
+	        }
+   	    }
     }
 
-    if (fileExt == ".MP3")
-    {
-        downloadLabel = resourceBundle["label.play"];
-    }
-    else
-    {
-        downloadLabel = resourceBundle["label.download"];
-    }
+    const downloadLabel = (fileExt == ".MP3") ? resourceBundle["menuPlay"] : resourceBundle["menuDownload"];
 
-    menuText = menuText 
-             + menuEntry("javascript:downloadFile('" + scriptPreparedPath + "')",downloadLabel);
+	addContextMenuEntry(menuDiv, "downloadFile('" + scriptPreparedPath + "')", downloadLabel);
 
-    if (readonly != 'true')
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:delLink('" + linkName + "')",resourceBundle["menuDelLink"]);
+    if (readonly != 'true') {
+    	addContextMenuEntry(menuDiv, "delLink('" + linkName + "')", resourceBundle["menuDelLink"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:renameLink('" + linkName + "')",resourceBundle["menuRenLink"]);
+    	addContextMenuEntry(menuDiv, "renameLink('" + linkName + "')", resourceBundle["menuRenLink"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:editRemoteLink('" + scriptPreparedPath + "')",resourceBundle["menuEdit"]);
+    	addContextMenuEntry(menuDiv, "editRemoteLink('" + scriptPreparedPath + "')", resourceBundle["menuEdit"]);
 
-        if (parent.mailEnabled == 'true')
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:emailLink('" + scriptPreparedPath + "')",resourceBundle["menuSendFile"]);
+        if (parent.mailEnabled == 'true') {
+        	addContextMenuEntry(menuDiv, "emailLink('" + scriptPreparedPath + "')", resourceBundle["menuSendFile"]);
         }
     }
 
-    menuText = menuText 
-             + menuEntry("javascript:comments('" + scriptPreparedPath + "')",resourceBundle["menuComments"]);
+	addContextMenuEntry(menuDiv, "comments('" + scriptPreparedPath + "')", resourceBundle["menuComments"]);
 
-    if (serverOS == 'win')
-    {
+	let realDir = "";
+    if (serverOS == 'win') {
         realDir = realPath.substring(0,realPath.lastIndexOf('\\'));
-        
-        if (realDir.length < 3)
-        {
+        if (realDir.length < 3) {
             realDir = realDir + "\\";
         }
-    }
-    else
-    {
+    } else {
         realDir = realPath.substring(0,realPath.lastIndexOf('/'));
-        
-        if (realDir.length == 0)
-        {
+        if (realDir.length == 0) {
             realDir = "/";
         }
-        
     }
 
-    menuText = menuText 
-             + menuEntry("javascript:origDir('" + insertDoubleBackslash(realDir) + "')",resourceBundle["menuOrigDir"]);
-        
-    menuText = menuText + '</table>'; 
-
-    menuDiv.innerHTML = menuText;
+	addContextMenuEntry(menuDiv, "origDir('" + insertDoubleBackslash(realDir) + "')", resourceBundle["menuOrigDir"]);
 
     positionMenuDiv(menuDiv);
+
+    menuDiv.style.visibility = 'visible';
 }
 
-function editRemoteLink(path)
-{
+function editRemoteLink(path) {
     window.location.href = '/webfilesys/servlet?command=mobile&cmd=editFile&filePath=' + encodeURIComponent(path) + '&screenHeight=' + screen.height;
 }
 
-function origDir(path)
-{
+function origDir(path) {
     window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList&absPath=" + encodeURIComponent(path);
 }
 
@@ -122,5 +82,4 @@ function emailLink(filePath) {
         document.emailForm.receiver.select();
     });
 }
-
 

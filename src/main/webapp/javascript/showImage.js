@@ -91,43 +91,36 @@ var MIN_VIEWPORT_HEIGHT = 300;
 
 function deleteSelf(imgPath, imgName) {
 	
-	var fileName;
+	let fileName = "";
 	if (imgName) {
 		fileName = imgName;
 	} else {
 		fileName = extractFileName(imgPath)
 	}
 	
-	customConfirm(resourceBundle["confirm.delfile"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
+	customConfirm(fileName + " - " + resourceBundle["confirm.delfile"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
 			function() {
-	            var url;
+			    let parameters = {};
 	            if (imgName) {
-	                url = "/webfilesys/servlet?command=delFile&fileName=" + encodeURIComponent(imgName);
-	            } else {
-	                url = "/webfilesys/servlet?command=delFile&filePath=" + encodeURIComponent(imgPath);
-	            }
-	    
-	            xmlRequest(url, function(req) {
-	                if (req.readyState == 4) {
-	                    if (req.status == 200) {
-	                        var responseXml = req.responseXML;
-	                        var successItem = responseXml.getElementsByTagName("success")[0];
-	                        var success = successItem.firstChild.nodeValue;  
+                    parameters["fileName"] = encodeURIComponent(imgName);
+                } else {
+                    parameters["filePath"] = encodeURIComponent(imgPath);
+                }
+
+                xmlPostRequest("delFile", parameters, function(responseXml) {
+                    var successItem = responseXml.getElementsByTagName("success")[0];
+                    var success = successItem.firstChild.nodeValue;  
 	                
-	                        if (success == "true") {
-	                            var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
-	                            var deletedFile = deletedFileItem.firstChild.nodeValue; 
+                    if (success == "true") {
+                        var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
+                        var deletedFile = deletedFileItem.firstChild.nodeValue; 
 	                    
-	                            window.opener.removeDeletedFile(deletedFile);
+                        window.opener.removeDeletedFile(deletedFile);
 	                    
-	                            setTimeout("self.close()", 300);
-	                        } else {
-	                            customAlert(resourceBundle["alert.delFileError"]);
-	                        }
-	                    } else {
-	                        customAlert(resourceBundle["alert.communicationFailure"]);
-	                    }
-	                }
+                        setTimeout("self.close()", 300);
+                    } else {
+                        customAlert(resourceBundle["alert.delFileError"]);
+                    }
 	            });          
 	        }
 	);

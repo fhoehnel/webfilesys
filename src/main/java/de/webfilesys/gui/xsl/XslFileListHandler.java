@@ -7,13 +7,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.ClipBoard;
 import de.webfilesys.Constants;
@@ -132,14 +132,10 @@ public class XslFileListHandler extends XslFileListHandlerBase
 			iconMgr = IconManager.getInstance();
 		}
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/fileList.xsl\"");
-
 		Element fileListElement = doc.createElement("fileList");
 			
 		doc.appendChild(fileListElement);
 			
-		doc.insertBefore(xslRef, fileListElement);
-
 		String errorMsg = getParameter("errorMsg");
 		
 	    if (errorMsg != null)

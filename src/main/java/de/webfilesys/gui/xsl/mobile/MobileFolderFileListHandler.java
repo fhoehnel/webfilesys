@@ -5,10 +5,10 @@ import java.io.PrintWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.StringTokenizer;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -32,7 +32,6 @@ import de.webfilesys.WinDriveManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
-import de.webfilesys.util.StringComparator;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -389,12 +388,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 		
 		folderFileListElement.appendChild(foldersElem);
 
-        String relPathWithSlash = relativePath;
-        
-        if ((relativePath.length() > 0) && (!relativePath.endsWith(File.separator)))
-        {
-        	relPathWithSlash = relativePath + File.separator;
-        }
+        final String relPathWithSlash = (relativePath.length() > 0) && (!relativePath.endsWith(File.separator)) ? relativePath + File.separator : relativePath;
         
         File dirFile = new File(currentPath);
         
@@ -407,8 +401,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
         
         if ((File.separatorChar == '\\') && 
             (docRoot.charAt(0) == '*') &&
-            relativePath.equals(File.separator))
-        {
+            relativePath.equals(File.separator)) {
             // show Windows drive letters
 
             for (int i = 1; i <= 26; i++)
@@ -444,47 +437,16 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             }
             
             XmlUtil.setChildText(folderFileListElement, "cwdNotSelected", "true");
-        }
-        else
-        {
-            String fileList[] = dirFile.list();
-
-            if (fileList != null)
-            {
-                ArrayList subFolders = new ArrayList();
-                
-                for (int i = 0; i < fileList.length; i++)
-                {
-                    String subDirName = fileList[i];
+        } else {
+        	Arrays.stream(dirFile.listFiles())
+	            .filter(file -> file.isDirectory())
+	            .filter(dir -> !ThumbnailThread.THUMBNAIL_SUBDIR.equals(dir.getName()))
+        	    .sorted((folder1, folder2) -> folder1.getName().compareToIgnoreCase(folder2.getName()))
+        	    .forEach(folder -> {
+        	    	
+                    String subDirName = folder.getName();
                     
-                    if (!subDirName.equals(ThumbnailThread.THUMBNAIL_SUBDIR))
-                    {
-                        File tempFile = new File(currentPath, subDirName);
-
-                        if (tempFile.isDirectory())
-                        {
-                            subFolders.add(subDirName);
-                        }
-                    }
-                }
-
-                if (subFolders.size() > 1)
-                {
-                    Collections.sort(subFolders, new StringComparator(StringComparator.SORT_IGNORE_CASE));
-                }
-
-                Iterator iter = subFolders.iterator();
-                
-                while (iter.hasNext())
-                {
-                    String subDirName = (String) iter.next();
-                    
-                    String shortDirName = subDirName;
-                    
-                    if (subDirName.length() > 18)
-                    {
-                        shortDirName = CommonUtils.shortName(subDirName, MAX_FILENAME_DISPLAY_LENGTH);
-                    }
+                    String shortDirName = subDirName.length() > 18 ? CommonUtils.shortName(subDirName, MAX_FILENAME_DISPLAY_LENGTH) : subDirName;
                     
                     Element subDirElem = doc.createElement("folder");
                 
@@ -495,8 +457,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                     subDirElem.setAttribute("displayName", shortDirName);
                 
                     subDirElem.setAttribute("path", UTF8URLEncoder.encode(relPathWithSlash + subDirName));
-                }
-            }
+        	});
         }
         // end subdir section
 		
@@ -587,34 +548,36 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 	            iconMgr = IconManager.getInstance();
 	        }
 			
-			for (int i = 0; i < selectedFiles.size(); i++)
-			{
+	        int idx = 0;
+			for (FileContainer fileCont : selectedFiles) {
 				Element fileElement = doc.createElement("file");
                 
 				fileListElement.appendChild(fileElement);
 
-				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
-				
 				String fileName = fileCont.getName();
 
 				fileElement.setAttribute("name", fileName);
                 fileElement.setAttribute("nameForScript", escapeForJavascript(fileName));
 
-				fileElement.setAttribute("id", Integer.toString(i));
+				fileElement.setAttribute("id", Integer.toString(idx++));
 				
-                if (WebFileSys.getInstance().isShowAssignedIcons())
-                {
-                    String docImage = "doc.gif";
+				String docImage = null;
 
-                    int extIdx = fileName.lastIndexOf('.');
+				if (WebFileSys.getInstance().isShowAssignedIcons()) {
+					int extIdx = fileName.lastIndexOf('.');
+					if ((extIdx > 0) && (extIdx < (fileName.length() - 1))) {
+						docImage = iconMgr.getFileIconNoDefault(fileName);
+					}
+				}
 
-                    if ((extIdx > 0) && (extIdx < (fileName.length() - 1)))
-                    {
-                        docImage = iconMgr.getAssignedIcon(fileName.substring(extIdx + 1));
-                    }
-
-                    fileElement.setAttribute("icon", docImage);
-                }
+				if (docImage != null) {
+	                fileElement.setAttribute("icon", docImage);
+				} else {
+					String docImageIconFont = iconMgr.getFileIconFont(fileName); 
+					if (docImageIconFont != null) {
+		                fileElement.setAttribute("iconFont", docImageIconFont);
+					}
+				}
 				
 				File tempFile = fileCont.getRealFile();
 

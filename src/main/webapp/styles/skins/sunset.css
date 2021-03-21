@@ -144,6 +144,16 @@ table.contextMenu th {
     background-color: #d0d0d0;
 }
 
+div.contextMenuItem {
+    background-color: #ffa000;
+    color: maroon;
+}
+
+div.contextMenuItem:hover {
+    background-color: #ffc020;
+    color: #000000;
+}
+
 .icon-button a:before {
 	color: #404040;
 }
@@ -214,3 +224,7 @@ div.currentFolder > a.dirtree {
 	border: 1px solid #b06000;
 }
 
+body.zipContent span.icon-folderOpen:before,
+div.zipEntry span.icon-folderOpenFilled:before {
+	color: #b06000;
+}

@@ -6,13 +6,13 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.ClipBoard;
 import de.webfilesys.Constants;
@@ -144,13 +144,9 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			}
 		}
 
-		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/thumbnailOnePage.xsl\"");
-
 		Element fileListElement = doc.createElement("fileList");
 
 		doc.appendChild(fileListElement);
-
-		doc.insertBefore(xslRef, fileListElement);
 
 		String errorMsg = getParameter("errorMsg");
 

@@ -15,200 +15,143 @@ function extractDirNameFromPath(path)
     return path;
 }
 
-function dirContextMenu(domId, root)
-{
+function dirContextMenu(domId, root) {
     parentDiv = document.getElementById(domId);
 
-    if (!parentDiv)
-    {
-        alert('Element with id ' + domId + ' not found');
-
+    if (!parentDiv) {
+        console.error("Element with id " + domId + " not found");
         return;
     }
 
-	var dirIsRoot = false;
+	let dirIsRoot = false;
 	if (root && root == "true") {
 		dirIsRoot = true;
 	}
     
-    var urlEncodedPath = parentDiv.getAttribute("path");
+    const urlEncodedPath = parentDiv.getAttribute("path");
 
-    var path = decodeURIComponent(urlEncodedPath);
+    const path = decodeURIComponent(urlEncodedPath);
 
-    var folderName = extractDirNameFromPath(path);
+    let folderName = extractDirNameFromPath(path);
 
-    if (folderName.length > 24)
-    {
+    if (folderName.length > 24) {
         folderName = folderName.substring(0,7) + "..." + folderName.substring(folderName.length - 14, folderName.length);
     }    
 
-    var shortPathName = path;
+    let shortPathName = path;
     
-    if (path.length > 24)
-    {
+    if (path.length > 24) {
         shortPathName = path.substring(0,7) + "..." + path.substring(path.length - 14, path.length);
     }    
 
     scriptPreparedPath = insertDoubleBackslash(path);
 
-    if (parent.syncStarted)
-    {
+    if (parent.syncStarted) {
         syncSelectTarget(path, shortPathName, scriptPreparedPath);
         return;
     }
 
-    if (parent.compStarted)
-    {
+    if (parent.compStarted) {
         compSelectTarget(path, shortPathName, scriptPreparedPath);
         return;
     }
 
-    var menuDiv = document.getElementById('contextMenu');    
+    const menuDiv = document.getElementById("contextMenu");    
     
-    menuText = '<table class="contextMenu">'
-             + '<tr>'
-             + '<th>'
-             + folderName
-             + '</th>'
-             + '</tr>';
+    menuDiv.style.visibility = "hidden";
 
-    if (parent.readonly != 'true')
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:mkdir('" + scriptPreparedPath + "')",resourceBundle["label.mkdir"]);
+    menuDiv.innerHTML = "";
+
+    addContextMenuHead(menuDiv, folderName);
+
+    if (parent.readonly != 'true') {
+    	addContextMenuEntry(menuDiv, "mkdir('" + scriptPreparedPath + "')", resourceBundle["label.mkdir"]);
     }
 
     if (((parent.serverOS == 'win') && (path.length > 3)) ||
-	    ((parent.serverOS == 'ix') && (path.length > 1)))
-    {
-        if ((parent.readonly != 'true') && (!dirIsRoot))
-	    {
-            menuText = menuText 
-                     + menuEntry("javascript:copyDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.copydir"]);
+	    ((parent.serverOS == 'ix') && (path.length > 1))) {
 
-            menuText = menuText 
-                     + menuEntry("javascript:moveDirToClip('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.movedir"]);
+    	if ((parent.readonly != 'true') && (!dirIsRoot)) {
+    		addContextMenuEntry(menuDiv, "copyDir('" + scriptPreparedPath + "', '" + domId + "')", resourceBundle["label.copydir"]);
 
-            menuText = menuText 
-                     + menuEntry("javascript:deleteDir('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.deldir"]);
+    		addContextMenuEntry(menuDiv, "moveDirToClip('" + scriptPreparedPath + "', '" + domId + "')", resourceBundle["label.movedir"]);
 
-            menuText = menuText 
-                     + menuEntry("javascript:renameDir('" + scriptPreparedPath + "')",resourceBundle["label.renamedir"]);
+    		addContextMenuEntry(menuDiv, "deleteDir('" + scriptPreparedPath + "', '" + domId + "')", resourceBundle["label.deldir"]);
+
+    		addContextMenuEntry(menuDiv, "renameDir('" + scriptPreparedPath + "')", resourceBundle["label.renamedir"]);
 	    }
     }
 
-    if (!clipboardEmpty)
-    {
-        if (parent.readonly != 'true')
-	    {
-            menuText = menuText 
-                     + menuEntry("javascript:checkPasteOverwrite('" + scriptPreparedPath + "')",resourceBundle["label.pastedir"]);
+    if (!clipboardEmpty) {
+        if (parent.readonly != 'true') {
+        	addContextMenuEntry(menuDiv, "checkPasteOverwrite('" + scriptPreparedPath + "')", resourceBundle["label.pastedir"]);
 	    }
     }
 
-    menuText = menuText 
-             + menuEntry("javascript:statisticsMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "')",resourceBundle["label.statistics"] + ' >');
+	addContextMenuEntry(menuDiv, "statisticsMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "')", resourceBundle["label.statistics"] + " ...");
 
-    menuText = menuText 
-             + menuEntry("javascript:search('" + scriptPreparedPath + "')",resourceBundle["label.search"]);
+	addContextMenuEntry(menuDiv, "search('" + scriptPreparedPath + "')", resourceBundle["label.search"]);
 
-    if (parent.readonly != 'true')
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:mkfile('" + scriptPreparedPath + "')",resourceBundle["label.createfile"]);
+    if (parent.readonly != 'true') {
+    	addContextMenuEntry(menuDiv, "mkfile('" + scriptPreparedPath + "')", resourceBundle["label.createfile"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:upload('" + scriptPreparedPath + "')",resourceBundle["label.upload"]);
+    	addContextMenuEntry(menuDiv, "upload('" + scriptPreparedPath + "')", resourceBundle["label.upload"]);
     }
 
     if ((parent.serverOS == 'ix')  && (parent.readonly != 'true') &&
-        ((parent.webspaceUser != 'true') || (parent.chmodAllowed == 'true')))
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:rights('" + scriptPreparedPath + "')",resourceBundle["label.accessrights"]);
+        ((parent.webspaceUser != 'true') || (parent.chmodAllowed == 'true'))) {
+    
+    	addContextMenuEntry(menuDiv, "rights('" + scriptPreparedPath + "')", resourceBundle["label.accessrights"]);
     }
 
     if (((parent.serverOS == 'win') && (path.length > 3)) ||
-	((parent.serverOS == 'ix') && (path.length > 1)))
-    {
-        if (parent.readonly != 'true')
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:zip('" + scriptPreparedPath + "')",resourceBundle["label.zipdir"]);
-	}
+	    ((parent.serverOS == 'ix') && (path.length > 1))) {
+        if (parent.readonly != 'true') {
+        	addContextMenuEntry(menuDiv, "zip('" + scriptPreparedPath + "')", resourceBundle["label.zipdir"]);
+	    }
     }
 
-    if (parent.readonly != 'true')
-    {
+    if (parent.readonly != 'true') {
         lastPathChar = path.charAt(path.length - 1);
     
-        if ((lastPathChar == '/') || (lastPathChar == '\\'))
-        {
-  	    descriptionPath = path + ".";
-	}
-	else
-	{
-	    if (parent.serverOS == 'win')
-	    {
-	        descriptionPath = path + '\\' + '.';
+        if ((lastPathChar == '/') || (lastPathChar == '\\')) {
+  	        descriptionPath = path + ".";
+	    } else {
+	        if (parent.serverOS == 'win') {
+	            descriptionPath = path + '\\' + '.';
+	        } else {
+	            descriptionPath = path + '/' + '.';
+	        }
 	    }
-	    else
-	    {
-	        descriptionPath = path + '/' + '.';
-	    }
-	}
 
-        menuText = menuText 
-                 + menuEntry("javascript:description('" + insertDoubleBackslash(descriptionPath) + "')",resourceBundle["label.editMetaInfo"]);
+    	addContextMenuEntry(menuDiv, "description('" + insertDoubleBackslash(descriptionPath) + "')", resourceBundle["label.editMetaInfo"]);
     }
 
-    if ((parent.clientIsLocal == 'true') && (parent.readonly != 'true') && (parent.serverOS == 'win'))
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:winCmdLine('" + scriptPreparedPath + "')",resourceBundle["label.winCmdLine"]);
+    if ((parent.clientIsLocal == 'true') && (parent.readonly != 'true') && (parent.serverOS == 'win')) {
+    	addContextMenuEntry(menuDiv, "winCmdLine('" + scriptPreparedPath + "')", resourceBundle["label.winCmdLine"]);
     }
 
-    menuText = menuText 
-             + menuEntry("javascript:refresh('" + scriptPreparedPath + "')",resourceBundle["label.refresh"]);
+	addContextMenuEntry(menuDiv, "refresh('" + scriptPreparedPath + "')", resourceBundle["label.refresh"]);
 
-    if ((parent.serverOS == 'win') && (path.length <= 3))
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:driveInfo('" + scriptPreparedPath + "')",resourceBundle["label.driveinfo"]);
+    if ((parent.serverOS == 'win') && (path.length <= 3)) {
+    	addContextMenuEntry(menuDiv, "driveInfo('" + scriptPreparedPath + "')", resourceBundle["label.driveinfo"]);
     }
         
-    if (parent.readonly != 'true')
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:extendedDirMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "', '" + domId + "', '" + dirIsRoot + "')", resourceBundle["label.menuMore"]);
+    if (parent.readonly != 'true') {
+    	addContextMenuEntry(menuDiv, "extendedDirMenu('" + insertDoubleBackslash(shortPathName) + "', '" + scriptPreparedPath + "', '" + domId + "', '" + dirIsRoot + "')", resourceBundle["label.menuMore"]);
     }
 
-    menuText = menuText + '</table>'; 
-
-    menuDiv.innerHTML = menuText;
+    let maxMenuHeight;
     
-    menuDiv.style.bgcolor = '#c0c0c0';
-    
-    var maxMenuHeight;
-    
-    if (parent.readonly == 'true')
-    {
+    if (parent.readonly == 'true') {
         maxMenuHeight = 260;
-    }
-    else
-    {
-        if (parent.serverOS == 'win')
-        {
+    } else {
+        if (parent.serverOS == 'win') {
             maxMenuHeight = 420;
-        }
-        else
-        {
-            if (parent.webspaceUser == 'true')
-            {
+        } else {
+            if (parent.webspaceUser == 'true') {
                 maxMenuHeight = 420;
-            }
-            else
-            {
+            } else {
                 maxMenuHeight = 440;
             }
         }
@@ -217,86 +160,62 @@ function dirContextMenu(domId, root)
     positionMenuDivByDomId(menuDiv, maxMenuHeight, domId);
 
     menuDiv.style.visibility = 'visible';
-  
-    // setTimeout('hideMenu()',8000);
 }
 
-function extendedDirMenu(shortPath, path, domId, dirIsRoot)
-{
+function extendedDirMenu(shortPath, path, domId, dirIsRoot) {
     stopMenuClose = true;
 
     var scriptPreparedPath = insertDoubleBackslash(path);
 
-    var menuDiv = document.getElementById('contextMenu');    
+    const menuDiv = document.getElementById("contextMenu");    
+    
+    menuDiv.style.visibility = "hidden";
 
-    menuDiv.style.visibility = 'hidden';
+    menuDiv.innerHTML = "";
 
     var folderName = extractDirNameFromPath(path);
 
     var shortFolderName = folderName;
 
-    if (folderName.length > 24)
-    {
+    if (folderName.length > 24) {
         shortFolderName = folderName.substring(0,7) + "..." + folderName.substring(folderName.length - 14, folderName.length);
     }    
 
-    var menuText = '<table class="contextMenu">'
-                 + '<tr>'
-                 + '<th>'
-                 + shortFolderName
-                 + '</th>'
-                 + '</tr>';
+    addContextMenuHead(menuDiv, shortFolderName);
 
-    if (parent.readonly != 'true')
-    {
-        if (parent.mailEnabled == 'true')
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:publish('" + scriptPreparedPath + "', true)",resourceBundle["label.publish"]);
-        }
-        else
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:publish('" + scriptPreparedPath + "', false)",resourceBundle["label.publish"]);
+    if (parent.readonly != 'true') {
+        if (parent.mailEnabled == 'true') {
+        	addContextMenuEntry(menuDiv, "publish('" + scriptPreparedPath + "', true)", resourceBundle["label.publish"]);
+        } else {
+        	addContextMenuEntry(menuDiv, "publish('" + scriptPreparedPath + "', false)", resourceBundle["label.publish"]);
         }
     }
 
-    if ((parent.readonly != 'true') && (parent.autoCreateThumbs != 'true'))
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:createThumbs('" + scriptPreparedPath + "')",resourceBundle["label.createthumbs"]);
+    if ((parent.readonly != 'true') && (parent.autoCreateThumbs != 'true')) {
+    	addContextMenuEntry(menuDiv, "createThumbs('" + scriptPreparedPath + "')", resourceBundle["label.createthumbs"]);
     }
 
-    if ((parent.adminUser == 'true') && (parent.autoCreateThumbs != 'true'))
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:clearThumbs('" + scriptPreparedPath + "')",resourceBundle["label.clearthumbs"]);
+    if ((parent.adminUser == 'true') && (parent.autoCreateThumbs != 'true')) {
+    	addContextMenuEntry(menuDiv, "clearThumbs('" + scriptPreparedPath + "')", resourceBundle["label.clearthumbs"]);
     }
     
 	if (dirIsRoot == 'false') {
-        menuText = menuText 
-                 + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.compSource"]);
+		addContextMenuEntry(menuDiv, "compareFolders('" + scriptPreparedPath + "', '" + domId + "')", resourceBundle["label.compSource"]);
 	}
     
-    if (parent.readonly != 'true')
-    {
+    if (parent.readonly != 'true') {
     	if (dirIsRoot == 'false') {
-            menuText = menuText 
-                     + menuEntry("javascript:synchronize('" + scriptPreparedPath + "', '" + domId + "')",resourceBundle["label.menuSynchronize"]);
+    		addContextMenuEntry(menuDiv, "synchronize('" + scriptPreparedPath + "', '" + domId + "')", resourceBundle["label.menuSynchronize"]);
     	}
-        
-        if (parent.watchEnabled)
-        {
-            menuText = menuText 
-                     + menuEntry("javascript:watchFolder('" + scriptPreparedPath + "')",resourceBundle["label.watchFolder"]);
+        if (parent.watchEnabled) {
+        	addContextMenuEntry(menuDiv, "watchFolder('" + scriptPreparedPath + "')", resourceBundle["label.watchFolder"]);
         }
     }
 
     if (((parent.serverOS == 'win') && (path.length > 3)) ||
-	((parent.serverOS == 'ix') && (path.length > 1)))
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:downloadFolder('" + scriptPreparedPath + "')",resourceBundle["label.downloadFolder"]);
+	    ((parent.serverOS == 'ix') && (path.length > 1))) {
+    	
+    	addContextMenuEntry(menuDiv, "downloadFolder('" + scriptPreparedPath + "')", resourceBundle["label.downloadFolder"]);
     }
 
     if (parent.readonly != 'true') {
@@ -304,123 +223,81 @@ function extendedDirMenu(shortPath, path, domId, dirIsRoot)
             if (((parent.serverOS == 'win') && (path.length > 3)) ||
                 ((parent.serverOS == 'ix') && (path.length > 1))) {
             	
-                menuText = menuText 
-                         + menuEntry("javascript:cloneFolder('" + scriptPreparedPath + "', '" + folderName + "')",resourceBundle["label.cloneFolder"]);
-
+            	addContextMenuEntry(menuDiv, "cloneFolder('" + scriptPreparedPath + "', '" + folderName + "')", resourceBundle["label.cloneFolder"]);
             }
     	}
     }
 
     if (parent.webspaceUser != 'true') {
-        menuText = menuText 
-                 + menuEntry("javascript:copyPathToClipboard('" + scriptPreparedPath + "')", resourceBundle["label.copyPath"]);
+    	addContextMenuEntry(menuDiv, "copyPathToClipboard('" + scriptPreparedPath + "')", resourceBundle["label.copyPath"]);
     }
-    
-    menuText = menuText + '</table>'; 
-
-    menuDiv.innerHTML = menuText;
     
     menuDiv.style.visibility = 'visible';
 }
 
-function syncSelectTarget(path, shortPath, scriptPreparedPath)
-{
-    var menuDiv = document.getElementById('contextMenu');    
-
-    menuDiv.style.visibility = 'hidden';
-
-    var menuText = '<table class="contextMenu">'
-                 + '<tr>'
-                 + '<th>'
-                 + shortPath
-                 + '</th>'
-                 + '</tr>';
+function syncSelectTarget(path, shortPath, scriptPreparedPath) {
+    const menuDiv = document.getElementById("contextMenu");    
     
-    if (parent.readonly != 'true')
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:synchronize('" + scriptPreparedPath + "')",resourceBundle["label.menuSynchronize"]);
+    menuDiv.style.visibility = "hidden";
 
-        menuText = menuText 
-                 + menuEntry("javascript:cancelSynchronize('" + scriptPreparedPath + "')",resourceBundle["label.menuCancelSync"]);
+    menuDiv.innerHTML = "";
+
+    addContextMenuHead(menuDiv, shortPath);
+    
+    if (parent.readonly != 'true') {
+    	addContextMenuEntry(menuDiv, "synchronize('" + scriptPreparedPath + "')", resourceBundle["label.menuSynchronize"]);
+
+    	addContextMenuEntry(menuDiv, "cancelSynchronize('" + scriptPreparedPath + "')", resourceBundle["label.menuCancelSync"]);
     }
 
-    menuText = menuText + '</table>'; 
+    positionMenuDiv(menuDiv, 120);
 
-    menuDiv.innerHTML = menuText;
+    menuDiv.style.visibility = 'visible';
+}
+
+function compSelectTarget(path, shortPath, scriptPreparedPath) {
+    const menuDiv = document.getElementById("contextMenu");    
+    
+    menuDiv.style.visibility = "hidden";
+
+    menuDiv.innerHTML = "";
+
+    addContextMenuHead(menuDiv, shortPath);
+    
+    if (parent.readonly != 'true') {
+    	addContextMenuEntry(menuDiv, "compareFolders('" + scriptPreparedPath + "')", resourceBundle["label.compTarget"]);
+
+    	addContextMenuEntry(menuDiv, "cancelCompare('" + scriptPreparedPath + "')", resourceBundle["label.cancelComp"]);
+    }
     
     positionMenuDiv(menuDiv, 120);
 
     menuDiv.style.visibility = 'visible';
 }
 
-function compSelectTarget(path, shortPath, scriptPreparedPath)
-{
-    var menuDiv = document.getElementById('contextMenu');    
-
-    menuDiv.style.visibility = 'hidden';
-
-    var menuText = '<table class="contextMenu">'
-                 + '<tr>'
-                 + '<th>'
-                 + shortPath
-                 + '</th>'
-                 + '</tr>';
-    
-    if (parent.readonly != 'true')
-    {
-        menuText = menuText 
-                 + menuEntry("javascript:compareFolders('" + scriptPreparedPath + "')",resourceBundle["label.compTarget"]);
-
-        menuText = menuText 
-                 + menuEntry("javascript:cancelCompare('" + scriptPreparedPath + "')",resourceBundle["label.cancelComp"]);
-    }
-
-    menuText = menuText + '</table>'; 
-
-    menuDiv.innerHTML = menuText;
-    
-    positionMenuDiv(menuDiv, 120);
-
-    menuDiv.style.visibility = 'visible';
-}
-
-function statisticsMenu(shortPath, path)
-{
+function statisticsMenu(shortPath, path) {
     stopMenuClose = true;
 
     var scriptPreparedPath = insertDoubleBackslash(path);
 
-    var menuDiv = document.getElementById('contextMenu');    
-
-    menuDiv.style.visibility = 'hidden';
-
-    var menuText = '<table class="contextMenu">'
-                 + '<tr>'
-                 + '<th>'
-                 + shortPath
-                 + '</th>'
-                 + '</tr>';
-
-    menuText = menuText 
-             + menuEntry("javascript:statistics('" + scriptPreparedPath + "')",resourceBundle["label.subdirStats"]);
-
-    menuText = menuText 
-             + menuEntry("javascript:statSunburst('" + scriptPreparedPath + "')",resourceBundle["label.statSunburst"]);
-
-    menuText = menuText 
-             + menuEntry("javascript:fileSizeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.sizeStats"]);
-
-    menuText = menuText 
-             + menuEntry("javascript:fileTypeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.typeStats"]);
-
-    menuText = menuText 
-             + menuEntry("javascript:fileAgeStatistics('" + scriptPreparedPath + "')",resourceBundle["label.ageStats"]);
-
-    menuText = menuText + '</table>'; 
-
-    menuDiv.innerHTML = menuText;
+    const menuDiv = document.getElementById("contextMenu");    
     
+    menuDiv.style.visibility = "hidden";
+
+    menuDiv.innerHTML = "";
+
+    addContextMenuHead(menuDiv, shortPath);
+
+	addContextMenuEntry(menuDiv, "statistics('" + scriptPreparedPath + "')", resourceBundle["label.subdirStats"]);
+
+	addContextMenuEntry(menuDiv, "statSunburst('" + scriptPreparedPath + "')", resourceBundle["label.statSunburst"]);
+
+	addContextMenuEntry(menuDiv, "fileSizeStatistics('" + scriptPreparedPath + "')", resourceBundle["label.sizeStats"]);
+
+	addContextMenuEntry(menuDiv, "fileTypeStatistics('" + scriptPreparedPath + "')", resourceBundle["label.typeStats"]);
+
+	addContextMenuEntry(menuDiv, "fileAgeStatistics('" + scriptPreparedPath + "')", resourceBundle["label.ageStats"]);
+
     menuDiv.style.visibility = 'visible';
 }
 

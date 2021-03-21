@@ -45,7 +45,7 @@ function paste(path)
 
 function statistics(path)
 {
-    var statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=treeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=600,height=590");
+    var statWin=open("/webfilesys/servlet?command=fileStatistics&cmd=treeStats&actpath=" + encodeURIComponent(path) + "&random=" + (new Date()).getTime(),"Statistics","scrollbars=yes,resizable=yes,width=610,height=590");
     statWin.focus();
 }
 
@@ -148,7 +148,7 @@ function publish(path,mailEnabled)
 
 function description(path)
 {
-    descWin=window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&geoTag=true&random=" + new Date().getTime(),"descWin","status=no,toolbar=no,location=no,menu=no,width=600,height=590,scrollbars=yes,resizable=yes,left=20,top=10,screenX=20,screenY=10");
+    descWin=window.open("/webfilesys/servlet?command=editMetaInf&path=" + encodeURIComponent(path) + "&geoTag=true&random=" + new Date().getTime(),"descWin","status=no,toolbar=no,location=no,menu=no,width=600,height=630,scrollbars=yes,resizable=yes,left=20,top=10,screenX=20,screenY=10");
     descWin.focus();
     // descWin.opener=parent.FileList;
 }

@@ -10,6 +10,10 @@
       text-align:left;
   }
   
+  div.headline {
+      background-color:lavender;
+  }
+  
   a.currentPath {
       font-size: 20px;
       color: black;
@@ -322,6 +326,12 @@ span.menuitem:hover {
       color: maroon;
       font-style: normal;
   }
+
+  .mobileFileIcon:before {
+      font-size: 24px;
+      color: navy;
+      font-style: normal;
+  }
   
   .mobileMenuIcon:before {
       font-size: 24px;
@@ -338,12 +348,17 @@ span.menuitem:hover {
       text-align: right;
       padding-right: 12px;
   }
+
+  td.mobileMainMenu a {
+      padding-left: 8px;
+      padding-right: 8px;
+  }
   
   div.contextMenu {
       position: absolute;
       top: 10px;
       left: 50px;
-      width: 220px;
+      width: 250px;
       background-color: #c0c0c0;
       border-style: ridge;
       border-width: 3px;
@@ -351,20 +366,38 @@ span.menuitem:hover {
       visibility: hidden;
   }
   
-  div.contextMenu table {
-      border-spacing: 0;
-  }
-  
-  div.contextMenu table th {
-      background-color: lavender;
-      font-size: 16px;
-      color: black;
-      padding: 4px 5px;
-      text-align: left;
-      border-bottom-width: 1px;
-      border-bottom-style: solid;
-      border-bottom-color: black;  
-  }
+div.contextMenuHead {
+	background-color: lavender;
+	color: #000000;
+    padding: 4px 5px;
+    text-align: left;
+    font-size: 20px;
+    font-weight: bold; 
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: black;	
+}  
+
+div.contextMenuItem {
+    background-color: #e0e0e0;
+    color: #000080;
+    padding: 2px 5px;
+    border-top-width: 1px;
+    border-top-style: solid;
+    border-top-color: white;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Arial,Helvetica,sans-serif;
+    cursor: pointer;
+}
+
+div.contextMenuItem:hover {
+    background-color: #f0f0f0;
+    color: maroon;
+}
 
 div.mouseClickShield {
     height: 768px;

@@ -18,6 +18,7 @@ import de.webfilesys.Constants;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.PictureRating;
+import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ImageTransform;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
@@ -144,19 +145,10 @@ public class XformImageHandler extends XmlRequestHandlerBase {
 		}
 
 		String resultImagePath = resultImgFile.getAbsolutePath();
-
-		boolean imgFound = true;
-
-		ScaledImage scaledImage = null;
-
+		
 		try {
-			scaledImage = new ScaledImage(resultImagePath, 100, 100);
-		} catch (IOException ioex) {
-			LOG.error(ioex);
-			imgFound = false;
-		}
+			ScaledImage scaledImage = new ScaledImage(resultImagePath, 100, 100);
 
-		if (imgFound) {
 			XmlUtil.setChildText(fileElement, "imgType", Integer.toString(scaledImage.getImageType()));
 			XmlUtil.setChildText(fileElement, "xpix", Integer.toString(scaledImage.getRealWidth()));
 			XmlUtil.setChildText(fileElement, "ypix", Integer.toString(scaledImage.getRealHeight()));
@@ -164,31 +156,47 @@ public class XformImageHandler extends XmlRequestHandlerBase {
 			int thumbWidth = 0;
 			int thumbHeight = 0;
 
-			if (scaledImage.getRealHeight() > scaledImage.getRealWidth()) {
-				thumbHeight = Constants.THUMBNAIL_SIZE;
-				thumbWidth = scaledImage.getRealWidth() * Constants.THUMBNAIL_SIZE / scaledImage.getRealHeight();
-			} else {
-				thumbWidth = Constants.THUMBNAIL_SIZE;
-				thumbHeight = scaledImage.getRealHeight() * Constants.THUMBNAIL_SIZE / scaledImage.getRealWidth();
-			}
+	        CameraExifData exifData = new CameraExifData(resultImagePath);
+	        
+	        if ((exifData.getThumbWidth() > 0) && (exifData.getThumbHeight() > 0)) {
+	            thumbWidth = exifData.getThumbWidth();
+	            thumbHeight = exifData.getThumbHeight();
+	        } else {
+	   			if (scaledImage.getRealHeight() > scaledImage.getRealWidth()) {
+	   				thumbHeight = Constants.THUMBNAIL_SIZE;
+	   				thumbWidth = scaledImage.getRealWidth() * Constants.THUMBNAIL_SIZE / scaledImage.getRealHeight();
+	   			} else {
+	   				thumbWidth = Constants.THUMBNAIL_SIZE;
+	   				thumbHeight = scaledImage.getRealHeight() * Constants.THUMBNAIL_SIZE / scaledImage.getRealWidth();
+	   			}
+	        }
 
-			XmlUtil.setChildText(fileElement, "thumbWidth", Integer.toString(thumbWidth));
+	        if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+	        	int savedThumbWidth = thumbWidth;
+	            thumbWidth = thumbHeight;
+	        	thumbHeight = savedThumbWidth;
+	        }
+
+	        XmlUtil.setChildText(fileElement, "thumbWidth", Integer.toString(thumbWidth));
 			XmlUtil.setChildText(fileElement, "thumbHeight", Integer.toString(thumbHeight));
 			
-			String imgSrcPath = "/webfilesys/servlet?command=picThumb&imgFile=" + UTF8URLEncoder.encode(resultImageName);
-
-			XmlUtil.setChildText(fileElement, "imgSrcPath", imgSrcPath);
-
-			XmlUtil.setChildText(fileElement, "imgPath", resultImagePath);
-
-			XmlUtil.setChildText(fileElement, "encodedPath", UTF8URLEncoder.encode(resultImagePath), false);
-			
-			XmlUtil.setChildText(fileElement, "pathForScript", escapeForJavascript(resultImagePath), false);
-
-			XmlUtil.setChildText(fileElement, "encodedName", UTF8URLEncoder.encode(resultImageName), false);
-			
-			XmlUtil.setChildText(fileElement, "nameForId", resultImageName.replace(' ',  '_'));
+		} catch (IOException ioex) {
+			LOG.error("failed to get image data", ioex);
 		}
+		
+		String imgSrcPath = "/webfilesys/servlet?command=picThumb&imgFile=" + UTF8URLEncoder.encode(resultImageName);
+
+		XmlUtil.setChildText(fileElement, "imgSrcPath", imgSrcPath);
+
+		XmlUtil.setChildText(fileElement, "imgPath", resultImagePath);
+
+		XmlUtil.setChildText(fileElement, "encodedPath", UTF8URLEncoder.encode(resultImagePath), false);
+		
+		XmlUtil.setChildText(fileElement, "pathForScript", escapeForJavascript(resultImagePath), false);
+
+		XmlUtil.setChildText(fileElement, "encodedName", UTF8URLEncoder.encode(resultImageName), false);
+		
+		XmlUtil.setChildText(fileElement, "nameForId", resultImageName.replace(' ',  '_'));
 
 		addMsgResource("label.comments", getResource("label.comments", "Comments"));
 

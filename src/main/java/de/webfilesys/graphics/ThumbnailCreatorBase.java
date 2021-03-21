@@ -71,40 +71,7 @@ public class ThumbnailCreatorBase
 
             if (exifData.getThumbnailLength() > 0)
             {
-                if (scaledImg.getRealWidth() < scaledImg.getRealHeight())
-                {
-                    // portrait orientation
-                    if (exifData.getThumbOrientation() == CameraExifData.ORIENTATION_PORTRAIT)
-                    {
-                        // we can use the thumbnail from the Exif data
-                        return;
-                    }
-                    else
-                    {
-                        if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8))
-                        {
-                            // we can use a rotated version of the thumbnail from the Exif data
-                            return;
-                        }
-                    }
-                }
-                else
-                {
-                    // landscape orientation
-                    if (exifData.getThumbOrientation() == CameraExifData.ORIENTATION_LANDSCAPE)
-                    {
-                        // we can use the thumbnail from the Exif data
-                        return;
-                    }
-                    else
-                    {
-                        if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) 
-                        {
-                            // we can use a rotated version of the thumbnail from the Exif data
-                            return;
-                        }
-                    }
-                }
+            	return;
             }
         }
 
@@ -161,10 +128,13 @@ public class ThumbnailCreatorBase
         
         if (scaledImg.getImageType() == ScaledImage.IMG_TYPE_JPEG)
         {
-        	if ((exifData.getThumbnailLength() <= 0) && 
-        		((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8))) {
-        		bufferedImg = rotateThumbnail(bufferedImg, exifData);
-        	}
+			if (exifData.getOrientation() == 6) {
+				bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 270);
+			} else if (exifData.getOrientation() == 8) {
+				bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 90);
+			} else if (exifData.getOrientation() == 3) {
+				bufferedImg = ImageTransformUtil.rotateImage(bufferedImg, 180);
+			}
         	
             // JPEG thumbnails
             boolean success = false;
@@ -281,50 +251,6 @@ public class ThumbnailCreatorBase
         bufferedImg.flush();
 
         origImage.flush();
-    }
-
-    private BufferedImage rotateThumbnail(BufferedImage sourceImg, CameraExifData exifData) {
-        float degrees = 90;
-		if (exifData.getOrientation() == 6) {
-        	degrees = 270;
-        } 
-		
-		int newWidth = sourceImg.getHeight();
-		int newHeight = sourceImg.getWidth();
-		
-        Canvas dummyComponent = new Canvas();
-        MediaTracker tracker = new MediaTracker(dummyComponent);
-		
-        Image rotatedImg;
-
-        try {
-            ImageFilter filter = new RotateFilter((Math.PI / 180) * degrees);
-            ImageProducer producer = new FilteredImageSource(sourceImg.getSource(), filter);
-            rotatedImg = dummyComponent.createImage(producer);
-
-            tracker.addImage (rotatedImg,1);
-
-            try {
-                tracker.waitForAll();
-            } catch(InterruptedException intEx2) {
-               Logger.getLogger(getClass()).error("failed to rotate thumbnail image", intEx2);
-            }
-
-            tracker.removeImage(rotatedImg);
-
-            sourceImg.flush();
-            
-            BufferedImage bufferedImg = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
-            Graphics g = bufferedImg.getGraphics();
-            g.drawImage(rotatedImg, 0, 0, null);
-            g.dispose();
-
-            rotatedImg.flush();
-            return bufferedImg;
-        } catch (Exception ex) {
-            Logger.getLogger(getClass()).error("failed to rotate thumbnail image", ex);
-		}
-    	return null;
     }
     
     public boolean thumbnailUpToDate(String imgPath)

@@ -121,8 +121,7 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 	            ScaledImage scaledImage = new ScaledImage(imgFilePath, 400, 400);
 	            
 				CameraExifData exifData = new CameraExifData(imgFilePath);
-				if ((exifData.getThumbnailLength() <= 0) && 
-	                ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8))) {
+				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
 		            thumbnailWidth = scaledImage.getScaledHeight();
 		    		thumbnailHeight = scaledImage.getScaledWidth();
 	            } else {

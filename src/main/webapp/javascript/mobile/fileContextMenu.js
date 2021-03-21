@@ -1,15 +1,16 @@
 function contextMenu(fileName) {
-    menuDiv = document.getElementById('contextMenu');    
-        
-    shortFileName = fileName;
+       
+    let shortFileName = fileName;
     
-    if (fileName.length > 24) {
-        shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 14, fileName.length);
+    if (fileName.length > 22) {
+        shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 12, fileName.length);
     }    
 
-    fileNameExt = getFileNameExt(fileName);
+    const fileNameExt = getFileNameExt(fileName);
     
-    lastPathChar = path.charAt(path.length - 1);
+    const lastPathChar = path.charAt(path.length - 1);
+    
+    let fullPath = "";
     
     if ((lastPathChar == '/') || (lastPathChar == '\\')) {
         fullPath = path + fileName;
@@ -21,83 +22,63 @@ function contextMenu(fileName) {
         }
     }
 
-    scriptPreparedPath = insertDoubleBackslash(fullPath);
+    const scriptPreparedPath = insertDoubleBackslash(fullPath);
 
-    scriptPreparedFile = insertDoubleBackslash(fileName);
-        
-    menuText = '<table style="width:100%">'
-             + '<tr>'
-             + '<th>'
-             + shortFileName
-             + '</th>'
-             + '</tr>';
+    const scriptPreparedFile = insertDoubleBackslash(fileName);
+
+    const menuDiv = document.getElementById('contextMenu');    
+    
+    menuDiv.style.visibility = 'hidden';
+
+    menuDiv.innerHTML = "";
+
+    addContextMenuHead(menuDiv, shortFileName);
 
     if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR") {
-        menuText = menuText 
-                 + menuEntry("javascript:viewZip('" + scriptPreparedPath + "')", resourceBundle["menuViewZip"]);
+    	addContextMenuEntry(menuDiv, "viewZip('" + scriptPreparedPath + "')", resourceBundle["menuViewZip"]);
     } else {
 	    if (fileExt == ".URL") {
-            menuText = menuText 
-                     + menuEntry("javascript:openUrlFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
+	    	addContextMenuEntry(menuDiv, "openUrlFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
 	    } else {
-            menuText = menuText 
-                     + menuEntry("javascript:viewFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
+	    	addContextMenuEntry(menuDiv, "viewFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
 	    }
     }
         
-    if (fileExt == ".MP3") {
-        downloadLabel = resourceBundle["menuPlay"];
-    } else {
-        downloadLabel = resourceBundle["menuDownload"];
-    }
+    const downloadLabel = (fileExt == ".MP3") ? resourceBundle["menuPlay"] : resourceBundle["menuDownload"];
 
-    menuText = menuText 
-             + menuEntry("javascript:downloadFile('" + scriptPreparedPath + "')", downloadLabel);
+	addContextMenuEntry(menuDiv, "downloadFile('" + scriptPreparedPath + "')", downloadLabel);
 
     if (readonly != 'true') {
-        menuText = menuText 
-                 + menuEntry("javascript:delFile('" + scriptPreparedFile + "')", resourceBundle["menuDelete"]);
+    	addContextMenuEntry(menuDiv, "delFile('" + scriptPreparedFile + "')", resourceBundle["menuDelete"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:renameFile('" + scriptPreparedFile + "')", resourceBundle["menuRename"]);
+    	addContextMenuEntry(menuDiv, "renameFile('" + scriptPreparedFile + "')", resourceBundle["menuRename"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["menuCopy"]);
+    	addContextMenuEntry(menuDiv, "copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["menuCopy"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["menuCut"]);
+    	addContextMenuEntry(menuDiv, "cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["menuCut"]);
 
-        menuText = menuText 
-                 + menuEntry("javascript:editRemote('" + scriptPreparedFile + "')", resourceBundle["menuEdit"]);
+    	addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedFile + "')", resourceBundle["menuEdit"]);
 
 	    if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR")) {
-            menuText = menuText 
-                     + menuEntry("javascript:zipFile('" + scriptPreparedPath + "')", resourceBundle["menuUnzip"]);
+	    	addContextMenuEntry(menuDiv, "zipFile('" + scriptPreparedPath + "')", resourceBundle["menuUnzip"]);
         } else {
-            menuText = menuText 
-                     + menuEntry("javascript:zipFile('" + scriptPreparedPath + "')", resourceBundle["menuZip"]);
+	    	addContextMenuEntry(menuDiv, "zipFile('" + scriptPreparedPath + "')", resourceBundle["menuZip"]);
         }
         
         if (mailEnabled == 'true') {
-            menuText = menuText 
-                     + menuEntry("javascript:sendFile('" + scriptPreparedFile + "')", resourceBundle["menuSendFile"]);
+	    	addContextMenuEntry(menuDiv, "sendFile('" + scriptPreparedFile + "')", resourceBundle["menuSendFile"]);
         }
         
 	    if (fileExt == ".MP3") {
-            menuText = menuText 
-                     + menuEntry("javascript:editMP3('" + scriptPreparedPath + "')", resourceBundle["menuEditMP3"]);
+	    	addContextMenuEntry(menuDiv, "editMP3('" + scriptPreparedPath + "')", resourceBundle["menuEditMP3"]);
 	    } else {
-            menuText = menuText 
-                     + menuEntry("javascript:editMetaInfo('" + scriptPreparedFile + "')", resourceBundle["menuEditDesc"]);
+	    	addContextMenuEntry(menuDiv, "editMetaInfo('" + scriptPreparedFile + "')", resourceBundle["menuEditDesc"]);
         }
     }
     
-    menuText = menuText 
-             + menuEntry("javascript:comments('" + scriptPreparedPath + "')", resourceBundle["menuComments"]);
+	addContextMenuEntry(menuDiv, "comments('" + scriptPreparedPath + "')", resourceBundle["menuComments"]);
         
-    menuText = menuText + '</table>'; 
-
-    menuDiv.innerHTML = menuText;
-
     positionMenuDiv(menuDiv);
+    
+    menuDiv.style.visibility = 'visible';
 }

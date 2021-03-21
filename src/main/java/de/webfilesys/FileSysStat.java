@@ -5,169 +5,118 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class FileSysStat
-{
-    String path=null;
+import org.apache.log4j.Logger;
 
-    long size_sum;
-    int file_num;
-    int subdir_num;
-    int tree_file_num;
-    long tree_file_size;
-    int depth_of_tree;
-    long totalSizeSum;
-    long totalFileNum;
+public class FileSysStat {
+    private String path = null;
 
-    long firstLevelSizeSum;
-    long firstLevelFileNum;
+    private int tree_file_num;
+    private long tree_file_size;
+    private int depth_of_tree;
+    private long totalSizeSum;
+    private long totalFileNum;
 
-    long totalSubdirNum;
+    private long firstLevelSizeSum;
+    private long firstLevelFileNum;
 
-    int maxLevel;
+    private long totalSubdirNum;
 
-    long maxDirSize;
+    private int maxLevel;
 
-    public FileSysStat(String path)
-    {
-        this.path=path;
+    private long maxDirSize;
 
-        totalSizeSum=0L;
-        totalFileNum=0L;
-        firstLevelSizeSum=0L;
-        firstLevelFileNum=0L;
+    public FileSysStat(String path) {
+        this.path = path;
 
-        totalSubdirNum=0;
+        totalSizeSum = 0L;
+        totalFileNum = 0L;
+        firstLevelSizeSum = 0L;
+        firstLevelFileNum = 0L;
 
-        maxDirSize=0L;
+        totalSubdirNum = 0;
 
-        maxLevel=0;
+        maxDirSize = 0L;
+
+        maxLevel = 0;
     }
 
-    public ArrayList<DirStat> getStatistics()
-    {
+    public ArrayList<DirStat> getStatistics() {
     	ArrayList<DirStat> statList = new ArrayList<DirStat>();
 
-        File dirFile=new File(path);
+        File dirFile = new File(path);
         
-        String fileList[]=dirFile.list();
+        File[] fileList = dirFile.listFiles();
 
-        if (fileList==null)
-        {
+        if (fileList == null) {
             return(null);
         }
 
-        for (int i=0;i<fileList.length;i++)
-        {
-             String subDir=path + File.separator + fileList[i];
-
-             File tempFile=new File(subDir);
-             
-             if (tempFile.isDirectory())
-             {
+        for (File file : fileList) {
+             if (file.isDirectory()) {
                  totalSubdirNum++;
 
-                 size_sum=0;
-                 file_num=0;
-                 subdir_num=0;
-                 tree_file_num=0;
-                 tree_file_size=0;
-                 depth_of_tree=0;
+                 tree_file_num = 0;
+                 tree_file_size = 0;
+                 depth_of_tree = 0;
 
-                 explore(0,subDir);
+                 explore(0, file.getAbsolutePath());
 
-                 DirStat dirStat=new DirStat(fileList[i]);
+                 DirStat dirStat = new DirStat(file.getName());
 
                  dirStat.setFileNum(tree_file_num);
                  dirStat.setTreeSize(tree_file_size);
 
                  statList.add(dirStat);
 
-                 if (tree_file_size>maxDirSize)
-                 {
-                     maxDirSize=tree_file_size;
+                 if (tree_file_size > maxDirSize) {
+                     maxDirSize = tree_file_size;
                  }
-             }
-             else
-             {
-                 if (tempFile.isFile())
-                 {
-                     totalSizeSum+=tempFile.length();
-
-                     totalFileNum++;
-
-                     firstLevelSizeSum+=tempFile.length();
-
-                     firstLevelFileNum++;
-                 }
+             } else if (file.isFile()) {
+                 totalSizeSum += file.length();
+                 totalFileNum++;
+                 firstLevelSizeSum += file.length();
+                 firstLevelFileNum++;
              }
         }
 
-        if (statList.size()==0)
-        {
+        if (statList.size() == 0) {
             return(null);
         }
 
-        Collections.sort(statList,new DirComparator());
+        Collections.sort(statList, new DirComparator());
 
         return(statList);
     }
 
-    public void explore(int level,String act_path)
-    {
-        File dir_file;
-        File temp_file;
-        int i;
-        String sub_dir;
-        String file_list[]=null;
-
-        if (level+1>maxLevel)
-        {
-            maxLevel=level+1;
+    public void explore(int level, String currentPath) {
+        if (level + 1 > maxLevel) {
+            maxLevel = level + 1;
         }
 
-        dir_file=new File(act_path);
-        file_list=dir_file.list();
-
-        if (file_list!=null)
-        {
-            for (i=0;i<file_list.length;i++)
-            {
-                temp_file=new File(act_path + File.separator + file_list[i]);
-                if (temp_file.isDirectory())
-                {
-                    subdir_num++;
-
+        File dirFile = new File(currentPath);
+        
+        File[] fileList = dirFile.listFiles();
+        
+        if (fileList != null) {
+            for (File file : fileList) {
+                if (file.isDirectory()) {
                     totalSubdirNum++;
-
-                    if (level>depth_of_tree)
-                        depth_of_tree=level;
-                    sub_dir=new String(act_path + File.separator + file_list[i]);
-                    explore(level+1,sub_dir);
-                }
-                else
-                {
-                    if (temp_file.isFile())
-                    {
-                        tree_file_size+=temp_file.length();
-                        tree_file_num++;
-
-                        totalSizeSum+=temp_file.length();
-                        totalFileNum++;
-
-                        if (level==0)
-                        {
-                            size_sum+=temp_file.length();
-                            file_num++;
-                        }
+                    if (level > depth_of_tree) {
+                        depth_of_tree = level;
                     }
+                    explore(level + 1, file.getAbsolutePath());
+                    
+                } else if (file.isFile()) {
+                    tree_file_size += file.length();
+                    tree_file_num++;
+
+                    totalSizeSum += file.length();
+                    totalFileNum++;
                 }
             }
+        } else {
+        	Logger.getLogger(getClass()).warn("cannot get dir entries for " + currentPath);
         }
-        else
-        {
-            System.out.println("cannot get dir entries for " + act_path + "<br>");
-        }
-        file_list=null;
     }
 
     public long getSizeSum()

@@ -141,7 +141,7 @@ public class AdminEditUserRequestHandler extends AdminRequestHandler
         }
         
         output.println("<tr>");
-        output.println("<td class=\"formParm1\"><b>document root</b></td>");
+        output.println("<td class=\"formParm1\"><b>home directory / document root</b></td>");
 		output.println("<td class=\"formParm2\">");
 		output.println("<input type=\"text\" name=\"documentRoot\" id=\"documentRoot\" maxlength=\"255\" value=\"" + userDocRoot + "\">");
 		output.print("&nbsp;");

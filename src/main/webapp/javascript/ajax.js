@@ -1,4 +1,3 @@
-
 function cutCopyToClip(fileName, operation)
 {
     url = '/webfilesys/servlet?command=cutCopy&fileName=' + encodeURIComponent(fileName) + '&cmd=' + operation;
@@ -167,36 +166,25 @@ function openDiffWindow()
     return false;
 }
 
-function touch(fileName)
-{
-    url = '/webfilesys/servlet?command=touch&fileName=' + encodeURIComponent(fileName);
-
-    xmlRequest(url, showTouchResult);
-}
-
-function showTouchResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var item = req.responseXML.getElementsByTagName("success")[0];            
-             var success = item.firstChild.nodeValue;
+function touch(fileName) {
+    const parameters = { "fileName": encodeURIComponent(fileName) };
+    
+	xmlPostRequest("touch", parameters, function(responseXml) {
+        var item = responseXml.getElementsByTagName("success")[0];            
+        var success = item.firstChild.nodeValue;
              
-             hideMenu();
+        hideMenu();
 
-             if (success == 'true')
-             {
-                 reloadPage();
-                 return;
-             }
-
-             item = req.responseXML.getElementsByTagName("message")[0];            
-             var message = item.firstChild.nodeValue;
-
-             toast(message, 3000);
+        if (success == 'true') {
+            reloadPage();
+            return;
         }
-    }
+
+        item = req.responseXML.getElementsByTagName("message")[0];            
+        var message = item.firstChild.nodeValue;
+
+        toast(message, 3000);
+    });
 }
 
 function sendFileViaEmail() 
@@ -311,41 +299,33 @@ function checkPasteOverwriteResult(req) {
 }
 
 function delFileAjax(path, deleteWriteProtected) {
-    
-    var url = "/webfilesys/servlet?command=delFile&filePath=" + encodeURIComponent(path);
+	
+    const parameters = { "filePath": encodeURIComponent(path) };
     
     if (deleteWriteProtected) {
-        url = url + "&deleteWriteProtected=true";
+        parameters["deleteWriteProtected"] = "true";
     }
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                var successItem = responseXml.getElementsByTagName("success")[0];
-                var success = successItem.firstChild.nodeValue;  
+
+    xmlPostRequest("delFile", parameters, function(responseXml) {
+        var successItem = responseXml.getElementsByTagName("success")[0];
+        var success = successItem.firstChild.nodeValue;  
                 
-                if (success == "true") {
-                    var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
-                    var deletedFile = deletedFileItem.firstChild.nodeValue; 
-                
-                    var viewModeItem = responseXml.getElementsByTagName("viewMode")[0];
-                    if ((viewModeItem) && (viewModeItem.firstChild.nodeValue == 2)) {
-                    	if (typeof stopPolling == "function") {
-                    		stopPolling();
-                        }
-                        removeDeletedFile(deletedFile);
-                        hidePrompt();
-                        return;
-                    }                    
-                } else {
-                    alert(resourceBundle["alert.delFileError"]);
+        if (success == "true") {
+            var deletedFileItem = responseXml.getElementsByTagName("deletedFile")[0];
+            var deletedFile = deletedFileItem.firstChild.nodeValue; 
+               
+            var viewModeItem = responseXml.getElementsByTagName("viewMode")[0];
+            if ((viewModeItem) && (viewModeItem.firstChild.nodeValue == 2)) {
+            	if (typeof stopPolling == "function") {
+            		stopPolling();
                 }
-                
-                window.location.href = "/webfilesys/servlet?command=listFiles";                
-            } else {
-                customAlert(resourceBundle["alert.communicationFailure"]);
-            }
+                removeDeletedFile(deletedFile);
+                hidePrompt();
+                return;
+            }                    
+        } else {
+            alert(resourceBundle["alert.delFileError"]);
         }
+        window.location.href = "/webfilesys/servlet?command=listFiles";                
     });          
 }

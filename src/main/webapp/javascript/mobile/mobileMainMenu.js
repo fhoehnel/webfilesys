@@ -1,25 +1,22 @@
 function mobileMainMenu() {
-    var menuDiv = document.getElementById('contextMenu');    
     
-    menuText = '<table style="width:100%">'
-
-    menuText = menuText 
-             + menuEntry("javascript:mobileBookmarks()", resourceBundle["label.bookmarksMobile"]);
-
-    menuText = menuText 
-             + menuEntry("javascript:mobileAbout()", resourceBundle["label.about"]);
-
-    menuText = menuText 
-             + menuEntry("javascript:switchToClassicVersion()", resourceBundle["classicView"]);
-
-    menuText = menuText 
-             + menuEntry("javascript:mobileLogout()", resourceBundle["label.logout"]);
+    const menuDiv = document.getElementById('contextMenu');    
     
-    menuText = menuText + '</table>'; 
+    menuDiv.style.visibility = 'hidden';
 
-    menuDiv.innerHTML = menuText;
+    menuDiv.innerHTML = "";
+    
+	addContextMenuEntry(menuDiv, "mobileBookmarks()", resourceBundle["label.bookmarksMobile"]);
+
+	addContextMenuEntry(menuDiv, "mobileAbout()", resourceBundle["label.about"]);
+
+	addContextMenuEntry(menuDiv, "switchToClassicVersion()", resourceBundle["classicView"]);
+
+	addContextMenuEntry(menuDiv, "mobileLogout()", resourceBundle["label.logout"]);
     
     positionMenuDiv(menuDiv);
+
+    menuDiv.style.visibility = 'visible';
 }
 
 function mobileBookmarks() {

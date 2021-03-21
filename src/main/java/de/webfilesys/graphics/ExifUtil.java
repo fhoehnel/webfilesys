@@ -15,7 +15,9 @@ import org.apache.commons.imaging.common.ImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
 import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
 import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
+import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffConstants;
+import org.apache.commons.imaging.formats.tiff.fieldtypes.FieldType;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputField;
@@ -27,7 +29,8 @@ import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
  * @author bricolsoft consulting (modified)
  */
 public class ExifUtil {
-
+    public static final int TAG_ORIENTATION = 0x0112;
+	
 	public static boolean copyExifData(File sourceFile, File destFile, List<TagInfo> excludedFields) {
 		
 		String tempFileName = destFile.getAbsolutePath() + ".tmp";
@@ -114,6 +117,68 @@ public class ExifUtil {
 		return false;
 	}
 
+	public static boolean resetExifOrientation(File imgFile) {
+		return setExifOrientation(imgFile, 1);
+	}
+		
+	public static boolean setExifOrientation(File imgFile, int newOrientation) {
+		String tempFileName = imgFile.getAbsolutePath() + ".tmp";
+		File tempFile = null;
+		OutputStream tempStream = null;
+
+		try {
+			tempFile = new File(tempFileName);
+
+			TiffOutputSet tiffOutputSet = getSanselanOutputSet(imgFile, TiffConstants.DEFAULT_TIFF_BYTE_ORDER);
+
+			for (TiffOutputDirectory directory : tiffOutputSet.getDirectories()) {
+				
+				for (TiffOutputField field : directory.getFields()) {
+
+					if (field.tagInfo.tag == TAG_ORIENTATION) {
+					
+				        byte[] orientationValue = new byte[1];
+				        orientationValue[0] = (byte) newOrientation;
+				        
+				        TiffOutputField orientationField =  new TiffOutputField(field.tagInfo, field.fieldType, field.count, orientationValue);		
+				        
+				        directory.removeField(TAG_ORIENTATION);
+				        directory.add(orientationField);
+					}
+				}
+			}
+
+			tempStream = new BufferedOutputStream(new FileOutputStream(tempFile));
+			new ExifRewriter().updateExifMetadataLossless(imgFile, tempStream, tiffOutputSet);
+			tempStream.close();
+
+			if (imgFile.delete()) {
+				tempFile.renameTo(imgFile);
+			}
+
+			return true;
+		} catch (ImageReadException exception) {
+			exception.printStackTrace();
+		} catch (ImageWriteException exception) {
+			exception.printStackTrace();
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		} finally {
+			if (tempStream != null) {
+				try {
+					tempStream.close();
+				} catch (IOException e) {
+				}
+			}
+
+			if (tempFile != null) {
+				if (tempFile.exists())
+					tempFile.delete();
+			}
+		}
+		return false;
+	}
+	
 	private static TiffOutputSet getSanselanOutputSet(File jpegImageFile, ByteOrder defaultByteOrder)
 			throws IOException, ImageReadException, ImageWriteException {
 		TiffImageMetadata exif = null;
