@@ -69,32 +69,26 @@ public class ImageTransform
         this.degrees=degrees;
     }
 
-    public String execute(boolean keepSource)
-    {
-        try
-        {
+    public String execute(boolean keepSource) {
+        try {
             sourceImage=new ScaledImage(sourceFilePath,1000,1000);
-        }
-        catch (IOException ioex)
-        {
-            Logger.getLogger(getClass()).error("ImageTransformation.execute: " + ioex);
+        } catch (IOException ioex) {
+            Logger.getLogger(getClass()).error("failed to get dimensions of source image " + sourceFilePath, ioex);
             return(null);
         }
 
-        if (sourceImage.getImageType()==ScaledImage.IMG_TYPE_BMP)
-        {
+        if (sourceImage.getImageType()==ScaledImage.IMG_TYPE_BMP) {
             Logger.getLogger(getClass()).debug("ImageTransformation: ignoring BMP file " + sourceFilePath);
             return(null);
         }
         
         if ((sourceImage.getImageType() == ScaledImage.IMG_TYPE_PNG) ||
-            (sourceImage.getImageType() == ScaledImage.IMG_TYPE_GIF))
-        {
-            return(rotateLossy());
+            (sourceImage.getImageType() == ScaledImage.IMG_TYPE_GIF)) {
+            return(rotateLossy(false));
         }
 
         if ((!degrees.equals("90")) && (!degrees.equals("180")) && (!degrees.equals("270"))) {
-            return(rotateLossy());
+            return(rotateLossy(true));
         }
         
         return(transformLossless(keepSource));
@@ -288,7 +282,7 @@ public class ImageTransform
   		return oldOrientation;
     }
     
-    protected String rotateLossy()
+    protected String rotateLossy(boolean isJPEG)
     {
         String fileNameAppendix = "-r" + degrees;
         double numericDegrees;
@@ -337,6 +331,28 @@ public class ImageTransform
 
         rotateImage(sourceFilePath, destFilePath , numericDegrees);
 
+        if (isJPEG) {
+        	String intermediateFilePath = destFilePath;
+            CameraExifData exifData = new CameraExifData(sourceFilePath);
+
+            if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+                try {
+                    sourceImage = new ScaledImage(intermediateFilePath, 1000, 1000);
+                    destFilePath = actPath + File.separator + fileName + "-rr" + degrees + ".jpg";
+
+                    if (exifData.getOrientation() == 6) {
+                        rotateImage(intermediateFilePath, destFilePath , 270);
+                    } else if (exifData.getOrientation() == 8) {
+                        rotateImage(intermediateFilePath, destFilePath , 90);
+                    }
+                    File intermediateFile = new File(intermediateFilePath);
+                    intermediateFile.delete();
+                } catch (IOException ioex) {
+                    Logger.getLogger(getClass()).error("failed to get dimensions of intermediate image " + intermediateFilePath, ioex);
+                }
+            }            
+        }
+        
 		if (WebFileSys.getInstance().isAutoCreateThumbs()) {
 			AutoThumbnailCreator.getInstance().queuePath(destFilePath , AutoThumbnailCreator.SCOPE_FILE);
 		} else {
