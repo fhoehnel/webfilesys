@@ -53,7 +53,15 @@ function editMP3(path)
 function renameFile(fileName) {  
     centeredDialog('/webfilesys/servlet?command=renameFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameFile.xsl', 360, 160, function() {
         document.renameForm.newFileName.focus();
-        document.renameForm.newFileName.select();
+        const newFileName = document.renameForm.newFileName.value;
+        if (newFileName) {
+	        const extStart = newFileName.lastIndexOf(".");
+            if (extStart > 0) {
+	            document.renameForm.newFileName.setSelectionRange(0, extStart);
+            } else {
+                document.renameForm.newFileName.select();
+            }
+        }
     });
 }
 
