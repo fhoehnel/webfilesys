@@ -19,6 +19,9 @@ import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.graphics.CameraExifData;
+import de.webfilesys.graphics.ImageDimensions;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
@@ -257,33 +260,11 @@ public class XslAlbumSlideShowHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(slideShowElement, "prevImgIdx", Integer.toString(imageIdx - 1), false);
         }
         
-        try
-        {
-            ScaledImage scaledImage = new ScaledImage(imgPath, windowXSize - 20, windowYSize - 130);
-
-            ScaledImage bigImage = new ScaledImage(imgPath, screenWidth - 40, screenHeight - 155);
-
-            if ((role == null) || (!role.equals("album")))
-            {
-                int fullScreenWidth = bigImage.getScaledWidth() + 20;
-                        
-                if (fullScreenWidth < 600)
-                {
-                    fullScreenWidth = 600;
-                }
-
-                XmlUtil.setChildText(slideShowElement, "detailWinWidth", Integer.toString(fullScreenWidth), false);
-                XmlUtil.setChildText(slideShowElement, "detailWinHeight", Integer.toString((bigImage.getScaledHeight() + 70)), false);
-            }
-
-            XmlUtil.setChildText(slideShowElement, "displayWidth", Integer.toString(scaledImage.getScaledWidth()), false);
-            XmlUtil.setChildText(slideShowElement, "displayHeight", Integer.toString(scaledImage.getScaledHeight()), false);
-        }
-        catch (IOException io1)
-        {
-            Logger.getLogger(getClass()).error(io1);
-        }
-		
+  		ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(imgPath, windowXSize - 20, windowYSize - 130);
+    	
+        XmlUtil.setChildText(slideShowElement, "displayWidth", Integer.toString(scaledDim.getWidth()), false);
+        XmlUtil.setChildText(slideShowElement, "displayHeight", Integer.toString(scaledDim.getHeight()), false);
+        
         if (autoForward)
         {
             String pause = getParameter("pause");
