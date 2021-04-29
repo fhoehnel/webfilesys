@@ -90,15 +90,6 @@ public class CompareImageTabHandler extends XslRequestHandlerBase {
 			String imgSrcPath = "/webfilesys/servlet?command=picThumb&imgFile=" + UTF8URLEncoder.encode(selectedFile);
 
 			XmlUtil.setChildText(fileElement, "imgPath", imgSrcPath);
-			
-			try {
-				ScaledImage scaledImage = new ScaledImage(imgPath, THUMBNAIL_SIZE, THUMBNAIL_SIZE);
-				XmlUtil.setChildText(fileElement, "thumbWidth", Integer.toString(scaledImage.getScaledWidth()));
-				XmlUtil.setChildText(fileElement, "thumbHeight", Integer.toString(scaledImage.getScaledHeight()));
-			} catch (IOException io1) {
-				Logger.getLogger(getClass()).error("failed to determine image size for image comparision", io1);
-				return;
-			}
 		}
         
         processResponse(XSL_STYLESHEET_NAME);
