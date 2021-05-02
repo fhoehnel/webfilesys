@@ -150,15 +150,20 @@ public class SlideshowToVideoParamHandler extends XslRequestHandlerBase {
 				return;
 			}
 			targetWidth = resolution;
-			targetHeight = (int) Math.round(resolution / aspectRatio);
+			targetHeight = (int) Math.floor(resolution / aspectRatio);
+			if (targetHeight % 2 == 1) {
+				targetHeight--;
+			}
 		} else {
 			if (resolution > maxHeight) {
 				return;
 			}
 			targetHeight = resolution;
-			targetWidth = (int) Math.round(resolution * aspectRatio);
+			targetWidth = (int) Math.floor(resolution * aspectRatio);
+			if (targetWidth % 2 == 1) {
+				targetWidth--;
+			}
 		}
-		
 		
 		Element resolutionOptionElem = doc.createElement("option");
 		XmlUtil.setChildText(resolutionOptionElem, "width", Integer.toString(targetWidth));

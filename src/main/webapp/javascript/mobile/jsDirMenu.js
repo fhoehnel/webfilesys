@@ -93,39 +93,33 @@ function rights(path)
 }
 
 function deleteFolder(path, confirmed) {
-    var url = "/webfilesys/servlet?command=deleteDir&path=" + encodeURIComponent(path) + "&confirmed=" + confirmed;
+	
+    hideMenu();
 
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                
-                var successItem = responseXml.getElementsByTagName("success")[0];            
-                var success = successItem.firstChild.nodeValue;
+    const parameters = { 
+    	"path": encodeURIComponent(path),
+    	"confirmed": confirmed
+    };
+        
+    xmlPostRequest("deleteDir", parameters, function(responseXml) {
+        const successItem = responseXml.getElementsByTagName("success")[0];            
+        const success = successItem.firstChild.nodeValue;
              
-                var messageItem = responseXml.getElementsByTagName("message")[0];            
-                var message = "";
+        const messageItem = responseXml.getElementsByTagName("message")[0];            
+        let message = "";
              
-                if (messageItem.firstChild) {
-                    message = messageItem.firstChild.nodeValue;
-                }
+        if (messageItem.firstChild) {
+            message = messageItem.firstChild.nodeValue;
+        }
              
-                if (success == "notEmpty") {
-                    if (confirm(message)) {
-                        deleteFolder(path, "true");
-                    }
-                } else {
-                    if (success == "deleted") {
-                        window.location.href = '/webfilesys/servlet?command=mobile&cmd=folderFileList';
-                    } else {
-                        alert(path + '\n' + message);
-                    }
-                }
+        if (success == "notEmpty") {
+	        customConfirm(message, resourceBundle["button.cancel"], resourceBundle["button.ok"], () => deleteFolder(path, "true"));
+        } else {
+            if (success == "deleted") {
+                window.location.href = '/webfilesys/servlet?command=mobile&cmd=folderFileList';
             } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-                window.parent.parent.location.href = '/webfilesys/servlet?command=mobile&cmd=folderFileList';
+                customAlert(path + '\n' + message);
             }
-            hideMenu();
         }
     });
 }

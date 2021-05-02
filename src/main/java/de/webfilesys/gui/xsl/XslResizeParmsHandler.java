@@ -1,6 +1,5 @@
 package de.webfilesys.gui.xsl;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -12,7 +11,8 @@ import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.graphics.CameraExifData;
+import de.webfilesys.graphics.ImageDimensions;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -114,28 +114,10 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 	        String imgSrc = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(imgFilePath);
 			XmlUtil.setChildText(resizeParamsElement, "imgSrc", imgSrc, false);
 
-			int thumbnailWidth = 400;
-			int thumbnailHeight = 400;
-			
-	        try {
-	            ScaledImage scaledImage = new ScaledImage(imgFilePath, 400, 400);
-	            
-				CameraExifData exifData = new CameraExifData(imgFilePath);
-				if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
-		            thumbnailWidth = scaledImage.getScaledHeight();
-		    		thumbnailHeight = scaledImage.getScaledWidth();
-	            } else {
-		            thumbnailWidth = scaledImage.getScaledWidth();
-		    		thumbnailHeight = scaledImage.getScaledHeight();
-	            }
-
-	    		XmlUtil.setChildText(resizeParamsElement, "imageType", Integer.toString(scaledImage.getImageType()), false);
-	        } catch (IOException ioEx) {
-	            LOG.error("failed to get image dimensions", ioEx);
-	        }
+			ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(imgFilePath, 400, 400);
 	        
-			XmlUtil.setChildText(resizeParamsElement, "thumbnailWidth", Integer.toString(thumbnailWidth), false);
-			XmlUtil.setChildText(resizeParamsElement, "thumbnailHeight", Integer.toString(thumbnailHeight), false);
+			XmlUtil.setChildText(resizeParamsElement, "thumbnailWidth", Integer.toString(scaledDim.getWidth()), false);
+			XmlUtil.setChildText(resizeParamsElement, "thumbnailHeight", Integer.toString(scaledDim.getHeight()), false);
 		} else {
 			if (anyJpegFileSelected) {
 	    		XmlUtil.setChildText(resizeParamsElement, "imageType", Integer.toString(ScaledImage.IMG_TYPE_JPEG), false);

@@ -188,29 +188,10 @@ public class ScaledImage
             return;
         }
         
-        int yscale = 100000;
-        int xscale = 100000;
-
-        if (ySize > maxHeight)
-        {
-            yscale = maxHeight * 100000 / ySize;
-        }
+    	ImageDimensions scaledDim = ImageUtils.getScaledDimensions(xSize, ySize, maxWidth, maxHeight);
         
-        if (xSize > maxWidth)
-        {
-            xscale = maxWidth * 100000 / xSize;
-        }
-
-        if (yscale < xscale)
-        {
-            xDisplay = xSize * yscale / 100000 + 1;
-            yDisplay = maxHeight;
-        }
-        else
-        {
-            xDisplay = maxWidth;
-            yDisplay = ySize * xscale / 100000 + 1;
-        }
+        xDisplay = scaledDim.getWidth();
+        yDisplay = scaledDim.getHeight();
     }
 
     public int getScaledWidth()

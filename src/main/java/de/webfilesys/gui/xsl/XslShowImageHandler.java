@@ -1,6 +1,5 @@
 package de.webfilesys.gui.xsl;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Hashtable;
 
@@ -8,16 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Constants;
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.PictureRating;
 import de.webfilesys.graphics.CameraExifData;
-import de.webfilesys.graphics.ScaledImage;
+import de.webfilesys.graphics.ImageDimensions;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -84,40 +82,19 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(imgPath);
 		
 		XmlUtil.setChildText(imageDataElement, "imageSource", srcFileName, false);
-		
-		ScaledImage scaledImage = null;
 
-		try
-		{
-			scaledImage = new ScaledImage(imgPath, 1000, 1000);
+        String fileExt = CommonUtils.getFileExtension(imgPath);
+        
+        boolean isJpeg = fileExt.equals(".jpg") || fileExt.equals(".jpeg");
+
+		if (isJpeg) {
+			XmlUtil.setChildText(imageDataElement, "imageType", "1", false);
 		}
-		catch (IOException ioEx)
-		{
-			Logger.getLogger(getClass()).error(ioEx.toString());
-			XmlUtil.setChildText(imageDataElement, "error", ioEx.toString(), false);
-			processResponse("xsl/showImage.xsl");
-			return;
-		}
-
-		XmlUtil.setChildText(imageDataElement, "imageType", Integer.toString(scaledImage.getImageType()), false);
 		
+		ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(imgPath, 1000, 1000);
 		
-		int imageWidth = scaledImage.getRealWidth();
-		int imageHeight = scaledImage.getRealHeight();
-
-		if (scaledImage.getImageType() == ScaledImage.IMG_TYPE_JPEG) {
-        	CameraExifData exifData = new CameraExifData(imgPath);
-            int orientation = exifData.getOrientation();
-            if (orientation == 6 || orientation == 8) {
-            	// the browser will rotate the picture for display, so we have to shape the browser window accordingly
-            	int swap = imageWidth;
-            	imageWidth = imageHeight;
-            	imageHeight = swap;
-            }
-		}		
-		
-		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(imageWidth), false);
-		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(imageHeight), false);
+		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(scaledDim.getOrigWidth()), false);
+		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(scaledDim.getOrigHeight()), false);
 
         PictureRating pictureRating = metaInfMgr.getPictureRating(imgPath);
         
@@ -162,9 +139,10 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		
 		boolean exifGpsDataPresent = false;
 		
-		if (geoTag == null)
-		{
-		    exifGpsDataPresent = hasGpsExifData(imgPath);
+		if (geoTag == null) {
+			if (isJpeg) {
+			    exifGpsDataPresent = hasGpsExifData(imgPath);
+			}
 		}
 		
 		if ((geoTag != null) || exifGpsDataPresent)
@@ -178,21 +156,14 @@ public class XslShowImageHandler extends XslRequestHandlerBase
 		processResponse("showImage.xsl");
     }
 	
-	private boolean hasGpsExifData(String path)
-	{
-        String fileExt = CommonUtils.getFileExtension(path);
-        
-        if (fileExt.equals(".jpg") || fileExt.equals(".jpeg"))
-        {
-            CameraExifData exifData = new CameraExifData(path);
+	private boolean hasGpsExifData(String path) {
+        CameraExifData exifData = new CameraExifData(path);
 
-            if (exifData.hasExifData())
-            {
-                float gpsLatitude = exifData.getGpsLatitude();
-                float gpsLongitude = exifData.getGpsLongitude();
-                
-                return((gpsLatitude >= 0.0f) && (gpsLongitude >= 0.0f));
-            }
+        if (exifData.hasExifData()) {
+            float gpsLatitude = exifData.getGpsLatitude();
+            float gpsLongitude = exifData.getGpsLongitude();
+            
+            return((gpsLatitude >= 0.0f) && (gpsLongitude >= 0.0f));
         }
 	  
         return false;

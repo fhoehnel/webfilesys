@@ -187,31 +187,22 @@ function touch(fileName) {
     });
 }
 
-function sendFileViaEmail() 
-{
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.emailForm), showEmailResult);
-}
+function sendFileViaEmail()  {
+	
+    if (validateEmailList(document.emailForm.receiver.value)) {
+	
+        xmlPostRequest(null, getFormDataAsProps(document.emailForm), function(responseXml) {
+            let item = responseXml.getElementsByTagName("result")[0];            
+            const success = item.firstChild.nodeValue;
 
-function showEmailResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var item = req.responseXML.getElementsByTagName("result")[0];            
-             var success = item.firstChild.nodeValue;
+            item = responseXml.getElementsByTagName("message")[0];            
+            const message = item.firstChild.nodeValue;
 
-             item = req.responseXML.getElementsByTagName("message")[0];            
-             var message = item.firstChild.nodeValue;
-
-             toast(message, 3000);
-        }
-        else 
-        {
-            alert("failed to send e-mail");
-        }
-        
-        hideHourGlass();
+            toast(message, 3000);
+        });
+	    hidePrompt();
+    } else {
+	    customAlert(resourceBundle["alert.emailsyntax"]);
     }
 }
 

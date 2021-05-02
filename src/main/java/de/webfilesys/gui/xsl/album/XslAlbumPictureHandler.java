@@ -1,7 +1,6 @@
 package de.webfilesys.gui.xsl.album;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +27,8 @@ import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.PictureRating;
 import de.webfilesys.graphics.CameraExifData;
-import de.webfilesys.graphics.ScaledImage;
+import de.webfilesys.graphics.ImageDimensions;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.servlet.VisitorServlet;
 import de.webfilesys.util.CommonUtils;
@@ -268,35 +268,16 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 		String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(imgPath);
 
 		XmlUtil.setChildText(imageDataElement, "imageSource", srcFileName, false);
-
-		ScaledImage scaledImage=null;
-
-		try
-		{
-			scaledImage = new ScaledImage(imgPath, winWidth-50, winHeight-86);
-		}
-		catch (IOException io1)
-		{
-			Logger.getLogger(getClass()).error(io1.toString());
-			this.processResponse("album/albumPicture.xsl");
-			return;
-		}
-
-		XmlUtil.setChildText(imageDataElement, "imageType", Integer.toString(scaledImage.getImageType()), false);
 		
-		int xsize = scaledImage.getRealWidth();
-		int ysize = scaledImage.getRealHeight();
-
-		int xDisplay = scaledImage.getScaledWidth();
-		int yDisplay = scaledImage.getScaledHeight();
+		ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(imgPath, winWidth - 50, winHeight - 90);
 		
-		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(xsize), false);
-		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(ysize), false);
+		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(scaledDim.getOrigWidth()), false);
+		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(scaledDim.getOrigHeight()), false);
 
-		XmlUtil.setChildText(imageDataElement, "displayWidth", Integer.toString(xDisplay), false);
-		XmlUtil.setChildText(imageDataElement, "displayHeight", Integer.toString(yDisplay), false);
+		XmlUtil.setChildText(imageDataElement, "displayWidth", Integer.toString(scaledDim.getWidth()), false);
+		XmlUtil.setChildText(imageDataElement, "displayHeight", Integer.toString(scaledDim.getHeight()), false);
 
-		if (xDisplay < scaledImage.getRealWidth())
+		if (scaledDim.getWidth() < scaledDim.getOrigWidth())
         {
 			XmlUtil.setChildText(imageDataElement, "scaled", "true", false);
         }

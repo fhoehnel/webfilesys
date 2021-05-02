@@ -20,6 +20,8 @@ import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.graphics.ImageDimensions;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -472,66 +474,25 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 				
 				String fullFileName = tempFile.getAbsolutePath();
 
-				boolean imgFound=true;
-
-				ScaledImage scaledImage=null;
-
-				try
-				{
-					scaledImage = new ScaledImage(fullFileName, screenWidth-100, screenHeight-135);
-				}
-				catch (IOException io1)
-				{
-	            	Logger.getLogger(getClass()).error("failed to get scaled image dimensions", io1);
-					imgFound=false;                 
+		  		ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(fullFileName, thumbnailSize, thumbnailSize);
+         
+				XmlUtil.setChildText(fileElement, "thumbnailWidth", Integer.toString(scaledDim.getWidth()));
+				XmlUtil.setChildText(fileElement, "thumbnailHeight", Integer.toString(scaledDim.getHeight()));
+				
+		  		scaledDim = ImageUtils.getScaledImageDimensions(fullFileName, screenWidth-100, screenHeight-135);
+				
+				int fullScreenWidth = scaledDim.getWidth() + 20;
+				
+				if (fullScreenWidth < 600) {
+					fullScreenWidth = 600;
 				}
 				
-				if (imgFound)
-				{
-					XmlUtil.setChildText(fileElement, "imgType", Integer.toString(scaledImage.getImageType()));
-					XmlUtil.setChildText(fileElement, "xpix", Integer.toString(scaledImage.getRealWidth()));
-					XmlUtil.setChildText(fileElement, "ypix", Integer.toString(scaledImage.getRealHeight()));
-             
-					int thumbWidth = 0;
-					int thumbHeight = 0;
-
-                    if ((scaledImage.getRealWidth() <= thumbnailSize) &&
-                        (scaledImage.getRealHeight() <= thumbnailSize))
-                    {
-						thumbHeight = scaledImage.getRealHeight();
-						thumbWidth = scaledImage.getRealWidth();
-                    }
-                    else
-                    {
-						if (scaledImage.getRealHeight() > scaledImage.getRealWidth())
-						{
-							thumbHeight = thumbnailSize;
-							thumbWidth = scaledImage.getRealWidth() * thumbnailSize / scaledImage.getRealHeight();
-						}
-						else
-						{
-							thumbWidth = thumbnailSize;
-							thumbHeight = scaledImage.getRealHeight() * thumbnailSize / scaledImage.getRealWidth();
-						}
-                    }
-					
-					XmlUtil.setChildText(fileElement, "thumbnailWidth", Integer.toString(thumbWidth));
-					XmlUtil.setChildText(fileElement, "thumbnailHeight", Integer.toString(thumbHeight));
-
-					int fullScreenWidth = scaledImage.getScaledWidth() + 20;
-					
-					if (fullScreenWidth < 600)
-					{
-						fullScreenWidth = 600;
-					}
-					
-					XmlUtil.setChildText(fileElement, "fullScreenWidth", Integer.toString(fullScreenWidth));
-					XmlUtil.setChildText(fileElement, "fullScreenHeight", Integer.toString(scaledImage.getScaledHeight()));
-					
-					String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(fullFileName) + "&cached=true";
-					
-					XmlUtil.setChildText(fileElement, "imgPath", srcFileName);
-				}
+				XmlUtil.setChildText(fileElement, "fullScreenWidth", Integer.toString(fullScreenWidth));
+				XmlUtil.setChildText(fileElement, "fullScreenHeight", Integer.toString(scaledDim.getHeight()));
+				
+				String srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(fullFileName) + "&cached=true";
+				
+				XmlUtil.setChildText(fileElement, "imgPath", srcFileName);
 			}
 		}
 

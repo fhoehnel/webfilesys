@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 
+import de.webfilesys.graphics.ImageDimensions;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.XmlUtil;
@@ -76,20 +78,9 @@ public class XmlSlideShowImageHandler extends XmlRequestHandlerBase
 		    Logger.getLogger(getClass()).error("failed to determine window dimensions");
 		}
 		
-		ScaledImage scaledImage = null;
-
-		try
-		{
-            scaledImage=new ScaledImage(imgFileName, screenWidth - 4, screenHeight - 10);
-		}
-		catch (IOException io1)
-		{
-			Logger.getLogger(getClass()).error(io1, io1);
-			return;
-		}
+		ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(imgFileName, screenWidth - 4, screenHeight - 10);
 		
 		Element resultElement = doc.createElement("result");
-
 		
 		XmlUtil.setChildText(resultElement, "success", "true");
 		
@@ -97,10 +88,8 @@ public class XmlSlideShowImageHandler extends XmlRequestHandlerBase
 
 		XmlUtil.setChildText(resultElement, "imagePath", imgFileName);
 
-		XmlUtil.setChildText(resultElement, "imageWidth", Integer.toString(scaledImage.getRealWidth()));
-		XmlUtil.setChildText(resultElement, "imageHeight", Integer.toString(scaledImage.getRealHeight()));
-		XmlUtil.setChildText(resultElement, "displayWidth", Integer.toString(scaledImage.getScaledWidth()));
-		XmlUtil.setChildText(resultElement, "displayHeight", Integer.toString(scaledImage.getScaledHeight()));
+		XmlUtil.setChildText(resultElement, "displayWidth", Integer.toString(scaledDim.getWidth()));
+		XmlUtil.setChildText(resultElement, "displayHeight", Integer.toString(scaledDim.getHeight()));
 
 		doc.appendChild(resultElement);
 		

@@ -1,7 +1,6 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -18,8 +17,8 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.CameraExifData;
-import de.webfilesys.graphics.ScaledImage;
-import de.webfilesys.graphics.ThumbnailThread;
+import de.webfilesys.graphics.ImageDimensions;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -577,109 +576,14 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 	    	return(null);
 	    }
 	    
-		ScaledImage scaledImage = null;
-
-		try
-		{
-			scaledImage = new ScaledImage(filePath, 100, 100);
-		}
-		catch (IOException ioEx)
-		{
-			Logger.getLogger(getClass()).error(ioEx);
-			return(null);                
-		}
-		
+	    ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(filePath, 140, 120);
+	    
 		Element thumbnailElement = doc.createElement("thumbnail");
 		
-		int thumbnailSize = 100;
-		
-		int thumbWidth = 0;
-		int thumbHeight = 0;
+		XmlUtil.setChildText(thumbnailElement, "thumbnailWidth", Integer.toString(scaledDim.getWidth()));
+		XmlUtil.setChildText(thumbnailElement, "thumbnailHeight", Integer.toString(scaledDim.getHeight()));
 
-		if (scaledImage.getRealHeight() > scaledImage.getRealWidth())
-		{
-			thumbHeight = thumbnailSize;
-			thumbWidth = scaledImage.getRealWidth() * thumbnailSize / scaledImage.getRealHeight();
-		}
-		else
-		{
-			thumbWidth = thumbnailSize;
-			thumbHeight = scaledImage.getRealHeight() * thumbnailSize / scaledImage.getRealWidth();
-		}
-		
-		String srcFileName = filePath;
-		
-		boolean useThumb = false;
-		boolean useExif = false;
-
-		CameraExifData exifData = null;
-
-		String thumbFileName = ThumbnailThread.getThumbnailPath(filePath);
-
-		File thumbnailFile = new File(thumbFileName);
-		
-		if (thumbnailFile.exists())
-		{
-			srcFileName = "/webfilesys/servlet?command=getThumb&imgFile=" + UTF8URLEncoder.encode(filePath);
-
-			useThumb = true;
-		}
-		else
-		{
-			int sizeBorder = 500;
-
-			if ((scaledImage.getImageType() == ScaledImage.IMG_TYPE_JPEG) && 
-				((scaledImage.getRealWidth() > sizeBorder) ||
-				 (scaledImage.getRealHeight() > sizeBorder)))
-			{
-				exifData = new CameraExifData(filePath);
-
-				if (exifData.getThumbnailLength() > 0)
-				{
-					if (scaledImage.getRealWidth() >= scaledImage.getRealHeight())
-					{
-						useExif = true;
-					}
-					else
-					{
-						if (exifData.getThumbOrientation() == CameraExifData.ORIENTATION_PORTRAIT)
-						{
-							useExif = true;
-						}
-					}
-
-					if (useExif)
-					{
-						int exifThumbWidth = exifData.getThumbWidth();
-						int exifThumbHeight = exifData.getThumbHeight();
-						
-						if (exifThumbHeight > exifThumbWidth)
-						{
-							thumbHeight = thumbnailSize;
-							thumbWidth = exifThumbWidth * thumbnailSize / exifThumbHeight;
-						}
-						else
-						{
-							thumbWidth = thumbnailSize;
-							thumbHeight = exifThumbHeight * thumbnailSize / exifThumbWidth;
-						}
-						
-						srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(filePath);
-						
-						useThumb = true;
-					}
-				}
-			}
-		}
-
-		XmlUtil.setChildText(thumbnailElement, "thumbnailWidth", Integer.toString(thumbWidth));
-		XmlUtil.setChildText(thumbnailElement, "thumbnailHeight", Integer.toString(thumbHeight));
-
-		if (!useThumb)
-		{
-			srcFileName = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(srcFileName);
-		}
-		
+   	    String srcFileName = "/webfilesys/servlet?command=picThumb&imgFile=" + UTF8URLEncoder.encode(CommonUtils.extractFileName(filePath));
 		XmlUtil.setChildText(thumbnailElement, "imgPath", srcFileName);
 		
         return(thumbnailElement);	    

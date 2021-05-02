@@ -112,7 +112,16 @@ function jsRenameImg(fileName, domId) {
     centeredDialog('/webfilesys/servlet?command=renameImagePrompt&imageFile=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameImage.xsl', 360, 160, function() {
     	document.renameForm.domId.value = domId;
     	document.renameForm.newFileName.focus();
-        document.renameForm.newFileName.select();
+
+        const newFileName = document.renameForm.newFileName.value;
+        if (newFileName) {
+	        const extStart = newFileName.lastIndexOf(".");
+            if (extStart > 0) {
+	            document.renameForm.newFileName.setSelectionRange(0, extStart);
+            } else {
+                document.renameForm.newFileName.select();
+            }
+        }
     });
 }
 

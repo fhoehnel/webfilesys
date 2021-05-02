@@ -112,42 +112,30 @@ function multiImgToVideo() {
 } 
 
 function sendSlideshowVideoParams() {
-	showHourGlass();
 	
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function (req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var success = req.responseXML.getElementsByTagName("success")[0];
-                if (success) {
-                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+    xmlPostRequest(null, getFormDataAsProps(document.form1), function(responseXml) {
+        const success = responseXml.getElementsByTagName("success")[0];
+        if (success) {
+            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];            
+            const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                    var targetPath = targetPathItem.firstChild.nodeValue;
+            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];            
+            const targetPath = targetPathItem.firstChild.nodeValue;
                     
-                    customAlert(resourceBundle["slideshowToVideoStarted"] + " " + targetFolder + ".");
+            customAlert(resourceBundle["slideshowToVideoStarted"] + " " + targetFolder + ".");
                     
-                    setTimeout(function() {
-    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	                window.parent.frames[1].location.href = expUrl;
-                    } , 4000);
-                } else {
-	                var item = req.responseXML.getElementsByTagName("errorCode")[0];
-	                var errorCode = item.firstChild.nodeValue;
-	                if (errorCode == '1') {
-	                    customAlert(resourceBundle["slideshowVideoErrorMissmatch"]);
-	                } else if (errorCode == '2') {
-	                    customAlert(resourceBundle["slideshowVideoErrorProcess"]);
-	                }
-                }
-            } else {
-            	alert(resourceBundle["alert.communicationFailure"]);
+            setTimeout(function() {
+                const expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+                window.parent.frames[1].location.href = expUrl;
+            } , 4000);
+        } else {
+            const item = responseXml.getElementsByTagName("errorCode")[0];
+            const errorCode = item.firstChild.nodeValue;
+            if (errorCode == '1') {
+                customAlert(resourceBundle["slideshowVideoErrorMissmatch"]);
+            } else if (errorCode == '2') {
+                customAlert(resourceBundle["slideshowVideoErrorProcess"]);
             }
-            
-            document.form2.command.value = '';
-            document.form2.cmd.selectedIndex = 0;
-
-            hideHourGlass();
         }
     });
 }
@@ -783,11 +771,11 @@ function handleRenameKeyPress(e) {
 }
 
 function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
-	var renameForm = document.getElementById('renameForm');
+	const renameForm = document.getElementById('renameForm');
 	
-    var newFileName = renameForm.newFileName.value;
+    const newFileName = renameForm.newFileName.value;
 
-    if (newFileName == oldFileName) {
+    if (newFileName === oldFileName) {
         customAlert(errorMsg1);
         return;
     }
@@ -799,62 +787,54 @@ function validateNewFileNameAndRename(oldFileName, errorMsg1, errorMsg2) {
     	return
     }
     
-    var domId = renameForm.domId.value;
-    
-	var formData = getFormData(renameForm);
-	
-	xmlRequestPost("/webfilesys/servlet", formData, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
+    document.getElementById("prompt").style.visibility = "hidden";
+
+    xmlPostRequest(null, getFormDataAsProps(renameForm), function(responseXml) {
 			    
-	            var successItem = req.responseXML.getElementsByTagName("success")[0];            
-	            var success = successItem.firstChild.nodeValue;
+        const successItem = responseXml.getElementsByTagName("success")[0];            
+	    const success = successItem.firstChild.nodeValue;
 			    
-                if (success == 'true') {
-                	if (typeof stopPolling == "function") {
-                		stopPolling();
-                    }
-
-                	var fileNameElem = document.getElementById("fileName-" + domId);
-                	if (fileNameElem) {
-                		fileNameElem.innerHTML = abbrevText(newFileName, 23);
-                		fileNameElem.setAttribute("title", newFileName);
-                	}
-
-                    var checkboxElem = document.getElementById("cb-" + domId);
-                    if (checkboxElem) {
-                        checkboxElem.setAttribute("name", "list-" + newFileName);
-                    }
-
-                	var newFilePathItem = req.responseXML.getElementsByTagName("filePath")[0];
-                	var newFilePath = newFilePathItem.firstChild.nodeValue;
-                	
-                	var thumbLink = document.getElementById("thumb-" + domId);
-                	if (thumbLink) {
-                		thumbLink.setAttribute("href", "javascript:showImgFromThumb('" + insertDoubleBackslash(newFilePath) + "');hidePopupPicture()");
-                	    thumbLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
-                	}
-                	
-                	var contextMenuLink = document.getElementById("fileName-" + domId);
-                    if (contextMenuLink) {
-                    	contextMenuLink.setAttribute("href", "javascript:picContextMenu('" + newFileName + "', '" + domId + "');");
-                    	contextMenuLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
-                    }
-                	
-                	var thumbContElem = document.getElementById("thumbCont-" + escapeForId(oldFileName));
-                	if (thumbContElem) {
-                	    thumbContElem.id = "thumbCont-" + escapeForId(newFileName);
-                	}
-                } else {
-                	customAlert(oldFileName + " " + resourceBundle["error.renameFailed"] + " " + newFileName);
-                }			    
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
+        if (success == 'true') {
+          	if (typeof stopPolling == "function") {
+           		stopPolling();
             }
-        }
-        
-        document.getElementById("prompt").style.visibility = "hidden";
+
+	        const renameForm = document.getElementById('renameForm');
+            const domId = renameForm.domId.value;
+
+        	const fileNameElem = document.getElementById("fileName-" + domId);
+          	if (fileNameElem) {
+          		fileNameElem.innerHTML = abbrevText(newFileName, 23);
+           		fileNameElem.setAttribute("title", newFileName);
+           	}
+
+            const checkboxElem = document.getElementById("cb-" + domId);
+            if (checkboxElem) {
+                checkboxElem.setAttribute("name", "list-" + newFileName);
+            }
+
+          	const newFilePathItem = responseXml.getElementsByTagName("filePath")[0];
+          	const newFilePath = newFilePathItem.firstChild.nodeValue;
+                	
+          	const thumbLink = document.getElementById("thumb-" + domId);
+          	if (thumbLink) {
+           		thumbLink.setAttribute("href", "javascript:showImgFromThumb('" + insertDoubleBackslash(newFilePath) + "');hidePopupPicture()");
+           	    thumbLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
+           	}
+                	
+           	const contextMenuLink = document.getElementById("fileName-" + domId);
+            if (contextMenuLink) {
+               	contextMenuLink.setAttribute("href", "javascript:picContextMenu('" + newFileName + "', '" + domId + "');");
+               	contextMenuLink.setAttribute("oncontextmenu", "picturePopupInFrame('" + insertDoubleBackslash(newFilePath) + "', '" + domId + "');return false;");
+            }
+	
+          	const thumbContElem = document.getElementById("thumbCont-" + escapeForId(oldFileName));
+          	if (thumbContElem) {
+           	    thumbContElem.id = "thumbCont-" + escapeForId(newFileName);
+           	}
+        } else {
+          	customAlert(oldFileName + " " + resourceBundle["error.renameFailed"] + " " + newFileName);
+        }			    
     });
 }
 

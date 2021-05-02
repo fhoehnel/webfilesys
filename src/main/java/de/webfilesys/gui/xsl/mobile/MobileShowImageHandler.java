@@ -1,14 +1,12 @@
 package de.webfilesys.gui.xsl.mobile;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -18,7 +16,8 @@ import de.webfilesys.FileContainer;
 import de.webfilesys.FileLinkSelector;
 import de.webfilesys.FileSelectionStatus;
 import de.webfilesys.MetaInfManager;
-import de.webfilesys.graphics.ScaledImage;
+import de.webfilesys.graphics.ImageDimensions;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -156,48 +155,14 @@ public class MobileShowImageHandler extends XslRequestHandlerBase
             }
         }
 		
-		int maxDisplayWidth = windowWidth - 4;
+		ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(imgPath, windowWidth - 4, windowHeight - 4);
 		
-		int maxDisplayHeight = windowHeight - 4;
-		
-		ScaledImage scaledImage=null;
+		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(scaledDim.getOrigWidth()), false);
+		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(scaledDim.getOrigHeight()), false);
 
-		try
-		{
-			scaledImage = new ScaledImage(imgPath, maxDisplayWidth, maxDisplayHeight);
-		}
-		catch (IOException io1)
-		{
-			Logger.getLogger(getClass()).error(io1.toString());
-			this.processResponse("xsl/mobile/showImage.xsl");
-			return;
-		}
+		XmlUtil.setChildText(imageDataElement, "displayWidth", Integer.toString(scaledDim.getWidth()), false);
+		XmlUtil.setChildText(imageDataElement, "displayHeight", Integer.toString(scaledDim.getHeight()), false);
 
-		XmlUtil.setChildText(imageDataElement, "imageType", Integer.toString(scaledImage.getImageType()), false);
-		
-		int xsize = scaledImage.getRealWidth();
-		int ysize = scaledImage.getRealHeight();
-
-		int xDisplay = xsize;
-		int yDisplay = ysize;
-
-		if ((xsize > maxDisplayWidth) || (ysize > maxDisplayHeight))
-		{
-			xDisplay = scaledImage.getScaledWidth();
-			yDisplay = scaledImage.getScaledHeight();
-		}
-		
-		XmlUtil.setChildText(imageDataElement, "imageWidth", Integer.toString(xsize), false);
-		XmlUtil.setChildText(imageDataElement, "imageHeight", Integer.toString(ysize), false);
-
-		XmlUtil.setChildText(imageDataElement, "displayWidth", Integer.toString(xDisplay), false);
-		XmlUtil.setChildText(imageDataElement, "displayHeight", Integer.toString(yDisplay), false);
-
-		if (xDisplay < scaledImage.getRealWidth())
-        {
-			XmlUtil.setChildText(imageDataElement, "scaled", "true", false);
-        }
-		
 		this.processResponse("mobile/showImage.xsl");
     }
 	
