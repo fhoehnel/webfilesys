@@ -421,6 +421,9 @@ function resizeViewPort(width, height) {
 
 function calculateAspectRatioFit(srcWidth, srcHeight, maxWidth, maxHeight) {
    var ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+   if (ratio > 1) {
+       return {width: srcWidth, height: srcHeight};
+   }
    return {width: srcWidth * ratio, height: srcHeight * ratio};
 }
 

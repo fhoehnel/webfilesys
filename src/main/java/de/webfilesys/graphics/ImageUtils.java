@@ -34,11 +34,13 @@ public class ImageUtils {
             if (orientation == 6 || orientation == 8) {
             	// portrait - the browser will rotate the picture for display
             	scaledDim = ImageUtils.getScaledDimensions(exifData.getImageHeigth(), exifData.getImageWidth(), maxWidth, maxHeight);
+                scaledDim.setOrigWidth(exifData.getImageHeigth());
+                scaledDim.setOrigHeight(exifData.getImageWidth());
             } else {
             	scaledDim = ImageUtils.getScaledDimensions(exifData.getImageWidth(), exifData.getImageHeigth(), maxWidth, maxHeight);
+                scaledDim.setOrigWidth(exifData.getImageWidth());
+                scaledDim.setOrigHeight(exifData.getImageHeigth());
             }
-            scaledDim.setOrigWidth(exifData.getImageWidth());
-            scaledDim.setOrigHeight(exifData.getImageHeigth());
         } else {
         	try {
                 ScaledImage scaledImage = new ScaledImage(imgPath, maxWidth, maxHeight);
