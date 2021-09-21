@@ -5,7 +5,7 @@
   <artifactId>webfilesys</artifactId>
   <packaging>war</packaging>
   <version>2.30.0</version>
-  <name>webfilesys Maven Webapp</name>
+  <name>webfilesys Maven webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
