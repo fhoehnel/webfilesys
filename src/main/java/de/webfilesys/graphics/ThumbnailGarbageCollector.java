@@ -103,8 +103,14 @@ public class ThumbnailGarbageCollector extends Thread
                 String imgFileName=imgPath + fileName;
                 
                 File imgFile=new File(imgFileName);
+                
+                File videoFile = null;
+                if (fileName.indexOf('.') != fileName.lastIndexOf('.')) {
+                	String videoFileName = fileName.substring(0, fileName.lastIndexOf('.' ));
+                	videoFile = new File(imgPath, videoFileName);
+                }
 
-                if ((!imgFile.exists()) || (!imgFile.isFile()))
+                if (((!imgFile.exists()) || (!imgFile.isFile())) && ((videoFile == null) || (!videoFile.exists()) || (!videoFile.isFile())))
                 {
                     if (!tempFile.delete())
                     {
