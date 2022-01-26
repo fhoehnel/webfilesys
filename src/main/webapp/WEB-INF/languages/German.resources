@@ -988,6 +988,7 @@ validationError.videoStartEndTime=Die Endezeit darf nicht vor der Startzeit lieg
 validationError.videoTimeRange=Das gewählte Zeitfenster liegt ausserhalb des Zeitbereiches des Videos.
 selectTwoOrMoreVideoFiles=Es müssen mindestens 2 Video-Dateien ausgewählt werden. 
 concatVideos=Videos verketten
+addSilentAudio=stilles Audio hinzufügen
 joinVideos=versch. Videoformate verketten
 videoConcatStarted=Die Verkettung der selektierten Video-Dateien wurde gestartet und kann einige Minuten dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 videoConcatErrorCodec=Zu verkettende Videos müssen den gleichen Codec benutzen.

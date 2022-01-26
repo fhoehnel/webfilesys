@@ -79,6 +79,7 @@ import de.webfilesys.gui.ajax.ExtractVideoFrameHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
 import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
+import de.webfilesys.gui.ajax.MultiVideoAddSilentAudioHandler;
 import de.webfilesys.gui.ajax.MultiVideoConcatHandler;
 import de.webfilesys.gui.ajax.MultiVideoDeshakeHandler;
 import de.webfilesys.gui.ajax.PollForDirChangeHandler;
@@ -1349,6 +1350,13 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
+        if (command.equals("multiVideoAddSilentAudio"))
+        {
+		    (new MultiVideoAddSilentAudioHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+
         if (command.equals("multiImageExifRename"))
         {
 		    (new RenameToExifDateHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 

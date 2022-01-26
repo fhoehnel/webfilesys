@@ -985,6 +985,7 @@ validationError.videoStartEndTime=The end time may not be before the start time.
 validationError.videoTimeRange=The selected time range is outside the range of the video.
 selectTwoOrMoreVideoFiles=Select at least two video files to concatenate.
 concatVideos=concatenate videos
+addSilentAudio=add silent audio
 joinVideos=concatenate different formats
 videoConcatStarted=The concatenation of the selected video files has been started. This can take some time to complete. The result file will be created in the subfolder
 videoConcatErrorCodec=Videos to be concatenated must use the same codec.
