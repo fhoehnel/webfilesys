@@ -19,7 +19,9 @@ import de.webfilesys.LanguageManager;
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.PictureRating;
 import de.webfilesys.graphics.CameraExifData;
+import de.webfilesys.graphics.ImageDimensions;
 import de.webfilesys.graphics.ImageTransform;
+import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -177,8 +179,10 @@ public class XformImageHandler extends XmlRequestHandlerBase {
 	        	thumbHeight = savedThumbWidth;
 	        }
 
-	        XmlUtil.setChildText(fileElement, "thumbWidth", Integer.toString(thumbWidth));
-			XmlUtil.setChildText(fileElement, "thumbHeight", Integer.toString(thumbHeight));
+	    	ImageDimensions scaledDim = ImageUtils.getScaledDimensions(thumbWidth, thumbHeight, Constants.THUMBNAIL_SIZE, Constants.THUMBNAIL_SIZE);
+	        
+	        XmlUtil.setChildText(fileElement, "thumbWidth", Integer.toString(scaledDim.getWidth()));
+			XmlUtil.setChildText(fileElement, "thumbHeight", Integer.toString(scaledDim.getHeight()));
 			
 		} catch (IOException ioex) {
 			LOG.error("failed to get image data", ioex);
