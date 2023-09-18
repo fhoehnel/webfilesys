@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Category;
 import de.webfilesys.Comment;
@@ -47,7 +49,7 @@ public class RenameImageRequestHandler extends UserRequestHandler
 		
 		if (newFileName == null)
 		{
-			Logger.getLogger(getClass()).error("required parameter newFileName missing");
+			LogManager.getLogger(getClass()).error("required parameter newFileName missing");
 			
 			return;
 		}
@@ -141,7 +143,7 @@ public class RenameImageRequestHandler extends UserRequestHandler
 		{
 			if (!thumbnailFile.delete())
 			{
-				Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
+				LogManager.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
 			}
 		}
 

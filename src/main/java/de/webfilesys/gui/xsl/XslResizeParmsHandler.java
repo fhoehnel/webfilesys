@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -22,7 +24,7 @@ import de.webfilesys.util.XmlUtil;
  * @author Frank Hoehnel
  */
 public class XslResizeParmsHandler extends XslRequestHandlerBase {
-    private static final Logger LOG = Logger.getLogger(XslResizeParmsHandler.class);
+    private static final Logger LOG = LogManager.getLogger(XslResizeParmsHandler.class);
 	
 	public XslResizeParmsHandler(
 			HttpServletRequest req, 

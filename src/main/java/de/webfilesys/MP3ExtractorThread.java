@@ -2,7 +2,9 @@ package de.webfilesys;
 
 import java.io.File;
 import java.util.ArrayList;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class MP3ExtractorThread extends Thread
 {
@@ -29,7 +31,7 @@ public class MP3ExtractorThread extends Thread
         {
             long endTime=System.currentTimeMillis();
 
-            Logger.getLogger(getClass()).debug("MP3ExtractorThread extracted tags from " + numExtracted + " files (" + (endTime-startTime) + " ms)");
+            LogManager.getLogger(getClass()).debug("MP3ExtractorThread extracted tags from " + numExtracted + " files (" + (endTime-startTime) + " ms)");
         }
     }
 

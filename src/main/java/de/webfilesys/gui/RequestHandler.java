@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 
@@ -143,7 +145,7 @@ public abstract class RequestHandler
 		
 		if (browserType == null)
 		{
-			Logger.getLogger(getClass()).debug("user agent of browser undefined");
+			LogManager.getLogger(getClass()).debug("user agent of browser undefined");
 			
 			browserType = "";
 			browserManufacturer = BROWSER_NON_MSIE;
@@ -258,7 +260,7 @@ public abstract class RequestHandler
             }
             catch (NumberFormatException numEx)
             {
-                Logger.getLogger(getClass()).warn(numEx);
+                LogManager.getLogger(getClass()).warn(numEx);
             }
         }
         
@@ -293,7 +295,7 @@ public abstract class RequestHandler
             }
             catch (NumberFormatException numEx)
             {
-                Logger.getLogger(getClass()).warn(numEx);
+                LogManager.getLogger(getClass()).warn(numEx);
             }
         }
         

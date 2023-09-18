@@ -19,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 import de.webfilesys.FileLink;
@@ -69,7 +71,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 			if (link != null) {
 				imgPath = link.getDestPath();
 				if (!accessAllowed(imgPath)) {
-					Logger.getLogger(getClass()).warn("unauthorized access to file " + imgPath);
+					LogManager.getLogger(getClass()).warn("unauthorized access to file " + imgPath);
 					try {
 						resp.sendError(HttpServletResponse.SC_FORBIDDEN);
 					} catch (IOException ioex) {
@@ -77,7 +79,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 					return;
 				}
 			} else {
-				Logger.getLogger(getClass()).warn("invalid link: " + imgFileName);
+				LogManager.getLogger(getClass()).warn("invalid link: " + imgFileName);
 				try {
 					resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				} catch (IOException ioex) {
@@ -131,7 +133,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 			
 			int orientationMissmatchResult = checkOrientationMissmatch(scaledImage, exifData);
 			
-			Logger.getLogger(getClass()).debug("orientationMissmatch for file " + imgFileName + " : " + orientationMissmatchResult);
+			LogManager.getLogger(getClass()).debug("orientationMissmatch for file " + imgFileName + " : " + orientationMissmatchResult);
 
 			if (orientationMissmatchResult < 0) {
 				serveImageFromFile(imgPath, false);
@@ -151,7 +153,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 			serveImageFromExifThumb(imgPath, exifData);
 				
 		} catch (IOException io1) {
-			Logger.getLogger(getClass()).error("failed to create scaled image " + imgPath, io1);
+			LogManager.getLogger(getClass()).error("failed to create scaled image " + imgPath, io1);
 			serveImageFromFile(imgPath, false);
 		}
 	}
@@ -197,7 +199,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
                 }
 
                 if (bytesWritten != fileSize) {
-                    Logger.getLogger(getClass()).warn(
+                    LogManager.getLogger(getClass()).warn(
                         "only " + bytesWritten + " bytes of " + fileSize + " have been written to output");
                 } 
 
@@ -211,7 +213,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
             		}
                 }
         	} catch (IOException ioEx) {
-            	Logger.getLogger(getClass()).warn(ioEx);
+            	LogManager.getLogger(getClass()).warn(ioEx);
             } finally {
         		if (fileInput != null) {
         		    try {
@@ -221,7 +223,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
         		}
         	}
         } else {
-        	Logger.getLogger(getClass()).error(imgPath + " is not a readable file");
+        	LogManager.getLogger(getClass()).error(imgPath + " is not a readable file");
         }
 	}
 	
@@ -230,7 +232,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 		byte imgData[] = exifData.getThumbnailData();
 
 		if (imgData == null) {
-			Logger.getLogger(getClass()).error("img data from exif thumb are null for image " + imgPath);
+			LogManager.getLogger(getClass()).error("img data from exif thumb are null for image " + imgPath);
 			return;
 		}
 
@@ -250,7 +252,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 			byteOut.write(imgData, 0, docLength);
 			byteOut.flush();
 		} catch (IOException ioEx) {
-        	Logger.getLogger(getClass()).warn("failed to server image from exif thumb for file " + imgPath, ioEx);
+        	LogManager.getLogger(getClass()).warn("failed to server image from exif thumb for file " + imgPath, ioEx);
         }
 	}
 	
@@ -259,7 +261,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
 		byte imgData[] = exifData.getThumbnailData();
 
 		if (imgData == null) {
-			Logger.getLogger(getClass()).error("img data from exif thumb are null for image " + imgPath);
+			LogManager.getLogger(getClass()).error("img data from exif thumb are null for image " + imgPath);
 			return;
 		}
 
@@ -304,7 +306,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
         try {
             tracker.waitForAll();
         } catch(InterruptedException intEx1) {
-            Logger.getLogger(getClass()).warn("rotateImage: " + intEx1);
+            LogManager.getLogger(getClass()).warn("rotateImage: " + intEx1);
         }
         
         tracker.removeImage(origImage);
@@ -318,7 +320,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
         try {
             tracker.waitForAll();
         } catch(InterruptedException intEx2) {
-           Logger.getLogger(getClass()).error("rotateImage: " + intEx2);
+           LogManager.getLogger(getClass()).error("rotateImage: " + intEx2);
         }
 
         tracker.removeImage(rotatedImg);
@@ -348,7 +350,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
             pngBytes = pngEncoder.pngEncode();
             
             if (pngBytes == null) {
-                Logger.getLogger(getClass()).warn("failed to create rotated exif thumbnail image, PNG Encoder : null image");
+                LogManager.getLogger(getClass()).warn("failed to create rotated exif thumbnail image, PNG Encoder : null image");
             } else {
                 resp.setContentLength(pngBytes.length);
                 out.write(pngBytes);
@@ -356,10 +358,10 @@ public class ThumbnailRequestHandler extends UserRequestHandler
             
             out.flush();
         } catch (IOException ioex1) {
-            Logger.getLogger(getClass()).error("failed to rotate exif thumbnail image: " + ioex1);
+            LogManager.getLogger(getClass()).error("failed to rotate exif thumbnail image: " + ioex1);
             return;
         } catch (OutOfMemoryError memErr) {
-            Logger.getLogger(getClass()).error("not enough memory to complete exif thumbnail image rotation");
+            LogManager.getLogger(getClass()).error("not enough memory to complete exif thumbnail image rotation");
         } finally {
             bufferedImg.flush();
             g.dispose();
@@ -405,8 +407,8 @@ public class ThumbnailRequestHandler extends UserRequestHandler
                 // set the orientation value to 1
             	
             	/*
-        		if (Logger.getLogger(getClass()).isDebugEnabled()) {
-        			Logger.getLogger(getClass()).debug("Exif thumbnail not usable because of wrong orientation data");
+        		if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+        			LogManager.getLogger(getClass()).debug("Exif thumbnail not usable because of wrong orientation data");
         		}
         		*/
 

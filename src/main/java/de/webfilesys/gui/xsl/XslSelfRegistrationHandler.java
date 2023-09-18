@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -132,7 +134,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
         String userRole = getParameter("userRole");
 
         if ((userRole == null) || (!userRole.equals("webspace"))) {
-			Logger.getLogger(getClass()).error("invalid user role: " + userRole);
+			LogManager.getLogger(getClass()).error("invalid user role: " + userRole);
 			return;
         }
         
@@ -163,7 +165,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		{
 			if (!docRootFile.mkdir())
 			{
-				Logger.getLogger(getClass()).error("cannot create home directory for new user " + login + ": " + docRoot);
+				LogManager.getLogger(getClass()).error("cannot create home directory for new user " + login + ": " + docRoot);
 			}
 		}
 		
@@ -190,14 +192,14 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		try {
 			userMgr.createUser(newUser);
 		} catch (UserMgmtException ex) {
-        	Logger.getLogger(getClass()).warn("failed to create new user " + login, ex);
+        	LogManager.getLogger(getClass()).warn("failed to create new user " + login, ex);
 			addValidationError("username", "failed to create new user");
 			selfRegistrationForm(req, session);
 			return;
 		}
 
-		if (Logger.getLogger(getClass()).isInfoEnabled()) {
-			Logger.getLogger(getClass()).info(req.getRemoteAddr() + ": new user " + login + " registered (not activated)");
+		if (LogManager.getLogger(getClass()).isInfoEnabled()) {
+			LogManager.getLogger(getClass()).info(req.getRemoteAddr() + ": new user " + login + " registered (not activated)");
 		}
 
 		

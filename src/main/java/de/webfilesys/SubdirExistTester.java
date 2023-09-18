@@ -2,7 +2,9 @@ package de.webfilesys;
 
 import java.io.File;
 import java.util.ArrayList;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.graphics.ThumbnailThread;
 
@@ -32,7 +34,7 @@ public class SubdirExistTester extends Thread {
 	}
 
 	public void run() {
-		Logger.getLogger(getClass()).info("SubdirExistTester started");
+		LogManager.getLogger(getClass()).info("SubdirExistTester started");
 
 		Thread.currentThread().setPriority(1);
 
@@ -56,7 +58,7 @@ public class SubdirExistTester extends Thread {
 			}
 		}
 
-		Logger.getLogger(getClass()).info("SubdirExistTester shutting down");
+		LogManager.getLogger(getClass()).info("SubdirExistTester shutting down");
 	}
 
 	public synchronized void queuePath(String path, int scope, boolean forceRescan) {

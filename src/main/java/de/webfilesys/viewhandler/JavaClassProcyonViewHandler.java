@@ -9,7 +9,9 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import com.strobel.decompiler.Decompiler;
 import com.strobel.decompiler.DecompilerSettings;
@@ -56,7 +58,7 @@ public class JavaClassProcyonViewHandler implements ViewHandler {
 
 				javaSourceOut.close();
 			} catch (Exception ex) {
-				Logger.getLogger(getClass()).error(ex);
+				LogManager.getLogger(getClass()).error(ex);
 			}
 
 			(new JavaSourceViewHandler()).process(javaSourcePath, viewHandlerConfig, req, resp);
@@ -69,7 +71,7 @@ public class JavaClassProcyonViewHandler implements ViewHandler {
 				javaSourceTempFile.delete();
 			}
 		} catch (IOException ioex) {
-			Logger.getLogger(getClass()).error(ioex);
+			LogManager.getLogger(getClass()).error(ioex);
 		}
 	}
 
@@ -128,7 +130,7 @@ public class JavaClassProcyonViewHandler implements ViewHandler {
 
 				javaSourceOut.close();
 			} catch (Exception ex) {
-				Logger.getLogger(getClass()).error(ex);
+				LogManager.getLogger(getClass()).error(ex);
 			}
 
 			(new JavaSourceViewHandler()).process(javaSourcePath, viewHandlerConfig, req, resp);
@@ -143,7 +145,7 @@ public class JavaClassProcyonViewHandler implements ViewHandler {
 
 			tempFile.delete();
 		} catch (IOException ioex) {
-			Logger.getLogger(getClass()).error(ioex);
+			LogManager.getLogger(getClass()).error(ioex);
 		}
 	}
 

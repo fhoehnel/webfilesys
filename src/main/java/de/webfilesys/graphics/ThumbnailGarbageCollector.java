@@ -2,7 +2,9 @@ package de.webfilesys.graphics;
 import java.io.File;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 
 public class ThumbnailGarbageCollector extends Thread
@@ -27,7 +29,7 @@ public class ThumbnailGarbageCollector extends Thread
 
     protected void removeThumbnailGarbage()
     {
-        Logger.getLogger(getClass()).debug("thumbnail garbage collector started for dir " + path);
+        LogManager.getLogger(getClass()).debug("thumbnail garbage collector started for dir " + path);
         long startTime=(new Date()).getTime();
 
         removedCount=0;
@@ -36,7 +38,7 @@ public class ThumbnailGarbageCollector extends Thread
 
         long endTime=(new Date()).getTime();
 
-		Logger.getLogger(getClass()).debug("thumbnail garbage collection ended for dir " + path + " (" + (endTime-startTime) + " ms) - " + removedCount + " thumbnails removed.");
+		LogManager.getLogger(getClass()).debug("thumbnail garbage collection ended for dir " + path + " (" + (endTime-startTime) + " ms) - " + removedCount + " thumbnails removed.");
     }
 
     protected void exploreTree(String path)
@@ -114,15 +116,15 @@ public class ThumbnailGarbageCollector extends Thread
                 {
                     if (!tempFile.delete())
                     {
-						Logger.getLogger(getClass()).warn("cannot remove thumbnail garbage file " + tempFile);
+						LogManager.getLogger(getClass()).warn("cannot remove thumbnail garbage file " + tempFile);
                     }
                     else
                     {
                         removedCount++;
 
-                        if (Logger.getLogger(getClass()).isDebugEnabled())
+                        if (LogManager.getLogger(getClass()).isDebugEnabled())
                         {
-    						Logger.getLogger(getClass()).debug("removed thumbnail garbage file: " + tempFile);
+    						LogManager.getLogger(getClass()).debug("removed thumbnail garbage file: " + tempFile);
                         }
                     }
                 }
@@ -135,14 +137,14 @@ public class ThumbnailGarbageCollector extends Thread
         {
             if (dirFile.delete())
             {
-                if (Logger.getLogger(getClass()).isDebugEnabled())
+                if (LogManager.getLogger(getClass()).isDebugEnabled())
                 {
-    				Logger.getLogger(getClass()).debug("removed empty thumbnail dir " + thumbnailPath);
+    				LogManager.getLogger(getClass()).debug("removed empty thumbnail dir " + thumbnailPath);
                 }
             }
             else
             {
-				Logger.getLogger(getClass()).warn("cannot delete empty thumbnail dir " + thumbnailPath);
+				LogManager.getLogger(getClass()).warn("cannot delete empty thumbnail dir " + thumbnailPath);
             }
         }
     }

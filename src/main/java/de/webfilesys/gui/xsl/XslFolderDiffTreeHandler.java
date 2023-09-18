@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -67,7 +69,7 @@ public class XslFolderDiffTreeHandler extends XslRequestHandlerBase
 
         if ((compSourcePath == null) || (compTargetPath == null))
         {
-            Logger.getLogger(getClass()).warn("missing parameter source or target path");
+            LogManager.getLogger(getClass()).warn("missing parameter source or target path");
             return;
         }
         

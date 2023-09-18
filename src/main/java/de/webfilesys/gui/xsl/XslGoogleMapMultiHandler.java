@@ -14,7 +14,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -29,7 +31,7 @@ import de.webfilesys.util.XmlUtil;
  * @author Frank Hoehnel
  */
 public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
-	private static final Logger LOG = Logger.getLogger(XslGoogleMapMultiHandler.class);
+	private static final Logger LOG = LogManager.getLogger(XslGoogleMapMultiHandler.class);
 	
 	private static final int INFO_TEXT_FROM_DESCR_MAX_LENGTH = 80;
 	

@@ -16,7 +16,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -59,7 +61,7 @@ public class XmlUserManager extends UserManagerBase
        }
        catch (ParserConfigurationException pcex)
        {
-           Logger.getLogger(getClass()).error(pcex.toString());
+           LogManager.getLogger(getClass()).error(pcex.toString());
        }
 
        userFilePath = WebFileSys.getInstance().getConfigBaseDir() + "/" + USER_FILE_NAME;
@@ -82,9 +84,9 @@ public class XmlUserManager extends UserManagerBase
             return;
         }
         
-        if (Logger.getLogger(getClass()).isDebugEnabled())
+        if (LogManager.getLogger(getClass()).isDebugEnabled())
         {
-            Logger.getLogger(getClass()).debug("saving user info to file: " + userFilePath);
+            LogManager.getLogger(getClass()).debug("saving user info to file: " + userFilePath);
         }
 
         synchronized (userRoot)
@@ -105,7 +107,7 @@ public class XmlUserManager extends UserManagerBase
             }
             catch (IOException io1)
             {
-                Logger.getLogger(getClass()).error("error saving user registry file " + userFilePath, io1);
+                LogManager.getLogger(getClass()).error("error saving user registry file " + userFilePath, io1);
             }
             finally
             {
@@ -144,28 +146,28 @@ public class XmlUserManager extends UserManagerBase
            {
                if (!osSpecificUsersFile.renameTo(usersFile)) 
                {
-                   Logger.getLogger(getClass()).error("failed to rename user database file " + osSpecificUsersFile.getAbsolutePath() + " to " + usersFile);
+                   LogManager.getLogger(getClass()).error("failed to rename user database file " + osSpecificUsersFile.getAbsolutePath() + " to " + usersFile);
                    return(null);
                }
                else 
                {
-                   Logger.getLogger(getClass()).info("initialized user database file from " + osSpecificUsersFile.getAbsolutePath());
+                   LogManager.getLogger(getClass()).info("initialized user database file from " + osSpecificUsersFile.getAbsolutePath());
                }
            }
            else
            {
-               Logger.getLogger(getClass()).error("failed to initialize user database file from " + osSpecificUsersFile.getAbsolutePath());
+               LogManager.getLogger(getClass()).error("failed to initialize user database file from " + osSpecificUsersFile.getAbsolutePath());
                return(null);
            }
        }
        
        if ((!usersFile.isFile()) || (!usersFile.canRead()))
        {
-    	   Logger.getLogger(getClass()).error("user database file " + userFilePath + " is not a readable file");
+    	   LogManager.getLogger(getClass()).error("user database file " + userFilePath + " is not a readable file");
            return(null);
        }
 
-       Logger.getLogger(getClass()).info("reading user registry from " + usersFile.getAbsolutePath());
+       LogManager.getLogger(getClass()).info("reading user registry from " + usersFile.getAbsolutePath());
 
        doc = null;
        
@@ -183,11 +185,11 @@ public class XmlUserManager extends UserManagerBase
        }
        catch (SAXException saxex)
        {
-           Logger.getLogger(getClass()).error("failed to load user registry file " + usersFile.getAbsolutePath(), saxex);
+           LogManager.getLogger(getClass()).error("failed to load user registry file " + usersFile.getAbsolutePath(), saxex);
        }
        catch (IOException ioex)
        {
-           Logger.getLogger(getClass()).error("failed to load user registry file : " + usersFile.getAbsolutePath(), ioex);
+           LogManager.getLogger(getClass()).error("failed to load user registry file : " + usersFile.getAbsolutePath(), ioex);
        }
        finally 
        {
@@ -605,7 +607,7 @@ public class XmlUserManager extends UserManagerBase
         try {
             createUser(virtualUser);
         } catch (UserMgmtException ex) {
-        	Logger.getLogger(getClass()).warn("failed to create virtual user " + virtualUserId, ex);
+        	LogManager.getLogger(getClass()).warn("failed to create virtual user " + virtualUserId, ex);
         }
 
         modified = true;
@@ -707,7 +709,7 @@ public class XmlUserManager extends UserManagerBase
             }
             catch (NumberFormatException nfex)
             {
-            	Logger.getLogger(getClass()).warn("invalid disk quota " + quotaString);
+            	LogManager.getLogger(getClass()).warn("invalid disk quota " + quotaString);
             }
         }
 
@@ -881,7 +883,7 @@ public class XmlUserManager extends UserManagerBase
             File docRootFile=new File(documentRoot);
             if ((!docRootFile.exists()) || (!docRootFile.isDirectory()))
             {
-            	Logger.getLogger(getClass()).warn("the document root directory " + documentRoot + " does not exist!");
+            	LogManager.getLogger(getClass()).warn("the document root directory " + documentRoot + " does not exist!");
             }
         }
 
@@ -914,7 +916,7 @@ public class XmlUserManager extends UserManagerBase
             
             return mimeEncoder.encodeToString(encryptedPassword).trim();
     	} catch (java.security.NoSuchAlgorithmException nsaEx) {
-    	    Logger.getLogger(getClass()).error("failed to encrypt password", nsaEx);
+    	    LogManager.getLogger(getClass()).error("failed to encrypt password", nsaEx);
         	return "";
         }
     }
@@ -1059,7 +1061,7 @@ public class XmlUserManager extends UserManagerBase
             }
             catch (NumberFormatException nfex)
             {
-            	Logger.getLogger(getClass()).warn("invalid last login time " + timeString);
+            	LogManager.getLogger(getClass()).warn("invalid last login time " + timeString);
             }
         }
 
@@ -1253,8 +1255,8 @@ public class XmlUserManager extends UserManagerBase
                                 XmlUtil.setChildText(userElement, "activated", "true");
                                 modified = true;
 
-                                if (Logger.getLogger(getClass()).isInfoEnabled()) {
-                                    Logger.getLogger(getClass()).info("user activated: " + userElement.getAttribute("id"));
+                                if (LogManager.getLogger(getClass()).isInfoEnabled()) {
+                                    LogManager.getLogger(getClass()).info("user activated: " + userElement.getAttribute("id"));
                                 }
 
                                 return;

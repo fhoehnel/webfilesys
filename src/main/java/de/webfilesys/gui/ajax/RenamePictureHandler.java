@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.Category;
@@ -39,14 +41,14 @@ public class RenamePictureHandler extends XmlRequestHandlerBase {
 		String newFileName = getParameter("newFileName");
 
 		if (CommonUtils.isEmpty(newFileName)) {
-			Logger.getLogger(getClass()).error("required parameter newFileName missing");
+			LogManager.getLogger(getClass()).error("required parameter newFileName missing");
 			return;
 		}
 
 		String oldFileName = getParameter("imageFile");
 
 		if (CommonUtils.isEmpty(oldFileName)) {
-			Logger.getLogger(getClass()).error("required parameter oldFileName missing");
+			LogManager.getLogger(getClass()).error("required parameter oldFileName missing");
 			return;
 		}
 		
@@ -111,7 +113,7 @@ public class RenamePictureHandler extends XmlRequestHandlerBase {
 
 			if (thumbnailFile.exists()) {
 				if (!thumbnailFile.delete()) {
-					Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
+					LogManager.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
 				}
 			}
 

@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -181,7 +183,7 @@ public class XslThumbnailExtractDescriptionHandler extends XslFileListHandlerBas
 		File dirFile = new File(currentPath);
 
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {
-			Logger.getLogger(getClass()).warn("folder is not a readable directory: " + currentPath);
+			LogManager.getLogger(getClass()).warn("folder is not a readable directory: " + currentPath);
 			XmlUtil.setChildText(fileListElement, "dirNotFound", "true", false);
 			processResponse("xsl/folderTree.xsl");
 			return;

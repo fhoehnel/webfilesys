@@ -12,7 +12,9 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,7 +37,7 @@ public class JsonViewHandler implements ViewHandler {
 			FileReader jsonReader = new FileReader(new File(filePath));
 			processJson(resp, jsonReader);
 		} catch (FileNotFoundException e) {
-			Logger.getLogger(getClass()).error("JSON file not found: " + e);
+			LogManager.getLogger(getClass()).error("JSON file not found: " + e);
 		}
 	}
 
@@ -62,8 +64,8 @@ public class JsonViewHandler implements ViewHandler {
 				output.println(gson.toJson(el));			
 			} catch (JsonSyntaxException jsonEx) {
 				output.println("<span style=\"color:red\">The file does not contain valid JSON data.</span>");
-				if (Logger.getLogger(getClass()).isDebugEnabled()) {
-					Logger.getLogger(getClass()).debug("invalid JSON data: " + jsonEx.toString());
+				if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+					LogManager.getLogger(getClass()).debug("invalid JSON data: " + jsonEx.toString());
 				}
 			}
 			
@@ -73,7 +75,7 @@ public class JsonViewHandler implements ViewHandler {
 
 			output.flush();
 		} catch (IOException e) {
-			Logger.getLogger(getClass()).error("JSON formatting failed: " + e);
+			LogManager.getLogger(getClass()).error("JSON formatting failed: " + e);
 		} finally {
 			if (jsonReader != null) {
 				try {

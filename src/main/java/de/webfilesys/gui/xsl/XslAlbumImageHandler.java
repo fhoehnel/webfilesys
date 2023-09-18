@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -97,7 +99,7 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 			}
 			catch (NumberFormatException nfe)
 			{
-				Logger.getLogger(getClass()).error(nfe);
+				LogManager.getLogger(getClass()).error(nfe);
 			}
 		}
         
@@ -127,7 +129,7 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 			}
 			catch (NumberFormatException nfe)
 			{
-				Logger.getLogger(getClass()).error(nfe);
+				LogManager.getLogger(getClass()).error(nfe);
 			}
 		}
         
@@ -279,7 +281,7 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
 		}
 		catch (IOException io1)
 		{
-			Logger.getLogger(getClass()).error(io1.toString());
+			LogManager.getLogger(getClass()).error(io1.toString());
 			this.processResponse("xsl/showImage.xsl");
 			return;
 		}

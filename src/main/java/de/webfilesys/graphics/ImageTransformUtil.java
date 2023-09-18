@@ -25,7 +25,9 @@ import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class ImageTransformUtil {
 	
@@ -34,14 +36,14 @@ public class ImageTransformUtil {
         File origImgFile = new File(origImgPath);
         
         if ((!origImgFile.exists()) || (!origImgFile.isFile()) || (!origImgFile.canRead())) {
-            Logger.getLogger(ImageTransformUtil.class).error("not a readable picture file: " + origImgPath);
+            LogManager.getLogger(ImageTransformUtil.class).error("not a readable picture file: " + origImgPath);
             return false;
         }
 
         File scaledImgFile = new File(scaledImgPath);
 
         if (scaledImgFile.exists()) {
-            Logger.getLogger(ImageTransformUtil.class).error("destination file already exists: " + scaledImgPath);
+            LogManager.getLogger(ImageTransformUtil.class).error("destination file already exists: " + scaledImgPath);
             return false;
         }
 
@@ -50,7 +52,7 @@ public class ImageTransformUtil {
         try {
             scaledImg = new ScaledImage(origImgPath, maxWidth, maxHeight);
         } catch (IOException ioex) {
-            Logger.getLogger(ImageTransformUtil.class).error(ioex);
+            LogManager.getLogger(ImageTransformUtil.class).error(ioex);
             return false;
         }
         
@@ -78,12 +80,12 @@ public class ImageTransformUtil {
                 timeoutCounter--;
 
                 if (timeoutCounter == 0) {
-                    Logger.getLogger(ImageTransformUtil.class).error("picture load timeout for image " + origImgPath);
+                    LogManager.getLogger(ImageTransformUtil.class).error("picture load timeout for image " + origImgPath);
                     origImage.flush();
                     return false;
                 }
             } catch (InterruptedException iex) {
-                Logger.getLogger(ImageTransformUtil.class).error(iex);
+                LogManager.getLogger(ImageTransformUtil.class).error(iex);
                 origImage.flush();
                 return false;
             }
@@ -114,18 +116,18 @@ public class ImageTransformUtil {
                 ios.flush();
                 imgWriter.dispose();
                 long endTime = System.currentTimeMillis();
-                Logger.getLogger(ImageTransformUtil.class).debug("scaled JPEG instance created for " + origImgPath + " (" + (endTime - startTime) + " ms)");
+                LogManager.getLogger(ImageTransformUtil.class).debug("scaled JPEG instance created for " + origImgPath + " (" + (endTime - startTime) + " ms)");
                 success = true;
             } catch (IOException ioex) {
-                Logger.getLogger(ImageTransformUtil.class).error("error writing scaled JPEG instance file " + scaledImgPath, ioex);
+                LogManager.getLogger(ImageTransformUtil.class).error("error writing scaled JPEG instance file " + scaledImgPath, ioex);
             } catch (OutOfMemoryError memEx) {
-                Logger.getLogger(ImageTransformUtil.class).error("insufficient memory for scaled JPEG instance creation", memEx);
+                LogManager.getLogger(ImageTransformUtil.class).error("insufficient memory for scaled JPEG instance creation", memEx);
             } finally {
                 if (thumbOut != null) {
                     try {
                         thumbOut.close();
                     } catch (Exception ex) {
-                        Logger.getLogger(ImageTransformUtil.class).error("error closing scaled JPEG file", ex);
+                        LogManager.getLogger(ImageTransformUtil.class).error("error closing scaled JPEG file", ex);
                     }
                 }
             }
@@ -150,7 +152,7 @@ public class ImageTransformUtil {
                 pngBytes = pngEncoder.pngEncode();
 
                 if (pngBytes == null) {
-                    Logger.getLogger(ImageTransformUtil.class).warn("PNG Encoder : Null image");
+                    LogManager.getLogger(ImageTransformUtil.class).warn("PNG Encoder : Null image");
                 } else {
                     thumbOut.write(pngBytes);
                 }
@@ -158,17 +160,17 @@ public class ImageTransformUtil {
                 thumbOut.flush();
 
                 long endTime = System.currentTimeMillis();
-                Logger.getLogger(ImageTransformUtil.class).debug("scaled PNG instance created for " + origImgPath + " (" + (endTime - startTime) + " ms)");
+                LogManager.getLogger(ImageTransformUtil.class).debug("scaled PNG instance created for " + origImgPath + " (" + (endTime - startTime) + " ms)");
 
                 success = true;
             } catch (IOException ioex) {
-                Logger.getLogger(ImageTransformUtil.class).error("cannot create scaled PNG instance for " + origImgPath, ioex);
+                LogManager.getLogger(ImageTransformUtil.class).error("cannot create scaled PNG instance for " + origImgPath, ioex);
             } finally {
                 if (thumbOut != null) {
                     try {
                         thumbOut.close();
                     } catch (Exception ex) {
-                        Logger.getLogger(ImageTransformUtil.class).error("error closing thumbnail file", ex);
+                        LogManager.getLogger(ImageTransformUtil.class).error("error closing thumbnail file", ex);
                     }
                 }
             }
@@ -205,7 +207,7 @@ public class ImageTransformUtil {
             try {
                 tracker.waitForAll();
             } catch(InterruptedException ex) {
-               Logger.getLogger(ImageTransformUtil.class).error("failed to rotate image", ex);
+               LogManager.getLogger(ImageTransformUtil.class).error("failed to rotate image", ex);
             }
 
             tracker.removeImage(rotatedImg);
@@ -224,7 +226,7 @@ public class ImageTransformUtil {
 
             return bufferedImg;
         } catch (OutOfMemoryError memErr) {
-            Logger.getLogger(ImageTransformUtil.class).error("not enough memory for image rotation", memErr);
+            LogManager.getLogger(ImageTransformUtil.class).error("not enough memory for image rotation", memErr);
             return null;
         }
     }

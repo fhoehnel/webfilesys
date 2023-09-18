@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.Constants;
@@ -68,7 +70,7 @@ public class XmlRemoveDirHandler extends XmlRequestHandlerBase
 			
 			if (!dirToBeDeleted.canWrite() || (!dirToBeDeleted.isDirectory()))
 			{
-				Logger.getLogger(getClass()).warn(dirToBeDeleted + " cannot be deleted (is not a writable directory)");
+				LogManager.getLogger(getClass()).warn(dirToBeDeleted + " cannot be deleted (is not a writable directory)");
 				
 			    success = "error";
 

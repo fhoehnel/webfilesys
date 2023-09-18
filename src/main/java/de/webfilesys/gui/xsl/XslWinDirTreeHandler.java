@@ -59,7 +59,7 @@ public class XslWinDirTreeHandler extends XslDirTreeHandler
 
 		String currentPath = actPath;
 		
-		// Logger.getLogger(getClass()).debug("current path: " + currentPath);
+		// LogManager.getLogger(getClass()).debug("current path: " + currentPath);
 
 		if (!accessAllowed(currentPath))
 		{

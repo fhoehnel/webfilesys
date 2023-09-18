@@ -1,6 +1,8 @@
 package de.webfilesys;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class SystemCmdParms extends Thread
 {
@@ -23,7 +25,7 @@ public class SystemCmdParms extends Thread
 		}
 		catch (Exception e)
 		{
-			Logger.getLogger(getClass()).error(e);
+			LogManager.getLogger(getClass()).error(e);
 		}
 	}
 }

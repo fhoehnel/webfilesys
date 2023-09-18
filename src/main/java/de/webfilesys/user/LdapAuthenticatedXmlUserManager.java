@@ -21,7 +21,9 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
@@ -49,7 +51,7 @@ import de.webfilesys.util.CommonUtils;
  * https://tools.ietf.org/html/rfc2798
  */
 public class LdapAuthenticatedXmlUserManager extends XmlUserManager {
-	private static Logger LOG = Logger.getLogger(LdapAuthenticatedXmlUserManager.class);
+	private static Logger LOG = LogManager.getLogger(LdapAuthenticatedXmlUserManager.class);
 	
 	private static final String DEFAULT_CSS = "fmweb";
 	

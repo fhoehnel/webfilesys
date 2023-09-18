@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.WebFileSys;
@@ -33,7 +35,7 @@ public class XmlRunUnixCmdHandler extends XmlRequestHandlerBase
 	{
         if ((!isAdminUser(false)) || (!userMgr.getDocumentRoot(uid).equals("/")))
         {
-            Logger.getLogger(getClass()).warn("UNIX command line is only available for admin users with root access");
+            LogManager.getLogger(getClass()).warn("UNIX command line is only available for admin users with root access");
             return;
         }
 		
@@ -73,7 +75,7 @@ public class XmlRunUnixCmdHandler extends XmlRequestHandlerBase
             cmdToExecute = unixCmd + " 2>&1";
         }
  
-        Logger.getLogger(getClass()).debug("executing command : " + cmdToExecute);
+        LogManager.getLogger(getClass()).debug("executing command : " + cmdToExecute);
 
         String cmdWithParms[];
         
@@ -101,7 +103,7 @@ public class XmlRunUnixCmdHandler extends XmlRequestHandlerBase
         }
         catch (Exception e)
         {
-            Logger.getLogger(getClass()).error("failed to run OS command", e);
+            LogManager.getLogger(getClass()).error("failed to run OS command", e);
         }
 
         DataInputStream cmdOut = new DataInputStream(cmdProcess.getInputStream());
@@ -128,7 +130,7 @@ public class XmlRunUnixCmdHandler extends XmlRequestHandlerBase
         }
         catch (IOException ioe)
         {
-            Logger.getLogger(getClass()).error("failed to read OS command output", ioe);
+            LogManager.getLogger(getClass()).error("failed to read OS command output", ioe);
         }
         
         return buff.toString();

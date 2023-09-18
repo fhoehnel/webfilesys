@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -23,7 +25,7 @@ import de.webfilesys.util.XmlUtil;
  */
 public class AnyVideoConcatParamHandler extends XslRequestHandlerBase {
 	
-	private static Logger LOG = Logger.getLogger(AnyVideoConcatParamHandler.class);
+	private static Logger LOG = LogManager.getLogger(AnyVideoConcatParamHandler.class);
 	
 	private static final int ERROR_CODE_NO_AUDIO = 5;
 	

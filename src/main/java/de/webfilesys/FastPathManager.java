@@ -3,7 +3,9 @@ package de.webfilesys;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class FastPathManager extends Thread
 {
@@ -155,13 +157,13 @@ public class FastPathManager extends Thread
         }
         
         if (!fastPathFile.delete()) {
-            Logger.getLogger(getClass()).warn("failed to delete fastpath file for user " + userid);
+            LogManager.getLogger(getClass()).warn("failed to delete fastpath file for user " + userid);
         }
     }
     
     public synchronized void run()
     {
-       	Logger.getLogger(getClass()).debug("FastPathManager started");
+       	LogManager.getLogger(getClass()).debug("FastPathManager started");
     	
     	boolean stop = false;
     	
@@ -180,7 +182,7 @@ public class FastPathManager extends Thread
             
             if (stop)
             {
-                Logger.getLogger(getClass()).debug("FastPathManager ready for shutdown");
+                LogManager.getLogger(getClass()).debug("FastPathManager ready for shutdown");
             }
         }
     }

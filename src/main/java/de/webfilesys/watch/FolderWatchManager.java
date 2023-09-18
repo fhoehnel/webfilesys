@@ -13,7 +13,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -55,7 +57,7 @@ public class FolderWatchManager extends Thread
         if (!folderWatchDirFile.exists()) {
             if (!folderWatchDirFile.mkdirs()) 
             {
-                Logger.getLogger(getClass()).error("cannot create folder watch directory " + folderWatchDirFile); 
+                LogManager.getLogger(getClass()).error("cannot create folder watch directory " + folderWatchDirFile); 
                 return;
             }
         }
@@ -82,16 +84,16 @@ public class FolderWatchManager extends Thread
         }
         catch (ParserConfigurationException pcex)
         {
-            Logger.getLogger(getClass()).error(pcex.toString());
+            LogManager.getLogger(getClass()).error(pcex.toString());
         }
 
         changed = false;
 
         this.start();
         
-        if (Logger.getLogger(getClass()).isDebugEnabled()) 
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) 
         {
-            Logger.getLogger(getClass()).debug("FolderWatchManager started");
+            LogManager.getLogger(getClass()).debug("FolderWatchManager started");
         }
     }
 
@@ -116,7 +118,7 @@ public class FolderWatchManager extends Thread
 
         if (folderWatchFile.exists() && (!folderWatchFile.canWrite()))
         {
-            Logger.getLogger(getClass()).error(
+            LogManager.getLogger(getClass()).error(
                     "cannot write folder watch config file "
                             + folderWatchFile.getAbsolutePath());
             return;
@@ -132,9 +134,9 @@ public class FolderWatchManager extends Thread
 
                 xmlOutFile = new OutputStreamWriter(fos, "UTF-8");
 
-                if (Logger.getLogger(getClass()).isDebugEnabled())
+                if (LogManager.getLogger(getClass()).isDebugEnabled())
                 {
-                    Logger.getLogger(getClass()).debug(
+                    LogManager.getLogger(getClass()).debug(
                             "Saving folder watch configuration to file "
                                     + folderWatchFile.getAbsolutePath());
                 }
@@ -147,7 +149,7 @@ public class FolderWatchManager extends Thread
             }
             catch (IOException io1)
             {
-                Logger.getLogger(getClass()).error(
+                LogManager.getLogger(getClass()).error(
                         "error saving folder watch config file "
                                 + folderWatchFile.getAbsolutePath(), io1);
             }
@@ -176,7 +178,7 @@ public class FolderWatchManager extends Thread
             return (null);
         }
 
-        Logger.getLogger(getClass()).info(
+        LogManager.getLogger(getClass()).info(
                 "reading folder watch config from "
                         + folderWatchFile.getAbsolutePath());
 
@@ -196,13 +198,13 @@ public class FolderWatchManager extends Thread
         }
         catch (SAXException saxex)
         {
-            Logger.getLogger(getClass()).error(
+            LogManager.getLogger(getClass()).error(
                     "failed to load folder watch config file : "
                             + folderWatchFile.getAbsolutePath(), saxex);
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error(
+            LogManager.getLogger(getClass()).error(
                     "failed to load folder watch config file : "
                             + folderWatchFile.getAbsolutePath(), ioex);
         }
@@ -543,9 +545,9 @@ public class FolderWatchManager extends Thread
                         
                         if (folderChanges.size() > 0) 
                         {
-                            if (Logger.getLogger(getClass()).isDebugEnabled()) 
+                            if (LogManager.getLogger(getClass()).isDebugEnabled()) 
                             {
-                                Logger.getLogger(getClass()).debug("changes detected in folder " + folderPath);
+                                LogManager.getLogger(getClass()).debug("changes detected in folder " + folderPath);
                             }
                             
                             NodeList listeners = folderElem.getElementsByTagName("listener");
@@ -563,9 +565,9 @@ public class FolderWatchManager extends Thread
                         }
                         else
                         {
-                            if (Logger.getLogger(getClass()).isDebugEnabled()) 
+                            if (LogManager.getLogger(getClass()).isDebugEnabled()) 
                             {
-                                Logger.getRootLogger().debug("checksum changed but no changes found in folder " + folderPath);
+                            	LogManager.getLogger(getClass()).debug("checksum changed but no changes found in folder " + folderPath);
                             }
                         }
                         
@@ -574,9 +576,9 @@ public class FolderWatchManager extends Thread
                 } 
                 else 
                 {
-                    if (Logger.getLogger(getClass()).isDebugEnabled()) 
+                    if (LogManager.getLogger(getClass()).isDebugEnabled()) 
                     {
-                        Logger.getLogger(getClass()).debug("watched folder has been removed: " + folderPath);
+                        LogManager.getLogger(getClass()).debug("watched folder has been removed: " + folderPath);
                     }
                     folderWatchElement.removeChild(folderElem);
                     
@@ -589,7 +591,7 @@ public class FolderWatchManager extends Thread
                         File statusFile = new File(statusFilePath);
                         if (!statusFile.delete()) 
                         {
-                            Logger.getLogger(getClass()).warn("failed to delete status file for removed watched folder: " + statusFilePath);
+                            LogManager.getLogger(getClass()).warn("failed to delete status file for removed watched folder: " + statusFilePath);
                         }
                     }
                 }
@@ -670,7 +672,7 @@ public class FolderWatchManager extends Thread
         }
         catch (IllegalArgumentException iaex)
         {
-            Logger.getLogger(getClass()).error("failed to send notification e-mail for folder change", iaex);
+            LogManager.getLogger(getClass()).error("failed to send notification e-mail for folder change", iaex);
         }
     }
     
@@ -766,9 +768,9 @@ public class FolderWatchManager extends Thread
 
                 stop = true;
 
-                if (Logger.getLogger(getClass()).isDebugEnabled())
+                if (LogManager.getLogger(getClass()).isDebugEnabled())
                 {
-                    Logger.getLogger(getClass()).debug(
+                    LogManager.getLogger(getClass()).debug(
                             "FolderWatchManager ready for shutdown");
                 }
             }

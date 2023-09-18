@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.util.CommonUtils;
@@ -38,7 +40,7 @@ public class AjaxCheckFolderExistHandler extends XmlRequestHandlerBase {
             	pathInvalid = true;
             } else {
                 if (!accessAllowed(path)) {
-        			Logger.getLogger(getClass()).warn("unauthorized access to path " + path);
+        			LogManager.getLogger(getClass()).warn("unauthorized access to path " + path);
                 	pathInvalid = true;
                 } else {
                     File fileToCheck = new File(path);

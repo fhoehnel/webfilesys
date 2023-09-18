@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 
 public class DirSynchronizer
 {
-    private static final Logger LOG = Logger.getLogger(DirSynchronizer.class);
+    private static final Logger LOG = LogManager.getLogger(DirSynchronizer.class);
 	
     /** the granularity of file timestamps for FAT filesystems is 2 sec ! */
     private static final long TIMESTAMP_GRANULARITY = 2000;

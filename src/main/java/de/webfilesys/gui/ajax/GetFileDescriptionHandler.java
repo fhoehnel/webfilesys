@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.MetaInfManager;
@@ -46,7 +48,7 @@ public class GetFileDescriptionHandler extends XmlRequestHandlerBase {
         String description = null;
         
         if (!accessAllowed(filePath)) {
-			Logger.getLogger(getClass()).warn("unauthorized access to path " + filePath);
+			LogManager.getLogger(getClass()).warn("unauthorized access to path " + filePath);
         } else {
         	description = MetaInfManager.getInstance().getDescription(filePath);
         }

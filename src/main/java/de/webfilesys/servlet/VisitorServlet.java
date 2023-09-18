@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 import de.webfilesys.WebFileSys;
@@ -61,7 +63,7 @@ public class VisitorServlet extends WebFileSysServlet {
 		String requestPath = req.getRequestURI();		
 		
 		if (requestPath.length() <= REQUEST_PATH_LENGTH + 1) {
-        	Logger.getLogger(getClass()).error("missing parameters");
+        	LogManager.getLogger(getClass()).error("missing parameters");
         	sendErrorPage(resp, "missing parameters");
         	return;
 		}
@@ -83,12 +85,12 @@ public class VisitorServlet extends WebFileSysServlet {
 					viewType = paramParser.nextToken();
 				}
 			} else {
-	        	Logger.getLogger(getClass()).error("missing parameter password");
+	        	LogManager.getLogger(getClass()).error("missing parameter password");
 	        	sendErrorPage(resp, "missing parameter");
 	        	return;
 			}
 		} else {
-        	Logger.getLogger(getClass()).error("missing parameter userid");
+        	LogManager.getLogger(getClass()).error("missing parameter userid");
         	sendErrorPage(resp, "missing parameter");
         	return;
 		}
@@ -125,7 +127,7 @@ public class VisitorServlet extends WebFileSysServlet {
                 logEntry = logEntry + " [" + userAgent + "]";
             }
 
-            Logger.getLogger(getClass()).info(logEntry);
+            LogManager.getLogger(getClass()).info(logEntry);
 
             if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin()) {
             	

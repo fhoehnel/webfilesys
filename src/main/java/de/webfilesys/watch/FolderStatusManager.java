@@ -12,7 +12,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -92,7 +94,7 @@ public class FolderStatusManager
         }
         catch (ParserConfigurationException pcex)
         {
-            Logger.getLogger(getClass()).error(pcex.toString());
+            LogManager.getLogger(getClass()).error(pcex.toString());
         }
         
         return statusFileName;
@@ -126,7 +128,7 @@ public class FolderStatusManager
 
         if (statusFile.exists() && (!statusFile.canWrite()))
         {
-            Logger.getLogger(getClass()).error(
+            LogManager.getLogger(getClass()).error(
                     "cannot write folder status file "
                             + statusFile.getAbsolutePath());
             return;
@@ -142,9 +144,9 @@ public class FolderStatusManager
 
                 xmlOutFile = new OutputStreamWriter(fos, "UTF-8");
 
-                if (Logger.getLogger(getClass()).isDebugEnabled())
+                if (LogManager.getLogger(getClass()).isDebugEnabled())
                 {
-                    Logger.getLogger(getClass()).debug(
+                    LogManager.getLogger(getClass()).debug(
                             "Saving folder status to file "
                                     + statusFile.getAbsolutePath());
                 }
@@ -155,7 +157,7 @@ public class FolderStatusManager
             }
             catch (IOException ioEx)
             {
-                Logger.getLogger(getClass()).error(
+                LogManager.getLogger(getClass()).error(
                         "error saving folder status file "
                                 + statusFile.getAbsolutePath(), ioEx);
             }
@@ -387,7 +389,7 @@ public class FolderStatusManager
 
         if ((!folderStatusFile.exists()) || (!folderStatusFile.canRead()))
         {
-            Logger.getLogger(getClass()).warn("Folder status file does not exist or is not readable: " + statusFilePath);
+            LogManager.getLogger(getClass()).warn("Folder status file does not exist or is not readable: " + statusFilePath);
             return (null);
         }
         
@@ -410,19 +412,19 @@ public class FolderStatusManager
         }
         catch (SAXException saxex)
         {
-            Logger.getLogger(getClass()).error(
+            LogManager.getLogger(getClass()).error(
                     "failed to load folder status file : "
                             + folderStatusFile.getAbsolutePath(), saxex);
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error(
+            LogManager.getLogger(getClass()).error(
                     "failed to load folder status file : "
                             + folderStatusFile.getAbsolutePath(), ioex);
         }
         catch (ParserConfigurationException pcex)
         {
-            Logger.getLogger(getClass()).error(pcex.toString());
+            LogManager.getLogger(getClass()).error(pcex.toString());
         }
         finally
         {

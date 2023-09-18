@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.CopyStatus;
 import de.webfilesys.LanguageManager;
@@ -157,7 +159,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
             return (true);
         }
 
-        Logger.getLogger(getClass()).warn(
+        LogManager.getLogger(getClass()).warn(
             "read-only user " + uid + " tried write access");
 
         output.print(HTTPUtils.createHTMLHeader());
@@ -195,7 +197,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(UserRequestHandler.class).warn(ioex);
+            LogManager.getLogger(UserRequestHandler.class).warn(ioex);
             return (false);
         }
     }
@@ -319,7 +321,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
                     if (!tempFile.delete())
                     {
                         deleteError=true;
-                        Logger.getLogger(getClass()).warn("cannot delete " + tempFile);
+                        LogManager.getLogger(getClass()).warn("cannot delete " + tempFile);
                     }
                     else
                     {
@@ -415,7 +417,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
                     .forName(viewHandlerClassName)
                     .newInstance());
 
-            Logger.getLogger(getClass()).debug("ViewHandler instantiated: " + viewHandler.getClass().getName());
+            LogManager.getLogger(getClass()).debug("ViewHandler instantiated: " + viewHandler.getClass().getName());
             
             if (zipIn == null) 
             {
@@ -439,25 +441,25 @@ public class UserRequestHandler extends ProtectedRequestHandler
         }
         catch (ClassNotFoundException cnfex)
         {
-            Logger.getLogger(getClass()).error("Viewhandler class "
+            LogManager.getLogger(getClass()).error("Viewhandler class "
                                          + viewHandlerClassName
                                          + " cannot be found: " + cnfex);
         }
         catch (InstantiationException instEx)
         {
-            Logger.getLogger(getClass()).error("Viewhandler class "
+            LogManager.getLogger(getClass()).error("Viewhandler class "
                     + viewHandlerClassName
                     + " cannot be instantiated: " + instEx);
         }
         catch (IllegalAccessException iaEx)
         {
-            Logger.getLogger(getClass()).error("Viewhandler class "
+            LogManager.getLogger(getClass()).error("Viewhandler class "
                     + viewHandlerClassName
                     + " cannot be instantiated: " + iaEx);
         }
         catch (ClassCastException cex)
         {
-            Logger.getLogger(getClass()).error("Viewhandler class "
+            LogManager.getLogger(getClass()).error("Viewhandler class "
                     + viewHandlerClassName
                     + " does not implement the ViewHandler interface: "
                     + cex);
@@ -493,7 +495,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
             fin.close();
             
         } catch (IOException ioex) {
-            Logger.getLogger(getClass()).warn("cannot determine file encoding for " + filePath);
+            LogManager.getLogger(getClass()).warn("cannot determine file encoding for " + filePath);
         }
 
         return FileEncodingMap.getInstance().getFileEncoding(filePath);
@@ -569,7 +571,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
     	}
     	catch (IOException ioex)
     	{
-    		Logger.getLogger(getClass()).error("failed to check if text file", ioex);
+    		LogManager.getLogger(getClass()).error("failed to check if text file", ioex);
     	}
     	finally
     	{

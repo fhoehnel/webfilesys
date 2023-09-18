@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Configuration name="WebFileSysDefaultConfig" status="INFO" monitorInterval="5">
+  
+  <Appenders>
+    <File name="WebFileSysLogAppender" fileName="${webfilesys.log.path}/system.log">
+      <PatternLayout>
+        <Pattern>[%d{yyyy-MM-dd HH:mm:ss}] %-5p - %m%n</Pattern>
+      </PatternLayout>
+    </File>
+  </Appenders>
+  
+  <Loggers>
+    <Logger name="de.webfilesys" level="debug" additivity="false">
+      <AppenderRef ref="WebFileSysLogAppender" />
+    </Logger>  
+    <Root level="info">
+      <AppenderRef ref="WebFileSysLogAppender"/>
+    </Root>
+  </Loggers>
+
+</Configuration>

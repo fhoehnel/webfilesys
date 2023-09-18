@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.calendar.AlarmEntry;
@@ -37,13 +39,13 @@ public class XmlDelayAppointmentHandler extends XmlRequestHandlerBase {
 
 		String eventId = getParameter("eventId");
 		if (CommonUtils.isEmpty(eventId)) {
-			Logger.getLogger(getClass()).warn("missing parameter eventId");
+			LogManager.getLogger(getClass()).warn("missing parameter eventId");
 			return;
 		}
 
 		String delayMinutesParm = getParameter("delayMinutes");
 		if (CommonUtils.isEmpty(delayMinutesParm)) {
-			Logger.getLogger(getClass()).warn("missing parameter delayMinutes");
+			LogManager.getLogger(getClass()).warn("missing parameter delayMinutes");
 			return;
 		}
 
@@ -54,7 +56,7 @@ public class XmlDelayAppointmentHandler extends XmlRequestHandlerBase {
 		}
 		catch (NumberFormatException numEx)
 		{
-			Logger.getLogger(getClass()).warn("invalid parameter delayMinutes: " + delayMinutesParm);
+			LogManager.getLogger(getClass()).warn("invalid parameter delayMinutes: " + delayMinutesParm);
 			return;
 		}
 		
@@ -72,9 +74,9 @@ public class XmlDelayAppointmentHandler extends XmlRequestHandlerBase {
 			
 			clone.setCloned(true);
 
-			if (Logger.getLogger(getClass()).isDebugEnabled())
+			if (LogManager.getLogger(getClass()).isDebugEnabled())
 			{
-				Logger.getLogger(getClass()).debug("created AlarmEntry clone for delayed alarm: " + clone);
+				LogManager.getLogger(getClass()).debug("created AlarmEntry clone for delayed alarm: " + clone);
 			}
 		}
 		

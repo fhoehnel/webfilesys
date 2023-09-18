@@ -23,7 +23,9 @@ import javax.security.auth.x500.X500Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.util.CommonUtils;
@@ -35,7 +37,7 @@ import de.webfilesys.util.CommonUtils;
  */
 public class KeyStoreViewHandler implements ViewHandler {
 	
-	private static Logger LOG = Logger.getLogger(KeyStoreViewHandler.class);
+	private static Logger LOG = LogManager.getLogger(KeyStoreViewHandler.class);
 	
 	public void process(String filePath, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req,
 			HttpServletResponse resp) {
@@ -203,7 +205,7 @@ public class KeyStoreViewHandler implements ViewHandler {
 			output.println("</html>");
 			output.flush();
 		} catch (IOException e) {
-			Logger.getLogger(getClass()).error("failed to send keystore password prompt",e);
+			LogManager.getLogger(getClass()).error("failed to send keystore password prompt",e);
 		}		
 	}
 

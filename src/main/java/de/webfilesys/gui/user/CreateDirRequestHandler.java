@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 import de.webfilesys.DirTreeStatus;
@@ -37,7 +39,7 @@ public class CreateDirRequestHandler extends UserRequestHandler {
 		String newDir = getParameter("NewDirName");
 
 		if (newDir == null) {
-			Logger.getLogger(getClass()).error("required parameter newDirName missing");
+			LogManager.getLogger(getClass()).error("required parameter newDirName missing");
 
 			return;
 		}

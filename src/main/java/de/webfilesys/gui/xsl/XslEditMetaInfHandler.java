@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.GeoTag;
@@ -76,7 +78,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 	                }
 	                else
 	                {
-	                    Logger.getLogger(getClass()).warn("missing cwd");
+	                    LogManager.getLogger(getClass()).warn("missing cwd");
 	                }
 	            }
 	        }
@@ -84,7 +86,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		if (!accessAllowed(path))
 		{
-			Logger.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
+			LogManager.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
 			
 			return;
 		}
@@ -300,7 +302,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		if (!folderOrFile.exists())
 		{
-			Logger.getLogger(getClass()).error("file not found: " + path);
+			LogManager.getLogger(getClass()).error("file not found: " + path);
 			
 			return;
 		}

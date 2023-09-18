@@ -3,7 +3,9 @@ package de.webfilesys.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 /**
  * URL encoding with charset UTF-8.
@@ -18,7 +20,7 @@ public class UTF8URLEncoder
         }
         catch (UnsupportedEncodingException uex)
         {
-            Logger.getLogger(UTF8URLEncoder.class).error(uex);
+            LogManager.getLogger(UTF8URLEncoder.class).error(uex);
         }
         
         return null;

@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
@@ -25,8 +27,8 @@ public class VideoDeshaker extends Thread {
     }
 
     public void run() {
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
-            Logger.getLogger(getClass()).debug("starting video deshaker thread for " + processQueue.size() + " video files");
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+            LogManager.getLogger(getClass()).debug("starting video deshaker thread for " + processQueue.size() + " video files");
         }
         
         String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
@@ -38,19 +40,19 @@ public class VideoDeshaker extends Thread {
                 File targetVideoDir = new File(targetVideoPath);
                 if (!targetVideoDir.exists()) {
                     if (!targetVideoDir.mkdir()) {
-                        Logger.getLogger(getClass()).error("failed to create target directory for deshaked video " + targetVideoPath);
+                        LogManager.getLogger(getClass()).error("failed to create target directory for deshaked video " + targetVideoPath);
                         return;
                     }
                 }
 
                 File transformFile = new File(getTransformFilePath(targetVideoPath));
                 if (transformFile.exists()) {
-                    Logger.getLogger(getClass()).error("transform file for video deshaking still exists: " + transformFile + " - an other deshaking process seems to be running");
+                    LogManager.getLogger(getClass()).error("transform file for video deshaking still exists: " + transformFile + " - an other deshaking process seems to be running");
                     return;
                 }
 
-                if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                    Logger.getLogger(getClass()).debug("starting video deshaking for file " + videoFilePath);
+                if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+                    LogManager.getLogger(getClass()).debug("starting video deshaking for file " + videoFilePath);
                 }
                 
                 if (prepareStabilizer(videoFilePath, targetVideoPath)) {
@@ -83,13 +85,13 @@ public class VideoDeshaker extends Thread {
         progNameAndParams.add("null");
         progNameAndParams.add("-");
         
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
         	StringBuilder buff = new StringBuilder();
             for (String cmdToken : progNameAndParams) {
             	buff.append(cmdToken);
             	buff.append(' ');
             }
-            Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
+            LogManager.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
         }
     	
 		try {
@@ -100,8 +102,8 @@ public class VideoDeshaker extends Thread {
 	        String outLine = null;
 	        
 	        while ((outLine = processOut.readLine()) != null) {
-	        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-	                Logger.getLogger(getClass()).debug("ffmpeg output: " + outLine);
+	        	if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+	                LogManager.getLogger(getClass()).debug("ffmpeg output: " + outLine);
 	        	}
 	        }
 			
@@ -113,14 +115,14 @@ public class VideoDeshaker extends Thread {
 				if (resultFile.exists()) {
 					return true;
 				} 
-                Logger.getLogger(getClass()).error("transform file for ffmpeg video deshaking not found: " + resultFile);
+                LogManager.getLogger(getClass()).error("transform file for ffmpeg video deshaking not found: " + resultFile);
 			} else {
-				Logger.getLogger(getClass()).warn("ffmpeg deshaking returned error " + deshakeResult);
+				LogManager.getLogger(getClass()).warn("ffmpeg deshaking returned error " + deshakeResult);
 			}
 		} catch (IOException ioex) {
-			Logger.getLogger(getClass()).error("failed to deshake video " + videoFilePath, ioex);
+			LogManager.getLogger(getClass()).error("failed to deshake video " + videoFilePath, ioex);
 		} catch (InterruptedException iex) {
-			Logger.getLogger(getClass()).error("failed to deshake video " + videoFilePath, iex);
+			LogManager.getLogger(getClass()).error("failed to deshake video " + videoFilePath, iex);
 		}
 		return false;
     }
@@ -159,13 +161,13 @@ public class VideoDeshaker extends Thread {
         
         progNameAndParams.add(targetFilePath);
         
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
         	StringBuilder buff = new StringBuilder();
             for (String cmdToken : progNameAndParams) {
             	buff.append(cmdToken);
             	buff.append(' ');
             }
-            Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
+            LogManager.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
         }
     	
 		try {
@@ -176,8 +178,8 @@ public class VideoDeshaker extends Thread {
 	        String outLine = null;
 	        
 	        while ((outLine = processOut.readLine()) != null) {
-	        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-	                Logger.getLogger(getClass()).debug("ffmpeg output: " + outLine);
+	        	if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+	                LogManager.getLogger(getClass()).debug("ffmpeg output: " + outLine);
 	        	}
 	        }
 			
@@ -189,15 +191,15 @@ public class VideoDeshaker extends Thread {
 				if (resultFile.exists()) {
 					return true;
 				} else {
-                    Logger.getLogger(getClass()).error("ffmpeg deshake result file not found: " + targetFilePath);
+                    LogManager.getLogger(getClass()).error("ffmpeg deshake result file not found: " + targetFilePath);
 				}
 			} else {
-				Logger.getLogger(getClass()).warn("ffmpeg deshaking returned error " + deshakeResult);
+				LogManager.getLogger(getClass()).warn("ffmpeg deshaking returned error " + deshakeResult);
 			}
 		} catch (IOException ioex) {
-			Logger.getLogger(getClass()).error("failed to deshake video " + videoFilePath, ioex);
+			LogManager.getLogger(getClass()).error("failed to deshake video " + videoFilePath, ioex);
 		} catch (InterruptedException iex) {
-			Logger.getLogger(getClass()).error("failed to deshake video " + videoFilePath, iex);
+			LogManager.getLogger(getClass()).error("failed to deshake video " + videoFilePath, iex);
 		}
 		return false;
     }
@@ -206,7 +208,7 @@ public class VideoDeshaker extends Thread {
         File transformFile = new File(getTransformFilePath(targetVideoPath));
         
         if (!transformFile.delete()) {
-        	Logger.getLogger(getClass()).error("failed to delete ffmpeg deshake transform file " + transformFile);
+        	LogManager.getLogger(getClass()).error("failed to delete ffmpeg deshake transform file " + transformFile);
         }
     }
     
@@ -227,7 +229,7 @@ public class VideoDeshaker extends Thread {
         int sepIdx = videoPath.lastIndexOf(File.separator);
 
         if (sepIdx < 0) {
-            Logger.getLogger(VideoThumbnailCreator.class).error("incorrect video file path: " + videoPath);
+            LogManager.getLogger(VideoThumbnailCreator.class).error("incorrect video file path: " + videoPath);
             return(null); 
         }
 

@@ -4,7 +4,9 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 
@@ -31,8 +33,8 @@ public class SlideshowToVideoThread extends Thread {
     }
 
     public void run() {
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
-            Logger.getLogger(getClass()).debug("starting picture slideshow video creation thread for pictures in " + pictureListFilePath);
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+            LogManager.getLogger(getClass()).debug("starting picture slideshow video creation thread for pictures in " + pictureListFilePath);
         }
         
         Thread.currentThread().setPriority(1);
@@ -40,7 +42,7 @@ public class SlideshowToVideoThread extends Thread {
         File targetDirFile = new File(targetPath);
         if (!targetDirFile.exists()) {
             if (!targetDirFile.mkdir()) {
-                Logger.getLogger(getClass()).error("failed to create target folder for slideshow video: " + targetPath);
+                LogManager.getLogger(getClass()).error("failed to create target folder for slideshow video: " + targetPath);
                 return;
             }
         }
@@ -84,13 +86,13 @@ public class SlideshowToVideoThread extends Thread {
         
         progNameAndParams.add(targetFilePath);
         
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
         	StringBuilder buff = new StringBuilder();
             for (String cmdToken : progNameAndParams) {
             	buff.append(cmdToken);
             	buff.append(' ');
             }
-            Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
+            LogManager.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
         }
         
 		try {
@@ -101,8 +103,8 @@ public class SlideshowToVideoThread extends Thread {
 	        String outLine = null;
 	        
 	        while ((outLine = convertProcessOut.readLine()) != null) {
-	        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-	                Logger.getLogger(getClass()).debug("ffmpeg output: " + outLine);
+	        	if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+	                LogManager.getLogger(getClass()).debug("ffmpeg output: " + outLine);
 	        	}
 	        }
 			
@@ -112,15 +114,15 @@ public class SlideshowToVideoThread extends Thread {
 				File resultFile = new File(targetFilePath);
 				
 				if (!resultFile.exists()) {
-                    Logger.getLogger(getClass()).error("result file from ffmpeg video creation not found: " + targetFilePath);
+                    LogManager.getLogger(getClass()).error("result file from ffmpeg video creation not found: " + targetFilePath);
 				}
 			} else {
-				Logger.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
+				LogManager.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
 			}
 		} catch (IOException ioex) {
-			Logger.getLogger(getClass()).error("failed to create slideshow video", ioex);
+			LogManager.getLogger(getClass()).error("failed to create slideshow video", ioex);
 		} catch (InterruptedException iex) {
-			Logger.getLogger(getClass()).error("failed to create slideshow video", iex);
+			LogManager.getLogger(getClass()).error("failed to create slideshow video", iex);
 		}
 		
     	File fileListFile = new File(pictureListFilePath);

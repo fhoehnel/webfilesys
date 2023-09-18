@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 
@@ -68,14 +70,14 @@ public class MultiImageRequestHandler extends UserRequestHandler
 			
 			if (actPath == null)
 			{
-				Logger.getLogger(getClass()).warn("current path cannot be determined");
+				LogManager.getLogger(getClass()).warn("current path cannot be determined");
 				return;
 			}
 		}
 		
 		if (!accessAllowed(actPath))
 		{
-			Logger.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of it's document root: " + actPath);
+			LogManager.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of it's document root: " + actPath);
 			return;
 		}
 		

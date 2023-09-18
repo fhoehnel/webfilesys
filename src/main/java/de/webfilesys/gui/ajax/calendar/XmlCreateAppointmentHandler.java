@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.calendar.Appointment;
@@ -38,17 +40,17 @@ public class XmlCreateAppointmentHandler extends XmlRequestHandlerBase {
 
 		String yearParam = getParameter("year");
 		if (CommonUtils.isEmpty(yearParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter year");
+			LogManager.getLogger(getClass()).warn("missing parameter year");
 			return;
 		}
 		String monthParam = getParameter("month");
 		if (CommonUtils.isEmpty(monthParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter month");
+			LogManager.getLogger(getClass()).warn("missing parameter month");
 			return;
 		}
 		String dayParam = getParameter("day");
 		if (CommonUtils.isEmpty(dayParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter day");
+			LogManager.getLogger(getClass()).warn("missing parameter day");
 			return;
 		}
 		
@@ -64,7 +66,7 @@ public class XmlCreateAppointmentHandler extends XmlRequestHandlerBase {
 		}
 		catch (NumberFormatException numEx)
 		{
-			Logger.getLogger(getClass()).warn("invalid parameter", numEx);
+			LogManager.getLogger(getClass()).warn("invalid parameter", numEx);
 			return;
 		}
 		
@@ -78,23 +80,23 @@ public class XmlCreateAppointmentHandler extends XmlRequestHandlerBase {
 		String startHourParam = getParameter("startHour");
 		
 		if (CommonUtils.isEmpty(startHourParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter startHour");
+			LogManager.getLogger(getClass()).warn("missing parameter startHour");
 			return;
 		}
 		String startMinuteParam = getParameter("startMinute");
 		if (CommonUtils.isEmpty(startMinuteParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter startMinute");
+			LogManager.getLogger(getClass()).warn("missing parameter startMinute");
 			return;
 		}
 
 		String endHourParam = getParameter("endHour");
 		if (CommonUtils.isEmpty(endHourParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter endHour");
+			LogManager.getLogger(getClass()).warn("missing parameter endHour");
 			return;
 		}
 		String endMinuteParam = getParameter("endMinute");
 		if (CommonUtils.isEmpty(endMinuteParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter endMinute");
+			LogManager.getLogger(getClass()).warn("missing parameter endMinute");
 			return;
 		}
 		
@@ -106,13 +108,13 @@ public class XmlCreateAppointmentHandler extends XmlRequestHandlerBase {
 		
 		String repeatPeriodParam = getParameter("repeatPeriod");
 		if (CommonUtils.isEmpty(repeatPeriodParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter repeatPeriod");
+			LogManager.getLogger(getClass()).warn("missing parameter repeatPeriod");
 			return;
 		}
 		
 		String alarmTypeParam = getParameter("alarmType");
 		if (CommonUtils.isEmpty(alarmTypeParam)) {
-			Logger.getLogger(getClass()).warn("missing parameter alarmType");
+			LogManager.getLogger(getClass()).warn("missing parameter alarmType");
 			return;
 		}
 
@@ -152,7 +154,7 @@ public class XmlCreateAppointmentHandler extends XmlRequestHandlerBase {
 		}
 		catch (NumberFormatException numEx)
 		{
-			Logger.getLogger(getClass()).warn("invalid parameter value", numEx);
+			LogManager.getLogger(getClass()).warn("invalid parameter value", numEx);
 			return;
 		}
 		

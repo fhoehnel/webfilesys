@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.WebFileSys;
@@ -32,7 +34,7 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
 
 	protected void process() {
 		if (!clientIsLocal) {
-			Logger.getLogger(getClass()).warn("remote user tried to start local video player");
+			LogManager.getLogger(getClass()).warn("remote user tried to start local video player");
 			return;
 		}
 		
@@ -74,13 +76,13 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
             
             progNameAndParams.add(videoFilePath);
 
-            if (Logger.getLogger(getClass()).isDebugEnabled()) {
+            if (LogManager.getLogger(getClass()).isDebugEnabled()) {
             	StringBuilder buff = new StringBuilder();
                 for (String cmdToken : progNameAndParams) {
                 	buff.append(cmdToken);
                 	buff.append(' ');
                 }
-                Logger.getLogger(getClass()).debug("ffplay call with params: " + buff.toString());
+                LogManager.getLogger(getClass()).debug("ffplay call with params: " + buff.toString());
             }
         	
 			Process ffplayProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
@@ -90,17 +92,17 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
 	        String outLine = null;
 	        
 	        while ((outLine = ffplayOut.readLine()) != null) {
-                if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                    Logger.getLogger(getClass()).debug("video player output: " + outLine);
+                if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+                    LogManager.getLogger(getClass()).debug("video player output: " + outLine);
                 }
 	        }
 			
 			int ffplayResult = ffplayProcess.waitFor();
 			return ffplayResult;
 		} catch (IOException ioex) {
-			Logger.getLogger(getClass()).error("failed to play video " + videoFilePath, ioex);
+			LogManager.getLogger(getClass()).error("failed to play video " + videoFilePath, ioex);
 		} catch (InterruptedException iex) {
-			Logger.getLogger(getClass()).error("failed to play video " + videoFilePath, iex);
+			LogManager.getLogger(getClass()).error("failed to play video " + videoFilePath, iex);
 		}
 
         return -1;

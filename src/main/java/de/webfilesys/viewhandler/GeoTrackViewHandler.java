@@ -13,7 +13,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import com.ctc.wstx.exc.WstxParsingException;
 
@@ -219,7 +221,7 @@ public class GeoTrackViewHandler implements ViewHandler
                                     }
                                     catch (NumberFormatException numEx)
                                     {
-                                        Logger.getLogger(getClass()).error(numEx, numEx);
+                                        LogManager.getLogger(getClass()).error(numEx, numEx);
                                     }
                                 }
                             }
@@ -352,7 +354,7 @@ public class GeoTrackViewHandler implements ViewHandler
                                             double duration = trackPointTime - prevTime;
                                             
                                             if (duration < 0) {
-                                                Logger.getLogger(getClass()).warn("invalid trkpt time (before previous timestamp): " + elementText);
+                                                LogManager.getLogger(getClass()).warn("invalid trkpt time (before previous timestamp): " + elementText);
                                                 invalidTime = true;
                                                 speed = 0.0f;
                                             } else {
@@ -388,7 +390,7 @@ public class GeoTrackViewHandler implements ViewHandler
                                     } 
                                     catch (Exception ex)
                                     {
-                                        Logger.getLogger(getClass()).error(ex, ex);
+                                        LogManager.getLogger(getClass()).error(ex, ex);
                                         
                                         prevTime = 0L;
                                     }
@@ -419,7 +421,7 @@ public class GeoTrackViewHandler implements ViewHandler
                 }
                 catch (WstxParsingException epex)
                 {
-                    Logger.getLogger(getClass()).warn("GPX parsing error", epex);
+                    LogManager.getLogger(getClass()).warn("GPX parsing error", epex);
                 }
             }            
 
@@ -427,14 +429,14 @@ public class GeoTrackViewHandler implements ViewHandler
         } 
         catch (IOException e) 
         {
-            Logger.getLogger(getClass()).error("failed to read target file", e);
+            LogManager.getLogger(getClass()).error("failed to read target file", e);
         }
         catch (XMLStreamException xmlEx) {
-            Logger.getLogger(getClass()).error("error parsing XML stream", xmlEx);
+            LogManager.getLogger(getClass()).error("error parsing XML stream", xmlEx);
         }
         catch (Exception e) 
         {
-            Logger.getLogger(getClass()).error("failed to transform GPX file", e);
+            LogManager.getLogger(getClass()).error("failed to transform GPX file", e);
 		} 
         finally 
         {
@@ -508,7 +510,7 @@ public class GeoTrackViewHandler implements ViewHandler
     public void processZipContent(String zipFilePath, InputStream zipIn, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req, HttpServletResponse resp)
     {
         // not yet supported
-        Logger.getLogger(getClass()).warn("reading from ZIP archive not supported by ViewHandler " + this.getClass().getName());
+        LogManager.getLogger(getClass()).warn("reading from ZIP archive not supported by ViewHandler " + this.getClass().getName());
     }
     
     /**

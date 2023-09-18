@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -42,7 +44,7 @@ public class XslSwitchReadonlyHandler extends XmlRequestHandlerBase
 
 		if (!accessAllowed(path))
 		{
-			Logger.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
+			LogManager.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
 			
 			return;
 		}
@@ -76,7 +78,7 @@ public class XslSwitchReadonlyHandler extends XmlRequestHandlerBase
 				}
 				catch (IOException rte)
 				{
-					Logger.getLogger(getClass()).error(rte);
+					LogManager.getLogger(getClass()).error(rte);
 				}
 
 				try
@@ -85,7 +87,7 @@ public class XslSwitchReadonlyHandler extends XmlRequestHandlerBase
 				}
 				catch (InterruptedException iex)
 				{
-					Logger.getLogger(getClass()).error(iex);
+					LogManager.getLogger(getClass()).error(iex);
 				}
 			}
 			

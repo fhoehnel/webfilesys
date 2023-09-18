@@ -10,7 +10,9 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.calendar.AppointmentManager;
 import de.webfilesys.decoration.DecorationManager;
@@ -41,7 +43,7 @@ implements HttpSessionListener, ServletContextListener
 		
         if (activeSessions >= 0)  // this value can be negative because of sessions that survived tomcat restart
         {
-  		    // Logger.getLogger(getClass()).debug("active sessions: " + activeSessions);
+  		    // LogManager.getLogger(getClass()).debug("active sessions: " + activeSessions);
         }
 	}
 
@@ -64,27 +66,27 @@ implements HttpSessionListener, ServletContextListener
 
 			if (userid == null)
 			{
-		        Logger.getLogger(getClass()).info("session expired/destroyed with id " + sessionId);
+		        LogManager.getLogger(getClass()).info("session expired/destroyed with id " + sessionId);
 			}
 			else
 			{
-		        Logger.getLogger(getClass()).info("session expired/destroyed for user: " + userid + " sessionId: " + sessionId);
+		        LogManager.getLogger(getClass()).info("session expired/destroyed for user: " + userid + " sessionId: " + sessionId);
 			}
 		}
 		catch (IllegalStateException iex)
 		{
-			Logger.getLogger(getClass()).info("session expired/destroyed with id " + sessionId);
+			LogManager.getLogger(getClass()).info("session expired/destroyed with id " + sessionId);
 
 			// In tomcat version 4 the session has already been invalidated when sessionDestroyed()
 			// is called. So we get an IllegalStateException when we try to read the userid attribute.
 			// In tomcat version 5 sessionDestroyed() is called before the session is being invalidated.
 			
-			Logger.getLogger(getClass()).debug(iex);
+			LogManager.getLogger(getClass()).debug(iex);
 		}
 
 		activeSessions--;
 
-		Logger.getLogger(getClass()).debug("active sessions: " + activeSessions);
+		LogManager.getLogger(getClass()).debug("active sessions: " + activeSessions);
 	}
 
 	public static Enumeration getSessions()
@@ -101,7 +103,7 @@ implements HttpSessionListener, ServletContextListener
     {
         // ServletContext servletContext = servletContextEvent.getServletContext ();
 
-    	Logger.getLogger(getClass()).info("saving and cleaning up on context shutdown");
+    	LogManager.getLogger(getClass()).info("saving and cleaning up on context shutdown");
     	
     	UserManager userMgr = WebFileSys.getInstance().getUserMgr();    	
     	
@@ -161,7 +163,7 @@ implements HttpSessionListener, ServletContextListener
 		}
 		while (!userMgr.isReadyForShutdown());
 
-        Logger.getLogger(getClass()).info("WebFileSys ready for shutdown");
+        LogManager.getLogger(getClass()).info("WebFileSys ready for shutdown");
     }
 	
 }

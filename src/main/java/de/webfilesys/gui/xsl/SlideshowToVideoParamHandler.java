@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -25,7 +27,7 @@ public class SlideshowToVideoParamHandler extends XslRequestHandlerBase {
 	
 	public static final String SESSION_KEY_SELECTED_SLIDESHOW_VIDEO_FILES = "slideshowVideoSelectedFiles";
 	
-    private static final Logger LOG = Logger.getLogger(SlideshowToVideoParamHandler.class);
+    private static final Logger LOG = LogManager.getLogger(SlideshowToVideoParamHandler.class);
 
 	public static final String LIST_PREFIX = "list-";
 	

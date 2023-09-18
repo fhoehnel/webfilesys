@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 import de.webfilesys.MetaInfManager;
@@ -75,7 +77,7 @@ public class DeleteFileRequestHandler extends UserRequestHandler
 
 		if (!accessAllowed(filePath))
 		{
-			Logger.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's document root: " + filePath);
+			LogManager.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's document root: " + filePath);
 			return;
 		}
 
@@ -121,7 +123,7 @@ public class DeleteFileRequestHandler extends UserRequestHandler
             {
                 if (!thumbnailFile.delete())
                 {
-                    Logger.getLogger(getClass()).warn("cannot remove thumbnail file " + thumbnailPath);
+                    LogManager.getLogger(getClass()).warn("cannot remove thumbnail file " + thumbnailPath);
                 }
             }
 

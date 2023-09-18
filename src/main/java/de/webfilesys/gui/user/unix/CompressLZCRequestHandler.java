@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import com.googlecode.compress_j2me.lzc.LZCInputStream;
 import com.googlecode.compress_j2me.lzc.LZCOutputStream;
@@ -93,7 +95,7 @@ public class CompressLZCRequestHandler extends UserRequestHandler
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("error during compress/uncompress of file " + fileName, ioex);
+            LogManager.getLogger(getClass()).error("error during compress/uncompress of file " + fileName, ioex);
             javascriptAlert(getResource("alert.compresserror","Error during compress/uncompress!"));
         }
         

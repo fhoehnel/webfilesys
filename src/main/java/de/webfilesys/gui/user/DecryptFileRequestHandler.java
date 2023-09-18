@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.gui.xsl.XslFileListHandler;
@@ -57,7 +59,7 @@ public class DecryptFileRequestHandler extends UserRequestHandler
 
 		if ((fileName == null) || (fileName.trim().length() == 0))
 		{
-		    Logger.getLogger(getClass()).error("parameter fileName missing");
+		    LogManager.getLogger(getClass()).error("parameter fileName missing");
 		    return;
 		}
 		
@@ -65,7 +67,7 @@ public class DecryptFileRequestHandler extends UserRequestHandler
 		
         if ((cryptoKey == null) || (cryptoKey.trim().length() == 0))
         {
-            Logger.getLogger(getClass()).error("parameter cryptoKey missing");
+            LogManager.getLogger(getClass()).error("parameter cryptoKey missing");
             return;
         }
 		
@@ -106,7 +108,7 @@ public class DecryptFileRequestHandler extends UserRequestHandler
         }
         catch (Exception e)
         {
-            Logger.getLogger(getClass()).error("failed to create cipher for AES decryption", e);
+            LogManager.getLogger(getClass()).error("failed to create cipher for AES decryption", e);
         }
 	    
         
@@ -114,7 +116,7 @@ public class DecryptFileRequestHandler extends UserRequestHandler
 	    
 	    if ((!sourceFile.exists()) || (!sourceFile.isFile()) || (!sourceFile.canRead()))
 	    {
-	        Logger.getLogger(getClass()).error(fileName + " is not a readable file");
+	        LogManager.getLogger(getClass()).error(fileName + " is not a readable file");
 	        return false;
 	    }
 	    
@@ -185,7 +187,7 @@ public class DecryptFileRequestHandler extends UserRequestHandler
 	        
 	        if (numRead != EncryptFileRequestHandler.CHECKSUM.length)
 	        {
-                Logger.getLogger(getClass()).debug("invalid key used to decrypt file " + fileName);
+                LogManager.getLogger(getClass()).debug("invalid key used to decrypt file " + fileName);
 	            return false;   
 	        }
 	        else
@@ -194,7 +196,7 @@ public class DecryptFileRequestHandler extends UserRequestHandler
 	            {
 	                if (checksumBuff[i] != EncryptFileRequestHandler.CHECKSUM[i])
 	                {
-	                    Logger.getLogger(getClass()).debug("invalid key used to decrypt file " + fileName);
+	                    LogManager.getLogger(getClass()).debug("invalid key used to decrypt file " + fileName);
 	                    return false;
 	                }
 	            }
@@ -212,11 +214,11 @@ public class DecryptFileRequestHandler extends UserRequestHandler
 	    }
 	    catch (FileNotFoundException fnfEx)
 	    {
-	        Logger.getLogger(getClass()).error(fnfEx);
+	        LogManager.getLogger(getClass()).error(fnfEx);
 	    }
 	    catch (IOException ioex)
 	    {
-	        Logger.getLogger(getClass()).error(ioex);
+	        LogManager.getLogger(getClass()).error(ioex);
 	    }
 	    finally
 	    {

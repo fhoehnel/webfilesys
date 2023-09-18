@@ -6,7 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
@@ -24,7 +26,7 @@ public class AlarmDistributor extends Thread
 	
 	public synchronized void run()
 	{
-    	Logger.getLogger(getClass()).info("AlarmDistributor started");
+    	LogManager.getLogger(getClass()).info("AlarmDistributor started");
 
     	boolean shutdownFlag = false;
 
@@ -41,9 +43,9 @@ public class AlarmDistributor extends Thread
 			catch (InterruptedException e)
 			{
 				shutdownFlag = true;
-				if (Logger.getLogger(getClass()).isInfoEnabled())
+				if (LogManager.getLogger(getClass()).isInfoEnabled())
 				{
-	            	Logger.getLogger(getClass()).info("AlarmDistributor ready for shutdown");
+	            	LogManager.getLogger(getClass()).info("AlarmDistributor ready for shutdown");
 				}
 			}
 		}
@@ -94,9 +96,9 @@ public class AlarmDistributor extends Thread
                             }
                             else
                             {
-                    			if (Logger.getLogger(getClass()).isDebugEnabled())
+                    			if (LogManager.getLogger(getClass()).isDebugEnabled())
                     			{
-                    				Logger.getLogger(getClass()).debug("ignoring alarm entry clone in repeat check: " + entryToAlarm);
+                    				LogManager.getLogger(getClass()).debug("ignoring alarm entry clone in repeat check: " + entryToAlarm);
                     			}
                             }
 
@@ -122,7 +124,7 @@ public class AlarmDistributor extends Thread
     	{
     		if (mailsSentInLastHour > WebFileSys.getInstance().getMaxAppointmentMailsPerHour())
     		{
-            	Logger.getLogger(getClass()).warn("too many appointment mails sent per hour: " + mailsSentInLastHour);
+            	LogManager.getLogger(getClass()).warn("too many appointment mails sent per hour: " + mailsSentInLastHour);
                 return false;
     		}
     		mailsSentInLastHour++;

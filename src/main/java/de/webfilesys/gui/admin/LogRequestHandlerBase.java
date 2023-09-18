@@ -1,15 +1,17 @@
 package de.webfilesys.gui.admin;
 
 import java.io.PrintWriter;
-import java.util.Enumeration;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Appender;
-import org.apache.log4j.FileAppender;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 /**
  * @author Frank Hoehnel
@@ -30,20 +32,16 @@ public abstract class LogRequestHandlerBase extends AdminRequestHandler
     
 	protected String getSystemLogFilePath()
 	{
-		Enumeration allAppenders = Logger.getLogger(WEBFILESYS_LOGGER_NAME).getAllAppenders();
-
-		while (allAppenders.hasMoreElements())
-		{
-			Appender appender = (Appender) allAppenders.nextElement();
-
-			if (appender.getName().equals(APPENDER_NAME)) {
-	            if (appender instanceof org.apache.log4j.FileAppender)
-	            {
-	                return ((FileAppender) appender).getFile();
-	            }
-			}
-		}
+		Logger logger = LogManager.getLogger(WEBFILESYS_LOGGER_NAME);
+		Map<String, Appender> appenderMap = ((org.apache.logging.log4j.core.Logger) logger).getAppenders();
 		
+		Appender appender = appenderMap.get(APPENDER_NAME);
+        if (appender instanceof FileAppender) 
+        {
+        	System.out.println("appender filename: " + ((FileAppender) appender).getFileName());
+            return ((FileAppender) appender).getFileName();
+        }
+    	System.out.println("appender not found, map size: " + appenderMap.size());
 		return null;
 	}
 }

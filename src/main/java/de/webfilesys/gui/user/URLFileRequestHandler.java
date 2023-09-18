@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 /**
  * @author Frank Hoehnel
@@ -55,7 +57,7 @@ public class URLFileRequestHandler extends UserRequestHandler
 		}
 		catch (IOException ioex)
 		{
-			Logger.getLogger(getClass()).warn("openUrlFile: " + ioex);
+			LogManager.getLogger(getClass()).warn("openUrlFile: " + ioex);
 		}
 
 		output.println("<HTML>");

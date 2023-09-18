@@ -11,7 +11,9 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.java2html.converter.JavaSource2HTMLConverter;
 import de.java2html.javasource.JavaSource;
@@ -53,13 +55,13 @@ public class JavaSourceViewHandler implements ViewHandler
         } 
         catch (FileNotFoundException e)
         {
-            Logger.getLogger(getClass()).error("Java to HTML conversion failed: " + e);
+            LogManager.getLogger(getClass()).error("Java to HTML conversion failed: " + e);
                
             return;
         }
         catch (IOException e) 
         {
-            Logger.getLogger(getClass()).error("Java to HTML conversion failed: " + e);
+            LogManager.getLogger(getClass()).error("Java to HTML conversion failed: " + e);
                
             return;
         }
@@ -102,13 +104,13 @@ public class JavaSourceViewHandler implements ViewHandler
         } 
         catch (FileNotFoundException e)
         {
-            Logger.getLogger(getClass()).error("Java to HTML conversion failed: " + e);
+            LogManager.getLogger(getClass()).error("Java to HTML conversion failed: " + e);
                
             return;
         }
         catch (IOException e) 
         {
-            Logger.getLogger(getClass()).error("Java to HTML conversion failed: " + e);
+            LogManager.getLogger(getClass()).error("Java to HTML conversion failed: " + e);
                
             return;
         }

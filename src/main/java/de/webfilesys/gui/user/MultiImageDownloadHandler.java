@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
@@ -44,7 +46,7 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
 		
 		if ((selectedFiles == null) || (selectedFiles.size() == 0))
 		{
-			Logger.getLogger(getClass()).debug("MultiImageDownloadHandler: no files selected");
+			LogManager.getLogger(getClass()).debug("MultiImageDownloadHandler: no files selected");
 			
 			return;
 		}
@@ -53,7 +55,7 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
 		
 		if (actPath == null)
 		{
-			Logger.getLogger(getClass()).error("MultiImageDownloadHandler: actPath is null");
+			LogManager.getLogger(getClass()).error("MultiImageDownloadHandler: actPath is null");
 			
 			return;
 		}
@@ -103,7 +105,7 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
 				}
 				catch (Exception zioe)
 				{
-					Logger.getLogger(getClass()).warn("failed to add file to temporary zip archive", zioe);
+					LogManager.getLogger(getClass()).warn("failed to add file to temporary zip archive", zioe);
 					return;
 				}
 		        finally 
@@ -116,7 +118,7 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
 		        		}
 		        		catch (IOException ioex2)
 		        		{
-		        			Logger.getLogger(getClass()).error("failed to close file", ioex2);
+		        			LogManager.getLogger(getClass()).error("failed to close file", ioex2);
 		        		}
 		        	}
 		        }
@@ -168,7 +170,7 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
 		}
         catch (IOException ioex)
         {
-        	Logger.getLogger(getClass()).error(ioex);
+        	LogManager.getLogger(getClass()).error(ioex);
         	return;
         }
         finally 
@@ -181,7 +183,7 @@ public class MultiImageDownloadHandler extends MultiImageRequestHandler
         		}
         		catch (IOException ioex2)
         		{
-        			Logger.getLogger(getClass()).error("failed to close ZIP-File", ioex2);
+        			LogManager.getLogger(getClass()).error("failed to close ZIP-File", ioex2);
         		}
         	}
         }

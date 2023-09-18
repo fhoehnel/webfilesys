@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.WebFileSys;
@@ -33,8 +35,8 @@ public class VideoFadeAudioThread extends Thread {
     }
     
     public void run() {
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
-            Logger.getLogger(getClass()).debug("starting fade audio thread for video file " + videoFilePath);
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+            LogManager.getLogger(getClass()).debug("starting fade audio thread for video file " + videoFilePath);
         }
         
         Thread.currentThread().setPriority(1);
@@ -55,7 +57,7 @@ public class VideoFadeAudioThread extends Thread {
                 }
     		}
             if (fadeOutStart < 0) {
-                Logger.getLogger(getClass()).error("failed to determine fade out start point");
+                LogManager.getLogger(getClass()).error("failed to determine fade out start point");
                 return;
             }
         }
@@ -74,7 +76,7 @@ public class VideoFadeAudioThread extends Thread {
             File targetDirFile = new File(targetPath);
             if (!targetDirFile.exists()) {
                 if (!targetDirFile.mkdir()) {
-                    Logger.getLogger(getClass()).error("failed to create target folder for video audio fade: " + targetPath);
+                    LogManager.getLogger(getClass()).error("failed to create target folder for video audio fade: " + targetPath);
                 }
             }
             
@@ -124,13 +126,13 @@ public class VideoFadeAudioThread extends Thread {
             
             progNameAndParams.add(targetFilePath);
             
-            if (Logger.getLogger(getClass()).isDebugEnabled()) {
+            if (LogManager.getLogger(getClass()).isDebugEnabled()) {
             	StringBuilder buff = new StringBuilder();
                 for (String cmdToken : progNameAndParams) {
                 	buff.append(cmdToken);
                 	buff.append(' ');
                 }
-                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
+                LogManager.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
             }
             
 			try {
@@ -141,8 +143,8 @@ public class VideoFadeAudioThread extends Thread {
 		        String outLine = null;
 		        
 		        while ((outLine = grabProcessOut.readLine()) != null) {
-		        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-		                Logger.getLogger(getClass()).debug("ffmpeg output: " + outLine);
+		        	if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+		                LogManager.getLogger(getClass()).debug("ffmpeg output: " + outLine);
 		        	}
 		        }
 				
@@ -151,16 +153,16 @@ public class VideoFadeAudioThread extends Thread {
 				if (convertResult == 0) {
 					File resultFile = new File(targetFilePath);
 					if (!resultFile.exists()) {
-	                    Logger.getLogger(getClass()).error("result file from ffmpeg fade audio not found: " + targetFilePath);
+	                    LogManager.getLogger(getClass()).error("result file from ffmpeg fade audio not found: " + targetFilePath);
 					}
 					SubdirExistCache.getInstance().setExistsSubdir(sourcePath, new Integer(1));
 				} else {
-					Logger.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
+					LogManager.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
 				}
 			} catch (IOException ioex) {
-				Logger.getLogger(getClass()).error("failed to fade audio in video " + videoFilePath, ioex);
+				LogManager.getLogger(getClass()).error("failed to fade audio in video " + videoFilePath, ioex);
 			} catch (InterruptedException iex) {
-				Logger.getLogger(getClass()).error("failed to fade audio in video " + videoFilePath, iex);
+				LogManager.getLogger(getClass()).error("failed to fade audio in video " + videoFilePath, iex);
 			}
         }
     }

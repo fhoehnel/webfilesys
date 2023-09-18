@@ -19,7 +19,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
@@ -35,7 +37,7 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslRequestHandlerBase extends UserRequestHandler
 {
-	private static final Logger LOG = Logger.getLogger(XslRequestHandlerBase.class);
+	private static final Logger LOG = LogManager.getLogger(XslRequestHandlerBase.class);
 	
 	protected Document doc;
 
@@ -242,7 +244,7 @@ public class XslRequestHandlerBase extends UserRequestHandler
         	
 			String xslPath = WebFileSys.getInstance().getWebAppRootDir() + "xsl" + File.separator + xslFile;
         	
-        	// Logger.getLogger(getClass()).debug("server-side XSLT: " + xslPath);
+        	// LogManager.getLogger(getClass()).debug("server-side XSLT: " + xslPath);
 
 			TransformerFactory tf = TransformerFactory.newInstance();
 		

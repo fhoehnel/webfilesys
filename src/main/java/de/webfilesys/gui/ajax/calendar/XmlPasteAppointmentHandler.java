@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.calendar.Appointment;
@@ -43,7 +45,7 @@ public class XmlPasteAppointmentHandler extends XmlRequestHandlerBase {
 		
 		if (CommonUtils.isEmpty(yearParam) || CommonUtils.isEmpty(monthParam) || CommonUtils.isEmpty(dayOfMonthParam))
 		{
-            Logger.getLogger(getClass()).warn("missing parameter");
+            LogManager.getLogger(getClass()).warn("missing parameter");
 			return;
 		}
 		
@@ -58,7 +60,7 @@ public class XmlPasteAppointmentHandler extends XmlRequestHandlerBase {
         }
         catch (NumberFormatException numEx)
         {
-            Logger.getLogger(getClass()).warn("invalid parameter", numEx);
+            LogManager.getLogger(getClass()).warn("invalid parameter", numEx);
             return;
         }
         
@@ -68,7 +70,7 @@ public class XmlPasteAppointmentHandler extends XmlRequestHandlerBase {
 		
         if (CommonUtils.isEmpty(appointmentId))
         {
-            Logger.getLogger(getClass()).warn("appointment id for move not found in session");
+            LogManager.getLogger(getClass()).warn("appointment id for move not found in session");
 			return;
         }
 
@@ -76,7 +78,7 @@ public class XmlPasteAppointmentHandler extends XmlRequestHandlerBase {
 		
         if (appointmentToMove == null) 
         {
-            Logger.getLogger(getClass()).warn("appointment for move operation not found: " + appointmentId);
+            LogManager.getLogger(getClass()).warn("appointment for move operation not found: " + appointmentId);
             return;
         }
         

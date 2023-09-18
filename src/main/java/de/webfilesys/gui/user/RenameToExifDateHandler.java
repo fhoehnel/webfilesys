@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Category;
 import de.webfilesys.MetaInfManager;
@@ -77,7 +79,7 @@ public class RenameToExifDateHandler extends MultiImageRequestHandler
 						
 						if (!imgFile.renameTo(newImgFile))
 						{
-							Logger.getLogger(getClass()).error("could not rename image file " + imgFileName + " to exif exposure date: + " + newImgFile);
+							LogManager.getLogger(getClass()).error("could not rename image file " + imgFileName + " to exif exposure date: + " + newImgFile);
 						}
 						else
 						{

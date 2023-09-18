@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
@@ -55,7 +57,7 @@ public class TailRequestHandler extends UserRequestHandler
 		    
 		    if (fileName == null)
 		    {
-		        Logger.getLogger(getClass()).warn("parameters filePath and fileName missing");
+		        LogManager.getLogger(getClass()).warn("parameters filePath and fileName missing");
 		        return;
 		    }
 		    else
@@ -124,13 +126,13 @@ public class TailRequestHandler extends UserRequestHandler
         
         if (!fileToSend.exists())
         {
-        	Logger.getLogger(getClass()).warn("requested file does not exist: " + filePath);
+        	LogManager.getLogger(getClass()).warn("requested file does not exist: " + filePath);
         	
         	error = true;
         }
         else if ((!fileToSend.isFile()) || (!fileToSend.canRead()))
         {
-        	Logger.getLogger(getClass()).warn("requested file is not a readable file: " + filePath);
+        	LogManager.getLogger(getClass()).warn("requested file is not a readable file: " + filePath);
         	
         	error = true;
         }
@@ -188,7 +190,7 @@ public class TailRequestHandler extends UserRequestHandler
                     }
                 } 
                 catch (Exception miEx) {
-                    Logger.getLogger(getClass()).warn("error during reading file for tail", miEx);
+                    LogManager.getLogger(getClass()).warn("error during reading file for tail", miEx);
                     excCounter++;
                     queueLine(ENCODING_ERROR);
                 }
@@ -196,7 +198,7 @@ public class TailRequestHandler extends UserRequestHandler
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("failed to read file for tail", ioex);
+            LogManager.getLogger(getClass()).error("failed to read file for tail", ioex);
         }
         finally
         {

@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.graphics.ScaledImage;
 import de.webfilesys.util.CommonUtils;
@@ -142,7 +144,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 			}
 			catch (IOException io1)
 			{
-				Logger.getLogger(getClass()).error(io1);
+				LogManager.getLogger(getClass()).error(io1);
 			}
 		}
 
@@ -177,7 +179,7 @@ public class CompareImageRequestHandler extends MultiImageRequestHandler
 			}
 			catch (IOException io1)
 			{
-				Logger.getLogger(getClass()).error(io1);
+				LogManager.getLogger(getClass()).error(io1);
 				output.println("</body></html>");
 				output.flush();
 				return;

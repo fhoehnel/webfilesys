@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Category;
 import de.webfilesys.ClipBoard;
@@ -92,7 +94,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		
 		if (clipBoard == null)
 		{
-			Logger.getLogger(getClass()).warn("clipboard is empty in paste operation");
+			LogManager.getLogger(getClass()).warn("clipboard is empty in paste operation");
 
 		    return;
 		}
@@ -299,7 +301,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 							{
 								if (!thumbnailFile.delete())
 								{
-									Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
+									LogManager.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
 								}
 							}
 							
@@ -310,7 +312,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 
 				                if (videoThumbnailFile.exists()) {
 				                    if (!videoThumbnailFile.delete()) {
-				                        Logger.getLogger(getClass()).warn("failed to remove video thumbnail file " + videoThumbnailPath);
+				                        LogManager.getLogger(getClass()).warn("failed to remove video thumbnail file " + videoThumbnailPath);
 				                    }
 				                }
 				            }

@@ -14,7 +14,9 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -47,7 +49,7 @@ public class XslOpenStreetMapHandler extends XslRequestHandlerBase
 
 		if (!accessAllowed(path))
 		{
-			Logger.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
+			LogManager.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
 			
 			return;
 		}
@@ -56,7 +58,7 @@ public class XslOpenStreetMapHandler extends XslRequestHandlerBase
 		
 		if (!folderOrFile.exists())
 		{
-			Logger.getLogger(getClass()).error("file not found: " + path);
+			LogManager.getLogger(getClass()).error("file not found: " + path);
 			
 			return;
 		}
@@ -154,7 +156,7 @@ public class XslOpenStreetMapHandler extends XslRequestHandlerBase
 		
         if (!geoLocationDefined)
         {
-            Logger.getLogger(getClass()).error("No Geo Tag / GPS Exif data exists for file/folder " + path);
+            LogManager.getLogger(getClass()).error("No Geo Tag / GPS Exif data exists for file/folder " + path);
             
             return;
         }

@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 import de.webfilesys.MetaInfManager;
@@ -53,7 +55,7 @@ public class RenameLinkRequestHandler extends UserRequestHandler
 
 		if (newLinkName == null)
 		{
-			Logger.getLogger(getClass()).fatal("missing parameter newLinkName");
+			LogManager.getLogger(getClass()).fatal("missing parameter newLinkName");
 			return;
 		}
 
@@ -61,7 +63,7 @@ public class RenameLinkRequestHandler extends UserRequestHandler
 		
 		if (oldLinkName == null)
 		{
-			Logger.getLogger(getClass()).fatal("missing parameter oldLinkName");
+			LogManager.getLogger(getClass()).fatal("missing parameter oldLinkName");
 			return;
 		}
 

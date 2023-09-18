@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.graphics.ImageDimensions;
@@ -37,7 +39,7 @@ public class XmlSlideShowImageHandler extends XmlRequestHandlerBase
 		
 		if (imageFiles == null)
 		{
-			Logger.getLogger(getClass()).warn("slideshow buffer not found in session");
+			LogManager.getLogger(getClass()).warn("slideshow buffer not found in session");
 			return;
 		}
 		
@@ -75,7 +77,7 @@ public class XmlSlideShowImageHandler extends XmlRequestHandlerBase
 		}
 		catch (Exception ex)
 		{
-		    Logger.getLogger(getClass()).error("failed to determine window dimensions");
+		    LogManager.getLogger(getClass()).error("failed to determine window dimensions");
 		}
 		
 		ImageDimensions scaledDim = ImageUtils.getScaledImageDimensions(imgFileName, screenWidth - 4, screenHeight - 10);

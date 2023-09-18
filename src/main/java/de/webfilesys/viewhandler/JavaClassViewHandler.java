@@ -8,7 +8,9 @@ import java.io.InputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.WebFileSys;
@@ -54,7 +56,7 @@ public class JavaClassViewHandler implements ViewHandler
             }
             catch (Exception e)
             {
-                Logger.getLogger(getClass()).error(e);
+                LogManager.getLogger(getClass()).error(e);
                 return;
             }
 
@@ -64,13 +66,13 @@ public class JavaClassViewHandler implements ViewHandler
             }
             catch (InterruptedException iex)
             {
-                Logger.getLogger(getClass()).error(iex);
+                LogManager.getLogger(getClass()).error(iex);
                 return;
             }
 
             if (decompileProcess.exitValue()!=0)
             {
-                Logger.getLogger(getClass()).error("exit value from jad: " + decompileProcess.exitValue());
+                LogManager.getLogger(getClass()).error("exit value from jad: " + decompileProcess.exitValue());
                 return;
             }
             
@@ -89,7 +91,7 @@ public class JavaClassViewHandler implements ViewHandler
         }
         catch (IOException ioex) 
         {
-            Logger.getLogger(getClass()).error(ioex);
+            LogManager.getLogger(getClass()).error(ioex);
         }
     }
     
@@ -149,7 +151,7 @@ public class JavaClassViewHandler implements ViewHandler
             }
             catch (Exception e)
             {
-                Logger.getLogger(getClass()).error(e);
+                LogManager.getLogger(getClass()).error(e);
                 return;
             }
 
@@ -159,13 +161,13 @@ public class JavaClassViewHandler implements ViewHandler
             }
             catch (InterruptedException iex)
             {
-                Logger.getLogger(getClass()).error(iex);
+                LogManager.getLogger(getClass()).error(iex);
                 return;
             }
 
             if (decompileProcess.exitValue() != 0)
             {
-                Logger.getLogger(getClass()).error("exit value from jad: " + decompileProcess.exitValue());
+                LogManager.getLogger(getClass()).error("exit value from jad: " + decompileProcess.exitValue());
                 return;
             }
             
@@ -186,7 +188,7 @@ public class JavaClassViewHandler implements ViewHandler
         }
         catch (IOException ioex) 
         {
-            Logger.getLogger(getClass()).error(ioex);
+            LogManager.getLogger(getClass()).error(ioex);
         }
     }
     

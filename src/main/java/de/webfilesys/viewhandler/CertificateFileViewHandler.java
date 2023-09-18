@@ -15,7 +15,9 @@ import javax.security.auth.x500.X500Principal;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.util.CommonUtils;
@@ -27,7 +29,7 @@ import de.webfilesys.util.CommonUtils;
  */
 public class CertificateFileViewHandler implements ViewHandler {
 	
-	private static Logger LOG = Logger.getLogger(CertificateFileViewHandler.class);
+	private static Logger LOG = LogManager.getLogger(CertificateFileViewHandler.class);
 	
 	public void process(String filePath, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req,
 			HttpServletResponse resp) {

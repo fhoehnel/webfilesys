@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 import de.webfilesys.FileComparator;
@@ -113,11 +115,11 @@ public class CopyLinkRequestHandler extends UserRequestHandler
 					if (copyFile(fileCont.getRealFile().getAbsolutePath(), targetPath))
 					{
 						metaInfMgr.removeLink(actPath, linkName);
-						Logger.getLogger(getClass()).debug("link " + linkName + " replaced by a copy of original file " + fileCont.getRealFile().getAbsolutePath());
+						LogManager.getLogger(getClass()).debug("link " + linkName + " replaced by a copy of original file " + fileCont.getRealFile().getAbsolutePath());
 					}
 					else
 					{
-						Logger.getLogger(getClass()).error("failed to replace link " + linkName + " by a copy of original file " + fileCont.getRealFile().getAbsolutePath());
+						LogManager.getLogger(getClass()).error("failed to replace link " + linkName + " by a copy of original file " + fileCont.getRealFile().getAbsolutePath());
 					}
 				}
 			}

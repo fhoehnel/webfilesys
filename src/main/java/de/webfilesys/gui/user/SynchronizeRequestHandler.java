@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.xsl.XslSyncCompareHandler;
@@ -89,7 +91,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         if (syncItemList == null)
         {
             // should never happen
-            Logger.getLogger(getClass()).error("sync item list not found in session");
+            LogManager.getLogger(getClass()).error("sync item list not found in session");
             return;
         }
         
@@ -373,7 +375,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         }
         catch (Throwable e)
         {
-            Logger.getLogger(getClass()).error(e);
+            LogManager.getLogger(getClass()).error(e);
             copyFailed = true;
         }
 
@@ -457,7 +459,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
                     {
                         deleteError=true;
                         output.println("<nobr>" + getResource("sync.fileDeleteError", "failed to delete file") + ": " + getHeadlinePath(tempFile.getAbsolutePath()) + "</nobr><br>");
-                        Logger.getLogger(getClass()).warn("failed to delete file " + tempFile);
+                        LogManager.getLogger(getClass()).warn("failed to delete file " + tempFile);
                     }
                 }
             }
@@ -472,7 +474,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         {
             deleteError=true;
             output.println("<nobr>" + getResource("sync.dirDeleteError", "failed to delete directory") + ": " + getHeadlinePath(path) + "</nobr><br>");
-            Logger.getLogger(getClass()).warn("failed to delete directory " + path);
+            LogManager.getLogger(getClass()).warn("failed to delete directory " + path);
         }
 
         return(!(deleteError));
@@ -510,7 +512,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         }
         catch (IOException rte)
         {
-            Logger.getLogger(getClass()).error(rte);
+            LogManager.getLogger(getClass()).error(rte);
         }
 
         try
@@ -519,7 +521,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         }
         catch (InterruptedException iex)
         {
-            Logger.getLogger(getClass()).error(iex);
+            LogManager.getLogger(getClass()).error(iex);
         }
         
         output.println("<nobr>" + getResource("sync.switchedToReadWrite", "access rights changed to writable") + ": " + getHeadlinePath(path) + "</nobr><br>");

@@ -28,7 +28,9 @@ import java.util.Properties;
 import javax.mail.Session;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.calendar.AppointmentManager;
 import de.webfilesys.decoration.DecorationManager;
@@ -44,7 +46,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.30.0-beta4 (06 Feb 2022)";
+	public static final String VERSION = "Version 2.30.1-beta1 (18 Sep 2023)";
  
     public static final String THUMB_DIR = "thumbnails";
 
@@ -252,7 +254,7 @@ public class WebFileSys
 	
 	private WebFileSys(Properties config, String webAppRootDir)
 	{
-        Logger.getLogger(getClass()).info("starting WebFileSys " + VERSION);      
+        LogManager.getLogger(getClass()).info("starting WebFileSys " + VERSION);      
 	    
 		this.webAppRootDir = webAppRootDir;
 		
@@ -267,11 +269,11 @@ public class WebFileSys
 		
         javaVersion = System.getProperty("java.version");
 
-        Logger.getLogger(getClass()).info("java version : " + javaVersion);
+        LogManager.getLogger(getClass()).info("java version : " + javaVersion);
 		
         opSysName = System.getProperty("os.name");
         
-        Logger.getLogger(getClass()).info("operating system : " + opSysName);
+        LogManager.getLogger(getClass()).info("operating system : " + opSysName);
 
         if (opSysName.startsWith("OS/2"))
         {
@@ -307,7 +309,7 @@ public class WebFileSys
         }
         catch (NumberFormatException nfe)
         {
-        	Logger.getLogger(getClass()).error("invalid config parameter PageThumbnailNumber: " + nfe);
+        	LogManager.getLogger(getClass()).error("invalid config parameter PageThumbnailNumber: " + nfe);
         	thumbnailsPerPage = 12;
         }
 
@@ -323,11 +325,11 @@ public class WebFileSys
         if (temp.equalsIgnoreCase("open"))
         {
             openRegistration = true;
-            Logger.getLogger(getClass()).info("registration: open");
+            LogManager.getLogger(getClass()).info("registration: open");
         }
         else
         {
-            Logger.getLogger(getClass()).info("registration: closed");
+            LogManager.getLogger(getClass()).info("registration: closed");
         }
 
         showDescriptionsInline = false;
@@ -359,7 +361,7 @@ public class WebFileSys
                     || (!docRootFile.isDirectory())
                     || (!docRootFile.canWrite()))
                 {
-                	Logger.getLogger(getClass()).error("UserDocumentRoot is not a writable directory: "+ userDocRoot);
+                	LogManager.getLogger(getClass()).error("UserDocumentRoot is not a writable directory: "+ userDocRoot);
                     userDocRoot = null;
                 }
                 else
@@ -376,7 +378,7 @@ public class WebFileSys
 
                             if (!canonicalRoot.equals(absoluteRoot))
                             {
-                            	Logger.getLogger(getClass()).error("UserDocumentRoot is not a writable directory (check uppercase/lowercase!): " + userDocRoot);
+                            	LogManager.getLogger(getClass()).error("UserDocumentRoot is not a writable directory (check uppercase/lowercase!): " + userDocRoot);
                                 userDocRoot = null;
                             }
                         }
@@ -389,7 +391,7 @@ public class WebFileSys
 
                 if (userDocRoot != null)
                 {
-                    Logger.getLogger(getClass()).info("User Document Root: " + userDocRoot);
+                    LogManager.getLogger(getClass()).info("User Document Root: " + userDocRoot);
                 }
             }
 
@@ -397,7 +399,7 @@ public class WebFileSys
             {
             	userDocRoot = configBaseDir + File.separator + "userhome";
 
-                Logger.getLogger(getClass()).info(
+                LogManager.getLogger(getClass()).info(
                     "using default UserDocumentRoot for open registration: "
                         + userDocRoot);
             }
@@ -413,7 +415,7 @@ public class WebFileSys
         	}
         	catch (NumberFormatException nfex)
         	{
-                Logger.getLogger(getClass()).warn("invalid upload limit ignored: " + temp);        		
+                LogManager.getLogger(getClass()).warn("invalid upload limit ignored: " + temp);        		
         	}
         }
         
@@ -427,7 +429,7 @@ public class WebFileSys
         	}
         	catch (NumberFormatException nfex)
         	{
-                Logger.getLogger(getClass()).warn("invalid upload limit ignored: " + temp);        		
+                LogManager.getLogger(getClass()).warn("invalid upload limit ignored: " + temp);        		
         	}
         }
         
@@ -467,7 +469,7 @@ public class WebFileSys
             }
             catch (NumberFormatException nfex)
             {
-            	Logger.getLogger(getClass()).error(
+            	LogManager.getLogger(getClass()).error(
                     "invalid default disk quota value: "
                         + temp
                         + " - using default value " + DEFAULT_DISK_QUOTA);
@@ -482,7 +484,7 @@ public class WebFileSys
 
         if ((mailHost != null) && (mailHost.trim().length() > 0))
         {
-        	Logger.getLogger(getClass()).info("SMTP mail host: " + mailHost);
+        	LogManager.getLogger(getClass()).info("SMTP mail host: " + mailHost);
         	
         	temp = config.getProperty("SmtpAuth");
         	
@@ -493,14 +495,14 @@ public class WebFileSys
         		smtpUser = config.getProperty("SmtpUser");
         		if (CommonUtils.isEmpty(smtpUser))
         		{
-        			Logger.getLogger(getClass()).error("SmtpUser property is required if SmtpAuth=true");
+        			LogManager.getLogger(getClass()).error("SmtpUser property is required if SmtpAuth=true");
         		}
 
         		smtpPassword = config.getProperty("SmtpPassword");
         		
         		if (CommonUtils.isEmpty(smtpPassword))
         		{
-        			Logger.getLogger(getClass()).error("smtpPassword property is required if SmtpAuth=true");
+        			LogManager.getLogger(getClass()).error("smtpPassword property is required if SmtpAuth=true");
         		}
         	}
 
@@ -540,9 +542,9 @@ public class WebFileSys
             clientUrl = config.getProperty("ClientURL");
 
         } else {
-        	Logger.getLogger(getClass()).warn("SmtpMailHost not configured - WebFileSys will not send e-mails. It is strongly recommended to configure a mail server.");
+        	LogManager.getLogger(getClass()).warn("SmtpMailHost not configured - WebFileSys will not send e-mails. It is strongly recommended to configure a mail server.");
         	if (openRegistration) {
-            	Logger.getLogger(getClass()).warn("SmtpMailHost not configured - self registered users must be activated by an administrator");
+            	LogManager.getLogger(getClass()).warn("SmtpMailHost not configured - self registered users must be activated by an administrator");
         	}
         }
 
@@ -554,7 +556,7 @@ public class WebFileSys
         {
             enableDiskQuota = true;
 
-            Logger.getLogger(getClass()).info("disk quota enabled");
+            LogManager.getLogger(getClass()).info("disk quota enabled");
 
             diskQuotaCheckHour = 3;
 
@@ -566,7 +568,7 @@ public class WebFileSys
             }
             catch (NumberFormatException nfex)
             {
-            	Logger.getLogger(getClass()).error("invalid DiskQuotaCheckHour: " + temp);
+            	LogManager.getLogger(getClass()).error("invalid DiskQuotaCheckHour: " + temp);
             }
 
             mailNotifyQuotaAdmin = false;
@@ -589,7 +591,7 @@ public class WebFileSys
         }
         else
         {
-        	Logger.getLogger(getClass()).info("disk quota disabled");
+        	LogManager.getLogger(getClass()).info("disk quota disabled");
         }
 
         systemEditor = config.getProperty("SystemEditor");
@@ -628,11 +630,11 @@ public class WebFileSys
 	            }
 	            catch (NumberFormatException numEx)
 	            {
-	            	Logger.getLogger(getClass()).error("invalid property value for MaxAppointmentMailsPerHour: " + temp);
+	            	LogManager.getLogger(getClass()).error("invalid property value for MaxAppointmentMailsPerHour: " + temp);
 	            	maxAppointmentMailsPerHour = DEFAULT_MAX_APP_MAILS_PER_HOUR;
 	            }
 	        }
-        	Logger.getLogger(getClass()).debug("maximum allowed appointment e-mails per hour: " + maxAppointmentMailsPerHour);
+        	LogManager.getLogger(getClass()).debug("maximum allowed appointment e-mails per hour: " + maxAppointmentMailsPerHour);
 
 		    temp = config.getProperty("AppointmentExpirationDays", null);
 		    if (!CommonUtils.isEmpty(temp))
@@ -643,7 +645,7 @@ public class WebFileSys
 	            }
 	            catch (NumberFormatException numEx)
 	            {
-	            	Logger.getLogger(getClass()).error("invalid property value for AppointmentExpirationDays: " + temp);
+	            	LogManager.getLogger(getClass()).error("invalid property value for AppointmentExpirationDays: " + temp);
 	            	calendarExpirationPeriod = DEFAULT_CAL_EXPIRATION_PERIOD;
 	            }
 		    }
@@ -686,7 +688,7 @@ public class WebFileSys
             try {
             	pollFilesysChangesInterval = Integer.parseInt(temp);
             } catch (NumberFormatException nfex) {
-            	Logger.getLogger(getClass()).error("invalid value for property PollFilesysChangesInterval: " + temp + " - using default value " + pollFilesysChangesInterval);
+            	LogManager.getLogger(getClass()).error("invalid value for property PollFilesysChangesInterval: " + temp + " - using default value " + pollFilesysChangesInterval);
             }
         }
         
@@ -730,19 +732,19 @@ public class WebFileSys
             InetAddress localHost = InetAddress.getLocalHost();
             local_full = localHost.toString();
             localIPAddress = localHost.getHostAddress();
-            Logger.getLogger(getClass()).info("local ip address : " + local_full);
+            LogManager.getLogger(getClass()).info("local ip address : " + local_full);
             localHostName = localHost.getHostName();
         }
         catch (Exception e)
         {
-        	Logger.getLogger(getClass()).error(e);
+        	LogManager.getLogger(getClass()).error(e);
             try
             {
                 localHostName = InetAddress.getLocalHost().toString();
             }
             catch (Exception o)
             {
-            	Logger.getLogger(getClass()).error(o);
+            	LogManager.getLogger(getClass()).error(o);
                 localHostName = "cannot query host name";
             }
         }
@@ -752,7 +754,7 @@ public class WebFileSys
                 "primaryLanguage",
                 LanguageManager.DEFAULT_LANGUAGE);
 
-        Logger.getLogger(getClass()).info("primary language: " + primaryLanguage);
+        LogManager.getLogger(getClass()).info("primary language: " + primaryLanguage);
 
         if (File.separatorChar == '/')
         {
@@ -777,11 +779,11 @@ public class WebFileSys
                         .forName(this.userMgrClass)
                         .newInstance();
 
-                Logger.getLogger(getClass()).info("User Manager class: " + this.userMgrClass);
+                LogManager.getLogger(getClass()).info("User Manager class: " + this.userMgrClass);
             }
             catch (ClassNotFoundException cnfex)
             {
-            	Logger.getLogger(getClass()).error(
+            	LogManager.getLogger(getClass()).error(
                     "the user manager class "
                         + userMgrClass
                         + " cannot be found: "
@@ -789,17 +791,17 @@ public class WebFileSys
             }
             catch (InstantiationException instEx)
             {
-            	Logger.getLogger(getClass()).error(
+            	LogManager.getLogger(getClass()).error(
                     "the user manager cannot be instantiated: " + instEx);
             }
             catch (IllegalAccessException iaEx)
             {
-            	Logger.getLogger(getClass()).error(
+            	LogManager.getLogger(getClass()).error(
                     "the user manager cannot be instantiated: " + iaEx);
             }
             catch (ClassCastException cex)
             {
-            	Logger.getLogger(getClass()).error(
+            	LogManager.getLogger(getClass()).error(
                     "the class "
                         + userMgrClass
                         + " does not implement the UserManager interface: "
@@ -813,7 +815,7 @@ public class WebFileSys
 
             if (adminEmailList.size() == 0)
             {
-            	Logger.getLogger(getClass()).warn("no admin e-mail address available for event notification");
+            	LogManager.getLogger(getClass()).warn("no admin e-mail address available for event notification");
             }
         }
         
@@ -914,7 +916,7 @@ public class WebFileSys
                 }
                 catch (IndexOutOfBoundsException iex)
                 {
-                	Logger.getLogger(getClass()).warn("invalid date format: " + iex);
+                	LogManager.getLogger(getClass()).warn("invalid date format: " + iex);
                 }
             }
         }
@@ -1263,14 +1265,14 @@ public class WebFileSys
     
     public String getGoogleMapsAPIKeyHTTP() {
     	if (CommonUtils.isEmpty(googleMapsAPIKeyHTTP)) {
-    		Logger.getLogger(getClass()).warn("no google maps API key configured for HTTP (missing config property GoogleMapsAPIKeyHTTP)");
+    		LogManager.getLogger(getClass()).warn("no google maps API key configured for HTTP (missing config property GoogleMapsAPIKeyHTTP)");
     	}
     	return googleMapsAPIKeyHTTP;
     }
 
     public String getGoogleMapsAPIKeyHTTPS() {
     	if (CommonUtils.isEmpty(googleMapsAPIKeyHTTPS)) {
-    		Logger.getLogger(getClass()).warn("no google maps API key configured for HTTPS (missing config property GoogleMapsAPIKeyHTTPS)");
+    		LogManager.getLogger(getClass()).warn("no google maps API key configured for HTTPS (missing config property GoogleMapsAPIKeyHTTPS)");
     	}
     	return googleMapsAPIKeyHTTPS;
     }

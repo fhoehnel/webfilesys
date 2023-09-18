@@ -12,11 +12,13 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class TrustAllCertificatesSocketFactory extends SSLSocketFactory  {
 
-	private static Logger LOG = Logger.getLogger(LdapAuthenticatedXmlUserManager.class);
+	private static Logger LOG = LogManager.getLogger(LdapAuthenticatedXmlUserManager.class);
 
 	private SSLSocketFactory socketFactory;
 	

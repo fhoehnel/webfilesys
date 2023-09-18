@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.util.PatternComparator;
 
@@ -88,7 +90,7 @@ public class FileLinkSelector
 					{
 						MetaInfManager.getInstance().removeLink(path,fileName);
 						
-						Logger.getLogger(getClass()).info("removing invalid link " + fileName + " in directory " + path + " pointing to " + fileCont.getRealFile().getAbsolutePath());
+						LogManager.getLogger(getClass()).info("removing invalid link " + fileName + " in directory " + path + " pointing to " + fileCont.getRealFile().getAbsolutePath());
 					}
 				}
 			}
@@ -296,7 +298,7 @@ public class FileLinkSelector
 					{
 						metaInfMgr.removeLink(path,fileName);
 						
-						Logger.getLogger(getClass()).info("removing invalid link " + fileName + " in directory " + path + " pointing to " + fileCont.getRealFile().getAbsolutePath());
+						LogManager.getLogger(getClass()).info("removing invalid link " + fileName + " in directory " + path + " pointing to " + fileCont.getRealFile().getAbsolutePath());
 					}
 				}
 			}

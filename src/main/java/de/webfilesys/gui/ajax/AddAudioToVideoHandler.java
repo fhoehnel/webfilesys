@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.ClipBoard;
@@ -36,7 +38,7 @@ public class AddAudioToVideoHandler extends XmlRequestHandlerBase {
         String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
         
         if (CommonUtils.isEmpty(ffmpegExePath)) {
-        	Logger.getLogger(getClass()).warn("ffmpeg not configured");
+        	LogManager.getLogger(getClass()).warn("ffmpeg not configured");
         	return;
         }		
 		
