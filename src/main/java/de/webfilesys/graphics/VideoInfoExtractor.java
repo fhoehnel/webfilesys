@@ -1,8 +1,10 @@
 package de.webfilesys.graphics;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 import org.apache.logging.log4j.Logger;
@@ -150,7 +152,7 @@ public class VideoInfoExtractor {
             
             Process ffprobeProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
             
-            DataInputStream ffprobeOut = new DataInputStream(ffprobeProcess.getInputStream());
+            BufferedReader ffprobeOut = new BufferedReader(new InputStreamReader(ffprobeProcess.getInputStream()));
             
             String outLine = null;
             

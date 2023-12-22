@@ -729,6 +729,9 @@ error.missingLanguage=language is required
 
 # MP3 labels
 label.editmp3=Edit MP3 Tags
+label.cutAudio=Cut part of audio
+title.cutAudio=Extract a part of the audio stream
+label.audioFile=audio file
 label.mp3title=Song Title
 label.mp3artist=Artist
 label.mp3album=Album
@@ -976,13 +979,14 @@ fadeOutDuration=fade out duration
 maxVideoWidth=max video width
 maxVideoHeight=max video height
 videoConversionStarted=The conversion of the video has been started. This can take some time to complete. For the result file watch the subfolder 
+cutAudioStarted=The conversion of the audio has been started. This can take some time to complete. For the result file watch the subfolder
 textOnVideoStarted=The text on video processing has been started. This can take some time to complete. For the result file watch the subfolder
 videoFadeAudioStarted=Audio fading has been started. This can take some time to complete. For the result file watch the subfolder
 addSilentAudioStarted=Adding silent audio to video has started. This can take some time to complete. For the result file watch the subfolder
 fadeInValueInvalid=The value for fade in duration is invalid.
 fadeOutValueInvalid=The value for fade out duration is invalid.
 validationError.videoStartEndTime=The end time may not be before the start time.
-validationError.videoTimeRange=The selected time range is outside the range of the video.
+validationError.videoTimeRange=The selected time range is outside the range of the video/audio.
 selectTwoOrMoreVideoFiles=Select at least two video files to concatenate.
 concatVideos=concatenate videos
 addSilentAudio=add silent audio

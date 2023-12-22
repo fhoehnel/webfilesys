@@ -50,6 +50,10 @@ function editMP3(path)
     mp3Win.focus();
 }
 
+function cutAudio(path) {
+    window.location.href="/webfilesys/servlet?command=cutAudioParams&filePath=" + encodeURIComponent(path);
+}
+
 function renameFile(fileName) {  
     centeredDialog('/webfilesys/servlet?command=renameFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameFile.xsl', 360, 160, function() {
         document.renameForm.newFileName.focus();

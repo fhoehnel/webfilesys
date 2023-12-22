@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.gui.xsl.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -73,6 +74,7 @@ import de.webfilesys.gui.ajax.AnyVideoConcatHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.CheckUploadConflictHandler;
+import de.webfilesys.gui.ajax.CutAudioHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DeshakeVideoHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
@@ -225,74 +227,6 @@ import de.webfilesys.gui.user.unix.ProcessListRequestHandler;
 import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
 import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
-import de.webfilesys.gui.xsl.AnyVideoConcatParamHandler;
-import de.webfilesys.gui.xsl.CompareImageSliderHandler;
-import de.webfilesys.gui.xsl.CompareImageTabHandler;
-import de.webfilesys.gui.xsl.EditVideoParamHandler;
-import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
-import de.webfilesys.gui.xsl.GPXViewHandler;
-import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
-import de.webfilesys.gui.xsl.SlideshowToVideoParamHandler;
-import de.webfilesys.gui.xsl.TextOnVideoParamHandler;
-import de.webfilesys.gui.xsl.VideoFadeAudioParamHandler;
-import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
-import de.webfilesys.gui.xsl.XslAlbumImageHandler;
-import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
-import de.webfilesys.gui.xsl.XslCategoryHandler;
-import de.webfilesys.gui.xsl.XslCloneFilePromptHandler;
-import de.webfilesys.gui.xsl.XslCoBrowsingClientHandler;
-import de.webfilesys.gui.xsl.XslCoBrowsingMasterHandler;
-import de.webfilesys.gui.xsl.XslCompFolderParmsHandler;
-import de.webfilesys.gui.xsl.XslCompareFolderHandler;
-import de.webfilesys.gui.xsl.XslCreateFilePromptHandler;
-import de.webfilesys.gui.xsl.XslCreateFolderPromptHandler;
-import de.webfilesys.gui.xsl.XslCryptoKeyPromptHandler;
-import de.webfilesys.gui.xsl.XslDownloadPromptHandler;
-import de.webfilesys.gui.xsl.XslEditMetaInfHandler;
-import de.webfilesys.gui.xsl.XslEmailFilePromptHandler;
-import de.webfilesys.gui.xsl.XslExifDataHandler;
-import de.webfilesys.gui.xsl.XslFastPathHandler;
-import de.webfilesys.gui.xsl.XslFileListHandler;
-import de.webfilesys.gui.xsl.XslFileListStatsHandler;
-import de.webfilesys.gui.xsl.XslFileSysBookmarkHandler;
-import de.webfilesys.gui.xsl.XslFindFileHandler;
-import de.webfilesys.gui.xsl.XslFolderDiffTreeHandler;
-import de.webfilesys.gui.xsl.XslFolderWatchListHandler;
-import de.webfilesys.gui.xsl.XslGoogleMapHandler;
-import de.webfilesys.gui.xsl.XslGoogleMapMultiHandler;
-import de.webfilesys.gui.xsl.XslListCommentsHandler;
-import de.webfilesys.gui.xsl.XslLogonHandler;
-import de.webfilesys.gui.xsl.XslMenuBarHandler;
-import de.webfilesys.gui.xsl.XslMultiUploadHandler;
-import de.webfilesys.gui.xsl.XslOpenStreetMapFilesHandler;
-import de.webfilesys.gui.xsl.XslOpenStreetMapHandler;
-import de.webfilesys.gui.xsl.XslPictureStoryHandler;
-import de.webfilesys.gui.xsl.XslPictureStoryOwnWindowHandler;
-import de.webfilesys.gui.xsl.XslPublishFileHandler;
-import de.webfilesys.gui.xsl.XslPublishListHandler;
-import de.webfilesys.gui.xsl.XslRenameDirHandler;
-import de.webfilesys.gui.xsl.XslRenameFilePromptHandler;
-import de.webfilesys.gui.xsl.XslRenameFolderPromptHandler;
-import de.webfilesys.gui.xsl.XslRenameImagePromptHandler;
-import de.webfilesys.gui.xsl.XslResizeParmsHandler;
-import de.webfilesys.gui.xsl.XslSearchParmsHandler;
-import de.webfilesys.gui.xsl.XslSelfRegistrationHandler;
-import de.webfilesys.gui.xsl.XslShowImageHandler;
-import de.webfilesys.gui.xsl.XslSlideShowHandler;
-import de.webfilesys.gui.xsl.XslSlideShowInFrameHandler;
-import de.webfilesys.gui.xsl.XslSlideshowParmsHandler;
-import de.webfilesys.gui.xsl.XslSyncCompareHandler;
-import de.webfilesys.gui.xsl.XslThumbnailExtractDescriptionHandler;
-import de.webfilesys.gui.xsl.XslThumbnailHandler;
-import de.webfilesys.gui.xsl.XslTreeStatSunburstHandler;
-import de.webfilesys.gui.xsl.XslTreeStatsHandler;
-import de.webfilesys.gui.xsl.XslUnixCmdLineHandler;
-import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
-import de.webfilesys.gui.xsl.XslUploadParmsHandler;
-import de.webfilesys.gui.xsl.XslUserSettingsHandler;
-import de.webfilesys.gui.xsl.XslVideoListHandler;
-import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
-import de.webfilesys.gui.xsl.XslZipContentHandler;
 import de.webfilesys.gui.xsl.album.AddAlbumCommentHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumPictureHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumSlideShowHandler;
@@ -1854,11 +1788,22 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("editMP3"))
         {
 			(new EditMP3RequestHandler(req, resp, session, output, userid)).handleRequest(); 
-            
             return(true);
         }
-        
-        if (command.equals("unixRights"))
+
+		if (command.equals("cutAudioParams"))
+		{
+			(new CutAudioParamHandler(req, resp, session, output, userid)).handleRequest();
+			return(true);
+		}
+
+		if (command.equals("cutAudio"))
+		{
+			(new CutAudioHandler(req, resp, session, output, userid)).handleRequest();
+			return(true);
+		}
+
+		if (command.equals("unixRights"))
         {
             (new UnixOwnerRequestHandler(req, resp, session, output, userid, false)).handleRequest();
 

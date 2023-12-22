@@ -732,6 +732,9 @@ error.missingLanguage=Sprache ist ein Pflichtfeld
 
 # MP3 labels
 label.editmp3=MP3 Tags editieren
+label.cutAudio=Audio schneiden
+title.cutAudio=Teil aus einem Audio-Stream extrahieren
+label.audioFile=Audio-Datei
 label.mp3title=Titel des Songs
 label.mp3artist=Interpret
 label.mp3album=Album
@@ -979,13 +982,14 @@ fadeOutDuration=fade-out Dauer
 maxVideoWidth=maximale Video-Breite
 maxVideoHeight=maximale Video-Höhe
 videoConversionStarted=Die Videokonvertierung wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner 
+cutAudioStarted=Die Audiokonvertierung wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 textOnVideoStarted=Das Hinzufügen von Text zum Video wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 videoFadeAudioStarted=Audio-Fading wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 addSilentAudioStarted=Das Hinzufügen von stillem Audio zum Video wurde gestartet und kann einige Zeit dauern. Die Ergebnis-Datei wird bereitgestellt im Unterordner
 fadeInValueInvalid=Der Wert für die fade-in Dauer ist ungültig.
 fadeOutValueInvalid=Der Wert für die fade-out Dauer ist ungültig.
 validationError.videoStartEndTime=Die Endezeit darf nicht vor der Startzeit liegen.
-validationError.videoTimeRange=Das gewählte Zeitfenster liegt ausserhalb des Zeitbereiches des Videos.
+validationError.videoTimeRange=Das gewählte Zeitfenster liegt ausserhalb des Zeitbereiches des Videos/Audios.
 selectTwoOrMoreVideoFiles=Es müssen mindestens 2 Video-Dateien ausgewählt werden. 
 concatVideos=Videos verketten
 addSilentAudio=stilles Audio hinzufügen
