@@ -54,19 +54,7 @@ public class VideoSilentAudioGeneratorThread extends Thread {
 					}
 				}
 
-				String targetFilePath = targetPath + File.separator + sourceFileName;
-
-				boolean targetFileNameOk = true;
-				do {
-					File existingTargetFile = new File(targetFilePath);
-					if (existingTargetFile.exists()) {
-						targetFileNameOk = false;
-						int dotIdx = targetFilePath.lastIndexOf(".");
-						targetFilePath = targetFilePath.substring(0, dotIdx) + "-1" + targetFilePath.substring(dotIdx);
-					} else {
-						targetFileNameOk = true;
-					}
-				} while (!targetFileNameOk);
+	            String targetFilePath = CommonUtils.getNonConflictingTargetFilePath(targetPath + File.separator + sourceFileName);
 
 				// ffmpeg -f lavfi -i anullsrc=channel_layout=stereo:sample_rate=44100 -i
 				// input.mp4 -c:v copy -c:a aac -shortest output.mp4

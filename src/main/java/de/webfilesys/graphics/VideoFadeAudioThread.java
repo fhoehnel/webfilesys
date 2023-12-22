@@ -80,19 +80,7 @@ public class VideoFadeAudioThread extends Thread {
                 }
             }
             
-            String targetFilePath = targetPath + File.separator + sourceFileName;
-            
-            boolean targetFileNameOk = true;
-            do {
-                File existingTargetFile = new File(targetFilePath);
-                if (existingTargetFile.exists()) {
-                    targetFileNameOk = false;
-                    int dotIdx = targetFilePath.lastIndexOf(".");
-                    targetFilePath = targetFilePath.substring(0, dotIdx) + "-1" + targetFilePath.substring(dotIdx);
-                } else {
-                    targetFileNameOk = true;
-                }
-            } while (!targetFileNameOk);
+            String targetFilePath = CommonUtils.getNonConflictingTargetFilePath(targetPath + File.separator + sourceFileName);
             
             // ffmpeg -i testvideo.mp4 -filter:a "afade=in:st=0:d=1, afade=out:st=30:d=6" -c:v libx264 -c:a aac testvideo-fade.mp4
             

@@ -22,6 +22,7 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.VideoDeshaker;
 import de.webfilesys.graphics.VideoInfo;
 import de.webfilesys.graphics.VideoInfoExtractor;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -159,19 +160,8 @@ public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
             String fileNameOnly = firstFileName.substring(0,  firstFileName.lastIndexOf('.'));
             String ext = firstFileName.substring(firstFileName.lastIndexOf('.') + 1);
             String targetFileName = fileNameOnly + "_concat." + ext;
-            String targetFilePath = targetPath + File.separator + targetFileName;
             
-            boolean targetFileNameOk = true;
-            do {
-                File existingTargetFile = new File(targetFilePath);
-                if (existingTargetFile.exists()) {
-                    targetFileNameOk = false;
-                    int dotIdx = targetFilePath.lastIndexOf(".");
-                    targetFilePath = targetFilePath.substring(0, dotIdx) + "-1" + targetFilePath.substring(dotIdx);
-                } else {
-                    targetFileNameOk = true;
-                }
-            } while (!targetFileNameOk);
+            String targetFilePath = CommonUtils.getNonConflictingTargetFilePath(targetPath + File.separator + targetFileName);
             
 	        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
 			
