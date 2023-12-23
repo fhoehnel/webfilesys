@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.mail.EmailUtils;
@@ -80,7 +82,7 @@ public class AjaxSendEmailHandler extends XmlRequestHandlerBase
             }
             else
             {
-                Logger.getLogger(getClass()).warn("invalid e-mail address: " + email);
+                LogManager.getLogger(getClass()).warn("invalid e-mail address: " + email);
             }
         }
 

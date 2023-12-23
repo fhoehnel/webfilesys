@@ -14,7 +14,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -65,7 +67,7 @@ public class CategoryManager extends Thread
         }
         catch (ParserConfigurationException pcex)
         {
-            Logger.getLogger(getClass()).error(pcex);
+            LogManager.getLogger(getClass()).error(pcex);
         }
 
         this.start();
@@ -98,7 +100,7 @@ public class CategoryManager extends Thread
         {
             if (!categoryFile.canRead())
             {
-                Logger.getLogger(getClass()).error("cannot read categories file for user " + userid);
+                LogManager.getLogger(getClass()).error("cannot read categories file for user " + userid);
                 return(null);
             }
 
@@ -137,20 +139,20 @@ public class CategoryManager extends Thread
             
             inputSource.setEncoding("UTF-8");
 
-            if (Logger.getLogger(getClass()).isDebugEnabled())
+            if (LogManager.getLogger(getClass()).isDebugEnabled())
             {
-                Logger.getLogger(getClass()).debug("reading categories from " + categoryFilePath);
+                LogManager.getLogger(getClass()).debug("reading categories from " + categoryFilePath);
             }
 
             doc = builder.parse(inputSource);
         }
         catch (SAXException saxex)
         {
-            Logger.getLogger(getClass()).error("failed to load category file : " + categoryFilePath, saxex);
+            LogManager.getLogger(getClass()).error("failed to load category file : " + categoryFilePath, saxex);
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("failed to load category file : " + categoryFilePath, ioex);
+            LogManager.getLogger(getClass()).error("failed to load category file : " + categoryFilePath, ioex);
         }
         finally 
         {
@@ -209,7 +211,7 @@ public class CategoryManager extends Thread
 
         if (categoryTable.get(userid) != null)
         {
-			Logger.getLogger(getClass()).debug("disposing category list of user " + userid);
+			LogManager.getLogger(getClass()).debug("disposing category list of user " + userid);
         }
 
         categoryTable.remove(userid);
@@ -255,7 +257,7 @@ public class CategoryManager extends Thread
         }
         else
         {
-            Logger.getLogger(getClass()).debug("no categories found for userid " + userid);
+            LogManager.getLogger(getClass()).debug("no categories found for userid " + userid);
         }
     
         return categoryIds;
@@ -269,7 +271,7 @@ public class CategoryManager extends Thread
 
         if (categoryList==null)
         {
-            Logger.getLogger(getClass()).debug("category list for user " + userid + " does not exist!");
+            LogManager.getLogger(getClass()).debug("category list for user " + userid + " does not exist!");
             return listOfCategories;
         }
 
@@ -297,7 +299,7 @@ public class CategoryManager extends Thread
                 }
                 catch (NumberFormatException nfe)
                 {
-                    Logger.getLogger(getClass()).warn(nfe);
+                    LogManager.getLogger(getClass()).warn(nfe);
                     creationTime=(new Date()).getTime();
                 }
 
@@ -311,7 +313,7 @@ public class CategoryManager extends Thread
                 }
                 catch (NumberFormatException nfe)
                 {
-                    Logger.getLogger(getClass()).warn(nfe);
+                    LogManager.getLogger(getClass()).warn(nfe);
                     updateTime=(new Date()).getTime();
                 }
 
@@ -335,7 +337,7 @@ public class CategoryManager extends Thread
 
         if (category == null)
         {
-            Logger.getLogger(getClass()).warn("category for user " + userid + "id " + searchedId + " does not exist!");
+            LogManager.getLogger(getClass()).warn("category for user " + userid + "id " + searchedId + " does not exist!");
             return(null);
         }
 
@@ -351,7 +353,7 @@ public class CategoryManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-            Logger.getLogger(getClass()).error(nfe);
+            LogManager.getLogger(getClass()).error(nfe);
             creationTime=(new Date()).getTime();
         }
 
@@ -365,7 +367,7 @@ public class CategoryManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-			Logger.getLogger(getClass()).error(nfe);
+			LogManager.getLogger(getClass()).error(nfe);
             updateTime=(new Date()).getTime();
         }
 
@@ -397,7 +399,7 @@ public class CategoryManager extends Thread
             }
         }
 
-        Logger.getLogger(getClass()).warn("category with id " + searchedId + " not found in index");
+        LogManager.getLogger(getClass()).warn("category with id " + searchedId + " not found in index");
 
         NodeList categories = categoryList.getElementsByTagName("category");
 
@@ -423,7 +425,7 @@ public class CategoryManager extends Thread
 
     protected Element createCategoryList(String userid)
     {
-        Logger.getLogger(getClass()).debug("creating new category list for user : " + userid);
+        LogManager.getLogger(getClass()).debug("creating new category list for user : " + userid);
         
         Document doc = builder.newDocument();
 
@@ -504,7 +506,7 @@ public class CategoryManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-            Logger.getLogger(getClass()).warn(nfe);
+            LogManager.getLogger(getClass()).warn(nfe);
         }
 
         return(lastId);
@@ -532,7 +534,7 @@ public class CategoryManager extends Thread
 
             if (categoryElement == null)
             {
-                Logger.getLogger(getClass()).warn("updateCategory: category for user " + userid + " with id " + changedCategory.getId() +  " not found");
+                LogManager.getLogger(getClass()).warn("updateCategory: category for user " + userid + " with id " + changedCategory.getId() +  " not found");
                 return(null);
             }
 
@@ -605,7 +607,7 @@ public class CategoryManager extends Thread
 		}
 		catch (NumberFormatException nfe)
 		{
-			Logger.getLogger(getClass()).warn(nfe);
+			LogManager.getLogger(getClass()).warn(nfe);
 			creationTime=(new Date()).getTime();
 		}
 
@@ -619,7 +621,7 @@ public class CategoryManager extends Thread
 		}
 		catch (NumberFormatException nfe)
 		{
-			Logger.getLogger(getClass()).warn(nfe);
+			LogManager.getLogger(getClass()).warn(nfe);
 			updateTime=(new Date()).getTime();
 		}
 
@@ -638,7 +640,7 @@ public class CategoryManager extends Thread
 
             if (categoryElement == null)
             {
-                Logger.getLogger(getClass()).warn("category for user " + userid + " id " + searchedId + " not found");
+                LogManager.getLogger(getClass()).warn("category for user " + userid + " id " + searchedId + " not found");
                 return;
             }
 
@@ -663,13 +665,13 @@ public class CategoryManager extends Thread
 
         if (categoryListElement == null)
         {
-            Logger.getLogger(getClass()).warn("category list for user " + userid + " does not exist");
+            LogManager.getLogger(getClass()).warn("category list for user " + userid + " does not exist");
             return;
         }
 
-        if (Logger.getLogger(getClass()).isDebugEnabled())
+        if (LogManager.getLogger(getClass()).isDebugEnabled())
         {
-            Logger.getLogger(getClass()).debug("saving categories for user " + userid);
+            LogManager.getLogger(getClass()).debug("saving categories for user " + userid);
         }
         
         synchronized (categoryListElement)
@@ -690,7 +692,7 @@ public class CategoryManager extends Thread
             }
             catch (IOException io1)
             {
-				Logger.getLogger(getClass()).error("error saving category file " + xmlFileName, io1);
+				LogManager.getLogger(getClass()).error("error saving category file " + xmlFileName, io1);
             }
             finally
             {

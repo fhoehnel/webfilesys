@@ -9,7 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.w3c.dom.Element;
 
-import de.webfilesys.graphics.VideoAddSilentAudioThread;
+import de.webfilesys.graphics.VideoSilentAudioGeneratorThread;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
@@ -32,21 +32,20 @@ public class VideoAddSilentAudioHandler extends XmlRequestHandlerBase {
 
 		String videoFilePath = CommonUtils.joinFilesysPath(getCwd(), videoFileName);
 		
-		VideoAddSilentAudioThread addAudioThread = new VideoAddSilentAudioThread(videoFilePath);
+		VideoSilentAudioGeneratorThread addAudioThread = new VideoSilentAudioGeneratorThread(videoFilePath);
 		
 		addAudioThread.start();
 
     	String[] partsOfPath = CommonUtils.splitPath(videoFilePath);
     	
-    	String targetFolder = "_silentAudio";
+    	String targetPath = partsOfPath[0] + File.separator + VideoSilentAudioGeneratorThread.TARGET_SUBDIR;
     	
-    	String targetPath = partsOfPath[0] + File.separator + targetFolder;
 		
 		Element resultElement = doc.createElement("result");
 
 		XmlUtil.setChildText(resultElement, "success", Boolean.toString(true));
 
-		XmlUtil.setChildText(resultElement, "targetFolder", targetFolder);
+		XmlUtil.setChildText(resultElement, "targetFolder", VideoSilentAudioGeneratorThread.TARGET_SUBDIR);
 
 		XmlUtil.setChildText(resultElement, "targetPath", targetPath);
 		

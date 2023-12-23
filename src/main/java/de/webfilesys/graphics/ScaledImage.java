@@ -3,7 +3,9 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class ScaledImage
 {
@@ -151,7 +153,7 @@ public class ScaledImage
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("failed to determined image dimesions", ioex);
+            LogManager.getLogger(getClass()).error("failed to determined image dimesions", ioex);
             throw ioex;
         }
         finally
@@ -170,13 +172,13 @@ public class ScaledImage
         
         if (ySize == 0)
         {
-            Logger.getLogger(getClass()).warn("could not determine height of image " + imgFileName);
+            LogManager.getLogger(getClass()).warn("could not determine height of image " + imgFileName);
             ySize = 100;
         }
 
         if (xSize == 0)
         {
-            Logger.getLogger(getClass()).warn("could not determine width of image " + imgFileName);
+            LogManager.getLogger(getClass()).warn("could not determine width of image " + imgFileName);
             xSize = 100;
         }
 

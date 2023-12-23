@@ -12,7 +12,9 @@ import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
@@ -254,7 +256,7 @@ public class TextSearch
 											try {
 												metaInfMgr.createLink(searchResultDir, new FileLink(fileList[i].getName(), fullPath, uid), true);
 											} catch (FileNotFoundException nfex) {
-												Logger.getLogger(getClass()).error(nfex);
+												LogManager.getLogger(getClass()).error(nfex);
 											}
 										}
 									}
@@ -291,7 +293,7 @@ public class TextSearch
         }
         catch (FileNotFoundException e)
         {
-            Logger.getLogger(getClass()).error("cannot open search result file", e);
+            LogManager.getLogger(getClass()).error("cannot open search result file", e);
             return(-1);
         }
 
@@ -327,7 +329,7 @@ public class TextSearch
         }
         catch (IOException e)
         {
-        	Logger.getLogger(getClass()).warn("fulltext search error: " + e);
+        	LogManager.getLogger(getClass()).warn("fulltext search error: " + e);
         }
         finally
         {
@@ -446,7 +448,7 @@ public class TextSearch
             {
             	if (fin.skip(startIdx) != startIdx) 
             	{
-                    Logger.getLogger(getClass()).warn("cannot locate to search hit index " + firstMatchIdx);
+                    LogManager.getLogger(getClass()).warn("cannot locate to search hit index " + firstMatchIdx);
             	}
             }
 
@@ -538,7 +540,7 @@ public class TextSearch
         }
         catch (IOException e)
         {
-        	Logger.getLogger(getClass()).warn("fulltext search error", e);
+        	LogManager.getLogger(getClass()).warn("fulltext search error", e);
         }
         finally
         {

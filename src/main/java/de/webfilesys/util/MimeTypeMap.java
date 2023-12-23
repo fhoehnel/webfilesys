@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 
@@ -50,7 +52,7 @@ public class MimeTypeMap
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("Failed to read mimetype configuration", ioex);
+            LogManager.getLogger(getClass()).error("Failed to read mimetype configuration", ioex);
         }
     }
 

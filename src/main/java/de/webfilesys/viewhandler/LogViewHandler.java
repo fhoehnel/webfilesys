@@ -13,7 +13,9 @@ import java.util.StringTokenizer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.util.CommonUtils;
@@ -120,8 +122,8 @@ public class LogViewHandler implements ViewHandler
                 isr = new InputStreamReader(fis);
             }
             
-            if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                Logger.getLogger(getClass()).debug("Reading log file with char encoding " + isr.getEncoding());
+            if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+                LogManager.getLogger(getClass()).debug("Reading log file with char encoding " + isr.getEncoding());
             }
             
             BufferedReader fileIn = new BufferedReader(isr);
@@ -177,7 +179,7 @@ public class LogViewHandler implements ViewHandler
         	        }
         	    } 
         	    catch (Exception ex) {
-        	        Logger.getLogger(getClass()).warn("error during reading log file", ex);
+        	        LogManager.getLogger(getClass()).warn("error during reading log file", ex);
         	        excCounter++;
         	    }
         	}
@@ -192,7 +194,7 @@ public class LogViewHandler implements ViewHandler
     	}
     	catch (IOException ioex)
     	{
-    		Logger.getLogger(getClass()).error(ioex);
+    		LogManager.getLogger(getClass()).error(ioex);
     	}
     }
     
@@ -236,7 +238,7 @@ public class LogViewHandler implements ViewHandler
     public void processZipContent(String zipFilePath, InputStream zipIn, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req, HttpServletResponse resp)
     {
         // not yet supported
-        Logger.getLogger(getClass()).warn("reading from ZIP archive not supported by ViewHaandler " + this.getClass().getName());
+        LogManager.getLogger(getClass()).warn("reading from ZIP archive not supported by ViewHaandler " + this.getClass().getName());
     }
     
     /**

@@ -1,6 +1,8 @@
 package de.webfilesys.graphics;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class ImageUtils {
 
@@ -34,11 +36,13 @@ public class ImageUtils {
             if (orientation == 6 || orientation == 8) {
             	// portrait - the browser will rotate the picture for display
             	scaledDim = ImageUtils.getScaledDimensions(exifData.getImageHeigth(), exifData.getImageWidth(), maxWidth, maxHeight);
+                scaledDim.setOrigWidth(exifData.getImageHeigth());
+                scaledDim.setOrigHeight(exifData.getImageWidth());
             } else {
             	scaledDim = ImageUtils.getScaledDimensions(exifData.getImageWidth(), exifData.getImageHeigth(), maxWidth, maxHeight);
+                scaledDim.setOrigWidth(exifData.getImageWidth());
+                scaledDim.setOrigHeight(exifData.getImageHeigth());
             }
-            scaledDim.setOrigWidth(exifData.getImageWidth());
-            scaledDim.setOrigHeight(exifData.getImageHeigth());
         } else {
         	try {
                 ScaledImage scaledImage = new ScaledImage(imgPath, maxWidth, maxHeight);
@@ -46,7 +50,7 @@ public class ImageUtils {
                 scaledDim.setOrigWidth(scaledImage.getRealWidth());
                 scaledDim.setOrigHeight(scaledImage.getRealHeight());
         	} catch (Exception ex) {
-                Logger.getLogger(ImageUtils.class).error("failed to get image dimension for file " + imgPath, ex);
+                LogManager.getLogger(ImageUtils.class).error("failed to get image dimension for file " + imgPath, ex);
         		scaledDim = new ImageDimensions(100, 100);
         	}
         }

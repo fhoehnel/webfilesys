@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -24,7 +26,7 @@ import de.webfilesys.util.XmlUtil;
  * @author Frank Hoehnel
  */
 public class ExtractVideoFrameParamHandler extends XslRequestHandlerBase {
-    private static final Logger LOG = Logger.getLogger(ExtractVideoFrameParamHandler.class);
+    private static final Logger LOG = LogManager.getLogger(ExtractVideoFrameParamHandler.class);
 	
 	public ExtractVideoFrameParamHandler(
 			HttpServletRequest req, 
@@ -109,7 +111,7 @@ public class ExtractVideoFrameParamHandler extends XslRequestHandlerBase {
     			XmlUtil.setChildText(editParamsElem, "thumbnailWidth", Integer.toString(scaledImage.getRealWidth()), false);                    
     			XmlUtil.setChildText(editParamsElem, "thumbnailHeight", Integer.toString(scaledImage.getRealHeight()), false);                    
 			} catch (IOException ioEx) {
-				Logger.getLogger(getClass()).error(ioEx);
+				LogManager.getLogger(getClass()).error(ioEx);
 			}
         }        
 		

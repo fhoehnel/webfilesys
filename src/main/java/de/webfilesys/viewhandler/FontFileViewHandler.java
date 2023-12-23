@@ -7,7 +7,9 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -108,7 +110,7 @@ public class FontFileViewHandler implements ViewHandler {
 
 			output.flush();
 		} catch (IOException ex) {
-			Logger.getLogger(getClass()).error("Font file viewer exception: " + ex);
+			LogManager.getLogger(getClass()).error("Font file viewer exception: " + ex);
 		}
 	}
 

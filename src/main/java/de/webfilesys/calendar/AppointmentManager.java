@@ -18,7 +18,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -66,7 +68,7 @@ public class AppointmentManager extends Thread
         }
         catch (ParserConfigurationException pcex)
         {
-        	Logger.getLogger(getClass()).error(pcex);
+        	LogManager.getLogger(getClass()).error(pcex);
         }
 
         alarmDistributor = new AlarmDistributor();
@@ -92,7 +94,7 @@ public class AppointmentManager extends Thread
 
     public synchronized void run()
     {
-    	Logger.getLogger(getClass()).info("AppointmentManager started");
+    	LogManager.getLogger(getClass()).info("AppointmentManager started");
 
     	boolean stop = false;
     	
@@ -121,8 +123,8 @@ public class AppointmentManager extends Thread
                                     saveChangedUsers();
                     			}
                     			
-                    			if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                                	Logger.getLogger(getClass()).debug("AppointmentManager clearing appointment cache");
+                    			if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+                                	LogManager.getLogger(getClass()).debug("AppointmentManager clearing appointment cache");
                     			}
                                 appointmentMap.clear();
                                 indexTable.clear();
@@ -137,9 +139,9 @@ public class AppointmentManager extends Thread
             {
             	alarmDistributor.interrupt();
                 saveChangedUsers();
-            	if (Logger.getLogger(getClass()).isInfoEnabled())
+            	if (LogManager.getLogger(getClass()).isInfoEnabled())
             	{
-            	    Logger.getLogger(getClass()).info("AppointmentManager ready for shutdown");
+            	    LogManager.getLogger(getClass()).info("AppointmentManager ready for shutdown");
             	}
                 stop = true;
             }
@@ -148,15 +150,15 @@ public class AppointmentManager extends Thread
     
     private void expireUnrepeatedEvents() 
     {
-    	if (Logger.getLogger(getClass()).isInfoEnabled())
+    	if (LogManager.getLogger(getClass()).isInfoEnabled())
     	{
-        	Logger.getLogger(getClass()).info("checking for unrepeated events to expire");
+        	LogManager.getLogger(getClass()).info("checking for unrepeated events to expire");
     	}
     	
     	File appDir = new File(appointmentDir);
     	File[] userFiles = appDir.listFiles();
     	if (userFiles == null) {
-        	Logger.getLogger(getClass()).error("failed to list appointment user files");
+        	LogManager.getLogger(getClass()).error("failed to list appointment user files");
         	return;
     	}
     	
@@ -174,9 +176,9 @@ public class AppointmentManager extends Thread
     			{
     				String userid = userFileName.substring(0, userFileName.lastIndexOf('.'));
     				
-    		    	if (Logger.getLogger(getClass()).isDebugEnabled())
+    		    	if (LogManager.getLogger(getClass()).isDebugEnabled())
     		    	{
-    		        	Logger.getLogger(getClass()).debug("checking expiration for user " + userid);
+    		        	LogManager.getLogger(getClass()).debug("checking expiration for user " + userid);
     		    	}
 
     		    	ArrayList<Appointment> userAppointments = getListOfAppointments(userid, false);
@@ -191,9 +193,9 @@ public class AppointmentManager extends Thread
         						if (now - appointment.getEventTime().getTime() > appointmentExpirationMillis)
         						{
         							removeAppointment(userid, appointment.getId());
-        					    	if (Logger.getLogger(getClass()).isInfoEnabled())
+        					    	if (LogManager.getLogger(getClass()).isInfoEnabled())
         					    	{
-        				        	    Logger.getLogger(getClass()).info("removing expired appointment: " + appointment.getId() + " for user " + userid);
+        				        	    LogManager.getLogger(getClass()).info("removing expired appointment: " + appointment.getId() + " for user " + userid);
         					    	}
         						}
     						}
@@ -221,7 +223,7 @@ public class AppointmentManager extends Thread
         {
             if (!appointmentFile.canRead())
             {
-            	Logger.getLogger(getClass()).error("cannot read appointment file for user " + userid);
+            	LogManager.getLogger(getClass()).error("cannot read appointment file for user " + userid);
                 return(null);
             }
 
@@ -246,7 +248,7 @@ public class AppointmentManager extends Thread
 
         if ((!appointmentFile.exists()) || (!appointmentFile.canRead()))
         {
-        	Logger.getLogger(getClass()).error("appointment file not found or not readable: " + appointmentFilePath);
+        	LogManager.getLogger(getClass()).error("appointment file not found or not readable: " + appointmentFilePath);
             return(null);
         }
         
@@ -262,20 +264,20 @@ public class AppointmentManager extends Thread
             
             inputSource.setEncoding("UTF-8");
 
-            if (Logger.getLogger(getClass()).isDebugEnabled())
+            if (LogManager.getLogger(getClass()).isDebugEnabled())
             {
-                Logger.getLogger(getClass()).debug("reading appointments from " + appointmentFilePath);
+                LogManager.getLogger(getClass()).debug("reading appointments from " + appointmentFilePath);
             }
 
             doc = builder.parse(inputSource);
         }
         catch (SAXException saxex)
         {
-            Logger.getLogger(getClass()).error("failed to load appointment file : " + appointmentFilePath, saxex);
+            LogManager.getLogger(getClass()).error("failed to load appointment file : " + appointmentFilePath, saxex);
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("failed to load appointment file : " + appointmentFilePath, ioex);
+            LogManager.getLogger(getClass()).error("failed to load appointment file : " + appointmentFilePath, ioex);
         }
         finally 
         {
@@ -375,7 +377,7 @@ public class AppointmentManager extends Thread
         }
         else
         {
-        	Logger.getLogger(getClass()).info("no appointments found for userid " + userid);
+        	LogManager.getLogger(getClass()).info("no appointments found for userid " + userid);
         }
     
         return(appointmentIds);
@@ -469,7 +471,7 @@ public class AppointmentManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-        	Logger.getLogger(getClass()).error("failed to read appointment: ", nfe);
+        	LogManager.getLogger(getClass()).error("failed to read appointment: ", nfe);
         }
 
         int repeatPeriod=AlarmEntry.REPEAT_NONE;
@@ -481,7 +483,7 @@ public class AppointmentManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-        	Logger.getLogger(getClass()).error("failed to read appointment", nfe);
+        	LogManager.getLogger(getClass()).error("failed to read appointment", nfe);
         }
 
         String fullDay = XmlUtil.getChildText(appointment,"fullDay");
@@ -527,7 +529,7 @@ public class AppointmentManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-        	Logger.getLogger(getClass()).error("failed to read appointment", nfe);
+        	LogManager.getLogger(getClass()).error("failed to read appointment", nfe);
         }
 
         newAppointment.setEventTime(new Date(eventTime));
@@ -542,7 +544,7 @@ public class AppointmentManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-        	Logger.getLogger(getClass()).error("invalid appointment creation time", nfe);
+        	LogManager.getLogger(getClass()).error("invalid appointment creation time", nfe);
             creationTime=(new Date()).getTime();
         }
 
@@ -556,7 +558,7 @@ public class AppointmentManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-        	Logger.getLogger(getClass()).error("invalid appointment update time", nfe);
+        	LogManager.getLogger(getClass()).error("invalid appointment update time", nfe);
             updateTime=(new Date()).getTime();
         }
 
@@ -569,7 +571,7 @@ public class AppointmentManager extends Thread
 
         if (appointment==null)
         {
-        	Logger.getLogger(getClass()).error("appointment for user " + userid + " id " + searchedId + " not found");
+        	LogManager.getLogger(getClass()).error("appointment for user " + userid + " id " + searchedId + " not found");
             return(null);
         }
         
@@ -603,7 +605,7 @@ public class AppointmentManager extends Thread
             }
         }
 
-    	Logger.getLogger(getClass()).error("appointment with id " + searchedId + " not found in index");
+    	LogManager.getLogger(getClass()).error("appointment with id " + searchedId + " not found in index");
 
         NodeList appointments=appointmentList.getElementsByTagName("appointment");
 
@@ -629,7 +631,7 @@ public class AppointmentManager extends Thread
 
     protected Element createAppointmentList(String userid)
     {
-    	Logger.getLogger(getClass()).info("creating new appointment list for user : " + userid);
+    	LogManager.getLogger(getClass()).info("creating new appointment list for user : " + userid);
         
         Document doc=builder.newDocument();
 
@@ -725,7 +727,7 @@ public class AppointmentManager extends Thread
         }
         catch (NumberFormatException nfe)
         {
-        	Logger.getLogger(getClass()).error("failed to get last id", nfe);
+        	LogManager.getLogger(getClass()).error("failed to get last id", nfe);
         }
 
         return(lastId);
@@ -755,7 +757,7 @@ public class AppointmentManager extends Thread
 
             if (appointmentElement == null)
             {
-            	Logger.getLogger(getClass()).error("updateAppointment: appointment for user " + userid + " with id " + changedAppointment.getId() +  " not found");            	
+            	LogManager.getLogger(getClass()).error("updateAppointment: appointment for user " + userid + " with id " + changedAppointment.getId() +  " not found");            	
                 return(null);
             }
 
@@ -815,7 +817,7 @@ public class AppointmentManager extends Thread
 
             if (appointmentElement==null)
             {
-            	Logger.getLogger(getClass()).error("appointment for user " + userid + " id " + searchedId + " not found");
+            	LogManager.getLogger(getClass()).error("appointment for user " + userid + " id " + searchedId + " not found");
                 return;
             }
 
@@ -926,7 +928,7 @@ public class AppointmentManager extends Thread
 					}
 					catch (NumberFormatException nfex)
 					{
-						Logger.getLogger(getClass()).error("invalid event time in appointment of user " + userid);
+						LogManager.getLogger(getClass()).error("invalid event time in appointment of user " + userid);
 					}
                 }
 
@@ -1028,7 +1030,7 @@ public class AppointmentManager extends Thread
 						}
 						catch (NumberFormatException nfex)
 						{
-							Logger.getLogger(getClass()).error("invalid event time in appointment of user " + userid + " : " + eventTimeVal);
+							LogManager.getLogger(getClass()).error("invalid event time in appointment of user " + userid + " : " + eventTimeVal);
 						}
 	                }
 				}
@@ -1057,7 +1059,7 @@ public class AppointmentManager extends Thread
 						}
 						catch (NumberFormatException numEx) 
 						{
-							Logger.getLogger(getClass()).error("invalid fullDayNum value in appointment of user " + userid, numEx);
+							LogManager.getLogger(getClass()).error("invalid fullDayNum value in appointment of user " + userid, numEx);
 						}
 					}
 				}
@@ -1318,7 +1320,7 @@ public class AppointmentManager extends Thread
 
 		if (appointmentList == null)
 		{
-			Logger.getLogger(getClass()).error("appointment list for user " + userid + " does not exist!");
+			LogManager.getLogger(getClass()).error("appointment list for user " + userid + " does not exist!");
 
 			return(listOfAppointments);
 		}
@@ -1345,7 +1347,7 @@ public class AppointmentManager extends Thread
 					}
 					catch (NumberFormatException nfex)
 					{
-						Logger.getLogger(getClass()).error("invalid alarm time in appointment of user " + userid);
+						LogManager.getLogger(getClass()).error("invalid alarm time in appointment of user " + userid);
 					}
 				}
 
@@ -1371,22 +1373,22 @@ public class AppointmentManager extends Thread
 
         if (appointmentListElement==null)
         {
-        	Logger.getLogger(getClass()).error("appointment list for user " + userid + " does not exist");
+        	LogManager.getLogger(getClass()).error("appointment list for user " + userid + " does not exist");
             return;
         }
 
-        Logger.getLogger(getClass()).debug("saving appointments for user " + userid);
+        LogManager.getLogger(getClass()).debug("saving appointments for user " + userid);
 
         File appointmentDirFile = new File(appointmentDir);
         if (!appointmentDirFile.exists()) 
         {
         	if (appointmentDirFile.mkdirs())
         	{
-        		Logger.getLogger(getClass()).debug("appointment folder created");
+        		LogManager.getLogger(getClass()).debug("appointment folder created");
         	}
         	else
         	{
-        		Logger.getLogger(getClass()).error("appointment folder could not be created");
+        		LogManager.getLogger(getClass()).error("appointment folder could not be created");
         		return;
         	}
         }
@@ -1409,7 +1411,7 @@ public class AppointmentManager extends Thread
             }
             catch (IOException io1)
             {
-            	Logger.getLogger(getClass()).error("failed to save appointments for user " + userid, io1);
+            	LogManager.getLogger(getClass()).error("failed to save appointments for user " + userid, io1);
             }
             finally
             {
@@ -1449,7 +1451,7 @@ public class AppointmentManager extends Thread
     
     protected void loadAlarmIndexFromXml()
     {
-    	Logger.getLogger(getClass()).debug("loading appointments into alarm index");
+    	LogManager.getLogger(getClass()).debug("loading appointments into alarm index");
     	
         alarmIdx = new AlarmIndex();
 
@@ -1543,9 +1545,9 @@ public class AppointmentManager extends Thread
             			{
             				if (!appointment.isMailAlarmed())
             				{
-            					if (Logger.getLogger(getClass()).isDebugEnabled()) 
+            					if (LogManager.getLogger(getClass()).isDebugEnabled()) 
             					{
-                        			Logger.getLogger(getClass()).debug("sending downtime alarm for user " + userName);
+                        			LogManager.getLogger(getClass()).debug("sending downtime alarm for user " + userName);
             					}
 
             					// TODO: take user's timezone from user profile and calculate time
@@ -1577,9 +1579,9 @@ public class AppointmentManager extends Thread
             }
         }
         
-		if (Logger.getLogger(getClass()).isDebugEnabled())
+		if (LogManager.getLogger(getClass()).isDebugEnabled())
 		{
-	    	Logger.getLogger(getClass()).debug("loaded appointments of user " + userName + " into alarm index");
+	    	LogManager.getLogger(getClass()).debug("loaded appointments of user " + userName + " into alarm index");
 		}
     	
     	if (downtimeAlarmSent)
@@ -1643,9 +1645,9 @@ public class AppointmentManager extends Thread
 	    	alarmCal.add(Calendar.DAY_OF_MONTH, 1);
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		if (LogManager.getLogger(getClass()).isDebugEnabled())
 	    		{
-	    			Logger.getLogger(getClass()).debug("sending daily repeated downtime alarm for user " + userid);
+	    			LogManager.getLogger(getClass()).debug("sending daily repeated downtime alarm for user " + userid);
 	    		}
 
 				// TODO: take user's timezone from user profile and calculate time
@@ -1674,9 +1676,9 @@ public class AppointmentManager extends Thread
 	    	alarmCal.add(Calendar.WEEK_OF_YEAR, 1);
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		if (LogManager.getLogger(getClass()).isDebugEnabled())
 	    		{
-	    			Logger.getLogger(getClass()).debug("sending weekly repeated downtime alarm for user " + userid);
+	    			LogManager.getLogger(getClass()).debug("sending weekly repeated downtime alarm for user " + userid);
 	    		}
 
     			// TODO: take user's timezone from user profile and calculate time
@@ -1705,9 +1707,9 @@ public class AppointmentManager extends Thread
 	    	alarmCal.add(Calendar.MONTH, 1);
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		if (LogManager.getLogger(getClass()).isDebugEnabled())
 	    		{
-	    			Logger.getLogger(getClass()).debug("sending monthly repeated downtime alarm for user " + userid);
+	    			LogManager.getLogger(getClass()).debug("sending monthly repeated downtime alarm for user " + userid);
 	    		}
 
     			// TODO: take user's timezone from user profile and calculate time
@@ -1736,9 +1738,9 @@ public class AppointmentManager extends Thread
 	    	alarmCal.add(Calendar.YEAR, 1);
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		if (LogManager.getLogger(getClass()).isDebugEnabled())
 	    		{
-	    			Logger.getLogger(getClass()).debug("sending annual repeated downtime alarm for user " + userid);
+	    			LogManager.getLogger(getClass()).debug("sending annual repeated downtime alarm for user " + userid);
 	    		}
 
     			// TODO: take user's timezone from user profile and calculate time
@@ -1778,9 +1780,9 @@ public class AppointmentManager extends Thread
 	    	}
 	    	while (alarmCal.getTimeInMillis() < todayCal.getTimeInMillis())
 	    	{
-	    		if (Logger.getLogger(getClass()).isDebugEnabled())
+	    		if (LogManager.getLogger(getClass()).isDebugEnabled())
 	    		{
-	    			Logger.getLogger(getClass()).debug("sending weekday repeated downtime alarm for user " + userid + " alarm time: " + alarmCal.getTime());
+	    			LogManager.getLogger(getClass()).debug("sending weekday repeated downtime alarm for user " + userid + " alarm time: " + alarmCal.getTime());
 	    		}
 
     			// TODO: take user's timezone from user profile and calculate time

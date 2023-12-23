@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.FileLink;
 import de.webfilesys.MetaInfManager;
@@ -56,7 +58,7 @@ public class VideoThumbHandler extends UserRequestHandler
 			if (link != null) {
 				videoPath = link.getDestPath();
 				if (!accessAllowed(videoPath)) {
-					Logger.getLogger(getClass()).warn("unauthorized access to file " + videoPath);
+					LogManager.getLogger(getClass()).warn("unauthorized access to file " + videoPath);
 					try {
 						resp.sendError(HttpServletResponse.SC_FORBIDDEN);
 					} catch (IOException ioex) {
@@ -64,7 +66,7 @@ public class VideoThumbHandler extends UserRequestHandler
 					return;
 				}
 			} else {
-				Logger.getLogger(getClass()).warn("invalid link: " + videoFileName);
+				LogManager.getLogger(getClass()).warn("invalid link: " + videoFileName);
 				try {
 					resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
 				} catch (IOException ioex) {
@@ -102,10 +104,10 @@ public class VideoThumbHandler extends UserRequestHandler
 				serveImageFromFile(thumbnailPath, true);
 				return;
 			}
-			Logger.getLogger(getClass()).error("new created video thumbnail file not found: " + thumbnailPath);
+			LogManager.getLogger(getClass()).error("new created video thumbnail file not found: " + thumbnailPath);
 			throw new RuntimeException("failed to create video thumbnail");
 		} catch (InterruptedException ex) {
-			Logger.getLogger(getClass()).error("error occured while waiting for video thumbnail creator thread for video file " + videoPath, ex);
+			LogManager.getLogger(getClass()).error("error occured while waiting for video thumbnail creator thread for video file " + videoPath, ex);
 		}
 	}
 	
@@ -150,7 +152,7 @@ public class VideoThumbHandler extends UserRequestHandler
                 }
 
                 if (bytesWritten != fileSize) {
-                    Logger.getLogger(getClass()).warn(
+                    LogManager.getLogger(getClass()).warn(
                         "only " + bytesWritten + " bytes of " + fileSize + " have been written to output");
                 } 
 
@@ -164,7 +166,7 @@ public class VideoThumbHandler extends UserRequestHandler
             		}
                 }
         	} catch (IOException ioEx) {
-            	Logger.getLogger(getClass()).warn(ioEx);
+            	LogManager.getLogger(getClass()).warn(ioEx);
             } finally {
         		if (fileInput != null) {
         		    try {
@@ -174,7 +176,7 @@ public class VideoThumbHandler extends UserRequestHandler
         		}
         	}
         } else {
-        	Logger.getLogger(getClass()).error(imgPath + " is not a readable file");
+        	LogManager.getLogger(getClass()).error(imgPath + " is not a readable file");
         }
 	}
 	

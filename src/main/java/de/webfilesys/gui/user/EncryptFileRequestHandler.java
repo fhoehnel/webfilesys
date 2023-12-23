@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.gui.xsl.XslFileListHandler;
@@ -59,7 +61,7 @@ public class EncryptFileRequestHandler extends UserRequestHandler
 
 		if ((fileName == null) || (fileName.trim().length() == 0))
 		{
-		    Logger.getLogger(getClass()).error("parameter fileName missing");
+		    LogManager.getLogger(getClass()).error("parameter fileName missing");
 		    return;
 		}
 		
@@ -67,7 +69,7 @@ public class EncryptFileRequestHandler extends UserRequestHandler
 		
         if ((cryptoKey == null) || (cryptoKey.trim().length() == 0))
         {
-            Logger.getLogger(getClass()).error("parameter cryptoKey missing");
+            LogManager.getLogger(getClass()).error("parameter cryptoKey missing");
             return;
         }
 		
@@ -87,7 +89,7 @@ public class EncryptFileRequestHandler extends UserRequestHandler
 		{
 			if (!thumbnailFile.delete())
 			{
-				Logger.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
+				LogManager.getLogger(getClass()).debug("cannot remove thumbnail file " + thumbnailPath);
 			}
 		}
 		*/
@@ -120,14 +122,14 @@ public class EncryptFileRequestHandler extends UserRequestHandler
         }
         catch (Exception e)
         {
-            Logger.getLogger(getClass()).error("failed to create cipher for AES encryption", e);
+            LogManager.getLogger(getClass()).error("failed to create cipher for AES encryption", e);
         }
 	    
 	    File sourceFile = new File(currentPath, fileName);
 	    
 	    if ((!sourceFile.exists()) || (!sourceFile.isFile()) || (!sourceFile.canRead()))
 	    {
-	        Logger.getLogger(getClass()).error(fileName + " is not a readable file");
+	        LogManager.getLogger(getClass()).error(fileName + " is not a readable file");
 	        return;
 	    }
 	    
@@ -172,11 +174,11 @@ public class EncryptFileRequestHandler extends UserRequestHandler
 	    }
 	    catch (FileNotFoundException fnfEx)
 	    {
-	        Logger.getLogger(getClass()).error(fnfEx);
+	        LogManager.getLogger(getClass()).error(fnfEx);
 	    }
 	    catch (IOException ioex)
 	    {
-	        Logger.getLogger(getClass()).error(ioex);
+	        LogManager.getLogger(getClass()).error(ioex);
 	    }
 	    finally
 	    {

@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -225,7 +227,7 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
         File dirFile = new File(currentPath);
 	    
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {
-		    Logger.getLogger(getClass()).error("directory not found or not readable: " + dirFile);
+		    LogManager.getLogger(getClass()).error("directory not found or not readable: " + dirFile);
 			processResponse("mobile/folderPictures.xsl");
 			return; 
 		}

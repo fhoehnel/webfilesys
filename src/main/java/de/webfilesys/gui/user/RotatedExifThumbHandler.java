@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.RotateFilter;
@@ -57,7 +59,7 @@ public class RotatedExifThumbHandler extends UserRequestHandler
 
 		if (imgData == null)
 		{
-            Logger.getLogger(getClass()).warn("missing EXIF data for picture " + imgFileName);
+            LogManager.getLogger(getClass()).warn("missing EXIF data for picture " + imgFileName);
 			return;
 		}
         
@@ -102,7 +104,7 @@ public class RotatedExifThumbHandler extends UserRequestHandler
         }
         catch(InterruptedException intEx1)
         {
-            Logger.getLogger(getClass()).warn("rotateImage: " + intEx1);
+            LogManager.getLogger(getClass()).warn("rotateImage: " + intEx1);
         }
         
         tracker.removeImage(origImage);
@@ -119,7 +121,7 @@ public class RotatedExifThumbHandler extends UserRequestHandler
         }
         catch(InterruptedException intEx2)
         {
-           Logger.getLogger(getClass()).error("rotateImage: " + intEx2);
+           LogManager.getLogger(getClass()).error("rotateImage: " + intEx2);
         }
 
         tracker.removeImage(rotatedImg);
@@ -156,7 +158,7 @@ public class RotatedExifThumbHandler extends UserRequestHandler
             
             if (pngBytes == null)
             {
-                Logger.getLogger(getClass()).warn("PNG Encoder : Null image");
+                LogManager.getLogger(getClass()).warn("PNG Encoder : Null image");
             }
             else
             {
@@ -169,12 +171,12 @@ public class RotatedExifThumbHandler extends UserRequestHandler
         }
         catch (IOException ioex1)
         {
-            Logger.getLogger(getClass()).error("rotateImage: " + ioex1);
+            LogManager.getLogger(getClass()).error("rotateImage: " + ioex1);
             return;
         }
         catch (OutOfMemoryError memErr)
         {
-            Logger.getLogger(getClass()).error("not enough memory to complete image rotation");
+            LogManager.getLogger(getClass()).error("not enough memory to complete image rotation");
         }
         finally
         {

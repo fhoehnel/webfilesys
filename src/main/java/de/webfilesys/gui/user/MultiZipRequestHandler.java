@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.WebFileSys;
@@ -167,7 +169,7 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
 			}
 			catch (Exception zioe)
 			{
-                Logger.getLogger(getClass()).error(zioe);
+                LogManager.getLogger(getClass()).error(zioe);
 				javascriptAlert(zioe.toString());
 				return;
 			}
@@ -179,7 +181,7 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
 			    }
                 catch (Exception ex)
                 {
-                    Logger.getLogger(getClass()).error(ex);
+                    LogManager.getLogger(getClass()).error(ex);
                 }
 			}
 		}
@@ -190,7 +192,7 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
 		}
 		catch (IOException io4)
 		{
-			Logger.getLogger(getClass()).error(io4);
+			LogManager.getLogger(getClass()).error(io4);
 		}
 
         for (String selectedFile : selectedFiles) 
@@ -207,7 +209,7 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
 			}
 			else
 			{
-			    Logger.getLogger(getClass()).error("failed to delete file " + temp_file.getAbsolutePath() + " after adding to ZIP archive");
+			    LogManager.getLogger(getClass()).error("failed to delete file " + temp_file.getAbsolutePath() + " after adding to ZIP archive");
 			}
 			
 		}

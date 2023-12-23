@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -21,7 +23,7 @@ import de.webfilesys.util.XmlUtil;
  * @author Frank Hoehnel
  */
 public class MultiGPXTrackHandler extends XslRequestHandlerBase {
-	private static final Logger LOG = Logger.getLogger(MultiGPXTrackHandler.class);
+	private static final Logger LOG = LogManager.getLogger(MultiGPXTrackHandler.class);
 
 	public MultiGPXTrackHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
 			PrintWriter output, String uid) {

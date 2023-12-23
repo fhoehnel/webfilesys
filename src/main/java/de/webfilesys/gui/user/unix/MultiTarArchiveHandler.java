@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import com.ice.tar.TarEntry;
 import com.ice.tar.TarOutputStream;
@@ -93,7 +95,7 @@ public class MultiTarArchiveHandler extends MultiFileRequestHandler
 		}
 		catch (Exception ex) 
 		{
-		    Logger.getLogger(getClass()).error("failed to create tar archive", ex);
+		    LogManager.getLogger(getClass()).error("failed to create tar archive", ex);
             output.println("error creating tar archive");
 		}
 		finally

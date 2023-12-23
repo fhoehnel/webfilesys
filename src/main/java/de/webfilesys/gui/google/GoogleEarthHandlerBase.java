@@ -11,7 +11,9 @@ import javax.servlet.http.HttpSession;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -58,7 +60,7 @@ public abstract class GoogleEarthHandlerBase extends UserRequestHandler
 		}
 		catch (ParserConfigurationException pcex)
 		{
-			Logger.getLogger(getClass()).error(pcex.toString());
+			LogManager.getLogger(getClass()).error(pcex.toString());
 			System.out.println(pcex.toString());
 		}
 	}

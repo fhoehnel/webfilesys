@@ -19,7 +19,9 @@ import name.fraser.neil.plaintext.diff_match_patch;
 import name.fraser.neil.plaintext.diff_match_patch.Diff;
 import name.fraser.neil.plaintext.diff_match_patch.Operation;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.util.CommonUtils;
 
@@ -44,7 +46,7 @@ public class DiffCompareBase extends UserRequestHandler
 
         if ((file1Path == null) || (file2Path == null))
         {
-            Logger.getLogger(getClass()).error("missing file path for diff");
+            LogManager.getLogger(getClass()).error("missing file path for diff");
         }
         
         if ((!checkAccess(file1Path)) || (!checkAccess(file2Path)))
@@ -356,7 +358,7 @@ public class DiffCompareBase extends UserRequestHandler
         String fileEncoding = guessFileEncoding(file.getAbsolutePath());
         
         if (fileEncoding != null) {
-            Logger.getLogger(getClass()).debug("reading diff file " + file.getAbsolutePath() + " with character encoding " + fileEncoding);
+            LogManager.getLogger(getClass()).debug("reading diff file " + file.getAbsolutePath() + " with character encoding " + fileEncoding);
         }
         
         StringBuffer buff = new StringBuffer();     
@@ -404,7 +406,7 @@ public class DiffCompareBase extends UserRequestHandler
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error(ioex);
+            LogManager.getLogger(getClass()).error(ioex);
         }
         finally
         {
@@ -417,7 +419,7 @@ public class DiffCompareBase extends UserRequestHandler
             }
             catch (Exception ex)
             {
-                Logger.getLogger(getClass()).error(ex);
+                LogManager.getLogger(getClass()).error(ex);
             }
         }
         

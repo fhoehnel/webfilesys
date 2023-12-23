@@ -1,6 +1,8 @@
 package de.webfilesys;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class SystemEditor extends Thread
 {
@@ -33,7 +35,7 @@ public class SystemEditor extends Thread
 		}
 		catch (Exception e)
 		{
-			Logger.getLogger(getClass()).error(e);
+			LogManager.getLogger(getClass()).error(e);
 		}
 	}
 }

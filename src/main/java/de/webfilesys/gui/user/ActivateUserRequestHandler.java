@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.user.UserManager;
@@ -34,7 +36,7 @@ public class ActivateUserRequestHandler extends UserRequestHandler {
         String activationCode = getParameter("code");
 
         if (CommonUtils.isEmpty(activationCode)) {
-            Logger.getLogger(getClass()).warn("missing activation code");
+            LogManager.getLogger(getClass()).warn("missing activation code");
             return;
         }
         
@@ -59,12 +61,12 @@ public class ActivateUserRequestHandler extends UserRequestHandler {
             try {
                 resp.sendRedirect(req.getContextPath() + "/servlet?command=loginForm&activationSuccess=true");
             } catch (IOException ex) {
-                Logger.getLogger(getClass()).warn("failed to redirect to blog handler", ex);
+                LogManager.getLogger(getClass()).warn("failed to redirect to blog handler", ex);
             }
 
             // TODO
         } catch (UserMgmtException ex) {
-            Logger.getLogger(getClass()).warn("user activation attempt failed", ex);
+            LogManager.getLogger(getClass()).warn("user activation attempt failed", ex);
 
             /*
             try {
@@ -78,7 +80,7 @@ public class ActivateUserRequestHandler extends UserRequestHandler {
             try {
                 resp.sendRedirect(redirectUrl);
             } catch (IOException ex2) {
-                Logger.getLogger(getClass()).warn("redirect failed", ex2);
+                LogManager.getLogger(getClass()).warn("redirect failed", ex2);
             }
             
         }

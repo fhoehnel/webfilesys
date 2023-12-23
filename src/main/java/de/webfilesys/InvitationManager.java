@@ -13,7 +13,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -70,7 +72,7 @@ public class InvitationManager extends Thread
         }
         catch (ParserConfigurationException pcex)
         {
-        	Logger.getLogger(getClass()).error(pcex.toString());
+        	LogManager.getLogger(getClass()).error(pcex.toString());
         }
 
         changed=false;
@@ -99,7 +101,7 @@ public class InvitationManager extends Thread
         
         if (invitationFile.exists() && (!invitationFile.canWrite()))
         {
-        	Logger.getLogger(getClass()).error("InvitationManager.saveToFile: cannot write to invitation file " + invitationFile.getAbsolutePath());
+        	LogManager.getLogger(getClass()).error("InvitationManager.saveToFile: cannot write to invitation file " + invitationFile.getAbsolutePath());
             return;
         }
 
@@ -113,9 +115,9 @@ public class InvitationManager extends Thread
                 
                 xmlOutFile = new OutputStreamWriter(fos, "UTF-8");
                 
-                if (Logger.getLogger(getClass()).isDebugEnabled())
+                if (LogManager.getLogger(getClass()).isDebugEnabled())
                 {
-                    Logger.getLogger(getClass()).debug("Saving invitations to file " + invitationFile.getAbsolutePath());
+                    LogManager.getLogger(getClass()).debug("Saving invitations to file " + invitationFile.getAbsolutePath());
                 }
                 
                 XmlUtil.writeToStream(invitationRoot, xmlOutFile);
@@ -126,7 +128,7 @@ public class InvitationManager extends Thread
             }
             catch (IOException io1)
             {
-                Logger.getLogger(getClass()).error("error saving invitation registry file " + invitationFile.getAbsolutePath(), io1);
+                LogManager.getLogger(getClass()).error("error saving invitation registry file " + invitationFile.getAbsolutePath(), io1);
             }
             finally
             {
@@ -153,7 +155,7 @@ public class InvitationManager extends Thread
            return(null);
        }
 
-       Logger.getLogger(getClass()).info("reading invitation registry from " + invitationFile.getAbsolutePath());
+       LogManager.getLogger(getClass()).info("reading invitation registry from " + invitationFile.getAbsolutePath());
 
        doc = null;
        
@@ -171,11 +173,11 @@ public class InvitationManager extends Thread
        }
        catch (SAXException saxex)
        {
-           Logger.getLogger(getClass()).error("failed to load invitation registry file : " + invitationFile.getAbsolutePath(), saxex);
+           LogManager.getLogger(getClass()).error("failed to load invitation registry file : " + invitationFile.getAbsolutePath(), saxex);
        }
        catch (IOException ioex)
        {
-           Logger.getLogger(getClass()).error("failed to load invitation registry file : " + invitationFile.getAbsolutePath(), ioex);
+           LogManager.getLogger(getClass()).error("failed to load invitation registry file : " + invitationFile.getAbsolutePath(), ioex);
        }
        finally 
        {
@@ -687,7 +689,7 @@ public class InvitationManager extends Thread
                 		changed = true;
                 		return true;
                 	} else {
-                		Logger.getLogger(getClass()).warn("unsubscribe attempt with invalid code, virtualUser=" + virtualUser + " email=" + subscriberEmail + " code=" + code);
+                		LogManager.getLogger(getClass()).warn("unsubscribe attempt with invalid code, virtualUser=" + virtualUser + " email=" + subscriberEmail + " code=" + code);
                 	}
                 }
             }
@@ -699,7 +701,7 @@ public class InvitationManager extends Thread
     	Element invitationElem = getInvitationElement(accessCode);
     	
     	if (invitationElem == null) {
-    		Logger.getLogger(getClass()).warn("invitation for subscription notification not found: " + accessCode);
+    		LogManager.getLogger(getClass()).warn("invitation for subscription notification not found: " + accessCode);
             return;
     	}
     	
@@ -801,7 +803,7 @@ public class InvitationManager extends Thread
                 if ((virtualUser!=null) && (virtualUser.trim().length() > 0))
                 {
                     WebFileSys.getInstance().getUserMgr().removeUser(virtualUser);
-                    Logger.getLogger(getClass()).debug("expired virtual user " + virtualUser + " removed");
+                    LogManager.getLogger(getClass()).debug("expired virtual user " + virtualUser + " removed");
                 }
             }
 
@@ -813,7 +815,7 @@ public class InvitationManager extends Thread
             changed=true;
         }
 
-        Logger.getLogger(getClass()).info(expiredNum + " expired invitations removed");
+        LogManager.getLogger(getClass()).info(expiredNum + " expired invitations removed");
     }
 
     public synchronized void run()
@@ -849,8 +851,8 @@ public class InvitationManager extends Thread
             catch (InterruptedException e)
             {
                 shutdownFlag = true;
-                if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                    Logger.getLogger(getClass()).debug("shutting down InvitationManager");
+                if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+                    LogManager.getLogger(getClass()).debug("shutting down InvitationManager");
                 }
             }
         }

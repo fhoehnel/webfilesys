@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 import de.webfilesys.LanguageManager;
@@ -285,7 +287,7 @@ public class UploadServlet extends WebFileSysServlet
 			}
 			catch (IOException ioex)
 			{
-				Logger.getLogger(getClass()).debug("cannot write upload to file " + out_file_name + " - using original file name " + fn_only);
+				LogManager.getLogger(getClass()).debug("cannot write upload to file " + out_file_name + " - using original file name " + fn_only);
 			    
 			    out_file_name = null;
 			}
@@ -345,7 +347,7 @@ public class UploadServlet extends WebFileSysServlet
                     {
                         stop = true;
 
-                        Logger.getLogger(getClass()).warn("unexpected end of upload stream of file " + out_file_name + " at byte index "
+                        LogManager.getLogger(getClass()).warn("unexpected end of upload stream of file " + out_file_name + " at byte index "
                                 + bytesUploaded);
                     }
                     else
@@ -354,7 +356,7 @@ public class UploadServlet extends WebFileSysServlet
                 
                         if (uploadCanceled != null)
                         {
-                            Logger.getLogger(getClass()).warn("upload of file " + out_file_name + " canceled by user at byte index " + bytesUploaded);
+                            LogManager.getLogger(getClass()).warn("upload of file " + out_file_name + " canceled by user at byte index " + bytesUploaded);
                             stop = true;
                         }
                     }
@@ -431,7 +433,7 @@ public class UploadServlet extends WebFileSysServlet
                                 
                                 session.setAttribute(Constants.UPLOAD_LIMIT_EXCEEDED,new Boolean(true));
                                 
-                                Logger.getLogger(getClass()).warn("upload limit exceeded for user " + userid + " for file " + out_file_name);
+                                LogManager.getLogger(getClass()).warn("upload limit exceeded for user " + userid + " for file " + out_file_name);
 
                                 exceptionText = LanguageManager.getInstance().getResource(language, "alert.uploadLimitExceeded", "The size of the uploaded file exceeds the limit");
                             }
@@ -458,7 +460,7 @@ public class UploadServlet extends WebFileSysServlet
         }
         catch (IOException e)
         {
-            Logger.getLogger(getClass()).error("error writing upload file to " + out_file_name, e);
+            LogManager.getLogger(getClass()).error("error writing upload file to " + out_file_name, e);
 
             if (e instanceof FileNotFoundException)
             {
@@ -480,7 +482,7 @@ public class UploadServlet extends WebFileSysServlet
         		}
         		catch (Exception ex) 
         		{
-        			Logger.getLogger(getClass()).error("error closing upload file", ex);
+        			LogManager.getLogger(getClass()).error("error closing upload file", ex);
         		}
         	}
         }
@@ -569,7 +571,7 @@ public class UploadServlet extends WebFileSysServlet
         String currentPath = (String) session.getAttribute(Constants.SESSION_KEY_CWD);
         
         if (currentPath == null) {
-            Logger.getLogger(getClass()).error("current working directory unknown");
+            LogManager.getLogger(getClass()).error("current working directory unknown");
             return;
         }
         
@@ -585,9 +587,9 @@ public class UploadServlet extends WebFileSysServlet
 
         File outFile = new File(currentPath, fileName);
         
-        if (Logger.getLogger(getClass()).isDebugEnabled())
+        if (LogManager.getLogger(getClass()).isDebugEnabled())
         {
-            Logger.getLogger(getClass()).debug("ajax binary file upload: " + outFile.getAbsolutePath());
+            LogManager.getLogger(getClass()).debug("ajax binary file upload: " + outFile.getAbsolutePath());
         }
         
         long uploadSize = 0l;
@@ -608,7 +610,7 @@ public class UploadServlet extends WebFileSysServlet
             {
                 uploadSize += bytesRead;
                 if (uploadSize > uploadLimit) {
-                    Logger.getLogger(getClass()).warn("upload limit of " + uploadLimit + " bytes exceeded for file " + outFile.getAbsolutePath());
+                    LogManager.getLogger(getClass()).warn("upload limit of " + uploadLimit + " bytes exceeded for file " + outFile.getAbsolutePath());
                     uploadOut.flush();
                     uploadOut.close();
                     outFile.delete();
@@ -623,7 +625,7 @@ public class UploadServlet extends WebFileSysServlet
         }
         catch (IOException ex) 
         {
-            Logger.getLogger(getClass()).error("error in ajax binary upload", ex);
+            LogManager.getLogger(getClass()).error("error in ajax binary upload", ex);
             throw ex;
         }
         finally 
@@ -734,7 +736,7 @@ public class UploadServlet extends WebFileSysServlet
             return (true);
         }
 
-        Logger.getLogger(getClass()).warn("read-only user " + userid + " tried write access");
+        LogManager.getLogger(getClass()).warn("read-only user " + userid + " tried write access");
 
         return (false);
     }

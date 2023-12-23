@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.ViewHandlerConfig;
 import de.webfilesys.ViewHandlerManager;
@@ -119,7 +121,7 @@ public class ZipContentFileRequestHandler extends UserRequestHandler
                     
                 if (bytesWritten != fileSize)
                 {
-                    Logger.getLogger(getClass()).warn(
+                    LogManager.getLogger(getClass()).warn(
                         "only " + bytesWritten + " bytes of " + fileSize + " have been written to output");
                 }
 
@@ -130,7 +132,7 @@ public class ZipContentFileRequestHandler extends UserRequestHandler
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("cannot read ZIP file content " + zipContentPath + " from " + zipFilePath, ioex);
+            LogManager.getLogger(getClass()).error("cannot read ZIP file content " + zipContentPath + " from " + zipFilePath, ioex);
         }
         finally
         {

@@ -9,7 +9,9 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class GifQuantizer
 {
@@ -34,13 +36,13 @@ public class GifQuantizer
 			{
 				if (grabber.grabPixels() != true)
 				{
-					Logger.getLogger(GifQuantizer.class).error(
+					LogManager.getLogger(GifQuantizer.class).error(
 						"PixelGrabber failure: " + grabber.status());
 				}
 			}
 			catch (InterruptedException intEx)
 			{
-				Logger.getLogger(GifQuantizer.class).error(intEx);
+				LogManager.getLogger(GifQuantizer.class).error(intEx);
 			}
 
             byte indices[] = quantizer.direct2index(pixels);
@@ -59,7 +61,7 @@ public class GifQuantizer
         } 
         catch (IOException ioEx)
         {
-            Logger.getLogger(GifQuantizer.class).error(ioEx.toString());
+            LogManager.getLogger(GifQuantizer.class).error(ioEx.toString());
             return(null);
         }
     }

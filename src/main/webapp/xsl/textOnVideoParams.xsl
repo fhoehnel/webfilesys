@@ -101,7 +101,7 @@
               <tr>
                 <td class="formParm1"><span resource="videoTextSize"></span>:</td>
                 <td class="formParm2">
-                  <select name="videoTextSize" size="1" style="width:40px;">
+                  <select name="videoTextSize" size="1" style="width:60px;">
                     <option value="12">12</option>
                     <option value="16">16</option>
                     <option value="20">20</option>
@@ -139,7 +139,7 @@
               <tr>
                 <td class="formParm1"><span resource="videoTextPosition"></span>:</td>
                 <td class="formParm2">
-                  <select name="videoTextPosition" size="1" style="width:60px;">
+                  <select name="videoTextPosition" size="1" style="width:100px;">
                     <option value="top" resource="videoTextPositionTop" />
                     <option value="center" resource="videoTextPositionCenter" selected="selected" />
                     <option value="bottom" resource="videoTextPositionBottom" />

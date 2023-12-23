@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.util.PatternComparator;
 
@@ -32,11 +34,11 @@ public class AssociationManager {
             	
             	associationMap.load(fin);
             	
-            	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-            		Logger.getLogger(getClass()).debug("filetype associations loaded from " + ASSOCIATION_CONFIG_FILE);
+            	if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+            		LogManager.getLogger(getClass()).debug("filetype associations loaded from " + ASSOCIATION_CONFIG_FILE);
             	}
             } catch (Exception e) {
-                Logger.getLogger(getClass()).error("cannot load filetype associations from " + ASSOCIATION_CONFIG_FILE, e);
+                LogManager.getLogger(getClass()).error("cannot load filetype associations from " + ASSOCIATION_CONFIG_FILE, e);
             } finally {
      			if (fin != null) {
      				try {
@@ -46,7 +48,7 @@ public class AssociationManager {
      			}
      		 }
         } else {
-            Logger.getLogger(getClass()).error("cannot load filetype associations from " + ASSOCIATION_CONFIG_FILE);
+            LogManager.getLogger(getClass()).error("cannot load filetype associations from " + ASSOCIATION_CONFIG_FILE);
         }
 	}
 	

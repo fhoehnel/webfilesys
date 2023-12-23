@@ -1,18 +1,22 @@
 package de.webfilesys.graphics;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 
 public class VideoInfoExtractor {
 
-    private static final Logger LOG = Logger.getLogger(VideoInfoExtractor.class);
+    private static final Logger LOG = LogManager.getLogger(VideoInfoExtractor.class);
 
     private ArrayList<String> cmdOutput = new ArrayList<>();
     
@@ -76,7 +80,7 @@ public class VideoInfoExtractor {
                                     int durationSeconds = (Integer.parseInt(partsOfDuration[0]) * 3600) + (Integer.parseInt(partsOfDuration[1]) * 60) + Integer.parseInt(partsOfDuration[2]);
                                     videoInfo.setDurationSeconds(durationSeconds);
                                 } catch (Exception ex) {
-                                    Logger.getLogger(getClass()).warn("invalid video duration: " + duration);
+                                    LogManager.getLogger(getClass()).warn("invalid video duration: " + duration);
                                 }
                             }
                         }
@@ -90,7 +94,7 @@ public class VideoInfoExtractor {
                                 int frameRatePart2 = Integer.parseInt(tokens[1]);
                                 videoInfo.setFrameRate(frameRatePart1 / frameRatePart2);
                             } catch (Exception ex) {
-                                Logger.getLogger(getClass()).warn("invalid frame rate for " + videoFilePath + ": " + averageFrameRate);
+                                LogManager.getLogger(getClass()).warn("invalid frame rate for " + videoFilePath + ": " + averageFrameRate);
                             }
                         }
                     } else if ((audioCodec == null) && outLine.contains("_codec")) {
@@ -137,18 +141,18 @@ public class VideoInfoExtractor {
             progNameAndParams.add("-sexagesimal");
             progNameAndParams.add(videoFile.getAbsolutePath());
             
-            if (Logger.getLogger(getClass()).isDebugEnabled()) {
+            if (LogManager.getLogger(getClass()).isDebugEnabled()) {
             	StringBuilder buff = new StringBuilder();
                 for (String cmdToken : progNameAndParams) {
                 	buff.append(cmdToken);
                 	buff.append(' ');
                 }
-                Logger.getLogger(getClass()).debug("ffprobe call with params: " + buff.toString());
+                LogManager.getLogger(getClass()).debug("ffprobe call with params: " + buff.toString());
             }
             
             Process ffprobeProcess = Runtime.getRuntime().exec(progNameAndParams.toArray(new String[0]));
             
-            DataInputStream ffprobeOut = new DataInputStream(ffprobeProcess.getInputStream());
+            BufferedReader ffprobeOut = new BufferedReader(new InputStreamReader(ffprobeProcess.getInputStream()));
             
             String outLine = null;
             

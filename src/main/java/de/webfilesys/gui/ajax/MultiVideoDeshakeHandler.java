@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.graphics.VideoDeshaker;
@@ -21,7 +23,7 @@ import de.webfilesys.util.XmlUtil;
  */
 public class MultiVideoDeshakeHandler extends MultiVideoHandlerBase {
 	
-	private static Logger LOG = Logger.getLogger(MultiVideoDeshakeHandler.class);
+	private static Logger LOG = LogManager.getLogger(MultiVideoDeshakeHandler.class);
 
 	public MultiVideoDeshakeHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
 			PrintWriter output, String uid) {

@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.util.UTF8URLEncoder;
 
@@ -76,7 +78,7 @@ public class HexViewHandler extends UserRequestHandler
 		
 		if ((!hexFile.isFile()) || (!hexFile.canRead()))
 		{
-		    Logger.getLogger(getClass()).warn(hexFile.getAbsolutePath() + " is not a readable file");
+		    LogManager.getLogger(getClass()).warn(hexFile.getAbsolutePath() + " is not a readable file");
 		    return;
 		}
 		
@@ -248,7 +250,7 @@ public class HexViewHandler extends UserRequestHandler
 	    }
 	    catch (IOException ioex)
 	    {
-	        Logger.getLogger(getClass()).error("error in reading hex viewer file " + hexFile.getAbsolutePath(), ioex);
+	        LogManager.getLogger(getClass()).error("error in reading hex viewer file " + hexFile.getAbsolutePath(), ioex);
 	        
             output.println("<script type=\"text/javascript\">");
             output.println("alert('error occured while reading file " + hexFile.getName() + "');");

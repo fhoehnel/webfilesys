@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Category;
 import de.webfilesys.Constants;
@@ -121,7 +123,7 @@ public class SearchRequestHandler extends UserRequestHandler
                 toDate.setSeconds(59);
 			}
 		} catch (Exception ex) {
-			Logger.getLogger(getClass()).warn("invalid date format in search date range", ex);
+			LogManager.getLogger(getClass()).warn("invalid date format in search date range", ex);
 		}
 
 		session.removeAttribute("searchCanceled");
@@ -254,7 +256,7 @@ public class SearchRequestHandler extends UserRequestHandler
         
 			if (!searchResultDirFile.mkdirs())
 			{
-				Logger.getLogger(getClass()).error("cannot create search result directory " + searchResultDir);
+				LogManager.getLogger(getClass()).error("cannot create search result directory " + searchResultDir);
 			}
 			else
 			{
@@ -441,7 +443,7 @@ public class SearchRequestHandler extends UserRequestHandler
 											}
 											catch (FileNotFoundException nfex)
 											{
-												Logger.getLogger(getClass()).error(nfex);
+												LogManager.getLogger(getClass()).error(nfex);
 											}
 										}
 									}

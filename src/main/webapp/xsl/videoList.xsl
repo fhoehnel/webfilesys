@@ -384,6 +384,7 @@
               <option value="move" resource="label.cutToClip" />
               <option value="concat" resource="concatVideos" />
               <option value="join" resource="joinVideos" />
+              <option value="addSilentAudio" resource="addSilentAudio" />
               <option value="deshake" resource="contextMenuDeshakeVideo" />
             </select>
           </td>

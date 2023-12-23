@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.WinDriveManager;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
  
 /**
@@ -191,7 +192,11 @@ public class MainFrameSetHandler extends UserRequestHandler
         {
 			output.println("var chmodAllowed = 'false';");
         }
-
+        
+        if (!CommonUtils.isEmpty(WebFileSys.getInstance().getFfmpegExePath())) {
+			output.println("var ffmpegEnabled = true;");
+        }
+        
         if (!readonly)
 		{
             if (WebFileSys.getInstance().isFolderWatch()) {

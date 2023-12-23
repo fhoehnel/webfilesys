@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.user.UserRequestHandler;
@@ -154,7 +156,7 @@ public class ProcessListRequestHandler extends UserRequestHandler
 			}
 			catch (IOException ioe)
 			{
-				Logger.getLogger(getClass()).error(ioe);
+				LogManager.getLogger(getClass()).error(ioe);
 			}
 			if (stdoutLine==null)
 			{

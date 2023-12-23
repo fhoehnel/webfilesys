@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.gui.xsl.XslShowImageHandler;
@@ -36,7 +38,7 @@ public class RateVotingHandler extends UserRequestHandler
 		
 		if ((imagePath == null) || (imagePath.trim().length() == 0))
 		{
-			Logger.getLogger(getClass()).error("RateVotingHandler: imagePath missing");
+			LogManager.getLogger(getClass()).error("RateVotingHandler: imagePath missing");
 			return;
 		}
 		
@@ -51,7 +53,7 @@ public class RateVotingHandler extends UserRequestHandler
         
         if (temp == null)
         {
-        	Logger.getLogger(getClass()).error("rating is null");
+        	LogManager.getLogger(getClass()).error("rating is null");
         	return;
         }
         
@@ -63,7 +65,7 @@ public class RateVotingHandler extends UserRequestHandler
         }
         catch (NumberFormatException nfe)
         {
-			Logger.getLogger(getClass()).error("invalid rating: " + temp);
+			LogManager.getLogger(getClass()).error("invalid rating: " + temp);
 			return;
         }
 

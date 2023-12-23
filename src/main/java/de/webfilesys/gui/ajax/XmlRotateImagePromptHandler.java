@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.util.XmlUtil;
@@ -38,7 +40,7 @@ public class XmlRotateImagePromptHandler extends XmlRequestHandlerBase
 		
 		if ((imagePath == null) || (imagePath.trim().length() == 0))
 		{
-			Logger.getLogger(getClass()).error("required parameter imagePath missing");
+			LogManager.getLogger(getClass()).error("required parameter imagePath missing");
 			
 			return;
 		}

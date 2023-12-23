@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.util.XmlUtil;
@@ -18,7 +20,7 @@ import de.webfilesys.util.XmlUtil;
  */
 public class CheckUploadConflictHandler extends XmlRequestHandlerBase {
 	
-    private static final Logger LOG = Logger.getLogger(CheckUploadConflictHandler.class);
+    private static final Logger LOG = LogManager.getLogger(CheckUploadConflictHandler.class);
 	
 	public CheckUploadConflictHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
 			PrintWriter output, String uid) {

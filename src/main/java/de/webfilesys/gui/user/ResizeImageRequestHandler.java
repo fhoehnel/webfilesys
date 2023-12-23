@@ -31,7 +31,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.WebFileSys;
@@ -185,7 +187,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             }
             catch (NumberFormatException nfex)
             {
-    			Logger.getLogger(getClass()).error("parameter copyRightColor invalid", nfex);
+    			LogManager.getLogger(getClass()).error("parameter copyRightColor invalid", nfex);
             }
         }
 
@@ -296,7 +298,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                         output.println("cannot create dir for scaled images");
                         output.println("</body></html>");
                         output.flush();
-                        Logger.getLogger(getClass()).error("cannot create dir for scaled images: " + scaledDir);
+                        LogManager.getLogger(getClass()).error("cannot create dir for scaled images: " + scaledDir);
                         return;
                     }
                     else
@@ -331,7 +333,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                     }
                     catch (NumberFormatException numEx) 
                     {
-                        Logger.getLogger(getClass()).error(numEx);
+                        LogManager.getLogger(getClass()).error(numEx);
                     }
                 }
                 
@@ -425,7 +427,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         }
         catch (IOException ioex3)
         {
-            Logger.getLogger(getClass()).error(ioex3);
+            LogManager.getLogger(getClass()).error(ioex3);
 
             javascriptAlert("cannot read image file");
 
@@ -521,7 +523,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             try {
                 tracker.waitForAll();
             } catch (Exception ex) {
-                Logger.getLogger(getClass()).warn("failed to load image " + imgFileName, ex);
+                LogManager.getLogger(getClass()).warn("failed to load image " + imgFileName, ex);
             }
 
             tracker.removeImage(origImage);
@@ -600,7 +602,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
                 }
                 catch (IOException ioEx)
                 {
-                    Logger.getLogger(getClass()).error(ioEx);
+                    LogManager.getLogger(getClass()).error(ioEx);
                     return (false);
                 }
             } 
@@ -686,7 +688,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
 
                 if (pngBytes == null)
                 {
-                    Logger.getLogger(getClass()).error("PNG Encoder : Null image");
+                    LogManager.getLogger(getClass()).error("PNG Encoder : Null image");
                 }
                 else
                 {
@@ -741,7 +743,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
             javascriptAlert(getResource("alert.outOfMemory",
                     "insufficient memory to perform the requested operation"));
 
-            Logger.getLogger(getClass()).error(memEx.toString());
+            LogManager.getLogger(getClass()).error(memEx.toString());
 
             output.flush();
 
@@ -763,7 +765,7 @@ public class ResizeImageRequestHandler extends UserRequestHandler
         }
         catch (IOException ioEx)
         {
-            Logger.getLogger(getClass()).warn(ioEx);
+            LogManager.getLogger(getClass()).warn(ioEx);
 
             javascriptAlert("error writing output file: " + ioEx);
 

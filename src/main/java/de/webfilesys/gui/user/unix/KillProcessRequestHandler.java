@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.user.UserRequestHandler;
@@ -71,11 +73,11 @@ public class KillProcessRequestHandler extends UserRequestHandler
 		}
 		catch (Exception e)
 		{
-			Logger.getLogger(getClass()).warn(e);
+			LogManager.getLogger(getClass()).warn(e);
 			return;
 		}
 
-		Logger.getLogger(getClass()).debug("killing process " + pid);
+		LogManager.getLogger(getClass()).debug("killing process " + pid);
 
 		output.print("<HTML>");
 		output.print("<HEAD>");

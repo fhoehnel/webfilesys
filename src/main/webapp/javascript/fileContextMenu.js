@@ -112,6 +112,9 @@ function contextMenu(fileName) {
         
 	if (fileExt == ".MP3") {
 	   	addContextMenuEntry(menuDiv, "editMP3('" + scriptPreparedPath + "')", resourceBundle["label.editmp3"]);
+	   	if (parent.ffmpegEnabled) {
+		   	addContextMenuEntry(menuDiv, "cutAudio('" + scriptPreparedPath + "')", resourceBundle["label.cutAudio"]);
+	   	}
 	} else {
 	   	addContextMenuEntry(menuDiv, "description('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
     }

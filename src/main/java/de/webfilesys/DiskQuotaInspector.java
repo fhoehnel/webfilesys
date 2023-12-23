@@ -2,7 +2,9 @@ package de.webfilesys;
 
 import java.util.ArrayList;
 import java.util.Date;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.mail.MailTemplate;
 import de.webfilesys.mail.SmtpEmail;
@@ -46,7 +48,7 @@ public class DiskQuotaInspector extends Thread
     {
         long startTime=System.currentTimeMillis();
 
-        Logger.getLogger(getClass()).info("disk quota inspection for webspace users started");
+        LogManager.getLogger(getClass()).info("disk quota inspection for webspace users started");
 
         UserManager userMgr = WebFileSys.getInstance().getUserMgr();
 
@@ -76,7 +78,7 @@ public class DiskQuotaInspector extends Thread
 
                         if (fileSysStat.getTotalSizeSum() > diskQuota)
                         {
-                            Logger.getLogger(getClass()).warn("disk quota exceeded for user " + userid + " (" + (diskQuota / 1024l) + " / " + (fileSysStat.getTotalSizeSum() / 1024l) + ")");
+                            LogManager.getLogger(getClass()).warn("disk quota exceeded for user " + userid + " (" + (diskQuota / 1024l) + " / " + (fileSysStat.getTotalSizeSum() / 1024l) + ")");
 
                             if (WebFileSys.getInstance().getMailHost() !=null)
                             {
@@ -147,7 +149,7 @@ public class DiskQuotaInspector extends Thread
                        adminMailBuffer.toString())).send();
         }
 
-        Logger.getLogger(getClass()).info("disk quota inspection ended (" + ((endTime - startTime) / 1000) + " sec)");
+        LogManager.getLogger(getClass()).info("disk quota inspection ended (" + ((endTime - startTime) / 1000) + " sec)");
     }
 
 }

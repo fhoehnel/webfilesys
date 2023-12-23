@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.InvitationManager;
 import de.webfilesys.MetaInfManager;
@@ -41,7 +43,7 @@ public class VisitorFileRequestHandler extends RequestHandler
 
 		if (accessCode == null)
 		{
-			Logger.getLogger(getClass()).warn("invalid visitor access code");
+			LogManager.getLogger(getClass()).warn("invalid visitor access code");
 			return;
 		}
 
@@ -49,7 +51,7 @@ public class VisitorFileRequestHandler extends RequestHandler
 
 		if (filePath == null)
 		{
-			Logger.getLogger(getClass()).warn("visitor access with invalid access code");
+			LogManager.getLogger(getClass()).warn("visitor access with invalid access code");
 			return;
 		}
 		
@@ -57,13 +59,13 @@ public class VisitorFileRequestHandler extends RequestHandler
         
         if (!fileToSend.exists())
         {
-        	Logger.getLogger(getClass()).warn("requested file does not exist: " + filePath);
+        	LogManager.getLogger(getClass()).warn("requested file does not exist: " + filePath);
         	
         	error = true;
         }
         else if ((!fileToSend.isFile()) || (!fileToSend.canRead()))
         {
-        	Logger.getLogger(getClass()).warn("requested file is not a readable file: " + filePath);
+        	LogManager.getLogger(getClass()).warn("requested file is not a readable file: " + filePath);
         	
         	error = true;
         }
@@ -84,7 +86,7 @@ public class VisitorFileRequestHandler extends RequestHandler
     		}
             catch (IOException ioEx)
             {
-            	Logger.getLogger(getClass()).warn(ioEx);
+            	LogManager.getLogger(getClass()).warn(ioEx);
             }
         }
 
@@ -143,7 +145,7 @@ public class VisitorFileRequestHandler extends RequestHandler
 
 	        if (bytesWritten != fileSize)
 	        {
-	            Logger.getLogger(getClass()).warn(
+	            LogManager.getLogger(getClass()).warn(
 	                "only " + bytesWritten + " bytes of " + fileSize + " have been written to output");
 	        }
 
@@ -158,7 +160,7 @@ public class VisitorFileRequestHandler extends RequestHandler
 		}
         catch (IOException ioEx)
         {
-        	Logger.getLogger(getClass()).warn(ioEx);
+        	LogManager.getLogger(getClass()).warn(ioEx);
         }
 		finally {
 			if (fileInput != null) 

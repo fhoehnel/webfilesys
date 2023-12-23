@@ -2,7 +2,9 @@ package de.webfilesys.unix;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class ProcessTree
 {
@@ -107,7 +109,7 @@ public class ProcessTree
     {
         if (rootProcess==null)
         {
-            Logger.getLogger(getClass()).error("ProcessTree.toHTML(): rootProcess is null");
+            LogManager.getLogger(getClass()).error("ProcessTree.toHTML(): rootProcess is null");
             return "";
         }
         outBuffer=new StringBuffer(); 

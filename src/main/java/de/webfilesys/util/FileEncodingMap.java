@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 
@@ -28,15 +30,15 @@ public class FileEncodingMap
         	
         	fin = new FileInputStream(propFilePath);
 
-            if (Logger.getLogger(getClass()).isDebugEnabled()) {
-                Logger.getLogger(getClass()).debug("reading file encoding map from " + propFilePath);
+            if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+                LogManager.getLogger(getClass()).debug("reading file encoding map from " + propFilePath);
             }
             
         	encodingMap.load(fin);
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("Failed to read file encoding configuration", ioex);
+            LogManager.getLogger(getClass()).error("Failed to read file encoding configuration", ioex);
         }
 		finally
 		{

@@ -18,7 +18,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -108,14 +110,14 @@ public class TarViewHandler implements ViewHandler {
 			
 			tarFile.close();
 		} catch (ParserConfigurationException pcex) {
-			Logger.getLogger(getClass()).error(pcex.toString());
+			LogManager.getLogger(getClass()).error(pcex.toString());
 		} catch (FileNotFoundException e) {
-			Logger.getLogger(getClass()).error(
+			LogManager.getLogger(getClass()).error(
 					"failed to extract content of tar archive", e);
 
 			return;
 		} catch (IOException e) {
-			Logger.getLogger(getClass()).error(
+			LogManager.getLogger(getClass()).error(
 					"failed to extract content of tar archive", e);
 
 			if (tarFile != null) {
@@ -261,7 +263,7 @@ public class TarViewHandler implements ViewHandler {
     public void processZipContent(String zipFilePath, InputStream zipIn, ViewHandlerConfig viewHandlerConfig, HttpServletRequest req, HttpServletResponse resp)
     {
         // not yet supported
-        Logger.getLogger(getClass()).warn("reading from ZIP archive not supported by ViewHaandler " + this.getClass().getName());
+        LogManager.getLogger(getClass()).warn("reading from ZIP archive not supported by ViewHaandler " + this.getClass().getName());
     }
     
     /**

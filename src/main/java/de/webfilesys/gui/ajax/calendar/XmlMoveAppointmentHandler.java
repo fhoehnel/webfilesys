@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.gui.ajax.XmlRequestHandlerBase;
@@ -36,7 +38,7 @@ public class XmlMoveAppointmentHandler extends XmlRequestHandlerBase {
 
 		String eventId = getParameter("eventId");
 		if (CommonUtils.isEmpty(eventId)) {
-			Logger.getLogger(getClass()).warn("missing parameter eventId");
+			LogManager.getLogger(getClass()).warn("missing parameter eventId");
 			return;
 		}
 

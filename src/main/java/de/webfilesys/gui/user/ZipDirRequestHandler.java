@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -19,7 +21,7 @@ import de.webfilesys.util.UTF8URLEncoder;
  * @author Frank Hoehnel
  */
 public class ZipDirRequestHandler extends UserRequestHandler {
-    private static final Logger LOG = Logger.getLogger(ZipDirRequestHandler.class);
+    private static final Logger LOG = LogManager.getLogger(ZipDirRequestHandler.class);
 	
 	public ZipDirRequestHandler(
     		HttpServletRequest req, 

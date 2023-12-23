@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 /**
  * @author Frank Hoehnel
@@ -121,7 +123,7 @@ public class RemoteEditorRequestHandler extends UserRequestHandler
 			String fileEncoding = guessFileEncoding(editFile);
 			
 			if (fileEncoding != null) {
-			    Logger.getLogger(getClass()).debug("reading editor file " + editFile + " with character encoding " + fileEncoding);
+			    LogManager.getLogger(getClass()).debug("reading editor file " + editFile + " with character encoding " + fileEncoding);
 			}
 			
 			boolean readError = false;
@@ -167,7 +169,7 @@ public class RemoteEditorRequestHandler extends UserRequestHandler
 			}
 			catch (IOException ioex)
 			{
-				Logger.getLogger(getClass()).error("cannot read file for remote editing", ioex);
+				LogManager.getLogger(getClass()).error("cannot read file for remote editing", ioex);
 				readError = true;
 			}
 

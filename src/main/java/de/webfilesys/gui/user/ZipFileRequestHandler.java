@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.SubdirExistTester;
 import de.webfilesys.WebFileSys;
@@ -31,7 +33,7 @@ import de.webfilesys.util.UTF8URLEncoder;
  * @author Frank Hoehnel
  */
 public class ZipFileRequestHandler extends UserRequestHandler {
-    private static final Logger LOG = Logger.getLogger(ZipFileRequestHandler.class);
+    private static final Logger LOG = LogManager.getLogger(ZipFileRequestHandler.class);
 
     public ZipFileRequestHandler(
 			HttpServletRequest req, 

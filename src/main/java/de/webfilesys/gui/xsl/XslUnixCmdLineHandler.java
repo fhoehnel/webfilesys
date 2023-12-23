@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -36,7 +38,7 @@ public class XslUnixCmdLineHandler extends XslRequestHandlerBase
 		
         if ((!isAdminUser(false)) || (!userMgr.getDocumentRoot(uid).equals("/")))
 	    {
-	        Logger.getLogger(getClass()).warn("UNIX command line is only available for admin users with root access");
+	        LogManager.getLogger(getClass()).warn("UNIX command line is only available for admin users with root access");
 	        return;
 	    }
 	    

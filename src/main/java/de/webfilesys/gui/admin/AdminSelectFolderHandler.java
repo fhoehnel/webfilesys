@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -141,7 +143,7 @@ public class AdminSelectFolderHandler extends XslRequestHandlerBase
 
 		if (fileList == null)
 		{
-			Logger.getLogger(getClass()).warn("filelist is null for " + partOfPath);
+			LogManager.getLogger(getClass()).warn("filelist is null for " + partOfPath);
 			
 			dirTreeStatus.collapseDir(partOfPath);
 			return;
@@ -262,7 +264,7 @@ public class AdminSelectFolderHandler extends XslRequestHandlerBase
 						}
 						catch (IOException ioex)
 						{
-							Logger.getLogger(getClass()).error(ioex);
+							LogManager.getLogger(getClass()).error(ioex);
 						}
 					}
 				}

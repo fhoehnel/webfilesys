@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.mail.EmailUtils;
@@ -216,7 +218,7 @@ public class AdminAddUserRequestHandler extends AdminRequestHandler
 		try {
 			userMgr.createUser(newUser);
 		} catch (UserMgmtException ex) {
-        	Logger.getLogger(getClass()).warn("failed to create new user " + newUser.getUserid(), ex);
+        	LogManager.getLogger(getClass()).warn("failed to create new user " + newUser.getUserid(), ex);
 			errorMsg.append("failed to create new user " + newUser.getUserid());
 			(new AdminRegisterUserRequestHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest(); 
 			return;

@@ -1,6 +1,8 @@
 package de.webfilesys.mail;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
@@ -140,7 +142,7 @@ public class EmailUtils
 		}
 		catch (IllegalArgumentException iaex)
 		{
-            Logger.getLogger(EmailUtils.class).error("failed to send welcome mail", iaex);
+            LogManager.getLogger(EmailUtils.class).error("failed to send welcome mail", iaex);
 		}
 	}
 }

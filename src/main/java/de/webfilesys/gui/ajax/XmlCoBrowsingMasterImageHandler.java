@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.CoBrowsingManager;
@@ -36,7 +38,7 @@ public class XmlCoBrowsingMasterImageHandler extends XmlRequestHandlerBase
 		
 		if (imageFiles == null)
 		{
-			Logger.getLogger(getClass()).warn("slideshow buffer not found in session");
+			LogManager.getLogger(getClass()).warn("slideshow buffer not found in session");
 			return;
 		}
 		
@@ -88,7 +90,7 @@ public class XmlCoBrowsingMasterImageHandler extends XmlRequestHandlerBase
 		}
 		catch (IOException io1)
 		{
-			Logger.getLogger(getClass()).error(io1, io1);
+			LogManager.getLogger(getClass()).error(io1, io1);
 			return;
 		}
 		

@@ -96,8 +96,8 @@ function multiImgToVideo() {
 
 	var numChecked = getSelectedCheckboxCount();
 
-    if (numChecked < 2) {
-        customAlert(resourceBundle["selectTwoOrMorePics"]);
+    if (numChecked < 1) {
+        customAlert(resourceBundle["selectOneOrMorePics"]);
         document.form2.command.value = '';
         document.form2.cmd.selectedIndex = 0;
         return;

@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -138,7 +140,7 @@ public class XslUnixFileSysStatHandler extends XslRequestHandlerBase
         }
         catch (Exception e)
         {
-            Logger.getLogger(getClass()).error(e);
+            LogManager.getLogger(getClass()).error(e);
         }
 
         DataInputStream cmdOut = new DataInputStream(cmdProcess.getInputStream());
@@ -206,11 +208,11 @@ public class XslUnixFileSysStatHandler extends XslRequestHandlerBase
                     }
                     catch (NoSuchElementException nseEx)
                     {
-                        Logger.getLogger(getClass()).error("error parsing filesys table : " + nseEx + "\n in line " + stdoutLine);
+                        LogManager.getLogger(getClass()).error("error parsing filesys table : " + nseEx + "\n in line " + stdoutLine);
                     }
                     catch (NumberFormatException nfe)
                     {
-                        Logger.getLogger(getClass()).error("error parsing filesys table : " + nfe + "\n in line " + stdoutLine);
+                        LogManager.getLogger(getClass()).error("error parsing filesys table : " + nfe + "\n in line " + stdoutLine);
                     }
                 }
             }

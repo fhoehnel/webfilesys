@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class FileSysStat {
     private String path = null;
@@ -115,7 +117,7 @@ public class FileSysStat {
                 }
             }
         } else {
-        	Logger.getLogger(getClass()).warn("cannot get dir entries for " + currentPath);
+        	LogManager.getLogger(getClass()).warn("cannot get dir entries for " + currentPath);
         }
     }
 

@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.CopyStatus;
 import de.webfilesys.FileSysStat;
@@ -52,7 +54,7 @@ public class CloneFolderRequestHandler extends UserRequestHandler
 		
 		if ((!sourceFolderFile.exists()) || (!sourceFolderFile.canRead())) 
 		{
-			Logger.getLogger(getClass()).error("clone source folder is not a readable folder: " + sourceFolderPath);
+			LogManager.getLogger(getClass()).error("clone source folder is not a readable folder: " + sourceFolderPath);
 			return;
 		}
 
@@ -60,7 +62,7 @@ public class CloneFolderRequestHandler extends UserRequestHandler
 		
 		if (parentFolder == null)
 		{
-			Logger.getLogger(getClass()).error("could not determine clone parent folder");
+			LogManager.getLogger(getClass()).error("could not determine clone parent folder");
 			return;
 		}
 

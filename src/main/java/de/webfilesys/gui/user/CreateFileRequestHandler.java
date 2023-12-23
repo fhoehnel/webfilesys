@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
 import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
@@ -35,7 +37,7 @@ public class CreateFileRequestHandler extends UserRequestHandler {
 		String newFileName = getParameter("NewFileName");
 
 		if (CommonUtils.isEmpty(newFileName)) {
-			Logger.getLogger(getClass()).error("required parameter newFileName missing");
+			LogManager.getLogger(getClass()).error("required parameter newFileName missing");
 			return;
 		}
 

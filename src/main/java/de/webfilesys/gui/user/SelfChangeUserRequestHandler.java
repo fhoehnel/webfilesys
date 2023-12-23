@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.gui.xsl.XslFileListHandler;
 import de.webfilesys.gui.xsl.XslUserSettingsHandler;
@@ -108,7 +110,7 @@ public class SelfChangeUserRequestHandler extends UserRequestHandler {
 		TransientUser changedUser = userMgr.getUser(login);
 		
 		if (changedUser == null) {
-            Logger.getLogger(getClass()).error("user for update not found: " + login);
+            LogManager.getLogger(getClass()).error("user for update not found: " + login);
 			errorMsg.append("user for update not found: " + login);
 			(new XslUserSettingsHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest();
 			return;
@@ -157,7 +159,7 @@ public class SelfChangeUserRequestHandler extends UserRequestHandler {
 		try {
 			userMgr.updateUser(changedUser);
 		} catch (UserMgmtException ex) {
-            Logger.getLogger(getClass()).error("failed to update user " + login, ex);
+            LogManager.getLogger(getClass()).error("failed to update user " + login, ex);
 			errorMsg.append("failed to update user " + login);
 			(new XslUserSettingsHandler(req, resp, session, output, uid, errorMsg.toString())).handleRequest();
 			return;

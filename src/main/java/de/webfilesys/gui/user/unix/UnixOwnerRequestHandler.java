@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.user.UserRequestHandler;
@@ -160,7 +162,7 @@ public class UnixOwnerRequestHandler extends UserRequestHandler
             }
             catch (Exception e)
             {
-                Logger.getLogger(getClass()).error(e);
+                LogManager.getLogger(getClass()).error(e);
             }
 
             if (!isWebspaceUser())
@@ -183,7 +185,7 @@ public class UnixOwnerRequestHandler extends UserRequestHandler
                 }
                 catch (Exception e)
                 {
-                    Logger.getLogger(getClass()).error(e);
+                    LogManager.getLogger(getClass()).error(e);
                 }
             }
         }
@@ -303,13 +305,13 @@ public class UnixOwnerRequestHandler extends UserRequestHandler
                 }
                 catch (IOException ioEx)
                 {
-                	Logger.getLogger(getClass()).error(ioEx);
+                	LogManager.getLogger(getClass()).error(ioEx);
                 }
                 
             }
             catch (Exception e)
             {
-                Logger.getLogger(getClass()).error(e);
+                LogManager.getLogger(getClass()).error(e);
             }
 
         }

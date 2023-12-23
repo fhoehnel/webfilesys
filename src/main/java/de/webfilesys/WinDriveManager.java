@@ -5,7 +5,9 @@ import java.util.HashMap;
 
 import javax.swing.filechooser.FileSystemView;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class WinDriveManager extends Thread
 {
@@ -35,9 +37,9 @@ public class WinDriveManager extends Thread
 	
     public synchronized void run()
     {
-    	if (Logger.getLogger(getClass()).isDebugEnabled())
+    	if (LogManager.getLogger(getClass()).isDebugEnabled())
     	{
-        	Logger.getLogger(getClass()).debug("DriveQueryThread started");
+        	LogManager.getLogger(getClass()).debug("DriveQueryThread started");
     	}
     	
         setPriority(1);
@@ -55,7 +57,7 @@ public class WinDriveManager extends Thread
             catch(InterruptedException e)
             {
                 stop = true;
-                Logger.getLogger(getClass()).debug("DriveQueryThread ready for shutdown");
+                LogManager.getLogger(getClass()).debug("DriveQueryThread ready for shutdown");
             }
         }
     }

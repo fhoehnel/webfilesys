@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.ClipBoard;
 import de.webfilesys.Constants;
@@ -70,7 +72,7 @@ public class PasteAsLinkRequestHandler extends UserRequestHandler
 		
 		if (clipBoard == null)
 		{
-			Logger.getLogger(getClass()).warn("clipboard is empty in paste operation");
+			LogManager.getLogger(getClass()).warn("clipboard is empty in paste operation");
 
 		    return;
 		}
@@ -98,7 +100,7 @@ public class PasteAsLinkRequestHandler extends UserRequestHandler
                 }
                 catch (FileNotFoundException fnfex)
                 {
-                	Logger.getLogger(getClass()).warn(fnfex.toString());
+                	LogManager.getLogger(getClass()).warn(fnfex.toString());
                 }
 			}
 		}

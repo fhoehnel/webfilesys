@@ -6,7 +6,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -52,7 +54,7 @@ public class XslUserSettingsHandler extends XslRequestHandlerBase {
 
 		TransientUser user = userMgr.getUser(uid);
 		if (user == null) {
-        	Logger.getLogger(getClass()).error("user not found: " + uid);
+        	LogManager.getLogger(getClass()).error("user not found: " + uid);
         	return;
 		}
 		

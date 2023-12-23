@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class FastPathQueue {
 	public static final String FAST_PATH_DIR = "fastpath";
@@ -39,15 +41,15 @@ public class FastPathQueue {
 			fastPathFile.close();
 			success = true;
 		} catch (ClassNotFoundException cnfe) {
-			Logger.getLogger(getClass()).warn(cnfe);
+			LogManager.getLogger(getClass()).warn(cnfe);
 		} catch (FileNotFoundException ioe) {
-			if (Logger.getLogger(getClass()).isDebugEnabled()) {
-				Logger.getLogger(getClass()).debug(ioe);
+			if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+				LogManager.getLogger(getClass()).debug(ioe);
 			}
 		} catch (IOException ioe) {
-			Logger.getLogger(getClass()).warn(ioe);
+			LogManager.getLogger(getClass()).warn(ioe);
 		} catch (ClassCastException cex) {
-			Logger.getLogger(getClass()).warn(cex);
+			LogManager.getLogger(getClass()).warn(cex);
 		} finally {
 			if (fastPathFile != null) {
 				try {
@@ -65,7 +67,7 @@ public class FastPathQueue {
 
 		if (!fastPathDir.exists()) {
 			if (!fastPathDir.mkdirs()) {
-				Logger.getLogger(getClass()).warn("cannot create fastpath directory " + fastPathDir);
+				LogManager.getLogger(getClass()).warn("cannot create fastpath directory " + fastPathDir);
 			}
 
 			return;
@@ -78,7 +80,7 @@ public class FastPathQueue {
 			fastPathFile.writeObject(pathQueue);
 			fastPathFile.flush();
 		} catch (IOException ioEx) {
-			Logger.getLogger(getClass()).warn(ioEx);
+			LogManager.getLogger(getClass()).warn(ioEx);
 		} finally {
 			if (fastPathFile != null) {
 				try {

@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 /**
  * @author Frank Hoehnel
@@ -69,7 +71,7 @@ public class DownloadFolderZipHandler extends UserRequestHandler
         
         if (errorMsg != null)
         {
-        	Logger.getLogger(getClass()).warn(errorMsg);
+        	LogManager.getLogger(getClass()).warn(errorMsg);
         	
             resp.setStatus(404);
 
@@ -85,7 +87,7 @@ public class DownloadFolderZipHandler extends UserRequestHandler
     		}
             catch (IOException ioEx)
             {
-            	Logger.getLogger(getClass()).warn(ioEx);
+            	LogManager.getLogger(getClass()).warn(ioEx);
             }
         }
 
@@ -108,7 +110,7 @@ public class DownloadFolderZipHandler extends UserRequestHandler
 		}
         catch (IOException ioEx)
         {
-        	Logger.getLogger(getClass()).warn(ioEx);
+        	LogManager.getLogger(getClass()).warn(ioEx);
         }
         finally
         {
@@ -180,7 +182,7 @@ public class DownloadFolderZipHandler extends UserRequestHandler
                     }
                     catch (Exception zioe)
                     {
-                        Logger.getLogger(getClass()).warn("failed to zip file " + fullFileName, zioe);
+                        LogManager.getLogger(getClass()).warn("failed to zip file " + fullFileName, zioe);
                     }
                     finally
                     {
@@ -198,7 +200,7 @@ public class DownloadFolderZipHandler extends UserRequestHandler
                 }
                 catch (IOException ioex)
                 {
-                    Logger.getLogger(getClass()).error("failed to zip file " + fullFileName, ioex);
+                    LogManager.getLogger(getClass()).error("failed to zip file " + fullFileName, ioex);
                 }
             }
         }

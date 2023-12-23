@@ -45,7 +45,7 @@ public class ViewLogRequestHandler extends LogRequestHandlerBase {
 		if (logFileName != null) {
 	        File logFile = new File(logFileName);
 	        if ((!logFile.exists()) || (!logFile.isFile()) || (!logFile.canRead())) {
-	            output.println("WebFileSys system log file " + logFileName + " could not be located. Check the log4j configuration!");
+	            output.println("WebFileSys system log file " + logFileName + " could not be located. Check the log4j2 configuration!");
 	            output.println("</body></html>");
 	            output.flush();
 	            return;

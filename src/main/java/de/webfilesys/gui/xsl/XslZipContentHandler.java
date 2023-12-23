@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -95,12 +97,12 @@ public class XslZipContentHandler extends XslRequestHandlerBase
 		}
 		catch (ZipException zipEx)
 		{
-			Logger.getLogger(getClass()).error("cannot open ZIP file: " + zipEx);
+			LogManager.getLogger(getClass()).error("cannot open ZIP file: " + zipEx);
 			return;
 		}
 		catch (IOException ioex)
 		{
-			Logger.getLogger(getClass()).error("cannot open ZIP file: " + ioex);
+			LogManager.getLogger(getClass()).error("cannot open ZIP file: " + ioex);
 			return;
 		}
 		

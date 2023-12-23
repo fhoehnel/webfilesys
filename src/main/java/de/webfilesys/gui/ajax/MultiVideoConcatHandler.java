@@ -13,13 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.VideoDeshaker;
 import de.webfilesys.graphics.VideoInfo;
 import de.webfilesys.graphics.VideoInfoExtractor;
+import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -27,7 +30,7 @@ import de.webfilesys.util.XmlUtil;
  */
 public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
 	
-	private static Logger LOG = Logger.getLogger(MultiVideoConcatHandler.class);
+	private static Logger LOG = LogManager.getLogger(MultiVideoConcatHandler.class);
 	
 	private static final String FFMPEG_INPUT_LIST_FILE_NAME = "ffmpegInputFileList.txt";
 	
@@ -147,7 +150,7 @@ public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
             File targetDirFile = new File(targetPath);
             if (!targetDirFile.exists()) {
                 if (!targetDirFile.mkdir()) {
-                    Logger.getLogger(getClass()).error("failed to create target folder for video conversion: " + targetPath);
+                    LogManager.getLogger(getClass()).error("failed to create target folder for video conversion: " + targetPath);
                     return;
                 }
             }
@@ -157,19 +160,8 @@ public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
             String fileNameOnly = firstFileName.substring(0,  firstFileName.lastIndexOf('.'));
             String ext = firstFileName.substring(firstFileName.lastIndexOf('.') + 1);
             String targetFileName = fileNameOnly + "_concat." + ext;
-            String targetFilePath = targetPath + File.separator + targetFileName;
             
-            boolean targetFileNameOk = true;
-            do {
-                File existingTargetFile = new File(targetFilePath);
-                if (existingTargetFile.exists()) {
-                    targetFileNameOk = false;
-                    int dotIdx = targetFilePath.lastIndexOf(".");
-                    targetFilePath = targetFilePath.substring(0, dotIdx) + "-1" + targetFilePath.substring(dotIdx);
-                } else {
-                    targetFileNameOk = true;
-                }
-            } while (!targetFileNameOk);
+            String targetFilePath = CommonUtils.getNonConflictingTargetFilePath(targetPath + File.separator + targetFileName);
             
 	        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
 			
@@ -187,13 +179,13 @@ public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
             progNameAndParams.add("copy");
             progNameAndParams.add(targetFilePath);
             
-            if (Logger.getLogger(getClass()).isDebugEnabled()) {
+            if (LogManager.getLogger(getClass()).isDebugEnabled()) {
             	StringBuilder buff = new StringBuilder();
                 for (String cmdToken : progNameAndParams) {
                 	buff.append(cmdToken);
                 	buff.append(' ');
                 }
-                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
+                LogManager.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
             }
             
 			try {
@@ -204,8 +196,8 @@ public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
 		        String outLine = null;
 		        
 		        while ((outLine = grabProcessOut.readLine()) != null) {
-		        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-		                Logger.getLogger(getClass()).debug("ffmpeg output: " + outLine);
+		        	if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+		                LogManager.getLogger(getClass()).debug("ffmpeg output: " + outLine);
 		        	}
 		        }
 				
@@ -215,20 +207,20 @@ public class MultiVideoConcatHandler extends MultiVideoHandlerBase {
 					File resultFile = new File(targetFilePath);
 					
 					if (!resultFile.exists()) {
-	                    Logger.getLogger(getClass()).error("result file from ffmpeg video conversion not found: " + targetFilePath);
+	                    LogManager.getLogger(getClass()).error("result file from ffmpeg video conversion not found: " + targetFilePath);
 					}
 				} else {
-					Logger.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
+					LogManager.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
 				}
 				
 				if (!ffmpegFileListFile.delete()) {
-					Logger.getLogger(getClass()).warn("failed to delete ffmpeg input file list file");
+					LogManager.getLogger(getClass()).warn("failed to delete ffmpeg input file list file");
 				}
 			} catch (IOException ioex) {
-				Logger.getLogger(getClass()).error("failed to concatente videos", ioex);
+				LogManager.getLogger(getClass()).error("failed to concatente videos", ioex);
 				errorCode = ERROR_CODE_CONVERSION_FAILED;
 			} catch (InterruptedException iex) {
-				Logger.getLogger(getClass()).error("failed to concatente videos", iex);
+				LogManager.getLogger(getClass()).error("failed to concatente videos", iex);
 				errorCode = ERROR_CODE_CONVERSION_FAILED;
 			}
 		}

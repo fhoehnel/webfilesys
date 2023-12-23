@@ -270,6 +270,8 @@ function multiVideoFunction() {
         multiVideoJoinParams();
     } else if (cmd == 'deshake') {
         multiVideoDeshake();
+    } else if (cmd == 'addSilentAudio') {
+        multiVideoAddSilentAudio();
     }
      
     document.form2.cmd.selectedIndex = 0;
@@ -443,6 +445,47 @@ function multiVideoDeshake() {
     }
 }
 
+function multiVideoAddSilentAudio() {
+    if (anySelected()) {
+    	showHourGlass();
+	    document.form2.command.value = 'multiVideoAddSilentAudio';
+	    
+	    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
+	        if (req.readyState == 4) {
+	            if (req.status == 200) {
+	                var success = req.responseXML.getElementsByTagName("success")[0];
+	                if (success) {
+                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                        var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                        var targetPath = targetPathItem.firstChild.nodeValue;
+                        
+                        customAlert(resourceBundle["addSilentAudioStarted"] + " " + targetFolder + ".");
+                        
+                        setTimeout(function() {
+                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                        }, 6000);
+	                } else {
+	                    customAlert(resourceBundle["errorAddSilentAudio"]);
+	                }
+	            } else {
+	            	alert(resourceBundle["alert.communicationFailure"]);
+	            }
+	            
+	            document.form2.command.value = '';
+	            document.form2.cmd.selectedIndex = 0;
+
+	            hideHourGlass();
+	        }
+	    });
+    } else {   
+        customAlert(resourceBundle["alert.nofileselected"] + "!");
+        document.form2.command.value = '';
+        document.form2.cmd.selectedIndex = 0;
+    }
+}
+
 function checkTwoOrMoreFilesSelected() {
     var numChecked = 0;
     
@@ -577,7 +620,7 @@ function playVideoMaxSize(videoFilePath, videoFileName, isLink) {
     });
 }
 
-function validateConvertVideoForm() {
+function validateTimeRange() {
 	
 	if (document.getElementById("startHour")) {
 	    var startHour = getSelectboxValueInt("startHour");
@@ -613,7 +656,7 @@ function getSelectboxValueInt(selectboxId) {
 
 function sendEditConvertForm() {
 
-    if (!validateConvertVideoForm()) {
+    if (!validateTimeRange()) {
         return;
     }
 
@@ -631,6 +674,44 @@ function sendEditConvertForm() {
                     var targetPath = targetPathItem.firstChild.nodeValue;
                     
                     customAlert(resourceBundle["videoConversionStarted"] + " " + targetFolder + ".");
+                    
+                    setTimeout(function() {
+    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	                window.parent.frames[1].location.href = expUrl;
+                    } , 4000);
+                    
+                } else {
+                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
+                    var message = messageItem.firstChild.nodeValue;
+                    customAlert(message);
+                }
+            } else {
+                alert(resourceBundle["alert.communicationFailure"]);
+            }
+        }
+    });
+}
+
+function sendCutAudioForm() {
+
+    if (!validateTimeRange()) {
+        return;
+    }
+
+    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function(req) {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                var successItem = req.responseXML.getElementsByTagName("success")[0];            
+                var success = successItem.firstChild.nodeValue;
+                
+                if (success == "true") {
+                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
+                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
+                    var targetPath = targetPathItem.firstChild.nodeValue;
+                    
+                    customAlert(resourceBundle["cutAudioStarted"] + " " + targetFolder + ".");
                     
                     setTimeout(function() {
     	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
@@ -803,7 +884,7 @@ function videoFrameGrabPreview() {
 }
 
 function videoEditStartPreview() {
-    if (!validateConvertVideoForm()) {
+    if (!validateTimeRange()) {
         return;
     }
 

@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.graphics.VideoConcatAnyThread;
@@ -20,7 +22,7 @@ import de.webfilesys.util.XmlUtil;
  */
 public class AnyVideoConcatHandler extends MultiVideoHandlerBase {
 	
-	private static Logger LOG = Logger.getLogger(AnyVideoConcatHandler.class);
+	private static Logger LOG = LogManager.getLogger(AnyVideoConcatHandler.class);
 	
 	private static final String TARGET_FOLDER = "_joined";
 	

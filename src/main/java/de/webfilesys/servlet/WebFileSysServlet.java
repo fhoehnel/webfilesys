@@ -34,7 +34,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import de.webfilesys.gui.xsl.*;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.CategoryManager;
 import de.webfilesys.Constants;
@@ -71,6 +74,7 @@ import de.webfilesys.gui.ajax.AnyVideoConcatHandler;
 import de.webfilesys.gui.ajax.AutoImageRotateHandler;
 import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
 import de.webfilesys.gui.ajax.CheckUploadConflictHandler;
+import de.webfilesys.gui.ajax.CutAudioHandler;
 import de.webfilesys.gui.ajax.DeleteFileHandler;
 import de.webfilesys.gui.ajax.DeshakeVideoHandler;
 import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
@@ -79,6 +83,7 @@ import de.webfilesys.gui.ajax.ExtractVideoFrameHandler;
 import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
 import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
 import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
+import de.webfilesys.gui.ajax.MultiVideoAddSilentAudioHandler;
 import de.webfilesys.gui.ajax.MultiVideoConcatHandler;
 import de.webfilesys.gui.ajax.MultiVideoDeshakeHandler;
 import de.webfilesys.gui.ajax.PollForDirChangeHandler;
@@ -222,74 +227,6 @@ import de.webfilesys.gui.user.unix.ProcessListRequestHandler;
 import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
 import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
-import de.webfilesys.gui.xsl.AnyVideoConcatParamHandler;
-import de.webfilesys.gui.xsl.CompareImageSliderHandler;
-import de.webfilesys.gui.xsl.CompareImageTabHandler;
-import de.webfilesys.gui.xsl.EditVideoParamHandler;
-import de.webfilesys.gui.xsl.ExtractVideoFrameParamHandler;
-import de.webfilesys.gui.xsl.GPXViewHandler;
-import de.webfilesys.gui.xsl.MultiGPXTrackHandler;
-import de.webfilesys.gui.xsl.SlideshowToVideoParamHandler;
-import de.webfilesys.gui.xsl.TextOnVideoParamHandler;
-import de.webfilesys.gui.xsl.VideoFadeAudioParamHandler;
-import de.webfilesys.gui.xsl.XslAddBookmarkPromptHandler;
-import de.webfilesys.gui.xsl.XslAlbumImageHandler;
-import de.webfilesys.gui.xsl.XslAssignCategoryHandler;
-import de.webfilesys.gui.xsl.XslCategoryHandler;
-import de.webfilesys.gui.xsl.XslCloneFilePromptHandler;
-import de.webfilesys.gui.xsl.XslCoBrowsingClientHandler;
-import de.webfilesys.gui.xsl.XslCoBrowsingMasterHandler;
-import de.webfilesys.gui.xsl.XslCompFolderParmsHandler;
-import de.webfilesys.gui.xsl.XslCompareFolderHandler;
-import de.webfilesys.gui.xsl.XslCreateFilePromptHandler;
-import de.webfilesys.gui.xsl.XslCreateFolderPromptHandler;
-import de.webfilesys.gui.xsl.XslCryptoKeyPromptHandler;
-import de.webfilesys.gui.xsl.XslDownloadPromptHandler;
-import de.webfilesys.gui.xsl.XslEditMetaInfHandler;
-import de.webfilesys.gui.xsl.XslEmailFilePromptHandler;
-import de.webfilesys.gui.xsl.XslExifDataHandler;
-import de.webfilesys.gui.xsl.XslFastPathHandler;
-import de.webfilesys.gui.xsl.XslFileListHandler;
-import de.webfilesys.gui.xsl.XslFileListStatsHandler;
-import de.webfilesys.gui.xsl.XslFileSysBookmarkHandler;
-import de.webfilesys.gui.xsl.XslFindFileHandler;
-import de.webfilesys.gui.xsl.XslFolderDiffTreeHandler;
-import de.webfilesys.gui.xsl.XslFolderWatchListHandler;
-import de.webfilesys.gui.xsl.XslGoogleMapHandler;
-import de.webfilesys.gui.xsl.XslGoogleMapMultiHandler;
-import de.webfilesys.gui.xsl.XslListCommentsHandler;
-import de.webfilesys.gui.xsl.XslLogonHandler;
-import de.webfilesys.gui.xsl.XslMenuBarHandler;
-import de.webfilesys.gui.xsl.XslMultiUploadHandler;
-import de.webfilesys.gui.xsl.XslOpenStreetMapFilesHandler;
-import de.webfilesys.gui.xsl.XslOpenStreetMapHandler;
-import de.webfilesys.gui.xsl.XslPictureStoryHandler;
-import de.webfilesys.gui.xsl.XslPictureStoryOwnWindowHandler;
-import de.webfilesys.gui.xsl.XslPublishFileHandler;
-import de.webfilesys.gui.xsl.XslPublishListHandler;
-import de.webfilesys.gui.xsl.XslRenameDirHandler;
-import de.webfilesys.gui.xsl.XslRenameFilePromptHandler;
-import de.webfilesys.gui.xsl.XslRenameFolderPromptHandler;
-import de.webfilesys.gui.xsl.XslRenameImagePromptHandler;
-import de.webfilesys.gui.xsl.XslResizeParmsHandler;
-import de.webfilesys.gui.xsl.XslSearchParmsHandler;
-import de.webfilesys.gui.xsl.XslSelfRegistrationHandler;
-import de.webfilesys.gui.xsl.XslShowImageHandler;
-import de.webfilesys.gui.xsl.XslSlideShowHandler;
-import de.webfilesys.gui.xsl.XslSlideShowInFrameHandler;
-import de.webfilesys.gui.xsl.XslSlideshowParmsHandler;
-import de.webfilesys.gui.xsl.XslSyncCompareHandler;
-import de.webfilesys.gui.xsl.XslThumbnailExtractDescriptionHandler;
-import de.webfilesys.gui.xsl.XslThumbnailHandler;
-import de.webfilesys.gui.xsl.XslTreeStatSunburstHandler;
-import de.webfilesys.gui.xsl.XslTreeStatsHandler;
-import de.webfilesys.gui.xsl.XslUnixCmdLineHandler;
-import de.webfilesys.gui.xsl.XslUnixDirTreeHandler;
-import de.webfilesys.gui.xsl.XslUploadParmsHandler;
-import de.webfilesys.gui.xsl.XslUserSettingsHandler;
-import de.webfilesys.gui.xsl.XslVideoListHandler;
-import de.webfilesys.gui.xsl.XslWinDirTreeHandler;
-import de.webfilesys.gui.xsl.XslZipContentHandler;
 import de.webfilesys.gui.xsl.album.AddAlbumCommentHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumPictureHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumSlideShowHandler;
@@ -342,7 +279,7 @@ public class WebFileSysServlet extends ServletBase
 
 		if ((configFileName == null) || (configFileName.trim().length() == 0))
 		{
-			Logger.getLogger(getClass()).fatal("config file not specified in web.xml");
+			LogManager.getLogger(getClass()).fatal("config file not specified in web.xml");
 			throw new ServletException ("config file not specified in web.xml");
 		}
 
@@ -350,7 +287,7 @@ public class WebFileSysServlet extends ServletBase
 		
 		if ((configPath == null) || (configPath.length() == 0))
 		{
-			Logger.getLogger(getClass()).fatal("cannot determine real path of config file " + configFileName);
+			LogManager.getLogger(getClass()).fatal("cannot determine real path of config file " + configFileName);
 			throw new ServletException ("cannot determine real path of config file " + configFileName);
 		}
 
@@ -363,7 +300,7 @@ public class WebFileSysServlet extends ServletBase
 		
 		if ((!configFile.isFile()) || (!configFile.canRead()))
 		{
-			Logger.getLogger(getClass()).fatal(configPath + " is not a readable file");
+			LogManager.getLogger(getClass()).fatal(configPath + " is not a readable file");
 			throw new ServletException (configPath + " is not a readable file");
 		}
 		
@@ -377,11 +314,11 @@ public class WebFileSysServlet extends ServletBase
 			
 			configProperties.load(propFile);
 			
-			Logger.getLogger(getClass()).info("properties loaded from " + configFile);
+			LogManager.getLogger(getClass()).info("properties loaded from " + configFile);
 		}
 		catch (IOException ioEx)
 		{
-			Logger.getLogger(getClass()).fatal("error reading config file: " + ioEx);
+			LogManager.getLogger(getClass()).fatal("error reading config file: " + ioEx);
 			throw new ServletException ("error reading config file: " + ioEx);
 		}
 		finally
@@ -441,7 +378,7 @@ public class WebFileSysServlet extends ServletBase
 				}
 				else
 				{
-					Logger.getLogger(getClass()).warn("invalid request path: " + requestPath);
+					LogManager.getLogger(getClass()).warn("invalid request path: " + requestPath);
 				}
 			}
 			else
@@ -492,7 +429,7 @@ public class WebFileSysServlet extends ServletBase
         logEntry.append(req.getProtocol());
         logEntry.append(')');
 
-        Logger.getLogger(getClass()).info(logEntry.toString());
+        LogManager.getLogger(getClass()).info(logEntry.toString());
         
         String localIP = WebFileSys.getInstance().getLocalIPAddress();
 		
@@ -1349,6 +1286,13 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
         
+        if (command.equals("multiVideoAddSilentAudio"))
+        {
+		    (new MultiVideoAddSilentAudioHandler(req, resp, session, output, userid)).handleRequest(); 
+
+            return(true);
+        }
+
         if (command.equals("multiImageExifRename"))
         {
 		    (new RenameToExifDateHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
@@ -1844,11 +1788,22 @@ public class WebFileSysServlet extends ServletBase
         if (command.equals("editMP3"))
         {
 			(new EditMP3RequestHandler(req, resp, session, output, userid)).handleRequest(); 
-            
             return(true);
         }
-        
-        if (command.equals("unixRights"))
+
+		if (command.equals("cutAudioParams"))
+		{
+			(new CutAudioParamHandler(req, resp, session, output, userid)).handleRequest();
+			return(true);
+		}
+
+		if (command.equals("cutAudio"))
+		{
+			(new CutAudioHandler(req, resp, session, output, userid)).handleRequest();
+			return(true);
+		}
+
+		if (command.equals("unixRights"))
         {
             (new UnixOwnerRequestHandler(req, resp, session, output, userid, false)).handleRequest();
 
@@ -2578,7 +2533,7 @@ public class WebFileSysServlet extends ServletBase
             logoutPage = WebFileSys.getInstance().getLogoutURL();
         }
 
-        Logger.getLogger(getClass()).info(req.getRemoteAddr() + ": logout user " + userid);
+        LogManager.getLogger(getClass()).info(req.getRemoteAddr() + ": logout user " + userid);
         
         try
         {
@@ -2586,7 +2541,7 @@ public class WebFileSysServlet extends ServletBase
         }
         catch (IOException ioex)
         {
-        	Logger.getLogger(getClass()).warn(ioex);
+        	LogManager.getLogger(getClass()).warn(ioex);
         }
     }
     
@@ -2610,7 +2565,7 @@ public class WebFileSysServlet extends ServletBase
             {
             	session = req.getSession(false);
             	if (session != null) {
-            		Logger.getLogger(getClass()).debug("destroying existing session");
+            		LogManager.getLogger(getClass()).debug("destroying existing session");
             		session.invalidate();
             	}
             	
@@ -2662,7 +2617,7 @@ public class WebFileSysServlet extends ServletBase
     				logEntry = logEntry + " [" + browserType + "]";
     			}
     			
-                Logger.getLogger(getClass()).info(logEntry);
+                LogManager.getLogger(getClass()).info(logEntry);
 
                 if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
                 {
@@ -2680,7 +2635,7 @@ public class WebFileSysServlet extends ServletBase
             {
             	session = req.getSession(false);
             	if (session != null) {
-            		Logger.getLogger(getClass()).debug("destroying existing session");
+            		LogManager.getLogger(getClass()).debug("destroying existing session");
             		session.invalidate();
             	}
             	
@@ -2715,7 +2670,7 @@ public class WebFileSysServlet extends ServletBase
     				logEntry = logEntry + " [" + browserType + "]";
     			}
 
-                Logger.getLogger(getClass()).info(logEntry);
+                LogManager.getLogger(getClass()).info(logEntry);
 
                 if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
                 {
@@ -2731,7 +2686,7 @@ public class WebFileSysServlet extends ServletBase
         }
 
         logEntry = clientIP + ": login failed for user " + userid;
-        Logger.getLogger(getClass()).warn(logEntry);
+        LogManager.getLogger(getClass()).warn(logEntry);
 
         if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
         {
@@ -2750,7 +2705,7 @@ public class WebFileSysServlet extends ServletBase
         	}
         	catch (IOException ioex)
         	{
-        		Logger.getLogger(getClass()).warn(ioex);
+        		LogManager.getLogger(getClass()).warn(ioex);
         	}
         	
             return;
@@ -2845,7 +2800,7 @@ public class WebFileSysServlet extends ServletBase
             {
             	session = req.getSession(false);
             	if (session != null) {
-            		Logger.getLogger(getClass()).debug("destroying existing session");
+            		LogManager.getLogger(getClass()).debug("destroying existing session");
             		session.invalidate();
             	}
             	
@@ -2872,7 +2827,7 @@ public class WebFileSysServlet extends ServletBase
     				logEntry = logEntry + " [" + browserType + "]";
     			}
     			
-                Logger.getLogger(getClass()).info(logEntry);
+                LogManager.getLogger(getClass()).info(logEntry);
 
                 if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
                 {
@@ -2893,7 +2848,7 @@ public class WebFileSysServlet extends ServletBase
                 	}
                 	catch (IOException ioex)
                 	{
-                		Logger.getLogger(getClass()).error(ioex);
+                		LogManager.getLogger(getClass()).error(ioex);
                 	}
                 }
                 
@@ -2934,7 +2889,7 @@ public class WebFileSysServlet extends ServletBase
     				logEntry = logEntry + " [" + browserType + "]";
     			}
 
-                Logger.getLogger(getClass()).info(logEntry);
+                LogManager.getLogger(getClass()).info(logEntry);
 
                 if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
                 {
@@ -2955,7 +2910,7 @@ public class WebFileSysServlet extends ServletBase
                 	}
                 	catch (IOException ioex)
                 	{
-                		Logger.getLogger(getClass()).error(ioex);
+                		LogManager.getLogger(getClass()).error(ioex);
                 	}
                 }
                 
@@ -2975,7 +2930,7 @@ public class WebFileSysServlet extends ServletBase
         }
 
         logEntry = clientIP + ": silent login failed for user " + userid;
-        Logger.getLogger(getClass()).warn(logEntry);
+        LogManager.getLogger(getClass()).warn(logEntry);
 
         if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
         {
@@ -2994,7 +2949,7 @@ public class WebFileSysServlet extends ServletBase
         	}
         	catch (IOException ioex)
         	{
-        		Logger.getLogger(getClass()).warn(ioex);
+        		LogManager.getLogger(getClass()).warn(ioex);
         	}
         	
             return;

@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.Constants;
@@ -37,7 +39,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
         if (filePath == null) {
         	String fileName = getParameter("fileName");
         	if (CommonUtils.isEmpty(fileName)) {
-        		Logger.getLogger(getClass()).warn("missing parameter filePath or fileName");
+        		LogManager.getLogger(getClass()).warn("missing parameter filePath or fileName");
         		return;
         	}
         	filePath = getCwd();
@@ -48,7 +50,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
         	}
         } else {
             if (!accessAllowed(filePath)) {
-                Logger.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's document root: " + filePath);
+                LogManager.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's document root: " + filePath);
                 return;
             }
             if (File.separatorChar == '\\') {
@@ -82,7 +84,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
 
             if (thumbnailFile.exists()) {
                 if (!thumbnailFile.delete()) {
-                    Logger.getLogger(getClass()).warn("failed to remove thumbnail file " + thumbnailPath);
+                    LogManager.getLogger(getClass()).warn("failed to remove thumbnail file " + thumbnailPath);
                 }
             }
 
@@ -93,7 +95,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
 
                 if (videoThumbnailFile.exists()) {
                     if (!videoThumbnailFile.delete()) {
-                        Logger.getLogger(getClass()).warn("failed to remove video thumbnail file " + videoThumbnailPath);
+                        LogManager.getLogger(getClass()).warn("failed to remove video thumbnail file " + videoThumbnailPath);
                     }
                 }
             }
@@ -101,7 +103,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
             if (fileToDelete.delete()) {
                 success = true;
             } else {
-                Logger.getLogger(getClass()).warn("failed to delete file " + filePath);
+                LogManager.getLogger(getClass()).warn("failed to delete file " + filePath);
             }
         }
 

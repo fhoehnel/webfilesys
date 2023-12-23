@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -54,7 +56,7 @@ public class XslTreeStatSunburstHandler extends XslRequestHandlerBase
         File dirFile = new File(path);
         if ((!dirFile.exists()) || (!dirFile.isDirectory()))
         {
-		    Logger.getLogger(getClass()).warn("folder is not a readable directory: " + path);
+		    LogManager.getLogger(getClass()).warn("folder is not a readable directory: " + path);
             return;
         }
 		

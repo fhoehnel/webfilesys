@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Comment;
 import de.webfilesys.InvitationManager;
@@ -54,7 +56,7 @@ public class AddAlbumCommentHandler extends UserRequestHandler
 			
 		if (!InvitationManager.getInstance().commentsAllowed(uid))
 		{
-			Logger.getLogger(getClass()).warn("attempt to add comments for " + actPath + " from virtual user " + uid + " without permission");
+			LogManager.getLogger(getClass()).warn("attempt to add comments for " + actPath + " from virtual user " + uid + " without permission");
 			return;
 		}
 

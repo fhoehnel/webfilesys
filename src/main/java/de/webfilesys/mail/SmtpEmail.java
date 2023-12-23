@@ -16,7 +16,9 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
@@ -165,13 +167,13 @@ public class SmtpEmail extends Thread {
             tr.close();
 
             for (String receiver : receiverList) {
-                Logger.getLogger(getClass()).info("e-mail sent to " + receiver);
+                LogManager.getLogger(getClass()).info("e-mail sent to " + receiver);
             }
             
             return true;
             
         } catch (Exception ex) {
-            Logger.getLogger(getClass()).error("failed to send mail", ex);
+            LogManager.getLogger(getClass()).error("failed to send mail", ex);
         	return false;
         }
 	}

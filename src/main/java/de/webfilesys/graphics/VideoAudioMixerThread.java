@@ -4,7 +4,9 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
@@ -23,8 +25,8 @@ public class VideoAudioMixerThread extends Thread {
     }
     
     public void run() {
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
-            Logger.getLogger(getClass()).debug("starting video/audio mixer thread for video file " + videoFilePath);
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+            LogManager.getLogger(getClass()).debug("starting video/audio mixer thread for video file " + videoFilePath);
         }
         
         Thread.currentThread().setPriority(1);
@@ -39,7 +41,7 @@ public class VideoAudioMixerThread extends Thread {
         File targetDirFile = new File(targetPath);
         if (!targetDirFile.exists()) {
             if (!targetDirFile.mkdir()) {
-                Logger.getLogger(getClass()).error("failed to create target folder for video conversion: " + targetPath);
+                LogManager.getLogger(getClass()).error("failed to create target folder for video conversion: " + targetPath);
                 return;
             }
         }
@@ -78,13 +80,13 @@ public class VideoAudioMixerThread extends Thread {
             progNameAndParams.add("-shortest");
             progNameAndParams.add(targetFilePath);
             
-            if (Logger.getLogger(getClass()).isDebugEnabled()) {
+            if (LogManager.getLogger(getClass()).isDebugEnabled()) {
             	StringBuilder buff = new StringBuilder();
                 for (String cmdToken : progNameAndParams) {
                 	buff.append(cmdToken);
                 	buff.append(' ');
                 }
-                Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
+                LogManager.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
             }
             
 			try {
@@ -95,8 +97,8 @@ public class VideoAudioMixerThread extends Thread {
 		        String outLine = null;
 		        
 		        while ((outLine = convertProcessOut.readLine()) != null) {
-		        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-		                Logger.getLogger(getClass()).debug("ffmpeg output: " + outLine);
+		        	if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+		                LogManager.getLogger(getClass()).debug("ffmpeg output: " + outLine);
 		        	}
 		        }
 				
@@ -106,22 +108,22 @@ public class VideoAudioMixerThread extends Thread {
 					File resultFile = new File(targetFilePath);
 					
 					if (!resultFile.exists()) {
-	                    Logger.getLogger(getClass()).error("result file from ffmpeg video conversion not found: " + targetFilePath);
+	                    LogManager.getLogger(getClass()).error("result file from ffmpeg video conversion not found: " + targetFilePath);
 					}
 				} else {
-					Logger.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
+					LogManager.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
 				}
 			} catch (IOException ioex) {
-				Logger.getLogger(getClass()).error("failed to convert video " + videoFilePath, ioex);
+				LogManager.getLogger(getClass()).error("failed to convert video " + videoFilePath, ioex);
 			} catch (InterruptedException iex) {
-				Logger.getLogger(getClass()).error("failed to convert video " + videoFilePath, iex);
+				LogManager.getLogger(getClass()).error("failed to convert video " + videoFilePath, iex);
 			}
         }
         
         if (audioFiles.size() > 1) {
         	File combinedAudioFile = new File(audioFilePath);
         	if (!combinedAudioFile.delete()) {
-        		Logger.getLogger(getClass()).warn("failed to delete temporary combined audio file " + audioFilePath);
+        		LogManager.getLogger(getClass()).warn("failed to delete temporary combined audio file " + audioFilePath);
         	}
         }
     }
@@ -167,13 +169,13 @@ public class VideoAudioMixerThread extends Thread {
         
         progNameAndParams.add(combinedAudioFilePath);
         
-        if (Logger.getLogger(getClass()).isDebugEnabled()) {
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
         	buff = new StringBuilder();
             for (String cmdToken : progNameAndParams) {
             	buff.append(cmdToken);
             	buff.append(' ');
             }
-            Logger.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
+            LogManager.getLogger(getClass()).debug("ffmpeg call with params: " + buff.toString());
         }
         
 		try {
@@ -184,8 +186,8 @@ public class VideoAudioMixerThread extends Thread {
 	        String outLine = null;
 	        
 	        while ((outLine = convertProcessOut.readLine()) != null) {
-	        	if (Logger.getLogger(getClass()).isDebugEnabled()) {
-	                Logger.getLogger(getClass()).debug("ffmpeg output: " + outLine);
+	        	if (LogManager.getLogger(getClass()).isDebugEnabled()) {
+	                LogManager.getLogger(getClass()).debug("ffmpeg output: " + outLine);
 	        	}
 	        }
 			
@@ -195,17 +197,17 @@ public class VideoAudioMixerThread extends Thread {
 				File resultFile = new File(combinedAudioFilePath);
 				
 				if (!resultFile.exists()) {
-                    Logger.getLogger(getClass()).error("result file from ffmpeg audio concatenation not found: " + combinedAudioFilePath);
+                    LogManager.getLogger(getClass()).error("result file from ffmpeg audio concatenation not found: " + combinedAudioFilePath);
 				} else {
 					return combinedAudioFilePath;
 				}
 			} else {
-				Logger.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
+				LogManager.getLogger(getClass()).warn("ffmpeg returned error " + convertResult);
 			}
 		} catch (IOException ioex) {
-			Logger.getLogger(getClass()).error("failed to concatenate audio files", ioex);
+			LogManager.getLogger(getClass()).error("failed to concatenate audio files", ioex);
 		} catch (InterruptedException iex) {
-			Logger.getLogger(getClass()).error("failed to concatenate audio files", iex);
+			LogManager.getLogger(getClass()).error("failed to concatenate audio files", iex);
 		}
 		
 		return null;

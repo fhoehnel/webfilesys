@@ -9,7 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.Constants;
@@ -49,7 +51,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 
 		if (!accessAllowed(expandDir))
 		{
-			Logger.getLogger(getClass()).warn("user " + this.getUid() + " tried to access directory outside the home directory: " + expandDir);
+			LogManager.getLogger(getClass()).warn("user " + this.getUid() + " tried to access directory outside the home directory: " + expandDir);
 			
 			try
 			{
@@ -57,7 +59,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 			}
 			catch (IOException ioex)
 			{
-				Logger.getLogger(getClass()).warn(ioex);
+				LogManager.getLogger(getClass()).warn(ioex);
 			}
 			
 			return;
@@ -221,7 +223,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 	            }
 	            catch (IOException ioex)
 	            {
-	                Logger.getLogger(getClass()).error(ioex);
+	                LogManager.getLogger(getClass()).error(ioex);
 	            }
 	        }
 		}
@@ -234,7 +236,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 
 		if (fileList == null)
 		{
-			Logger.getLogger(getClass()).warn("filelist is null for " + parentPath);
+			LogManager.getLogger(getClass()).warn("filelist is null for " + parentPath);
 			
 			dirTreeStatus.collapseDir(parentPath);
 			
@@ -351,7 +353,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 					}
 					catch (IOException ioex)
 					{
-						Logger.getLogger(getClass()).error(ioex);
+						LogManager.getLogger(getClass()).error(ioex);
 					}
 				}
 			}

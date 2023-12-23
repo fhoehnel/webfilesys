@@ -1,7 +1,9 @@
 package de.webfilesys.graphics;
 
 import java.util.ArrayList;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 
@@ -63,7 +65,7 @@ public class AutoThumbnailCreator extends ThumbnailCreatorBase implements Runnab
     
     public void run()
     {
-        Logger.getLogger(getClass()).info("AutoThumbnailCreator started");
+        LogManager.getLogger(getClass()).info("AutoThumbnailCreator started");
 
         Thread.currentThread().setPriority(1);
 
@@ -80,7 +82,7 @@ public class AutoThumbnailCreator extends ThumbnailCreatorBase implements Runnab
     				queue.remove(0);
     			}
     			
-    			Logger.getLogger(getClass()).debug("size of AutoThumbnailCreator queue: " + queue.size());
+    			LogManager.getLogger(getClass()).debug("size of AutoThumbnailCreator queue: " + queue.size());
     		}
 
             try
@@ -96,7 +98,7 @@ public class AutoThumbnailCreator extends ThumbnailCreatorBase implements Runnab
             }
     	}
 
-		Logger.getLogger(getClass()).info("AutoThumbnailCreator shutting down");
+		LogManager.getLogger(getClass()).info("AutoThumbnailCreator shutting down");
     }
     
     public synchronized void queuePath(String path, int scope)
@@ -111,9 +113,9 @@ public class AutoThumbnailCreator extends ThumbnailCreatorBase implements Runnab
     
     private void updateThumbnails(QueueElem queueElem)
     {
-        if (Logger.getLogger(getClass()).isDebugEnabled())
+        if (LogManager.getLogger(getClass()).isDebugEnabled())
         {
-            Logger.getLogger(getClass()).debug("updating thumbnail(s) of " + queueElem.getPath());
+            LogManager.getLogger(getClass()).debug("updating thumbnail(s) of " + queueElem.getPath());
         }
 		
 		if (queueElem.getScope() == SCOPE_TREE)

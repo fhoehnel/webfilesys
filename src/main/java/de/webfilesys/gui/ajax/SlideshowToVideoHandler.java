@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 
 import de.webfilesys.Constants;
@@ -25,7 +27,7 @@ import de.webfilesys.util.XmlUtil;
  */
 public class SlideshowToVideoHandler extends XmlRequestHandlerBase {
 	
-	private static Logger LOG = Logger.getLogger(SlideshowToVideoHandler.class);
+	private static Logger LOG = LogManager.getLogger(SlideshowToVideoHandler.class);
 	
 	public static final String LIST_PREFIX = "list-";
 	

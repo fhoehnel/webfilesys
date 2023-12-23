@@ -14,7 +14,9 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.util.CommonUtils;
 
@@ -163,7 +165,7 @@ public class FtpBackupHandler extends UserRequestHandler
         {
 			ftpClient.connect(ftpServerName);
 			
-			Logger.getLogger(getClass()).debug("FTP connect to " + ftpServerName + " response: " + ftpClient.getReplyString());
+			LogManager.getLogger(getClass()).debug("FTP connect to " + ftpServerName + " response: " + ftpClient.getReplyString());
 
 			int reply = ftpClient.getReplyCode();
 
@@ -185,16 +187,16 @@ public class FtpBackupHandler extends UserRequestHandler
 						{
 							if (!ftpClient.makeDirectory(subDir))
 							{
-								Logger.getLogger(getClass()).warn("FTP cannot create remote directory " + subDir);
+								LogManager.getLogger(getClass()).warn("FTP cannot create remote directory " + subDir);
 								remoteChdirOk = false;
 							}
 							else
 							{
-								Logger.getLogger(getClass()).debug("FTP created new remote directory " + subDir);
+								LogManager.getLogger(getClass()).debug("FTP created new remote directory " + subDir);
 									
 								if (!ftpClient.changeWorkingDirectory(subDir))
 								{
-									Logger.getLogger(getClass()).warn("FTP cannot chdir to remote directory " + subDir);
+									LogManager.getLogger(getClass()).warn("FTP cannot chdir to remote directory " + subDir);
 									remoteChdirOk = false;
 								}
 							}
@@ -221,13 +223,13 @@ public class FtpBackupHandler extends UserRequestHandler
 				}
 				else
 				{
-					Logger.getLogger(getClass()).info("FTP connect to " + ftpServerName + " login failed");
+					LogManager.getLogger(getClass()).info("FTP connect to " + ftpServerName + " login failed");
 					javascriptAlert("Login to FTP server " + ftpServerName + " failed");
 				}
 			}
 			else
 			{
-				Logger.getLogger(getClass()).warn("FTP connect to " + ftpServerName + " response: " + reply);
+				LogManager.getLogger(getClass()).warn("FTP connect to " + ftpServerName + " response: " + reply);
 				javascriptAlert("Login to FTP server " + ftpServerName + " failed");
 			}
 
@@ -239,12 +241,12 @@ public class FtpBackupHandler extends UserRequestHandler
         }
 		catch (SocketException sockEx)
 		{
-			Logger.getLogger(getClass()).warn(sockEx);
+			LogManager.getLogger(getClass()).warn(sockEx);
 			javascriptAlert("FTP transfer failed: " + sockEx);
 		}
 		catch (IOException ioEx)
 		{
-			Logger.getLogger(getClass()).warn(ioEx);
+			LogManager.getLogger(getClass()).warn(ioEx);
 			javascriptAlert("FTP transfer failed: " + ioEx);
 		}
 
@@ -434,16 +436,16 @@ public class FtpBackupHandler extends UserRequestHandler
 							{
 								if (!ftpClient.makeDirectory(subDir))
 								{
-									Logger.getLogger(getClass()).warn("FTP cannot create remote directory " + subDir);
+									LogManager.getLogger(getClass()).warn("FTP cannot create remote directory " + subDir);
                                     remoteChdirOk = false;
 								}
 								else
 								{
-									Logger.getLogger(getClass()).debug("FTP created new remote directory " + subDir);
+									LogManager.getLogger(getClass()).debug("FTP created new remote directory " + subDir);
 									
 									if (!ftpClient.changeWorkingDirectory(subDir))
 									{
-										Logger.getLogger(getClass()).warn("FTP cannot chdir to remote directory " + subDir);
+										LogManager.getLogger(getClass()).warn("FTP cannot chdir to remote directory " + subDir);
 										remoteChdirOk = false;
 									}
 								}
@@ -458,7 +460,7 @@ public class FtpBackupHandler extends UserRequestHandler
 
 								if (!ftpClient.changeWorkingDirectory(".."))
 								{
-									Logger.getLogger(getClass()).warn("FTP cannot chdir .. from " + subDir);
+									LogManager.getLogger(getClass()).warn("FTP cannot chdir .. from " + subDir);
 									return(false);
 								}
                             }
@@ -479,13 +481,13 @@ public class FtpBackupHandler extends UserRequestHandler
 						
 							if (!ftpClient.storeFile(localFile.getName(), fin))
 							{
-								Logger.getLogger(getClass()).warn("FTP put file " + localPath + "/" + localFile.getName() + " failed");
+								LogManager.getLogger(getClass()).warn("FTP put file " + localPath + "/" + localFile.getName() + " failed");
                         	
 								error = true;
 							}
 							else
 							{
-								Logger.getLogger(getClass()).debug("FTP put of file " + localPath + "/" + localFile.getName() + " successful");
+								LogManager.getLogger(getClass()).debug("FTP put of file " + localPath + "/" + localFile.getName() + " successful");
 								
 								filesTransferred ++;
 								
@@ -504,7 +506,7 @@ public class FtpBackupHandler extends UserRequestHandler
                         }
                         catch (IOException ioex)
                         {
-							Logger.getLogger(getClass()).warn("FTP put file " + localPath + "/" + localFile.getName() + " failed: " + ioex);
+							LogManager.getLogger(getClass()).warn("FTP put file " + localPath + "/" + localFile.getName() + " failed: " + ioex);
                       
                             output.println("<br>FTP put file " + localPath + "/" + localFile.getName() + " failed: " + ioex);
                       
@@ -516,7 +518,7 @@ public class FtpBackupHandler extends UserRequestHandler
 		}
 		else
 		{
-			Logger.getLogger(getClass()).warn("FTP local directory " + localPath + " is not readable");
+			LogManager.getLogger(getClass()).warn("FTP local directory " + localPath + " is not readable");
 			
 			return(false);
 		}

@@ -11,7 +11,9 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.util.CommonUtils;
 
@@ -78,7 +80,7 @@ public class LanguageManager
 
         if ((!languageDir.exists()) || (!languageDir.isDirectory()) || (!languageDir.canRead()))
         {
-        	Logger.getLogger(getClass()).error("language directory not found or not readable: " + languageDir);
+        	LogManager.getLogger(getClass()).error("language directory not found or not readable: " + languageDir);
              
             return;
         } 
@@ -158,7 +160,7 @@ public class LanguageManager
     {
         InputStreamReader configFile = null;
 
-        Logger.getLogger(getClass()).info("Loading Resources from " + configFilename);
+        LogManager.getLogger(getClass()).info("Loading Resources from " + configFilename);
 
         try
         {
@@ -170,12 +172,12 @@ public class LanguageManager
         }
         catch(FileNotFoundException fnfe)
         {
-            Logger.getLogger(getClass()).error("failed to load language resources", fnfe);
+            LogManager.getLogger(getClass()).error("failed to load language resources", fnfe);
             return(false);
         }
         catch(IOException ioex)
         {
-        	Logger.getLogger(getClass()).error("failed to load language resources", ioex);
+        	LogManager.getLogger(getClass()).error("failed to load language resources", ioex);
             return(false);
         }
 		finally
@@ -260,7 +262,7 @@ public class LanguageManager
 
         for (int i=0;i<languageNames.size();i++)
         {
-        	Logger.getLogger(getClass()).info("available language: " + (String) languageNames.get(i));
+        	LogManager.getLogger(getClass()).info("available language: " + (String) languageNames.get(i));
         }
     }
     

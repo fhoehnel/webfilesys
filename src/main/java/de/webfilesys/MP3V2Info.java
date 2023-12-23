@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.farng.mp3.MP3File;
 import org.farng.mp3.TagException;
 import org.farng.mp3.id3.AbstractID3v2;
@@ -124,13 +126,13 @@ public class MP3V2Info
 
         if ((!tmpFile.exists()) || (!tmpFile.isFile()))
         {
-            Logger.getLogger(getClass()).error("MP3 file not found: " + path);
+            LogManager.getLogger(getClass()).error("MP3 file not found: " + path);
             return;
         }
 
         if (!tmpFile.canRead())
         {
-            Logger.getLogger(getClass()).error("MP3 file is not readable: " + path);
+            LogManager.getLogger(getClass()).error("MP3 file is not readable: " + path);
             return;
         }
 
@@ -194,7 +196,7 @@ public class MP3V2Info
         }
         catch (IOException nfex)
         {
-            Logger.getLogger(getClass()).error("cannot read MP3 file: " + nfex);
+            LogManager.getLogger(getClass()).error("cannot read MP3 file: " + nfex);
         }
         catch (TagException tagEx)
         {
@@ -297,13 +299,13 @@ public class MP3V2Info
 
         if ((!tmpFile.exists()) || (!tmpFile.isFile()))
         {
-            Logger.getLogger(getClass()).error("MP3 file not found: " + fileName);
+            LogManager.getLogger(getClass()).error("MP3 file not found: " + fileName);
             return;
         }
 
         if (!tmpFile.canWrite())
         {
-            Logger.getLogger(getClass()).error("MP3 file is not writable: " + fileName);
+            LogManager.getLogger(getClass()).error("MP3 file is not writable: " + fileName);
             return;
         }
         
@@ -338,7 +340,7 @@ public class MP3V2Info
             if (mp3file.hasID3v2Tag()) {
                 id3v2 = mp3file.getID3v2Tag();
                 if (id3v2 instanceof ID3v2_4) {
-                    Logger.getLogger(getClass()).debug("cannot use existing ID3v2 tag of class : " + id3v2.getClass().getName());
+                    LogManager.getLogger(getClass()).debug("cannot use existing ID3v2 tag of class : " + id3v2.getClass().getName());
                     existingV2TagNotSupported = true;
                 }
             } else {
@@ -363,7 +365,7 @@ public class MP3V2Info
         }
         catch (IOException ioex)
         {
-            Logger.getLogger(getClass()).error("error writing MP3 tag");
+            LogManager.getLogger(getClass()).error("error writing MP3 tag");
         }
     }
 

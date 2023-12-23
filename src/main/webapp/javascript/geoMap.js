@@ -147,15 +147,15 @@
     function resizeAndShowPic() {
     	var picOnMapElem = document.getElementById("picOnMap");
     	
-    	var thumbDimensions = calculateAspectRatioFit(picOnMapElem.width, picOnMapElem.height, 400, 400);
+    	var thumbDimensions = calculateAspectRatioFit(picOnMapElem.width, picOnMapElem.height, 800, 600);
     	picOnMapElem.style.width = thumbDimensions.width + "px";
     	picOnMapElem.style.height = thumbDimensions.height + "px";
     	
-    	if (thumbDimensions.height < 399) {
+    	if (thumbDimensions.height < 599) {
         	var picContElem = document.getElementById("picOnMapCont");
         	picContElem.style.height = (thumbDimensions.height + 30) + "px";
     	}
-    	if (thumbDimensions.width < 399) {
+    	if (thumbDimensions.width < 799) {
         	var picContElem = document.getElementById("picOnMapCont");
         	picContElem.style.width = thumbDimensions.width + "px";
     	}
@@ -168,10 +168,12 @@
         const parameters = { "fileName": encodeURIComponent(picFileName) };
     
 	    xmlGetRequest("getFileDesc", parameters, function(responseXml) {
-
-            const fileDescription = responseXml.getElementsByTagName("result")[0].firstChild.nodeValue;        
-            if (fileDescription && (fileDescription.length > 0)) {
-                picOnMapElem.setAttribute("title", fileDescription);
+            const result = responseXml.getElementsByTagName("result")[0];
+            if (result.firstChild) {
+                const fileDescription = result.firstChild.nodeValue;        
+                if (fileDescription && (fileDescription.length > 0)) {
+                    picOnMapElem.setAttribute("title", fileDescription);
+                }
             }
     	});
     }

@@ -11,7 +11,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<AlarmEntry>>> implements Serializable
 {
@@ -95,9 +97,9 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
             }
         }
 
-		if (Logger.getLogger(getClass()).isDebugEnabled())
+		if (LogManager.getLogger(getClass()).isDebugEnabled())
 		{
-			Logger.getLogger(getClass()).debug("adding AlarmEntry to alarm index: " + newEvent);
+			LogManager.getLogger(getClass()).debug("adding AlarmEntry to alarm index: " + newEvent);
 		}
 
 		return(newEvent);
@@ -130,9 +132,9 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
 			{
 				if (nextEvent.isCloned())
 				{
-					if (Logger.getLogger(getClass()).isDebugEnabled())
+					if (LogManager.getLogger(getClass()).isDebugEnabled())
 					{
-						Logger.getLogger(getClass()).debug("removing AlarmEntry clone from alarm index: " + nextEvent);
+						LogManager.getLogger(getClass()).debug("removing AlarmEntry clone from alarm index: " + nextEvent);
 					}
 					
 					dayEventList.remove(nextEvent);
@@ -188,9 +190,9 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
 			{
 				dayEventList.remove(nextEvent);
 
-				if (Logger.getLogger(getClass()).isDebugEnabled())
+				if (LogManager.getLogger(getClass()).isDebugEnabled())
 				{
-					Logger.getLogger(getClass()).debug("removing AlarmEntry from alarm index " + nextEvent);
+					LogManager.getLogger(getClass()).debug("removing AlarmEntry from alarm index " + nextEvent);
 				}
 				
 				return(true);
@@ -210,20 +212,20 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
 
 		if (userRoot == null)
 		{
-	    	Logger.getLogger(getClass()).warn("AlarmEntry to move for user " + owner + " not found");
+	    	LogManager.getLogger(getClass()).warn("AlarmEntry to move for user " + owner + " not found");
 			return;
 		}
 
 		Vector<AlarmEntry> dayEventList = userRoot.get(dateKey);
 		if (dayEventList == null)
 		{
-	    	Logger.getLogger(getClass()).warn("day event list for user " + owner + " not found");
+	    	LogManager.getLogger(getClass()).warn("day event list for user " + owner + " not found");
 			return;
 		}
 
 		if (!dayEventList.remove(entryToMove))
 		{
-	    	Logger.getLogger(getClass()).warn("AlarmEntry to remove not found");
+	    	LogManager.getLogger(getClass()).warn("AlarmEntry to remove not found");
 		}
 		
 		Integer newDateKey = getDateKey(entryToMove.getEventDate());
@@ -237,9 +239,9 @@ public class AlarmIndex extends Hashtable<String, Hashtable<Integer, Vector<Alar
 			
 		dayEventList.add(entryToMove);
 
-		if (Logger.getLogger(getClass()).isDebugEnabled())
+		if (LogManager.getLogger(getClass()).isDebugEnabled())
 		{
-			Logger.getLogger(getClass()).debug("AlarmEntry moved from " + oldEventTime + " to " + entryToMove.getEventDate());
+			LogManager.getLogger(getClass()).debug("AlarmEntry moved from " + oldEventTime + " to " + entryToMove.getEventDate());
 		}
 	}
     

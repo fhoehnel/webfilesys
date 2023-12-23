@@ -30,7 +30,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -88,7 +90,7 @@ public class DecorationManager extends Thread {
         }
         catch (ParserConfigurationException pcex)
         {
-        	Logger.getLogger(getClass()).error(pcex.toString());
+        	LogManager.getLogger(getClass()).error(pcex.toString());
         }
 
         modified = false;
@@ -117,7 +119,7 @@ public class DecorationManager extends Thread {
         
         if (decoFile.exists() && (!decoFile.canWrite()))
         {
-        	Logger.getLogger(getClass()).error("cannot write to decoration file " + decoFile.getAbsolutePath());
+        	LogManager.getLogger(getClass()).error("cannot write to decoration file " + decoFile.getAbsolutePath());
             return;
         }
 
@@ -131,9 +133,9 @@ public class DecorationManager extends Thread {
                 
                 xmlOutFile = new OutputStreamWriter(fos, "UTF-8");
                 
-                if (Logger.getLogger(getClass()).isDebugEnabled())
+                if (LogManager.getLogger(getClass()).isDebugEnabled())
                 {
-                    Logger.getLogger(getClass()).debug("Saving decorations to file " + decoFile.getAbsolutePath());
+                    LogManager.getLogger(getClass()).debug("Saving decorations to file " + decoFile.getAbsolutePath());
                 }
                 
                 XmlUtil.writeToStream(decorationRoot, xmlOutFile);
@@ -144,7 +146,7 @@ public class DecorationManager extends Thread {
             }
             catch (IOException io1)
             {
-                Logger.getLogger(getClass()).error("error saving decoration to file " + decoFile.getAbsolutePath(), io1);
+                LogManager.getLogger(getClass()).error("error saving decoration to file " + decoFile.getAbsolutePath(), io1);
             }
             finally
             {
@@ -171,7 +173,7 @@ public class DecorationManager extends Thread {
            return(null);
        }
 
-       Logger.getLogger(getClass()).info("reading decorations from " + decorationFile.getAbsolutePath());
+       LogManager.getLogger(getClass()).info("reading decorations from " + decorationFile.getAbsolutePath());
 
        doc = null;
        
@@ -189,11 +191,11 @@ public class DecorationManager extends Thread {
        }
        catch (SAXException saxex)
        {
-           Logger.getLogger(getClass()).error("failed to load decoration from file : " + decorationFile.getAbsolutePath(), saxex);
+           LogManager.getLogger(getClass()).error("failed to load decoration from file : " + decorationFile.getAbsolutePath(), saxex);
        }
        catch (IOException ioex)
        {
-           Logger.getLogger(getClass()).error("failed to load decoration from file : " + decorationFile.getAbsolutePath(), ioex);
+           LogManager.getLogger(getClass()).error("failed to load decoration from file : " + decorationFile.getAbsolutePath(), ioex);
        }
        finally 
        {
@@ -402,16 +404,16 @@ public class DecorationManager extends Thread {
                 			
                 			modified = true;
                 			
-                	        if (Logger.getLogger(getClass()).isInfoEnabled()) {
-                	            Logger.getLogger(getClass()).info("removing folder decoration for non-existing icon " + icon);
+                	        if (LogManager.getLogger(getClass()).isInfoEnabled()) {
+                	            LogManager.getLogger(getClass()).info("removing folder decoration for non-existing icon " + icon);
                 	        }
                 		}
             		}
             	}
             }            
         	
-            if (Logger.getLogger(getClass()).isInfoEnabled()) {
-                Logger.getLogger(getClass()).info(decoGarbageCounter + " decorations for removed folders deleted");
+            if (LogManager.getLogger(getClass()).isInfoEnabled()) {
+                LogManager.getLogger(getClass()).info(decoGarbageCounter + " decorations for removed folders deleted");
             }
         }
     }
@@ -453,7 +455,7 @@ public class DecorationManager extends Thread {
                 	saveToFile();
                 }
 				
-                Logger.getLogger(getClass()).debug("DecorationManager ready for shutdown");
+                LogManager.getLogger(getClass()).debug("DecorationManager ready for shutdown");
                 
 				stop = true;
             }

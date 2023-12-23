@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.Constants;
 import de.webfilesys.FileComparator;
@@ -44,7 +46,7 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
 
 		if (!accessAllowed(path))
 		{
-			Logger.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
+			LogManager.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
 			
 			return;
 		}
@@ -53,7 +55,7 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
 		
 		if (!folder.exists())
 		{
-			Logger.getLogger(getClass()).error("folder not found: " + path);
+			LogManager.getLogger(getClass()).error("folder not found: " + path);
 			
 			return;
 		}

@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.util.MimeTypeMap;
@@ -68,7 +70,7 @@ public class ExifThumbRequestHandler extends UserRequestHandler
 		}
         catch (IOException ioEx)
         {
-        	Logger.getLogger(getClass()).warn(ioEx);
+        	LogManager.getLogger(getClass()).warn(ioEx);
         }
 	}
 }

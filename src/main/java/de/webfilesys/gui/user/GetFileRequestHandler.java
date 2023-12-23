@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.MetaInfManager;
 import de.webfilesys.ViewHandlerConfig;
@@ -64,13 +66,13 @@ public class GetFileRequestHandler extends UserRequestHandler
         
         if (!fileToSend.exists())
         {
-        	Logger.getLogger(getClass()).warn("requested file does not exist: " + filePath);
+        	LogManager.getLogger(getClass()).warn("requested file does not exist: " + filePath);
         	
         	error = true;
         }
         else if ((!fileToSend.isFile()) || (!fileToSend.canRead()))
         {
-        	Logger.getLogger(getClass()).warn("requested file is not a readable file: " + filePath);
+        	LogManager.getLogger(getClass()).warn("requested file is not a readable file: " + filePath);
         	
         	error = true;
         }
@@ -91,7 +93,7 @@ public class GetFileRequestHandler extends UserRequestHandler
     		}
             catch (IOException ioEx)
             {
-            	Logger.getLogger(getClass()).warn(ioEx);
+            	LogManager.getLogger(getClass()).warn(ioEx);
             }
         }
 
@@ -176,7 +178,7 @@ public class GetFileRequestHandler extends UserRequestHandler
 
 	        if (bytesWritten != fileSize)
 	        {
-	            Logger.getLogger(getClass()).warn(
+	            LogManager.getLogger(getClass()).warn(
 	                "only " + bytesWritten + " bytes of " + fileSize + " have been written to output");
 	        } 
 
@@ -192,7 +194,7 @@ public class GetFileRequestHandler extends UserRequestHandler
 		}
         catch (IOException ioEx)
         {
-        	Logger.getLogger(getClass()).warn(ioEx);
+        	LogManager.getLogger(getClass()).warn(ioEx);
         }
 		finally 
 		{

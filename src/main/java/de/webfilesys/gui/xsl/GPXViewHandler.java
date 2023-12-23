@@ -13,7 +13,9 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import com.ctc.wstx.exc.WstxParsingException;
 
@@ -116,17 +118,17 @@ public class GPXViewHandler extends UserRequestHandler {
 						// System.out.println("unhandled event: " + event);
 					}
 				} catch (WstxParsingException epex) {
-					Logger.getLogger(getClass()).warn("GPX parsing error", epex);
+					LogManager.getLogger(getClass()).warn("GPX parsing error", epex);
 				}
 			}
 
 			output.flush();
 		} catch (IOException e) {
-			Logger.getLogger(getClass()).error("failed to read GPX file", e);
+			LogManager.getLogger(getClass()).error("failed to read GPX file", e);
 		} catch (XMLStreamException xmlEx) {
-			Logger.getLogger(getClass()).error("error parsing XML stream", xmlEx);
+			LogManager.getLogger(getClass()).error("error parsing XML stream", xmlEx);
 		} catch (Exception e) {
-			Logger.getLogger(getClass()).error("failed to transform GPX file", e);
+			LogManager.getLogger(getClass()).error("failed to transform GPX file", e);
 		} finally {
 			if (gpxReader != null) {
 				try {

@@ -4,7 +4,9 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.imaging.jpeg.JpegMetadataReader;
@@ -75,7 +77,7 @@ public class CameraExifData {
 				            	tnDirectory.setObject(TAG_THUMBNAIL_DATA, tnData);
 				            }
 				        } catch (MetadataException e) {
-							Logger.getLogger(getClass()).error("failed to read thumbnail data", e);
+							LogManager.getLogger(getClass()).error("failed to read thumbnail data", e);
 				        }
 				    }
 				}	
@@ -100,7 +102,7 @@ public class CameraExifData {
 			thumbnailDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
 			ifd0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
 		} catch (Exception ex) {
-			Logger.getLogger(getClass()).warn("failed to extract exif data from file " + imgFileName + ": " + ex);
+			LogManager.getLogger(getClass()).warn("failed to extract exif data from file " + imgFileName + ": " + ex);
 		}
 	}
 
@@ -358,7 +360,7 @@ public class CameraExifData {
 			return;
 		}
 		if (!thumbnailDirectory.containsTag(TAG_THUMBNAIL_DATA)) {
-			Logger.getLogger(getClass()).debug("missing EXIF thumbnail data tag");
+			LogManager.getLogger(getClass()).debug("missing EXIF thumbnail data tag");
 			return;
 		}
 
@@ -367,7 +369,7 @@ public class CameraExifData {
 		try {
 			thumbData = thumbnailDirectory.getByteArray(TAG_THUMBNAIL_DATA);
 		} catch (Exception metaEx) {
-			Logger.getLogger(getClass()).warn(metaEx);
+			LogManager.getLogger(getClass()).warn(metaEx);
 			return;
 		}
 		
@@ -463,7 +465,7 @@ public class CameraExifData {
 				}
 			}
 		} catch (Exception mex) {
-			Logger.getLogger(getClass()).warn(mex);
+			LogManager.getLogger(getClass()).warn(mex);
 		}
 
 		return (latitude);
@@ -509,7 +511,7 @@ public class CameraExifData {
 				}
 			}
 		} catch (Exception mex) {
-			Logger.getLogger(getClass()).warn(mex);
+			LogManager.getLogger(getClass()).warn(mex);
 		}
 
 		return (longitude);

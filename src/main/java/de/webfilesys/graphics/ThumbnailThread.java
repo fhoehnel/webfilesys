@@ -1,6 +1,8 @@
 package de.webfilesys.graphics;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 
 import de.webfilesys.WebFileSys;
 
@@ -26,9 +28,9 @@ public class ThumbnailThread extends ThumbnailCreatorBase implements Runnable
 
     public void run()
     {
-        if (Logger.getLogger(getClass()).isDebugEnabled())
+        if (LogManager.getLogger(getClass()).isDebugEnabled())
         {
-            Logger.getLogger(getClass()).debug("starting thumbnail creator thread");
+            LogManager.getLogger(getClass()).debug("starting thumbnail creator thread");
         }
         
         WebFileSys.getInstance().setThumbThreadRunning(true);

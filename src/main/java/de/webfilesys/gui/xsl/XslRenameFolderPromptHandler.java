@@ -7,7 +7,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -48,7 +50,7 @@ public class XslRenameFolderPromptHandler extends XslRequestHandlerBase
 
 		if ((currentPath == null) || (currentPath.trim().length() == 0))
 		{
-			Logger.getLogger(getClass()).error("required parameter path missing");
+			LogManager.getLogger(getClass()).error("required parameter path missing");
 			
 			return;
 		}

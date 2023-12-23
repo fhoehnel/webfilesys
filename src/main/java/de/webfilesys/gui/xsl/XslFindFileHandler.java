@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -99,7 +101,7 @@ public class XslFindFileHandler extends XslRequestHandlerBase
                 toDate.setSeconds(59);
 			}
 		} catch (Exception ex) {
-			Logger.getLogger(getClass()).warn("invalid date format in search date range", ex);
+			LogManager.getLogger(getClass()).warn("invalid date format in search date range", ex);
 		}
 
         Category category = null;
@@ -207,7 +209,7 @@ public class XslFindFileHandler extends XslRequestHandlerBase
 		}
 		else
 		{
-		    Logger.getLogger(getClass()).error("cannot get dir entries for " + actPath);
+		    LogManager.getLogger(getClass()).error("cannot get dir entries for " + actPath);
 		}
 
 		fileList = null;
