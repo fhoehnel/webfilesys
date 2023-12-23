@@ -1001,6 +1001,11 @@ videoDeshakeStarted=The stabilization of the video(s) has been started. This can
 errorVideoDeshake=Failed to stabilize video.
 errorAddSilentAudio=Failed to add silent audio to video.
 
+# video duration sum
+button.videoDurationSum=video duration sum
+videoDurationSumResult=calculated duration of all videos in this folder
+videoDurationSumError=the duration of one or more video files could not be determined
+
 # slideshow video
 titleSlideshowVideo=Create slideshow video
 slideshowVideoResolution=video resolution

@@ -1004,6 +1004,11 @@ videoDeshakeStarted=Die Stabilisierung des/der Videos wurde gestartet und kann e
 errorVideoDeshake=Beim Stabilisieren des Videos ist ein Fehler aufgetreten.
 errorAddSilentAudio=Beim Hinzufügen von stillem Audio ist ein Fehler aufgetreten.
 
+# video duration sum
+button.videoDurationSum=Video-Gesamtlaufzeit
+videoDurationSumResult=Gesamtlaufzeit aller Videos in diesem Ordner
+videoDurationSumError=die Laufzeit mindestens eines Videos konnte nicht ermittelt werden
+
 # slideshow video
 titleSlideshowVideo=Slideshow-Video erstellen
 slideshowVideoResolution=Video-Auflösung

@@ -1017,6 +1017,25 @@ function addAudioToVideo(videoFilePath) {
 	});
 }
 
+function videoDurationSum() {
+	showHourGlass();
+
+    xmlGetRequest("video", {"cmd": "videoDurationSum"}, function(responseXml) {
+        const durationElem = responseXml.getElementsByTagName("duration")[0];
+        let result = "";
+        if (durationElem.firstChild) {
+            const duration = durationElem.firstChild.nodeValue;        
+            result = resourceBundle["videoDurationSumResult"] + ":<br/>" + duration + " hh:mm:ss";
+        }
+        const errorElem = responseXml.getElementsByTagName("error")[0];
+        if (errorElem) {
+        	result += "<br/><br/>(" + resourceBundle["videoDurationSumError"] + ")"
+        }
+    	hideHourGlass();
+        customAlert(result);
+    });
+}
+
 function initialSetReencodeCheckboxState(codec) {
 	if (codec == "h264") { 
 		document.getElementById("re-encodeCont").style.display = "inline";
