@@ -48,8 +48,6 @@ public class WebFileSys
 
 	public static final String VERSION = "Version 2.30.1-beta2 (23 Dec 2023)";
  
-    public static final String THUMB_DIR = "thumbnails";
-
     public static final String DEFAULT_MAIL_SENDER_ADDRESS = "WebFileSys@nowhere.com";
 
     public static final String DEFAULT_MAIL_SENDER_NAME = "WebFileSys";
@@ -1039,20 +1037,6 @@ public class WebFileSys
     public String getOpSysName()
     {
     	return(opSysName);
-    }
-    
-    public boolean is32bitWindows() 
-    {
-        return((opSysName != null)) &&  
-               (opSysName.equals("Windows NT") ||
-                opSysName.equals("Windows XP") ||
-                opSysName.equals("Windows 2003") ||
-                opSysName.equals("Windows Vista") ||
-                opSysName.equals("Windows 7") ||
-                opSysName.startsWith("Windows 8") ||
-                opSysName.startsWith("Windows 10") ||
-                opSysName.equals("Windows 2000") ||
-                opSysName.startsWith("Windows Server"));
     }
     
     public String getJavaVersion()

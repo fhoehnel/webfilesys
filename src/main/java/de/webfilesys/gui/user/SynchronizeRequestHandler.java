@@ -493,16 +493,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
     
     private void setReadWrite(String path)
     {
-        String execString;
-
-        if (WebFileSys.getInstance().is32bitWindows())
-        {
-            execString = "cmd /c attrib -R " + path;
-        }
-        else
-        {
-            execString = "attrib -R " + path;
-        }
+        String execString = "cmd /c attrib -R " + path;
 
         Process attribProcess = null;
 
