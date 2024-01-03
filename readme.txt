@@ -9,6 +9,7 @@ mvn install:install-file -Dfile=[your-path-to-project-webfilesys]/maven-reposito
 mvn install:install-file -Dfile=[your-path-to-project-webfilesys]/maven-repository/com/googlecode/compress-j2me/0.3/compress-j2me-0.3.jar -DgroupId=com.googlecode -DartifactId=compress-j2me -Dversion=0.3 -Dpackaging=jar
 mvn install:install-file -Dfile=[your-path-to-project-webfilesys]/maven-repository/com/ice/tar/javatar/2.3/javatar-2.3.jar -DgroupId=com.ice.tar -DartifactId=javatar -Dversion=2.3 -Dpackaging=jar
 mvn install:install-file -Dfile=[your-path-to-project-webfilesys]/maven-repository/com/keypoint/png-gif/1.0/png-gif-1.0.jar -DgroupId=com.keypoint -DartifactId=png-gif -Dversion=1.0 -Dpackaging=jar
+mvn install:install-file -Dfile=[your-path-to-project-webfilesys]/maven-repository/mediachest/mediautil/1.0.0/mediautil-1.0.0.jar -DgroupId=mediachest -DartifactId=mediautil -Dversion=1.0.0 -Dpackaging=jar
 
 Use the command
   maven install
