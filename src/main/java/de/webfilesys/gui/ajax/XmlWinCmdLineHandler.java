@@ -60,22 +60,19 @@ public class XmlWinCmdLineHandler extends XmlRequestHandlerBase
 		
 		String execString = null;
 
-		if (WebFileSys.getInstance().is32bitWindows())
-		{
-			String cmdLineCmdFile = WebFileSys.getInstance().getConfigBaseDir() + "/" + CMD_LINE_BATCH_FILE;
-			
-			execString="cmd /k start " + cmdLineCmdFile + " " + path.substring(0,2) + " \"" + path + "\"";
+		String cmdLineCmdFile = WebFileSys.getInstance().getConfigBaseDir() + "/" + CMD_LINE_BATCH_FILE;
+		
+		execString="cmd /k start " + cmdLineCmdFile + " " + path.substring(0,2) + " \"" + path + "\"";
 
-			try
-			{
-				Runtime.getRuntime().exec(execString);
-				
-				success = true;
-			}
-			catch (IOException rte)
-			{
-				LogManager.getLogger(getClass()).error(rte);
-			}
+		try
+		{
+			Runtime.getRuntime().exec(execString);
+			
+			success = true;
+		}
+		catch (IOException rte)
+		{
+			LogManager.getLogger(getClass()).error(rte);
 		}
 		
 		Element resultElement = doc.createElement("result");

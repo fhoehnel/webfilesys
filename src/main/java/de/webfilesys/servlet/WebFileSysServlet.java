@@ -95,6 +95,7 @@ import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
 import de.webfilesys.gui.ajax.TestSubdirExistHandler;
 import de.webfilesys.gui.ajax.TextOnVideoHandler;
 import de.webfilesys.gui.ajax.VideoAddSilentAudioHandler;
+import de.webfilesys.gui.ajax.VideoDurationSumHandler;
 import de.webfilesys.gui.ajax.VideoFadeAudioHandler;
 import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
 import de.webfilesys.gui.ajax.XformImageHandler;
@@ -2240,6 +2241,11 @@ public class WebFileSysServlet extends ServletBase
         		    (new AnyVideoConcatHandler(req, resp, session, output, userid)).handleRequest(); 
                     return(true);
                 }
+                
+            	if (cmd.equals("videoDurationSum")) {
+        		    (new VideoDurationSumHandler(req, resp, session, output, userid)).handleRequest(); 
+        		    return(true);
+            	}
             }
         }
 

@@ -46,15 +46,11 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.30.1-beta1 (18 Sep 2023)";
+	public static final String VERSION = "Version 2.31.0 (21 Jan 2024)";
  
-    public static final String THUMB_DIR = "thumbnails";
-
     public static final String DEFAULT_MAIL_SENDER_ADDRESS = "WebFileSys@nowhere.com";
 
     public static final String DEFAULT_MAIL_SENDER_NAME = "WebFileSys";
-
-    public static final String LOG_CONFIG_FILE = "LogConfig.xml";
 
     public static final int OS_OS2 = 1;
     public static final int OS_WIN = 2;
@@ -1039,20 +1035,6 @@ public class WebFileSys
     public String getOpSysName()
     {
     	return(opSysName);
-    }
-    
-    public boolean is32bitWindows() 
-    {
-        return((opSysName != null)) &&  
-               (opSysName.equals("Windows NT") ||
-                opSysName.equals("Windows XP") ||
-                opSysName.equals("Windows 2003") ||
-                opSysName.equals("Windows Vista") ||
-                opSysName.equals("Windows 7") ||
-                opSysName.startsWith("Windows 8") ||
-                opSysName.startsWith("Windows 10") ||
-                opSysName.equals("Windows 2000") ||
-                opSysName.startsWith("Windows Server"));
     }
     
     public String getJavaVersion()

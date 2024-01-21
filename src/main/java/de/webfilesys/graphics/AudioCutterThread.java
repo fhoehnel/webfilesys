@@ -75,7 +75,7 @@ public class AudioCutterThread extends Thread {
                 progNameAndParams.add("copy");
                 progNameAndParams.add("-ss");
                 progNameAndParams.add(startTime);
-                progNameAndParams.add("-t");
+                progNameAndParams.add("-to");
                 progNameAndParams.add(endTime);
                 progNameAndParams.add(targetFilePath);
                 

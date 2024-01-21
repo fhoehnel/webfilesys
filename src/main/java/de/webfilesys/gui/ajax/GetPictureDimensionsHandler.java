@@ -75,18 +75,17 @@ public class GetPictureDimensionsHandler extends XmlRequestHandlerBase {
 		try {
 			ScaledImage scaledImage = new ScaledImage(picFile.getAbsolutePath(), 100, 100);
 
-            CameraExifData exifData = new CameraExifData(picFile.getAbsolutePath());
-            
-            int picWidth;
-            int picHeight;
-            if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
-                // rotated
-            	picWidth = scaledImage.getRealHeight();
-            	picHeight = scaledImage.getRealWidth();
-            } else {
-            	picWidth = scaledImage.getRealWidth();
-            	picHeight = scaledImage.getRealHeight();
-            }
+        	int picWidth = scaledImage.getRealWidth();
+        	int picHeight = scaledImage.getRealHeight();
+
+            if (scaledImage.getImageType() == ScaledImage.IMG_TYPE_JPEG) {
+                CameraExifData exifData = new CameraExifData(picFile.getAbsolutePath());
+                if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+                    // rotated
+                	picWidth = scaledImage.getRealHeight();
+                	picHeight = scaledImage.getRealWidth();
+                } 
+			}
 			
 	        XmlUtil.setChildText(resultElement, "xpix", Integer.toString(picWidth));
 	        XmlUtil.setChildText(resultElement, "ypix", Integer.toString(picHeight));

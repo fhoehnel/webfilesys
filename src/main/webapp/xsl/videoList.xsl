@@ -364,6 +364,12 @@
                   <xsl:attribute name="style">display:none</xsl:attribute>
                 </xsl:if>
               </input> 
+
+              <xsl:if test="/fileList/file">
+                <input type="button" resource="button.videoDurationSum" id="videoLengthButton">
+                  <xsl:attribute name="onclick">javascript:videoDurationSum()</xsl:attribute>
+                </input> 
+              </xsl:if>
                     
             </xsl:if>
                   

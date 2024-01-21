@@ -59,16 +59,7 @@ public class XslSwitchReadonlyHandler extends XmlRequestHandlerBase
 			}
 			else
 			{
-				String execString;
-
-				if (WebFileSys.getInstance().is32bitWindows())
-				{
-					execString = "cmd /c attrib -R " + path;
-				}
-				else
-				{
-					execString = "attrib -R " + path;
-				}
+				String execString = "cmd /c attrib -R " + path;
 
 				Process attribProcess=null;
 

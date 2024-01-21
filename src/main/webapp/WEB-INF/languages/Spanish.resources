@@ -1002,6 +1002,11 @@ videoDeshakeStarted=Se ha iniciado la estabilización del vídeo / de los vídeo
 errorVideoDeshake=Error al estabilización del archivo de vídeo.
 errorAddSilentAudio=No se pudo agregar audio silencioso al vídeo.
 
+# video duration sum
+button.videoDurationSum=duración suma total
+videoDurationSumResult=duración total de todos los videos en esta carpeta
+videoDurationSumError=no se pudo determinar la duración de uno o más archivos de vídeo
+
 # slideshow video
 titleSlideshowVideo=Crear video de diapositivas
 slideshowVideoResolution=resolución del vídeo
