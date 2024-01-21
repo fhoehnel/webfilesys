@@ -46,13 +46,11 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.30.1-beta2 (23 Dec 2023)";
+	public static final String VERSION = "Version 2.31.0 (21 Jan 2024)";
  
     public static final String DEFAULT_MAIL_SENDER_ADDRESS = "WebFileSys@nowhere.com";
 
     public static final String DEFAULT_MAIL_SENDER_NAME = "WebFileSys";
-
-    public static final String LOG_CONFIG_FILE = "LogConfig.xml";
 
     public static final int OS_OS2 = 1;
     public static final int OS_WIN = 2;
