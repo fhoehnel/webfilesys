@@ -2410,6 +2410,7 @@ a.folderTreeIcon {
 a.folderTreeIcon span.icon-font,
 div.fastpath.last span.icon-font,
 div.findFileResult span.icon-font {
+    font-size: 16px;
 	vertical-align: bottom;
 	margin-right: 2px;
 }
