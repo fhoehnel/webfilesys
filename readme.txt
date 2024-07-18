@@ -16,8 +16,7 @@ Use the command
 to build the webfilesys.war web application archive which can be deployed
 in any servlet container.
 
-You can import the project into the Eclipse IDE using the provided
-project files (".project", ".classpath", ".setting/*").
+You can import the project into the Eclipse IDE using the provided project files (".project", ".classpath", ".setting/*").
 
 The ant script "build-hotdeploy.xml" can be used to copy changed
 files to the deploy target of the exploaded webfilesys webapp
