@@ -46,7 +46,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.31.0 (21 Jan 2024)";
+	public static final String VERSION = "Version 2.31.1-beta1 (08 Aug 2024)";
  
     public static final String DEFAULT_MAIL_SENDER_ADDRESS = "WebFileSys@nowhere.com";
 
