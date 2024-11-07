@@ -53,7 +53,13 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		if (relPath != null)
 		{
-		    path = this.getAbsolutePath(relPath);
+			if (relPath.indexOf("..") >= 0) {
+				// Hacker attack?
+				LogManager.getLogger(getClass()).warn("potential hacker attack with relPath: " + relPath);
+				relPath = File.separator;
+			}
+
+			path = this.getAbsolutePath(relPath);
 		}
 		else
 		{

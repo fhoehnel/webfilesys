@@ -374,21 +374,22 @@ public class FileLinkSelector
 		if ((!dirFile.exists()) || (!dirFile.canRead())) {
 			return(filesAndLinks);
 		}
-		
-    	Arrays.stream(dirFile.listFiles())
+
+		File[] fileList = dirFile.listFiles();
+		if (fileList == null) {
+			LogManager.getLogger(getClass()).warn("file list is null for path " + path);
+			return(filesAndLinks);
+		}
+
+    	Arrays.stream(fileList)
             .filter(file -> file.isFile() && file.canRead())
  	        .forEach(file -> filesAndLinks.add(new FileContainer(file.getName(), file)));
 
 		ArrayList<FileLink> linkList = MetaInfManager.getInstance().getListOfLinks(path);
-        
-        if (linkList != null)
-        {
-        	for (int i=0;i<linkList.size();i++)
-        	{
-        		filesAndLinks.add(new FileContainer((FileLink) linkList.get(i)));
-        	}
+        if (linkList != null) {
+			linkList.forEach(link -> filesAndLinks.add(new FileContainer(link)));
         }
-        
+
         return(filesAndLinks);
     }
     

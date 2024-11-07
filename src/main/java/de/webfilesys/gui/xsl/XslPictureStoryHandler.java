@@ -62,6 +62,12 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 	        
 	        if ((relativePath != null) && (relativePath.trim().length() > 0))
 	        {
+				if (relativePath.indexOf("..") >= 0) {
+					// Hacker attack?
+					LogManager.getLogger(getClass()).warn("potential hacker attack with relPath: " + relativePath);
+					relativePath = null;
+				}
+
 				String docRoot = userMgr.getDocumentRoot(uid);
 				
 				String docRootOS = docRoot;

@@ -197,6 +197,7 @@ public class KeyStoreViewHandler implements ViewHandler {
 			output.println("</head>");
 			output.println("<body style=\"font-family:Arial,Helvetica;font-size:16px\">");
 			output.println("<form method=\"get\" action=\"" + req.getRequestURI() + "\">");
+			output.println("<input type=\"hidden\" name=\"viewHandler\" value=\"true\">");
 			output.println("<label>password for keystore " + CommonUtils.extractFileName(keyStoreFilePath) + ":</label>");
 			output.println("<input type=\"password\" name=\"passwd\" style=\"width:120px;\">");
 			output.println("<input type=\"submit\" style=\"width:60px;\" value=\"OK\">");
