@@ -52,6 +52,13 @@ public class XslPictureStoryOwnWindowHandler extends XslRequestHandlerBase {
 			String relativePath = getParameter("relPath");
 
 			if ((relativePath != null) && (relativePath.trim().length() > 0)) {
+
+				if (relativePath.indexOf("..") >= 0) {
+					// Hacker attack?
+					LogManager.getLogger(getClass()).warn("potential hacker attack with relPath: " + relativePath);
+					relativePath = File.separator;
+				}
+
 				String docRoot = userMgr.getDocumentRoot(uid);
 
 				String docRootOS = docRoot;

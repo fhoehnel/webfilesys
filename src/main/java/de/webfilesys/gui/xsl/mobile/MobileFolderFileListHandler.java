@@ -81,6 +81,12 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
         String currentPath = null;
 
         String relativePath = getParameter("relPath");
+
+		if (relativePath.indexOf("..") >= 0) {
+			// Hacker attack?
+			LogManager.getLogger(getClass()).warn("potential hacker attack with relPath: " + relativePath);
+			relativePath = null;
+		}
         
         if (relativePath == null) 
         {

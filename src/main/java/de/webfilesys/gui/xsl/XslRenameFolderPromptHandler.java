@@ -38,13 +38,10 @@ public class XslRenameFolderPromptHandler extends XslRequestHandlerBase
 			return;
 		}
 
-		String relPath = null;
-		
 		String currentPath = getParameter("path");
 		
         if (isMobile()) 
         {
-            relPath = currentPath;
             currentPath = getAbsolutePath(currentPath);
         }
 

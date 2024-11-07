@@ -47,49 +47,55 @@ public class CameraExifData {
 	// reading the thumbnail data has been removed from the original metadata-extractor library to save memory
 	// https://github.com/drewnoakes/metadata-extractor/issues/276
 	static {
-		List<JpegSegmentMetadataReader> allReaders = (List<JpegSegmentMetadataReader>) JpegMetadataReader.ALL_READERS;
-		for (int n = 0, cnt = allReaders.size(); n < cnt; n++) {
-			if (allReaders.get(n).getClass() != ExifReader.class) {
-				continue;
-			}
-			
-			allReaders.set(n, new ExifReader() {
-				@Override
-				public void readJpegSegments(@NotNull final Iterable<byte[]> segments, @NotNull final Metadata metadata, @NotNull final JpegSegmentType segmentType) {
-					super.readJpegSegments(segments, metadata, segmentType);
+		
+		try {
+			List<JpegSegmentMetadataReader> allReaders = (List<JpegSegmentMetadataReader>) JpegMetadataReader.ALL_READERS;
+			for (int n = 0, cnt = allReaders.size(); n < cnt; n++) {
+				if (allReaders.get(n).getClass() != ExifReader.class) {
+					continue;
+				}
+				
+				allReaders.set(n, new ExifReader() {
+					@Override
+					public void readJpegSegments(@NotNull final Iterable<byte[]> segments, @NotNull final Metadata metadata, @NotNull final JpegSegmentType segmentType) {
+						super.readJpegSegments(segments, metadata, segmentType);
 
-				    for (byte[] segmentBytes : segments) {
-				        // Filter any segments containing unexpected preambles
-				        // if (!startsWithJpegExifPreamble(segmentBytes)) {
-				        if (!startsWithJpegExifPreamble2(segmentBytes)) {
-				        	continue;
-				        }
-				        
-						// Extract the thumbnail
-				        try {
-				            ExifThumbnailDirectory tnDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
+					    for (byte[] segmentBytes : segments) {
+					        // Filter any segments containing unexpected preambles
+					        // if (!startsWithJpegExifPreamble(segmentBytes)) {
+					        if (!startsWithJpegExifPreamble2(segmentBytes)) {
+					        	continue;
+					        }
+					        
+							// Extract the thumbnail
+					        try {
+					            ExifThumbnailDirectory tnDirectory = metadata.getFirstDirectoryOfType(ExifThumbnailDirectory.class);
 
-				            if (tnDirectory != null && tnDirectory.containsTag(ExifThumbnailDirectory.TAG_THUMBNAIL_OFFSET)) {
-				            	int offset = tnDirectory.getInt(ExifThumbnailDirectory.TAG_THUMBNAIL_OFFSET);
-				            	int length = tnDirectory.getInt(ExifThumbnailDirectory.TAG_THUMBNAIL_LENGTH);
-				            	byte[] tnData = new byte[length];
-				            	System.arraycopy(segmentBytes, JPEG_SEGMENT_PREAMBLE.length() + offset, tnData, 0, length);
-				            	tnDirectory.setObject(TAG_THUMBNAIL_DATA, tnData);
-				            }
-				        } catch (MetadataException e) {
-							LogManager.getLogger(getClass()).error("failed to read thumbnail data", e);
-				        }
+					            if (tnDirectory != null && tnDirectory.containsTag(ExifThumbnailDirectory.TAG_THUMBNAIL_OFFSET)) {
+					            	int offset = tnDirectory.getInt(ExifThumbnailDirectory.TAG_THUMBNAIL_OFFSET);
+					            	int length = tnDirectory.getInt(ExifThumbnailDirectory.TAG_THUMBNAIL_LENGTH);
+					            	byte[] tnData = new byte[length];
+					            	System.arraycopy(segmentBytes, JPEG_SEGMENT_PREAMBLE.length() + offset, tnData, 0, length);
+					            	tnDirectory.setObject(TAG_THUMBNAIL_DATA, tnData);
+					            }
+					        } catch (MetadataException e) {
+								LogManager.getLogger(getClass()).error("failed to read thumbnail data", e);
+					        }
+					    }
+					}	
+					
+				    private boolean startsWithJpegExifPreamble2(byte[] bytes) {
+				        return bytes.length >= JPEG_SEGMENT_PREAMBLE.length() &&
+				            new String(bytes, 0, JPEG_SEGMENT_PREAMBLE.length()).equals(JPEG_SEGMENT_PREAMBLE);
 				    }
-				}	
-				
-			    private boolean startsWithJpegExifPreamble2(byte[] bytes) {
-			        return bytes.length >= JPEG_SEGMENT_PREAMBLE.length() &&
-			            new String(bytes, 0, JPEG_SEGMENT_PREAMBLE.length()).equals(JPEG_SEGMENT_PREAMBLE);
-			    }
-				
-			});
-			break;
+					
+				});
+				break;
+			}
+		} catch (Throwable t) {
+			LogManager.getLogger(CameraExifData.class).error("failed to initialize CameraExifData", t);
 		}
+		
 	}	
 	
 	public CameraExifData(String imgFileName) {

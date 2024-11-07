@@ -1,1 +1,5 @@
 /target/
+.settings/
+build-hotdeploy-local.xml
+build-hotdeploy.xml.org
+.idea/
