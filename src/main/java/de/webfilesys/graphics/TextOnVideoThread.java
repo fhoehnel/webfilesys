@@ -82,7 +82,9 @@ public class TextOnVideoThread extends Thread {
             	fontFilePath = fontFilePath + File.separator;
             }
             fontFilePath = fontFilePath + "fonts" + File.separator + "GoogleKiteOne.woff";
-            
+
+            fontFilePath = fontFilePath.replace("\\", "\\\\").replace(":", "\\:");
+
             String textYPositionParam = "(h-text_h)/2";
             if (textPosition == TEXT_POSITION_TOP) {
             	textYPositionParam = "60";
@@ -99,8 +101,8 @@ public class TextOnVideoThread extends Thread {
             
             progNameAndParams.add("-vf");
             
-            progNameAndParams.add("drawtext='fontfile=" + fontFilePath + ": text=" + text + ": fontcolor=" + textColor + ": fontsize=" + textSize + ": box=1: boxcolor=black@0: boxborderw=5: x=(w-text_w)/2: y=" + textYPositionParam + "'");
-            
+            progNameAndParams.add("drawtext='fontfile=" + fontFilePath + ":text=" + text + ":fontcolor=" + textColor + ":fontsize=" + textSize + ":box=1:boxcolor=black@0:boxborderw=5:x=(w-text_w)/2:y=" + textYPositionParam + "'");
+
             progNameAndParams.add("-codec:a");
             progNameAndParams.add("copy");
             
