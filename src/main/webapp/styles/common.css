@@ -383,6 +383,12 @@ a.dirtree {
     vertical-align: middle;
 }
 
+@media (pointer:coarse) {
+    a.dirtree {
+        font-size: 20px;
+    }
+}
+
 a.dir {
     font-size:13px;
     color:black;
@@ -450,6 +456,15 @@ a.fn {
     font-weight:bold;
     text-decoration:none;
     word-wrap: break-word;
+}
+
+@media (pointer:coarse) {
+    a.fn {
+        font-size:18px;
+    }
+    .thumbnailCont a.fn {
+        font-size:16px;
+	}
 }
 
 a.fn:hover {
@@ -2361,6 +2376,12 @@ input[type=checkbox].big {
 	position: relative;
 }
 
+@media (pointer:coarse) {
+	input[type=checkbox].big {
+	    margin-left: 0;
+	}
+}
+
 input[type=checkbox].big:active,
 input[type=checkbox].big:checked:active {
 	box-shadow: 0 1px 2px rgba(0,0,0,0.05);
@@ -2414,13 +2435,21 @@ div.findFileResult span.icon-font {
 	vertical-align: bottom;
 	margin-right: 2px;
 }
-	
+
 a.folderTreeIcon span.icon-font:before,
 div.fastpath.last span.icon-font:before,
 div.findFileResult span.icon-font {
 	font-size: 16px;
 	font-weight: bold;
     color: #806000;
+}
+
+@media (pointer:coarse) {
+    a.folderTreeIcon span.icon-font:before,
+    div.fastpath.last span.icon-font:before,
+    div.findFileResult span.icon-font {
+        font-size: 22px;
+    }
 }
 
 a.folderTreeIcon span.icon-font.folderCurrent:before {
