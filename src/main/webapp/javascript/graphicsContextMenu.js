@@ -30,7 +30,7 @@ function jsContextMenu(fileName, imgType, domId) {
     scriptPreparedFile = insertDoubleBackslash(fileName);
         
     addContextMenuHead(menuDiv, shortFileName);
-    
+	
     if (parent.readonly != 'true') {
     	
     	addContextMenuEntry(menuDiv, "delImg('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
@@ -87,11 +87,19 @@ function jsContextMenu(fileName, imgType, domId) {
     	addContextMenuEntry(menuDiv, "startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')", resourceBundle["startSlideshowHere"]);
     }
     
+	if (parent.clientIsLocal != 'true') {
+	    addContextMenuEntry(menuDiv, "downloadFile('" + scriptPreparedPath + "')", resourceBundle["label.download"]);
+	}
+	
     if (parent.readonly == 'true') {
         maxMenuHeight = 120;
     } else {
         maxMenuHeight = 380;
     }
+	
+	if (parent.clientIsLocal != 'true') {
+		maxMenuHeight += 20;
+	}
     
     positionMenuDiv(menuDiv, maxMenuHeight);
     menuDiv.style.visibility = 'visible';
@@ -210,6 +218,10 @@ function addCopyToClipboard(fileName)
 function addMoveToClipboard(fileName)
 {
     cutCopyToClip(fileName, 'addMove');
+}
+
+function downloadFile(path) {
+    window.location.href = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(path) + "&disposition=download";
 }
 
 function publishFile(path)
