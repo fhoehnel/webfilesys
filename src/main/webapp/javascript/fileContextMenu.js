@@ -74,50 +74,52 @@ function contextMenu(fileName) {
    	    if (addMoveAllowed) {
    	   	    addContextMenuEntry(menuDiv, "addMoveToClipboard('" + scriptPreparedFile + "')", resourceBundle["label.cutToClip"] + " +");
         }
-    }
 
-	if (parent.localEditor == 'true') {
-	   	addContextMenuEntry(menuDiv, "editLocal('" + scriptPreparedFile + "')", resourceBundle["label.edit"]);
-    } else {
-	   	addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedFile + "')", resourceBundle["label.edit"]);
-    }
-
-	if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR") || (fileExt == ".EAR")) {
-	   	addContextMenuEntry(menuDiv, "zip('" + scriptPreparedPath + "')", resourceBundle["label.unzip"]);
-    } else if ((fileExt == ".GZ")  || (fileExt == ".GZIP")) {
-	   	addContextMenuEntry(menuDiv, "gunzip('" + scriptPreparedPath + "')", resourceBundle["label.unzip"]);
-  	} else {
-	   	addContextMenuEntry(menuDiv, "zip('" + scriptPreparedPath + "')", resourceBundle["label.zip"]);
-    }
-
-    if (fileExt == ".TAR") {
-	   	addContextMenuEntry(menuDiv, "untar('" + scriptPreparedPath + "')", resourceBundle["label.untar"]);
-    }
-
-    if (parent.serverOS == 'ix') {
-        if (parent.webspaceUser != 'true') {
-		    if (fileExt == ".Z") {
-			   	addContextMenuEntry(menuDiv, "compress('" + scriptPreparedPath + "')", resourceBundle["label.uncompress"]);
-  		    } else {
-			   	addContextMenuEntry(menuDiv, "compress('" + scriptPreparedPath + "')", resourceBundle["label.compress"]);
-		    }
+		if (parent.localEditor == 'true') {
+	   	    addContextMenuEntry(menuDiv, "editLocal('" + scriptPreparedFile + "')", resourceBundle["label.edit"]);
+        } else {
+	   	    addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedFile + "')", resourceBundle["label.edit"]);
         }
-    } else { // win
-	   	addContextMenuEntry(menuDiv, "switchReadWrite('" + scriptPreparedPath + "')", resourceBundle["label.switchReadOnly"]);
-    }
+
+	    if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR") || (fileExt == ".EAR")) {
+	   	    addContextMenuEntry(menuDiv, "zip('" + scriptPreparedPath + "')", resourceBundle["label.unzip"]);
+        } else if ((fileExt == ".GZ")  || (fileExt == ".GZIP")) {
+	   	    addContextMenuEntry(menuDiv, "gunzip('" + scriptPreparedPath + "')", resourceBundle["label.unzip"]);
+  	    } else {
+	   	    addContextMenuEntry(menuDiv, "zip('" + scriptPreparedPath + "')", resourceBundle["label.zip"]);
+        }
+
+        if (fileExt == ".TAR") {
+	   	    addContextMenuEntry(menuDiv, "untar('" + scriptPreparedPath + "')", resourceBundle["label.untar"]);
+        }
+
+		if (parent.serverOS == 'ix') {
+            if (parent.webspaceUser != 'true') {
+		        if (fileExt == ".Z") {
+			   	    addContextMenuEntry(menuDiv, "compress('" + scriptPreparedPath + "')", resourceBundle["label.uncompress"]);
+  		        } else {
+			   	    addContextMenuEntry(menuDiv, "compress('" + scriptPreparedPath + "')", resourceBundle["label.compress"]);
+		        }
+            }
+        } else { // win
+   	        addContextMenuEntry(menuDiv, "switchReadWrite('" + scriptPreparedPath + "')", resourceBundle["label.switchReadOnly"]);
+        }
+	}
         
     if (parent.mailEnabled == 'true') {
 	   	addContextMenuEntry(menuDiv, "sendFile('" + scriptPreparedFile + "')", resourceBundle["label.sendfile"]);
     }
-        
-	if (fileExt == ".MP3") {
-	   	addContextMenuEntry(menuDiv, "editMP3('" + scriptPreparedPath + "')", resourceBundle["label.editmp3"]);
-	   	if (parent.ffmpegEnabled) {
-		   	addContextMenuEntry(menuDiv, "cutAudio('" + scriptPreparedPath + "')", resourceBundle["label.cutAudio"]);
-	   	}
-	} else {
-	   	addContextMenuEntry(menuDiv, "description('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
-    }
+    
+	if (parent.readonly != 'true') {
+	    if (fileExt == ".MP3") {
+	   	    addContextMenuEntry(menuDiv, "editMP3('" + scriptPreparedPath + "')", resourceBundle["label.editmp3"]);
+	   	    if (parent.ffmpegEnabled) {
+		   	    addContextMenuEntry(menuDiv, "cutAudio('" + scriptPreparedPath + "')", resourceBundle["label.cutAudio"]);
+	   	    }
+	    } else {
+	   	    addContextMenuEntry(menuDiv, "description('" + scriptPreparedPath + "')", resourceBundle["label.editMetaInfo"]);
+	    }
+	}
     
    	addContextMenuEntry(menuDiv, "comments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
         
