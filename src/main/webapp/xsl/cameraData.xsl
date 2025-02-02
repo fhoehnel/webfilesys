@@ -42,7 +42,7 @@
   
   <form accept-charset="utf-8" name="form1" style="padding-top:5px;">
 
-    <table class="dataForm" width="100%">
+    <table class="dataForm exifData" width="100%">
    
       <tr>
         <td colspan="2" class="formParm1">

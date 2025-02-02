@@ -2521,6 +2521,10 @@ div.zipEntry img {
 	margin-right: 4px;
 }
 
+table.exifData td:first-child {
+	white-space: nowrap;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;
