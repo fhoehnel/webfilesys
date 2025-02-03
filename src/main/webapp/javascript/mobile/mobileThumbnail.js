@@ -47,8 +47,8 @@ function mobilePicturePopup(filePath, picIdx) {
     
     zoomImgObj.src = imgSrc;
 
-    var winWidth = determineWindowWidth();
-    var winHeight = determineWindowHeight();
+	const winWidth = document.documentElement.clientWidth;
+	const winHeight = document.documentElement.clientHeight;
 
     if (winWidth / xsize > winHeight / ysize) {
         zoomEndYSize = winHeight - 6;
@@ -89,8 +89,8 @@ function mobilePicturePopup(filePath, picIdx) {
 
     var picturePopup = document.getElementById('picturePopup');
 
-    picturePopup.style.top = yScrolled + Math.round((determineWindowHeight() - 3) / 2) - Math.round(zoomEndYSize / 2) + "px"; 
-    picturePopup.style.left = Math.round((determineWindowWidth() - 3) / 2) - Math.round(zoomEndXSize / 2) + "px"; 
+    picturePopup.style.top = yScrolled + Math.round((winHeight - 3) / 2) - Math.round(zoomEndYSize / 2) + "px"; 
+    picturePopup.style.left = Math.round((winWidth - 3) / 2) - Math.round(zoomEndXSize / 2) + "px"; 
 
     picturePopup.style.width = zoomEndXSize + 'px';
     picturePopup.style.height = zoomEndYSize + 'px';
