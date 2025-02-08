@@ -164,7 +164,7 @@ public class CameraExifData {
 			return (null);
 		}
 
-		return (exifDirectory.getString(ExifSubIFDDirectory.TAG_EXPOSURE_TIME));
+		return formatExposureTime(exifDirectory.getString(ExifSubIFDDirectory.TAG_EXPOSURE_TIME));
 	}
 
 	public String getAperture() {
@@ -531,4 +531,22 @@ public class CameraExifData {
 		return gpsDirectory.getString(GpsDirectory.TAG_LONGITUDE_REF);
 	}
 
+	
+	private String formatExposureTime(String origExifValue) {
+		String[] partsOfValue = origExifValue.split("/");
+		if (partsOfValue.length != 2) {
+			return origExifValue;
+		}
+		
+		try {
+			double value1 = Double.valueOf(partsOfValue[0]);
+			double value2 = Double.valueOf(partsOfValue[1]);
+			if (value2 / value1 < 2) {
+				return origExifValue;
+			}
+			return "1 / " + Math.round(value2 / value1);
+		} catch (NumberFormatException numEx) {
+			return origExifValue;
+		}
+	}
 }

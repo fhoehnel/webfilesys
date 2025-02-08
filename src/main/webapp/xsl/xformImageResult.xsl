@@ -32,7 +32,7 @@
     
     <br/>
                 
-    <input type="checkbox" class="cb2">
+    <input type="checkbox" class="big">
       <xsl:attribute name="name">list-<xsl:value-of select="@name" /></xsl:attribute>
     </input>
               
