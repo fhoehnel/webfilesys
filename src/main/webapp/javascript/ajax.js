@@ -306,13 +306,15 @@ function delFileAjax(path, deleteWriteProtected) {
             var deletedFile = deletedFileItem.firstChild.nodeValue; 
                
             var viewModeItem = responseXml.getElementsByTagName("viewMode")[0];
-            if ((viewModeItem) && (viewModeItem.firstChild.nodeValue == 2)) {
-            	if (typeof stopPolling == "function") {
-            		stopPolling();
-                }
-                removeDeletedFile(deletedFile);
-                hidePrompt();
-                return;
+            if (viewModeItem) {
+				if (viewModeItem.firstChild.nodeValue == 2 || viewModeItem.firstChild.nodeValue == 6) {
+            	    if (typeof stopPolling == "function") {
+            		    stopPolling();
+                    }
+                    removeDeletedFile(deletedFile);
+                    hidePrompt();
+                    return;
+				} 
             }                    
         } else {
             alert(resourceBundle["alert.delFileError"]);
