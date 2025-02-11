@@ -468,33 +468,35 @@
                   </span>
                 </div>
                 
-                <div>
-                  <xsl:value-of select="comments" />
-                  <xsl:value-of select="' '" />
-                  <label resource="label.comments"></label>
+                <xsl:if test="comments != '0' or ownerRating or visitorRating">
+                  <div>
+                    <xsl:value-of select="comments" />
+                    <xsl:value-of select="' '" />
+                    <label resource="label.comments"></label>
 
-                  &#160;
+                    &#160;
 
-                  <xsl:if test="ownerRating or visitorRating">
-                    <span class="thumbRating">
-                      <xsl:attribute name="title">
-                        <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
-                        <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
-                      </xsl:attribute>
-                      <span class="icon-font icon-star ratingStar"></span>
-                      <xsl:if test="ownerRating">
-                        <xsl:value-of select="ownerRating" />
-                        <xsl:if test="visitorRating">/</xsl:if>
-                      </xsl:if>
+                    <xsl:if test="ownerRating or visitorRating">
+                      <span class="thumbRating">
+                        <xsl:attribute name="title">
+                          <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
+                          <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
+                        </xsl:attribute>
+                        <span class="icon-font icon-star ratingStar"></span>
+                        <xsl:if test="ownerRating">
+                          <xsl:value-of select="ownerRating" />
+                          <xsl:if test="visitorRating">/</xsl:if>
+                        </xsl:if>
+                        <xsl:if test="visitorRating">
+                          <xsl:value-of select="visitorRating" />
+                        </xsl:if>
+                      </span>
                       <xsl:if test="visitorRating">
-                        <xsl:value-of select="visitorRating" />
+                        (<xsl:value-of select="numberOfVotes" />)
                       </xsl:if>
-                    </span>
-                    <xsl:if test="visitorRating">
-                      (<xsl:value-of select="numberOfVotes" />)
                     </xsl:if>
-                  </xsl:if>
-                </div>
+                  </div>
+                </xsl:if>
                 
               </div>
             
