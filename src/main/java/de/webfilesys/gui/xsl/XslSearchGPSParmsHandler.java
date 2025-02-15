@@ -35,7 +35,7 @@ public class XslSearchGPSParmsHandler extends XslRequestHandlerBase {
 	protected void process() {
 		String currentPath = getParameter("actpath");
 
-        if (isMobile()) {
+		if (isMobile()) {
             currentPath = getAbsolutePath(currentPath);
         } else {
             if ((currentPath == null) || (currentPath.trim().length() == 0)) {
@@ -79,7 +79,7 @@ public class XslSearchGPSParmsHandler extends XslRequestHandlerBase {
 		}
 		
 		if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
-		    XmlUtil.setChildText(searchParmsElement, "googleMapsAPIKey", googleMapsAPIKey, false);
+			XmlUtil.setChildText(searchParmsElement, "googleMapsAPIKey", googleMapsAPIKey, false);
 		}
 		
 		this.processResponse("searchGPSParms.xsl");

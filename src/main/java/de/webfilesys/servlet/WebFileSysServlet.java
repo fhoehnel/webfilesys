@@ -1742,10 +1742,9 @@ public class WebFileSysServlet extends ServletBase
             (new ResetExifOrientationHandler(req, resp, session, output, userid)).handleRequest();
             return(true);
         }
-        
-        
+
         if (command.equals("searchGPSParms")) {
-		    (new XslSearchGPSParmsHandler(req, resp, session, output, userid)).handleRequest(); 
+		    (new XslSearchGPSParmsHandler(req, resp, session, output, userid)).handleRequest();
             return(true);
         }
         

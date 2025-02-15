@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.util.GPSUtil;
 import org.apache.logging.log4j.LogManager;
 
 import de.webfilesys.Constants;
@@ -52,7 +53,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 
 	protected void process() {
 		String act_path = getParameter("actpath");
-		
+
 		if ((act_path == null) || (act_path.trim().length() == 0)) {
 			act_path = getCwd();
 		}
@@ -160,11 +161,6 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		output.println("<td class=\"formParm2\">");
 		output.println(CommonUtils.shortName(relativePath,40));
 		output.println("</td>");
-		output.println("<td rowspan=\"2\" class=\"formParm2\" valign=\"top\" align=\"right\">");
-		output.println("<form accept-charset=\"utf-8\" name=\"form2\">");
-		output.println("<input type=\"button\" name=\"cancelButton\" value=\"" + getResource("button.cancel","Cancel Search") + "\" onclick=\"cancelSearch()\">");
-		output.println("</form>");
-		output.println("</td>");
 		output.println("</tr>");
 
 		SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
@@ -172,7 +168,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		output.println("<tr><td class=\"formParm1\">");
 		output.println(getResource("label.dateRange","modification date range") + ":");
 		output.println("</td>");
-		output.println("<td colspan=\"2\" class=\"formParm2\">");
+		output.println("<td class=\"formParm2\">");
 		if (startDateProvided)
 		{
 			output.print(dateFormat.format(fromDate));
@@ -180,12 +176,19 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		output.print("<b> ... </b>");
 		output.println(dateFormat.format(toDate));
 		output.println("</td></tr>");
-        
-    	output.println("<tr><td class=\"formParm1\" colspan=\"3\">");
+
+		output.println("<tr id=\"cancelButtonCont\">");
+		output.println("<td colspan=\"2\" class=\"formParm2\" style=\"text-align:right\">");
+		output.println("<form accept-charset=\"utf-8\" name=\"form2\">");
+		output.println("<input type=\"button\" name=\"cancelButton\" value=\"" + getResource("button.cancel","Cancel Search") + "\" onclick=\"cancelSearch()\">");
+		output.println("</form>");
+		output.println("</tr>");
+
+    	output.println("<tr id=\"currentSearchDirLabelCont\"><td class=\"formParm1\" colspan=\"2\">");
 		output.println(getResource("label.currentSearchDir","searching in folder") + ":");
 		output.println("</td></tr>");
-		output.println("<tr><td class=\"formParm2\" colspan=\"3\">");
-		output.println("&nbsp;");
+		output.println("<tr id=\"currentSearchDirCont\"><td class=\"formParm2\" colspan=\"2\">");
+		output.println("<span id=\"currentSearchDir\"></span>");
 		output.println("</td></tr>");
 
 		output.println("</table>");
@@ -250,9 +253,11 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		
 		output.println("<script language=\"javascript\">");
 
-		output.println("document.form2.cancelButton.style.visibility='hidden';");
+		output.println("document.getElementById(\"cancelButtonCont\").style.display = \"none\";");
+		output.println("document.getElementById(\"currentSearchDirLabelCont\").style.display = \"none\";");
+		output.println("document.getElementById(\"currentSearchDirCont\").style.display = \"none\";");
 
-		output.println("scrollTo(1,50000);");
+		output.println("scrollTo(1,100000);");
 
 		output.println("customAlert('" + hitNumber + " " + getResource("label.matches","matches found") + "', '" + getResource("button.ok","OK") + "');");
 		
@@ -263,57 +268,47 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 	}
 	
 	public void searchTree(String currentPath, boolean includeSubdirs, long fromDate, long toDate, double latitude, double longitude, double distance) {
-		LogManager.getLogger(getClass()).warn("searchTree currentPath=" + currentPath);
-		
         if (currentPath.equals(searchResultDir)) {
             return;
         }
-        
+
+		if (session.getAttribute("searchCanceled") != null) {
+			return;
+		}
+
+		output.println("<script>document.getElementById(\"currentSearchDir\").innerHTML = \"" + CommonUtils.escapeForJavascript(CommonUtils.shortName(currentPath, 80))+ "\";</script>");
+		output.flush();
+
         File dirFile = new File(currentPath);
-        String[] fileList = dirFile.list();
+        File[] fileList = dirFile.listFiles();
 
 		if (fileList != null) {
-			for (int i = 0; i < fileList.length; i++) {
-                File tempFile = null;
-                if (currentPath.endsWith(File.separator)) {
-					tempFile = new File(currentPath + fileList[i]);
-				} else {
-					tempFile = new File(currentPath + File.separator + fileList[i]);
-				}
-
-        		LogManager.getLogger(getClass()).warn("searchTree current file=" + tempFile);
-                
-				if (tempFile.isDirectory()) {
+			for (File file : fileList) {
+				if (file.isDirectory()) {
 					if (includeSubdirs) {
-						if (!dirIsLink(tempFile)) {
-							if (!fileList[i].equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
-                                String subDir = null;
-								if (currentPath.endsWith(File.separator)) {
-									subDir = currentPath + fileList[i];
-								} else {
-									subDir = currentPath + File.separator + fileList[i];
-								}
-								searchTree(subDir, includeSubdirs, fromDate, toDate, latitude, longitude, distance);
+						if (!dirIsLink(file)) {
+							if (!file.getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
+								searchTree(file.getAbsolutePath(), includeSubdirs, fromDate, toDate, latitude, longitude, distance);
 							}
 						}
 					}
 				} else {
-					if (PatternComparator.patternMatch(fileList[i], "*.jpg") || PatternComparator.patternMatch(fileList[i], "*.jpeg")) {
-						if ((tempFile.lastModified() >= fromDate) && (tempFile.lastModified() <= toDate)) {
-							double locationDistance = locationInsideDistance(tempFile.getAbsolutePath(), latitude, longitude, distance);
-							if (locationDistance >= 0) {
-								String viewLink = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(tempFile.getAbsolutePath());
+					if (PatternComparator.patternMatch(file.getName(), "*.jpg") || PatternComparator.patternMatch(file.getName(), "*.jpeg")) {
+						if ((file.lastModified() >= fromDate) && (file.lastModified() <= toDate)) {
+							double locationDistance = getDistance(file.getAbsolutePath(), latitude, longitude);
+							if (locationDistance >= 0 && locationDistance <= distance) {
+								String viewLink = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(file.getAbsolutePath());
 								
-							    String iconImg = IconManager.getInstance().getIconForFileName(fileList[i]);
+							    String iconImg = IconManager.getInstance().getIconForFileName(file.getName());
 											
-								output.print("<a class=\"fn\" href=\"" + viewLink + "\" target=\"_blank\"><img border=\"0\" src=\"icons/" + iconImg + "\" align=\"absbottom\"> " + getHeadlinePath(tempFile.getAbsolutePath()) + "</a>");
+								output.print("<a class=\"fn\" href=\"" + viewLink + "\" target=\"_blank\"><img border=\"0\" src=\"icons/" + iconImg + "\" align=\"absbottom\"> " + getHeadlinePath(file.getAbsolutePath()) + "</a>");
 								output.print("<span class=\"searchMatchInContext\" style=\"margin-left:20px\">" + distNumFormat.format((locationDistance / 1000)) + " km</span>");
 								output.println("<br/>");
 								output.flush();
 								fileFindNum++;
 											
 								try {
-									metaInfMgr.createLink(searchResultDir, new FileLink(fileList[i], tempFile.getAbsolutePath(), uid));
+									metaInfMgr.createLink(searchResultDir, new FileLink(file.getName(), file.getAbsolutePath(), uid));
 								} catch (FileNotFoundException nfex) {
 									LogManager.getLogger(getClass()).error(nfex);
 								}
@@ -326,94 +321,18 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 			output.print("cannot get dir entries for " + currentPath + "<br>");
 			output.flush();
 		}
-		fileList = null;
 	}
 
-	private double locationInsideDistance(String filePath, double latitude, double longitude, double distance) {
+	private double getDistance(String filePath, double latitude, double longitude) {
 		long startTime = System.currentTimeMillis();
-		GeoTag geoTag = getGPSCoordinates(filePath);
+		GeoTag geoTag = GPSUtil.getGPSCoordinates(filePath);
 		if (geoTag == null) {
 			return -1;
 		}
 		LogManager.getLogger(getClass()).warn("GPS coordinates of " + filePath + ": " + geoTag.getLatitude() + ", " + geoTag.getLongitude() + "(" + (System.currentTimeMillis() - startTime) + " ms)");
-		double locationDistance = calculateDistance(latitude, longitude, geoTag.getLatitude(), geoTag.getLongitude());
+		double locationDistance = GPSUtil.calculateDistance(latitude, longitude, geoTag.getLatitude(), geoTag.getLongitude());
 		LogManager.getLogger(getClass()).warn("distance of " + filePath + ": " + locationDistance);
-		if (locationDistance <= distance) {
-			return locationDistance;
-		}
-		return -1;
+		return locationDistance;
 	}
-	
-	private GeoTag getGPSCoordinates(String filePath) {
-		GeoTag geoTag = MetaInfManager.getInstance().getGeoTag(filePath);
-		if (geoTag == null) {
-			CameraExifData exifData = new CameraExifData(filePath);
-			float latitude = exifData.getGpsLatitude();
-			float longitude = exifData.getGpsLongitude();
-			if (latitude < 0 || longitude < 0) {
-				return null;
-			}
-			if ("S".equals(exifData.getGpsLatitudeRef())) {
-				latitude = -latitude;
-			}
-			if ("W".equals(exifData.getGpsLongitudeRef())) {
-				longitude = -longitude;
-			}
-			geoTag = new GeoTag();
-			geoTag.setLatitude(latitude);
-			geoTag.setLongitude(longitude);
-		}
-		return geoTag;
-	}
-	
-    /**
-     * Berechnet die Entfernung zwischen zwei Koordinaten in Metern.
-     *
-     * @param ax Breite der ersten Koordinate in Dezimalgrad
-     * @param ay Laenge der ersten Koordinate in Dezimalgrad
-     * @param bx Breite der zweiten Koordinate in Dezimalgrad
-     * @param by Laenge der zweiten Koordinate in Dezimalgrad
-     * @return Distanz in Metern 
-     */
-    double calculateDistance(double ax, double ay, double bx, double by) {
-    
-        if ((ax == bx) && (ay == by)) {
-            return 0.0f;
-        }
-    
-        double x = 1.0f / 298.257223563f;  // Abplattung der Erde
-        
-        double a = 6378137.0f / 1000.0f;  // Aequatorradius der Erde in km
-        
-        double f = (ax + bx) / 2.0f;
-        
-        double g = (ax - bx) / 2.0f;
-        
-        double l = (ay - by) / 2.0f;
-        
-        // auf Bogenmass bringen
-        
-        f = (Math.PI / 180.0f) * f;
-        
-        g = (Math.PI / 180.0f) * g;
-        
-        l = (Math.PI / 180.0f) * l;
-        
-        double s = Math.pow(Math.sin(g), 2) * Math.pow(Math.cos(l), 2) + Math.pow(Math.cos(f), 2) * Math.pow(Math.sin(l), 2);
-        
-        double c = Math.pow(Math.cos(g), 2) * Math.pow(Math.cos(l), 2) + Math.pow(Math.sin(f), 2) * Math.pow(Math.sin(l), 2);
-        
-        double w = Math.atan(Math.sqrt(s / c));
-
-        double d = 2.0f * w * a;  
-        
-        double r = Math.sqrt(s * c) / w;
-        
-        double h1 = (3.0f * r - 1.0f) / (2.0f * c); 
-        
-        double h2 = (3.0f * r + 1.0f) / (2.0 * s); 
-        
-        return(1000.0f * d * (1.0f + x * h1 * Math.pow(Math.sin(f), 2) * Math.pow(Math.cos(g), 2) - x * h2 * Math.pow(Math.cos(f), 2) * Math.pow(Math.sin(g), 2))); 
-    }
 	
 }
