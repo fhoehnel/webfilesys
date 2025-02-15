@@ -228,6 +228,11 @@ function extendedDirMenu(shortPath, path, domId, dirIsRoot) {
     	}
     }
 
+	if (dirIsRoot == 'false') {
+    	addContextMenuEntry(menuDiv, "searchGPS('" + scriptPreparedPath + "', '" + folderName + "')", resourceBundle["label.searchGPS"]);
+	}
+	
+	
     if (parent.webspaceUser != 'true') {
     	addContextMenuEntry(menuDiv, "copyPathToClipboard('" + scriptPreparedPath + "')", resourceBundle["label.copyPath"]);
     }

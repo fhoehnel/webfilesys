@@ -105,6 +105,7 @@ label.menuSynchronize=Synchronize
 label.menuCancelSync=Cancel Synchronize
 label.watchFolder=watch folder change
 label.cloneFolder=clone folder
+label.searchGPS=GPS search
 
 # file context menu labels
 label.view=View
@@ -340,7 +341,9 @@ label.bytesfree=Bytes free
 
 # search window labels and buttons
 label.searchHead=file and fulltext search
+label.searchGPSHead=GPS search
 label.searchTitle=WebFileSys: Search
+label.searchGPSTitle=WebFileSys: GPS Search
 label.searchPath=Search in Folder tree
 label.filemask=file name filter
 label.searcharg=text in file/meta info
@@ -364,6 +367,8 @@ label.searchResultAsTree=show search results as tree
 button.keepSearchResults=Keep Search Results
 button.discardSearchResults=Discard Search Results
 datePickerFormat=mm/dd/yy
+label.searchGPSDistance=max distance (km)
+label.searchGPSDistanceMandatory=Distance is a mandatory field!
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Copy/Rename/Move

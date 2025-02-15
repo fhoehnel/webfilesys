@@ -105,6 +105,7 @@ label.menuSynchronize=Sincronizar
 label.menuCancelSync=Cancelar sincronización
 label.watchFolder=Monitor cambio de carpeta
 label.cloneFolder=Clonar carpeta
+label.searchGPS=Buscar GPS
 
 # file context menu labels
 label.view=Ver
@@ -340,7 +341,9 @@ label.bytesfree=Bytes libres
 
 # search window labels and buttons
 label.searchHead=Búsqueda de archivos y texto
+label.searchGPSHead=Búsqueda GPS
 label.searchTitle=WebFileSys: Búsqueda
+label.searchGPSTitle=WebFileSys: Búsqueda GPS
 label.searchPath=Buscar en árbol de carpeta
 label.filemask=filtro para nombre de archivo
 label.searcharg=texto en archivo
@@ -364,6 +367,8 @@ label.searchResultAsTree=mostrar resultados de búsqueda como árbol
 button.keepSearchResults=Conservar resultados de la búsqueda
 button.discardSearchResults=Descartar resultados de la búsqueda
 datePickerFormat=dd-mm-yy
+label.searchGPSDistance=distancia máxima (km)
+label.searchGPSDistanceMandatory=La distancia es obligatorio!
 
 # copy/rename/move labels and buttons
 label.copymovehead=Copiar/Cambiar nombre/Mover
