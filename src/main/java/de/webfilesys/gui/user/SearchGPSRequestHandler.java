@@ -30,14 +30,11 @@ import de.webfilesys.util.UTF8URLEncoder;
  * @author Frank Hoehnel
  */
 public class SearchGPSRequestHandler extends UserRequestHandler {
-	int fileFindNum;
-
 	MetaInfManager metaInfMgr = null;
 
-	String searchResultDir = null;
-	
 	DecimalFormat distNumFormat = null;
-	
+	DecimalFormat coordFormat = null;
+
 	public SearchGPSRequestHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -49,16 +46,18 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		metaInfMgr = MetaInfManager.getInstance();
 		distNumFormat = new DecimalFormat();
 		distNumFormat.setMaximumFractionDigits(3);
+		coordFormat = new DecimalFormat();
+		coordFormat.setMaximumFractionDigits(6);
 	}
 
 	protected void process() {
-		String act_path = getParameter("actpath");
+		String currentPath = getParameter("actpath");
 
-		if ((act_path == null) || (act_path.trim().length() == 0)) {
-			act_path = getCwd();
+		if ((currentPath == null) || (currentPath.trim().length() == 0)) {
+			currentPath = getCwd();
 		}
 
-		if (!checkAccess(act_path)) {
+		if (!checkAccess(currentPath)) {
 			return;
 		}
 
@@ -67,11 +66,11 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		String distanceParm = getParameter("distance");
 		String latParm = getParameter("latitude");
 		String longParm = getParameter("longitude");
-		double distance = 10;
+		double searchDistance = 10;
 		double latitude = 0;
 		double longitude = 0;
 		try {
-			distance = Double.parseDouble(distanceParm) * 1000;
+			searchDistance = Double.parseDouble(distanceParm) * 1000;
 			latitude = Double.parseDouble(latParm);
 			longitude = Double.parseDouble(longParm);
 		} catch (Exception ex) {
@@ -110,7 +109,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 
 		session.removeAttribute("searchCanceled");
 
-		searchResultDir = act_path;
+		String searchResultDir = currentPath;
 
 		if (!searchResultDir.endsWith(File.separator)) {
 			searchResultDir = searchResultDir + File.separator;
@@ -123,13 +122,18 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		output.print("<title>" + getResource("label.searchresults","Search Results") + ": GPS</title>");
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/icons.css\">");
+		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/fileIcons.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
+		output.println("<script src=\"/webfilesys/javascript/jquery/jquery.min.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");
+		output.println("<script src=\"/webfilesys/javascript/searchResult.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/util.js\" type=\"text/javascript\"></script>");
+		output.println("<script src=\"/webfilesys/javascript/previewFile.js\" type=\"text/javascript\"></script>");
 
-        output.println("<script language=\"javascript\">"); 
+		output.println("<script language=\"javascript\">");
 
         output.println("window.resizeTo(700, 600);");
 
@@ -138,11 +142,6 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
        	output.println("var searchResultDir = '" + UTF8URLEncoder.encode(searchResultDir) + "';");
         output.println("</script>"); 
         
-        if (!readonly)
-        {
-    		output.println("<script src=\"/webfilesys/javascript/search.js\" type=\"text/javascript\"></script>");
-        }
-		
 		output.println("</head>");
 		
 		output.print("<body class=\"search searchText\">");
@@ -153,7 +152,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		
 		output.println("<table class=\"dataForm\" width=\"100%\">");
 
-        String relativePath = this.getHeadlinePath(act_path);
+        String relativePath = this.getHeadlinePath(currentPath);
 
 		output.println("<tr><td class=\"formParm1\">");
 		output.println(getResource("label.directory","directory") + ":");
@@ -175,6 +174,22 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		}
 		output.print("<b> ... </b>");
 		output.println(dateFormat.format(toDate));
+		output.println("</td></tr>");
+
+		output.println("<tr><td class=\"formParm1\">");
+		output.println(getResource("label.latitudeSearchResult","latitude"));
+		output.print(", ");
+		output.println(getResource("label.longitudeSearchResult","longtitude"));
+		output.println("</td>");
+		output.println("<td class=\"formParm2\">");
+		output.print(coordFormat.format(latitude) + "&nbsp;&nbsp;" + coordFormat.format(longitude));
+		output.println("</td></tr>");
+
+		output.println("<tr><td class=\"formParm1\">");
+		output.println(getResource("label.searchGPSDistance","distance"));
+		output.println("</td>");
+		output.println("<td class=\"formParm2\">");
+		output.print(distNumFormat.format(searchDistance));
 		output.println("</td></tr>");
 
 		output.println("<tr id=\"cancelButtonCont\">");
@@ -206,43 +221,30 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 				searchArgText.append(": GPS");
 				searchArgText.append(" latitude=" + latitude);
 				searchArgText.append(" longitude=" + longitude);
-				searchArgText.append(" distance=" + distance + " km");
+				searchArgText.append(" distance=" + searchDistance + " km");
 				metaInfMgr.setDescription(searchResultDir + File.separator + ".", searchArgText.toString());
 			}
         }
 
-        int hitNumber = 0;
-        
-		fileFindNum = 0;
-			
-		searchTree(act_path, (includeSubdirs != null), fromDate.getTime(), toDate.getTime(), latitude, longitude, distance);
-
-		hitNumber = fileFindNum;
+		output.println("<ul id=\"searchResultList\" class=\"searchResultList\"></ul>");
 
 		output.println("<table class=\"dataForm\" width=\"100%\" style=\"margin-top:10px\">");
 		output.println("<tr>");
-		output.println("<td class=\"fileListFunct\" style=\"padding:5px 10px\">");
-		output.println(hitNumber + "  " + getResource("label.matches","matches found"));
+		output.println("<td id=\"matchCount\" class=\"fileListFunct\" style=\"padding:5px 10px\">");
+		output.println("0 " + getResource("label.matches","matches found"));
 		output.println("</td>");
 		output.println("</tr>");
 		
 		output.println("<tr>");
 		
         output.println("<td class=\"fileListFunct\">");		
-        output.println("<div class=\"buttonCont\">");		
-		
-        if (readonly)		
-		{
-			output.println("<input type=\"button\" value=\"" + getResource("button.closewin","Close Window") + "\" onClick=\"self.close()\">");
-		}
-		else
-		{
-			if (hitNumber > 0)
-			{		
-				output.println("<input type=\"button\" value=\"" + getResource("button.keepSearchResults","Keep Search Results") + "\" onClick=\"showResults()\">");
-			}
-        
-			output.println("<input type=\"button\" value=\"" + getResource("button.discardSearchResults","Discard Search Results") + "\" onClick=\"discardAndClose()\">");
+        output.println("<div class=\"buttonCont\">");
+
+		if (readonly) {
+			output.println("<input id=\"closeButton\" type=\"button\" style=\"visibility:hidden\" value=\"" + getResource("button.closewin", "Close Window") + "\" onClick=\"self.close()\">");
+		} else {
+			output.println("<input id=\"keepButton\" type=\"button\" style=\"visibility:hidden\" value=\"" + getResource("button.keepSearchResults","Keep Search Results") + "\" onClick=\"showResults()\">");
+			output.println("<input id=\"discardButton\" type=\"button\" style=\"visibility:hidden\" value=\"" + getResource("button.discardSearchResults","Discard Search Results") + "\" onClick=\"discardSearchResults()\">");
 		}
 
 		output.println("</div>");
@@ -250,30 +252,47 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 
 		output.println("</tr>");
 		output.println("</table>");
-		
-		output.println("<script language=\"javascript\">");
+
+		output.println("</body>");
+		output.flush();
+
+		int matchCount = searchTree(currentPath, (includeSubdirs != null), searchResultDir, fromDate.getTime(), toDate.getTime(), latitude, longitude, searchDistance);
+
+		output.println("<script>");
+
+		output.println("document.getElementById(\"matchCount\").innerHTML = \"" + matchCount + " " + getResource("label.matches","matches found") + "\";");
 
 		output.println("document.getElementById(\"cancelButtonCont\").style.display = \"none\";");
 		output.println("document.getElementById(\"currentSearchDirLabelCont\").style.display = \"none\";");
 		output.println("document.getElementById(\"currentSearchDirCont\").style.display = \"none\";");
 
+		if (readonly) {
+			output.println("document.getElementById(\"closeButton\").style.visibility = \"visible\";");
+		} else {
+			if (matchCount > 0) {
+				output.println("document.getElementById(\"keepButton\").style.visibility = \"visible\";");
+			}
+			output.println("document.getElementById(\"discardButton\").style.visibility = \"visible\";");
+		}
+
 		output.println("scrollTo(1,100000);");
 
-		output.println("customAlert('" + hitNumber + " " + getResource("label.matches","matches found") + "', '" + getResource("button.ok","OK") + "');");
-		
-		output.println("</script>");
+		output.println("customAlert('" + matchCount + " " + getResource("label.matches","matches found") + "', '" + getResource("button.ok","OK") + "', addPreviewHandler);");
 
-		output.println("</body></html>");
+		output.println("</script>");
+		output.println("</html>");
 		output.flush();
 	}
 	
-	public void searchTree(String currentPath, boolean includeSubdirs, long fromDate, long toDate, double latitude, double longitude, double distance) {
+	public int searchTree(String currentPath, boolean includeSubdirs, String searchResultDir,
+						  long fromDate, long toDate, double latitude, double longitude, double distance) {
+		int searchHits = 0;
         if (currentPath.equals(searchResultDir)) {
-            return;
+            return searchHits;
         }
 
 		if (session.getAttribute("searchCanceled") != null) {
-			return;
+			return searchHits;
 		}
 
 		output.println("<script>document.getElementById(\"currentSearchDir\").innerHTML = \"" + CommonUtils.escapeForJavascript(CommonUtils.shortName(currentPath, 80))+ "\";</script>");
@@ -288,25 +307,31 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 					if (includeSubdirs) {
 						if (!dirIsLink(file)) {
 							if (!file.getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
-								searchTree(file.getAbsolutePath(), includeSubdirs, fromDate, toDate, latitude, longitude, distance);
+								searchHits += searchTree(file.getAbsolutePath(), includeSubdirs, searchResultDir, fromDate, toDate, latitude, longitude, distance);
 							}
 						}
 					}
 				} else {
 					if (PatternComparator.patternMatch(file.getName(), "*.jpg") || PatternComparator.patternMatch(file.getName(), "*.jpeg")) {
-						if ((file.lastModified() >= fromDate) && (file.lastModified() <= toDate)) {
-							double locationDistance = getDistance(file.getAbsolutePath(), latitude, longitude);
-							if (locationDistance >= 0 && locationDistance <= distance) {
+						double locationDistance = getDistance(file.getAbsolutePath(), latitude, longitude);
+						if (locationDistance >= 0 && locationDistance <= distance) {
+							long fileDate = getExposureOrModificationaTime(file);
+							if (fileDate >= fromDate && fileDate <= toDate) {
 								String viewLink = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(file.getAbsolutePath());
-								
-							    String iconImg = IconManager.getInstance().getIconForFileName(file.getName());
-											
-								output.print("<a class=\"fn\" href=\"" + viewLink + "\" target=\"_blank\"><img border=\"0\" src=\"icons/" + iconImg + "\" align=\"absbottom\"> " + getHeadlinePath(file.getAbsolutePath()) + "</a>");
-								output.print("<span class=\"searchMatchInContext\" style=\"margin-left:20px\">" + distNumFormat.format((locationDistance / 1000)) + " km</span>");
-								output.println("<br/>");
+
+								String iconImg = IconManager.getInstance().getIconForFileName(file.getName());
+
+								String searchresultPath = CommonUtils.escapeForJavascript(getHeadlinePath(file.getAbsolutePath()));
+								String viewLinkForScript = CommonUtils.escapeForJavascript(viewLink);
+								String formattedDistance = distNumFormat.format(locationDistance / 1000);
+
+								output.println("<script>");
+								output.println("appendSearchResult(\"" + searchresultPath + "\", \"" + viewLinkForScript + "\", \"" + iconImg + "\", \"" + formattedDistance + "\");");
+								output.println("</script>");
+
 								output.flush();
-								fileFindNum++;
-											
+								searchHits++;
+
 								try {
 									metaInfMgr.createLink(searchResultDir, new FileLink(file.getName(), file.getAbsolutePath(), uid));
 								} catch (FileNotFoundException nfex) {
@@ -321,6 +346,18 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 			output.print("cannot get dir entries for " + currentPath + "<br>");
 			output.flush();
 		}
+		return searchHits;
+	}
+
+	private long getExposureOrModificationaTime(File file) {
+		CameraExifData exifData = new CameraExifData(file.getAbsolutePath());
+		if (exifData != null) {
+			Date exposureDate = exifData.getExposureDate();
+			if (exposureDate != null) {
+				return exposureDate.getTime();
+			}
+		}
+		return file.lastModified();
 	}
 
 	private double getDistance(String filePath, double latitude, double longitude) {

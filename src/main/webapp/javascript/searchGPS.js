@@ -166,3 +166,27 @@ function hideMap() {
     document.getElementById("mapFrame").style.visibility = 'hidden';
     document.getElementById("mapFrame").style.display = 'none';
 }
+
+function appendSearchResult(filePath, viewLink, iconImg, distance) {
+    const searchResult = document.createElement("li");
+
+    const searchResultLink = document.createElement("a");
+    searchResultLink.setAttribute("href", viewLink);
+    searchResultLink.setAttribute("class", "fn");
+    searchResultLink.setAttribute("target", "_blank");
+    searchResult.appendChild(searchResultLink);
+
+    const searchResultImg = document.createElement("img");
+    searchResultImg.setAttribute("src", "icons/" + iconImg);
+    searchResultLink.appendChild(searchResultImg);
+
+    const filePathText = document.createTextNode(filePath);
+    searchResultLink.appendChild(filePathText);
+
+    const distanceCont = document.createElement("span");
+    distanceCont.setAttribute("class", "searchMatchInContext");
+    distanceCont.innerHTML = distance + " km";
+    searchResult.appendChild(distanceCont);
+
+    document.getElementById("searchResultList").appendChild(searchResult);
+}

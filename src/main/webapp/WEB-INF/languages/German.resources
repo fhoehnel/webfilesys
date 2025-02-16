@@ -835,6 +835,8 @@ label.googleMapAllFiles=Geographische Position aller Bilder in Google Maps anzei
 label.geoTag=Geo-Tag Daten
 label.latitude=geogr. Breite in Dezimalgrad (Beispiel: 51.05 für Dresden)
 label.longitude=geogr. Länge in Dezimalgrad (Beispiel: 13.75 für Dresden)
+latitudeSearchResult=geogr. Breite
+longitudeSearchResult=geogr. Länge
 label.zoomFactor=Zoom Factor (1 = weit weg, 16 = ganz nah)
 label.geoTagInfoText=Text für Info-Fenster auf der Karte
 alert.missingLatitude=geogr. Breite ist ein Pflichtfeld

@@ -96,6 +96,8 @@ function dirContextMenu(domId, root) {
     	addContextMenuEntry(menuDiv, "mkfile('" + scriptPreparedPath + "')", resourceBundle["label.createfile"]);
 
     	addContextMenuEntry(menuDiv, "upload('" + scriptPreparedPath + "')", resourceBundle["label.upload"]);
+    } else {
+        addContextMenuEntry(menuDiv, "searchGPS('" + scriptPreparedPath + "', '" + folderName + "')", resourceBundle["label.searchGPS"]);
     }
 
     if ((parent.serverOS == 'ix')  && (parent.readonly != 'true') &&
@@ -228,11 +230,10 @@ function extendedDirMenu(shortPath, path, domId, dirIsRoot) {
     	}
     }
 
-	if (dirIsRoot == 'false') {
+	if (dirIsRoot === 'false') {
     	addContextMenuEntry(menuDiv, "searchGPS('" + scriptPreparedPath + "', '" + folderName + "')", resourceBundle["label.searchGPS"]);
 	}
-	
-	
+
     if (parent.webspaceUser != 'true') {
     	addContextMenuEntry(menuDiv, "copyPathToClipboard('" + scriptPreparedPath + "')", resourceBundle["label.copyPath"]);
     }

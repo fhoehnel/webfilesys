@@ -832,6 +832,8 @@ label.googleMapAllFiles=Show geographic location of all pictures in Google Maps
 label.geoTag=Geo-Tag Data
 label.latitude=latitude in decimal degrees (example: 51.05 for Dresden)
 label.longitude=longitude in decimal degrees (example: 13.75 for Dresden)
+latitudeSearchResult=latitude
+longitudeSearchResult=longitude
 label.zoomFactor=zoom factor (1 = far away view, 16 = closest view)
 label.geoTagInfoText=Text for info window on the map
 alert.missingLatitude=latitude is a required field
