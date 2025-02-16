@@ -105,6 +105,7 @@ label.menuSynchronize=Synchronize
 label.menuCancelSync=Cancel Synchronize
 label.watchFolder=watch folder change
 label.cloneFolder=clone folder
+label.searchGPS=GPS search
 
 # file context menu labels
 label.view=View
@@ -340,7 +341,9 @@ label.bytesfree=Bytes free
 
 # search window labels and buttons
 label.searchHead=file and fulltext search
+label.searchGPSHead=GPS search
 label.searchTitle=WebFileSys: Search
+label.searchGPSTitle=WebFileSys: GPS Search
 label.searchPath=Search in Folder tree
 label.filemask=file name filter
 label.searcharg=text in file/meta info
@@ -364,6 +367,8 @@ label.searchResultAsTree=show search results as tree
 button.keepSearchResults=Keep Search Results
 button.discardSearchResults=Discard Search Results
 datePickerFormat=mm/dd/yy
+label.searchGPSDistance=max distance (km)
+label.searchGPSDistanceMandatory=Distance is a mandatory field!
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Copy/Rename/Move
@@ -827,6 +832,8 @@ label.googleMapAllFiles=Show geographic location of all pictures in Google Maps
 label.geoTag=Geo-Tag Data
 label.latitude=latitude in decimal degrees (example: 51.05 for Dresden)
 label.longitude=longitude in decimal degrees (example: 13.75 for Dresden)
+latitudeSearchResult=latitude
+longitudeSearchResult=longitude
 label.zoomFactor=zoom factor (1 = far away view, 16 = closest view)
 label.geoTagInfoText=Text for info window on the map
 alert.missingLatitude=latitude is a required field

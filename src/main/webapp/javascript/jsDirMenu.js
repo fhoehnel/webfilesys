@@ -185,3 +185,9 @@ function cloneFolder(path, folderName) {
 	    newFolderName.select();
 	});
 }
+
+function searchGPS(path, folderName) { 
+	searchWin=open("/webfilesys/servlet?command=searchGPSParms&actpath=" + encodeURIComponent(path),"SearchGPS","scrollbars=yes,resizable=yes,width=500,height=500,left=80,top=10,screenX=80,screenY=10");
+	searchWin.focus();
+	searchWin.opener=self;
+}

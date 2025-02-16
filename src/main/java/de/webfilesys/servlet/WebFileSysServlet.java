@@ -206,6 +206,7 @@ import de.webfilesys.gui.user.ResetStatisticsRequestHandler;
 import de.webfilesys.gui.user.ResizeImageRequestHandler;
 import de.webfilesys.gui.user.ReturnToPrevDirHandler;
 import de.webfilesys.gui.user.RotatedExifThumbHandler;
+import de.webfilesys.gui.user.SearchGPSRequestHandler;
 import de.webfilesys.gui.user.SearchRequestHandler;
 import de.webfilesys.gui.user.SelfChangeUserRequestHandler;
 import de.webfilesys.gui.user.SwitchFileAgeColoringHandler;
@@ -1621,6 +1622,13 @@ public class WebFileSysServlet extends ServletBase
             return(true);
         }
            
+		if (command.equals("searchGPS"))
+		{
+			(new SearchGPSRequestHandler(req, resp, session, output, userid)).handleRequest(); 
+            
+            return(true);
+		}
+		
         if (command.equals("selectSyncFolder"))
         {
 			(new XmlSelectSyncFolderHandler(req, resp, session, output, userid)).handleRequest();
@@ -1732,6 +1740,11 @@ public class WebFileSysServlet extends ServletBase
 
         if (command.equals("resetExifOrientation")) {
             (new ResetExifOrientationHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
+        if (command.equals("searchGPSParms")) {
+		    (new XslSearchGPSParmsHandler(req, resp, session, output, userid)).handleRequest();
             return(true);
         }
         

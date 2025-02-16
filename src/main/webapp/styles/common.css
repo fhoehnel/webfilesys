@@ -2326,7 +2326,7 @@ div.editorButtonCont {
 }
 
 div.filePreviewCont {
-    position: absolute;
+    position: fixed;
     right: 10px;
     top: 10px;
     width: 400px;
@@ -2523,6 +2523,19 @@ div.zipEntry img {
 
 table.exifData td:first-child {
 	white-space: nowrap;
+}
+
+ul.searchResultList {
+    list-style-type: none;
+    padding-left: 6px;
+}
+
+ul.searchResultList li a {
+    margin-right: 20px;
+}
+
+ul.searchResultList img {
+    vertical-align: bottom;
 }
 
 @media (max-width: 400px) {

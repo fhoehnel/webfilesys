@@ -10,7 +10,8 @@ function addPreviewHandler() {
 		if (previewSupported($(this).text())) {
 			
 			$(this).mouseover(function() {
-		   		var timeoutFunctionCall = "previewSearchResult('" + $(this).text() + "')";
+				const fileNameOrPath = insertDoubleBackslash($(this).text());
+		   		var timeoutFunctionCall = "previewSearchResult('" + fileNameOrPath + "')";
 		   		filePreviewTimeout = setTimeout(timeoutFunctionCall, 500);
 			});			
 
@@ -21,7 +22,7 @@ function addPreviewHandler() {
 	});
 }
 
-function previewSearchResult(fileName) {
+function previewSearchResult(fileNameOrPath) {
 	filePreviewTimeout = null;
 
    	var filePreviewCont = document.createElement("div");
@@ -55,8 +56,12 @@ function previewSearchResult(fileName) {
 
 		previewPic.style.display = "inline";
 	};
-   	
-   	previewPic.src = "/webfilesys/servlet?command=getFile&fileName=" + encodeURIComponent(fileName) + "&cached=true";
+
+	if (fileNameOrPath.indexOf('/') >= 0 || fileNameOrPath.indexOf('\\') >= 0) {
+	    previewPic.src = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(fileNameOrPath) + "&cached=true";
+	} else {
+	    previewPic.src = "/webfilesys/servlet?command=getFile&fileName=" + encodeURIComponent(fileNameOrPath) + "&cached=true";
+	}
    	filePreviewCont.appendChild(previewPic);
    	
     filePreviewActive = true;

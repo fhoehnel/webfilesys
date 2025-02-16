@@ -105,6 +105,7 @@ label.menuSynchronize=Synchronisieren
 label.menuCancelSync=Synchronisieren abbrechen
 label.watchFolder=Änderungen überwachen
 label.cloneFolder=klonen
+label.searchGPS=GPS-Suche
 
 # file context menu labels
 label.view=Anzeigen
@@ -340,7 +341,9 @@ label.bytesfree=Freier Speicherplatz (Bytes)
 
 # search window labels and buttons
 label.searchHead=Datei- und Volltextsuche
+label.searchGPSHead=GPS-Suche
 label.searchTitle=WebFileSys: Suche
+label.searchGPSTitle=WebFileSys: GPS-Suche
 label.searchPath=Suche in Ordner (inkl. Unterordner)
 label.filemask=Suchmaske für Dateinamen
 label.searcharg=enthaltener Text
@@ -364,6 +367,8 @@ label.searchResultAsTree=Suchergebnisse als Baum zeigen
 button.keepSearchResults=Suchergebnisse behalten
 button.discardSearchResults=Suchergebnisse verwerfen
 datePickerFormat=dd.mm.yy
+label.searchGPSDistance=max Entfernung (km)
+label.searchGPSDistanceMandatory=Entfernung ist ein Pflichtfeld!
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Kopieren/Umbenennen/Verschieben
@@ -830,6 +835,8 @@ label.googleMapAllFiles=Geographische Position aller Bilder in Google Maps anzei
 label.geoTag=Geo-Tag Daten
 label.latitude=geogr. Breite in Dezimalgrad (Beispiel: 51.05 für Dresden)
 label.longitude=geogr. Länge in Dezimalgrad (Beispiel: 13.75 für Dresden)
+latitudeSearchResult=geogr. Breite
+longitudeSearchResult=geogr. Länge
 label.zoomFactor=Zoom Factor (1 = weit weg, 16 = ganz nah)
 label.geoTagInfoText=Text für Info-Fenster auf der Karte
 alert.missingLatitude=geogr. Breite ist ein Pflichtfeld
