@@ -22,11 +22,17 @@
 <link rel="stylesheet" href="javascript/jquery-ui-1.12.1.custom/jquery-ui.min.css" />
 <link rel="stylesheet" href="javascript/jquery-ui-1.12.1.custom/jquery-ui.structure.min.css" />
 <link rel="stylesheet" href="javascript/jquery-ui-1.12.1.custom/jquery-ui.theme.min.css" />
+<link rel="stylesheet" type="text/css" href="/webfilesys/styles/osmap.css" />
+<link rel="stylesheet" href="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.css" />
 
-<title resource="label.searchTitle"></title>
 
-<script type="text/javascript" src="javascript/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="javascript/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+  <title resource="label.searchTitle"></title>
+
+  <script type="text/javascript" src="javascript/jquery/jquery.min.js"></script>
+  <script type="text/javascript" src="javascript/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+
+  <script type="text/javascript" src="javascript/openStreetMaps/OpenLayers.js"></script>
+  <script type="text/javascript" src="https://npmcdn.com/leaflet@1.0.0-rc.2/dist/leaflet.js"></script>
 
 <script src="javascript/browserCheck.js" type="text/javascript"></script>
 <script src="javascript/ajaxCommon.js" type="text/javascript"></script>
@@ -48,7 +54,7 @@
 </head>
 
 <body class="search">
-  <xsl:attribute name="onload">setBundleResources();loadGoogleMapsAPIScriptCode('<xsl:value-of select="/searchParms/googleMapsAPIKey" />')</xsl:attribute>
+  <xsl:attribute name="onload">setBundleResources();</xsl:attribute>
 
   <div class="headline" resource="label.searchGPSHead" />
   
@@ -87,7 +93,7 @@
       
               <li style="padding-bottom:5px;">
                 <input type="button" resource="button.selectFromMap">
-                  <xsl:attribute name="onclick">showMap(true)</xsl:attribute>
+                  <xsl:attribute name="onclick">showOSMap()</xsl:attribute>
                 </input> 
               </li>
             </ul>
@@ -147,17 +153,13 @@
   <div id="calDiv" style="position:absolute;visibility:hidden;background-color:white;layer-background-color:white;"></div>
 
 </body>
-
   <div id="mapFrame" style="width:100%;height:100%;position:absolute;top:0px;left:0px;visibility:hidden;background-color:#d0d0d0;">
-    <div id="map" style="width:100%;height:100%;position:absolute;top:0px;left:0px;"></div>
+    <div id="mapDiv" style="width:100%;height:100%;position:absolute;top:0px;left:0px;"></div>
     
-    <div style="position:absolute;bottom:15px;left:10px;"> 
+    <div style="position:fixed;bottom:15px;left:10px;z-index:500">
       <form>
-        <input id="closeButton" type="button" resource="button.closeMap" onclick="hideMap()" 
+        <input id="closeButton" type="button" resource="button.closeMap" onclick="hideOSMap()"
             style="font-size:13px;font-weight:bold;color:black;"/>
-
-        <input id="selectButton" type="button" resource="button.save" onclick="javascript:selectLocation()" 
-            style="visibility:hidden;font-size:13px;font-weight:bold;color:black;"/>
       </form>
     </div>
   </div>

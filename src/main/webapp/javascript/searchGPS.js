@@ -1,3 +1,5 @@
+var map;
+
 function loadGoogleMapsAPIScriptCode(googleMapsApiKey) {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -96,77 +98,6 @@ function submitIfValid() {
     document.form1.submit();
 }
 
-function showMap(selectLocation) {
-    document.getElementById("mapFrame").style.display = 'block';
-
-    var latitude = document.form1.latitude.value;
-
-    var coordinatesNotYetSelected = false;
-
-    if (latitude == '') {
-        coordinatesNotYetSelected = true;
-            
-        if (selectLocation) {
-            latitude = '51.1';
-        } else {
-            alert(resourceBundle["alert.missingLatitude"]);
-            return;
-        }
-    }
-  
-    var longitude = document.form1.longitude.value;
-
-    if (longitude == '') {
-        coordinatesNotYetSelected = true;
-
-        if (selectLocation) {
-            longitude = '13.76';
-        } else {
-            alert(resourceBundle["alert.missingLongitude"]);
-            return;
-        }
-    }
-
-    var zoomFactor = 11;
-
-    var mapCenter = new google.maps.LatLng(latitude, longitude);
-    
-    var myOptions = {
-        zoom: zoomFactor,
-        center: mapCenter,
-        mapTypeId: google.maps.MapTypeId.HYBRID
-    }
-      
-    var map = new google.maps.Map(document.getElementById("map"), myOptions);      
-          
-    if (selectLocation) {
-        document.getElementById("selectButton").style.visibility = 'visible';
-    }
-
-    var markerPos = new google.maps.LatLng(latitude, longitude);
-
-    posMarker = new google.maps.Marker({
-        position: markerPos,
-    });
-
-    posMarker.setMap(map);
-        
-    google.maps.event.addListener(map, 'click', function(event) {
-        var clickedPos = event.latLng;
-        posMarker.setPosition(clickedPos);
-        // map.setCenter(clickedPos);
-    });        
-
-    document.getElementById("mapFrame").style.visibility = 'visible';
-}  
-
-function hideMap() {
-    document.getElementById("selectButton").style.visibility = 'hidden';
-
-    document.getElementById("mapFrame").style.visibility = 'hidden';
-    document.getElementById("mapFrame").style.display = 'none';
-}
-
 function appendSearchResult(filePath, viewLink, iconImg, distance) {
     const searchResult = document.createElement("li");
 
@@ -189,4 +120,38 @@ function appendSearchResult(filePath, viewLink, iconImg, distance) {
     searchResult.appendChild(distanceCont);
 
     document.getElementById("searchResultList").appendChild(searchResult);
+}
+
+function hideOSMap() {
+    document.getElementById("mapFrame").style.visibility = 'hidden';
+    document.getElementById("mapFrame").style.display = 'none';
+}
+
+function onMapClick(e) {
+    document.form1.latitude.value = e.latlng.lat.toFixed(8);
+    document.form1.longitude.value = e.latlng.lng.toFixed(8);
+    hideOSMap();
+}
+
+function showOSMap() {
+    if (!map) {
+        const osmUrl='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+        const osm = new L.TileLayer(osmUrl, {minZoom:2, maxZoom:19});
+
+        const googleStreets = new L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{minZoom:1, maxZoom:19, subdomains:['mt0','mt1','mt2','mt3']});
+
+        const googleSat = new L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{minZoom:1, maxZoom: 21,subdomains:['mt0','mt1','mt2','mt3']});
+
+        map = new L.Map('mapDiv', { doubleClickZoom:false, zoomControl:false, maxBounds:([[90,-270],[-90,270]]) });
+
+        L.control.layers({"OSM (Mapnik)": osm, "Google Street": googleStreets, "Google Earth": googleSat}).addTo(map);
+
+        map.addLayer(osm);
+        map.fitBounds([[0,-180],[0,180]]);
+
+        map.on('click', onMapClick);
+    }
+
+    document.getElementById("mapFrame").style.display = 'block';
+    document.getElementById("mapFrame").style.visibility = 'visible';
 }

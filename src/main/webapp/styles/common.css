@@ -2538,6 +2538,10 @@ ul.searchResultList img {
     vertical-align: bottom;
 }
 
+div.leaflet-container {
+    cursor: pointer;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;
