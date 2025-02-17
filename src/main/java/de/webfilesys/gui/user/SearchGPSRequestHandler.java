@@ -221,7 +221,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 				searchArgText.append(": GPS");
 				searchArgText.append(" latitude=" + latitude);
 				searchArgText.append(" longitude=" + longitude);
-				searchArgText.append(" distance=" + searchDistance + " km");
+				searchArgText.append(" distance=" + (searchDistance / 1000) + " km");
 				metaInfMgr.setDescription(searchResultDir + File.separator + ".", searchArgText.toString());
 			}
         }
@@ -271,6 +271,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		} else {
 			if (matchCount > 0) {
 				output.println("document.getElementById(\"keepButton\").style.visibility = \"visible\";");
+				session.setAttribute("viewMode", Integer.valueOf(Constants.VIEW_MODE_THUMBS));
 			}
 			output.println("document.getElementById(\"discardButton\").style.visibility = \"visible\";");
 		}
@@ -317,7 +318,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 						if (locationDistance >= 0 && locationDistance <= distance) {
 							long fileDate = getExposureOrModificationaTime(file);
 							if (fileDate >= fromDate && fileDate <= toDate) {
-								String viewLink = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(file.getAbsolutePath());
+                                String viewLink = "/webfilesys/servlet?command=getFile&filePath=" + UTF8URLEncoder.encode(file.getAbsolutePath());
 
 								String iconImg = IconManager.getInstance().getIconForFileName(file.getName());
 
@@ -366,9 +367,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		if (geoTag == null) {
 			return -1;
 		}
-		LogManager.getLogger(getClass()).warn("GPS coordinates of " + filePath + ": " + geoTag.getLatitude() + ", " + geoTag.getLongitude() + "(" + (System.currentTimeMillis() - startTime) + " ms)");
 		double locationDistance = GPSUtil.calculateDistance(latitude, longitude, geoTag.getLatitude(), geoTag.getLongitude());
-		LogManager.getLogger(getClass()).warn("distance of " + filePath + ": " + locationDistance);
 		return locationDistance;
 	}
 	
