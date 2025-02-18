@@ -129,7 +129,7 @@ public class SearchGPSRequestHandler extends UserRequestHandler {
 		output.println("<script src=\"/webfilesys/javascript/jquery/jquery.min.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");
-		output.println("<script src=\"/webfilesys/javascript/searchResult.js\" type=\"text/javascript\"></script>");
+		output.println("<script src=\"/webfilesys/javascript/searchResultGPS.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/util.js\" type=\"text/javascript\"></script>");
 		output.println("<script src=\"/webfilesys/javascript/previewFile.js\" type=\"text/javascript\"></script>");
 
