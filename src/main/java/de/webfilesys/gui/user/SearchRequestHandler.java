@@ -29,10 +29,7 @@ import de.webfilesys.util.UTF8URLEncoder;
 /**
  * @author Frank Hoehnel
  */
-public class SearchRequestHandler extends UserRequestHandler
-{
-	int file_find_num;
-
+public class SearchRequestHandler extends UserRequestHandler {
 	MetaInfManager metaInfMgr = null;
 
 	String searchResultDir = null;
@@ -42,30 +39,25 @@ public class SearchRequestHandler extends UserRequestHandler
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 
 		metaInfMgr = MetaInfManager.getInstance();
 	}
 
-	protected void process()
-	{
+	protected void process() {
 		String act_path = getParameter("actpath");
 		
-		if ((act_path == null) || (act_path.trim().length() == 0))
-		{
+		if ((act_path == null) || (act_path.trim().length() == 0)) {
 			act_path = getCwd();
 		}
 
-		if (!checkAccess(act_path))
-		{
+		if (!checkAccess(act_path)) {
 			return;
 		}
 
 		String file_mask=getParameter("FindMask");
-		if ((file_mask==null) || (file_mask.length()==0))
-		{
+		if ((file_mask==null) || (file_mask.length()==0)) {
 			file_mask="*";
 		}
 
@@ -89,8 +81,7 @@ public class SearchRequestHandler extends UserRequestHandler
 
         String categoryName = getParameter("category");
 
-        if (!categoryName.equals("-1"))
-        {
+        if (!categoryName.equals("-1")) {
         	category = new Category();
         	category.setName(categoryName);
         }
@@ -129,8 +120,7 @@ public class SearchRequestHandler extends UserRequestHandler
 
 		searchResultDir = act_path;
 
-		if (!searchResultDir.endsWith(File.separator))
-		{
+		if (!searchResultDir.endsWith(File.separator)) {
 			searchResultDir = searchResultDir + File.separator;
 		}
         
@@ -138,12 +128,9 @@ public class SearchRequestHandler extends UserRequestHandler
 
 		output.print("<html>");
 		output.print("<head>");
-		if (CommonUtils.isEmpty(searchText))
-		{
+		if (CommonUtils.isEmpty(searchText)) {
 			output.print("<title>" + getResource("label.searchresults","Search Results") + ": " + file_mask + " </title>");
-		}
-		else
-		{
+		} else {
 			output.print("<title>" + getResource("label.searchresults","Search Results") + ": " + searchText + " </title>");
 		}
 
@@ -167,8 +154,7 @@ public class SearchRequestHandler extends UserRequestHandler
        	output.println("var searchResultDir = '" + UTF8URLEncoder.encode(searchResultDir) + "';");
         output.println("</script>"); 
         
-        if (!readonly)
-        {
+        if (!readonly) {
     		output.println("<script src=\"/webfilesys/javascript/searchResult.js\" type=\"text/javascript\"></script>");
         }
 		
@@ -205,8 +191,7 @@ public class SearchRequestHandler extends UserRequestHandler
 		output.println("</td>");
 		output.println("</tr>");
 
-		if (!CommonUtils.isEmpty(searchText))
-		{
+		if (!CommonUtils.isEmpty(searchText)) {
 			output.println("<tr><td class=\"formParm1\">");
 			output.println(getResource("label.searcharg","search argument") + ":");
 			output.println("</td>");
@@ -221,16 +206,14 @@ public class SearchRequestHandler extends UserRequestHandler
 		output.println(getResource("label.dateRange","modification date range") + ":");
 		output.println("</td>");
 		output.println("<td colspan=\"2\" class=\"formParm2\">");
-		if (startDateProvided)
-		{
+		if (startDateProvided) {
 			output.print(dateFormat.format(fromDate));
 		}
 		output.print("<b> ... </b>");
 		output.println(dateFormat.format(toDate));
 		output.println("</td></tr>");
 
-        if (category != null)
-        {
+        if (category != null) {
 			output.println("<tr><td class=\"formParm1\">");
 			output.println(getResource("label.assignedToCategory","assigned to category") + ":");
 			output.println("</td>");
@@ -239,8 +222,7 @@ public class SearchRequestHandler extends UserRequestHandler
 			output.println("</td></tr>");
         }
         
-		if (!CommonUtils.isEmpty(searchText))
-		{
+		if (!CommonUtils.isEmpty(searchText)) {
 			output.println("<tr><td class=\"formParm1\" colspan=\"3\">");
 			output.println(getResource("label.currentSearchDir","searching in folder") + ":");
 			output.println("</td></tr>");
@@ -253,24 +235,19 @@ public class SearchRequestHandler extends UserRequestHandler
 
 		output.flush();
 
-        if (!readonly)
-        {
+        if (!readonly) {
 			File searchResultDirFile = new File(searchResultDir);
         
-			if (!searchResultDirFile.mkdirs())
-			{
+			if (!searchResultDirFile.mkdirs()) {
 				LogManager.getLogger(getClass()).error("cannot create search result directory " + searchResultDir);
-			}
-			else
-			{
+			} else {
 				StringBuffer searchArgText = new StringBuffer();
 
 				searchArgText.append(getResource("label.searchresults","Search Results"));
 
 				searchArgText.append(": \"");
 
-				if (!CommonUtils.isEmpty(searchText)) 
-				{
+				if (!CommonUtils.isEmpty(searchText)) {
 					searchArgText.append(searchText);
 					searchArgText.append("\" ");
 					searchArgText.append(getResource("label.in","in"));
@@ -280,8 +257,7 @@ public class SearchRequestHandler extends UserRequestHandler
 				searchArgText.append(file_mask);
 				searchArgText.append("\"");
             
-				if (category != null)
-				{
+				if (category != null) {
 					searchArgText.append(" ");
 					searchArgText.append(getResource("label.category","category"));
 					searchArgText.append(" \"");
@@ -295,8 +271,7 @@ public class SearchRequestHandler extends UserRequestHandler
 
         int hitNumber = 0;
         
-		if (!CommonUtils.isEmpty(searchText)) 
-		{
+		if (!CommonUtils.isEmpty(searchText)) {
 			TextSearch textSearch = new TextSearch(act_path, file_mask, searchArguments, fromDate, toDate,
 			                                       output, (includeSubdirs != null),
 			                                       (includeDesc != null), (descOnly != null),
@@ -304,14 +279,8 @@ public class SearchRequestHandler extends UserRequestHandler
 			                                       getHeadlinePath(act_path), uid);
 
 			hitNumber = textSearch.getHitNumber();
-		}
-		else
-		{
-			file_find_num = 0;
-			
-			findFiles(act_path, file_mask, (includeSubdirs != null), fromDate.getTime(), toDate.getTime(), category);
-
-			hitNumber = file_find_num;
+		} else {
+			hitNumber = findFiles(act_path, file_mask, (includeSubdirs != null), fromDate.getTime(), toDate.getTime(), category);
 		}
 
 		output.println("<table class=\"dataForm\" width=\"100%\" style=\"margin-top:10px\">");
@@ -326,17 +295,12 @@ public class SearchRequestHandler extends UserRequestHandler
         output.println("<td class=\"fileListFunct\">");		
         output.println("<div class=\"buttonCont\">");		
 		
-        if (readonly)		
-		{
+        if (readonly) {
 			output.println("<input type=\"button\" value=\"" + getResource("button.closewin","Close Window") + "\" onClick=\"self.close()\">");
-		}
-		else
-		{
-			if (hitNumber > 0)
-			{		
+		} else {
+			if (hitNumber > 0) {
 				output.println("<input type=\"button\" value=\"" + getResource("button.keepSearchResults","Keep Search Results") + "\" onClick=\"showResults()\">");
 			}
-        
 			output.println("<input type=\"button\" value=\"" + getResource("button.discardSearchResults","Discard Search Results") + "\" onClick=\"discardAndClose()\">");
 		}
 
@@ -360,11 +324,16 @@ public class SearchRequestHandler extends UserRequestHandler
 		output.flush();
 	}
 	
-	public void findFiles(String currentPath, String file_mask, boolean includeSubdirs, long fromDate, long toDate, Category category) {
+	public int findFiles(String currentPath, String file_mask, boolean includeSubdirs, long fromDate, long toDate, Category category) {
+		int searchHits = 0;
         if (currentPath.equals(searchResultDir)) {
-            return;
+            return searchHits;
         }
-        
+
+		if (session.getAttribute("searchCanceled") != null) {
+			return searchHits;
+		}
+
 		boolean filePatternGiven = (!file_mask.equals("*")) && (!file_mask.equals("*.*"));
 
         File dirFile = new File(currentPath);
@@ -376,7 +345,7 @@ public class SearchRequestHandler extends UserRequestHandler
 					if (includeSubdirs) {
 						if (!dirIsLink(file)) {
 							if (!file.getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
-								findFiles(file.getAbsolutePath(), file_mask, includeSubdirs, fromDate, toDate, category);
+								searchHits += findFiles(file.getAbsolutePath(), file_mask, includeSubdirs, fromDate, toDate, category);
 							}
 						}
 					}
@@ -398,7 +367,8 @@ public class SearchRequestHandler extends UserRequestHandler
 									output.println("<a class=\"fn\" href=\"" + viewLink + "\" target=\"_blank\">" + getHeadlinePath(file.getAbsolutePath()) + "</a><br>");
 									output.println("</div>");
 									output.flush();
-									file_find_num++;
+
+									searchHits++;
 
 									if (!readonly) {
 										try {
@@ -422,5 +392,6 @@ public class SearchRequestHandler extends UserRequestHandler
 			output.print("cannot get dir entries for " + currentPath + "<br>");
 			output.flush();
 		}
+		return searchHits;
 	}
 }

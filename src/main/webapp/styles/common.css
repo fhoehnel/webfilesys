@@ -2530,6 +2530,10 @@ ul.searchResultList {
     padding-left: 6px;
 }
 
+ul.searchResultList li {
+    white-space: nowrap;
+}
+
 ul.searchResultList li a {
     margin-right: 20px;
 }
