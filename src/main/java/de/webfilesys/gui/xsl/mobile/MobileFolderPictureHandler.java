@@ -218,6 +218,16 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
 			XmlUtil.setChildText(fileListElem, "readonly", "true", false);
 		}
 		
+		if (File.separatorChar == '\\') {
+		    XmlUtil.setChildText(fileListElem, "serverOS", "win");
+		} else {
+            XmlUtil.setChildText(fileListElem, "serverOS", "ix");
+		}
+		
+		if (readonly) {
+			XmlUtil.setChildText(fileListElem, "readonly", "true", false);
+		}
+		
         if (WebFileSys.getInstance().getMailHost() !=null) {
             XmlUtil.setChildText(fileListElem, "mailEnabled", "true");
         }

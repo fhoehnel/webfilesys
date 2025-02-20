@@ -36,6 +36,8 @@
 <script src="/webfilesys/javascript/thumbnail.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/mobile/mobileCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/mobile/mobileThumbnail.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/mobile/thumbContextMenu.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/mobile/jsFileMenu.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
@@ -71,6 +73,9 @@
   }
   
   var path = '<xsl:value-of select="/fileList/menuPath" />';
+  var serverOS = '<xsl:value-of select="/fileList/serverOS" />';
+  var readonly = '<xsl:value-of select="/fileList/readonly" />';
+  var mailEnabled = '<xsl:value-of select="/fileList/mailEnabled" />';
   
 </script>
 
@@ -88,7 +93,7 @@
 
 </head>
 
-<body class="fileListNoMargin">
+<body class="mobile fileListNoMargin">
   <xsl:attribute name="onload">
     setMobileThumbContHeight();
     <xsl:if test="/fileList/file">
@@ -101,7 +106,7 @@
 
   <xsl:apply-templates />
 
-  <div id="contextMenu" class="contextMenuCont"></div>
+  <div id="contextMenu" class="contextMenu"></div>
 
   <div id="msg1" class="msgBox" style="visibility:hidden" />
 
@@ -262,6 +267,7 @@
                     <xsl:attribute name="width">1</xsl:attribute>
                     <xsl:attribute name="height">100</xsl:attribute>
                     <xsl:attribute name="imgPath"><xsl:value-of select="imgPath" /></xsl:attribute>
+                    <xsl:attribute name="oncontextmenu">mobileThumbContextMenu('<xsl:value-of select="@nameForScript" />');return false;</xsl:attribute>
                     <xsl:if test="description">
                       <xsl:attribute name="title"><xsl:value-of select="description" /></xsl:attribute>
                     </xsl:if>
@@ -305,34 +311,35 @@
                   </span>
                 </div>
                 
-                <div>
-                  <xsl:value-of select="comments" />
-                  <xsl:value-of select="' '" />
-                  <label resource="label.comments"></label>
+                <xsl:if test="comments != '0' or ownerRating or visitorRating">
+                  <div>
+                    <xsl:value-of select="comments" />
+                    <xsl:value-of select="' '" />
+                    <label resource="label.comments"></label>
 
-                  &#160;
+                    &#160;
 
-                  <xsl:if test="ownerRating or visitorRating">
-                    <a class="dirtree">
-                      <xsl:attribute name="title">
-                        <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
-                        <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
-                      </xsl:attribute>
-                      <img src="images/star.gif" border="0" style="vertical-align:bottom" />
-                      <xsl:if test="ownerRating">
-                        <xsl:value-of select="ownerRating" />
-                        <xsl:if test="visitorRating">/</xsl:if>
-                      </xsl:if>
+                    <xsl:if test="ownerRating or visitorRating">
+                      <a class="dirtree">
+                        <xsl:attribute name="title">
+                          <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
+                          <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
+                        </xsl:attribute>
+                        <img src="images/star.gif" border="0" style="vertical-align:bottom" />
+                        <xsl:if test="ownerRating">
+                          <xsl:value-of select="ownerRating" />
+                          <xsl:if test="visitorRating">/</xsl:if>
+                        </xsl:if>
+                        <xsl:if test="visitorRating">
+                          <xsl:value-of select="visitorRating" />
+                        </xsl:if>
+                      </a>
                       <xsl:if test="visitorRating">
-                        <xsl:value-of select="visitorRating" />
+                        (<xsl:value-of select="numberOfVotes" />)
                       </xsl:if>
-                    </a>
-                    <xsl:if test="visitorRating">
-                      (<xsl:value-of select="numberOfVotes" />)
                     </xsl:if>
-                  </xsl:if>
-                </div>
-                
+                  </div>
+                </xsl:if>
               </div>
             
             </xsl:for-each>

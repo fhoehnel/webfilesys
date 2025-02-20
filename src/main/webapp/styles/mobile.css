@@ -481,3 +481,7 @@ body.mobile .icon-star {
     font-size: 26px;
     color: #c08000;
 }
+
+body.mobile div.thumbnailCont {
+	width: 170px;
+}
