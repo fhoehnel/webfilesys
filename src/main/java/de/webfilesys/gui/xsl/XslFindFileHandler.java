@@ -33,10 +33,7 @@ import de.webfilesys.util.XmlUtil;
  * 
  * @author Frank Hoehnel
  */
-public class XslFindFileHandler extends XslRequestHandlerBase
-{
-	int filesFoundNum;
-	
+public class XslFindFileHandler extends XslRequestHandlerBase {
 	int docRootTokenCount;
 	
 	Element searchResultElement = null;
@@ -48,30 +45,25 @@ public class XslFindFileHandler extends XslRequestHandlerBase
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 
 		metaInfMgr = MetaInfManager.getInstance();
 	}
 
-	protected void process()
-	{
+	protected void process() {
 		String actPath = getParameter("actpath");
 		
-		if ((actPath == null) || (actPath.trim().length() == 0))
-		{
+		if ((actPath == null) || (actPath.trim().length() == 0)) {
 			actPath = getCwd();
 		}
 
-		if (!checkAccess(actPath))
-		{
+		if (!checkAccess(actPath)) {
 			return;
 		}
 
 		String fileNamePattern = getParameter("FindMask");
-		if ((fileNamePattern == null) || (fileNamePattern.length() == 0))
-		{
+		if ((fileNamePattern == null) || (fileNamePattern.length() == 0)) {
 			fileNamePattern = "*";
 		}
 
@@ -108,8 +100,7 @@ public class XslFindFileHandler extends XslRequestHandlerBase
 
         String categoryName = getParameter("category");
 
-        if (!categoryName.equals("-1"))
-        {
+        if (!categoryName.equals("-1")) {
             category = new Category();
             category.setName(categoryName);
         }
@@ -132,87 +123,55 @@ public class XslFindFileHandler extends XslRequestHandlerBase
 
         docRootTokenCount = getDocRootTokenCount();
         
-		filesFoundNum = 0;
-			
-		findFile(actPath, fileNamePattern, (includeSubdirs != null), fromDate.getTime(), toDate.getTime(), category);
+        int matchCount = findFile(actPath, fileNamePattern, (includeSubdirs != null), fromDate.getTime(), toDate.getTime(), category);
 
-		XmlUtil.setChildText(searchResultElement, "matchCount", Integer.toString(filesFoundNum));
+		XmlUtil.setChildText(searchResultElement, "matchCount", Integer.toString(matchCount));
 		
         processResponse("findFileResult.xsl");
 	}
 	
-	public void findFile(String actPath, String fileNamePattern, boolean includeSubdirs, 
-	    long fromDate, long toDate, Category category)
-	{
-		boolean filePatternGiven = (!fileNamePattern.equals("*")) && (!fileNamePattern.equals("*.*"));
+	public int findFile(String actPath, String fileNamePattern, boolean includeSubdirs, long fromDate, long toDate, Category category) {
+        int searchHits = 0;
+
+        boolean filePatternGiven = (!fileNamePattern.equals("*")) && (!fileNamePattern.equals("*.*"));
 
         File dirFile = new File(actPath);
-        String[] fileList = dirFile.list();
 
-		if (fileList != null)
-		{
-			for (int i = 0; i < fileList.length; i++)
-			{
-                File tempFile = new File(actPath, fileList[i]);
+        File[] fileList = dirFile.listFiles();
 
-				if (tempFile.isDirectory())
-				{
-					if (includeSubdirs)
-					{
-						if (!dirIsLink(tempFile))
-						{
-							if (!fileList[i].equals(ThumbnailThread.THUMBNAIL_SUBDIR))
-							{
-                                String subDir = null;
-
-								if (actPath.endsWith(File.separator))
-								{
-									subDir = actPath + fileList[i];
-								}
-								else
-								{
-									subDir = actPath + File.separator + fileList[i];
-								}
-									
-								findFile(subDir, fileNamePattern, includeSubdirs, fromDate, toDate, category);
+        if (fileList != null) {
+            for (File file : fileList) {
+				if (file.isDirectory()) {
+					if (includeSubdirs) {
+						if (!dirIsLink(file)) {
+							if (!file.getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
+                                searchHits += findFile(file.getAbsolutePath(), fileNamePattern, includeSubdirs, fromDate, toDate, category);
 							}
 						}
 					}
-				}
-				else
-				{
-					if (PatternComparator.patternMatch(fileList[i], fileNamePattern))
-					{
-						if (filePatternGiven || (!fileList[i].equals(MetaInfManager.METAINF_FILE)))
-						{
+				} else {
+					if (PatternComparator.patternMatch(file.getName(), fileNamePattern)) {
+						if (filePatternGiven || (!file.getName().equals(MetaInfManager.METAINF_FILE))) {
 							// if any file with given date range is searched, ignore the metainf files
 							
-							if ((tempFile.lastModified() >= fromDate) && (tempFile.lastModified() <= toDate))
-                            {
+							if ((file.lastModified() >= fromDate) && (file.lastModified() <= toDate)) {
                                 if ((category == null) || 
-                                    metaInfMgr.isCategoryAssigned(actPath, fileList[i], category))
-                                {
-                                    addSearchResult(searchResultElement, tempFile.getAbsolutePath());
-                                    
-                                    filesFoundNum++;
+                                    metaInfMgr.isCategoryAssigned(actPath, file.getName(), category)) {
+                                    addSearchResult(searchResultElement, file.getAbsolutePath());
+                                    searchHits++;
                                 }
                             }
 						}
 					}
 				}
 			}
-			
-            if (category != null)
-            {
+            if (category != null) {
                 metaInfMgr.releaseMetaInf(actPath, false);
             }
-		}
-		else
-		{
+		} else {
 		    LogManager.getLogger(getClass()).error("cannot get dir entries for " + actPath);
 		}
-
-		fileList = null;
+		return searchHits;
 	}
 	
     private void addSearchResult(Element searchResultElement, String filePath)
