@@ -531,6 +531,21 @@ public class CameraExifData {
 		return gpsDirectory.getString(GpsDirectory.TAG_LONGITUDE_REF);
 	}
 
+	public float getGpsAltitude() {
+		if (gpsDirectory != null) {
+			try {
+				if (gpsDirectory.containsTag(GpsDirectory.TAG_ALTITUDE)) {
+					Rational altitudeRational = gpsDirectory.getRational(GpsDirectory.TAG_ALTITUDE);
+					if (altitudeRational != null) {
+						return altitudeRational.floatValue();
+					}
+				}
+			} catch (Exception ex) {
+				LogManager.getLogger(getClass()).warn(ex);
+			}
+		}
+		return Float.NaN;
+	}
 	
 	private String formatExposureTime(String origExifValue) {
 		String[] partsOfValue = origExifValue.split("/");

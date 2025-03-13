@@ -577,6 +577,7 @@ label.imgwidth=anchura de imagen (píxeles)
 label.thumbexists=miniatura incluida
 label.gpsLatitude=GPS latitud
 label.gpsLongitude=GPS longitud
+label.gpsAltitude=GPS altitud
 label.imgOrientation=formato oblongo/alto
 orientation.landscape=formato oblongo
 orientation.portrait=formato alto

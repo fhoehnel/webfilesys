@@ -187,6 +187,17 @@
           </tr>
         </xsl:if>
 
+        <xsl:if test="/cameraData/exifData/gpsAltitude">
+          <tr>
+            <td class="formParm1">
+              <span resource="label.gpsAltitude"></span>
+            </td>
+            <td class="formParm2">
+              <xsl:value-of select="/cameraData/exifData/gpsAltitude" /> m
+            </td>
+          </tr>
+        </xsl:if>
+
         <xsl:if test="/cameraData/exifData/imgWidth">
           <tr>
             <td class="formParm1">

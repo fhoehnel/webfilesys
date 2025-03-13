@@ -577,6 +577,7 @@ label.imgwidth=image width (pixel)
 label.thumbexists=thumbnail included
 label.gpsLatitude=GPS latitude
 label.gpsLongitude=GPS longitude
+label.gpsAltitude=GPS altitude
 label.imgOrientation=orientation
 orientation.landscape=landscape
 orientation.portrait=portrait

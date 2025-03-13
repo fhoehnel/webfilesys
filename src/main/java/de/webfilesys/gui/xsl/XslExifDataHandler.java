@@ -188,6 +188,13 @@ public class XslExifDataHandler extends XslRequestHandlerBase
             {
                 XmlUtil.setChildText(exifDataElement, "gpsLongitude", Float.toString(gpsLongitude) +  " " + exifData.getGpsLongitudeRef());
             }
+
+            float gpsAltitude = exifData.getGpsAltitude();
+            
+            if (!Float.isNaN(gpsAltitude))
+            {
+                XmlUtil.setChildText(exifDataElement, "gpsAltitude", Integer.toString(Math.round(gpsAltitude)));
+            }
             
             int orientation = exifData.getOrientation();
             
