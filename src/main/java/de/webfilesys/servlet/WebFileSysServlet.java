@@ -348,9 +348,6 @@ public class WebFileSysServlet extends ServletBase
         
         webFileSys.initialize(configProperties);
         
-        // we are open source now!
-        webFileSys.setLicensed(true);
-        
 		initialized = true;
     }
 

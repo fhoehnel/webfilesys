@@ -30,22 +30,20 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.logging.log4j.LogManager;
 
-
 import de.webfilesys.calendar.AppointmentManager;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.XmlUserManager;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.watch.FolderWatchManager;
+import org.apache.logging.log4j.Logger;
 
-/**
- * Container for configuration settings.
- */
-public class WebFileSys
-{
+public class WebFileSys {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.31.2-beta2 (22 Sep 2025)";
+    private static final Logger LOG = LogManager.getLogger(WebFileSys.class);
+
+    public static final String VERSION = "Version 2.31.2-beta2 (22 Sep 2025)";
  
     public static final String DEFAULT_MAIL_SENDER_ADDRESS = "WebFileSys@nowhere.com";
 
@@ -68,8 +66,6 @@ public class WebFileSys
     /** folder watch interval in minutes */
     private static final int DEFAULT_FOLDER_WATCH_INTERVAL = 24 * 60;
     
-    private static long DEFAULT_DISK_QUOTA = (1024L * 1024L);
-    
 	public static final int DEFAULT_TEXT_FILE_MAX_LINE_LENGTH = 2048;
     
 	/** maximum number of appointment e-mails that can be sent in one hour */
@@ -77,7 +73,9 @@ public class WebFileSys
 	
 	/** default expiration period in days for non-repeated appointments */
 	private static final int DEFAULT_CAL_EXPIRATION_PERIOD = 365;
-	
+
+    private long defaultDiskQuota = (1024L * 1024L);
+
     private String webAppRootDir = null;
     
     private String configBaseDir = null;
@@ -224,8 +222,6 @@ public class WebFileSys
     
     private DiskQuotaInspector quotaInspector = null;
 
-    private boolean licensed = false;
-
     private SimpleDateFormat logDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         
 	private DocumentBuilderFactory docFactory = null;
@@ -235,239 +231,175 @@ public class WebFileSys
 	    return(instance);
     }
 	
-	public static WebFileSys createInstance(Properties configProps, String configBaseDir)
-	{
-		if (instance != null)
-		{
+	public static WebFileSys createInstance(Properties configProps, String configBaseDir) {
+		if (instance != null) {
 			return(instance);
 		}
-		
 		instance = new WebFileSys(configProps, configBaseDir);
-		
 		return(instance);
     }
 	
-	private WebFileSys(Properties config, String webAppRootDir)
-	{
-        LogManager.getLogger(getClass()).info("starting WebFileSys " + VERSION);      
+	private WebFileSys(Properties config, String webAppRootDir) {
+        LOG.info("starting WebFileSys version " + VERSION);
 	    
 		this.webAppRootDir = webAppRootDir;
 		
-		if (webAppRootDir.endsWith("\\") || webAppRootDir.endsWith("/"))
-		{
-			this.configBaseDir = webAppRootDir + "WEB-INF";
-		}
-		else
-		{
-			this.configBaseDir = webAppRootDir + "/WEB-INF";
+		if (webAppRootDir.endsWith("\\") || webAppRootDir.endsWith("/")) {
+			configBaseDir = webAppRootDir + "WEB-INF";
+		} else {
+			configBaseDir = webAppRootDir + "/WEB-INF";
 		}
 		
         javaVersion = System.getProperty("java.version");
 
-        LogManager.getLogger(getClass()).info("java version : " + javaVersion);
+        LOG.info("java version : " + javaVersion);
 		
         opSysName = System.getProperty("os.name");
         
-        LogManager.getLogger(getClass()).info("operating system : " + opSysName);
+        LOG.info("operating system : " + opSysName);
 
-        if (opSysName.startsWith("OS/2"))
-        {
+        if (opSysName.startsWith("OS/2")) {
             opSysType = OS_OS2;
-        }
-        else if (opSysName.startsWith("Win"))
-        {
+        } else if (opSysName.startsWith("Win")) {
             opSysType = OS_WIN;
-        }
-        else if (opSysName.startsWith("AIX"))
-        {
+        } else if (opSysName.startsWith("AIX")) {
             opSysType = OS_AIX;
-        }
-        else if (opSysName.startsWith("Linux"))
-        {
+        } else if (opSysName.startsWith("Linux")) {
             opSysType = OS_LINUX;
-        }
-        else if ((opSysName.startsWith("Solaris")) || (opSysName.startsWith("SunOS")))
-        {
+        } else if ((opSysName.startsWith("Solaris")) || (opSysName.startsWith("SunOS"))) {
             opSysType = OS_SOLARIS;
-        }
-        else
-        {
+        } else {
             opSysType = OS_UNKNOWN;
         }
 
 		docFactory = DocumentBuilderFactory.newInstance();
         
         String thumbNumString = config.getProperty("PageThumbnailNumber", "12");
-        try
-        {
+        try {
             thumbnailsPerPage = Integer.parseInt(thumbNumString);
-        }
-        catch (NumberFormatException nfe)
-        {
-        	LogManager.getLogger(getClass()).error("invalid config parameter PageThumbnailNumber: " + nfe);
+        } catch (NumberFormatException nfe) {
+        	LOG.error("invalid config parameter PageThumbnailNumber: " + nfe);
         	thumbnailsPerPage = 12;
         }
 
         oldLinuxPsStyle = false;
         String linuxPsStyle = config.getProperty("LinuxPsStyle", "new").toLowerCase();
-        if (linuxPsStyle.equals("old"))
-        {
+        if (linuxPsStyle.equals("old")) {
             oldLinuxPsStyle = true;
         }
 
         openRegistration = false;
         String temp = config.getProperty("RegistrationType", "closed");
-        if (temp.equalsIgnoreCase("open"))
-        {
+        if (temp.equalsIgnoreCase("open")) {
             openRegistration = true;
-            LogManager.getLogger(getClass()).info("registration: open");
-        }
-        else
-        {
-            LogManager.getLogger(getClass()).info("registration: closed");
+            LOG.info("registration: open");
+        } else {
+            LOG.info("registration: closed");
         }
 
         showDescriptionsInline = false;
         temp = config.getProperty("ShowDescriptionsInline", "true");
-        if (temp.equalsIgnoreCase("true"))
-        {
+        if (temp.equalsIgnoreCase("true")) {
             showDescriptionsInline = true;
         }
 
         showAssignedIcons = false;
         temp = config.getProperty("ShowAssignedIcons", "true");
-        if (temp.equalsIgnoreCase("true"))
-        {
+        if (temp.equalsIgnoreCase("true")) {
             showAssignedIcons = true;
         }
 
         userMgrClass = config.getProperty("UserManagerClass");
 
-
         userDocRoot = config.getProperty("UserDocumentRoot");
 
-        if (openRegistration)
-        {
-            if (userDocRoot != null)
-            {
+        if (openRegistration) {
+            if (userDocRoot != null) {
                 File docRootFile = new File(userDocRoot);
 
                 if ((!docRootFile.exists())
                     || (!docRootFile.isDirectory())
-                    || (!docRootFile.canWrite()))
-                {
-                	LogManager.getLogger(getClass()).error("UserDocumentRoot is not a writable directory: "+ userDocRoot);
+                    || (!docRootFile.canWrite())) {
+                    LOG.error("UserDocumentRoot is not a writable directory: {}", userDocRoot);
                     userDocRoot = null;
-                }
-                else
-                {
+                } else {
                     if ((File.separatorChar == '\\')
-                        && (userDocRoot.length() > 2))
-                    {
-                        try
-                        {
+                        && (userDocRoot.length() > 2)) {
+                        try {
                             String canonicalRoot =
                                 docRootFile.getCanonicalPath().substring(2);
                             String absoluteRoot =
                                 docRootFile.getAbsolutePath().substring(2);
 
-                            if (!canonicalRoot.equals(absoluteRoot))
-                            {
-                            	LogManager.getLogger(getClass()).error("UserDocumentRoot is not a writable directory (check uppercase/lowercase!): " + userDocRoot);
+                            if (!canonicalRoot.equals(absoluteRoot)) {
+                                LOG.error("UserDocumentRoot is not a writable directory (check uppercase/lowercase!): {}", userDocRoot);
                                 userDocRoot = null;
                             }
+                        } catch (IOException ioex) {
+                            LOG.error(ioex);
                         }
-                        catch (IOException ioex)
-                        {
-                        }
-
                     }
                 }
 
-                if (userDocRoot != null)
-                {
-                    LogManager.getLogger(getClass()).info("User Document Root: " + userDocRoot);
+                if (userDocRoot != null) {
+                    LOG.info("User Document Root: {}", userDocRoot);
                 }
             }
 
-            if (userDocRoot == null)
-            {
+            if (userDocRoot == null) {
             	userDocRoot = configBaseDir + File.separator + "userhome";
-
-                LogManager.getLogger(getClass()).info(
-                    "using default UserDocumentRoot for open registration: "
-                        + userDocRoot);
+                LOG.info("using default UserDocumentRoot for open registration: {}", userDocRoot);
             }
         }
 
         temp = config.getProperty("UploadLimit");
         
-        if (temp!=null)
-        {
-        	try
-        	{
+        if (temp!=null) {
+        	try {
         		uploadLimit = Long.parseLong(temp);
-        	}
-        	catch (NumberFormatException nfex)
-        	{
-                LogManager.getLogger(getClass()).warn("invalid upload limit ignored: " + temp);        		
+        	} catch (NumberFormatException nfex) {
+                LOG.warn("invalid upload limit ignored: {}", temp);
         	}
         }
         
         temp = config.getProperty("TextFileMaxLineLength");
         
-        if (temp != null)
-        {
-        	try
-        	{
+        if (temp != null) {
+        	try {
         		textFileMaxLineLength = Integer.parseInt(temp);
-        	}
-        	catch (NumberFormatException nfex)
-        	{
-                LogManager.getLogger(getClass()).warn("invalid upload limit ignored: " + temp);        		
+        	} catch (NumberFormatException nfex) {
+                LOG.warn("invalid max text line length limit ignored: {}", temp);
         	}
         }
         
         downloadStatistics = false;
         temp = config.getProperty("EnableDownloadStatistics", "false");
-        if (temp.equalsIgnoreCase("true"))
-        {
+        if (temp.equalsIgnoreCase("true")) {
             downloadStatistics = true;
         }
 
         autoCreateThumbs = false;
         temp = config.getProperty("AutoCreateThumbnails", "false");
-        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
-        {
+        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes")) {
             autoCreateThumbs = true;
         }
 
         autoExtractMP3 = false;
         temp = config.getProperty("AutoExtractMP3Tags", "false");
-        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
-        {
+        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes")) {
             autoExtractMP3 = true;
         }
 
         googleMapsAPIKeyHTTP = config.getProperty("GoogleMapsAPIKeyHTTP");
         googleMapsAPIKeyHTTPS = config.getProperty("GoogleMapsAPIKeyHTTPS");
         
-        if (openRegistration)
-        {
+        if (openRegistration) {
             temp = config.getProperty("DiskQuotaDefaultMB", "1");
-
-            try
-            {
+            try {
                 int diskQuotaMB = Integer.parseInt(temp);
-
-                DEFAULT_DISK_QUOTA = ((long) diskQuotaMB) * 1024l * 1024l;
-            }
-            catch (NumberFormatException nfex)
-            {
-            	LogManager.getLogger(getClass()).error(
-                    "invalid default disk quota value: "
-                        + temp
-                        + " - using default value " + DEFAULT_DISK_QUOTA);
+                defaultDiskQuota = ((long) diskQuotaMB) * 1024L * 1024L;
+            } catch (NumberFormatException nfex) {
+                LOG.error("invalid default disk quota value: {} - using default value {}", temp, defaultDiskQuota);
             }
         }
 
@@ -477,27 +409,21 @@ public class WebFileSys
 
         mailHost = config.getProperty("SmtpMailHost");
 
-        if ((mailHost != null) && (mailHost.trim().length() > 0))
-        {
-        	LogManager.getLogger(getClass()).info("SMTP mail host: " + mailHost);
+        if ((mailHost != null) && (!mailHost.trim().isEmpty())) {
+        	LOG.info("SMTP mail host: " + mailHost);
         	
         	temp = config.getProperty("SmtpAuth");
         	
         	smtpAuth = (temp != null) && temp.equalsIgnoreCase("true");
         	
-        	if (smtpAuth) 
-        	{
+        	if (smtpAuth) {
         		smtpUser = config.getProperty("SmtpUser");
-        		if (CommonUtils.isEmpty(smtpUser))
-        		{
-        			LogManager.getLogger(getClass()).error("SmtpUser property is required if SmtpAuth=true");
+        		if (CommonUtils.isEmpty(smtpUser)) {
+        			LOG.error("SmtpUser property is required if SmtpAuth=true");
         		}
-
         		smtpPassword = config.getProperty("SmtpPassword");
-        		
-        		if (CommonUtils.isEmpty(smtpPassword))
-        		{
-        			LogManager.getLogger(getClass()).error("smtpPassword property is required if SmtpAuth=true");
+        		if (CommonUtils.isEmpty(smtpPassword)) {
+        			LOG.error("smtpPassword property is required if SmtpAuth=true");
         		}
         	}
 
@@ -505,41 +431,32 @@ public class WebFileSys
         	
         	smtpSecure = (temp != null) && temp.equalsIgnoreCase("true");
         	
-            mailSenderAddress =
-                config.getProperty(
-                    "MailSenderAddress",
-                    DEFAULT_MAIL_SENDER_ADDRESS);
+            mailSenderAddress = config.getProperty("MailSenderAddress", DEFAULT_MAIL_SENDER_ADDRESS);
 
-            mailSenderName =
-                config.getProperty("MailSenderName", DEFAULT_MAIL_SENDER_NAME);
+            mailSenderName = config.getProperty("MailSenderName", DEFAULT_MAIL_SENDER_NAME);
 
             mailNotifyLogin = false;
             temp = config.getProperty("MailNotification.login", "false");
-            if (temp.equalsIgnoreCase("true"))
-            {
+            if (temp.equalsIgnoreCase("true")) {
                 mailNotifyLogin = true;
             }
 
             mailNotifyRegister = false;
             temp = config.getProperty("MailNotification.registration", "false");
-            if (temp.equalsIgnoreCase("true"))
-            {
+            if (temp.equalsIgnoreCase("true")) {
                 mailNotifyRegister = true;
             }
 
             mailNotifyWelcome = false;
             temp = config.getProperty("MailNotification.welcome", "false");
-            if (temp.equalsIgnoreCase("true"))
-            {
+            if (temp.equalsIgnoreCase("true")) {
                 mailNotifyWelcome = true;
             }
-
             clientUrl = config.getProperty("ClientURL");
-
         } else {
-        	LogManager.getLogger(getClass()).warn("SmtpMailHost not configured - WebFileSys will not send e-mails. It is strongly recommended to configure a mail server.");
+        	LOG.warn("SmtpMailHost not configured - WebFileSys will not send e-mails. It is strongly recommended to configure a mail server.");
         	if (openRegistration) {
-            	LogManager.getLogger(getClass()).warn("SmtpMailHost not configured - self registered users must be activated by an administrator");
+            	LOG.warn("SmtpMailHost not configured - self registered users must be activated by an administrator");
         	}
         }
 
@@ -547,31 +464,22 @@ public class WebFileSys
 
         temp = config.getProperty("EnableDiskQuota", "false");
 
-        if (temp.equalsIgnoreCase("true"))
-        {
+        if (temp.equalsIgnoreCase("true")) {
             enableDiskQuota = true;
-
-            LogManager.getLogger(getClass()).info("disk quota enabled");
-
+            LOG.info("disk quota enabled");
             diskQuotaCheckHour = 3;
-
             temp = config.getProperty("DiskQuotaCheckHour", "3");
-
-            try
-            {
+            try {
                 diskQuotaCheckHour = Integer.parseInt(temp);
-            }
-            catch (NumberFormatException nfex)
-            {
-            	LogManager.getLogger(getClass()).error("invalid DiskQuotaCheckHour: " + temp);
+            } catch (NumberFormatException nfex) {
+            	LOG.error("invalid DiskQuotaCheckHour: " + temp);
             }
 
             mailNotifyQuotaAdmin = false;
 
             temp = config.getProperty("DiskQuotaNotifyAdmin", "false");
 
-            if (temp.equalsIgnoreCase("true"))
-            {
+            if (temp.equalsIgnoreCase("true")) {
                 mailNotifyQuotaAdmin = true;
             }
 
@@ -579,14 +487,11 @@ public class WebFileSys
 
             temp = config.getProperty("DiskQuotaNotifyUser", "false");
 
-            if (temp.equalsIgnoreCase("true"))
-            {
+            if (temp.equalsIgnoreCase("true")) {
                 mailNotifyQuotaUser = true;
             }
-        }
-        else
-        {
-        	LogManager.getLogger(getClass()).info("disk quota disabled");
+        } else {
+        	LOG.info("disk quota disabled");
         }
 
         systemEditor = config.getProperty("SystemEditor");
@@ -594,86 +499,66 @@ public class WebFileSys
         allowProcessKill = true;
 
         temp = config.getProperty("AllowProcessKill", "true");
-        if (temp.equalsIgnoreCase("no") || temp.equalsIgnoreCase("false"))
-        {
+        if (temp.equalsIgnoreCase("no") || temp.equalsIgnoreCase("false")) {
             allowProcessKill = false;
         }
         
         temp = config.getProperty("OSShellCommandExceution", "false");
-        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
-        {
+        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes")) {
         	osShellCommandExceution = true;
         }
         
 		temp = config.getProperty("DebugMail", "false");
-		if (temp.equalsIgnoreCase("true"))
-		{
+		if (temp.equalsIgnoreCase("true")) {
 			debugMail = true;
 		}
 
 		temp = config.getProperty("EnableCalendar", "false");
-		if (temp.equalsIgnoreCase("true"))
-		{
+		if (temp.equalsIgnoreCase("true")) {
 			enableCalendar = true;
 
 			temp = config.getProperty("MaxAppointmentMailsPerHour", null);
-	        if (!CommonUtils.isEmpty(temp))
-	        {
-	            try
-	            {
+	        if (!CommonUtils.isEmpty(temp)) {
+	            try {
 	            	maxAppointmentMailsPerHour = Integer.parseInt(temp);
-	            }
-	            catch (NumberFormatException numEx)
-	            {
-	            	LogManager.getLogger(getClass()).error("invalid property value for MaxAppointmentMailsPerHour: " + temp);
+	            } catch (NumberFormatException numEx) {
+	            	LOG.error("invalid property value for MaxAppointmentMailsPerHour: " + temp);
 	            	maxAppointmentMailsPerHour = DEFAULT_MAX_APP_MAILS_PER_HOUR;
 	            }
 	        }
-        	LogManager.getLogger(getClass()).debug("maximum allowed appointment e-mails per hour: " + maxAppointmentMailsPerHour);
+        	LOG.debug("maximum allowed appointment e-mails per hour: " + maxAppointmentMailsPerHour);
 
 		    temp = config.getProperty("AppointmentExpirationDays", null);
-		    if (!CommonUtils.isEmpty(temp))
-		    {
-	            try
-	            {
+		    if (!CommonUtils.isEmpty(temp)) {
+	            try {
 	                calendarExpirationPeriod = Integer.parseInt(temp);
-	            }
-	            catch (NumberFormatException numEx)
-	            {
-	            	LogManager.getLogger(getClass()).error("invalid property value for AppointmentExpirationDays: " + temp);
+	            } catch (NumberFormatException numEx) {
+	            	LOG.error("invalid property value for AppointmentExpirationDays: " + temp);
 	            	calendarExpirationPeriod = DEFAULT_CAL_EXPIRATION_PERIOD;
 	            }
 		    }
 		}
 		
         temp = config.getProperty("SyncIgnoreOffsetDST", "false");
-        if (temp.equalsIgnoreCase("true"))
-        {
+        if (temp.equalsIgnoreCase("true")) {
             syncIgnoreOffsetDST = true;
         }
 		
         String slideShowString = config.getProperty("SlideshowDelay", "5");
-        try
-        {
+        try {
             slideShowDelay = Integer.parseInt(slideShowString);
-        }
-        catch (NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             slideShowDelay = 10;
         }
 
         temp = config.getProperty("EnableFolderWatch", "false");
-        if (temp.equalsIgnoreCase("true"))
-        {
+        if (temp.equalsIgnoreCase("true")) {
             enableFolderWatch = true;
             
             String watchIntervalString = config.getProperty("FolderWatchInterval", "1440");
-            try
-            {
+            try {
                 folderWatchInterval = Integer.parseInt(watchIntervalString);
-            }
-            catch (NumberFormatException nfe)
-            {
+            } catch (NumberFormatException nfe) {
                 folderWatchInterval = 1440;
             }
         }
@@ -683,16 +568,14 @@ public class WebFileSys
             try {
             	pollFilesysChangesInterval = Integer.parseInt(temp);
             } catch (NumberFormatException nfex) {
-            	LogManager.getLogger(getClass()).error("invalid value for property PollFilesysChangesInterval: " + temp + " - using default value " + pollFilesysChangesInterval);
+            	LOG.error("invalid value for property PollFilesysChangesInterval: " + temp + " - using default value " + pollFilesysChangesInterval);
             }
         }
         
 		temp = config.getProperty("SimulateRemote");
 		
-		if ((temp != null) && temp.equalsIgnoreCase("true"))
-		{
+		if ((temp != null) && temp.equalsIgnoreCase("true")) {
 			// for testing remote access and role webspace
-			
 		    simulateRemote = true;
 		}
 		
@@ -708,38 +591,29 @@ public class WebFileSys
 
         chmodAllowed = false;
 		temp = config.getProperty("ChmodWebspace", "false");
-		if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
-		{
+		if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes")) {
 			chmodAllowed = true;
 		}
 
         reverseFileLinkingEnabled = false;
         temp = config.getProperty("ReverseFileLinkingEnabled", "false");
-        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes"))
-        {
+        if (temp.equalsIgnoreCase("true") || temp.equalsIgnoreCase("yes")) {
             reverseFileLinkingEnabled = true;
         }
 		
-        String local_full = null;
+        String localHostIP = null;
 
-        try
-        {
+        try {
             InetAddress localHost = InetAddress.getLocalHost();
-            local_full = localHost.toString();
             localIPAddress = localHost.getHostAddress();
-            LogManager.getLogger(getClass()).info("local ip address : " + local_full);
+            LOG.info("local ip address : {}", localHost);
             localHostName = localHost.getHostName();
-        }
-        catch (Exception e)
-        {
-        	LogManager.getLogger(getClass()).error(e);
-            try
-            {
+        } catch (Exception e) {
+        	LOG.error(e);
+            try {
                 localHostName = InetAddress.getLocalHost().toString();
-            }
-            catch (Exception o)
-            {
-            	LogManager.getLogger(getClass()).error(o);
+            } catch (Exception o) {
+            	LOG.error(o);
                 localHostName = "cannot query host name";
             }
         }
@@ -749,108 +623,74 @@ public class WebFileSys
                 "primaryLanguage",
                 LanguageManager.DEFAULT_LANGUAGE);
 
-        LogManager.getLogger(getClass()).info("primary language: " + primaryLanguage);
+        LOG.info("primary language: " + primaryLanguage);
 
-        if (File.separatorChar == '/')
-        {
+        if (File.separatorChar == '/') {
         	SubdirExistCache.getInstance().setExistsSubdir("/", new Integer(1));
         }
 
         SubdirExistCache.getInstance().initialReadSubdirs(opSysType);
     }
 
-    public void initialize(Properties config)
-    {
-        if ((userMgrClass == null) || (userMgrClass.trim().length() == 0))
-        {
+    public void initialize(Properties config) {
+        if ((userMgrClass == null) || (userMgrClass.trim().isEmpty())) {
             userMgr = new XmlUserManager();
-        }
-        else
-        {
-            try
-            {
-                userMgr =
-                    (UserManager) Class
-                        .forName(this.userMgrClass)
-                        .newInstance();
-
-                LogManager.getLogger(getClass()).info("User Manager class: " + this.userMgrClass);
+        } else {
+            try {
+                userMgr = (UserManager) Class.forName(this.userMgrClass).newInstance();
+                LOG.info("User Manager class: " + this.userMgrClass);
+            } catch (ClassNotFoundException cnfex) {
+                LOG.error("the user manager class {} cannot be found: {}", userMgrClass, cnfex);
             }
-            catch (ClassNotFoundException cnfex)
-            {
-            	LogManager.getLogger(getClass()).error(
-                    "the user manager class "
-                        + userMgrClass
-                        + " cannot be found: "
-                        + cnfex);
-            }
-            catch (InstantiationException instEx)
-            {
-            	LogManager.getLogger(getClass()).error(
+            catch (InstantiationException instEx) {
+            	LOG.error(
                     "the user manager cannot be instantiated: " + instEx);
-            }
-            catch (IllegalAccessException iaEx)
-            {
-            	LogManager.getLogger(getClass()).error(
+            } catch (IllegalAccessException iaEx) {
+            	LOG.error(
                     "the user manager cannot be instantiated: " + iaEx);
-            }
-            catch (ClassCastException cex)
-            {
-            	LogManager.getLogger(getClass()).error(
-                    "the class "
-                        + userMgrClass
-                        + " does not implement the UserManager interface: "
-                        + cex);
+            } catch (ClassCastException cex) {
+            	LOG.error("the class " + userMgrClass + " does not implement the UserManager interface: " + cex);
             }
         }
 
-        if ((mailHost != null) && (mailHost.trim().length() > 0))
-        {
+        if ((mailHost != null) && (!mailHost.trim().isEmpty())) {
             adminEmailList = userMgr.getAdminUserEmails();
-
-            if (adminEmailList.size() == 0)
-            {
-            	LogManager.getLogger(getClass()).warn("no admin e-mail address available for event notification");
+            if (adminEmailList.isEmpty()) {
+            	LOG.warn("no admin e-mail address available for event notification");
             }
         }
         
         LanguageManager.getInstance(primaryLanguage).listAvailableLanguages();
 
-        if (File.separatorChar == '\\')
-        {
+        if (File.separatorChar == '\\') {
             WinDriveManager.getInstance();
         }
         
         readDateFormats(config);
         
-        if (mailHost != null)
-        {
+        if (mailHost != null) {
             InvitationManager.getInstance();
         }
 
         ViewHandlerManager.getInstance();
         
-        if (enableDiskQuota)
-        {
+        if (enableDiskQuota) {
             quotaInspector = new DiskQuotaInspector();
 
             quotaInspector.start();
         }
         
-        if (enableFolderWatch) 
-        {
+        if (enableFolderWatch) {
             FolderWatchManager.getInstance();
         }
         
         DecorationManager.getInstance();
         
-        if ((mailHost != null) && (mailHost.trim().length() > 0))
-        {
+        if ((mailHost != null) && (!mailHost.trim().isEmpty())) {
             initMailSession();        
         }
 
-        if (enableCalendar) 
-        {
+        if (enableCalendar) {
             AppointmentManager.getInstance();
         }
     }
@@ -865,15 +705,13 @@ public class WebFileSys
         
     	mailProps.put("mail.smtp.auth", isSmtpAuth());      
     	
-        if (getSmtpUser() != null) 
-        {
+        if (getSmtpUser() != null) {
     		mailProps.put("mail.smtp.user", getSmtpUser());        
         }
     	
         mailSession = Session.getInstance(mailProps, null);
 
-        if (isDebugMail()) 
-        {
+        if (isDebugMail()) {
             mailSession.setDebug(true);
         }
     }
@@ -882,123 +720,98 @@ public class WebFileSys
     	return mailSession;
     }
     
-    protected void readDateFormats(Properties config)
-    {
+    protected void readDateFormats(Properties config) {
         Enumeration propertyNames = config.propertyNames();
 
-        while (propertyNames.hasMoreElements())
-        {
+        while (propertyNames.hasMoreElements()) {
             String propertyName = (String) propertyNames.nextElement();
-
-            if (propertyName.startsWith("date.format."))
-            {
-                try
-                {
+            if (propertyName.startsWith("date.format.")) {
+                try {
                     String lang =
                         propertyName.substring(
                             propertyName.lastIndexOf('.') + 1);
 
                     String dateFormatString = config.getProperty(propertyName);
 
-                    if (dateFormatString.trim().length() == 0)
-                    {
+                    if (dateFormatString.trim().isEmpty()) {
                         dateFormatString = "yyyy/MM/dd HH:mm";
                     }
 
                     LanguageManager.getInstance().addDateFormat(
                         lang,
                         dateFormatString);
-                }
-                catch (IndexOutOfBoundsException iex)
-                {
-                	LogManager.getLogger(getClass()).warn("invalid date format: " + iex);
+                } catch (IndexOutOfBoundsException iex) {
+                	LOG.warn("invalid date format: " + iex);
                 }
             }
         }
     }
 
-    public int getDiskQuotaCheckHour()
-    {
+    public int getDiskQuotaCheckHour() {
     	return(diskQuotaCheckHour);
     }
     
-    public String getMailHost()
-    {
+    public String getMailHost() {
     	return(mailHost);
     }
     
-    public boolean isSmtpAuth() 
-    {
+    public boolean isSmtpAuth() {
     	return smtpAuth;
     }
     
-    public String getSmtpUser()
-    {
+    public String getSmtpUser() {
     	return smtpUser;
     }
     
-    public String getSmtpPassword()
-    {
+    public String getSmtpPassword() {
     	return smtpPassword;
     }
 
-    public boolean isSmtpSecure() 
-    {
+    public boolean isSmtpSecure() {
     	return smtpSecure;
     }
     
-    public boolean isMailNotifyQuotaAdmin()
-    {
+    public boolean isMailNotifyQuotaAdmin() {
     	return(mailNotifyQuotaAdmin);
     }
 
-    public boolean isMailNotifyQuotaUser()
-    {
+    public boolean isMailNotifyQuotaUser() {
     	return(mailNotifyQuotaUser);
     }
 
-    public boolean isMailNotifyLogin()
-    {
+    public boolean isMailNotifyLogin() {
     	return(mailNotifyLogin);
     }
     
-    public ArrayList<String> getAdminEmailList()
-    {
+    public ArrayList<String> getAdminEmailList() {
     	return(adminEmailList);
     }
     
-    public SimpleDateFormat getLogDateFormat()
-    {
+    public SimpleDateFormat getLogDateFormat() {
     	return(logDateFormat);
     }
     
-    public int getThumbnailsPerPage()
-    {
+    public int getThumbnailsPerPage() {
     	return(thumbnailsPerPage);
     }
     
-    public String getConfigBaseDir()
-    {
+    public String getConfigBaseDir() {
     	return(configBaseDir);
     }
     
-    public UserManager getUserMgr()
-    {
+    public UserManager getUserMgr() {
     	return(this.userMgr);
     }
     
-    public boolean isDebugMail()
-    {
+    public boolean isDebugMail() {
     	return(debugMail);
     }
 
-    public boolean isEnableCalendar()
-    {
+    public boolean isEnableCalendar() {
     	return(enableCalendar);
     }
     
-    public boolean isFolderWatch()
-    {
+    public boolean isFolderWatch() {
         return enableFolderWatch;
     }
     
@@ -1006,93 +819,75 @@ public class WebFileSys
     	return pollFilesysChangesInterval * 1000;
     }
     
-    public String getMailSenderAddress()
-    {
+    public String getMailSenderAddress() {
     	return(mailSenderAddress);
     }
     
-    public String getMailSenderName()
-    {
+    public String getMailSenderName() {
     	return(mailSenderName);
     }
     
-    public int getMaxAppointmentMailsPerHour()
-    {
+    public int getMaxAppointmentMailsPerHour() {
     	return maxAppointmentMailsPerHour;
     }
     
-    public String getClientUrl()
-    {
+    public String getClientUrl() {
     	return(this.clientUrl);
     }
     
-    public int getOpSysType()
-    {
+    public int getOpSysType() {
     	return(opSysType);
     }
     
-    public String getOpSysName()
-    {
+    public String getOpSysName() {
     	return(opSysName);
     }
     
-    public String getJavaVersion()
-    {
+    public String getJavaVersion() {
     	return(javaVersion);
     }
     
-    public DocumentBuilderFactory getDocFactory()
-    {
+    public DocumentBuilderFactory getDocFactory() {
     	return(docFactory);
     }
     
-    public String getPrimaryLanguage()
-    {
+    public String getPrimaryLanguage() {
     	return(primaryLanguage);
     }
     
-    public String getLocalHostName()
-    {
+    public String getLocalHostName() {
     	return(localHostName);
     }
     
-    public boolean isOpenRegistration()
-    {
+    public boolean isOpenRegistration() {
     	return(openRegistration);
     }
     
-    public String getWebAppRootDir()
-    {
+    public String getWebAppRootDir() {
     	return(webAppRootDir);
     }
     
-    public String getLoginErrorPage()
-    {
+    public String getLoginErrorPage() {
     	return(loginErrorPage);
     }
     
-    public String getLocalIPAddress()
-    {
+    public String getLocalIPAddress() {
     	return(localIPAddress);
     }
     
-    public void setMaintananceMode(boolean newVal)
-    {
+    public void setMaintananceMode(boolean newVal) {
     	maintananceMode = newVal;
     }
     
-    public boolean isMaintananceMode()
-    {
+    public boolean isMaintananceMode() {
     	return(maintananceMode);
     }
     
-    public boolean isAutoCreateThumbs()
-    {
+    public boolean isAutoCreateThumbs() {
     	return(autoCreateThumbs);
     }
 
-    public boolean isChmodAllowed()
-    {
+    public boolean isChmodAllowed() {
     	return(chmodAllowed);
     }
     
@@ -1100,63 +895,43 @@ public class WebFileSys
      * Are backward links from the linked file to the linking file enabeld?
      * @return
      */
-    public boolean isReverseFileLinkingEnabled()
-    {
+    public boolean isReverseFileLinkingEnabled() {
         return reverseFileLinkingEnabled;
     }
     
-    public void setThumbThreadRunning(boolean newVal)
-    {
+    public void setThumbThreadRunning(boolean newVal) {
     	thumbThreadRunning = newVal;
     }
     
-    public boolean isThumbThreadRunning()
-    {
+    public boolean isThumbThreadRunning() {
     	return(thumbThreadRunning);
     }
     
-    public boolean isShowAssignedIcons()
-    {
+    public boolean isShowAssignedIcons() {
     	return(showAssignedIcons);
     }
 
-    public void setLicensed(boolean newVal)
-    {
-    	licensed = newVal;
-    }
-    
-    public boolean isLicensed()
-    {
-    	return(licensed);
-    }
-    
-    public boolean isShowDescriptionsInline()
-    {
+    public boolean isShowDescriptionsInline() {
     	return(showDescriptionsInline);
     }
     
-    public boolean isAutoExtractMP3()
-    {
+    public boolean isAutoExtractMP3() {
     	return(autoExtractMP3);
     }
     
-    public boolean isSimulateRemote()
-    {
+    public boolean isSimulateRemote() {
         return simulateRemote;
     }
     
-    public boolean isDownloadStatistics()
-    {
+    public boolean isDownloadStatistics() {
     	return(downloadStatistics);
     }
     
-    public int getSlideShowDelay()
-    {
+    public int getSlideShowDelay() {
     	return(slideShowDelay);
     }
     
-    public long getUploadLimit()
-    {
+    public long getUploadLimit() {
     	return(uploadLimit);
     }
     
@@ -1164,96 +939,80 @@ public class WebFileSys
     	return textFileMaxLineLength;
     }
     
-    public int getFolderWatchInterval() 
-    {
+    public int getFolderWatchInterval() {
         return folderWatchInterval;
     }
     
-    public String getSystemEditor()
-    {
+    public String getSystemEditor() {
     	return(systemEditor);
     }
     
-    public String getLoopbackAddress()
-    {
+    public String getLoopbackAddress() {
     	return(LOOPBACK_ADDRESS);
     }
     
-    public String getIPV6LoopbackAddress()
-    {
+    public String getIPV6LoopbackAddress() {
         return(IPV6_LOOPBACK_ADDRESS);
     }
     
-    public String getServerDNS()
-    {
+    public String getServerDNS() {
         return(serverDNS);
     }
 
-    public String getLogoutURL()
-    {
+    public String getLogoutURL() {
     	return(this.logoutURL);
     }
     
-    public String getUserDocRoot()
-    {
+    public String getUserDocRoot() {
     	return(userDocRoot);
     }
     
-    public long getDefaultDiskQuota()
-    {
-    	return(DEFAULT_DISK_QUOTA);
+    public long getDefaultDiskQuota() {
+    	return(defaultDiskQuota);
     }
     
-    public boolean isMailNotifyRegister()
-    {
+    public boolean isMailNotifyRegister() {
     	return(mailNotifyRegister);
     }
 
-    public boolean isMailNotifyWelcome()
-    {
+    public boolean isMailNotifyWelcome() {
     	return(mailNotifyWelcome);
     }
     
-    public boolean isAllowProcessKill()
-    {
+    public boolean isAllowProcessKill() {
     	return(allowProcessKill);
     }
     
-    public boolean isOSShellCommandExcution()
-    {
+    public boolean isOSShellCommandExcution() {
     	return(osShellCommandExceution);
     }
     
-    public boolean isSyncIgnoreOffsetDST()
-    {
+    public boolean isSyncIgnoreOffsetDST() {
         return(syncIgnoreOffsetDST);
     }
     
-    public boolean isOldLinuxPsStyle()
-    {
+    public boolean isOldLinuxPsStyle() {
     	return(oldLinuxPsStyle);
     }
 
-    public DiskQuotaInspector getDiskQuotaInspector()
-    {
+    public DiskQuotaInspector getDiskQuotaInspector() {
     	return(quotaInspector);
     }
     
-    public int getCalendarExpirationPeriod()
-    {
+    public int getCalendarExpirationPeriod() {
     	return calendarExpirationPeriod;
     }
     
     public String getGoogleMapsAPIKeyHTTP() {
     	if (CommonUtils.isEmpty(googleMapsAPIKeyHTTP)) {
-    		LogManager.getLogger(getClass()).warn("no google maps API key configured for HTTP (missing config property GoogleMapsAPIKeyHTTP)");
+    		LOG.warn("no google maps API key configured for HTTP (missing config property GoogleMapsAPIKeyHTTP)");
     	}
     	return googleMapsAPIKeyHTTP;
     }
 
     public String getGoogleMapsAPIKeyHTTPS() {
     	if (CommonUtils.isEmpty(googleMapsAPIKeyHTTPS)) {
-    		LogManager.getLogger(getClass()).warn("no google maps API key configured for HTTPS (missing config property GoogleMapsAPIKeyHTTPS)");
+    		LOG.warn("no google maps API key configured for HTTPS (missing config property GoogleMapsAPIKeyHTTPS)");
     	}
     	return googleMapsAPIKeyHTTPS;
     }
