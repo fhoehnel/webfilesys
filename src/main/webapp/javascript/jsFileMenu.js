@@ -220,11 +220,18 @@ function switchReadWrite(path) {
     centeredDialog('/webfilesys/servlet?command=switchReadWrite&filePath=' + encodeURIComponent(path), '/webfilesys/xsl/switchReadWrite.xsl', 360, 130);
 }
 
-function associatedProg(path)
-{
-    var url = '/webfilesys/servlet?command=runAssociatedProgram&filePath=' + encodeURIComponent(path);
+function associatedProg(path) {
+    const parameters = { "filePath": encodeURIComponent(path) };
 
-    xmlRequest(url, startProgramResult);
+    xmlGetRequest("runAssociatedProgram", parameters, (responseXml) => {
+        const item = responseXml.getElementsByTagName("success")[0];
+        const success = item.firstChild.nodeValue;
+        if (success != 'true') {
+            const msgItem = responseXml.getElementsByTagName("message")[0];
+            const message = msgItem.firstChild.nodeValue;
+            customAlert(message);
+        }
+    });
 }
 
 function encrypt(fileName) {   
@@ -239,23 +246,6 @@ function decrypt(fileName) {
         document.cryptoForm.cryptoKey.focus();
         document.cryptoForm.cryptoKey.select();
     });
-}
-
-function startProgramResult(req) {
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var item = req.responseXML.getElementsByTagName("success")[0];            
-             var success = item.firstChild.nodeValue;
-
-             if (success != 'true') {
-                 var msgItem = req.responseXML.getElementsByTagName("message")[0];            
-                 var message = msgItem.firstChild.nodeValue;
-                 customAlert(message);
-             }             
-        }
-    }
 }
 
 function URLEncode(path)

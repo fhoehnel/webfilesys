@@ -280,8 +280,8 @@ function multiVideoFunction() {
 function multiVideoCopyMove() {
     if (anySelected()) {
         document.form2.command.value = 'multiImageCopyMove';
-        xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), showCopyResult);
-	    document.form2.command.value = '';
+        xmlFetchPost(getFormData(document.form2), handleCopyResult);
+        document.form2.command.value = '';
         resetSelected();
     } else {   
         customAlert(resourceBundle["alert.nofileselected"] + "!");

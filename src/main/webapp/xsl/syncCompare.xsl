@@ -23,6 +23,7 @@
 </xsl:if>
 
 <script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+<script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 <script language="JavaScript" src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
 <script language="JavaScript" src="/webfilesys/javascript/synchronize.js" type="text/javascript"></script>

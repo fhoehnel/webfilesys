@@ -113,7 +113,7 @@ public class RemoteEditorRequestHandler extends UserRequestHandler
 			headLine(this.getHeadlinePath(editFile));
 
 			output.println("<form id=\"editForm\" accept-charset=\"utf-8\" method=\"post\" action=\"/webfilesys/servlet\" style=\"margin-top:20px\">");
-			output.println("<input type=\"hidden\" name=\"command\" value=\"saveEditor\">");
+			output.println("<input type=\"hidden\" name=\"command\" value=\"saveRemoteEditor\">");
 			output.println("<input type=\"hidden\" name=\"actPath\" value=\"" + actPath + "\">");
 			output.println("<input type=\"hidden\" name=\"filename\" value=\"" + editFile + "\">");
 			output.print("<textarea id=\"editorText\" name=\"text\" rows=\"18\" cols=\"60\" style=\"width:100%;height:" + textAreaHeight + "px;font-family:monospace;\" wrap=\"virtual\">");

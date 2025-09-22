@@ -28,7 +28,6 @@ import java.util.Properties;
 import jakarta.mail.Session;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -46,7 +45,7 @@ public class WebFileSys
 {
 	private static WebFileSys instance = null;
 
-	public static final String VERSION = "Version 2.31.2-beta2 (20 Feb 2025)";
+	public static final String VERSION = "Version 2.31.2-beta2 (22 Sep 2025)";
  
     public static final String DEFAULT_MAIL_SENDER_ADDRESS = "WebFileSys@nowhere.com";
 
@@ -64,12 +63,12 @@ public class WebFileSys
     private static final String IPV6_LOOPBACK_ADDRESS = "0:0:0:0:0:0:0:1";
 
     // default upload limit: 128 MBytes
-    private static final long DEFAULT_UPLOAD_LIMIT = (128l * 1024l * 1024l);
+    private static final long DEFAULT_UPLOAD_LIMIT = (128L * 1024L * 1024L);
 
     /** folder watch interval in minutes */
     private static final int DEFAULT_FOLDER_WATCH_INTERVAL = 24 * 60;
     
-    private static long DEFAULT_DISK_QUOTA = (1024l * 1024l);
+    private static long DEFAULT_DISK_QUOTA = (1024L * 1024L);
     
 	public static final int DEFAULT_TEXT_FILE_MAX_LINE_LENGTH = 2048;
     

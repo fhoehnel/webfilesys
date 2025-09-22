@@ -95,12 +95,9 @@ function resetSelected() {
     }
 }
 
-function multiFileCopyMove()
-{
+function multiFileCopyMove() {
     document.form1.command.value='multiFileCopyMove';
-
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), showCopyResult);
-    
+    xmlFetchPost(getFormData(document.form1), handleCopyResult);
     document.form1.command.value='multiFileOp';
 }
 
@@ -378,16 +375,8 @@ function submitSwitchReadWrite()
 }
 
 function switchFolderWatch(path) {
-    var url = "/webfilesys/servlet?command=switchFolderWatch&path=" + encodeURIComponent(path);
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status != 200) {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-            hidePrompt();
-        }
-    });
+    const parameters = { "path": encodeURIComponent(path) };
+    xmlGetRequest("switchFolderWatch", parameters, () => hidePrompt());
 }
 
 function enableDisablePatternInput()

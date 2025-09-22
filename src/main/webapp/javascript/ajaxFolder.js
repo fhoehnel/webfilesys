@@ -75,11 +75,8 @@ function removeDir(path) {
     });
 }
 
-function cancelSearch()
-{
-    url = "/webfilesys/servlet?command=cancelSearch";
-
-    xmlRequest(url, handleSearchCanceled);
+function cancelSearch() {
+    xmlGetRequest("cancelSearch", {});
 }
 
 function clearThumbs(path) {
@@ -104,28 +101,21 @@ function createThumbs(path) {
 	});
 }
 
-function winCmdLine(path)
-{
-    url = "/webfilesys/servlet?command=winCmdLine&path=" + encodeURIComponent(path);
-
-    xmlRequest(url, handleCmdLineResult);
+function winCmdLine(path) {
+    const parameters = { "path": encodeURIComponent(path) };
+    xmlGetRequest("winCmdLine", parameters, xmlDoc => {
+        var successItem = xmlDoc.getElementsByTagName("success")[0];
+        var success = successItem.firstChild.nodeValue;
+        if (success != 'true') {
+            customAlert("Windows Command Line could not be started");
+        }
+    });
 }
 
 function hideMsg()
 {
      msgBox1 = document.getElementById("msg1");
      msgBox1.style.visibility = "hidden";
-}
-
-function handleSearchCanceled(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status != 200)
-        {
-             alert("communication failure");
-        }
-    }
 }
 
 function handleCmdLineResult(req)
@@ -516,41 +506,29 @@ function querySubdirStatus() {
 	}
 }
 
-function synchronize(path, domId)
-{
+function synchronize(path, domId) {
     parent.syncStarted = !parent.syncStarted;
 	
 	deselectFolder();
 	selectFolder(domId);
 
-    url = "/webfilesys/servlet?command=selectSyncFolder&path=" + encodeURIComponent(path);
+    const parameters = { "path": encodeURIComponent(path) };
 
-    xmlRequest(url, selectSyncFolderResult);
-}
+    xmlGetRequest("selectSyncFolder", parameters, responseXml => {
+        let item = responseXml.getElementsByTagName("success")[0];
+        const result = item.firstChild.nodeValue;
 
-function selectSyncFolderResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var item = req.responseXML.getElementsByTagName("success")[0];            
-             var result = item.firstChild.nodeValue;
-             
-             hideMenu();
+        hideMenu();
 
-             if (result == 'targetSelected')
-             {
-                 openSyncWindow();
-                 return;
-             }
-
-             item = req.responseXML.getElementsByTagName("message")[0];            
-             var message = item.firstChild.nodeValue;
-             
-             toast(message, 4000);
+        if (result === "targetSelected") {
+            openSyncWindow();
+            return;
         }
-    }
+
+        item = responseXml.getElementsByTagName("message")[0];
+        const message = item.firstChild.nodeValue;
+        toast(message, 4000);
+    });
 }
 
 function openSyncWindow()
@@ -569,39 +547,22 @@ function openSyncWindow()
     syncWin.focus();
 }
 
-function deselectSyncFolders()
-{
-    url = "/webfilesys/servlet?command=selectSyncFolder&cmd=deselect";
-    
-    xmlRequest(url, deselectSyncFolderResult);
-}
-
-function deselectSyncFolderResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            setTimeout("self.close()", 100);
-        }
-    }
+function deselectSyncFolders() {
+    const parameters = { "cmd": "deselect" };
+    xmlGetRequest("selectSyncFolder", parameters, responseXml => {
+        setTimeout(() => self.close(), 100);
+    });
 }
 
 function cancelSynchronize() {
     deselectFolder();
 
-    url = "/webfilesys/servlet?command=selectSyncFolder&cmd=deselect";
+    const parameters = {"cmd": "deselect"};
 
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                parent.syncStarted = false;
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-            hideMenu();    
-            stopMenuClose = true;
-        }
+    xmlGetRequest("selectSyncFolder", parameters, () => {
+        parent.syncStarted = false;
+        hideMenu();
+        stopMenuClose = true;
     });
 }
 
@@ -632,22 +593,20 @@ function compareFolders(path, domId) {
 	});
 }
 
-function cancelCompare()
-{
+function cancelCompare() {
+    console.debug("cancelCompare start new");
     deselectFolder();
-
-    url = "/webfilesys/servlet?command=selectCompFolder&cmd=deselect";
-
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
+    const parameters = { "cmd": "deselect" };
+    xmlGetRequest("selectCompFolder", parameters,
+            responseXml => {
                 parent.compStarted = false;
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-            hideMenu();    
-            stopMenuClose = true;
-        }
+                setTimeout(() => self.close(), 100);
+                hideMenu();
+                stopMenuClose = true;
+            },
+        () => {
+                hideMenu();
+                stopMenuClose = true;
     });
 }
 

@@ -269,8 +269,8 @@ function resize() {
 function multiImageCopyMove() {
     if (anySelected()) {
         document.form2.command.value = 'multiImageCopyMove';
-        xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), showCopyResult);
-	    document.form2.command.value = 'compareImg';
+        xmlFetchPost(getFormData(document.form2), handleCopyResult);
+        document.form2.command.value = 'compareImg';
     } else {   
         customAlert(resourceBundle["alert.nofileselected"] + "!");
     }

@@ -10,7 +10,42 @@ function xmlRequestPost(url, params, callBackFunction) {
     req.onreadystatechange = function() {callBackFunction(req)};
     req.open("POST", url, true);
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	req.send(params);
+    req.send(params);
+}
+
+function xmlFetchPost(postData, successCallBack, failureCallBack) {
+    showHourGlass();
+
+    const requestOptions = {
+        method: 'POST',
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: postData
+    };
+
+    fetch("/webfilesys/servlet", requestOptions)
+        .then((response) => {
+            hideHourGlass();
+            if (response.ok) {
+                return response.text();
+            }
+            if (typeof failureCallback !== 'undefined') {
+                failureCallback();
+            } else {
+                throw new Error('fetch communication error');
+            }
+        })
+        .then((data) => {
+            if (successCallBack) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data, 'text/xml');
+                successCallBack(xmlDoc);
+            }
+        })
+        .catch(error => {
+            hideHourGlass();
+            customAlert(resourceBundle["alert.communicationFailure"]);
+            console.error("communication error:", error);
+        });
 }
 
 function xmlGetRequest(command, parameters, successCallBack, failureCallBack) {
@@ -21,21 +56,30 @@ function xmlGetRequest(command, parameters, successCallBack, failureCallBack) {
         url = url + "&" + key + "=" + parameters[key];
    	}
 	
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-            	successCallBack(req.responseXML);
-                hideHourGlass();
-            } else {
-            	hideHourGlass();
-            	if (typeof failureCallback !== 'undefined') {
-            		failureCallback();
-            	} else {
-                    customAlert(resourceBundle["alert.communicationFailure"]);
-            	}
+    fetch(url)
+        .then((response) => {
+            hideHourGlass();
+            if (response.ok) {
+                return response.text();
             }
-        }
-    });
+            if (typeof failureCallback !== 'undefined') {
+                failureCallback();
+            } else {
+                throw new Error('fetch communication error');
+            }
+        })
+        .then((data) => {
+            if (successCallBack) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data, 'text/xml');
+                successCallBack(xmlDoc);
+            }
+        })
+        .catch(error => {
+            hideHourGlass();
+            customAlert(resourceBundle["alert.communicationFailure"]);
+            console.error("communication error:", error);
+        });
 }
 
 function xmlPostRequest(command, parameters, successCallBack, failureCallBack) {
@@ -48,23 +92,37 @@ function xmlPostRequest(command, parameters, successCallBack, failureCallBack) {
     for (const key in parameters) {
     	postData = postData + (postData.length > 0 ? "&" : "") + key + "=" + parameters[key];
    	}
-	
-	xmlRequestPost("/webfilesys/servlet", postData, function(req) {
-		
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-            	successCallBack(req.responseXML);
-                hideHourGlass();
-            } else {
-            	hideHourGlass();
-            	if (typeof failureCallback !== 'undefined') {
-            		failureCallback();
-            	} else {
-                    customAlert(resourceBundle["alert.communicationFailure"]);
-            	}
+
+    const requestOptions = {
+        method: 'POST',
+        headers: {"Content-Type": "application/x-www-form-urlencoded"},
+        body: postData
+    };
+
+    fetch("/webfilesys/servlet", requestOptions)
+        .then((response) => {
+            hideHourGlass();
+            if (response.ok) {
+                return response.text();
             }
-        }
-    });
+            if (typeof failureCallback !== 'undefined') {
+                failureCallback();
+            } else {
+                throw new Error('fetch communication error');
+            }
+        })
+        .then((data) => {
+            if (successCallBack) {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(data, 'text/xml');
+                successCallBack(xmlDoc);
+            }
+        })
+        .catch(error => {
+            hideHourGlass();
+            customAlert(resourceBundle["alert.communicationFailure"]);
+            console.error("communication error:", error);
+        });
 }
 
 function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
@@ -213,33 +271,33 @@ function browserXsltMSIE(xmlUrl, xslUrl)
     return(xslProcessor.output);
 }
 
-function getFormData(formObj) 
-{
-    var buff= '';
+function getFormData(formObj) {
+    let buff = "";
 	
-    var elemNum = formObj.elements.length;
+    const elemNum = formObj.elements.length;
 	
-    for (i = 0; i < elemNum; i++) 
-    {
-	    formElem = formObj.elements[i];
+    for (let i = 0; i < elemNum; i++) {
+	    const formElem = formObj.elements[i];
 
-	    switch (formElem.type) 
-	    {
-	        case 'checkbox' :
-	            if (formElem.checked)
-	            {
-	                buff += formElem.name + '=' + encodeURIComponent(formElem.value) + '&'
+	    switch (formElem.type) {
+	        case 'checkbox':
+	            if (formElem.checked) {
+                    if (buff.length > 0) {
+                        buff += "&";
+                    }
+                    buff += formElem.name + '=' + encodeURIComponent(formElem.value)
 	            }
-	      
 	            break;
-	      
 	        case 'text':
 	        case 'select-one':
 	        case 'hidden':
 	        case 'password':
 	        case 'email':
 	        case 'textarea':
-	            buff += formElem.name + '=' + encodeURIComponent(formElem.value) + '&'
+                if (buff.length > 0) {
+                    buff += "&";
+                }
+	            buff += formElem.name + '=' + encodeURIComponent(formElem.value);
 	            break;
 	    }
     }
@@ -250,7 +308,7 @@ function getFormData(formObj)
 function getFormDataAsProps(formObj) {
     const formParams = {};
 	
-    var elemNum = formObj.elements.length;
+    const elemNum = formObj.elements.length;
 	
     for (let i = 0; i < elemNum; i++) {
 	    let formElem = formObj.elements[i];
@@ -273,7 +331,6 @@ function getFormDataAsProps(formObj) {
 	            break;
 	    }
     }
-    
     return formParams;
 }
 
@@ -298,11 +355,11 @@ function getPageXScrolled()
 }
 
 function showHourGlass() {
-    var waitDivElem = document.createElement('div');
+    const waitDivElem = document.createElement('div');
     
     waitDivElem.setAttribute("id", "waitDiv");
     
-    var hourGlassElem = document.createElement('img');
+    const hourGlassElem = document.createElement('img');
     hourGlassElem.setAttribute("src", "/webfilesys/images/hourglass.gif");
     waitDivElem.appendChild(hourGlassElem);
 
@@ -313,11 +370,9 @@ function showHourGlass() {
     waitDivElem.style.visibility = "visible";
 }
 
-function hideHourGlass()
-{
-    var waitDiv = document.getElementById("waitDiv");
-    if (waitDiv)
-    {
+function hideHourGlass() {
+    const waitDiv = document.getElementById("waitDiv");
+    if (waitDiv) {
         document.getElementsByTagName('body')[0].removeChild(waitDiv);
     }
 }
