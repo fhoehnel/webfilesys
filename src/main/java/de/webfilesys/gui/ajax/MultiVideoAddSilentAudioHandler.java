@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.graphics.VideoSilentAudioGenerator;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -49,13 +50,13 @@ public class MultiVideoAddSilentAudioHandler extends MultiVideoHandlerBase {
 
 		silentAudioGenerator.start();
 
-    	String targetPath = currentPath + File.separator + VideoSilentAudioGeneratorThread.TARGET_SUBDIR;
+    	String targetPath = currentPath + File.separator + VideoSilentAudioGenerator.TARGET_SUBDIR;
 		
 		Element resultElement = doc.createElement("result");
 
 		XmlUtil.setChildText(resultElement, "success", Boolean.toString(true));
 
-		XmlUtil.setChildText(resultElement, "targetFolder", VideoSilentAudioGeneratorThread.TARGET_SUBDIR);
+		XmlUtil.setChildText(resultElement, "targetFolder", VideoSilentAudioGenerator.TARGET_SUBDIR);
 
 		XmlUtil.setChildText(resultElement, "targetPath", targetPath);
 		
