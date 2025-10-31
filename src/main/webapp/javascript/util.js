@@ -12,36 +12,34 @@ function formatDecimalNumber(nStr)
   return x1 + x2;
 }
 
-function getWinHeight() 
-{
-    var h;
-    if (window.innerHeight) 
-    {
-        h = window.innerHeight; 
-    } 
-    else if (document.body)
-    {
+function getWinHeight() {
+    let h;
+    if (window.innerHeight) {
+        h = window.innerHeight;
+        if (window.innerHeight > window.outerHeight) {
+            // strange but true on chrome on android
+            h = window.outerHeight;
+        }
+    } else if (document.body) {
         h = document.body.clientHeight;
-        if ((document.body.offsetHeight == h) && document.documentElement && document.documentElement.clientHeight)
-        {
+        if ((document.body.offsetHeight == h) && document.documentElement && document.documentElement.clientHeight) {
             h = document.documentElement.clientHeight;
         }
     }
     return h;
 }    
   
-function getWinWidth() 
-{
-    var w;
-    if (window.innerWidth) 
-    {
-        w = window.innerWidth; 
-    } 
-    else if (document.body)
-    {
+function getWinWidth() {
+    let w;
+    if (window.innerWidth) {
+        w = window.innerWidth;
+        if (window.innerWidth > window.outerWidth) {
+            // strange but true on chrome on android
+            w = window.outerWidth;
+        }
+    } else if (document.body) {
         w = document.body.clientWidth;
-        if ((document.body.offsetWidth == w) && document.documentElement && document.documentElement.clientWidth)
-        {
+        if ((document.body.offsetWidth == w) && document.documentElement && document.documentElement.clientWidth) {
             w = document.documentElement.clientWidth;
         }
     }
