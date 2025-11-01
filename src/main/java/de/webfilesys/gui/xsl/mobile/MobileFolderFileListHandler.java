@@ -368,15 +368,21 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 		
 		StringTokenizer pathParser = new StringTokenizer(relativePath, File.separator);
 		
-		StringBuffer partialPath = new StringBuffer();
-		
+		StringBuilder partialPath = new StringBuilder();
+
+        boolean firstToken = true;
+
 		while (pathParser.hasMoreTokens())
 		{
 			String partOfPath = pathParser.nextToken();
 			
 			partialPath.append(partOfPath);
-			
-			if (pathParser.hasMoreTokens())
+
+            if (firstToken && partOfPath.length() == 2 && partOfPath.charAt(1) == ':') {
+                partialPath.append(File.separator);
+            }
+
+            if (pathParser.hasMoreTokens())
 			{
 				partialPath.append(File.separatorChar);		
 			}
@@ -388,6 +394,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 			partOfPathElem.setAttribute("name", partOfPath);
 			
 			partOfPathElem.setAttribute("path", UTF8URLEncoder.encode(partialPath.toString()));
+
+            firstToken = false;
 		}
 		// end path section
 
