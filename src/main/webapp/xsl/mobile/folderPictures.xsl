@@ -69,7 +69,13 @@
       picWin = window.open('/webfilesys/servlet?command=showImg&amp;imgname=' + encodeURIComponent(imgPath), 'picWin' + randNum, 'status=no,toolbar=no,location=no,menu=no,width=400,height=300,resizable=yes,left=1,top=1,screenX=1,screenY=1');
       picWin.focus();
   }
-  
+
+  function setFullScreen() {
+    requestFullScreen(document.documentElement);
+    document.getElementById("fullScreenButton").style.display = 'none';
+    setTimeout(() => setMobileThumbContHeight(), 500);
+  }
+
   var path = '<xsl:value-of select="/fileList/menuPath" />';
   
 </script>
@@ -106,6 +112,11 @@
   <div id="msg1" class="msgBox" style="visibility:hidden" />
 
   <div id="prompt" class="promptBox" style="visibility:hidden" />
+
+  <a id="fullScreenButton" href="javascript:void(0)" onclick="setFullScreen()"
+     style="position:absolute;top:0px;right:10px;">
+    <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>
+  </a>
 
 </body>
 

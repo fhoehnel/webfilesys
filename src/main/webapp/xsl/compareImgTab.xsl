@@ -39,10 +39,15 @@
         
         var newWinWidth = screen.availWidth - 20;
         var newWinHeight = screen.availHeight - 64;
-        
+
         resizeViewPort(newWinWidth, newWinHeight);
         window.moveTo(screen.availWidth / 2 - (newWinWidth / 2), 1);
-        
+
+        function setFullScreen() {
+            requestFullScreen(document.documentElement);
+            document.getElementById("fullScreenButton").style.display = 'none';
+        }
+
     </script>
 
   </head>
@@ -91,6 +96,11 @@
         <xsl:attribute name="src">/webfilesys/images/space.gif</xsl:attribute>
       </img>
     </div>
+
+    <a id="fullScreenButton" href="javascript:void(0)" onclick="setFullScreen()"
+        style="position:absolute;top:10px;right:10px;">
+      <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>
+    </a>
 
   </body>
 
