@@ -31,9 +31,15 @@
 </script>
 
     <script type="text/javascript">
-        function setFullScreen() {
-            requestFullScreen(parent.document.documentElement);
-            document.getElementById("fullScreenButton").style.display = 'none';
+        let fullScreen = false;
+
+        function switchFullScreen() {
+            if (fullScreen) {
+                parent.document.exitFullscreen();
+            } else {
+                requestFullScreen(parent.document.documentElement);
+            }
+            fullScreen = !fullScreen;
         }
 
     </script>
@@ -306,7 +312,7 @@
             </th>
 
             <th>
-              <a id="fullScreenButton" href="javascript:void(0)" onclick="setFullScreen()">
+              <a id="fullScreenButton" href="javascript:void(0)" onclick="switchFullScreen()">
                   <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>
               </a>
             </th>

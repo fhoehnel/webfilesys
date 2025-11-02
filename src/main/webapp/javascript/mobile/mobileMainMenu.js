@@ -12,8 +12,6 @@ function mobileMainMenu() {
 
 	addContextMenuEntry(menuDiv, "switchToClassicVersion()", resourceBundle["classicView"]);
 
-    addContextMenuEntry(menuDiv, "requestFullScreen(document.documentElement)", resourceBundle["fullScreenMode"]);
-
 	addContextMenuEntry(menuDiv, "mobileLogout()", resourceBundle["label.logout"]);
     
     positionMenuDiv(menuDiv);

@@ -70,10 +70,19 @@
       picWin.focus();
   }
 
-  function setFullScreen() {
-    requestFullScreen(document.documentElement);
-    document.getElementById("fullScreenButton").style.display = 'none';
-    setTimeout(() => setMobileThumbContHeight(), 500);
+  let fullScreen = false;
+
+  function switchFullScreen() {
+      if (fullScreen) {
+          document.exitFullscreen();
+      } else {
+          requestFullScreen(document.documentElement);
+      }
+      if (fullScreen) {
+          document.getElementById("scrollAreaCont").style.height = '10px';
+      }
+      fullScreen = !fullScreen;
+      setTimeout(() => setMobileThumbContHeight(), 500);
   }
 
   var path = '<xsl:value-of select="/fileList/menuPath" />';
@@ -113,7 +122,7 @@
 
   <div id="prompt" class="promptBox" style="visibility:hidden" />
 
-  <a id="fullScreenButton" href="javascript:void(0)" onclick="setFullScreen()"
+  <a id="fullScreenButton" href="javascript:void(0)" onclick="switchFullScreen()"
      style="position:absolute;top:0px;right:10px;">
     <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>
   </a>

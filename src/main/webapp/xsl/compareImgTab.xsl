@@ -43,9 +43,16 @@
         resizeViewPort(newWinWidth, newWinHeight);
         window.moveTo(screen.availWidth / 2 - (newWinWidth / 2), 1);
 
-        function setFullScreen() {
-            requestFullScreen(document.documentElement);
-            document.getElementById("fullScreenButton").style.display = 'none';
+        let fullScreen = false;
+
+        function switchFullScreen() {
+            if (fullScreen) {
+                document.exitFullscreen();
+            } else {
+                requestFullScreen(document.documentElement);
+            }
+            fullScreen = !fullScreen;
+            compareImgLoadInitial();
         }
 
     </script>
@@ -97,7 +104,7 @@
       </img>
     </div>
 
-    <a id="fullScreenButton" href="javascript:void(0)" onclick="setFullScreen()"
+    <a id="fullScreenButton" href="javascript:void(0)" onclick="switchFullScreen()"
         style="position:absolute;top:10px;right:10px;">
       <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>
     </a>
