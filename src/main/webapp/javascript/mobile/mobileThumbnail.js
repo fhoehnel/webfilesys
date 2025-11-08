@@ -47,8 +47,8 @@ function mobilePicturePopup(filePath, picIdx) {
     
     zoomImgObj.src = imgSrc;
 
-	const winWidth = document.documentElement.clientWidth;
-	const winHeight = document.documentElement.clientHeight;
+    const winWidth = getWinWidth();
+    const winHeight = getWinHeight();
 
     if (winWidth / xsize > winHeight / ysize) {
         zoomEndYSize = winHeight - 6;
@@ -76,24 +76,12 @@ function mobilePicturePopup(filePath, picIdx) {
         zoomEndYSize = Math.round(zoomEndXSize * (ysize / xsize));
     }
 
-    var picture = document.getElementById('picturePopup');
-    picture.src = imgSrc;
+    const picturePopup = document.getElementById('picturePopup');
 
-    var yScrolled;
-
-    if (document.all) {
-        yScrolled = document.body.scrollTop;
-    } else {
-        yScrolled = window.pageYOffset;
-    }
-
-    var picturePopup = document.getElementById('picturePopup');
-
-    picturePopup.style.top = yScrolled + Math.round((winHeight - 3) / 2) - Math.round(zoomEndYSize / 2) + "px"; 
-    picturePopup.style.left = Math.round((winWidth - 3) / 2) - Math.round(zoomEndXSize / 2) + "px"; 
-
+    picturePopup.style.left = Math.round((winWidth - 3) / 2) - Math.round(zoomEndXSize / 2) + "px";
     picturePopup.style.width = zoomEndXSize + 'px';
     picturePopup.style.height = zoomEndYSize + 'px';
+    picturePopup.src = imgSrc;
 
     picturePopup.style.visibility = 'visible';
     

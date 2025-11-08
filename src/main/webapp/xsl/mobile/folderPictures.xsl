@@ -129,7 +129,7 @@
 
 </body>
 
-<div id="picturePopup" class="picturePopup zoomedPicCont">
+<div id="picturePopup" class="picturePopupFixed">
   <img id="zoomPic" class="zoomPic zoomedPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/>
   <div id="popupClose" class="popupClose" onclick="hidePopupPicture();">
     <img src="images/winClose.gif" border="0" width="16" height="14"/>
