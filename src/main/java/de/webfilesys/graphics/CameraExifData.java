@@ -335,13 +335,13 @@ public class CameraExifData {
 		}
 
 		if (!thumbnailDirectory.containsTag(ExifThumbnailDirectory.TAG_ORIENTATION)) {
-			return (ORIENTATION_UNKNOWN);
+            return getOrientation();
 		}
 
 		try {
 			return thumbnailDirectory.getInt(ExifThumbnailDirectory.TAG_ORIENTATION);
 		} catch (MetadataException metex) {
-			return (ORIENTATION_UNKNOWN);
+            return getOrientation();
 		}
 	}
 	
@@ -548,7 +548,10 @@ public class CameraExifData {
 	}
 	
 	private String formatExposureTime(String origExifValue) {
-		String[] partsOfValue = origExifValue.split("/");
+		if (origExifValue == null) {
+            return "";
+        }
+        String[] partsOfValue = origExifValue.split("/");
 		if (partsOfValue.length != 2) {
 			return origExifValue;
 		}
