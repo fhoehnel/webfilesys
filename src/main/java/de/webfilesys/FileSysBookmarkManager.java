@@ -147,15 +147,11 @@ public class FileSysBookmarkManager extends Thread
 
             doc = builder.parse(inputSource);
         }
-        catch (SAXException saxex)
+        catch (SAXException | IOException saxex)
         {
             LogManager.getLogger(getClass()).error("failed to load category file : " + bookmarkFilePath, saxex);
         }
-        catch (IOException ioex)
-        {
-            LogManager.getLogger(getClass()).error("failed to load category file : " + bookmarkFilePath, ioex);
-        }
-        finally 
+        finally
         {
             if (fis != null)
             {
@@ -235,7 +231,6 @@ public class FileSysBookmarkManager extends Thread
 
         if (bookmarkList == null)
         {
-            // System.out.println("bookmark list for user " + userid + " does not exist!");
             return(null);
         }
 

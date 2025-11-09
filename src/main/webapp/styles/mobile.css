@@ -467,6 +467,10 @@ table.dataForm {
     background-color: #ffffe0;
 }
 
+img.mobileFolderIcon {
+    padding: 4px 2px;
+}
+
 body.mobile a.dirtree {
 	font-size: 24px;
 	color: maroon;

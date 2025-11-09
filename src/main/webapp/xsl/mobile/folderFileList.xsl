@@ -299,7 +299,14 @@
             <i class="icon-font icon-harddisk mobileFolderIcon"></i>
           </xsl:if>
           <xsl:if test="not(@drive)">
-            <i class="icon-font icon-folderClosed mobileFolderIcon"></i>
+            <xsl:if test="not(@icon)">
+              <i class="icon-font icon-folderClosed mobileFolderIcon"></i>
+            </xsl:if>
+            <xsl:if test="@icon">
+              <img class="icon mobileFolderIcon">
+                <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
+              </img>
+            </xsl:if>
           </xsl:if>
         </td>
         <td colspan="2" class="fileListData sepBottom" style="width:95%">
