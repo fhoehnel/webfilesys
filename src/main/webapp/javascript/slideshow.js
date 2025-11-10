@@ -195,82 +195,71 @@ function stopAndGo() {
 }
     
 function loadImageIgnorePrefetch() {
-    url = '/webfilesys/servlet?command=slideShowImage&imageIdx=' + imageIdx + '&windowWidth=' + getWinWidth() + '&windowHeight=' + getWinHeight();
 
-    xmlRequest(url, showImageNoPrefetch);
-}
-    
-function showImageNoPrefetch(req) {
-    if (req.readyState == 4) {
-        if (req.status == 200) {
-            var item = req.responseXML.getElementsByTagName("imagePath")[0];            
+    const parameters = {
+        "imageIdx": imageIdx.toString(),
+        "windowWidth": getWinWidth(),
+        "windowHeight": getWinHeight()
+    };
 
-            var imagePath = item.firstChild.nodeValue;
-                
-            item = req.responseXML.getElementsByTagName("displayWidth")[0]; 
-                
-            var displayWidth = item.firstChild.nodeValue;
+    xmlGetRequest("slideShowImage", parameters, responseXml => {
+        let item = responseXml.getElementsByTagName("imagePath")[0];
+        const imagePath = item.firstChild.nodeValue;
 
-            item = req.responseXML.getElementsByTagName("displayHeight")[0]; 
-                
-            var displayHeight = item.firstChild.nodeValue;
-                
-            if (imagePath != '') {
-                var imageElement = imageElements[currentImg];
+        item = responseXml.getElementsByTagName("displayWidth")[0];
+        const displayWidth = item.firstChild.nodeValue;
 
-                imageElement.style.visibility = 'hidden';
-                    
-                if (fadeEnabled) {
-                    var alternateImg;                    
-			        if (currentImg == 0) {
-					    alternateImg = imageElements[1];
-					    currentImg = 1;
-				    } else {
-				        alternateImg = imageElements[0];
-				        currentImg = 0;
-				    }
+        item = responseXml.getElementsByTagName("displayHeight")[0];
+        const displayHeight = item.firstChild.nodeValue;
 
-				    alternateImg.style.visibility = 'hidden';
-			        alternateImg.src = '/webfilesys/images/space.gif';
-                    alternateImg.width = 1;
-                    alternateImg.heigth = 1;
-		            alternateImg.style.opacity = 1;
-				}
+        if (imagePath != '') {
+            const imageElement = imageElements[currentImg];
+            imageElement.style.visibility = 'hidden';
 
-			    imageElement.style.top = Math.round(((getWinHeight() - displayHeight) / 2)) + 'px';
-				imageElement.style.left = Math.round(((getWinWidth() - displayWidth) / 2)) + 'px';
-                    
-                imageElement.src = '/webfilesys/images/space.gif';
+            if (fadeEnabled) {
+                let alternateImg;
+    	        if (currentImg == 0) {
+    			    alternateImg = imageElements[1];
+    			    currentImg = 1;
+    		    } else {
+    		        alternateImg = imageElements[0];
+    		        currentImg = 0;
+    		    }
 
-                imageElement.width = 1;
-                    
-                imageElement.heigth = 1;
-                    
-                imageElement.src = '/webfilesys/servlet?command=getFile&filePath=' + encodeURIComponent(imagePath) + '&cached=true';
-                    
-                imageElement.width = displayWidth;
-                    
-                imageElement.heigth = displayHeight;
-             
-                if (fadeEnabled) {
-		            imageElement.style.opacity = 1;
-		        }
-		        
-                imageElement.style.visibility = 'visible';
-					
-                imageIdx = imageIdx + 1;
-                    
-                if (imageIdx == numberOfImages) {
-                        imageIdx = 0;
-                } 
-                    
-                first = true;
-                prefetchSrc = '/webfilesys/images/space.gif';
+    	        alternateImg.style.visibility = 'hidden';
+    		    alternateImg.src = '/webfilesys/images/space.gif';
+                alternateImg.width = 1;
+                alternateImg.heigth = 1;
+    		    alternateImg.style.opacity = 1;
+    		}
+
+    		imageElement.style.top = Math.round(((getWinHeight() - displayHeight) / 2)) + 'px';
+    		imageElement.style.left = Math.round(((getWinWidth() - displayWidth) / 2)) + 'px';
+
+            imageElement.src = '/webfilesys/images/space.gif';
+            imageElement.width = 1;
+            imageElement.heigth = 1;
+            imageElement.src = '/webfilesys/servlet?command=getFile&filePath=' + encodeURIComponent(imagePath) + '&cached=true';
+            imageElement.width = displayWidth;
+            imageElement.heigth = displayHeight;
+
+            if (fadeEnabled) {
+    		    imageElement.style.opacity = 1;
+    		}
+
+            imageElement.style.visibility = 'visible';
+
+            imageIdx = imageIdx + 1;
+            if (imageIdx == numberOfImages) {
+                imageIdx = 0;
             }
+
+            first = true;
+            prefetchSrc = '/webfilesys/images/space.gif';
         }
-    }
+    });
 }
-    
+
 function goBack() {
    if (first) {
        rollBackImageIdx(2);

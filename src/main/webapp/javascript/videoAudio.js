@@ -142,100 +142,95 @@ function setVideoDimensions(pic) {
 
     var picFileName = pixDim.getAttribute("picFileName");
 
-    var url = "/webfilesys/servlet?command=video&cmd=getVideoDimensions&fileName=" +  encodeURIComponent(picFileName);
+    const parameters = {
+        "cmd": "getVideoDimensions",
+        "fileName": encodeURIComponent(picFileName)
+    };
 
     var picIsLink = pixDim.getAttribute("picIsLink");
     if (picIsLink) {
-    	url = url + "&link=true";
+        parameters.link = "true";
     }
-    
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
-			    
-                var errorItem = xmlDoc.getElementsByTagName("error")[0];            
-                if (errorItem) {
-                	return;
-                }
-			    
-			    var videoWidth = null;
-			    var videoHeight = null;
-                var codec = null;
-                var audioCodec = null;
-                var duration = null;
-                var fps = null;
-			    
-                var item = xmlDoc.getElementsByTagName("xpix")[0];            
-                if (item) {
-                    videoWidth = item.firstChild.nodeValue;
-                }
-             
-                item = xmlDoc.getElementsByTagName("ypix")[0];            
-                if (item) {
-                    videoHeight = item.firstChild.nodeValue;
-                }
-			    
-                item = xmlDoc.getElementsByTagName("codec")[0];            
-                if (item) {
-                	codec = item.firstChild.nodeValue;
-                }
-			    
-                item = xmlDoc.getElementsByTagName("audioCodec")[0];            
-                if (item) {
-                	audioCodec = item.firstChild.nodeValue;
-                }
-			    
-                item = xmlDoc.getElementsByTagName("duration")[0];            
-                if (item && item.firstChild) {
-                	duration = item.firstChild.nodeValue;
-                }
-			    
-                item = xmlDoc.getElementsByTagName("fps")[0];            
-                if (item) {
-                	fps = item.firstChild.nodeValue;
-                }
 
-			    if ((videoWidth != null) && (videoHeight != null)) {
-			        pixDim.innerHTML = videoWidth + " x " + videoHeight + " pix";
-			        
-			        var pic = document.getElementById(picId);
-			        if (pic) {
-			        	pic.setAttribute("origWidth", videoWidth);
-			        	pic.setAttribute("origHeight", videoHeight);
-			        	if (codec) {
-                            var codecCont = document.getElementById("codec-" + picId.substring(4));
-                            if (codecCont) {
-                                codecCont.innerHTML = codec;
-                            }
-			        		// pic.setAttribute("codec", codec);
-			        	}
-			        	if (duration) {
-                            var durationCont = document.getElementById("duration-" + picId.substring(4));
-                            if (durationCont) {
-                                durationCont.innerHTML = duration;
-                            }
-			        		// pic.setAttribute("duration", duration);
-			        	}
-			        	if (fps) {
-                            var fpsCont = document.getElementById("fps-" + picId.substring(4));
-                            if (fpsCont) {
-                                fpsCont.innerHTML = fps + " fps";
-                            }
-			        		// pic.setAttribute("fps", fps);
-			        	}
-			        	if (audioCodec) {
-                            var audioCodecCont = document.getElementById("audioCodec-" + picId.substring(4));
-                            if (audioCodecCont) {
-                            	audioCodecCont.innerHTML = audioCodec;
-                            }
-			        	}
-			        } 
-			    }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+    xmlGetRequest("video", parameters, responseXml => {
+        const errorItem = responseXml.getElementsByTagName("error")[0];
+        if (errorItem) {
+          	return;
         }
+
+		let videoWidth = null;
+		let videoHeight = null;
+        let codec = null;
+        let audioCodec = null;
+        let duration = null;
+        let fps = null;
+
+        let item = responseXml.getElementsByTagName("xpix")[0];
+        if (item) {
+            videoWidth = item.firstChild.nodeValue;
+        }
+
+        item = responseXml.getElementsByTagName("ypix")[0];
+        if (item) {
+            videoHeight = item.firstChild.nodeValue;
+        }
+
+        item = responseXml.getElementsByTagName("codec")[0];
+        if (item) {
+           	codec = item.firstChild.nodeValue;
+        }
+
+        item = responseXml.getElementsByTagName("audioCodec")[0];
+        if (item) {
+           	audioCodec = item.firstChild.nodeValue;
+        }
+
+        item = responseXml.getElementsByTagName("duration")[0];
+        if (item && item.firstChild) {
+           	duration = item.firstChild.nodeValue;
+        }
+
+        item = responseXml.getElementsByTagName("fps")[0];
+        if (item) {
+           	fps = item.firstChild.nodeValue;
+        }
+
+		if ((videoWidth != null) && (videoHeight != null)) {
+		    pixDim.innerHTML = videoWidth + " x " + videoHeight + " pix";
+
+		    const pic = document.getElementById(picId);
+		    if (pic) {
+		      	pic.setAttribute("origWidth", videoWidth);
+		       	pic.setAttribute("origHeight", videoHeight);
+		       	if (codec) {
+                    const codecCont = document.getElementById("codec-" + picId.substring(4));
+                    if (codecCont) {
+                        codecCont.innerHTML = codec;
+                    }
+		       		// pic.setAttribute("codec", codec);
+		       	}
+		       	if (duration) {
+                    const durationCont = document.getElementById("duration-" + picId.substring(4));
+                    if (durationCont) {
+                        durationCont.innerHTML = duration;
+                    }
+		      		// pic.setAttribute("duration", duration);
+		       	}
+		       	if (fps) {
+                    const fpsCont = document.getElementById("fps-" + picId.substring(4));
+                    if (fpsCont) {
+                        fpsCont.innerHTML = fps + " fps";
+                    }
+		       		// pic.setAttribute("fps", fps);
+		       	}
+		       	if (audioCodec) {
+                    const audioCodecCont = document.getElementById("audioCodec-" + picId.substring(4));
+                    if (audioCodecCont) {
+                       	audioCodecCont.innerHTML = audioCodec;
+                    }
+		       	}
+		    }
+		}
     });
 }
 
@@ -986,33 +981,28 @@ function createVideoTimeOptions(selectBox, minVal, maxVal, preselectVal) {
 }
                 
 function addAudioToVideo(videoFilePath) {
-    var url = "/webfilesys/servlet?command=video&cmd=addAudioToVideo&videoFilePath=" +  encodeURIComponent(videoFilePath);
+    const parameters = {
+        "cmd": "addAudioToVideo",
+        "videoFilePath": encodeURIComponent(videoFilePath)
+    };
 
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
-			    
-                var errorItem = xmlDoc.getElementsByTagName("error")[0];            
-                if (errorItem) {
-                	customAlert(errorItem.firstChild.nodeValue);
-                } else {
-                    var targetFolderItem = xmlDoc.getElementsByTagName("targetFolder")[0];            
-                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+    xmlGetRequest("video", parameters, responseXml => {
+        const errorItem = responseXml.getElementsByTagName("error")[0];
+        if (errorItem) {
+           	customAlert(errorItem.firstChild.nodeValue);
+        } else {
+            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+            const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                    var targetPathItem = xmlDoc.getElementsByTagName("targetPath")[0];            
-                    var targetPath = targetPathItem.firstChild.nodeValue;
+            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+            const targetPath = targetPathItem.firstChild.nodeValue;
                     
-                    customAlert(resourceBundle["addAudioToVideoStarted"] + " " + targetFolder + ".");
+            customAlert(resourceBundle["addAudioToVideoStarted"] + " " + targetFolder + ".");
                     
-                    setTimeout(function() {
-    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	                window.parent.frames[1].location.href = expUrl;
-                    } , 4000);
-                }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+            setTimeout(function() {
+    	        const expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	        window.parent.frames[1].location.href = expUrl;
+            } , 4000);
         }
 	});
 }
