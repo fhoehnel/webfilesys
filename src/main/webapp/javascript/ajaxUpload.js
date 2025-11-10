@@ -1,44 +1,33 @@
 function getUploadStatus() {
 
-    var url = "/webfilesys/servlet?command=uploadStatus";
+    xmlGetRequest("uploadStatus", {}, responseXml => {
+        let item = responseXml.getElementsByTagName("fileSize")[0];
+        const fileSize = item.firstChild.nodeValue;
 
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
+        item = responseXml.getElementsByTagName("bytesUploaded")[0];
+        const bytesUploaded = item.firstChild.nodeValue;
 
-                var item = responseXml.getElementsByTagName("fileSize")[0];            
-                var fileSize = item.firstChild.nodeValue;
+        item = responseXml.getElementsByTagName("percent")[0];
+        const percent = item.firstChild.nodeValue;
 
-                item = responseXml.getElementsByTagName("bytesUploaded")[0];            
-                var bytesUploaded = item.firstChild.nodeValue;
+        let statusText;
+        if (fileSize != "0") {
+            statusText = bytesUploaded + " " + resourceLabelOf + " " + fileSize + " bytes (" + percent + "%)";
+        } else {
+            statusText = bytesUploaded  + " bytes";
+        }
 
-                item = responseXml.getElementsByTagName("percent")[0];            
-                var percent = item.firstChild.nodeValue;
+        document.getElementById("statusText").innerHTML = statusText;
+        document.getElementById("done").width = 3 * percent;
 
-                var statusText;
-                if (fileSize != "0") {
-                	statusText = bytesUploaded + " " + resourceLabelOf + " " + fileSize + " bytes (" + percent + "%)";
-                } else {
-                	statusText = bytesUploaded  + " bytes";
-                }
-                
-                document.getElementById("statusText").innerHTML = statusText;
-
-                document.getElementById("done").width = 3 * percent;
-
-                if (browserMSIE) {
-                    // workaround for MSIE hanging on the upload status screen
-                    if (responseXml.getElementsByTagName("success")[0].firstChild.nodeValue == 'true') {
-                        window.location.href = '/webfilesys/servlet?command=listFiles';        
-                    }        
-                }     
-             
-                window.setTimeout('getUploadStatus()',3000);
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
+        if (browserMSIE) {
+            // workaround for MSIE hanging on the upload status screen
+            if (responseXml.getElementsByTagName("success")[0].firstChild.nodeValue == 'true') {
+                window.location.href = '/webfilesys/servlet?command=listFiles';
             }
         }
+
+        window.setTimeout(() => getUploadStatus(), 3000);
     });
 }
 
