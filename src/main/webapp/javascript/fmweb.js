@@ -461,7 +461,7 @@ function centeredDialog(xmlUrl, xslUrl, boxWidth, boxHeight, callback) {
     }
         
     htmlFragmentByXslt(xmlUrl, xslUrl, promptBox, function() {
-        setBundleResources();
+        setBundleResources(promptBox);
         centerBox(promptBox);
         promptBox.style.visibility = "visible";
 

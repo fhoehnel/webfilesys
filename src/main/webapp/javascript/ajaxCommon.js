@@ -126,6 +126,11 @@ function xmlPostRequest(command, parameters, successCallBack, failureCallBack) {
 }
 
 function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
+    console.log("htmlFragmentByXsltJavascript");
+    // XSLT with Javascript (google ajaxslt)
+    htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
+
+    /*
     if (window.ActiveXObject !== undefined) {
         // MSIE  
         htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
@@ -143,6 +148,7 @@ function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback, replaceCont)
             }
         }
     }
+    */
 }
 
 function htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {

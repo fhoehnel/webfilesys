@@ -6,7 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead" resource="label.mkdir"></div>
+<div class="promptHead" resource="label.mkdir">placeholder</div>
     
 <form accept-charset="utf-8" name="mkdirForm" id="mkdirForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="mkdir" />
