@@ -398,17 +398,12 @@ function enableDisablePatternInput()
 }
 
 function bookmark(path) {
-    if (path && (path.length > 0)) {
-        centeredDialog('/webfilesys/servlet?command=addBookmark&path=' + encodeURIComponent(path), '/webfilesys/xsl/addBookmark.xsl', 320, 190, function() {
-            document.bookmarkForm.bookmarkName.focus();
-            document.bookmarkForm.bookmarkName.select();
-        });    
-    } else {
-        centeredDialog('/webfilesys/servlet?command=addBookmark', '/webfilesys/xsl/addBookmark.xsl', 320, 190, function() {
+    xmlGetRequest("addBookmark", { path: encodeURIComponent(path) }, htmlFragment => {
+        popupDialog(htmlFragment.documentElement.getHTML(),320, 190, function () {
             document.bookmarkForm.bookmarkName.focus();
             document.bookmarkForm.bookmarkName.select();
         });
-    }
+    });
 }
 
 function fastpath(path) {
@@ -427,6 +422,24 @@ function hidePrompt() {
      promptBox.style.visibility = "hidden";
      promptBox.style.width = "100px";
      promptBox.style.height = "140px";
+}
+
+function popupDialog(domFragment, boxWidth, boxHeight, callback) {
+    const promptBox = document.getElementById("prompt");
+    if (!promptBox) {
+        console.error("promptBox is not defined");
+        return;
+    }
+    hideMenu();
+    if (boxWidth) {
+        promptBox.style.width = boxWidth + "px";
+    }
+    if (boxHeight) {
+        promptBox.style.height = boxHeight + "px";
+    }
+    promptBox.innerHTML = domFragment;
+    centerBox(promptBox);
+    promptBox.style.visibility = "visible";
 }
 
 function centeredDialog(xmlUrl, xslUrl, boxWidth, boxHeight, callback) {

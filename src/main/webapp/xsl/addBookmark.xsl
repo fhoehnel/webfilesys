@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">	
-<xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
+<xsl:output method="xml" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" />
 
 <!-- root node-->
 <xsl:template match="/">
+
+<div>
 
 <div class="promptHead">
   <xsl:value-of select="/addBookmark/resources/msg[@key='label.addBookmark']/@value" />
@@ -60,6 +62,8 @@
   </table>
   
 </form>
+
+</div>
 
 </xsl:template>
 

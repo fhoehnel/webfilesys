@@ -1,6 +1,5 @@
 package de.webfilesys.gui.xsl;
 
-import java.io.BufferedWriter;
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,12 +65,6 @@ public class XslAddBookmarkPromptHandler extends XslRequestHandlerBase
 		addMsgResource("button.create", getResource("button.create","Create"));
 		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
 
-		resp.setContentType("text/xml");
-		
-		BufferedWriter xmlOutFile = new BufferedWriter(output);
-            
-		XmlUtil.writeToStream(doc, xmlOutFile);
-
-		output.flush();
+        this.processResponse("addBookmark.xsl");
 	}
 }
