@@ -6,7 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead" resource="label.rotateFreeAngle"></div>
+<div class="promptHead" resource="label.rotateFreeAngle">placeholder</div>
     
 <form accept-charset="utf-8" name="rotateForm" id="rotateForm" method="post" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="transformImage" />

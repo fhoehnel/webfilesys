@@ -6,7 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead" resource="label.createfile"></div>
+<div class="promptHead" resource="label.createfile">placeholder</div>
     
 <form accept-charset="utf-8" name="mkfileForm" id="mkfileForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="mkfile" />

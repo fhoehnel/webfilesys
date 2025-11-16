@@ -4,10 +4,6 @@
 <xsl:output method="html" indent="yes" omit-xml-declaration="yes" encoding="UTF-8" 
     doctype-public="html" />
 
-<xsl:decimal-format name="decimalFormat" decimal-separator="," grouping-separator="." />
-
-<xsl:strip-space elements="treeStats" />
-
 <!-- root node-->
 <xsl:template match="/">
 

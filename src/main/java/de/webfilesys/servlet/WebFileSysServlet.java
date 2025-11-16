@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.gui.xsl.*;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -684,7 +683,7 @@ public class WebFileSysServlet extends ServletBase
         	} 
         	
         	if (viewMode == Constants.VIEW_MODE_VIDEO) {
-			    (new XslVideoListHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+			    (new XslVideoListHandler(req, resp, session, output, userid)).handleRequest();
 				return(true);
 			} 
         	
@@ -713,7 +712,7 @@ public class WebFileSysServlet extends ServletBase
     	
         if (command.equals("listVideos"))
         {
-		    (new XslVideoListHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
+		    (new XslVideoListHandler(req, resp, session, output, userid)).handleRequest();
 		    
             return(true);
         }
@@ -2499,7 +2498,7 @@ public class WebFileSysServlet extends ServletBase
         
         if (command.equals("extractDescriptions"))
 		{
-			(new XslThumbnailExtractDescriptionHandler(req, resp, session, output, userid, false)).handleRequest();
+			(new XslThumbnailExtractDescriptionHandler(req, resp, session, output, userid)).handleRequest();
             
             return(true);
 		}        

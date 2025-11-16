@@ -6,21 +6,11 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.XmlUtil;
 
@@ -74,7 +64,7 @@ public class XslOpenStreetMapFilesHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(geoTagElement, "pathForScript", insertDoubleBackslash(path), false);
 		XmlUtil.setChildText(geoTagElement, "shortPath", shortPath, false);
 		
-		processResponse("openStreetMapFiles.xsl", true);
+		processResponse("openStreetMapFiles.xsl");
     }
 	
 }

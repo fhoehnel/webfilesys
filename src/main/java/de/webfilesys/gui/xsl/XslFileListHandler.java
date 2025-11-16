@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
@@ -150,15 +149,6 @@ public class XslFileListHandler extends XslFileListHandlerBase
         	XmlUtil.setChildText(fileListElement, "readonly", "true", false);
         }
         
-		if (this.isBrowserXslEnabled())
-		{
-			Element xslEnabledElement = doc.createElement("browserXslEnabled");
-			
-			XmlUtil.setElementText(xslEnabledElement, "true", false);
-			
-			fileListElement.appendChild(xslEnabledElement);
-		}
-
 		if (WebFileSys.getInstance().isMaintananceMode())
 		{
 			if (!isAdminUser(false))

@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
@@ -447,7 +446,7 @@ public class XslAlbumImageHandler extends XslRequestHandlerBase
             addMsgResource("rating.confirm", getResource("vote.confirm", "The vote has been accepted."));
         }
         
-		this.processResponse("albumImage.xsl", true);
+		this.processResponse("albumImage.xsl");
     }
 	
     private boolean hasGpsExifData(String path)

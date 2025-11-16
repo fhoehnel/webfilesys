@@ -72,7 +72,7 @@ public class MultiVideoDeleteHandler extends MultiImageRequestHandler {
 			setParameter("errorMsg", errorMsg.toString());
 		}
 
-		(new XslVideoListHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest();
+		(new XslVideoListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 
 }

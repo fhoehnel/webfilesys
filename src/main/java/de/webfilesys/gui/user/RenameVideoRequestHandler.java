@@ -136,6 +136,6 @@ public class RenameVideoRequestHandler extends UserRequestHandler {
 			}
 		}
 
-		(new XslVideoListHandler(req, resp, session, output, uid, requestIsLocal)).handleRequest();
+		(new XslVideoListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 }

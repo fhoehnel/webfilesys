@@ -126,97 +126,24 @@ function xmlPostRequest(command, parameters, successCallBack, failureCallBack) {
 }
 
 function htmlFragmentByXslt(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
-    if (window.ActiveXObject !== undefined) {
-        // MSIE  
-        htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
-    } else {
-        if (browserFirefox) { 
-            htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
-        } else {
-            if (browserChrome) {
-                htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
-            } else if (browserSafari) {
-                htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
-            } else {
-                // XSLT with Javascript (google ajaxslt)
-                htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
-            }
-        }
-    }
-}
-
-function htmlFragmentByXsltMozilla(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
-
-	xmlRequest(xslUrl, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xslStyleSheet = req.responseXML;
-
-	            xmlRequest(xmlUrl, function(req) {
-                    if (req.readyState == 4) {
-                        if (req.status == 200) {
-			                var xmlDoc = req.responseXML;
-
-                            var xsltProcessor = new XSLTProcessor();
-       
-                            xsltProcessor.importStylesheet(xslStyleSheet);
-
-                            var result = xsltProcessor.transformToDocument(xmlDoc);
-  
-                            var xmlSerializer = new XMLSerializer();
-
-                            var newDomFragment = xmlSerializer.serializeToString(result);
-
-                            if (replaceCont) {
-                                fragmentCont.outerHTML = newDomFragment;
-                            } else {
-                                fragmentCont.innerHTML = newDomFragment;
-                            }
-                            
-                            if (callback) {
-                                callback();
-                            }
-                        } else {
-                            alert('cannot load xml from ' + xmlUrl);
-                        }
-                    }
-                });
-            } else {
-                alert('cannot load xsl stylesheet from ' + xslUrl);
-            }
-        }
-    });
-}
-
-function htmlFragmentByXsltMSIE(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
-    var newDomFragment = browserXsltMSIE(xmlUrl, xslUrl);
-
-    if (replaceCont) {
-        fragmentCont.outerHTML = newDomFragment;
-    } else {
-        fragmentCont.innerHTML = newDomFragment;
-    }
-    
-    if (callback) {
-        callback();
-    }
+    // XSLT with Javascript (google ajaxslt)
+    htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback, replaceCont);
 }
 
 function htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback, replaceCont) {
-
 	xmlRequest(xslUrl, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
-			    var xslStyleSheet = req.responseXML;
+			    const xslStyleSheet = req.responseXML;
 
 	            xmlRequest(xmlUrl, function(req) {
                     if (req.readyState == 4) {
                         if (req.status == 200) {
-			                var xmlDoc = req.responseXML;
+			                const xmlDoc = req.responseXML;
 
                             // browser-independend client-side XSL transformation with google ajaxslt 
 
-                            var newDomFragment = xsltProcess(xmlDoc, xslStyleSheet);
+                            const newDomFragment = xsltProcess(xmlDoc, xslStyleSheet);
 
                             if (replaceCont) {
                                 fragmentCont.outerHTML = newDomFragment;
@@ -237,38 +164,6 @@ function htmlFragmentByXsltJavascript(xmlUrl, xslUrl, fragmentCont, callback, re
             }
         }
     });
-}
-    
-function browserXsltMSIE(xmlUrl, xslUrl)
-{ 
-    var xsl = new ActiveXObject('MSXML2.FreeThreadedDOMDocument.3.0');
-    xsl.async = false;
-    if (!xsl.load(xslUrl))
-    {
-        alert('cannot load xsl stylesheet from ' + xslUrl);
-        return;
-    }
-
-    var xslTemplate = new ActiveXObject("Msxml2.XSLTemplate.3.0");
-    xslTemplate.stylesheet = xsl;
-
-    xml = new ActiveXObject("Msxml2.DOMDocument.3.0");
-    xml.async = false;
-    if (!xml.load(xmlUrl))
-    {
-        alert('cannot load xml from ' + xmlUrl);
-        return;
-    }
-    
-    var newId = xml.documentElement.getAttribute('id');
-
-    var xslProcessor = xslTemplate.createProcessor();
-    
-    xslProcessor.input = xml;
-   
-    xslProcessor.transform();
-    
-    return(xslProcessor.output);
 }
 
 function getFormData(formObj) {

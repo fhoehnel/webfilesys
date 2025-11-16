@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -32,7 +33,7 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XformImageHandler extends XmlRequestHandlerBase {
+public class XformImageHandler extends XslRequestHandlerBase {
     private static final Logger LOG = LogManager.getLogger(XformImageHandler.class);
 	
 	public XformImageHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session, PrintWriter output,
@@ -79,7 +80,11 @@ public class XformImageHandler extends XmlRequestHandlerBase {
 
 		String resultImageName = imgTrans.execute(false);
 
-		File resultImgFile = new File(currentPath, resultImageName);
+        MetaInfManager metaInfMgr = MetaInfManager.getInstance();
+
+        metaInfMgr.moveMetaInf(currentPath, imageName, resultImageName);
+
+        File resultImgFile = new File(currentPath, resultImageName);
 
 		SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 
@@ -94,8 +99,6 @@ public class XformImageHandler extends XmlRequestHandlerBase {
 		fileElement.setAttribute("name", resultImageName);
 
 		fileElement.setAttribute("nameForScript", escapeForJavascript(resultImageName));
-		
-		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
 		String description = metaInfMgr.getDescription(currentPath, resultImageName);
 
@@ -154,14 +157,25 @@ public class XformImageHandler extends XmlRequestHandlerBase {
 			ScaledImage scaledImage = new ScaledImage(resultImagePath, 100, 100);
 
 			XmlUtil.setChildText(fileElement, "imgType", Integer.toString(scaledImage.getImageType()));
-			XmlUtil.setChildText(fileElement, "xpix", Integer.toString(scaledImage.getRealWidth()));
-			XmlUtil.setChildText(fileElement, "ypix", Integer.toString(scaledImage.getRealHeight()));
+
+            CameraExifData exifData = new CameraExifData(resultImagePath);
+
+            int picWidth = scaledImage.getRealWidth();
+            int picHeight = scaledImage.getRealHeight();
+            if (scaledImage.getImageType() == ScaledImage.IMG_TYPE_JPEG) {
+                if ((exifData.getOrientation() == 6) || (exifData.getOrientation() == 8)) {
+                    // rotated
+                    picWidth = scaledImage.getRealHeight();
+                    picHeight = scaledImage.getRealWidth();
+                }
+            }
+
+			XmlUtil.setChildText(fileElement, "xpix", Integer.toString(picWidth));
+			XmlUtil.setChildText(fileElement, "ypix", Integer.toString(picHeight));
 
 			int thumbWidth = 0;
 			int thumbHeight = 0;
 
-	        CameraExifData exifData = new CameraExifData(resultImagePath);
-	        
 	        if ((exifData.getThumbWidth() > 0) && (exifData.getThumbHeight() > 0)) {
 	            thumbWidth = exifData.getThumbWidth();
 	            thumbHeight = exifData.getThumbHeight();
@@ -194,8 +208,6 @@ public class XformImageHandler extends XmlRequestHandlerBase {
 
 		XmlUtil.setChildText(fileElement, "imgSrcPath", imgSrcPath);
 
-		XmlUtil.setChildText(fileElement, "imgPath", resultImagePath);
-
 		XmlUtil.setChildText(fileElement, "encodedPath", UTF8URLEncoder.encode(resultImagePath), false);
 		
 		XmlUtil.setChildText(fileElement, "pathForScript", escapeForJavascript(resultImagePath), false);
@@ -206,7 +218,7 @@ public class XformImageHandler extends XmlRequestHandlerBase {
 
 		addMsgResource("label.comments", getResource("label.comments", "Comments"));
 
-		processResponse();
+        this.processResponse("xformImageResult.xsl");
 	}
 
 }

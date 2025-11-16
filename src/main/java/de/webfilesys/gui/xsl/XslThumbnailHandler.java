@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
@@ -171,10 +170,6 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
 
 		XmlUtil.setChildText(fileListElement, "language", language, false);
-
-		if (isBrowserXslEnabled()) {
-			XmlUtil.setChildText(fileListElement, "browserXslEnabled", "true", false);
-		}
 
 		File dirFile = new File(currentPath);
 

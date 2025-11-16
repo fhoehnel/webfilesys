@@ -1,19 +1,22 @@
 function ajaxRotate(fileName, degrees, domId) {
     hideMenu();
 
-    const xmlUrl = '/webfilesys/servlet?command=xformImage&action=rotate&degrees=' + degrees + '&imgName=' + encodeURIComponent(fileName) + "&domId=" + domId;
-
-    const xslUrl = "/webfilesys/xsl/xformImageResult.xsl";
-
     const thumbCont = document.getElementById("thumbCont-" + fileName.replaceAll(" ", "_"));
-        
     if (thumbCont) {
-        htmlFragmentByXslt(xmlUrl, xslUrl, thumbCont, null, true);
-        
-        var sizeSumElem = document.getElementById("sizeSum");
-        if (sizeSumElem) {
-            sizeSumElem.innerHTML = "";
+        const params = {
+            action: "rotate",
+            degrees,
+            imgName: encodeURIComponent(fileName),
+            domId
         }
+        xmlGetRequest("xformImage", params, htmlFragment => {
+            const fragment = htmlFragment.documentElement.outerHTML;
+            thumbCont.innerHTML = fragment;
+            const sizeSumElem = document.getElementById("sizeSum");
+            if (sizeSumElem) {
+                sizeSumElem.innerHTML = "";
+            }
+        });
     }
 }
 

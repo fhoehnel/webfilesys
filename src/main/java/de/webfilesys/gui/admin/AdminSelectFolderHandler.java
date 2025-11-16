@@ -105,15 +105,6 @@ public class AdminSelectFolderHandler extends XslRequestHandlerBase
 			
 		doc.insertBefore(xslRef, folderTreeElement);
 		
-		if (this.isBrowserXslEnabled())
-		{
-			Element xslEnabledElement = doc.createElement("browserXslEnabled");
-			
-			XmlUtil.setElementText(xslEnabledElement, "true", false);
-			
-			folderTreeElement.appendChild(xslEnabledElement);
-		}
-		
 		dirCounter = 0;
 		currentDirNum = 0;
 	}

@@ -8,7 +8,7 @@
 
   <xsl:variable name="percentUsed" select="/driveInfo/percentUsed" />
 
-  <div class="promptHead" resource="label.driveinfo"></div>
+  <div class="promptHead" resource="label.driveinfo">placeholder</div>
     
   <table border="0" width="100%" cellpadding="10">
   

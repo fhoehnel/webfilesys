@@ -314,151 +314,19 @@ function exp(parentDivId, lastInLevel) {
    
     const urlEncodedPath = parentDiv.getAttribute("path");
 
-    const xmlUrl = "/webfilesys/servlet?command=ajaxExp&path=" + urlEncodedPath + "&lastInLevel=" + lastInLevel;
+    xmlGetRequest("ajaxExp", { path: urlEncodedPath, lastInLevel }, htmlFragment => {
+        const fragment = htmlFragment.documentElement.outerHTML;
 
-    const xslUrl = "/webfilesys/xsl/subFolder.xsl";
-
-    if (window.ActiveXObject !== undefined) {
-        // MSIE  
-
-        expMSIE(parentDiv, xmlUrl, xslUrl);
-    } else {
-        if (browserIsFirefox || browserIsChrome) { 
-            // Firefox & Chrome
-            expMozilla(parentDiv, xmlUrl, xslUrl);
-        } else {
-            // XSLT with Javascript (google ajaxslt)
-            expJavascriptXslt(parentDiv, xmlUrl, xslUrl)
+        let divClass = parentDiv.getAttribute("class");
+        if (divClass && divClass.indexOf("currentFolder") > 0) {
+            currentDirId = htmlFragment.documentElement.id;
         }
-    }
-}
-    
-function expMozilla(parentDiv, xmlUrl, xslUrl) {
 
-    showHourGlass();
-    
-	xmlRequest(xslUrl, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xslStyleSheet = req.responseXML;
-
-	            xmlRequest(xmlUrl, function(req) {
-                    if (req.readyState == 4) {
-                        if (req.status == 200) {
-			                var xmlDoc = req.responseXML;
-				
-				            if (!xmlDoc) {
-                                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-                                return;
-				            }
-				
-                            var xsltProcessor = new XSLTProcessor();
-       
-                            xsltProcessor.importStylesheet(xslStyleSheet);
-
-                            var fragment = xsltProcessor.transformToFragment(xmlDoc, document);
-       
-                            parentDiv.innerHTML = '';
-                            
-                            let divClass = parentDiv.getAttribute("class");
-                            if (divClass && divClass.indexOf("currentFolder") > 0) {
-                                currentDirId = fragment.childNodes[0].id;
-                            }
-                            
-                            parentDiv.parentNode.replaceChild(fragment, parentDiv);
-                            
-                            hideHourGlass();
-                            
-                            setTimeout('setTooltips()', 500);
-                            
-                            querySubdirs();
-                        } else {
-                            window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-                            return;
-			            }
-			        }
-		        });
-		    } else {
-                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-		    }
-		}
-	});
-}    
-
-function expMSIE(parentDiv, xmlUrl, xslUrl)
-{ 
-    showHourGlass();
-
-    xml = new ActiveXObject("Msxml2.DOMDocument.3.0");
-    xml.async = false;
-    if (!xml.load(xmlUrl))
-    {
-        window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-
-        return;
-    }
-    
-    var newId = xml.documentElement.getAttribute('id');
-
-    var xslProcessor = xslTemplate.createProcessor();
-    
-    xslProcessor.input = xml;
-   
-    xslProcessor.transform();
-    
-    parentDiv.outerHTML = xslProcessor.output;
-    
-    hideHourGlass();
-    
-    currentDirId = newId;
-
-    setTimeout('setTooltips()', 500);
-    
-    querySubdirs();
-}
-
-function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) { 
-
-	xmlRequest(xslUrl, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xslStyleSheet = req.responseXML;
-
-	            xmlRequest(xmlUrl, function(req) {
-                    if (req.readyState == 4) {
-                        if (req.status == 200) {
-			                var xmlDoc = req.responseXML;
-
-				            if (!xmlDoc) {
-                                alert(resourceBundle["alert.communicationFailure"]);
-                                return;
-				            }
-
-                            var newId = xmlDoc.documentElement.getAttribute('id');
-
-                            // browser-independend client-side XSL transformation with google ajaxslt 
-       
-                            var html = xsltProcess(xmlDoc, xslStyleSheet);
-
-                            parentDiv.outerHTML = html;
-    
-                            // currentDirId = newId;
-
-                            setTimeout('setTooltips()', 500);
-                            
-                            querySubdirs();
-                        } else {
-                            alert(resourceBundle["alert.communicationFailure"]);
-                            return;
-			            }
-                    }
-                });		
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-            }
-        }
+        parentDiv.outerHTML = htmlFragment.documentElement.outerHTML;
+        setTimeout('setTooltips()', 500);
+        querySubdirs();
     });
+
 }
 
 function querySubdirs() {

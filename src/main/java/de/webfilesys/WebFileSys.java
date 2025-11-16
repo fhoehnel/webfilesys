@@ -43,7 +43,7 @@ public class WebFileSys {
 
     private static final Logger LOG = LogManager.getLogger(WebFileSys.class);
 
-    public static final String VERSION = "Version 2.31.2-beta3 (26 Oct 2025)";
+    public static final String VERSION = "Version 2.32.0-beta1 (16 Nov 2025)";
  
     public static final String DEFAULT_MAIL_SENDER_ADDRESS = "WebFileSys@nowhere.com";
 

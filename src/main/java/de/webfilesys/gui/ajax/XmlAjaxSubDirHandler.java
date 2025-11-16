@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
+import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
@@ -31,7 +31,7 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
+public class XmlAjaxSubDirHandler extends XslRequestHandlerBase
 {
 	DirTreeStatus dirTreeStatus = null;
 	
@@ -108,8 +108,8 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 		XmlUtil.setChildText(subFolderElement, "css", userMgr.getCSS(uid), false);
 		
 		doc.appendChild(subFolderElement);
-		
-		processResponse();
+
+        processResponse("subFolder.xsl");
 		
         if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
     		(new DirTreeStatusInspector(dirTreeStatus)).rememberPathStatus(actPath);		

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
@@ -110,15 +109,6 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 			
 		doc.appendChild(folderTreeElement);
 			
-		if (this.isBrowserXslEnabled())
-		{
-			Element xslEnabledElement = doc.createElement("browserXslEnabled");
-			
-			XmlUtil.setElementText(xslEnabledElement, "true", false);
-			
-			folderTreeElement.appendChild(xslEnabledElement);
-		}
-		
 		String errorMsg = getParameter("errorMsg");
 		
 	    if (errorMsg != null)

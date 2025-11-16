@@ -21,13 +21,11 @@
 </link>
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
-<xsl:if test="not(/fileList/browserXslEnabled)">
-  <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
-</xsl:if>
+<script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>

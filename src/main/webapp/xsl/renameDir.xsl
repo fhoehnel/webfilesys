@@ -6,7 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead" resource="label.renameFolderHead"></div>
+<div class="promptHead" resource="label.renameFolderHead">placeholder</div>
     
 <form accept-charset="utf-8" name="mkdirForm" id="mkdirForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="renameDir" />

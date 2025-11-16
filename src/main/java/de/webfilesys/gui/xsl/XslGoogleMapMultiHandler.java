@@ -6,14 +6,6 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -171,11 +163,7 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 		    XmlUtil.setChildText(geoDataElement, "googleMapsAPIKey", googleMapsAPIKey, false);
 		}
 		
-		// when XSLT processing is done by the browser, the Firefox browser and MSIE 7.0 hang up forever
-		// when loading the Google maps API Javascript functions from the Google server
-		// so we have to do the XSLT processing always on server side
-		
-		processResponse("googleMapMulti.xsl", true);
+		processResponse("googleMapMulti.xsl");
     }
 	
 	private void addMarker(Element markersElement, float latitude, float longitude, String infoText, String fileName) {

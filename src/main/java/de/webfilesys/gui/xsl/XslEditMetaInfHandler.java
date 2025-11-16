@@ -569,7 +569,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		// when loading the Google maps API Javascript functions from the Google server
 		// so we have to do the XSLT processing always on server side
 		
-		processResponse("editMetaInf.xsl", true);
+		processResponse("editMetaInf.xsl");
     }
 	
 	private Element getThumbnailData(String filePath)
