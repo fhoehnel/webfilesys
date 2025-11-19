@@ -314,18 +314,24 @@ function exp(parentDivId, lastInLevel) {
    
     const urlEncodedPath = parentDiv.getAttribute("path");
 
-    xmlGetRequest("ajaxExp", { path: urlEncodedPath, lastInLevel }, htmlFragment => {
-        const fragment = htmlFragment.documentElement.outerHTML;
+    xmlGetRequest("ajaxExp", { path: urlEncodedPath, lastInLevel },
+        htmlFragment => {
+            const fragment = htmlFragment.documentElement.outerHTML;
 
-        let divClass = parentDiv.getAttribute("class");
-        if (divClass && divClass.indexOf("currentFolder") > 0) {
-            currentDirId = htmlFragment.documentElement.id;
+            let divClass = parentDiv.getAttribute("class");
+            if (divClass && divClass.indexOf("currentFolder") > 0) {
+                currentDirId = htmlFragment.documentElement.id;
+            }
+
+            parentDiv.outerHTML = htmlFragment.documentElement.outerHTML;
+            setTimeout('setTooltips()', 500);
+            querySubdirs();
+        },
+        () => {
+            console.warn("expand folder failed");
+            customAlert(resourceBundle["alert.sessionexpired"], "OK", redirectToLogin);
         }
-
-        parentDiv.outerHTML = htmlFragment.documentElement.outerHTML;
-        setTimeout('setTooltips()', 500);
-        querySubdirs();
-    });
+    );
 
 }
 

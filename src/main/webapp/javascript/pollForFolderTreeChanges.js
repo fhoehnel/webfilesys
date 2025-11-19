@@ -36,9 +36,10 @@ function pollForFolderTreeChanges(immediateRefreshView) {
             }
         },
         () => {
-            console.warn("communication failure");
-            parent.location.href = "/webfilesys/servlet";
-        }
+            console.warn("pollForFolderTreeChange failed");
+            redirectToLogin();
+        },
+        true
     );
 }
 

@@ -479,6 +479,10 @@ function cancelFullScreen(elem) {
 	}
 }
 
+function redirectToLogin() {
+    top.location.href = "/webfilesys/servlet?command=loginForm";
+}
+
 if (!String.prototype.endsWith) {
 	String.prototype.endsWith = function(searchString, position) {
 	    var subjectString = this.toString();
