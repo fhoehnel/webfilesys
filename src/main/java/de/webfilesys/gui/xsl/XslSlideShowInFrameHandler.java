@@ -8,19 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Constants;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ImageDimensions;
 import de.webfilesys.graphics.ImageUtils;
@@ -147,7 +141,7 @@ public class XslSlideShowInFrameHandler extends XslRequestHandlerBase
             screenHeight = heightScreen.intValue();
         }
 
-        int delay = WebFileSys.getInstance().getSlideShowDelay();
+        int delay = WebFileSysConfig.getInstance().getSlideShowDelay();
         
         int imageIdx = (-1);
         try

@@ -13,15 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.CopyStatus;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.ViewHandlerConfig;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.ProtectedRequestHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.FileEncodingMap;
@@ -140,27 +136,22 @@ public class UserRequestHandler extends ProtectedRequestHandler
         return (headlinePath);
     }
 
-    public boolean checkWriteAccess()
-    {
+    public boolean checkWriteAccess() {
     	boolean sessionReadonly = false;
     	
-    	Boolean sessRO = (Boolean)session.getAttribute("readonly");
+    	Boolean sessRO = (Boolean) session.getAttribute("readonly");
     	
-    	if (sessRO != null)
-    	{
-    		sessionReadonly = sessRO.booleanValue();
+    	if (sessRO != null) {
+    		sessionReadonly = sessRO;
     	}
     	
-        boolean readonly =
-            sessionReadonly || userMgr.isReadonly(uid);
+        boolean readonly = sessionReadonly || userMgr.isReadonly(uid);
 
-        if (!readonly)
-        {
+        if (!readonly) {
             return (true);
         }
 
-        LogManager.getLogger(getClass()).warn(
-            "read-only user " + uid + " tried write access");
+        LogManager.getLogger(getClass()).warn("read-only user " + uid + " tried write access");
 
         output.print(HTTPUtils.createHTMLHeader());
 
@@ -173,7 +164,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
         output.println("history.back();");
         output.println("</script>");
 
-        output.println("</html>");
+        output.println("</HEAD></HTML>");
         output.flush();
 
         return (false);
@@ -297,36 +288,26 @@ public class UserRequestHandler extends ProtectedRequestHandler
         return(!copyError);
     }
     
-    protected boolean delDirTree(String path)
-    { 
+    protected boolean delDirTree(String path) {
         boolean deleteError=false;
 
         File dirToBeDeleted = new File(path);
-        String fileList[] = dirToBeDeleted.list();
 
-        if (fileList != null)
-        {
-            for (int i = 0; i < fileList.length; i++)
-            {
-                File tempFile=new File(path + File.separator + fileList[i]);
-                if (tempFile.isDirectory())
-                {
-                    if (!delDirTree(path + File.separator + fileList[i]))
-                        deleteError=true;
-                }
-                else
-                {
-                    String absolutePath = tempFile.getAbsolutePath();
-                    
-                    if (!tempFile.delete())
-                    {
-                        deleteError=true;
-                        LogManager.getLogger(getClass()).warn("cannot delete " + tempFile);
+        File[] fileList = dirToBeDeleted.listFiles();
+
+        if (fileList != null) {
+            for (File file : fileList) {
+                if (file.isDirectory()) {
+                    if (!delDirTree(file.getAbsolutePath())) {
+                        deleteError = true;
                     }
-                    else
-                    {
-                        if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
-                        {
+                } else {
+                    String absolutePath = file.getAbsolutePath();
+                    if (!file.delete()) {
+                        deleteError = true;
+                        LogManager.getLogger(getClass()).warn("cannot delete " + file.getAbsolutePath());
+                    } else {
+                        if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
                             MetaInfManager.getInstance().updateLinksAfterMove(absolutePath, null, uid);
                         }
                         MetaInfManager.getInstance().removeMetaInf(absolutePath);
@@ -334,16 +315,11 @@ public class UserRequestHandler extends ProtectedRequestHandler
                 }
             }
         }
-
-        if (!dirToBeDeleted.delete())
-        {
-            deleteError=true;
-        } 
-        else 
-        {
+        if (!dirToBeDeleted.delete()) {
+            deleteError = true;
+        } else {
             MetaInfManager.getInstance().releaseMetaInf(path, false);
         }
-
         return(!(deleteError));
     }
     
@@ -423,7 +399,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
             {
                 viewHandler.process(filePath, viewHandlerConfig, req, resp);
 
-                if (WebFileSys.getInstance().isDownloadStatistics())
+                if (WebFileSysConfig.getInstance().isDownloadStatistics())
                 {
                     MetaInfManager.getInstance().incrementDownloads(filePath);
                 }

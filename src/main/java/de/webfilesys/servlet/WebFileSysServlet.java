@@ -35,16 +35,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import de.webfilesys.gui.xsl.*;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.CategoryManager;
-import de.webfilesys.Constants;
-import de.webfilesys.ResourceBundleHandler;
-import de.webfilesys.SubdirExistCache;
-import de.webfilesys.SubdirExistTester;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailGarbageCollector;
 import de.webfilesys.gui.admin.AdminAddUserRequestHandler;
 import de.webfilesys.gui.admin.AdminChangeUserRequestHandler;
@@ -181,7 +176,6 @@ import de.webfilesys.gui.user.GetThumbRequestHandler;
 import de.webfilesys.gui.user.GrepRequestHandler;
 import de.webfilesys.gui.user.HexViewHandler;
 import de.webfilesys.gui.user.ImageTransformationHandler;
-import de.webfilesys.gui.user.LicenseReminderRequestHandler;
 import de.webfilesys.gui.user.MainFrameSetHandler;
 import de.webfilesys.gui.user.Mp3V2ThumbnailHandler;
 import de.webfilesys.gui.user.MultiDeleteRequestHandler;
@@ -253,25 +247,18 @@ import org.apache.logging.log4j.Logger;
 public class WebFileSysServlet extends ServletBase {
     private static final Logger LOG = LogManager.getLogger(WebFileSysServlet.class);
 
-	// we are open source now!
-	// private static char lic[] = {'l','i','c','e','n','s','e','.','t','x','t'};
-
 	private static final int MIN_SCREEN_WIDTH_FOR_DESKTOP_VERSION = 1024;
+
+    static boolean initialized = false;
 	
-	private Properties configProperties = null;
-	
-	static boolean initialized = false;
-	
-	private static int REQUEST_PATH_LENGTH = "/webfilesys/servlet".length();
+	private static final int REQUEST_PATH_LENGTH = "/webfilesys/servlet".length();
 	
     public void init(ServletConfig config)
-    throws ServletException
-    {
-    	if (initialized)
-    	{
+    throws ServletException {
+    	if (initialized) {
     		return;
     	}
-    	
+
         ServletContext context = config.getServletContext();
     	
         String realLogDirPath = context.getRealPath("/WEB-INF/log");
@@ -281,76 +268,57 @@ public class WebFileSysServlet extends ServletBase {
         
     	String configFileName = config.getInitParameter("config");
 
-		if ((configFileName == null) || (configFileName.trim().length() == 0))
-		{
+		if ((configFileName == null) || (configFileName.trim().isEmpty())) {
 			LOG.fatal("config file not specified in web.xml");
 			throw new ServletException ("config file not specified in web.xml");
 		}
 
 		String configPath = context.getRealPath(configFileName);
 		
-		if ((configPath == null) || (configPath.length() == 0))
-		{
+		if ((configPath == null) || (configPath.isEmpty())) {
 			LOG.fatal("cannot determine real path of config file " + configFileName);
 			throw new ServletException ("cannot determine real path of config file " + configFileName);
 		}
 
 		File configFile = new File(configPath);
 		
-		if (!configFile.exists())
-		{
+		if (!configFile.exists()) {
 			throw new ServletException ("config file does not exist: " + configPath);
 		}
 		
-		if ((!configFile.isFile()) || (!configFile.canRead()))
-		{
+		if ((!configFile.isFile()) || (!configFile.canRead())) {
 			LOG.fatal(configPath + " is not a readable file");
 			throw new ServletException (configPath + " is not a readable file");
 		}
-		
-		configProperties = new Properties();
+
+        Properties configProperties = new Properties();
 		
 		FileInputStream propFile = null;
 		
-		try
-		{
+		try {
 			propFile = new FileInputStream(configFile);
-			
-			configProperties.load(propFile);
-			
-			LOG.info("properties loaded from " + configFile);
-		}
-		catch (IOException ioEx)
-		{
-			LOG.fatal("error reading config file: " + ioEx);
-			throw new ServletException ("error reading config file: " + ioEx);
-		}
-		finally
-		{
-			if (propFile != null) 
-			{
-				try 
-				{
+            configProperties.load(propFile);
+            LOG.info("config properties loaded from {}", configFile);
+		} catch (IOException ioEx) {
+			LOG.fatal("error reading config file " + configFile, ioEx);
+			throw new ServletException ("error reading config file " + configFile + ": " + ioEx.getMessage());
+		} finally {
+			if (propFile != null) {
+				try {
 					propFile.close();
-				}
-				catch (IOException ex)
-				{
+				} catch (IOException ex) {
 				}
 			}
 		}
 
 		String webAppRootDir = context.getRealPath("/");
-		
-		if ((!webAppRootDir.endsWith(File.separator)) && (!webAppRootDir.endsWith("/")))
-		{
+        if ((!webAppRootDir.endsWith(File.separator)) && (!webAppRootDir.endsWith("/"))) {
 		    webAppRootDir = webAppRootDir + File.separator;
 		}
-        
+
         WebFileSys webFileSys = WebFileSys.createInstance(configProperties, webAppRootDir);
-        
-        webFileSys.initialize(configProperties);
-        
-		initialized = true;
+        webFileSys.initialize();
+        initialized = true;
     }
 
     public void destroy ()
@@ -402,15 +370,14 @@ public class WebFileSysServlet extends ServletBase {
 		
         boolean requestIsLocal = false;
         
-        if (!WebFileSys.getInstance().isSimulateRemote())
-        {
-            requestIsLocal = clientIP.equals(localIP) || clientIP.equals(WebFileSys.getInstance().getLoopbackAddress()) || clientIP.equals(WebFileSys.getInstance().getIPV6LoopbackAddress());
+        if (!WebFileSysConfig.getInstance().isSimulateRemote()) {
+            requestIsLocal = clientIP.equals(localIP) || clientIP.equals(WebFileSys.LOOPBACK_ADDRESS) || clientIP.equals(WebFileSys.IPV6_LOOPBACK_ADDRESS);
         }
 		
         // prevent caching
         // will be overwritten in GetFileRequestHandler and VisitorFileRequestHandler with Parameter cache=true
         // and in ResourceBundleHandler
-		resp.setDateHeader("expires", 0l); 
+		resp.setDateHeader("expires", 0L);
 		resp.setHeader("Cache-Control", "no-cache, max-age=0, must-revalidate, no-store");
 		
 		// inserted 2008/10/08
@@ -463,9 +430,8 @@ public class WebFileSysServlet extends ServletBase {
 		}
     }
 
-    public void doPost ( HttpServletRequest req, HttpServletResponse resp )
-    throws ServletException, java.io.IOException
-    {
+    public void doPost (HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, java.io.IOException {
     	doGet(req, resp);
     }
 
@@ -499,65 +465,48 @@ public class WebFileSysServlet extends ServletBase {
     private boolean anonymousCommand(String command, 
     		HttpServletRequest req, HttpServletResponse resp,
     		PrintWriter output,
-    		boolean requestIsLocal)
-    {
-    	if (command == null)
-    	{
+    		boolean requestIsLocal) {
+    	if (command == null) {
     		return(false);
     	}
     	
-        if (command.equals("getResourceBundle"))
-        {
+        if (command.equals("getResourceBundle")) {
 		    (new ResourceBundleHandler(req, resp, output)).handleRequest(); 
-
             return(true);
         }
         
-        if (command.equals("visitorFile"))
-    	{
+        if (command.equals("visitorFile")) {
 		    (new VisitorFileRequestHandler(req, resp, null, output)).handleRequest(); 
-		    
     		return(true);
     	}
         
-        if (command.equals("login"))
-    	{
+        if (command.equals("login")) {
     		verifyLogin(req, resp, output, requestIsLocal);
-    		
     		return(true);
     	}
         
-        if (command.equals("silentLogin"))
-    	{
+        if (command.equals("silentLogin")) {
     		silentLogin(req, resp, output, requestIsLocal);
-    		
     		return(true);
     	}
         
-        if (command.equals("registerSelf"))
-    	{
+        if (command.equals("registerSelf")) {
 			(new XslSelfRegistrationHandler(req, resp, req.getSession(true), output)).handleRequest(); 
-    		
     		return(true);
     	}
         
         if (command.equals("activateUser")) {
             (new ActivateUserRequestHandler(req, resp)).handleRequest();
-
             return true;
         }
         
-        if (command.equals("blank"))
-    	{
+        if (command.equals("blank")) {
 		    (new BlankPageRequestHandler(req, resp, output)).handleRequest(); 
-    		
     		return(true);
     	}
         
-        if (command.equals("versionInfo"))
-    	{
+        if (command.equals("versionInfo")) {
 		    (new VersionInfoRequestHandler(output)).handleRequest(); 
-    		
     		return(true);
     	}
         
@@ -604,12 +553,9 @@ public class WebFileSysServlet extends ServletBase {
 			return(true);
     	}
     	
-    	if (command.equals("listFiles"))
-    	{
+    	if (command.equals("listFiles")) {
     	    String mobile = (String) session.getAttribute("mobile");
-    	    
-    	    if (mobile != null) 
-    	    {
+    	    if (mobile != null) {
                 (new MobileFolderFileListHandler(req, resp, session, output, userid)).handleRequest(); 
                 return true;
     	    }
@@ -618,34 +564,23 @@ public class WebFileSysServlet extends ServletBase {
         	
         	String viewModeParm = req.getParameter("viewMode");
         	
-        	if (viewModeParm != null)
-        	{
-				try
-				{
+        	if (viewModeParm != null) {
+				try {
 					viewMode = Integer.parseInt(viewModeParm);
+				} catch (NumberFormatException nfex) {
 				}
-				catch (NumberFormatException nfex)
-				{
-				}
-        	}
-            else
-            {        	
+        	} else {
 			    Integer sessionViewMode = (Integer) session.getAttribute("viewMode");
-			    
-			    if (sessionViewMode != null)
-			    {
+			    if (sessionViewMode != null) {
 			    	viewMode = sessionViewMode.intValue();
 			    }
             }
         	
         	if (viewMode == Constants.VIEW_MODE_THUMBS) {
-    			if (req.getParameter("keepListStatus") == null)
-    			{
+    			if (req.getParameter("keepListStatus") == null) {
     				req.setAttribute("initial", "true");
     			}
-        		
-    		    (new XslThumbnailHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
-					
+    		    (new XslThumbnailHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
 				return(true);
         	} 
         	
@@ -670,17 +605,13 @@ public class WebFileSysServlet extends ServletBase {
 			return(true);
     	}
     	
-        if (command.equals("thumbnail"))
-        {
+        if (command.equals("thumbnail")) {
 		    (new XslThumbnailHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
-		    
             return(true);
         }
     	
-        if (command.equals("listVideos"))
-        {
+        if (command.equals("listVideos")) {
 		    (new XslVideoListHandler(req, resp, session, output, userid)).handleRequest();
-		    
             return(true);
         }
     	
@@ -743,13 +674,6 @@ public class WebFileSysServlet extends ServletBase {
         if (command.equals("album"))
         {
 		    (new XslPictureAlbumHandler(req, resp, session, output, userid)).handleRequest(); 
-
-            return(true);
-        }
-        
-        if (command.equals("albumImg"))
-        {
-		    (new XslAlbumImageHandler(req, resp, session, output, userid)).handleRequest(); 
 
             return(true);
         }
@@ -860,12 +784,8 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
 
-    	if (command.equals("menuBar"))
-    	{
-		    // (new MenuBarRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
-
-		    (new XslMenuBarHandler(req, resp, session, output, userid)).handleRequest(); 
-
+    	if (command.equals("menuBar")) {
+		    (new XslMenuBarHandler(req, resp, session, output, userid)).handleRequest();
 		    return(true);
     	}
     	
@@ -1149,7 +1069,7 @@ public class WebFileSysServlet extends ServletBase {
         
         if (command.equals("editFile"))
         {
-        	if (requestIsLocal && (WebFileSys.getInstance().getSystemEditor() != null))
+        	if (requestIsLocal && (WebFileSysConfig.getInstance().getSystemEditor() != null))
         	{
     			(new XmlLocalEditorHandler(req, resp, session, output, userid)).handleRequest(); 
         	}
@@ -1703,30 +1623,22 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
         
-        if (command.equals("refresh"))
-    	{
+        if (command.equals("refresh")) {
             String path = req.getParameter("path");
 
             SubdirExistCache.getInstance().cleanupExistSubdir(path);
+	        SubdirExistTester.getInstance().queuePath(path, 1, true);
             
-	        SubdirExistTester.getInstance().queuePath(path, 1, true);	        
-            
-            try
-            {
+            try {
                 Thread.sleep(1000);
-            }
-            catch (InterruptedException iex)
-            {
+            } catch (InterruptedException iex) {
             }
 
             req.setAttribute("expand", path);
             
-            if (File.separatorChar == '/')
-    		{
+            if (File.separatorChar == '/') {
     			(new XslUnixDirTreeHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
-    		}
-    		else
-    		{
+    		} else {
     			(new XslWinDirTreeHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
     		}
     		
@@ -2113,7 +2025,7 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
         
-        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+        if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
         	
             if (command.equals("video")) {
             	String cmd = req.getParameter("cmd");
@@ -2462,13 +2374,6 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
 		}        
         
-        if (command.equals("licenseReminder"))
-        {
-			(new LicenseReminderRequestHandler(req, resp, session, output, userid)).handleRequest();
-			
-            return(true);
-        }
-
         if (command.equals("logout"))
 		{
 			logout(req, resp, session, userid);
@@ -2483,7 +2388,7 @@ public class WebFileSysServlet extends ServletBase {
     {
         UserManager userMgr = WebFileSys.getInstance().getUserMgr();
 
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
+		if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
 		{
 			String docRoot = userMgr.getDocumentRoot(userid);
         	
@@ -2502,9 +2407,9 @@ public class WebFileSysServlet extends ServletBase {
 
         String logoutPage = "/webfilesys/servlet";
 
-        if (WebFileSys.getInstance().getLogoutURL() != null)
+        if (WebFileSysConfig.getInstance().getLogoutURL() != null)
         {
-            logoutPage = WebFileSys.getInstance().getLogoutURL();
+            logoutPage = WebFileSysConfig.getInstance().getLogoutURL();
         }
 
         LOG.info(req.getRemoteAddr() + ": logout user " + userid);
@@ -2537,12 +2442,8 @@ public class WebFileSysServlet extends ServletBase {
         {
             if (userMgr.checkPassword(userid, password))
             {
-            	session = req.getSession(false);
-            	if (session != null) {
-            		LOG.debug("destroying existing session");
-            		session.invalidate();
-            	}
-            	
+                destroyExistingSession(req);
+
         		session = req.getSession(true);
         		
         		setSessionInfo(req, session);
@@ -2593,7 +2494,7 @@ public class WebFileSysServlet extends ServletBase {
     			
                 LOG.info(logEntry);
 
-                if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
+                if ((WebFileSysConfig.getInstance().getMailHost() != null) && WebFileSysConfig.getInstance().isMailNotifyLogin())
                 {
                 	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
                     
@@ -2607,11 +2508,7 @@ public class WebFileSysServlet extends ServletBase {
 
             if (userMgr.checkReadonlyPassword(userid, password))
             {
-            	session = req.getSession(false);
-            	if (session != null) {
-            		LOG.debug("destroying existing session");
-            		session.invalidate();
-            	}
+                destroyExistingSession(req);
             	
         		session = req.getSession(true);
 
@@ -2646,7 +2543,7 @@ public class WebFileSysServlet extends ServletBase {
 
                 LOG.info(logEntry);
 
-                if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
+                if ((WebFileSysConfig.getInstance().getMailHost() != null) && WebFileSysConfig.getInstance().isMailNotifyLogin())
                 {
                 	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
                     
@@ -2662,7 +2559,7 @@ public class WebFileSysServlet extends ServletBase {
         logEntry = clientIP + ": login failed for user " + userid;
         LOG.warn(logEntry);
 
-        if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin())
+        if ((WebFileSysConfig.getInstance().getMailHost() != null) && WebFileSysConfig.getInstance().isMailNotifyLogin())
         {
         	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
             
@@ -2671,11 +2568,11 @@ public class WebFileSysServlet extends ServletBase {
                            WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + logEntry)).send();
         }
 
-        if (WebFileSys.getInstance().getLoginErrorPage() != null)
+        if (WebFileSysConfig.getInstance().getLoginErrorPage() != null)
         {
         	try
         	{
-                resp.sendRedirect(WebFileSys.getInstance().getLoginErrorPage());
+                resp.sendRedirect(WebFileSysConfig.getInstance().getLoginErrorPage());
         	}
         	catch (IOException ioex)
         	{
@@ -2685,226 +2582,169 @@ public class WebFileSysServlet extends ServletBase {
             return;
         }
 
-        // logon(true);
-        
-	    (new XslLogonHandler(req, resp, session, output, true)).handleRequest(); 
+	    (new XslLogonHandler(req, resp, session, output, true)).handleRequest();
     }
     
     public void silentLogin(HttpServletRequest req, HttpServletResponse resp,
-    		PrintWriter output, boolean requestIsLocal)
-    {
+    		                PrintWriter output, boolean requestIsLocal) {
+
     	String requestParms = req.getQueryString();
-    	
-    	StringTokenizer parmParser = new StringTokenizer(requestParms, "?&=");
-    	
-    	if (parmParser.hasMoreTokens())
-    	{
-    		parmParser.nextToken(); // skip command param name
+    	StringTokenizer paramParser = new StringTokenizer(requestParms, "?&=");
+    	if (paramParser.hasMoreTokens()) {
+    		paramParser.nextToken(); // skip command param name
     	}
-    	
-    	if (parmParser.hasMoreTokens())
-    	{
-    		parmParser.nextToken(); // skip the command value
+        if (paramParser.hasMoreTokens()) {
+    		paramParser.nextToken(); // skip the command value (silentLogin)
     	}
 
     	String userid = null;
+    	if (paramParser.hasMoreTokens()) {
+    		userid = paramParser.nextToken();
+    	}
+
         String password = null;
-    	
-    	if (parmParser.hasMoreTokens())
-    	{
-    		userid = parmParser.nextToken();
+    	if (paramParser.hasMoreTokens()) {
+    		password = paramParser.nextToken();
     	}
 
-    	if (parmParser.hasMoreTokens())
-    	{
-    		password = parmParser.nextToken();
-    	}
+        String redirectURL = extractRedirectAfterSilentLoginUrl(req, paramParser);
 
-    	StringBuffer executeOnLoginCmd = new StringBuffer();
-
-    	StringBuffer redirectURL = new StringBuffer();
-
-    	if (parmParser.hasMoreTokens())
-    	{
-    		// execute on login command exists
-    		parmParser.nextToken(); // skip the cmd value
-
-            executeOnLoginCmd.append("command");
-    		
-            int i = 0;
-            
-    		while (parmParser.hasMoreTokens())
-        	{
-        		if (i % 2 == 0)
-        		{
-        			executeOnLoginCmd.append('=');
-        		}
-        		else
-        		{
-        			executeOnLoginCmd.append('&');
-        		}
-
-        		executeOnLoginCmd.append(parmParser.nextToken());
-        		
-                i++;        		
-        	}
-
-    	    String originalURL = req.getRequestURI();
-    	    
-    	    redirectURL = new StringBuffer();
-    	    
-    	    redirectURL.append(originalURL);  
-    	    
-    	    redirectURL.append('?');
-    	    
-            redirectURL.append(executeOnLoginCmd.toString());
-    	}
-    	
         UserManager userMgr = WebFileSys.getInstance().getUserMgr();
-
         String clientIP = req.getRemoteAddr();
+        HttpSession session = null;
 
-        String logEntry = null;
-
-		HttpSession session = null;
-        
-        if ((userid != null) && (password != null))
-        {
-            if (userMgr.checkPassword(userid, password))
-            {
-            	session = req.getSession(false);
-            	if (session != null) {
-            		LOG.debug("destroying existing session");
-            		session.invalidate();
-            	}
-            	
-        		session = req.getSession(true);
-        		
-        		setSessionInfo(req, session);
-
-        		session.setAttribute("userid", userid);
-        		
-        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
-        		
-        		session.removeAttribute(Constants.SESSION_KEY_CWD);
-
-        		session.removeAttribute("startIdx");
-        		
-                WebFileSys.getInstance().getUserMgr().setLastLoginTime(userid, new Date());
-
-                logEntry = clientIP + ": silent login user " + userid;
-
-        		String browserType = req.getHeader("User-Agent");
-                
-    			if (browserType != null)
-    			{
-    				logEntry = logEntry + " [" + browserType + "]";
-    			}
-    			
-                LOG.info(logEntry);
-
-                notifyAdminUsersAboutLogin(userMgr, "silent login successful", logEntry);
-
-                if (redirectURL.length() > 0) {
-                	try {
-                	    resp.sendRedirect(redirectURL.toString());
-                	    
-                	    return;
-                	} catch (IOException ioex) {
-                		LOG.error(ioex);
-                	}
-                }
-                
-        		String role = userMgr.getRole(userid);
-        		
-        		if ((role != null) && role.equals("album"))
-        		{
-           			(new XslPictureAlbumHandler(req, resp, session, output, userid)).handleRequest();
-        		}
-        		else
-        		{
-    		        (new MainFrameSetHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
-        		}
-    		    
-                return;
+        if ((userid != null) && (password != null)) {
+            boolean authSuccess = false;
+            if (userMgr.checkPassword(userid, password)) {
+                session = handleSilentLoginSuccess(userMgr, req, resp, userid, clientIP,false);
+                authSuccess = true;
+            } else if (userMgr.checkReadonlyPassword(userid, password)) {
+                session = handleSilentLoginSuccess(userMgr, req, resp, userid, clientIP,true);
+                authSuccess = true;
             }
 
-            if (userMgr.checkReadonlyPassword(userid, password))
-            {
-        		session = req.getSession(true);
-
-        		session.setAttribute("userid", userid);
-        		
-        		session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
-
-        		session.setAttribute("readonly", "true");
-
-        		session.removeAttribute(Constants.SESSION_KEY_CWD);
-
-        		session.removeAttribute("startIdx");
-
-                logEntry = clientIP + ": silent login user " + userid + " (read-only)";
-                
-        		String browserType = req.getHeader("User-Agent");
-                
-    			if (browserType != null)
-    			{
-    				logEntry = logEntry + " [" + browserType + "]";
-    			}
-
-                LOG.info(logEntry);
-
-                notifyAdminUsersAboutLogin(userMgr, "silent login successful (readonly)", logEntry);
-
-                if (redirectURL.length() > 0) {
-                	try {
-                	    resp.sendRedirect(redirectURL.toString());
-                	    
-                	    return;
-                	} catch (IOException ioex) {
-                		LOG.error(ioex);
-                	}
+            if (authSuccess) {
+                if (!redirectURL.isEmpty()) {
+                    try {
+                        resp.sendRedirect(redirectURL);
+                        return;
+                    } catch (IOException ioex) {
+                        LOG.error(ioex);
+                    }
                 }
-                
-        		String role = userMgr.getRole(userid);
-        		
-        		if ((role != null) && role.equals("album"))
-        		{
-        			(new XslPictureAlbumHandler(req, resp, session, output, userid)).handleRequest();
-        		}
-        		else
-        		{
-        		    (new MainFrameSetHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 
-        		}
-    		    
+
+                String role = userMgr.getRole(userid);
+                if ("album".equals(role)) {
+                    (new XslPictureAlbumHandler(req, resp, session, output, userid)).handleRequest();
+                } else {
+                    (new MainFrameSetHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest();
+                }
                 return;
             }
         }
 
-        logEntry = clientIP + ": silent login failed for user " + userid;
+        String logEntry = clientIP + ": silent login failed for user " + userid;
         LOG.warn(logEntry);
 
         notifyAdminUsersAboutLogin(userMgr, "silent login failed", logEntry);
 
-        if (WebFileSys.getInstance().getLoginErrorPage() != null)
-        {
-        	try
-        	{
-                resp.sendRedirect(WebFileSys.getInstance().getLoginErrorPage());
-        	}
-        	catch (IOException ioex)
-        	{
+        if (WebFileSysConfig.getInstance().getLoginErrorPage() != null) {
+        	try {
+                resp.sendRedirect(WebFileSysConfig.getInstance().getLoginErrorPage());
+        	} catch (IOException ioex) {
         		LOG.warn(ioex);
         	}
-        	
             return;
         }
 
-	    (new XslLogonHandler(req, resp, session, output, true)).handleRequest(); 
+        // silent login failed - goto login page
+	    (new XslLogonHandler(req, resp, session, output, true)).handleRequest();
+    }
+
+    private String extractRedirectAfterSilentLoginUrl(HttpServletRequest req, StringTokenizer parmParser) {
+        StringBuilder redirectURL = new StringBuilder();
+        if (parmParser.hasMoreTokens()) {
+            // execute on login command exists
+            parmParser.nextToken(); // skip the cmd value
+
+            StringBuilder executeOnLoginCmd = new StringBuilder();
+
+            executeOnLoginCmd.append("command");
+
+            int i = 0;
+            while (parmParser.hasMoreTokens()) {
+                if (i % 2 == 0) {
+                    executeOnLoginCmd.append('=');
+                } else {
+                    executeOnLoginCmd.append('&');
+                }
+                executeOnLoginCmd.append(parmParser.nextToken());
+                i++;
+            }
+
+            String originalURL = req.getRequestURI();
+            redirectURL.append(originalURL);
+            redirectURL.append('?');
+            redirectURL.append(executeOnLoginCmd);
+        }
+        return redirectURL.toString();
+    }
+
+    private HttpSession handleSilentLoginSuccess(UserManager userMgr, HttpServletRequest req, HttpServletResponse resp,
+                                          String userid, String clientIP, boolean readonly) {
+        destroyExistingSession(req);
+
+        HttpSession session = req.getSession(true);
+        setSessionInfo(req, session);
+        session.setAttribute("userid", userid);
+        session.setAttribute(Constants.SESSION_KEY_LOGIN_EVENT, "true");
+        session.removeAttribute(Constants.SESSION_KEY_CWD);
+        session.removeAttribute("startIdx");
+        if (readonly) {
+            session.setAttribute("readonly", "true");
+        }
+
+        logSilentLogin(userMgr, req, userid, clientIP, readonly);
+
+        userMgr.setLastLoginTime(userid, new Date());
+        return session;
+    }
+
+    private void destroyExistingSession(HttpServletRequest req) {
+        HttpSession session = req.getSession(false);
+        if (session != null) {
+            LOG.debug("destroying existing session");
+            session.invalidate();
+        }
+    }
+
+    private void logSilentLogin(UserManager userMgr, HttpServletRequest req, String userid, String clientIP, boolean readonly) {
+        StringBuilder logEntry = new StringBuilder();
+        logEntry.append(clientIP);
+        logEntry.append(": silent login user ");
+        logEntry.append(userid);
+        if (readonly) {
+            logEntry.append(" (read-only)");
+        }
+
+        String browserType = req.getHeader("User-Agent");
+        if (browserType != null) {
+            logEntry.append(" [");
+            logEntry.append(browserType);
+            logEntry.append("]");
+        }
+
+        LOG.info(logEntry.toString());
+
+        String subject = "silent login successful";
+        if (readonly) {
+            subject = subject + " (read-only)";
+        }
+        notifyAdminUsersAboutLogin(userMgr, subject, logEntry.toString());
     }
 
     private void notifyAdminUsersAboutLogin(UserManager userMgr, String subject, String message) {
-        if (WebFileSys.getInstance().getMailHost() != null && WebFileSys.getInstance().isMailNotifyLogin()) {
+        if (WebFileSysConfig.getInstance().getMailHost() != null && WebFileSysConfig.getInstance().isMailNotifyLogin()) {
             ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
             (new SmtpEmail(adminUserEmailList, subject,
                     WebFileSys.getInstance().getLogDateFormat().format(new Date()) + " " + message)).send();
@@ -2912,21 +2752,15 @@ public class WebFileSysServlet extends ServletBase {
 
     }
 
-    private void redirectToLogin(PrintWriter output)
-    {
+    private void redirectToLogin(PrintWriter output) {
 		output.println("<html>");
 		output.println("<head>");
 		output.println("<meta http-equiv=\"expires\" content=\"0\">");
-
-		output.println("<script language=\"javascript\">");
-
-		output.println("  top.location.href='/webfilesys/servlet?command=loginForm';"); 
-
+		output.println("<script type=\"text/javascript\">");
+		output.println("top.location.href='/webfilesys/servlet?command=loginForm';");
 		output.println("</script>");
-
-		output.println("</head>"); 
+		output.println("</head>");
 		output.println("</html>");
-		
 		output.flush();
     }
     
@@ -2934,7 +2768,7 @@ public class WebFileSysServlet extends ServletBase {
         if (browserType == null) {
             return false;
         }
-        return (browserType.indexOf("Android") >= 0);
+        return (browserType.contains("Android"));
     }
 }
 

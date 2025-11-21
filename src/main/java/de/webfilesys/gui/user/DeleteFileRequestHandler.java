@@ -7,14 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.Constants;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.SystemCmdParms;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslFileListHandler;
 import de.webfilesys.gui.xsl.XslThumbnailHandler;
@@ -108,7 +105,7 @@ public class DeleteFileRequestHandler extends UserRequestHandler
         {
             MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-            if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
             {
                 metaInfMgr.updateLinksAfterMove(filePath, null, uid);
             }

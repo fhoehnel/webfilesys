@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -92,7 +93,7 @@ public class GrepRequestHandler extends UserRequestHandler
 		// this is not 100 % save as we check only the beginning of very large files
 		// alternative would be to write our own readLine() method with limited line length
         
-        if (!isTextFile(filePath, WebFileSys.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK))
+        if (!isTextFile(filePath, WebFileSysConfig.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK))
         {
             resp.setStatus(404);
             output.println("This file seems not to be a text file: " + getHeadlinePath(filePath));

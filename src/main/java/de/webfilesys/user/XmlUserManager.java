@@ -16,6 +16,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -718,7 +719,7 @@ public class XmlUserManager extends UserManagerBase
 
     public int getPageSize(String userId)
     {
-        int pageSize = WebFileSys.getInstance().getThumbnailsPerPage();
+        int pageSize = WebFileSysConfig.getInstance().getThumbnailsPerPage();
 
         Element userElement=getUserElement(userId);
 

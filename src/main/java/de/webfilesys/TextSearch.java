@@ -241,7 +241,7 @@ public class TextSearch
 									if (session.getAttribute("searchCanceled")==null) {
                                         String iconImg = "doc.gif";
 
-                                        if (WebFileSys.getInstance().isShowAssignedIcons()) {
+                                        if (WebFileSysConfig.getInstance().isShowAssignedIcons()) {
                                             iconImg = IconManager.getInstance().getIconForFileName(fileList[i].getName());
                                         }
 									    

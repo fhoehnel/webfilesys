@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import org.apache.logging.log4j.Logger;
@@ -21,18 +22,6 @@ import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.ClipBoard;
-import de.webfilesys.Constants;
-import de.webfilesys.FastPathManager;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.IconManager;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
-import de.webfilesys.WinDriveManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
@@ -493,7 +482,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(folderFileListElement, "readonly", "true", false);
 		}
 		
-        if (WebFileSys.getInstance().getMailHost() !=null)
+        if (WebFileSysConfig.getInstance().getMailHost() !=null)
         {
             XmlUtil.setChildText(folderFileListElement, "mailEnabled", "true");
         }
@@ -570,7 +559,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
 	        IconManager iconMgr = null;
 
-	        if (WebFileSys.getInstance().isShowAssignedIcons())
+	        if (WebFileSysConfig.getInstance().isShowAssignedIcons())
 	        {
 	            iconMgr = IconManager.getInstance();
 	        }
@@ -590,7 +579,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 				
 				String docImage = null;
 
-				if (WebFileSys.getInstance().isShowAssignedIcons()) {
+				if (WebFileSysConfig.getInstance().isShowAssignedIcons()) {
 					int extIdx = fileName.lastIndexOf('.');
 					if ((extIdx > 0) && (extIdx < (fileName.length() - 1))) {
 						docImage = iconMgr.getFileIconNoDefault(fileName);

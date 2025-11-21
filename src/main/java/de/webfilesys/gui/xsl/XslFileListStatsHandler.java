@@ -9,18 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Constants;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.IconManager;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -139,7 +131,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 
 				File tempFile = fileCont.getRealFile();
 
-				if (WebFileSys.getInstance().isShowAssignedIcons())
+				if (WebFileSysConfig.getInstance().isShowAssignedIcons())
 				{
 					String docImage = null;
 
@@ -187,7 +179,7 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 			}
 		}		
 		
-        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+        if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
             XmlUtil.setChildText(fileListElem, "videoEnabled", "true");
         }
 		

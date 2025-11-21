@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -249,7 +250,7 @@ public class XslZipContentHandler extends XslRequestHandlerBase
 	private String getFileIcon(String filePath) {
 		String docImage = null;
 
-		if (WebFileSys.getInstance().isShowAssignedIcons()) {
+		if (WebFileSysConfig.getInstance().isShowAssignedIcons()) {
 			int extIdx = filePath.lastIndexOf('.');
 
 			if ((extIdx > 0) && (extIdx < (filePath.length() - 1))) {

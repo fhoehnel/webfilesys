@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -80,7 +81,7 @@ public class VideoConcatAnyThread extends Thread {
         
         String targetFilePath = CommonUtils.getNonConflictingTargetFilePath(targetPath + File.separator + targetFileName);
         
-        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
+        String ffmpegExePath = WebFileSysConfig.getInstance().getFfmpegExePath();
 		
         ArrayList<String> progNameAndParams = new ArrayList<String>();
         progNameAndParams.add(ffmpegExePath);

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -18,10 +19,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Category;
-import de.webfilesys.IconManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.PatternComparator;
@@ -361,7 +358,7 @@ public class XslFindFileHandler extends XslRequestHandlerBase {
     
     private String getFileIcon(String filePath)
     {
-        if (!WebFileSys.getInstance().isShowAssignedIcons()) {
+        if (!WebFileSysConfig.getInstance().isShowAssignedIcons()) {
             return(IconManager.DEFAULT_ICON);
         }
         

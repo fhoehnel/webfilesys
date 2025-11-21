@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -31,7 +32,7 @@ public class VideoDeshaker extends Thread {
             LogManager.getLogger(getClass()).debug("starting video deshaker thread for " + processQueue.size() + " video files");
         }
         
-        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
+        String ffmpegExePath = WebFileSysConfig.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
         	
@@ -75,7 +76,7 @@ public class VideoDeshaker extends Thread {
         String transformFile = getEscapedTransformFilePath(targetVideoPath);
         
         ArrayList<String> progNameAndParams = new ArrayList<String>();
-        progNameAndParams.add(WebFileSys.getInstance().getFfmpegExePath());
+        progNameAndParams.add(WebFileSysConfig.getInstance().getFfmpegExePath());
         progNameAndParams.add("-i");
         progNameAndParams.add(videoFilePath);
         progNameAndParams.add("-vf");
@@ -136,7 +137,7 @@ public class VideoDeshaker extends Thread {
         int smoothing = 12;
         
         ArrayList<String> progNameAndParams = new ArrayList<String>();
-        progNameAndParams.add(WebFileSys.getInstance().getFfmpegExePath());
+        progNameAndParams.add(WebFileSysConfig.getInstance().getFfmpegExePath());
         progNameAndParams.add("-i");
         progNameAndParams.add(videoFilePath);
         progNameAndParams.add("-vf");

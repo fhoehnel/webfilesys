@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.WebFileSysConfig;
 import de.webfilesys.gui.CSSManager;
 
 /**
@@ -312,7 +313,7 @@ public class AdminRegisterUserRequestHandler extends AdminRequestHandler
 		output.println("</select></td>");
         output.println("</tr>");
 
-		if (WebFileSys.getInstance().getMailHost() != null)
+		if (WebFileSysConfig.getInstance().getMailHost() != null)
 		{
 			val = "";
 			if (errorMsg != null)

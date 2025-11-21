@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -64,7 +65,7 @@ public class TextOnVideoParamHandler extends XslRequestHandlerBase {
 		XmlUtil.setChildText(editParamsElem, "shortVideoFileName", CommonUtils.shortName(videoFileName, 40), false);
 		XmlUtil.setChildText(editParamsElem, "videoFilePath", videoFilePath, false);
 		
-        String ffprobeExePath = WebFileSys.getInstance().getFfprobeExePath();
+        String ffprobeExePath = WebFileSysConfig.getInstance().getFfprobeExePath();
         
         if (!CommonUtils.isEmpty(ffprobeExePath)) {
 	        VideoInfoExtractor videoInfoExtractor = new VideoInfoExtractor();

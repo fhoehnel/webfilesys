@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -87,7 +88,7 @@ public class XslPublishListHandler extends XslRequestHandlerBase {
 
 					StringBuffer secretLink = new StringBuffer();
 
-					String baseUrl = WebFileSys.getInstance().getClientUrl();
+					String baseUrl = WebFileSysConfig.getInstance().getClientUrl();
 					
 					if (CommonUtils.isEmpty(baseUrl)) {
 						
@@ -97,8 +98,8 @@ public class XslPublishListHandler extends XslRequestHandlerBase {
 							secretLink.append("http://");
 						}
 
-						if (WebFileSys.getInstance().getServerDNS() != null) {
-							secretLink.append(WebFileSys.getInstance().getServerDNS());
+						if (WebFileSysConfig.getInstance().getServerDNS() != null) {
+							secretLink.append(WebFileSysConfig.getInstance().getServerDNS());
 						} else {
 							secretLink.append(WebFileSys.getInstance().getLocalIPAddress());
 						}

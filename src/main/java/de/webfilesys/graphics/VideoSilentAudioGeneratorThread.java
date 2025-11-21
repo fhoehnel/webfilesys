@@ -1,6 +1,8 @@
 package de.webfilesys.graphics;
 
 import java.util.ArrayList;
+
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.LogManager;
 import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
@@ -19,7 +21,7 @@ public class VideoSilentAudioGeneratorThread extends Thread {
     }
 
     public void run() {
-        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
+        String ffmpegExePath = WebFileSysConfig.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
             if (LogManager.getLogger(getClass()).isDebugEnabled()) {

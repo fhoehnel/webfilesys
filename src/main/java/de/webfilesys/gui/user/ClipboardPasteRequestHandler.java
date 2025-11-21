@@ -9,18 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.Category;
-import de.webfilesys.ClipBoard;
-import de.webfilesys.CopyStatus;
-import de.webfilesys.FileSysStat;
-import de.webfilesys.GeoTag;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.SubdirExistTester;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.graphics.VideoThumbnailCreator;
@@ -286,7 +279,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 						}
 						else
 						{
-					        if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+					        if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
 					        {
 	                            metaInfMgr.updateLinksAfterMove(sourceFile, destFile, uid);
 					        }
@@ -305,7 +298,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 								}
 							}
 							
-				            if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+				            if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
 				                String videoThumbnailPath = VideoThumbnailCreator.getThumbnailPath(sourceFile);
 
 				                File videoThumbnailFile = new File(videoThumbnailPath);
@@ -461,7 +454,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 		output.println("</body></html>");
 		output.flush();
 		
-		if (WebFileSys.getInstance().isAutoCreateThumbs()) {
+		if (WebFileSysConfig.getInstance().isAutoCreateThumbs()) {
 			AutoThumbnailCreator.getInstance().queuePath(actPath, AutoThumbnailCreator.SCOPE_TREE);
 		}
 	}

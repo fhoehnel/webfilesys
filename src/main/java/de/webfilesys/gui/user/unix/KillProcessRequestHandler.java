@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -36,7 +37,7 @@ public class KillProcessRequestHandler extends UserRequestHandler
 			return;
 		}
 
-		boolean allowProcessKill = WebFileSys.getInstance().isAllowProcessKill();
+		boolean allowProcessKill = WebFileSysConfig.getInstance().isAllowProcessKill();
 		
 		UserManager userMgr = WebFileSys.getInstance().getUserMgr();
 

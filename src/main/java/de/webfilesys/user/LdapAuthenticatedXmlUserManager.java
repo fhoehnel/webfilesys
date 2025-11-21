@@ -21,6 +21,7 @@ import javax.naming.directory.InitialDirContext;
 import javax.naming.directory.SearchControls;
 import javax.naming.directory.SearchResult;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -361,8 +362,8 @@ public class LdapAuthenticatedXmlUserManager extends XmlUserManager {
 				
 				user.setCss(DEFAULT_CSS);
 				user.setRole(DEFAULT_ROLE);
-				user.setDiskQuota(WebFileSys.getInstance().getDefaultDiskQuota());
-				user.setPageSize(WebFileSys.getInstance().getThumbnailsPerPage());
+				user.setDiskQuota(WebFileSysConfig.getInstance().getDefaultDiskQuota());
+				user.setPageSize(WebFileSysConfig.getInstance().getThumbnailsPerPage());
 				user.setLastLogin(new Date());
 				
 				if (CommonUtils.isEmpty(WebFileSys.getInstance().getUserDocRoot())) {

@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -72,7 +73,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
             
             MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-            if (WebFileSys.getInstance().isReverseFileLinkingEnabled()) {
+            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
                 metaInfMgr.updateLinksAfterMove(filePath, null, uid);
             }
 
@@ -88,7 +89,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
                 }
             }
 
-            if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+            if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
                 String videoThumbnailPath = VideoThumbnailCreator.getThumbnailPath(filePath);
 
                 File videoThumbnailFile = new File(videoThumbnailPath);

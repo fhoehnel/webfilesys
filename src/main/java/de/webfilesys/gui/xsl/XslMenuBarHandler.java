@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -50,7 +51,7 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(menuBarElement, "unixAdmin", "true", false);
 		}
 		
-		if (WebFileSys.getInstance().isOpenRegistration())
+		if (WebFileSysConfig.getInstance().isOpenRegistration())
 		{
 			XmlUtil.setChildText(menuBarElement, "registrationType", "open", false);
 		}
@@ -83,12 +84,12 @@ public class XslMenuBarHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(menuBarElement, "queryDrives", "true", false);
         }
 
-        if (WebFileSys.getInstance().isEnableCalendar())
+        if (WebFileSysConfig.getInstance().isEnableCalendar())
         {
             XmlUtil.setChildText(menuBarElement, "calendarEnabled", "true", false);
         }
 
-        if (WebFileSys.getInstance().isOSShellCommandExcution())
+        if (WebFileSysConfig.getInstance().isOSShellCommandExcution())
         {
             XmlUtil.setChildText(menuBarElement, "cmdLine", "true", false);
         }

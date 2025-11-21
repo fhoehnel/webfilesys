@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -37,7 +38,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 	{
 		super(req, resp, session, output, null);
 		
-		if (!WebFileSys.getInstance().isOpenRegistration())
+		if (!WebFileSysConfig.getInstance().isOpenRegistration())
 		{
 			return;
 		}
@@ -53,7 +54,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 
 		LanguageManager langMgr=LanguageManager.getInstance();
 
-        String primaryLanguage = WebFileSys.getInstance().getPrimaryLanguage();
+        String primaryLanguage = WebFileSysConfig.getInstance().getPrimaryLanguage();
         
 		if (login.trim().length() < 3)
 		{
@@ -184,7 +185,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
         newUser.setCss(getParameter("css"));
         newUser.setLanguage(userLanguage);
 
-		newUser.setDiskQuota(WebFileSys.getInstance().getDefaultDiskQuota());
+		newUser.setDiskQuota(WebFileSysConfig.getInstance().getDefaultDiskQuota());
 
         newUser.setActivationCode(CommonUtils.generateAccessCode());
         newUser.setActivationCodeExpiration(System.currentTimeMillis() + UserManager.ACTIVATION_CODE_EXPIRATION);
@@ -203,8 +204,8 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		}
 
 		
-        if (WebFileSys.getInstance().getMailHost() != null) {
-    		if (WebFileSys.getInstance().isMailNotifyRegister()) {
+        if (WebFileSysConfig.getInstance().getMailHost() != null) {
+    		if (WebFileSysConfig.getInstance().isMailNotifyRegister()) {
     			ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
                 
     			(new SmtpEmail(adminUserEmailList, "new user self-registration",
@@ -219,8 +220,8 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
                 activationLink.append("http://");
             }
 
-            if (WebFileSys.getInstance().getServerDNS() != null) {
-                activationLink.append(WebFileSys.getInstance().getServerDNS());
+            if (WebFileSysConfig.getInstance().getServerDNS() != null) {
+                activationLink.append(WebFileSysConfig.getInstance().getServerDNS());
             } else {
                 activationLink.append(WebFileSys.getInstance().getLocalIPAddress());
             }
@@ -253,7 +254,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 
         XmlUtil.setChildText(rootElement, "language", userLanguage, false);
 
-        if (WebFileSys.getInstance().getMailHost() == null) {
+        if (WebFileSysConfig.getInstance().getMailHost() == null) {
             XmlUtil.setChildText(rootElement, "activationByAdminRequired", "true", false);
         }
         
@@ -369,7 +370,7 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		addRequestParameter("email");
 		addRequestParameter("phone");
 		
-		String primaryLanguage = WebFileSys.getInstance().getPrimaryLanguage();		
+		String primaryLanguage = WebFileSysConfig.getInstance().getPrimaryLanguage();
 		
 		addMsgResource("label.regtitle", 
 		               langMgr.getResource(primaryLanguage,

@@ -12,22 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.ClipBoard;
-import de.webfilesys.Constants;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.PictureRating;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -218,7 +209,7 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
 			XmlUtil.setChildText(fileListElem, "readonly", "true", false);
 		}
 		
-        if (WebFileSys.getInstance().getMailHost() !=null) {
+        if (WebFileSysConfig.getInstance().getMailHost() !=null) {
             XmlUtil.setChildText(fileListElem, "mailEnabled", "true");
         }
             

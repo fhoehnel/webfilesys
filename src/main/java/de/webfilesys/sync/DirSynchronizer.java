@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -201,7 +202,7 @@ public class DirSynchronizer
                         
                         if (timestampDiff > TIMESTAMP_GRANULARITY)
                         {
-                            if (!WebFileSys.getInstance().isSyncIgnoreOffsetDST() ||
+                            if (!WebFileSysConfig.getInstance().isSyncIgnoreOffsetDST() ||
                                 (timestampDiff < DST_OFFSET - TIMESTAMP_GRANULARITY) ||
                                 (timestampDiff > DST_OFFSET + TIMESTAMP_GRANULARITY))
                             {

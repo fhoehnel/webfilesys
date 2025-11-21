@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.WebFileSysConfig;
 import de.webfilesys.util.CommonUtils;
 
 /**
@@ -142,9 +143,9 @@ public class PublishRequestHandler extends UserRequestHandler
 			secretURL.append("http://");
 		}
 
-		if (WebFileSys.getInstance().getServerDNS() != null)
+		if (WebFileSysConfig.getInstance().getServerDNS() != null)
 		{
-			secretURL.append(WebFileSys.getInstance().getServerDNS());
+			secretURL.append(WebFileSysConfig.getInstance().getServerDNS());
 		}
 		else
 		{
@@ -339,7 +340,8 @@ public class PublishRequestHandler extends UserRequestHandler
 		{
 			 output.print(" checked");
 		}
-		// output.print(" onclick=\"setRelatedCheckbox(this, document.form1.includeSub)\"");		output.print(">");
+		// output.print(" onclick=\"setRelatedCheckbox(this, document.form1.includeSub)\"");
+		output.print(">");
 		output.println(getResource("label.publishTypeAlbum", "picture album"));
 		output.println("</td>");
 		output.println("</tr>");

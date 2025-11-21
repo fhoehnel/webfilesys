@@ -10,14 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.ViewHandlerConfig;
-import de.webfilesys.ViewHandlerManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.FileEncodingMap;
 import de.webfilesys.util.MimeTypeMap;
@@ -187,7 +184,7 @@ public class GetFileRequestHandler extends UserRequestHandler
 	        buffer = null;
 
 	        // if (incrDownload)
-			if (WebFileSys.getInstance().isDownloadStatistics() && (filePath.indexOf(ThumbnailThread.THUMBNAIL_SUBDIR) < 0))
+			if (WebFileSysConfig.getInstance().isDownloadStatistics() && (filePath.indexOf(ThumbnailThread.THUMBNAIL_SUBDIR) < 0))
 			{
 				MetaInfManager.getInstance().incrementDownloads(filePath);
 			}

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -108,7 +109,7 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
         	
         	if (errorCode == 0)
         	{
-        		if (WebFileSys.getInstance().getMailHost() != null)
+        		if (WebFileSysConfig.getInstance().getMailHost() != null)
         		{
 					if (sendMail != null)
 					{
@@ -193,7 +194,7 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 		String shortPath = CommonUtils.shortName(getHeadlinePath(publishPath), 50);		
 		XmlUtil.setChildText(publishFileElement, "shortPath", shortPath, false);
 		
-		if (WebFileSys.getInstance().getMailHost() != null)
+		if (WebFileSysConfig.getInstance().getMailHost() != null)
 		{
 			XmlUtil.setChildText(publishFileElement, "mailEnabled", "true", false);
 		}
@@ -240,9 +241,9 @@ public class XslPublishFileHandler extends XslRequestHandlerBase
 			secretURL.append("http://");
 		}
 
-		if (WebFileSys.getInstance().getServerDNS() != null)
+		if (WebFileSysConfig.getInstance().getServerDNS() != null)
 		{
-			secretURL.append(WebFileSys.getInstance().getServerDNS());
+			secretURL.append(WebFileSysConfig.getInstance().getServerDNS());
 		}
 		else
 		{

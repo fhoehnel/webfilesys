@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.WebFileSys;
+import de.webfilesys.WebFileSysConfig;
 import de.webfilesys.WinDriveManager;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -129,7 +130,7 @@ public class MainFrameSetHandler extends UserRequestHandler
 			output.println("var clientIsLocal = 'false';");
 		}
 
-		if (clientIsLocal && (WebFileSys.getInstance().getSystemEditor() != null))
+		if (clientIsLocal && (WebFileSysConfig.getInstance().getSystemEditor() != null))
 		{
 			output.println("var localEditor = 'true';");
 		}
@@ -157,7 +158,7 @@ public class MainFrameSetHandler extends UserRequestHandler
 			output.println("var webspaceUser = 'false';");
 		}
 
-		if (WebFileSys.getInstance().getMailHost() != null)
+		if (WebFileSysConfig.getInstance().getMailHost() != null)
 		{
 			output.println("var mailEnabled = 'true';");
 		}
@@ -166,7 +167,7 @@ public class MainFrameSetHandler extends UserRequestHandler
 			output.println("var mailEnabled = 'false';");
 		}
 		
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
+		if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
 		{
 			output.println("var autoCreateThumbs = 'true';");
 		}
@@ -184,7 +185,7 @@ public class MainFrameSetHandler extends UserRequestHandler
 			output.println("var adminUser = 'false';");
         }
         
-        if (WebFileSys.getInstance().isChmodAllowed())
+        if (WebFileSysConfig.getInstance().isChmodAllowed())
         {
 			output.println("var chmodAllowed = 'true';");
         }
@@ -193,13 +194,13 @@ public class MainFrameSetHandler extends UserRequestHandler
 			output.println("var chmodAllowed = 'false';");
         }
         
-        if (!CommonUtils.isEmpty(WebFileSys.getInstance().getFfmpegExePath())) {
+        if (!CommonUtils.isEmpty(WebFileSysConfig.getInstance().getFfmpegExePath())) {
 			output.println("var ffmpegEnabled = true;");
         }
         
         if (!readonly)
 		{
-            if (WebFileSys.getInstance().isFolderWatch()) {
+            if (WebFileSysConfig.getInstance().isFolderWatch()) {
                 output.println("var watchEnabled = true;");
             }
 		}

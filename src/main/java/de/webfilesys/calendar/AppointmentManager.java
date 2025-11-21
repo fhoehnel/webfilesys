@@ -18,6 +18,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -164,7 +165,7 @@ public class AppointmentManager extends Thread
     	
     	long now = System.currentTimeMillis();
     	
-    	long appointmentExpirationMillis = WebFileSys.getInstance().getCalendarExpirationPeriod() * 24 * 60 * 60 * 1000;
+    	long appointmentExpirationMillis = WebFileSysConfig.getInstance().getCalendarExpirationPeriod() * 24 * 60 * 60 * 1000;
     	
     	for (int i = 0; i < userFiles.length; i++) 
     	{

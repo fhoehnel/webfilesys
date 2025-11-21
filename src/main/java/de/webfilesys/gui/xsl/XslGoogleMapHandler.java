@@ -6,6 +6,8 @@ import java.io.PrintWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
@@ -153,9 +155,9 @@ public class XslGoogleMapHandler extends XslRequestHandlerBase
 		
         String googleMapsAPIKey = null;
 		if (req.getScheme().equalsIgnoreCase("https")) {
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTPS();
 		} else {
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTP();
 		}
 		
 		if (!CommonUtils.isEmpty(googleMapsAPIKey)) {

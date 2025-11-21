@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -24,8 +23,6 @@ public abstract class RequestHandler
     public static final int BROWSER_SAFARI   = 5;
     public static final int BROWSER_GOOGLE   = 6;
 	
-	public static final int LIC_REMINDER_INTERVAL = 10;
-
 	protected HttpServletRequest req = null;
 
 	protected HttpServletResponse resp = null;
@@ -44,16 +41,11 @@ public abstract class RequestHandler
 	
     public RequestHandler(HttpServletRequest req, HttpServletResponse resp,
     		              HttpSession session,
-    		              PrintWriter output)
-    {
+    		              PrintWriter output) {
         this.req = req;
-        
         this.resp = resp;
-
         this.session = session;
-    	
     	this.output = output;
-    	
     	getBrowserType(req);
     }
     
@@ -146,10 +138,8 @@ public abstract class RequestHandler
 		if (browserType == null)
 		{
 			LogManager.getLogger(getClass()).debug("user agent of browser undefined");
-			
 			browserType = "";
 			browserManufacturer = BROWSER_NON_MSIE;
-			
 			return;
 		}
 		
@@ -212,94 +202,16 @@ public abstract class RequestHandler
 		return((String) session.getAttribute(Constants.SESSION_KEY_CWD));
 	}
 
-	protected int getIntParam(String paramName, int defaultValue)
-	{
+	protected int getIntParam(String paramName, int defaultValue) {
 		int value = defaultValue;
-		
-		String paramValue = getParameter(paramName);		
-
-		if (paramValue != null)
-		{
-			try
-			{
+		String paramValue = getParameter(paramName);
+		if (paramValue != null) {
+			try {
 				value = Integer.parseInt(paramValue);
-			}
-			catch (NumberFormatException nfex)
-			{
+			} catch (NumberFormatException nfex) {
 			}
 		}
-		
 		return(value);
 	}
-	
-	protected int getScreenWidth()
-	{
-        int screenWidth = 0;
-        
-        String screenWidthParam = (String) req.getParameter("screenWidth");
-        
-        if (screenWidthParam != null) 
-        {
-            try
-            {
-                screenWidth = Integer.parseInt(screenWidthParam);
-            }
-            catch (NumberFormatException numEx)
-            {
-                LogManager.getLogger(getClass()).warn(numEx);
-            }
-        }
-        
-        if (screenWidth == 0)
-        {
-            Integer screenWidthFromSession = (Integer) session.getAttribute("screenWidth");
-            if (screenWidthFromSession != null) 
-            {
-                screenWidth = screenWidthFromSession.intValue();
-            }
-        }
-        
-        if (screenWidth == 0)
-        {
-            screenWidth = 1024;
-        }
-        
-        return screenWidth;
-	}
 
-    protected int getScreenHeight()
-    {
-        int screenHeight = 0;
-        
-        String screenHeightParam = (String) req.getParameter("screenHeight");
-        
-        if (screenHeightParam != null) 
-        {
-            try
-            {
-                screenHeight = Integer.parseInt(screenHeightParam);
-            }
-            catch (NumberFormatException numEx)
-            {
-                LogManager.getLogger(getClass()).warn(numEx);
-            }
-        }
-        
-        if (screenHeight == 0)
-        {
-            Integer screenHeightFromSession = (Integer) session.getAttribute("screenHeight");
-            if (screenHeightFromSession != null) 
-            {
-                screenHeight = screenHeightFromSession.intValue();
-            }
-        }
-        
-        if (screenHeight == 0)
-        {
-            screenHeight = 1024;
-        }
-        
-        return screenHeight;
-    }
-	
 }

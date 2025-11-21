@@ -129,7 +129,7 @@ implements HttpSessionListener, ServletContextListener
 			WebFileSys.getInstance().getDiskQuotaInspector().interrupt();
 		}
 
-		if (WebFileSys.getInstance().isEnableCalendar())
+		if (WebFileSysConfig.getInstance().isEnableCalendar())
 		{
 			AppointmentManager.getInstance().interrupt();
 		}
@@ -146,7 +146,7 @@ implements HttpSessionListener, ServletContextListener
         
         FastPathManager.getInstance().interrupt();
         
-        if (WebFileSys.getInstance().isFolderWatch()) {
+        if (WebFileSysConfig.getInstance().isFolderWatch()) {
             FolderWatchManager.getInstance().interrupt();
         }
 

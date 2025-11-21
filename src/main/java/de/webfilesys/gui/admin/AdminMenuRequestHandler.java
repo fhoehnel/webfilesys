@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.WebFileSys;
+import de.webfilesys.WebFileSysConfig;
 
 /**
  * @author Frank Hoehnel
@@ -50,7 +51,7 @@ public class AdminMenuRequestHandler extends AdminRequestHandler
 		output.println("<a href=\"/webfilesys/servlet?command=admin&cmd=sessionList\">Active Sessions</a>");
 		output.println("</div>");
 
-		if (WebFileSys.getInstance().getMailHost() !=null)
+		if (WebFileSysConfig.getInstance().getMailHost() !=null)
 		{
 			output.println("<div class=\"adminMenuEntry\">");
 			output.println("<span class=\"icon-font icon-mail iconAdminMenu\"></span>");
