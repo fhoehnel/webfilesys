@@ -808,7 +808,7 @@ function createAppointment()
 	
 	var formData = getFormData(document.getElementById("detailForm"));
 	
-	formData = formData + "command=calendar&cmd=newAppointment";
+	formData = formData + "&command=calendar&cmd=newAppointment";
 	
 	formData = formData + "&year=" + selectedDay.year + "&month=" + selectedDay.month + "&day=" + selectedDay.dayOfMonth;
 	

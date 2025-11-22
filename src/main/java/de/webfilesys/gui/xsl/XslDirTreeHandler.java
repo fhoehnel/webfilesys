@@ -138,7 +138,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 	{
 		File folderFile = new File(partOfPath);
 		
-		File fileList[] = folderFile.listFiles();
+		File[] fileList = folderFile.listFiles();
 
 		if (fileList == null)
 		{
@@ -194,111 +194,96 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 		}
 
 		DecorationManager decoMgr = DecorationManager.getInstance();
-		
-		for (int i=0;i<subdirList.size();i++)
-		{
-			String subdirPath=(String) subdirList.get(i);
 
-			boolean access = (belowDocRoot || accessAllowed(subdirPath));
+        for (String subdirPath : subdirList) {
+            boolean access = (belowDocRoot || accessAllowed(subdirPath));
 
             Element parentForSubdirs = parentFolder;
 
-			Element folderElement = null;
+            Element folderElement = null;
 
-			if (access)
-			{
-				dirCounter++;
-				
-				Integer subdirExist = SubdirExistCache.getInstance().existsSubdir(subdirPath);
+            if (access) {
+                dirCounter++;
 
-				if (subdirExist == null)
-				{
-			        SubdirExistTester.getInstance().queuePath(subdirPath, 1, false);	        
-				}
+                Integer subdirExist = SubdirExistCache.getInstance().existsSubdir(subdirPath);
+
+                if (subdirExist == null) {
+                    SubdirExistTester.getInstance().queuePath(subdirPath, 1, false);
+                }
 
                 folderElement = doc.createElement("folder");
-                
+
                 parentFolder.appendChild(folderElement);
-                
+
                 String folderName = subdirPath.substring(subdirPath.lastIndexOf(File.separatorChar) + 1);
-                
-				folderElement.setAttribute("name", folderName);                
 
-				folderElement.setAttribute("id", Integer.toString(dirCounter));
+                folderElement.setAttribute("name", folderName);
 
-				String encodedPath = null;
-				
-	            if (subdirPath.indexOf('\'') > 0) {
-	                encodedPath = UTF8URLEncoder.encode(subdirPath.replace('\'', '`'));
-	            } else {
-	                encodedPath = UTF8URLEncoder.encode(subdirPath);
-	            }
-				
-				folderElement.setAttribute("path", encodedPath);      
+                folderElement.setAttribute("id", Integer.toString(dirCounter));
 
-				folderElement.setAttribute("menuPath", insertDoubleBackslash(subdirPath));  
-				
-				if (subdirExist == null) {
-					folderElement.setAttribute("leaf", "unknown");    
-				} else if (subdirExist.intValue() != 1) {
-					folderElement.setAttribute("leaf", "true");    
-				}
+                String encodedPath = null;
 
-				if (subdirPath.equals(actPath))
-				{
-					currentDirNum = dirCounter;
-					
-					folderElement.setAttribute("current","true");
-				}
-				
-				if (subdirPath.replace('\\','/').equals(docRoot)) {
-					folderElement.setAttribute("root", "true");
-				}
-				
-				Decoration deco = decoMgr.getDecoration(subdirPath);
-				
-				if (deco != null) 
-				{
-					if (deco.getIcon() != null) 
-					{
-		                folderElement.setAttribute("icon", deco.getIcon());
-					}
-					if (deco.getTextColor() != null) 
-					{
-		                folderElement.setAttribute("textColor", deco.getTextColor());
-					}
-				}
-				
-				if (File.separatorChar=='/')
-				{
-		            // there is no way to detect NTFS symbolic links / junctions with Java functions
-		            // see http://stackoverflow.com/questions/3249117/cross-platform-way-to-detect-a-symbolic-link-junction-point
-	                
-				    File linkTestFile = new File(subdirPath);
+                if (subdirPath.indexOf('\'') > 0) {
+                    encodedPath = UTF8URLEncoder.encode(subdirPath.replace('\'', '`'));
+                } else {
+                    encodedPath = UTF8URLEncoder.encode(subdirPath);
+                }
 
-	                if (dirIsLink(linkTestFile))
-	                {
-	                    try
-	                    {
-	                        folderElement.setAttribute("link", "true");
-	                    
-	                        folderElement.setAttribute("linkDir", linkTestFile.getCanonicalPath());
-	                    }
-	                    catch (IOException ioex)
-	                    {
-	                        LogManager.getLogger(getClass()).error(ioex);
-	                    }
-	                }
-				}
-				
-				parentForSubdirs = folderElement;
-			}
+                folderElement.setAttribute("path", encodedPath);
 
-			if (dirTreeStatus.dirExpanded(subdirPath))
-			{
-				dirSubTree(parentForSubdirs, actPath, subdirPath, access);
-			}
-		}
+                folderElement.setAttribute("menuPath", insertDoubleBackslash(subdirPath));
+
+                if (subdirExist == null) {
+                    folderElement.setAttribute("leaf", "unknown");
+                } else if (subdirExist.intValue() != 1) {
+                    folderElement.setAttribute("leaf", "true");
+                }
+
+                if (subdirPath.equals(actPath)) {
+                    currentDirNum = dirCounter;
+
+                    folderElement.setAttribute("current", "true");
+                }
+
+                if (subdirPath.replace('\\', '/').equals(docRoot)) {
+                    folderElement.setAttribute("root", "true");
+                }
+
+                Decoration deco = decoMgr.getDecoration(subdirPath);
+
+                if (deco != null) {
+                    if (deco.getIcon() != null) {
+                        folderElement.setAttribute("icon", deco.getIcon());
+                    }
+                    if (deco.getTextColor() != null) {
+                        folderElement.setAttribute("textColor", deco.getTextColor());
+                    }
+                }
+
+                if (File.separatorChar == '/') {
+                    // there is no way to detect NTFS symbolic links / junctions with Java functions
+                    // see http://stackoverflow.com/questions/3249117/cross-platform-way-to-detect-a-symbolic-link-junction-point
+
+                    File linkTestFile = new File(subdirPath);
+
+                    if (dirIsLink(linkTestFile)) {
+                        try {
+                            folderElement.setAttribute("link", "true");
+
+                            folderElement.setAttribute("linkDir", linkTestFile.getCanonicalPath());
+                        } catch (IOException ioex) {
+                            LogManager.getLogger(getClass()).error(ioex);
+                        }
+                    }
+                }
+
+                parentForSubdirs = folderElement;
+            }
+
+            if (dirTreeStatus.dirExpanded(subdirPath)) {
+                dirSubTree(parentForSubdirs, actPath, subdirPath, access);
+            }
+        }
 	}
 	
 }

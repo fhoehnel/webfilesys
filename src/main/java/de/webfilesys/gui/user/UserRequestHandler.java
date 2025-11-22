@@ -516,52 +516,28 @@ public class UserRequestHandler extends ProtectedRequestHandler
         boolean seemsToBeBinary = false;
         
         int byteCounter = 0;
-        
-    	BufferedInputStream fin = null;
-    	
-    	try 
-    	{
-        	fin = new BufferedInputStream(new FileInputStream(filePath));
 
-        	int bytesWithoutLineBreak = 0;
+        try (BufferedInputStream fin = new BufferedInputStream(new FileInputStream(filePath))) {
 
-    		int c;
-    		while ((!seemsToBeBinary) && (byteCounter < bytesToCheck) && ((c = fin.read()) != (-1)))
-    		{
-    			if ((c == 0x0d) || (c == 0x0a))
-    			{
-    				bytesWithoutLineBreak = 0;
-    			}
-    			else 
-    			{
-    				bytesWithoutLineBreak++;
-    				
-    				if (bytesWithoutLineBreak > maxBytesWithoutLineBreak)
-    				{
-    					seemsToBeBinary = true;
-    				}
-    			}
-    			
-    			byteCounter++;
-    		}
-    	}
-    	catch (IOException ioex)
-    	{
-    		LogManager.getLogger(getClass()).error("failed to check if text file", ioex);
-    	}
-    	finally
-    	{
-    		if (fin != null) 
-    		{
-    			try
-    			{
-    				fin.close();
-    			}
-    			catch (IOException ex)
-    			{
-    			}
-    		}
-    	}
+            int bytesWithoutLineBreak = 0;
+
+            int c;
+            while ((!seemsToBeBinary) && (byteCounter < bytesToCheck) && ((c = fin.read()) != (-1))) {
+                if ((c == 0x0d) || (c == 0x0a)) {
+                    bytesWithoutLineBreak = 0;
+                } else {
+                    bytesWithoutLineBreak++;
+
+                    if (bytesWithoutLineBreak > maxBytesWithoutLineBreak) {
+                        seemsToBeBinary = true;
+                    }
+                }
+
+                byteCounter++;
+            }
+        } catch (IOException ioex) {
+            LogManager.getLogger(getClass()).error("failed to check if text file", ioex);
+        }
 
     	return (!seemsToBeBinary);
     }
