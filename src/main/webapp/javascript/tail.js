@@ -11,7 +11,7 @@ function startPollForChanges(startDelay) {
 }
 
 function changeAutoRefresh() {
-    var autoRefreshCheckbox = document.getElementById('autoRefresh');
+    const autoRefreshCheckbox = document.getElementById('autoRefresh');
     if (autoRefreshCheckbox.checked) {
         startPollForChanges(500);
     } else {
@@ -20,23 +20,22 @@ function changeAutoRefresh() {
 }
 
 function pollForChange() {
-    var url = "/webfilesys/servlet?command=checkFileChange&filePath=" + encodeURIComponent(pathForScript) + "&lastModified=" + lastModified + "&size=" + fileSize;
-
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var responseXml = req.responseXML;
-                var resultItem = responseXml.getElementsByTagName("result")[0];            
-    
-                if (resultItem && (resultItem.firstChild.nodeValue == "true")) {
+    const parameters = {
+        filePath: encodeURIComponent(pathForScript),
+        lastModified,
+        size: fileSize
+    }
+    xmlGetRequest("checkFileChange", parameters,
+        responseXml => {
+                const resultItem = responseXml.getElementsByTagName("result")[0];
+                if (resultItem && resultItem.firstChild.nodeValue === "true") {
                     document.getElementById('tailForm').submit();
                 } else {
                     pollTimeout = setTimeout(pollForChange, 3000);
                 }
-            } else {
-                alert("communication failure");
-            }
-        }
-    });
+            },
+        null,
+        true
+    );
 }
 

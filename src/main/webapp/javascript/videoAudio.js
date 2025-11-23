@@ -497,121 +497,111 @@ function checkTwoOrMoreFilesSelected() {
 
 function playVideoMaxSize(videoFilePath, videoFileName, isLink) { 
 
-	var fileNameExt = getFileNameExt(videoFileName);
+	const fileNameExt = getFileNameExt(videoFileName);
 	
-    if ((fileNameExt != ".MP4") && (fileNameExt != ".OGG") && (fileNameExt != ".OGV") && (fileNameExt != ".WEBM")) {
-    	
+    if (fileNameExt !== ".MP4" && fileNameExt !== ".OGG" && fileNameExt !== ".OGV" && fileNameExt !== ".WEBM") {
     	// no HTML 5 video - cannot be played in browser
     	playVideoLocal(videoFilePath);
     	return;
     }
 	
-    var url = "/webfilesys/servlet?command=video&cmd=getVideoDimensions&fileName=" +  encodeURIComponent(videoFileName);
+    const parameters = {
+        cmd: "getVideoDimensions",
+        fileName: encodeURIComponent(videoFileName)
+    }
 
     if (isLink) {
-    	url = url + "&link=true";
+        parameters["link"] = "true";
     }
-    
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
-			    
-			    var videoWidth = 480;
-			    var videoHeight = 360;
-			    var codec = null;
-			    
-                item = xmlDoc.getElementsByTagName("codec")[0];            
-                if (item) {
-                	codec = item.firstChild.nodeValue;
-                	if (codec == "mpeg4") {
-                    	// no HTML 5 video - cannot be played in browser
-                    	playVideoLocal(videoFilePath);
-                    	return;
-                	}
-                }
-			    
-                var item = xmlDoc.getElementsByTagName("xpix")[0];            
-                if (item) {
-                    videoWidth = parseInt(item.firstChild.nodeValue);
-                }
-             
-                item = xmlDoc.getElementsByTagName("ypix")[0];            
-                if (item) {
-                    videoHeight = parseInt(item.firstChild.nodeValue);
-                }
 
-                var availWidth = getWinWidth() - 20;
-                var availHeight = getWinHeight() - 20;
-                
-                var maxVideoWidth = availWidth - 40;
-                var maxVideoHeight = availHeight - 60;
-                
-                var videoPresentationWidth;
+    xmlGetRequest("video", parameters, responseXml => {
+        let videoWidth = 480;
+        let videoHeight = 360;
+        let codec = null;
 
-                var widthScale = videoWidth / maxVideoWidth;
-                var heightScale = videoHeight / maxVideoHeight;
-                
-                var scaledWidth = videoWidth;
-                var scaledHeight = videoHeight;
-                
-                if ((widthScale > 1) || (heightScale > 1)) {
-                    var scale;
-                	if (widthScale > heightScale) {
-                		scale = widthScale;
-                	} else {
-                		scale = heightScale;
-                	}
-                	
-                	scaledWidth = videoWidth * (1 / scale);
-                	scaledHeight = videoHeight * (1 / scale);
-                }
-                
-                var videoType = "mp4";
-                
-                if (videoFileName.endsWithIgnoreCase(".ogg") || videoFileName.endsWithIgnoreCase(".ogv")) {
-                    videoType = "ogg"
-                } else if (videoFileName.endsWithIgnoreCase(".webm")) {
-                    videoType = "webm"
-                }
-                
-                var videoCont = document.createElement("div");
-                videoCont.id = "videoCont";
-                videoCont.setAttribute("class", "maxVideoCont");
-                videoCont.style.width = (scaledWidth + 20) + "px";
-                videoCont.style.height = (scaledHeight + 40) + "px";
-                
-                var closeButton = document.createElement("img");
-                closeButton.setAttribute("src", "/webfilesys/images/winClose.gif");
-                closeButton.setAttribute("class", "closeButton");
-                closeButton.setAttribute("onclick", "destroyVideo()");
-                videoCont.appendChild(closeButton);
-                
-                var videoUrl = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(videoFilePath);
-                
-                var videoElem = document.createElement("video");
-                videoElem.setAttribute("autobuffer", "autobuffer");
-                videoElem.setAttribute("autoplay", "autoplay");
-                videoElem.setAttribute("controls", "controls");
-                videoElem.setAttribute("src", videoUrl);
-                videoElem.setAttribute("type", videoType);
-                videoElem.style.width = scaledWidth + "px";
-                videoElem.style.height = scaledHeight + "px";
-
-                var altTextElem = document.createElement("p");
-                altTextElem.innerHTML = "This browser does not support HTML5 video!"
-                videoElem.appendChild(altTextElem);
-                
-                videoCont.appendChild(videoElem);    
-
-                var docRoot = document.documentElement;
-                docRoot.appendChild(videoCont);
-                
-                centerBox(videoCont);    
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
+        let item = responseXml.getElementsByTagName("codec")[0];
+        if (item) {
+            codec = item.firstChild.nodeValue;
+            if (codec === "mpeg4") {
+                // no HTML 5 video - cannot be played in browser
+                playVideoLocal(videoFilePath);
+                return;
             }
         }
+
+        item = responseXml.getElementsByTagName("xpix")[0];
+        if (item) {
+            videoWidth = parseInt(item.firstChild.nodeValue);
+        }
+
+        item = responseXml.getElementsByTagName("ypix")[0];
+        if (item) {
+            videoHeight = parseInt(item.firstChild.nodeValue);
+        }
+
+        const availWidth = getWinWidth() - 20;
+        const availHeight = getWinHeight() - 20;
+
+        const maxVideoWidth = availWidth - 40;
+        const maxVideoHeight = availHeight - 60;
+
+        const widthScale = videoWidth / maxVideoWidth;
+        const heightScale = videoHeight / maxVideoHeight;
+
+        let scaledWidth = videoWidth;
+        let scaledHeight = videoHeight;
+
+        if ((widthScale > 1) || (heightScale > 1)) {
+            let scale;
+            if (widthScale > heightScale) {
+                scale = widthScale;
+            } else {
+                scale = heightScale;
+            }
+            scaledWidth = videoWidth * (1 / scale);
+            scaledHeight = videoHeight * (1 / scale);
+        }
+
+        let videoType = "mp4";
+
+        if (videoFileName.endsWithIgnoreCase(".ogg") || videoFileName.endsWithIgnoreCase(".ogv")) {
+            videoType = "ogg"
+        } else if (videoFileName.endsWithIgnoreCase(".webm")) {
+            videoType = "webm"
+        }
+
+        const videoCont = document.createElement("div");
+        videoCont.id = "videoCont";
+        videoCont.setAttribute("class", "maxVideoCont");
+        videoCont.style.width = (scaledWidth + 20) + "px";
+        videoCont.style.height = (scaledHeight + 40) + "px";
+
+        const closeButton = document.createElement("img");
+        closeButton.setAttribute("src", "/webfilesys/images/winClose.gif");
+        closeButton.setAttribute("class", "closeButton");
+        closeButton.setAttribute("onclick", "destroyVideo()");
+        videoCont.appendChild(closeButton);
+
+        const videoUrl = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(videoFilePath);
+
+        const videoElem = document.createElement("video");
+        videoElem.setAttribute("autobuffer", "autobuffer");
+        videoElem.setAttribute("autoplay", "autoplay");
+        videoElem.setAttribute("controls", "controls");
+        videoElem.setAttribute("src", videoUrl);
+        videoElem.setAttribute("type", videoType);
+        videoElem.style.width = scaledWidth + "px";
+        videoElem.style.height = scaledHeight + "px";
+
+        const altTextElem = document.createElement("p");
+        altTextElem.innerHTML = "This browser does not support HTML5 video!"
+        videoElem.appendChild(altTextElem);
+
+        videoCont.appendChild(videoElem);
+
+        document.documentElement.appendChild(videoCont);
+
+        centerBox(videoCont);
     });
 }
 
@@ -650,39 +640,29 @@ function getSelectboxValueInt(selectboxId) {
 }
 
 function sendEditConvertForm() {
-
     if (!validateTimeRange()) {
         return;
     }
+    xmlFetchPost(getFormData(document.form1), responseXml => {
+        const successItem = responseXml.getElementsByTagName("success")[0];
+        const success = successItem.firstChild.nodeValue;
+        if (success === "true") {
+            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+            const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var successItem = req.responseXML.getElementsByTagName("success")[0];            
-                var success = successItem.firstChild.nodeValue;
-                
-                if (success == "true") {
-                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+            const targetPath = targetPathItem.firstChild.nodeValue;
 
-                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                    var targetPath = targetPathItem.firstChild.nodeValue;
-                    
-                    customAlert(resourceBundle["videoConversionStarted"] + " " + targetFolder + ".");
-                    
-                    setTimeout(function() {
-    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	                window.parent.frames[1].location.href = expUrl;
-                    } , 4000);
-                    
-                } else {
-                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
-                    var message = messageItem.firstChild.nodeValue;
-                    customAlert(message);
-                }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+            customAlert(resourceBundle["videoConversionStarted"] + " " + targetFolder + ".");
+
+            setTimeout(function() {
+                const expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+                window.parent.frames[1].location.href = expUrl;
+            } , 4000);
+        } else {
+            const messageItem = responseXml.getElementsByTagName("message")[0];
+            const message = messageItem.firstChild.nodeValue;
+            customAlert(message);
         }
     });
 }

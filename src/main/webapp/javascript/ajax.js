@@ -59,12 +59,6 @@ function editLocalLink(filePath) {
     xmlGetRequest("editFile", parameters, () => hideMenu());
 }
 
-function hideMsg()
-{
-     msgBox1 = document.getElementById("msg1");
-     msgBox1.style.visibility = "hidden";
-}
-
 function diffSelect(path) {
     parent.diffStarted = true;
 
