@@ -40,7 +40,7 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
 	}
 	  
 	protected void process() {
-		// session.setViewMode(Constants.VIEW_MODE_THUMBS);
+        session.setAttribute("viewMode", Constants.VIEW_MODE_THUMBS);
 
 	    if (getParameter("initial") != null) {
             session.setAttribute("mobile", "true");

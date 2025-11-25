@@ -130,7 +130,9 @@ a.icon-font {
 
 .icon-mobilePhone:before {
 	content: '\f10b';
-	font-size: 22px;
+	font-size: 32px;
+    position: relative;
+    top: -6px;
 }
 
 .icon-info:before {
