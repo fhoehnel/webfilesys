@@ -126,7 +126,7 @@ function contextMenu(fileName) {
     if (parent.readonly == 'true') {
        	addContextMenuEntry(menuDiv, "diffSelect('" + scriptPreparedPath + "')", resourceBundle["label.diffSource"]);
     } else {
-       	addContextMenuEntry(menuDiv, "extendedFileMenu('" + insertDoubleBackslash(shortFileName) + "', '" + scriptPreparedPath + "')", resourceBundle["label.menuMore"]);
+       	addContextMenuEntry(menuDiv, "extendedFileMenu('" + insertDoubleBackslash(shortFileName) + "', '" + scriptPreparedPath + "', '" + fileExt + "')", resourceBundle["label.menuMore"]);
     }      
         
     if (parent.readonly == 'true') {
@@ -152,7 +152,7 @@ function contextMenu(fileName) {
     menuDiv.style.visibility = 'visible';
 }
 
-function extendedFileMenu(shortFileName, path) {
+function extendedFileMenu(shortFileName, path, fileExt) {
     stopMenuClose = true;
 
     var scriptPreparedPath = insertDoubleBackslash(path);
