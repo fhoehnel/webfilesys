@@ -6,7 +6,7 @@ function contextMenu(fileName) {
         shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 12, fileName.length);
     }    
 
-    const fileNameExt = getFileNameExt(fileName);
+    const fileExt = getFileNameExt(fileName);
     
     const lastPathChar = path.charAt(path.length - 1);
     

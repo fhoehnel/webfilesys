@@ -1629,7 +1629,7 @@ public class MetaInfManager extends Thread
             
     		if (!suppressReverseLink) 
     		{
-    			if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+    			if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
     			{
     		        createReverseLinkRef(path, newLink);        
     			}
@@ -1795,7 +1795,7 @@ public class MetaInfManager extends Thread
 	 */
 	public void updateLinksAfterMove(String oldPath, String newPath, String userid)
 	{
-	    if (!WebFileSys.getInstance().isReverseFileLinkingEnabled())
+	    if (!WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
 	    {
 	        return;
 	    }
@@ -2101,7 +2101,7 @@ public class MetaInfManager extends Thread
 
                 if (linkName.equals(linkToRemove))
                 {
-                    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+                    if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
                     {
                         String linkTargetPath = XmlUtil.getChildText(linkElement, "destPath");
                         

@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -49,7 +51,7 @@ public class SlideshowToVideoThread extends Thread {
         
         String targetFilePath = getTargetVideoFilePath();
 		
-        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
+        String ffmpegExePath = WebFileSysConfig.getInstance().getFfmpegExePath();
 		
         ArrayList<String> progNameAndParams = new ArrayList<String>();
         progNameAndParams.add(ffmpegExePath);

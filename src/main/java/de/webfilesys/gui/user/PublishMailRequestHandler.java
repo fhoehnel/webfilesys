@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.WebFileSysConfig;
 import de.webfilesys.mail.EmailUtils;
 import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.util.CommonUtils;
@@ -236,9 +237,9 @@ public class PublishMailRequestHandler extends UserRequestHandler
 			secretURL.append("http://");
 		}
 
-		if (WebFileSys.getInstance().getServerDNS() != null)
+		if (WebFileSysConfig.getInstance().getServerDNS() != null)
 		{
-			secretURL.append(WebFileSys.getInstance().getServerDNS());
+			secretURL.append(WebFileSysConfig.getInstance().getServerDNS());
 		}
 		else
 		{
@@ -593,7 +594,8 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		if (invite == null)
 		{
 		    output.print(" disabled=\"true\"");
-		}		output.println(" style=\"width:100%;\">");
+		}
+		output.println(" style=\"width:100%;\">");
 		output.println("</td></tr>");
 
 		output.println("<tr><td colspan=\"2\" class=\"formParm1\">");

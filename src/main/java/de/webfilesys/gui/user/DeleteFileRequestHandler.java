@@ -7,14 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
+import de.webfilesys.gui.xsl.mobile.MobileFolderPictureHandler;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.Constants;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.SystemCmdParms;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslFileListHandler;
 import de.webfilesys.gui.xsl.XslThumbnailHandler;
@@ -108,7 +106,7 @@ public class DeleteFileRequestHandler extends UserRequestHandler
         {
             MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-            if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
             {
                 metaInfMgr.updateLinksAfterMove(filePath, null, uid);
             }
@@ -135,34 +133,31 @@ public class DeleteFileRequestHandler extends UserRequestHandler
             }
             else
             {
+                int viewMode = Constants.VIEW_MODE_LIST;
+
+                Integer sessionViewMode = (Integer) session.getAttribute("viewMode");
+
+                if (sessionViewMode != null)
+                {
+                    viewMode = sessionViewMode.intValue();
+                }
+
                 String mobile = (String) session.getAttribute("mobile");
                 
-                if (mobile == null) 
-                {
-                    int viewMode = Constants.VIEW_MODE_LIST;        
-                    
-                    Integer sessionViewMode = (Integer) session.getAttribute("viewMode");
-                    
-                    if (sessionViewMode != null)
-                    {
-                        viewMode = sessionViewMode.intValue();
-                    }
-
-                    if (viewMode == Constants.VIEW_MODE_THUMBS)
-                    {
+                if (mobile == null) {
+                    if (viewMode == Constants.VIEW_MODE_THUMBS) {
                         (new XslThumbnailHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest(); 
-                    }
-                    else
-                    {
+                    } else {
                         (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
                     }
-                }
-                else
-                {
-                    (new MobileFolderFileListHandler(req, resp, session, output, uid)).handleRequest(); 
+                } else {
+                    if (viewMode == Constants.VIEW_MODE_THUMBS) {
+                        (new MobileFolderPictureHandler(req, resp, session, output, uid)).handleRequest();
+                    } else {
+                        (new MobileFolderFileListHandler(req, resp, session, output, uid)).handleRequest();
+                    }
                 }
             }
-            
         }
 	}
     

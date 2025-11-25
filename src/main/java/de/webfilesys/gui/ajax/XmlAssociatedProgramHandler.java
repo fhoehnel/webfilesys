@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -58,7 +59,7 @@ public class XmlAssociatedProgramHandler extends XmlRequestHandlerBase
 
         if (assocProg == null)
         {
-            assocProg = WebFileSys.getInstance().getSystemEditor();
+            assocProg = WebFileSysConfig.getInstance().getSystemEditor();
         }
 
         if (assocProg == null) 

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -119,7 +120,7 @@ public class VideoInfoExtractor {
             throw new IllegalArgumentException("video file is not a readable file: " + videoFilePath);
         }        
 
-        String ffprobeExePath = WebFileSys.getInstance().getFfprobeExePath();
+        String ffprobeExePath = WebFileSysConfig.getInstance().getFfprobeExePath();
         
         if (CommonUtils.isEmpty(ffprobeExePath)) {
             throw new IllegalArgumentException("ffprobe executable path not configured");

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -46,7 +47,7 @@ public class XslLogonHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(loginElement, "operatingSystem", WebFileSys.getInstance().getOpSysName(), false);
 		XmlUtil.setChildText(loginElement, "version", WebFileSys.VERSION, false);
 		
-	    XmlUtil.setChildText(loginElement, "language", WebFileSys.getInstance().getPrimaryLanguage(), false);
+	    XmlUtil.setChildText(loginElement, "language", WebFileSysConfig.getInstance().getPrimaryLanguage(), false);
 
 		if (authFailed)
 		{
@@ -57,7 +58,7 @@ public class XslLogonHandler extends XslRequestHandlerBase
             XmlUtil.setChildText(loginElement, "activationSuccess", "true", false);
         }
 
-		if (WebFileSys.getInstance().isOpenRegistration())
+		if (WebFileSysConfig.getInstance().isOpenRegistration())
 		{
 			XmlUtil.setChildText(loginElement, "openRegistration", "true", false);
 		}

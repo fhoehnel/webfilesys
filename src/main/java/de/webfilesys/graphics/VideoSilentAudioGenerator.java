@@ -2,6 +2,7 @@ package de.webfilesys.graphics;
 
 import de.webfilesys.SubdirExistCache;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.WebFileSysConfig;
 import de.webfilesys.util.CommonUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +21,7 @@ public class VideoSilentAudioGenerator {
     public static void addSilentAudioToVideo(String videoFilePath) {
         LOG.debug("adding silent audio to video {}", videoFilePath);
 
-        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
+        String ffmpegExePath = WebFileSysConfig.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
             String[] partsOfPath = CommonUtils.splitPath(videoFilePath);

@@ -66,8 +66,6 @@
   
       var delDirStarted = false;
       
-      var querySubdirQueue = new Array();
-
       function scrollToCurrent() {
           if (currentDirId != "") {
               var currentFolder = document.getElementById(currentDirId);

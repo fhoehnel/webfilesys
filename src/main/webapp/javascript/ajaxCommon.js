@@ -48,9 +48,11 @@ function xmlFetchPost(postData, successCallBack, failureCallBack) {
         });
 }
 
-function xmlGetRequest(command, parameters, successCallBack, failureCallBack) {
-	showHourGlass();
-    
+function xmlGetRequest(command, parameters, successCallBack, failureCallBack, skipWaitIndicator) {
+	if (!skipWaitIndicator) {
+	    showHourGlass();
+	}
+
     let url = "/webfilesys/servlet?command=" + command;
     for (const key in parameters) {
         url = url + "&" + key + "=" + parameters[key];
@@ -58,12 +60,15 @@ function xmlGetRequest(command, parameters, successCallBack, failureCallBack) {
 	
     fetch(url)
         .then((response) => {
-            hideHourGlass();
+	        if (!skipWaitIndicator) {
+                hideHourGlass();
+            }
             if (response.ok) {
                 return response.text();
             }
-            if (typeof failureCallback !== 'undefined') {
-                failureCallback();
+            if (typeof failureCallBack !== 'undefined') {
+                failureCallBack();
+                successCallBack = undefined;
             } else {
                 throw new Error('fetch communication error');
             }
@@ -76,7 +81,9 @@ function xmlGetRequest(command, parameters, successCallBack, failureCallBack) {
             }
         })
         .catch(error => {
-            hideHourGlass();
+	        if (!skipWaitIndicator) {
+                hideHourGlass();
+            }
             customAlert(resourceBundle["alert.communicationFailure"]);
             console.error("communication error:", error);
         });

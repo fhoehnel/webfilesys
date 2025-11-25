@@ -13,6 +13,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -730,7 +731,7 @@ public class FolderWatchManager extends Thread
     
     public synchronized void run()
     {
-        int folderWatchIntervalMinutes = WebFileSys.getInstance().getFolderWatchInterval();
+        int folderWatchIntervalMinutes = WebFileSysConfig.getInstance().getFolderWatchInterval();
         
         boolean stop = false;
         

@@ -19,14 +19,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.Constants;
-import de.webfilesys.FileLink;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.RotateFilter;
 import de.webfilesys.graphics.ScaledImage;
@@ -208,7 +205,7 @@ public class ThumbnailRequestHandler extends UserRequestHandler
                 buffer = null;
 
                 if (!isThumbnail) {
-            		if (WebFileSys.getInstance().isDownloadStatistics()) {
+            		if (WebFileSysConfig.getInstance().isDownloadStatistics()) {
             			MetaInfManager.getInstance().incrementDownloads(imgPath);
             		}
                 }

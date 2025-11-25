@@ -104,127 +104,68 @@ function createThumbs(path) {
 function winCmdLine(path) {
     const parameters = { "path": encodeURIComponent(path) };
     xmlGetRequest("winCmdLine", parameters, xmlDoc => {
-        var successItem = xmlDoc.getElementsByTagName("success")[0];
-        var success = successItem.firstChild.nodeValue;
-        if (success != 'true') {
+        const successItem = xmlDoc.getElementsByTagName("success")[0];
+        const success = successItem.firstChild.nodeValue;
+        if (success !== 'true') {
             customAlert("Windows Command Line could not be started");
         }
     });
 }
 
-function hideMsg()
-{
-     msgBox1 = document.getElementById("msg1");
-     msgBox1.style.visibility = "hidden";
-}
-
-function handleCmdLineResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var successItem = req.responseXML.getElementsByTagName("success")[0];            
-             var success = successItem.firstChild.nodeValue;
-             
-             if (success != 'true')
-             {
-                 alert("Windows Command Line could not be started");
-             }
-        }
-    }
-}
-
-function col(domId)
-{
-    var urlEncodedPath;
-
-    parentDiv = document.getElementById(domId);
-
-    if (!parentDiv)
-    {
+function col(domId) {
+    const parentDiv = document.getElementById(domId);
+    if (!parentDiv) {
         alert('Element with id ' + domId + ' not found');
-    }
-    else
-    {
-        urlEncodedPath = parentDiv.getAttribute("path");
-    
-        // deselectCurrentDir();
+    } else {
+        // change minus sign into plus sign
         
-        // first change minus sign into plus sign
+        const children = parentDiv.childNodes;
         
-        children = parentDiv.childNodes;
-        
-        for (i = 0; i < children.length; i++)
-        {
-            if (children[i].nodeName.toLowerCase()  == 'a')
-            {
+        for (i = 0; i < children.length; i++) {
+            if (children[i].nodeName.toLowerCase()  === 'a') {
                 subChildren = children[i].childNodes;
         
-                for (k = 0; k < subChildren.length; k++)
-                {
-                     if (subChildren[k].nodeName.toLowerCase()  == 'img')
-                     {
-                         if (subChildren[k].src.indexOf('minus') > 0)
-                         {
+                for (k = 0; k < subChildren.length; k++) {
+                     if (subChildren[k].nodeName.toLowerCase()  === 'img') {
+                         if (subChildren[k].src.indexOf('minus') > 0) {
                              subChildren[k].src = subChildren[k].src.replace('minus', 'plus');
-                             
-                             children[i].href = children[i].href.replace('col', 'exp'); 
-                         }        
-                         else
-                         {
-                             if (subChildren[k].src.indexOf('folder.gif') > 0)
-                             {
+                             children[i].href = children[i].href.replace('col', 'exp');
+                         } else {
+                             if (subChildren[k].src.indexOf('folder.gif') > 0) {
                                  subChildren[k].src = subChildren[k].src.replace('folder.gif', 'folder1.gif');
                              }            
                          }    
                      }
                 }
             }
-            
-            /*
-            if (parentDiv.classList) {
-            	parentDiv.classList.add("currentFolder");    
-            }
-            */
-        }   
+        }
         
-        // currentDirId = domId;
-
         // and now remove the divs of the subfolders
 
-        children = parentDiv.childNodes;
-        
-        for (i = children.length - 1; i >= 0; i--)
-        {
-            if (children[i].nodeName.toLowerCase()  == 'div')
-            {
+        for (i = children.length - 1; i >= 0; i--) {
+            if (children[i].nodeName.toLowerCase()  === 'div') {
                 parentDiv.removeChild(children[i]);
             }
         }       
     }
-    
-    url = "/webfilesys/servlet?command=ajaxCollapse&path=" + urlEncodedPath;
 
-    xmlRequest(url, dummy);
-}
+    const urlEncodedPath = parentDiv.getAttribute("path");
 
-function dummy()
-{
+    xmlGetRequest("ajaxCollapse", { path: urlEncodedPath }, null, null, true);
 }
 
 function deselectCurrentDir() {
-    if (currentDirId != '') {
+    if (currentDirId !== '') {
         oldCurrentDirDiv = document.getElementById(currentDirId);
 
         if (oldCurrentDirDiv) {
             children = oldCurrentDirDiv.childNodes;
 
-            for (i = 0; i < children.length; i++) {
-                if (children[i].nodeName.toLowerCase()  == 'a') {
+            for (let i = 0; i < children.length; i++) {
+                if (children[i].nodeName.toLowerCase()  === 'a') {
                     subChildren = children[i].childNodes;
         
-                    for (k = 0; k < subChildren.length; k++) {
+                    for (let k = 0; k < subChildren.length; k++) {
                          if (subChildren[k].nodeName.toLowerCase() === "span") {
                         	 let currentStyle = subChildren[k].getAttribute("class");
                         	 if (currentStyle && currentStyle.indexOf("folderCurrent") >= 0) {
@@ -255,20 +196,20 @@ function deselectCurrentDir() {
 }
 
 function selectCurrentDir(parentDiv) {
-    children = parentDiv.childNodes;
+    const children = parentDiv.childNodes;
         
-    for (i = 0; i < children.length; i++) {
-         if (children[i].nodeName.toLowerCase()  == 'a') {
+    for (let i = 0; i < children.length; i++) {
+         if (children[i].nodeName.toLowerCase()  === 'a') {
              subChildren = children[i].childNodes;
          
-             for (k = 0; k < subChildren.length; k++) {
+             for (let k = 0; k < subChildren.length; k++) {
             	 
                  if (subChildren[k].nodeName.toLowerCase() === "span") {
                 	 let currentStyle = subChildren[k].getAttribute("class");
                 	 if (currentStyle && currentStyle.indexOf("folderCurrent") < 0) {
                 		 subChildren[k].setAttribute("class", currentStyle + " folderCurrent");
                 	 }
-                 } else if (subChildren[k].nodeName.toLowerCase()  == 'img') {
+                 } else if (subChildren[k].nodeName.toLowerCase()  === 'img') {
                       if (subChildren[k].src.indexOf('folder.gif') > 0) {
                           subChildren[k].src = subChildren[k].src.replace('folder.gif', 'folder1.gif');
                       }            
@@ -282,18 +223,15 @@ function selectCurrentDir(parentDiv) {
     }
 }
 
-function listFiles(id)
-{
-    parentDiv = document.getElementById(id);
+function listFiles(id){
+    const parentDiv = document.getElementById(id);
 
-    if (!parentDiv)
-    {
+    if (!parentDiv) {
         alert('Element with id ' + id + ' not found');
-
         return;
     }
 
-    var urlEncodedPath = parentDiv.getAttribute("path");
+    const urlEncodedPath = parentDiv.getAttribute("path");
 
     window.parent.frames[2].location.href = '/webfilesys/servlet?command=listFiles&actpath=' + urlEncodedPath + '&mask=*';
 
@@ -314,63 +252,66 @@ function exp(parentDivId, lastInLevel) {
    
     const urlEncodedPath = parentDiv.getAttribute("path");
 
-    xmlGetRequest("ajaxExp", { path: urlEncodedPath, lastInLevel }, htmlFragment => {
-        const fragment = htmlFragment.documentElement.outerHTML;
+    xmlGetRequest("ajaxExp", { path: urlEncodedPath, lastInLevel },
+        htmlFragment => {
+            const fragment = htmlFragment.documentElement.outerHTML;
 
-        let divClass = parentDiv.getAttribute("class");
-        if (divClass && divClass.indexOf("currentFolder") > 0) {
-            currentDirId = htmlFragment.documentElement.id;
-        }
+            let divClass = parentDiv.getAttribute("class");
+            if (divClass && divClass.indexOf("currentFolder") > 0) {
+                currentDirId = htmlFragment.documentElement.id;
+            }
 
-        parentDiv.outerHTML = htmlFragment.documentElement.outerHTML;
-        setTimeout('setTooltips()', 500);
-        querySubdirs();
-    });
-
+            parentDiv.outerHTML = htmlFragment.documentElement.outerHTML;
+            setTimeout('setTooltips()', 500);
+            querySubdirs();
+        },
+        () => {
+            console.warn("expand folder failed");
+            customAlert(resourceBundle["alert.sessionexpired"], "OK", redirectToLogin);
+        },
+        true
+    );
 }
 
 function querySubdirs() {
-	querySubdirQueue = new Array();
+	const querySubdirQueue = [];
 	
     $("div[subdirStatusUnknown]").each(function() {
     	querySubdirQueue.push({"path": $(this).attr("path"), "id": $(this).attr("id")});
     	$(this).removeAttr("subdirStatusUnknown");
     });	
     
-    querySubdirStatus();
+    querySubdirStatus(querySubdirQueue);
 }
 
-function querySubdirStatus() {
+function querySubdirStatus(querySubdirQueue) {
 	if (querySubdirQueue.length > 0) {
-		var queueElem = querySubdirQueue.pop();
-        var ajaxUrl = "/webfilesys/servlet?command=testSubdirExist&path=" + queueElem.path;
-        
-    	xmlRequest(ajaxUrl, function(req) {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    var subdirExists = req.responseXML.getElementsByTagName("result")[0].firstChild.nodeValue;        
-                    if (subdirExists == "false") {
-                    	var folderDiv = document.getElementById(queueElem.id);
-                    	if (folderDiv) {
-                    		var linkElem = getChildElementsByTagName(folderDiv, "A")[0];
-                    		if (linkElem) {
-                        		var expColImg = getChildElementsByTagName(linkElem, "IMG")[0];
-                        		if (expColImg) {
-                        			if (expColImg.src.endsWith("plusMore.gif")) {
-                            			expColImg.src = "/webfilesys/images/branch.gif";
-                        			} else {
-                        				expColImg.src = "/webfilesys/images/branchLast.gif";
-                        			}
-                        		}
-                    		}
-                    	}
+		const queueElem = querySubdirQueue.pop();
+
+        xmlGetRequest("testSubdirExist", { path: queueElem.path },
+            responseXml => {
+                const subdirExists = responseXml.getElementsByTagName("result")[0].firstChild.nodeValue;
+                if (subdirExists === "false") {
+                    const folderDiv = document.getElementById(queueElem.id);
+                    if (folderDiv) {
+                        const linkElem = getChildElementsByTagName(folderDiv, "A")[0];
+                        if (linkElem) {
+                            const expColImg = getChildElementsByTagName(linkElem, "IMG")[0];
+                            if (expColImg) {
+                                if (expColImg.src.endsWith("plusMore.gif")) {
+                                    expColImg.src = "/webfilesys/images/branch.gif";
+                                } else {
+                                    expColImg.src = "/webfilesys/images/branchLast.gif";
+                                }
+                            }
+                        }
                     }
-                    querySubdirStatus();
-                } else {
-                    alert(resourceBundle["alert.communicationFailure"]);
-	            }
-            }
-    	});
+                }
+                querySubdirStatus(querySubdirQueue);
+    	    },
+            null,
+            true
+        );
 	}
 }
 

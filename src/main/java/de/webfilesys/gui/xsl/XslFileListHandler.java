@@ -12,22 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
-import de.webfilesys.ClipBoard;
-import de.webfilesys.Constants;
-import de.webfilesys.FastPathManager;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.IconManager;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MP3ExtractorThread;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.user.SwitchFileAgeColoringHandler;
 import de.webfilesys.util.XmlUtil;
 
@@ -128,7 +117,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 		IconManager iconMgr = null;
 
-		if (WebFileSys.getInstance().isShowAssignedIcons())
+		if (WebFileSysConfig.getInstance().isShowAssignedIcons())
 		{
 			iconMgr = IconManager.getInstance();
 		}
@@ -288,23 +277,16 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 				String docImage = null;
 
-				if (WebFileSys.getInstance().isShowAssignedIcons())
-				{
-					int extIdx = fileName.lastIndexOf('.');
-
-					if ((extIdx > 0) && (extIdx < (fileName.length() - 1)))
-					{
-						docImage = iconMgr.getFileIconNoDefault(fileName);
-					}
-				}
-
-				if (docImage != null) {
-	                fileElement.setAttribute("icon", docImage);
-				} else {
-					String docImageIconFont = iconMgr.getFileIconFont(fileName); 
-					if (docImageIconFont != null) {
-		                fileElement.setAttribute("iconFont", docImageIconFont);
-					}
+				if (WebFileSysConfig.getInstance().isShowAssignedIcons()) {
+				    docImage = iconMgr.getFileIconNoDefault(fileName);
+                    if (docImage != null) {
+                        fileElement.setAttribute("icon", docImage);
+                    } else {
+                        docImage = iconMgr.getFileIconFont(fileName);
+                        if (docImage != null) {
+                            fileElement.setAttribute("iconFont", docImage);
+                        }
+                    }
 				}
 
                 description = null;
@@ -385,7 +367,7 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 				if (fileCont.isLink() || (dirHasMetaInf))
 				{
-					if (WebFileSys.getInstance().isShowDescriptionsInline())
+					if (WebFileSysConfig.getInstance().isShowDescriptionsInline())
 					{
 						if ((description!=null) && (description.trim().length()>0))
 						{
@@ -425,12 +407,12 @@ public class XslFileListHandler extends XslFileListHandlerBase
             }
 		}
 
-		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		int pollInterval = WebFileSysConfig.getInstance().getPollFilesysChangesInterval();
 		if (pollInterval > 0) {
 			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
 		}
 
-		if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+		if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
             XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
 		}
 		
@@ -442,10 +424,8 @@ public class XslFileListHandler extends XslFileListHandlerBase
 
 		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_LIST));
 
-		if (!readonly)
-		{
-			if (WebFileSys.getInstance().isAutoExtractMP3())
-			{
+		if (!readonly) {
+			if (WebFileSysConfig.getInstance().isAutoExtractMP3()) {
 				(new MP3ExtractorThread(actPath)).start();
 			}
 		}

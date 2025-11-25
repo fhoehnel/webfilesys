@@ -183,17 +183,12 @@ function extractFileName(filePath) {
 	return filePath.substring(lastSepIdx + 1);
 }
 
-function getFileNameExt(fileName)
-{
-    fileExt="";
-
-    extStart=fileName.lastIndexOf('.');
-
-    if (extStart > 0)
-    {
-	    fileExt=fileName.substring(extStart).toUpperCase();
+function getFileNameExt(fileName) {
+    let fileExt = "";
+    extStart = fileName.lastIndexOf('.');
+    if (extStart > 0) {
+	    fileExt = fileName.substring(extStart).toUpperCase();
     }
-    
     return(fileExt);
 }
 
@@ -477,6 +472,10 @@ function cancelFullScreen(elem) {
 	} else if (document.msExitFullscreen) {
 		document.msExitFullscreen();
 	}
+}
+
+function redirectToLogin() {
+    top.location.href = "/webfilesys/servlet?command=loginForm";
 }
 
 if (!String.prototype.endsWith) {

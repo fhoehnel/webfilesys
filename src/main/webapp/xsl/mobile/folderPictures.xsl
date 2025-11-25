@@ -36,30 +36,29 @@
 <script src="/webfilesys/javascript/mobile/mobileThumbnail.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
-<script src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
-<script src="/webfilesys/javascript/graphicsLinkMenu.js" type="text/javascript"></script>
-<script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
+
+<script src="/webfilesys/javascript/mobile/contextMenuCommon.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/mobile/picContextMenu.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/mobile/jsFileMenu.js" type="text/javascript"></script>
+
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/popupPicture.js" type="text/javascript"></script>
-<xsl:if test="/fileList/pollInterval">
-  <script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
-</xsl:if>
 
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
   <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
 </script>
 
-<xsl:if test="/fileList/geoTag">
-  <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
-</xsl:if>
-
 <script type="text/javascript">
   
   var lastScrollPos = 0;
-  
+
+  var serverOS = '<xsl:value-of select="/fileList/serverOS" />';
+  var readonly = '<xsl:value-of select="/fileList/readonly" />';
+  var mailEnabled = '<xsl:value-of select="/fileList/mailEnabled" />';
+
   var pathForScript = '<xsl:value-of select="/fileList/pathForScript" />';
   
   function showImage(imgPath) {
@@ -114,7 +113,7 @@
 
   <xsl:apply-templates />
 
-  <div id="contextMenu" class="contextMenuCont"></div>
+  <div id="contextMenu" class="contextMenu"></div>
 
   <div id="msg1" class="msgBox" style="visibility:hidden" />
 
@@ -238,9 +237,15 @@
                       <a class="icon-font icon-sort mobileMenuIcon" titleResource="showSortMenu">
                         <xsl:attribute name="href">javascript:showSortMenu()</xsl:attribute>
                       </a>
-                    </td> 
-	
-	              </xsl:if>
+                    </td>
+
+                    <td id="compareLink" class="mobileFolderMenu fileListFunct">
+                      <a class="icon-font icon-watch mobileMenuIcon" titleResource="label.comparehead">
+                        <xsl:attribute name="href">/webfilesys/servlet?command=compareImg&amp;selectAll=true</xsl:attribute>
+                      </a>
+                    </td>
+
+                  </xsl:if>
 	              <xsl:if test="not(/fileList/file)">
 	                <td class="fileListFunct" align="right" nowrap="true" resource="alert.nopictures" />
 	              </xsl:if>
@@ -283,6 +288,7 @@
                     <xsl:if test="description">
                       <xsl:attribute name="title"><xsl:value-of select="description" /></xsl:attribute>
                     </xsl:if>
+                    <xsl:attribute name="oncontextmenu">picContextMenu('<xsl:value-of select="@nameForScript" />');return false;</xsl:attribute>
                   </img>
                 </a>
                 <br/>

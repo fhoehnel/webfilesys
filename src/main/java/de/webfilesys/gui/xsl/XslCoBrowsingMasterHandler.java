@@ -7,14 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.SessionKey;
 import de.webfilesys.util.XmlUtil;
@@ -41,7 +37,7 @@ public class XslCoBrowsingMasterHandler extends XslRequestHandlerBase
         String docRoot = userMgr.getDocumentRoot(uid);
 		
    	    // TODO: remove this
-		int delay = WebFileSys.getInstance().getSlideShowDelay();
+		int delay = WebFileSysConfig.getInstance().getSlideShowDelay();
 		
 		int imageIdx = 0;
 		

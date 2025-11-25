@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -161,7 +162,7 @@ public class VideoThumbHandler extends UserRequestHandler
                 buffer = null;
 
                 if (!isThumbnail) {
-            		if (WebFileSys.getInstance().isDownloadStatistics()) {
+            		if (WebFileSysConfig.getInstance().isDownloadStatistics()) {
             			MetaInfManager.getInstance().incrementDownloads(imgPath);
             		}
                 }

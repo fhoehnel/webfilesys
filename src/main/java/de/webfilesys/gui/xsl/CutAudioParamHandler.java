@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
@@ -58,7 +59,7 @@ public class CutAudioParamHandler extends XslRequestHandlerBase {
 		XmlUtil.setChildText(cutParamsElem, "shortAudioFileName", CommonUtils.shortName(audioFileName, 40), false);
 		XmlUtil.setChildText(cutParamsElem, "audioFilePath", audioFilePath, false);
 		
-        String ffprobeExePath = WebFileSys.getInstance().getFfprobeExePath();
+        String ffprobeExePath = WebFileSysConfig.getInstance().getFfprobeExePath();
         
         if (!CommonUtils.isEmpty(ffprobeExePath)) {
 	        AudioInfoExtractor audioInfoExtractor = new AudioInfoExtractor();

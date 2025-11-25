@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.w3c.dom.Element;
 
 import de.webfilesys.WebFileSys;
@@ -42,7 +43,7 @@ public class AjaxCheckGrepAllowedHandler extends XmlRequestHandlerBase
         	return;
         }
 
-        boolean grepForbidden = (!isTextFile(filePath, WebFileSys.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK));
+        boolean grepForbidden = (!isTextFile(filePath, WebFileSysConfig.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK));
         
         Element resultElement = doc.createElement("result");
         

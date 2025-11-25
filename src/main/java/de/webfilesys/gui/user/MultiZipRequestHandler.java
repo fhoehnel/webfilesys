@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -200,7 +201,7 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
 			File temp_file = new File(pathWithSlash + selectedFile);
 			if (temp_file.delete()) 
 			{
-	            if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+	            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
 	            {
 	                MetaInfManager.getInstance().updateLinksAfterMove(pathWithSlash + selectedFile, null, uid);
 	            }

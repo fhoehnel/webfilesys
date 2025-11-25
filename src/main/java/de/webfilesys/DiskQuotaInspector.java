@@ -28,7 +28,7 @@ public class DiskQuotaInspector extends Thread
 
             int hour = now.getHours();
 
-            if (hour == WebFileSys.getInstance().getDiskQuotaCheckHour())
+            if (hour == WebFileSysConfig.getInstance().getDiskQuotaCheckHour())
             {
                 inspectDiskQuotas();
             }
@@ -80,7 +80,7 @@ public class DiskQuotaInspector extends Thread
                         {
                             LogManager.getLogger(getClass()).warn("disk quota exceeded for user " + userid + " (" + (diskQuota / 1024l) + " / " + (fileSysStat.getTotalSizeSum() / 1024l) + ")");
 
-                            if (WebFileSys.getInstance().getMailHost() !=null)
+                            if (WebFileSysConfig.getInstance().getMailHost() !=null)
                             {
                                 StringBuffer mailContent=new StringBuffer("Disk quota exceeded for user ");
                                 mailContent.append(userid);
@@ -92,7 +92,7 @@ public class DiskQuotaInspector extends Thread
                                 mailContent.append(fileSysStat.getTotalSizeSum() / 1024l);
                                 mailContent.append(" KByte\r\n");
 
-                                if (WebFileSys.getInstance().isMailNotifyQuotaUser())
+                                if (WebFileSysConfig.getInstance().isMailNotifyQuotaUser())
                                 {
                                     String email=userMgr.getEmail(userid);
 
@@ -136,7 +136,7 @@ public class DiskQuotaInspector extends Thread
         
         long endTime=System.currentTimeMillis();
         
-        if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyQuotaAdmin())
+        if ((WebFileSysConfig.getInstance().getMailHost() != null) && WebFileSysConfig.getInstance().isMailNotifyQuotaAdmin())
         {
             if (adminMailBuffer.length()==0)
             {

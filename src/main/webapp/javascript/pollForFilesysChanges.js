@@ -21,33 +21,40 @@ function pollForDirChanges(immediateRefreshView) {
         params.thumbnails = "true";
     }
 
-    xmlGetRequest("pollForDirChange", params, responseXml => {
-        if (pollingTimeout) {
-            clearTimeout(pollingTimeout);
-        }
-        const item = responseXml.getElementsByTagName("result")[0];
-        const result = item.firstChild.nodeValue;
-        if (result === "true") {
-            if (immediateRefreshView) {
-                window.location.href = "/webfilesys/servlet?command=listFiles";
-            } else {
-                customConfirm(resourceBundle["folderContentModified"], resourceBundle["label.no"], resourceBundle["label.yes"],
-                    function() {
-                        window.top.frames[2].location.href = "/webfilesys/servlet?command=listFiles";
-                    },
-                    function() {
-                        closeAlert();
-                        if (pollingTimeout) {
-                            clearTimeout(pollingTimeout);
-                        }
-                        pollingTimeout = setTimeout(pollForDirChanges, pollInterval);
-                    }
-                );
+    xmlGetRequest("pollForDirChange", params,
+        responseXml => {
+            if (pollingTimeout) {
+                clearTimeout(pollingTimeout);
             }
-        } else {
-            pollingTimeout = setTimeout(pollForDirChanges, pollInterval);
-        }
-    });
+            const item = responseXml.getElementsByTagName("result")[0];
+            const result = item.firstChild.nodeValue;
+            if (result === "true") {
+                if (immediateRefreshView) {
+                    window.location.href = "/webfilesys/servlet?command=listFiles";
+                } else {
+                    customConfirm(resourceBundle["folderContentModified"], resourceBundle["label.no"], resourceBundle["label.yes"],
+                        function() {
+                            window.top.frames[2].location.href = "/webfilesys/servlet?command=listFiles";
+                        },
+                        function() {
+                            closeAlert();
+                            if (pollingTimeout) {
+                                clearTimeout(pollingTimeout);
+                            }
+                            pollingTimeout = setTimeout(pollForDirChanges, pollInterval);
+                        }
+                    );
+                }
+            } else {
+                pollingTimeout = setTimeout(pollForDirChanges, pollInterval);
+            }
+        },
+        () => {
+            console.warn("pollForDirChange failed");
+            redirectToLogin();
+        },
+        true
+    );
 }
 
 function delayedPollForDirChanges() {

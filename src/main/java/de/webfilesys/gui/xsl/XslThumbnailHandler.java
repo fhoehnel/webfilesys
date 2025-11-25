@@ -11,22 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
-import de.webfilesys.ClipBoard;
-import de.webfilesys.Constants;
-import de.webfilesys.FastPathManager;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.GeoTag;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.PictureRating;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -349,11 +338,11 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 				}
 			}
 
-			if (WebFileSys.getInstance().isAutoCreateThumbs()) {
+			if (WebFileSysConfig.getInstance().isAutoCreateThumbs()) {
 				XmlUtil.setChildText(fileListElement, "autoCreateThumbs", "true");
 			}
 
-			if (WebFileSys.getInstance().getMailHost() != null) {
+			if (WebFileSysConfig.getInstance().getMailHost() != null) {
 				XmlUtil.setChildText(fileListElement, "mailEnabled", "true");
 			}
 
@@ -372,12 +361,12 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
 		}
 
-		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		int pollInterval = WebFileSysConfig.getInstance().getPollFilesysChangesInterval();
 		if (pollInterval > 0) {
 			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
 		}
 		
-        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+        if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
             XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
         }
 		

@@ -9,18 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
-import de.webfilesys.Constants;
-import de.webfilesys.DirTreeStatus;
-import de.webfilesys.DirTreeStatusInspector;
-import de.webfilesys.SubdirExistCache;
-import de.webfilesys.SubdirExistTester;
-import de.webfilesys.WebFileSys;
-import de.webfilesys.WinDriveManager;
 import de.webfilesys.decoration.Decoration;
 import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
@@ -111,7 +105,7 @@ public class XmlAjaxSubDirHandler extends XslRequestHandlerBase
 
         processResponse("subFolder.xsl");
 		
-        if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
+        if (WebFileSysConfig.getInstance().getPollFilesysChangesInterval() > 0) {
     		(new DirTreeStatusInspector(dirTreeStatus)).rememberPathStatus(actPath);		
         }
 	}
