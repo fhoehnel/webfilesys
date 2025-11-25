@@ -237,9 +237,15 @@
                       <a class="icon-font icon-sort mobileMenuIcon" titleResource="showSortMenu">
                         <xsl:attribute name="href">javascript:showSortMenu()</xsl:attribute>
                       </a>
-                    </td> 
-	
-	              </xsl:if>
+                    </td>
+
+                    <td id="compareLink" class="mobileFolderMenu fileListFunct">
+                      <a class="icon-font icon-watch mobileMenuIcon" titleResource="label.comparehead">
+                        <xsl:attribute name="href">/webfilesys/servlet?command=compareImg&amp;selectAll=true</xsl:attribute>
+                      </a>
+                    </td>
+
+                  </xsl:if>
 	              <xsl:if test="not(/fileList/file)">
 	                <td class="fileListFunct" align="right" nowrap="true" resource="alert.nopictures" />
 	              </xsl:if>
