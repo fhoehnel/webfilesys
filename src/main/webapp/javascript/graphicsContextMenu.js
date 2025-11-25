@@ -11,8 +11,6 @@ function jsContextMenu(fileName, imgType, domId) {
         shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 13, fileName.length);
     }    
 
-    fileNameExt = getFileNameExt(fileName);
-    
     lastPathChar = path.charAt(path.length - 1);
     
     if ((lastPathChar == '/') || (lastPathChar == '\\')) {

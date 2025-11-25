@@ -6,7 +6,7 @@ function jsLinkMenu(linkName, realPath) {
         shortFileName = linkName.substring(0,7) + "..." + linkName.substring(linkName.length - 12, linkName.length);
     }    
 
-    const fileNameExt = getFileNameExt(linkName);
+    const fileExt = getFileNameExt(linkName);
 
     const scriptPreparedPath = insertDoubleBackslash(realPath);
 

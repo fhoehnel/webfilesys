@@ -304,49 +304,40 @@ function multiVideoDelete() {
 
 function multiVideoConcat() {
     if (checkTwoOrMoreFilesSelected()) {
-    	showHourGlass();
 	    document.form2.command.value = 'multiVideoConcat';
-	    
-	    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
-	        if (req.readyState == 4) {
-	            if (req.status == 200) {
-	                var success = req.responseXML.getElementsByTagName("success")[0];
-	                if (success) {
-                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                        var targetFolder = targetFolderItem.firstChild.nodeValue;
-		                
-                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                        var targetPath = targetPathItem.firstChild.nodeValue;
-                        
-                        customAlert(resourceBundle["videoConcatStarted"] + " " + targetFolder + ".");
-                        
-                        setTimeout(function() {
-                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
-                        }, 6000);
-	                } else {
-		                var item = req.responseXML.getElementsByTagName("errorCode")[0];
-		                var errorCode = item.firstChild.nodeValue;
-		                if (errorCode == '1') {
-		                    customAlert(resourceBundle["videoConcatErrorFrameRate"]);
-		                } else if (errorCode == '2') {
-		               	    customAlert(resourceBundle["videoConcatErrorCodec"]);
-		                } else if (errorCode == '3') {
-		                    customAlert(resourceBundle["videoConcatErrorResolution"]);
-		                } else if (errorCode == '4') {
-		                    customAlert(resourceBundle["videoConcatErrorProcess"]);
-		                }
-	                }
-	            } else {
-	            	alert(resourceBundle["alert.communicationFailure"]);
-	            }
-	            
-	            document.form2.command.value = '';
-	            document.form2.cmd.selectedIndex = 0;
 
-	            hideHourGlass();
-	        }
-	    });
-    } else {   
+        xmlFetchPost(getFormData(document.form2), responseXml => {
+
+            const success = responseXml.getElementsByTagName("success")[0];
+            if (success) {
+                const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+                const targetFolder = targetFolderItem.firstChild.nodeValue;
+
+                const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+                const targetPath = targetPathItem.firstChild.nodeValue;
+
+                customAlert(resourceBundle["videoConcatStarted"] + " " + targetFolder + ".");
+
+                setTimeout(function () {
+                    parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                }, 6000);
+            } else {
+                const item = responseXml.getElementsByTagName("errorCode")[0];
+                const errorCode = item.firstChild.nodeValue;
+                if (errorCode == '1') {
+                    customAlert(resourceBundle["videoConcatErrorFrameRate"]);
+                } else if (errorCode == '2') {
+                    customAlert(resourceBundle["videoConcatErrorCodec"]);
+                } else if (errorCode == '3') {
+                    customAlert(resourceBundle["videoConcatErrorResolution"]);
+                } else if (errorCode == '4') {
+                    customAlert(resourceBundle["videoConcatErrorProcess"]);
+                }
+            }
+            document.form2.command.value = '';
+            document.form2.cmd.selectedIndex = 0;
+        });
+    } else {
         customAlert(resourceBundle["selectTwoOrMoreVideoFiles"] + "!");
         document.form2.command.value = '';
         document.form2.cmd.selectedIndex = 0;
@@ -365,73 +356,53 @@ function multiVideoJoinParams() {
 }
 
 function sendConcatForm() {
-	showHourGlass();
-    
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function (req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var success = req.responseXML.getElementsByTagName("success")[0];
-                if (success) {
-                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+    xmlFetchPost(getFormData(document.form1), responseXml => {
+        const success = responseXml.getElementsByTagName("success")[0];
+        if (success) {
+            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+            const targetFolder = targetFolderItem.firstChild.nodeValue;
 	                
-                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                    var targetPath = targetPathItem.firstChild.nodeValue;
+            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+            const targetPath = targetPathItem.firstChild.nodeValue;
                     
-                    customAlert(resourceBundle["videoConcatStarted"] + " " + targetFolder + ".");
+            customAlert(resourceBundle["videoConcatStarted"] + " " + targetFolder + ".");
                     
-                    setTimeout(function() {
-                    	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
-                    }, 6000);
-                } else {
-	                var item = req.responseXML.getElementsByTagName("errorCode")[0];
-	                var errorCode = item.firstChild.nodeValue;
-                    if (errorCode == '4') {
-	                    customAlert(resourceBundle["videoConcatErrorProcess"]);
-	                }
-                }
-            } else {
-            	alert(resourceBundle["alert.communicationFailure"]);
-            }
-            
-            hideHourGlass();
+            setTimeout(function() {
+              	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+            }, 6000);
+        } else {
+	        const item = responseXml.getElementsByTagName("errorCode")[0];
+	        const errorCode = item.firstChild.nodeValue;
+            if (errorCode === '4') {
+	            customAlert(resourceBundle["videoConcatErrorProcess"]);
+	        }
         }
     });
 }
 
 function multiVideoDeshake() {
     if (anySelected()) {
-    	showHourGlass();
 	    document.form2.command.value = 'multiVideoDeshake';
-	    
-	    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
-	        if (req.readyState == 4) {
-	            if (req.status == 200) {
-	                var success = req.responseXML.getElementsByTagName("success")[0];
-	                if (success) {
-                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                        var targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                        var targetPath = targetPathItem.firstChild.nodeValue;
-                        
-                        customAlert(resourceBundle["videoDeshakeStarted"] + " " + targetFolder + ".");
-                        
-                        setTimeout(function() {
-                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
-                        }, 6000);
-	                } else {
-	                    customAlert(resourceBundle["errorVideoDeshake"]);
-	                }
-	            } else {
-	            	alert(resourceBundle["alert.communicationFailure"]);
-	            }
-	            
-	            document.form2.command.value = '';
-	            document.form2.cmd.selectedIndex = 0;
+        xmlFetchPost(getFormData(document.form2), responseXml => {
+	        const success = responseXml.getElementsByTagName("success")[0];
+	        if (success) {
+                const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+                const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-	            hideHourGlass();
+                const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+                const targetPath = targetPathItem.firstChild.nodeValue;
+                        
+                customAlert(resourceBundle["videoDeshakeStarted"] + " " + targetFolder + ".");
+                        
+                setTimeout(function() {
+                  	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                }, 6000);
+	        } else {
+	            customAlert(resourceBundle["errorVideoDeshake"]);
 	        }
+	        document.form2.command.value = '';
+	        document.form2.cmd.selectedIndex = 0;
 	    });
     } else {   
         customAlert(resourceBundle["alert.nofileselected"] + "!");
@@ -442,37 +413,27 @@ function multiVideoDeshake() {
 
 function multiVideoAddSilentAudio() {
     if (anySelected()) {
-    	showHourGlass();
 	    document.form2.command.value = 'multiVideoAddSilentAudio';
-	    
-	    xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), function (req) {
-	        if (req.readyState == 4) {
-	            if (req.status == 200) {
-	                var success = req.responseXML.getElementsByTagName("success")[0];
-	                if (success) {
-                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                        var targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                        var targetPath = targetPathItem.firstChild.nodeValue;
-                        
-                        customAlert(resourceBundle["addSilentAudioStarted"] + " " + targetFolder + ".");
-                        
-                        setTimeout(function() {
-                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
-                        }, 6000);
-	                } else {
-	                    customAlert(resourceBundle["errorAddSilentAudio"]);
-	                }
-	            } else {
-	            	alert(resourceBundle["alert.communicationFailure"]);
-	            }
-	            
-	            document.form2.command.value = '';
-	            document.form2.cmd.selectedIndex = 0;
+        xmlFetchPost(getFormData(document.form2), responseXml => {
+	        const success = responseXml.getElementsByTagName("success")[0];
+	        if (success) {
+                const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+                const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-	            hideHourGlass();
+                const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+                const targetPath = targetPathItem.firstChild.nodeValue;
+                        
+                customAlert(resourceBundle["addSilentAudioStarted"] + " " + targetFolder + ".");
+                        
+                setTimeout(function() {
+                   	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                }, 6000);
+	        } else {
+	            customAlert(resourceBundle["errorAddSilentAudio"]);
 	        }
+	        document.form2.command.value = '';
+	        document.form2.cmd.selectedIndex = 0;
 	    });
     } else {   
         customAlert(resourceBundle["alert.nofileselected"] + "!");
@@ -668,72 +629,59 @@ function sendEditConvertForm() {
 }
 
 function sendCutAudioForm() {
-
     if (!validateTimeRange()) {
         return;
     }
 
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var successItem = req.responseXML.getElementsByTagName("success")[0];            
-                var success = successItem.firstChild.nodeValue;
+    xmlFetchPost(getFormData(document.form1), responseXml => {
+        const successItem = responseXml.getElementsByTagName("success")[0];
+        const success = successItem.firstChild.nodeValue;
                 
-                if (success == "true") {
-                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+        if (success === "true") {
+            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+            const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                    var targetPath = targetPathItem.firstChild.nodeValue;
+            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+            const targetPath = targetPathItem.firstChild.nodeValue;
                     
-                    customAlert(resourceBundle["cutAudioStarted"] + " " + targetFolder + ".");
+            customAlert(resourceBundle["cutAudioStarted"] + " " + targetFolder + ".");
                     
-                    setTimeout(function() {
-    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	                window.parent.frames[1].location.href = expUrl;
-                    } , 4000);
-                    
-                } else {
-                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
-                    var message = messageItem.firstChild.nodeValue;
-                    customAlert(message);
-                }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+            setTimeout(function() {
+    	        const expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	        window.parent.frames[1].location.href = expUrl;
+            } , 4000);
+        } else {
+            const messageItem = responseXml.getElementsByTagName("message")[0];
+            const message = messageItem.firstChild.nodeValue;
+            customAlert(message);
         }
     });
 }
 
 function sendTextOnVideoForm() {
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.textOnVideoForm), function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var successItem = req.responseXML.getElementsByTagName("success")[0];            
-                var success = successItem.firstChild.nodeValue;
-                
-                if (success == "true") {
-                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                    var targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                    var targetPath = targetPathItem.firstChild.nodeValue;
+    xmlFetchPost(getFormData(document.textOnVideoForm), responseXml => {
+        const successItem = responseXml.getElementsByTagName("success")[0];
+        const success = successItem.firstChild.nodeValue;
+                
+        if (success === "true") {
+            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+            const targetFolder = targetFolderItem.firstChild.nodeValue;
+
+            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+            const targetPath = targetPathItem.firstChild.nodeValue;
                     
-                    customAlert(resourceBundle["textOnVideoStarted"] + " " + targetFolder + ".");
+            customAlert(resourceBundle["textOnVideoStarted"] + " " + targetFolder + ".");
                     
-                    setTimeout(function() {
-    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	                window.parent.frames[1].location.href = expUrl;
-                    } , 4000);
+            setTimeout(function() {
+    	        const expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	        window.parent.frames[1].location.href = expUrl;
+            } , 4000);
                     
-                } else {
-                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
-                    var message = messageItem.firstChild.nodeValue;
-                    customAlert(message);
-                }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+        } else {
+            const messageItem = responseXml.getElementsByTagName("message")[0];
+            const message = messageItem.firstChild.nodeValue;
+            customAlert(message);
         }
     });
 }
@@ -758,34 +706,28 @@ function sendFadeAudioForm() {
 		}
 	}
 
-	xmlRequestPost("/webfilesys/servlet", getFormData(document.fadeAudioForm), function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var successItem = req.responseXML.getElementsByTagName("success")[0];            
-                var success = successItem.firstChild.nodeValue;
+    xmlFetchPost(getFormData(document.fadeAudioForm), responseXml => {
+        const successItem = responseXml.getElementsByTagName("success")[0];
+        const success = successItem.firstChild.nodeValue;
                 
-                if (success == "true") {
-                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+        if (success === "true") {
+            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+            const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                    var targetPath = targetPathItem.firstChild.nodeValue;
+            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+            const targetPath = targetPathItem.firstChild.nodeValue;
                     
-                    customAlert(resourceBundle["videoFadeAudioStarted"] + " " + targetFolder + ".");
+            customAlert(resourceBundle["videoFadeAudioStarted"] + " " + targetFolder + ".");
                     
-                    setTimeout(function() {
-    	                var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	                window.parent.frames[1].location.href = expUrl;
-                    } , 4000);
+            setTimeout(function() {
+    	        var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+    	        window.parent.frames[1].location.href = expUrl;
+            } , 4000);
                     
-                } else {
-                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
-                    var message = messageItem.firstChild.nodeValue;
-                    customAlert(message);
-                }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+        } else {
+            const messageItem = responseXml.getElementsByTagName("message")[0];
+            const message = messageItem.firstChild.nodeValue;
+            customAlert(message);
         }
     });
 }
@@ -810,32 +752,26 @@ function sendExtractVideoFrameForm() {
         return;
     }
 
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                var successItem = req.responseXML.getElementsByTagName("success")[0];            
-                var success = successItem.firstChild.nodeValue;
+    xmlFetchPost(getFormData(document.form1), responseXml => {
+        const successItem = responseXml.getElementsByTagName("success")[0];
+        const success = successItem.firstChild.nodeValue;
                 
-                if (success == "true") {
-                    var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                    var targetFolder = targetFolderItem.firstChild.nodeValue;
+        if (success === "true") {
+            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+            const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                    var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                    var targetPath = targetPathItem.firstChild.nodeValue;
+            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+            const targetPath = targetPathItem.firstChild.nodeValue;
                     
-                    customAlert(resourceBundle["videoFrameExtractionStarted"] + " " + targetFolder + ".");
+            customAlert(resourceBundle["videoFrameExtractionStarted"] + " " + targetFolder + ".");
                     
-                    setTimeout(function() {
-                    	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true&viewMode=2";
-                    }, 5000);
-                } else {
-                    var messageItem = req.responseXML.getElementsByTagName("message")[0];            
-                    var message = messageItem.firstChild.nodeValue;
-                    customAlert(message);
-                }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+            setTimeout(function() {
+              	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true&viewMode=2";
+            }, 5000);
+        } else {
+            const messageItem = responseXml.getElementsByTagName("message")[0];
+            const message = messageItem.firstChild.nodeValue;
+            customAlert(message);
         }
     });
 }

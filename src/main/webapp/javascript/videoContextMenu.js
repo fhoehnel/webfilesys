@@ -12,8 +12,6 @@ function videoContextMenu(fileName, domId) {
         shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 14, fileName.length);
     }    
 
-    var fileNameExt = getFileNameExt(fileName);
-    
     var lastPathChar = path.charAt(path.length - 1);
     
     var fullPath;
