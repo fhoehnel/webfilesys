@@ -31,7 +31,7 @@ function autoImgRotate() {
                 }
                 
                 var xmlUrl = '/webfilesys/servlet?command=autoImgRotate';
-                var responseXml = xmlRequest(xmlUrl, autoImgRotateResult);
+                xmlRequest(xmlUrl, autoImgRotateResult);
 	});
 }
 

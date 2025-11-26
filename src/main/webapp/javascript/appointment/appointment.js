@@ -644,94 +644,56 @@ function hideAppointments()
     document.getElementById("appointmentCont").style.visibility = "hidden";
 }
 
-function deleteAppointment(eventId)
-{
-	if (!confirm(resourceConfirmDelete))
-	{
+function deleteAppointment(eventId) {
+	if (!confirm(resourceConfirmDelete)) {
 		return;
 	}
-	var url = "/webfilesys/servlet?command=calendar&cmd=delAppointment&eventId=" + eventId;
-	xmlRequest(url, showDeleteResult);
-}
+    xmlGetRequest("calendar", { cmd: "delAppointment", eventId}, responseXml => {
+        const resultElem = responseXml.getElementsByTagName("result")[0];
+        const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+        if (success === 'true') {
+            const deletedEventId = resultElem.getElementsByTagName("deletedId")[0].firstChild.nodeValue;
 
-function showDeleteResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
-
-            if (success == 'true')
-            {
-                var deletedEventId = resultElem.getElementsByTagName("deletedId")[0].firstChild.nodeValue;            
-                
-                var dayAppointments = monthAppointments[selectedDay.dayOfMonth];
-                if (dayAppointments) 
-                {
-                	var found = false;
-                	for (var i = 0; (!found) && (i < dayAppointments.length); i++)
-                	{
-                		if (dayAppointments[i].eventId == deletedEventId)
-                		{
-                			dayAppointments.splice(i, 1);
-                			found = true;
-                		}
-                	}
+            const dayAppointments = monthAppointments[selectedDay.dayOfMonth];
+            if (dayAppointments) {
+                let found = false;
+                for (let i = 0; (!found) && (i < dayAppointments.length); i++) {
+                    if (dayAppointments[i].eventId === deletedEventId) {
+                        dayAppointments.splice(i, 1);
+                        found = true;
+                    }
                 }
-    	        // showAppointments();	
-				reloadMonth();
             }
+            reloadMonth();
         }
-    }
+    });
 }
 
-function moveAppointment(eventId)
-{
-	var url = "/webfilesys/servlet?command=calendar&cmd=moveAppointment&eventId=" + eventId;
-	xmlRequest(url, showMoveResult);
-}
-
-function showMoveResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
-
-            if (success == 'true')
-            {
-            	alert(resourceHintPaste);
-				reloadMonth();
-            }
+function moveAppointment(eventId) {
+    xmlGetRequest("calendar", { cmd: "moveAppointment", eventId}, responseXml => {
+        const resultElem = responseXml.getElementsByTagName("result")[0];
+        const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+        if (success === 'true') {
+            alert(resourceHintPaste);
+            reloadMonth();
         }
+    });
+}
+
+function pasteAppointment(year, month, dayOfMonth) {
+    const parameters = {
+        cmd: "pasteAppointment",
+        year,
+        month,
+        dayOfMonth
     }
-}
-
-function pasteAppointment(year, month, dayOfMonth)
-{
-	var url = "/webfilesys/servlet?command=calendar&cmd=pasteAppointment&year=" + year + "&month=" + month + "&dayOfMonth=" + dayOfMonth;
-	xmlRequest(url, showPasteResult);
-}
-
-function showPasteResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
-
-            if (success == 'true')
-            {
- 				reloadMonth();
-            }
+    xmlGetRequest("calendar", parameters, responseXml => {
+        const resultElem = responseXml.getElementsByTagName("result")[0];
+        const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+        if (success === 'true') {
+            reloadMonth();
         }
-    }
+    });
 }
 
 function changeAppointment() {

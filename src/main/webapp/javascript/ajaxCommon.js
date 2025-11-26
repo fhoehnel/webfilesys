@@ -41,6 +41,10 @@ function xmlFetchPost(postData, successCallBack, failureCallBack) {
 }
 
 function xmlGetRequest(command, parameters, successCallBack, failureCallBack, skipWaitIndicator) {
+    fetchGet(command, parameters, successCallBack, failureCallBack, skipWaitIndicator, true)
+}
+
+function fetchGet(command, parameters, successCallBack, failureCallBack, skipWaitIndicator, responseIsXML) {
 	if (!skipWaitIndicator) {
 	    showHourGlass();
 	}
@@ -67,9 +71,13 @@ function xmlGetRequest(command, parameters, successCallBack, failureCallBack, sk
         })
         .then((data) => {
             if (successCallBack) {
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(data, 'text/xml');
-                successCallBack(xmlDoc);
+                if (responseIsXML) {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(data, 'text/xml');
+                    successCallBack(xmlDoc);
+                } else {
+                    successCallBack(data);
+                }
             }
         })
         .catch(error => {
@@ -104,8 +112,8 @@ function xmlPostRequest(command, parameters, successCallBack, failureCallBack) {
             if (response.ok) {
                 return response.text();
             }
-            if (typeof failureCallback !== 'undefined') {
-                failureCallback();
+            if (typeof failureCallBack !== 'undefined') {
+                failureCallBack();
             } else {
                 throw new Error('fetch communication error');
             }

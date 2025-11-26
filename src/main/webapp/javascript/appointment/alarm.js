@@ -1,82 +1,54 @@
-function checkAlarm() 
-{
-	var url = "/webfilesys/servlet?command=calendar&cmd=checkAlarm";
-	xmlRequest(url, handleAlarmResult);
-}
+function checkAlarm() {
+    xmlGetRequest("calendar", { cmd: "checkAlarm" },
+            responseXml => {
+                const resultElem = responseXml.getElementsByTagName("result")[0];
+                const alarmList = resultElem.getElementsByTagName("alarm");
+                let eventId;
 
-function handleAlarmResult(req) 
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var alarmList = resultElem.getElementsByTagName("alarm");
+                for (let i = 0; i < alarmList.length; i++) {
+                    const alarm = alarmList[i];
 
-            var soundAlarm = false;
-            
-            var eventId;
-            
-            for (var i = 0; i < alarmList.length; i++)
-            {
-            	var alarm = alarmList[i];
-            	
-            	var eventTime = "";
-            	var alarmTime = "";
-            	var subject = "";
-            	var alarmType = "";
-            	
-            	var childNodeNum = alarm.childNodes.length;
-            	
-            	for (var k = 0; k < childNodeNum; k++) 
-            	{
-            		var childNode = alarm.childNodes[k];	
-            		
-            		if (childNode.tagName == "eventTime")
-            		{
-            			eventTime = childNode.firstChild.nodeValue;
-            		}
-            		else if (childNode.tagName == "alarmTime")
-            		{
-            			alarmTime = childNode.firstChild.nodeValue;
-            		}
-            		else if (childNode.tagName == "subject")
-            		{
-            			subject = childNode.firstChild.nodeValue;
-            		}
-            		else if (childNode.tagName == "alarmType")
-            		{
-            			alarmType = childNode.firstChild.nodeValue;
-            		}
-            		else if (childNode.tagName == "eventId")
-            		{
-            			eventId = childNode.firstChild.nodeValue;
-            		}
-            	}
-            	
-            	if ((alarmType == "2") || (alarmType == "4"))
-            	{
-           	        try 
-           	        {
-           	        	beep(400, 3);
-           	        }
-           	        catch (err)
-           	        {
-           	        	if (console)
-           	        	{
-           	        		console.log(err);
-           	        	}
-           	        }
-            	}
+                    let eventTime = "";
+                    let alarmTime = "";
+                    let subject = "";
+                    let alarmType = "";
 
-            	var alertText = eventTime + "<br/><br/>" + subject;
-            	
-            	showReminder(alertText, eventId);
-            }
-            
-   	        setTimeout("checkAlarm()", 60000);
-        }
-    }
+                    const childNodeNum = alarm.childNodes.length;
+
+                    for (let k = 0; k < childNodeNum; k++) {
+                        const childNode = alarm.childNodes[k];
+
+                        if (childNode.tagName === "eventTime") {
+                            eventTime = childNode.firstChild.nodeValue;
+                        } else if (childNode.tagName === "alarmTime") {
+                            alarmTime = childNode.firstChild.nodeValue;
+                        } else if (childNode.tagName === "subject") {
+                            subject = childNode.firstChild.nodeValue;
+                        } else if (childNode.tagName === "alarmType") {
+                            alarmType = childNode.firstChild.nodeValue;
+                        } else if (childNode.tagName === "eventId") {
+                            eventId = childNode.firstChild.nodeValue;
+                        }
+                    }
+
+                    if (alarmType === "2" || alarmType === "4") {
+                        try {
+                            beep(400, 3);
+                        } catch (err) {
+                            if (console) {
+                                console.log(err);
+                            }
+                        }
+                    }
+
+                    const alertText = eventTime + "<br/><br/>" + subject;
+                    showReminder(alertText, eventId);
+                }
+                setTimeout("checkAlarm()", 60000);
+            },
+            null,
+            true
+    );
 }
 
 function showReminder(appointmentText, eventId)
@@ -137,32 +109,23 @@ function showReminder(appointmentText, eventId)
     window.focus();
 }
 
-function delayOrCloseReminder(eventId)
-{
-	var remindAgainSel = document.getElementById("remindAgainSel-" + eventId);
+function delayOrCloseReminder(eventId) {
+	const remindAgainSel = document.getElementById("remindAgainSel-" + eventId);
 	
-	if (remindAgainSel.value == 0)
-	{
+	if (remindAgainSel.value == 0) {
 		hideReminder(eventId);
         return;
 	}
-
-	var url = "/webfilesys/servlet?command=calendar&cmd=delay&eventId=" + eventId + "&delayMinutes=" + remindAgainSel.value;
-	xmlRequest(url, handleDelayResult);
-}
-
-function handleDelayResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var delayedId = resultElem.getElementsByTagName("delayedId")[0].firstChild.nodeValue;
-            
-    		hideReminder(delayedId);
-        }
+    const parameters = {
+        cmd: "delay",
+        eventId,
+        delayMinutes: remindAgainSel.value
     }
+    xmlGetRequest("calendar", parameters, responseXml => {
+        const resultElem = responseXml.getElementsByTagName("result")[0];
+        const delayedId = resultElem.getElementsByTagName("delayedId")[0].firstChild.nodeValue;
+        hideReminder(delayedId);
+    });
 }
 
 function hideReminder(eventId)

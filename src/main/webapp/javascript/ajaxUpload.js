@@ -39,7 +39,7 @@ function checkUploadTargetExists(targetFileName, callback) {
         const resultItem = responseXml.getElementsByTagName("result")[0];
         const result = resultItem.firstChild.nodeValue;  
                 
-        if (result && (result == "true")) {
+        if (result && (result === "true")) {
             var confirmMsg = targetFileName + " - " + resourceBundle["upload.file.exists"];
           	customConfirm(confirmMsg, resourceBundle["button.cancel"], resourceBundle["button.ok"], 
        			function() {
