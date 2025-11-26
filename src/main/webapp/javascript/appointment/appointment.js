@@ -734,138 +734,101 @@ function showPasteResult(req)
     }
 }
 
-function changeAppointment()
-{
-	if (!validateFormData())
-	{
+function changeAppointment() {
+	if (!validateFormData()) {
 		alert("invalid data entered");
 		return;
 	}
-	
-	var formData = getFormData(document.getElementById("detailForm"));
-	
-	formData = formData + "command=calendar&cmd=changeAppointment";
-	
-	xmlRequestPost("/webfilesys/servlet", formData, showChangeResult)	
+	let formData = getFormData(document.getElementById("detailForm"));
+	formData = formData + "&command=calendar&cmd=changeAppointment";
+    xmlFetchPost(formData, showChangeResult);
 }
 
-function showChangeResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+function showChangeResult(responseXml) {
+    const resultElem = responseXml.getElementsByTagName("result")[0];
+    const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
 
-            if (success == 'true')
-            {
-                var appointmentElem = resultElem.getElementsByTagName("appointment")[0];            
+    if (success === 'true') {
+        const appointmentElem = resultElem.getElementsByTagName("appointment")[0];
 
-                var appointmentId = appointmentElem.getElementsByTagName("id")[0].firstChild.nodeValue;
-                
-                var changedAppointment = getAppointmentById(selectedDay.dayOfMonth, appointmentId);
+        const appointmentId = appointmentElem.getElementsByTagName("id")[0].firstChild.nodeValue;
 
-                if (changedAppointment != null)
-                {
-                    changedAppointment.eventTime = Number(appointmentElem.getElementsByTagName("eventTime")[0].firstChild.nodeValue);
-                    changedAppointment.duration = Number(appointmentElem.getElementsByTagName("duration")[0].firstChild.nodeValue);
-                    changedAppointment.startMinuteOfDay = appointmentElem.getElementsByTagName("startMinuteOfDay")[0].firstChild.nodeValue;
-                    changedAppointment.endMinuteOfDay = appointmentElem.getElementsByTagName("endMinuteOfDay")[0].firstChild.nodeValue;
-                    changedAppointment.startHour = appointmentElem.getElementsByTagName("startHour")[0].firstChild.nodeValue;
-                    changedAppointment.endHour = appointmentElem.getElementsByTagName("endHour")[0].firstChild.nodeValue;
-                    changedAppointment.subject = appointmentElem.getElementsByTagName("subject")[0].firstChild.nodeValue;
-                    changedAppointment.repeatPeriod = appointmentElem.getElementsByTagName("repeatPeriod")[0].firstChild.nodeValue;
-                    changedAppointment.alarmType = appointmentElem.getElementsByTagName("alarmType")[0].firstChild.nodeValue;
-                    changedAppointment.alarmAheadHours = appointmentElem.getElementsByTagName("alarmAheadHours")[0].firstChild.nodeValue;
-                    changedAppointment.alarmAheadMinutes = appointmentElem.getElementsByTagName("alarmAheadMinutes")[0].firstChild.nodeValue;
-                    
-                    var descElemList = appointmentElem.getElementsByTagName("description");
-                    if (descElemList && (descElemList.length > 0))
-                    {
-                        var description = descElemList[0].firstChild.nodeValue;
-                        if (description)
-                        {
-                        	changedAppointment.description = description;
-                        }	
-                    }
+        const changedAppointment = getAppointmentById(selectedDay.dayOfMonth, appointmentId);
+
+        if (changedAppointment != null) {
+            changedAppointment.eventTime = Number(appointmentElem.getElementsByTagName("eventTime")[0].firstChild.nodeValue);
+            changedAppointment.duration = Number(appointmentElem.getElementsByTagName("duration")[0].firstChild.nodeValue);
+            changedAppointment.startMinuteOfDay = appointmentElem.getElementsByTagName("startMinuteOfDay")[0].firstChild.nodeValue;
+            changedAppointment.endMinuteOfDay = appointmentElem.getElementsByTagName("endMinuteOfDay")[0].firstChild.nodeValue;
+            changedAppointment.startHour = appointmentElem.getElementsByTagName("startHour")[0].firstChild.nodeValue;
+            changedAppointment.endHour = appointmentElem.getElementsByTagName("endHour")[0].firstChild.nodeValue;
+            changedAppointment.subject = appointmentElem.getElementsByTagName("subject")[0].firstChild.nodeValue;
+            changedAppointment.repeatPeriod = appointmentElem.getElementsByTagName("repeatPeriod")[0].firstChild.nodeValue;
+            changedAppointment.alarmType = appointmentElem.getElementsByTagName("alarmType")[0].firstChild.nodeValue;
+            changedAppointment.alarmAheadHours = appointmentElem.getElementsByTagName("alarmAheadHours")[0].firstChild.nodeValue;
+            changedAppointment.alarmAheadMinutes = appointmentElem.getElementsByTagName("alarmAheadMinutes")[0].firstChild.nodeValue;
+
+            const descElemList = appointmentElem.getElementsByTagName("description");
+            if (descElemList && (descElemList.length > 0)) {
+                const description = descElemList[0].firstChild.nodeValue;
+                if (description) {
+                    changedAppointment.description = description;
                 }
-            	
-    	        // showAppointments();
-                reloadMonth();				
             }
         }
+        // showAppointments();
+        reloadMonth();
     }
 }
 
-function createAppointment()
-{
-	if (!validateFormData())
-	{
+function createAppointment() {
+	if (!validateFormData()) {
 		alert("invalid data entered");
 		return;
 	}
-	
-	var formData = getFormData(document.getElementById("detailForm"));
-	
+	let formData = getFormData(document.getElementById("detailForm"));
 	formData = formData + "&command=calendar&cmd=newAppointment";
-	
 	formData = formData + "&year=" + selectedDay.year + "&month=" + selectedDay.month + "&day=" + selectedDay.dayOfMonth;
 	
-	xmlRequestPost("/webfilesys/servlet", formData, showCreateResult)	
+    xmlFetchPost(formData, showCreateResult);
 }
 
-function showCreateResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+function showCreateResult(responseXml) {
+    const resultElem = responseXml.getElementsByTagName("result")[0];
+    const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
 
-            if (success == 'true')
-            {
-                var appointmentElem = resultElem.getElementsByTagName("appointment")[0];            
-            	
-                var dayAppointments = monthAppointments[selectedDay.dayOfMonth];
+    if (success === 'true') {
+        const appointmentElem = resultElem.getElementsByTagName("appointment")[0];
+        let dayAppointments = monthAppointments[selectedDay.dayOfMonth];
+        if (!dayAppointments) {
+            dayAppointments = [];
+            monthAppointments[selectedDay.dayOfMonth] = dayAppointments;
+        }
 
-                if (!dayAppointments)
-                {
-                	dayAppointments = new Array();
-                	monthAppointments[selectedDay.dayOfMonth] = dayAppointments;
-                }
-                
-                var appointment = new Object();
-                dayAppointments.push(appointment);
-                
-                appointment.eventId = appointmentElem.getElementsByTagName("id")[0].firstChild.nodeValue;
-                appointment.eventTime = Number(appointmentElem.getElementsByTagName("eventTime")[0].firstChild.nodeValue);
-                appointment.duration = Number(appointmentElem.getElementsByTagName("duration")[0].firstChild.nodeValue);
-                appointment.startMinuteOfDay = appointmentElem.getElementsByTagName("startMinuteOfDay")[0].firstChild.nodeValue;
-                appointment.endMinuteOfDay = appointmentElem.getElementsByTagName("endMinuteOfDay")[0].firstChild.nodeValue;
-                appointment.startHour = appointmentElem.getElementsByTagName("startHour")[0].firstChild.nodeValue;
-                appointment.endHour = appointmentElem.getElementsByTagName("endHour")[0].firstChild.nodeValue;
-                appointment.subject = appointmentElem.getElementsByTagName("subject")[0].firstChild.nodeValue;
-                appointment.repeatPeriod = appointmentElem.getElementsByTagName("repeatPeriod")[0].firstChild.nodeValue;
-                appointment.alarmType = appointmentElem.getElementsByTagName("alarmType")[0].firstChild.nodeValue;
-                appointment.alarmAheadHours = appointmentElem.getElementsByTagName("alarmAheadHours")[0].firstChild.nodeValue;
-                appointment.alarmAheadMinutes = appointmentElem.getElementsByTagName("alarmAheadMinutes")[0].firstChild.nodeValue;
-                
-                var descElemList = appointmentElem.getElementsByTagName("description");
-                if (descElemList && (descElemList.length > 0))
-                {
-                    var description = descElemList[0].firstChild.nodeValue;
-                    if (description)
-                    {
-                        appointment.description = description;
-                    }	
-                }
-            	
-    	        // showAppointments();	
-				reloadMonth();
+        const appointment = {};
+        dayAppointments.push(appointment);
+
+        appointment.eventId = appointmentElem.getElementsByTagName("id")[0].firstChild.nodeValue;
+        appointment.eventTime = Number(appointmentElem.getElementsByTagName("eventTime")[0].firstChild.nodeValue);
+        appointment.duration = Number(appointmentElem.getElementsByTagName("duration")[0].firstChild.nodeValue);
+        appointment.startMinuteOfDay = appointmentElem.getElementsByTagName("startMinuteOfDay")[0].firstChild.nodeValue;
+        appointment.endMinuteOfDay = appointmentElem.getElementsByTagName("endMinuteOfDay")[0].firstChild.nodeValue;
+        appointment.startHour = appointmentElem.getElementsByTagName("startHour")[0].firstChild.nodeValue;
+        appointment.endHour = appointmentElem.getElementsByTagName("endHour")[0].firstChild.nodeValue;
+        appointment.subject = appointmentElem.getElementsByTagName("subject")[0].firstChild.nodeValue;
+        appointment.repeatPeriod = appointmentElem.getElementsByTagName("repeatPeriod")[0].firstChild.nodeValue;
+        appointment.alarmType = appointmentElem.getElementsByTagName("alarmType")[0].firstChild.nodeValue;
+        appointment.alarmAheadHours = appointmentElem.getElementsByTagName("alarmAheadHours")[0].firstChild.nodeValue;
+        appointment.alarmAheadMinutes = appointmentElem.getElementsByTagName("alarmAheadMinutes")[0].firstChild.nodeValue;
+
+        const descElemList = appointmentElem.getElementsByTagName("description");
+        if (descElemList && descElemList.length > 0) {
+            const description = descElemList[0].firstChild.nodeValue;
+            if (description) {
+                appointment.description = description;
             }
         }
+        reloadMonth();
     }
 }
 

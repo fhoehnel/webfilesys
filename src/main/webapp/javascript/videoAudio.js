@@ -381,65 +381,36 @@ function sendConcatForm() {
 }
 
 function multiVideoDeshake() {
-    if (anySelected()) {
-	    document.form2.command.value = 'multiVideoDeshake';
-
-        xmlFetchPost(getFormData(document.form2), responseXml => {
-	        const success = responseXml.getElementsByTagName("success")[0];
-	        if (success) {
-                const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
-                const targetFolder = targetFolderItem.firstChild.nodeValue;
-
-                const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
-                const targetPath = targetPathItem.firstChild.nodeValue;
-                        
-                customAlert(resourceBundle["videoDeshakeStarted"] + " " + targetFolder + ".");
-                        
-                setTimeout(function() {
-                  	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
-                }, 6000);
-	        } else {
-	            customAlert(resourceBundle["errorVideoDeshake"]);
-	        }
-	        document.form2.command.value = '';
-	        document.form2.cmd.selectedIndex = 0;
-	    });
-    } else {   
+    if (!anySelected()) {
         customAlert(resourceBundle["alert.nofileselected"] + "!");
         document.form2.command.value = '';
         document.form2.cmd.selectedIndex = 0;
+        return;
     }
+
+    document.form2.command.value = 'multiVideoDeshake';
+
+    xmlFetchPost(getFormData(document.form2), responseXml => {
+        handleAsyncVideoTransformResult(responseXml, "videoDeshakeStarted");
+        document.form2.command.value = '';
+        document.form2.cmd.selectedIndex = 0;
+    });
 }
 
 function multiVideoAddSilentAudio() {
-    if (anySelected()) {
-	    document.form2.command.value = 'multiVideoAddSilentAudio';
-
-        xmlFetchPost(getFormData(document.form2), responseXml => {
-	        const success = responseXml.getElementsByTagName("success")[0];
-	        if (success) {
-                const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
-                const targetFolder = targetFolderItem.firstChild.nodeValue;
-
-                const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
-                const targetPath = targetPathItem.firstChild.nodeValue;
-                        
-                customAlert(resourceBundle["addSilentAudioStarted"] + " " + targetFolder + ".");
-                        
-                setTimeout(function() {
-                   	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
-                }, 6000);
-	        } else {
-	            customAlert(resourceBundle["errorAddSilentAudio"]);
-	        }
-	        document.form2.command.value = '';
-	        document.form2.cmd.selectedIndex = 0;
-	    });
-    } else {   
+    if (!anySelected()) {
         customAlert(resourceBundle["alert.nofileselected"] + "!");
         document.form2.command.value = '';
         document.form2.cmd.selectedIndex = 0;
+        return;
     }
+    document.form2.command.value = 'multiVideoAddSilentAudio';
+
+    xmlFetchPost(getFormData(document.form2), responseXml => {
+        handleAsyncVideoTransformResult(responseXml, "addSilentAudioStarted");
+        document.form2.command.value = '';
+        document.form2.cmd.selectedIndex = 0;
+    });
 }
 
 function checkTwoOrMoreFilesSelected() {
@@ -605,26 +576,7 @@ function sendEditConvertForm() {
         return;
     }
     xmlFetchPost(getFormData(document.form1), responseXml => {
-        const successItem = responseXml.getElementsByTagName("success")[0];
-        const success = successItem.firstChild.nodeValue;
-        if (success === "true") {
-            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
-            const targetFolder = targetFolderItem.firstChild.nodeValue;
-
-            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
-            const targetPath = targetPathItem.firstChild.nodeValue;
-
-            customAlert(resourceBundle["videoConversionStarted"] + " " + targetFolder + ".");
-
-            setTimeout(function() {
-                const expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-                window.parent.frames[1].location.href = expUrl;
-            } , 4000);
-        } else {
-            const messageItem = responseXml.getElementsByTagName("message")[0];
-            const message = messageItem.firstChild.nodeValue;
-            customAlert(message);
-        }
+        handleAsyncVideoTransformResult(responseXml, "videoConversionStarted");
     });
 }
 
@@ -632,66 +584,23 @@ function sendCutAudioForm() {
     if (!validateTimeRange()) {
         return;
     }
-
     xmlFetchPost(getFormData(document.form1), responseXml => {
-        const successItem = responseXml.getElementsByTagName("success")[0];
-        const success = successItem.firstChild.nodeValue;
-                
-        if (success === "true") {
-            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
-            const targetFolder = targetFolderItem.firstChild.nodeValue;
-
-            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
-            const targetPath = targetPathItem.firstChild.nodeValue;
-                    
-            customAlert(resourceBundle["cutAudioStarted"] + " " + targetFolder + ".");
-                    
-            setTimeout(function() {
-    	        const expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	        window.parent.frames[1].location.href = expUrl;
-            } , 4000);
-        } else {
-            const messageItem = responseXml.getElementsByTagName("message")[0];
-            const message = messageItem.firstChild.nodeValue;
-            customAlert(message);
-        }
+        handleAsyncVideoTransformResult(responseXml, "cutAudioStarted");
     });
 }
 
 function sendTextOnVideoForm() {
-
     xmlFetchPost(getFormData(document.textOnVideoForm), responseXml => {
-        const successItem = responseXml.getElementsByTagName("success")[0];
-        const success = successItem.firstChild.nodeValue;
-                
-        if (success === "true") {
-            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
-            const targetFolder = targetFolderItem.firstChild.nodeValue;
-
-            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
-            const targetPath = targetPathItem.firstChild.nodeValue;
-                    
-            customAlert(resourceBundle["textOnVideoStarted"] + " " + targetFolder + ".");
-                    
-            setTimeout(function() {
-    	        const expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	        window.parent.frames[1].location.href = expUrl;
-            } , 4000);
-                    
-        } else {
-            const messageItem = responseXml.getElementsByTagName("message")[0];
-            const message = messageItem.firstChild.nodeValue;
-            customAlert(message);
-        }
+        handleAsyncVideoTransformResult(responseXml, "textOnVideoStarted");
     });
 }
 
 function sendFadeAudioForm() {
-	var fadeInDuration = document.fadeAudioForm.fadeInDuration.value;
-	var fadeOutDuration = document.fadeAudioForm.fadeOutDuration.value;
+	const fadeInDuration = document.fadeAudioForm.fadeInDuration.value;
+	const fadeOutDuration = document.fadeAudioForm.fadeOutDuration.value;
 	
 	if (fadeInDuration.length > 0) {
-		var fadeInSeconds = parseInt(fadeInDuration);
+		const fadeInSeconds = parseInt(fadeInDuration);
 		if ((fadeInDuration % 1 != 0) || (fadeInSeconds > videoDuration)) {
 			customAlert(resourceBundle['fadeInValueInvalid']);
 			return;
@@ -699,7 +608,7 @@ function sendFadeAudioForm() {
 	}
 	
 	if (fadeOutDuration.length > 0) {
-		var fadeOutSeconds = parseInt(fadeOutDuration);
+		const fadeOutSeconds = parseInt(fadeOutDuration);
 		if ((fadeOutDuration % 1 != 0) || (fadeOutSeconds > videoDuration)) {
 			customAlert(resourceBundle['fadeOutValueInvalid']);
 			return;
@@ -707,28 +616,7 @@ function sendFadeAudioForm() {
 	}
 
     xmlFetchPost(getFormData(document.fadeAudioForm), responseXml => {
-        const successItem = responseXml.getElementsByTagName("success")[0];
-        const success = successItem.firstChild.nodeValue;
-                
-        if (success === "true") {
-            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
-            const targetFolder = targetFolderItem.firstChild.nodeValue;
-
-            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
-            const targetPath = targetPathItem.firstChild.nodeValue;
-                    
-            customAlert(resourceBundle["videoFadeAudioStarted"] + " " + targetFolder + ".");
-                    
-            setTimeout(function() {
-    	        var expUrl = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
-    	        window.parent.frames[1].location.href = expUrl;
-            } , 4000);
-                    
-        } else {
-            const messageItem = responseXml.getElementsByTagName("message")[0];
-            const message = messageItem.firstChild.nodeValue;
-            customAlert(message);
-        }
+        handleAsyncVideoTransformResult(responseXml, "videoFadeAudioStarted");
     });
 }
 
@@ -753,27 +641,35 @@ function sendExtractVideoFrameForm() {
     }
 
     xmlFetchPost(getFormData(document.form1), responseXml => {
-        const successItem = responseXml.getElementsByTagName("success")[0];
-        const success = successItem.firstChild.nodeValue;
-                
-        if (success === "true") {
-            const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
-            const targetFolder = targetFolderItem.firstChild.nodeValue;
-
-            const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
-            const targetPath = targetPathItem.firstChild.nodeValue;
-                    
-            customAlert(resourceBundle["videoFrameExtractionStarted"] + " " + targetFolder + ".");
-                    
-            setTimeout(function() {
-              	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true&viewMode=2";
-            }, 5000);
-        } else {
-            const messageItem = responseXml.getElementsByTagName("message")[0];
-            const message = messageItem.firstChild.nodeValue;
-            customAlert(message);
-        }
+        handleAsyncVideoTransformResult(responseXml, "videoFrameExtractionStarted", 2);
     });
+}
+
+function handleAsyncVideoTransformResult(responseXml, msgKey, targetFolderViewMode) {
+    const successItem = responseXml.getElementsByTagName("success")[0];
+    const success = successItem.firstChild.nodeValue;
+
+    if (success === "true") {
+        const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+        const targetFolder = targetFolderItem.firstChild.nodeValue;
+
+        const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+        const targetPath = targetPathItem.firstChild.nodeValue;
+
+        customAlert(resourceBundle[msgKey] + " " + targetFolder + ".");
+
+        setTimeout(function() {
+            let targetURL = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(targetPath) + "&mask=*&fastPath=true";
+            if (targetFolderViewMode) {
+                targetURL += "&viewMode=" + targetFolderViewMode;
+            }
+            parent.parent.frames[1].location.href = targetURL;
+        }, 5000);
+    } else {
+        const messageItem = responseXml.getElementsByTagName("message")[0];
+        const message = messageItem.firstChild.nodeValue;
+        customAlert(message);
+    }
 }
 
 function videoFrameGrabPreview() {

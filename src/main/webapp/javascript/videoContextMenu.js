@@ -63,7 +63,7 @@ function videoContextMenu(fileName, domId) {
 	addContextMenuEntry(menuDiv, "videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
     
     let maxMenuHeight = 240;
-    if (parent.readonly == 'true') {
+    if (parent.readonly === 'true') {
         maxMenuHeight = 120;
     } 
     

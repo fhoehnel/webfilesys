@@ -24,7 +24,10 @@
         <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
         <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
         <script src="/webfilesys/javascript/appointment/alarm.js" type="text/javascript"></script>
-	  
+        <script type="text/javascript">
+              <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/calendar/language" /></xsl:attribute>
+        </script>
+
 	<script type="text/javascript">  
 	
 	  function createColorMap(redStart, greenStart, blueStart, redIncr, greenIncr, blueIncr, numColors)

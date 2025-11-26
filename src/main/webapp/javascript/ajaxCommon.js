@@ -5,14 +5,6 @@ function xmlRequest(url, callBackFunction) {
 	req.send("");
 }
 
-function xmlRequestPost(url, params, callBackFunction) {
-    const req = new XMLHttpRequest();
-    req.onreadystatechange = function() {callBackFunction(req)};
-    req.open("POST", url, true);
-    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    req.send(params);
-}
-
 function xmlFetchPost(postData, successCallBack, failureCallBack) {
     showHourGlass();
 
