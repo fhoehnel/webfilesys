@@ -54,25 +54,14 @@ function cutAudio(path) {
     window.location.href="/webfilesys/servlet?command=cutAudioParams&filePath=" + encodeURIComponent(path);
 }
 
-function renameFile(fileName) {  
-    centeredDialog('/webfilesys/servlet?command=renameFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameFile.xsl', 360, 160, function() {
-        document.renameForm.newFileName.focus();
-        const newFileName = document.renameForm.newFileName.value;
-        if (newFileName) {
-	        const extStart = newFileName.lastIndexOf(".");
-            if (extStart > 0) {
-	            document.renameForm.newFileName.setSelectionRange(0, extStart);
-            } else {
-                document.renameForm.newFileName.select();
-            }
-        }
-    });
-}
-
-function cloneFile(fileName) {   
-    centeredDialog('/webfilesys/servlet?command=cloneFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/cloneFile.xsl', 360, 160, function() {
-        document.renameForm.newFileName.focus();
-        document.renameForm.newFileName.select();
+function cloneFile(fileName) {
+    showPromptDialog("/webfilesys/html/cloneFile.html", 340, function() {
+        document.getElementById("sourceFileName").value = fileName;
+        document.getElementById("shortFileName").innerHTML = abbrevText(fileName, 30);
+        const newFileName = document.getElementById("newFileName");
+        newFileName.value = fileName;
+        newFileName.focus();
+        newFileName.select();
     });
 }
 

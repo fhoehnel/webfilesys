@@ -363,20 +363,18 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
         boolean firstToken = true;
 
-		while (pathParser.hasMoreTokens())
-		{
+		while (pathParser.hasMoreTokens()) {
 			String partOfPath = pathParser.nextToken();
 			
 			partialPath.append(partOfPath);
 
-            if (firstToken && partOfPath.length() == 2 && partOfPath.charAt(1) == ':') {
-                partialPath.append(File.separator);
-            }
-
-            if (pathParser.hasMoreTokens())
-			{
+            if (pathParser.hasMoreTokens()) {
 				partialPath.append(File.separatorChar);		
-			}
+			} else {
+                if (firstToken && partOfPath.length() == 2 && partOfPath.charAt(1) == ':') {
+                    partialPath.append(File.separator);
+                }
+            }
 			
 			Element partOfPathElem = doc.createElement("pathElem");
 			
@@ -439,7 +437,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                     
                     subDirElem.setAttribute("displayName", displayName);
                 
-                    subDirElem.setAttribute("path", UTF8URLEncoder.encode(relPathWithSlash + subdirPath));
+                    subDirElem.setAttribute("path", UTF8URLEncoder.encode(subdirPath));
                 }
             }
             

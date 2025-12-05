@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
+import de.webfilesys.gui.api.CreateBookmarkHandler;
 import de.webfilesys.gui.xsl.*;
 import org.apache.logging.log4j.LogManager;
 
@@ -104,7 +105,6 @@ import de.webfilesys.gui.ajax.XmlCoBrowsingExitHandler;
 import de.webfilesys.gui.ajax.XmlCoBrowsingMasterImageHandler;
 import de.webfilesys.gui.ajax.XmlCollapseDirHandler;
 import de.webfilesys.gui.ajax.XmlCopyDirHandler;
-import de.webfilesys.gui.ajax.XmlCreateBookmarkHandler;
 import de.webfilesys.gui.ajax.XmlCreateThumbsHandler;
 import de.webfilesys.gui.ajax.XmlCutCopyHandler;
 import de.webfilesys.gui.ajax.XmlDeleteDirHandler;
@@ -148,7 +148,7 @@ import de.webfilesys.gui.user.ActivateUserRequestHandler;
 import de.webfilesys.gui.user.AddCommentRequestHandler;
 import de.webfilesys.gui.user.CancelPublishRequestHandler;
 import de.webfilesys.gui.user.ClipboardPasteRequestHandler;
-import de.webfilesys.gui.user.CloneFileRequestHandler;
+import de.webfilesys.gui.api.CloneFileRequestHandler;
 import de.webfilesys.gui.user.CloneFolderRequestHandler;
 import de.webfilesys.gui.user.CopyLinkRequestHandler;
 import de.webfilesys.gui.user.CreateDirRequestHandler;
@@ -192,7 +192,7 @@ import de.webfilesys.gui.user.PublishMailRequestHandler;
 import de.webfilesys.gui.user.PublishRequestHandler;
 import de.webfilesys.gui.user.RateVotingHandler;
 import de.webfilesys.gui.user.RemoteEditorRequestHandler;
-import de.webfilesys.gui.user.RenameFileRequestHandler;
+import de.webfilesys.gui.api.RenameFileRequestHandler;
 import de.webfilesys.gui.user.RenameLinkRequestHandler;
 import de.webfilesys.gui.user.RenameToExifDateHandler;
 import de.webfilesys.gui.user.RenameVideoRequestHandler;
@@ -749,24 +749,8 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
         
-        if (command.equals("renameFile"))
-        {
+        if (command.equals("renameFile")) {
             (new RenameFileRequestHandler(req, resp, session, output, userid)).handleRequest();
-
-            return(true);
-        }
-
-        if (command.equals("renameFilePrompt"))
-        {
-            (new XslRenameFilePromptHandler(req, resp, session, output, userid)).handleRequest();
-
-            return(true);
-        }
-
-        if (command.equals("cloneFilePrompt"))
-        {
-            (new XslCloneFilePromptHandler(req, resp, session, output, userid)).handleRequest();
-
             return(true);
         }
 
@@ -950,17 +934,8 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
         
-        if (command.equals("addBookmark"))
-        {
-		    (new XslAddBookmarkPromptHandler(req, resp, session, output, userid)).handleRequest(); 
-
-            return(true);
-        }
-
-        if (command.equals("createBookmark"))
-        {
-		    (new XmlCreateBookmarkHandler(req, resp, session, output, userid)).handleRequest(); 
-
+        if (command.equals("createBookmark")) {
+		    (new CreateBookmarkHandler(req, resp, session, output, userid)).handleRequest();
             return(true);
         }
         

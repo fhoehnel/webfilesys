@@ -51,7 +51,7 @@ function contextMenu(fileName) {
     if (readonly != 'true') {
     	addContextMenuEntry(menuDiv, "delFile('" + scriptPreparedFile + "')", resourceBundle["menuDelete"]);
 
-    	addContextMenuEntry(menuDiv, "renameFile('" + scriptPreparedFile + "')", resourceBundle["menuRename"]);
+    	addContextMenuEntry(menuDiv, "renameFile('" + scriptPreparedFile + "', true)", resourceBundle["menuRename"]);
 
     	addContextMenuEntry(menuDiv, "copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["menuCopy"]);
 

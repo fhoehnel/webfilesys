@@ -5,8 +5,25 @@ function xmlRequest(url, callBackFunction) {
 	req.send("");
 }
 
-function xmlFetchPost(postData, successCallBack, failureCallBack) {
-    showHourGlass();
+function xmlPostRequest(command, parameters, successCallBack, failureCallBack) {
+    let postData = "";
+    if (command) {
+        postData = "command=" + command;
+    }
+    for (const key in parameters) {
+        postData = postData + (postData.length > 0 ? "&" : "") + key + "=" + parameters[key];
+    }
+    xmlFetchPost(postData, successCallBack, failureCallBack, false);
+}
+
+function xmlFetchPost(postData, successCallBack, failureCallBack, skipWaitIndicator) {
+    fetchPost(postData, successCallBack, failureCallBack, skipWaitIndicator, true);
+}
+
+function fetchPost(postData, successCallBack, failureCallBack, skipWaitIndicator, responseIsXML) {
+    if (!skipWaitIndicator) {
+        showHourGlass();
+    }
 
     const requestOptions = {
         method: 'POST',
@@ -16,25 +33,34 @@ function xmlFetchPost(postData, successCallBack, failureCallBack) {
 
     fetch("/webfilesys/servlet", requestOptions)
         .then((response) => {
-            hideHourGlass();
+            if (!skipWaitIndicator) {
+                hideHourGlass();
+            }
             if (response.ok) {
                 return response.text();
             }
-            if (typeof failureCallback !== 'undefined') {
-                failureCallback();
+            if (typeof failureCallBack !== 'undefined') {
+                failureCallBack();
+                successCallBack = undefined;
             } else {
                 throw new Error('fetch communication error');
             }
         })
         .then((data) => {
             if (successCallBack) {
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(data, 'text/xml');
-                successCallBack(xmlDoc);
+                if (responseIsXML) {
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(data, 'text/xml');
+                    successCallBack(xmlDoc);
+                } else {
+                    successCallBack(data);
+                }
             }
         })
         .catch(error => {
-            hideHourGlass();
+            if (!skipWaitIndicator) {
+                hideHourGlass();
+            }
             customAlert(resourceBundle["alert.communicationFailure"]);
             console.error("communication error:", error);
         });
@@ -84,49 +110,6 @@ function fetchGet(command, parameters, successCallBack, failureCallBack, skipWai
 	        if (!skipWaitIndicator) {
                 hideHourGlass();
             }
-            customAlert(resourceBundle["alert.communicationFailure"]);
-            console.error("communication error:", error);
-        });
-}
-
-function xmlPostRequest(command, parameters, successCallBack, failureCallBack) {
-	showHourGlass();
-
-    let postData = "";
-    if (command) {
-	    postData = "command=" + command;
-    }
-    for (const key in parameters) {
-    	postData = postData + (postData.length > 0 ? "&" : "") + key + "=" + parameters[key];
-   	}
-
-    const requestOptions = {
-        method: 'POST',
-        headers: {"Content-Type": "application/x-www-form-urlencoded"},
-        body: postData
-    };
-
-    fetch("/webfilesys/servlet", requestOptions)
-        .then((response) => {
-            hideHourGlass();
-            if (response.ok) {
-                return response.text();
-            }
-            if (typeof failureCallBack !== 'undefined') {
-                failureCallBack();
-            } else {
-                throw new Error('fetch communication error');
-            }
-        })
-        .then((data) => {
-            if (successCallBack) {
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(data, 'text/xml');
-                successCallBack(xmlDoc);
-            }
-        })
-        .catch(error => {
-            hideHourGlass();
             customAlert(resourceBundle["alert.communicationFailure"]);
             console.error("communication error:", error);
         });

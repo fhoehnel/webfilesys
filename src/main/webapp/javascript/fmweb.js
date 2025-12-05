@@ -260,16 +260,61 @@ function checkFileNameSyntax(str)
     return(true);
 }
 
+function validateCloneFileName() {
+    const oldFileName = document.getElementById("sourceFileName").value;
+    const newFileName = document.getElementById("newFileName").value;
+    if (newFileName === oldFileName) {
+        customAlert(resourceBundle["alert.destEqualsSource"]);
+    } else {
+        if (!checkFileNameSyntax(newFileName)) {
+            customAlert(resourceBundle["alert.illegalCharInFilename"]);
+        } else {
+            if (newFileName !== '') {
+                fetchPost(getFormData(document.getElementById("cloneForm")),
+                    responseData => window.location.href = "/webfilesys/servlet?command=listFiles",
+                    () => customAlert(resourceBundle["alert.cloneTargetExists"])
+                );
+            }
+        }
+    }
+}
+
+function validateRenameTargetFileName() {
+    const oldFileName = document.getElementById("oldFileName").value;
+    const newFileName = document.getElementById("newFileName").value;
+    const mobile = document.getElementById("mobileParam").value;
+    if (newFileName === oldFileName) {
+        customAlert(resourceBundle["alert.destEqualsSource"]);
+    } else {
+        if (!checkFileNameSyntax(newFileName)) {
+            customAlert(resourceBundle["alert.illegalCharInFilename"]);
+        } else {
+            if (newFileName !== '') {
+                fetchPost(getFormData(document.getElementById("renameForm")),
+                    responseData => {
+                        if ("true" === mobileParam) {
+                            window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList&initial=true";
+                        } else {
+                            window.location.href = "/webfilesys/servlet?command=listFiles"
+                        }
+                    },
+                    () => customAlert(oldFileName + " " + resourceBundle["error.renameFailed"] + " " + newFileName)
+                );
+            }
+        }
+    }
+}
+
 function validateNewFileName(oldFileName, errorMsg1, errorMsg2) {
     var newFileName = document.getElementById('renameForm').newFileName.value;
 
-    if (newFileName == oldFileName) {
+    if (newFileName === oldFileName) {
         alert(errorMsg1);
     } else {
         if (!checkFileNameSyntax(newFileName)) {
             alert(errorMsg2);
         } else {
-            if (newFileName != '') {
+            if (newFileName !== '') {
                 document.renameForm.submit();
             }
         }
@@ -334,22 +379,15 @@ function validateNewFolderName(errorMsg) {
 }
 
 function validateBookmarkName(errorMsg) {
-    var bookmarkName = document.bookmarkForm.bookmarkName.value;
-
-    if (bookmarkName.trim().length == 0) {
+    const bookmarkName = document.bookmarkForm.bookmarkName.value;
+    if (bookmarkName.trim().length === 0) {
         customAlert(errorMsg);
         document.bookmarkForm.bookmarkName.focus();
         document.bookmarkForm.bookmarkName.select();
     } else {
-        const parameters = { 
-        		"path": encodeURIComponent(document.bookmarkForm.currentPath.value),
-        		"bookmarkName": encodeURIComponent(document.bookmarkForm.bookmarkName.value)
-        };
-        
-        xmlPostRequest("createBookmark", parameters, function(responseXml) {
-            toast(resourceBundle["alert.bookmarkCreated"] + " " + document.bookmarkForm.currentPath.value, 2000);
+        fetchPost(getFormData(document.getElementById("bookmarkForm")), responseData => {
+            toast(resourceBundle["alert.bookmarkCreated"], 2000);
         });
-
         hidePrompt();
     }
 }
@@ -398,11 +436,17 @@ function enableDisablePatternInput()
 }
 
 function bookmark(path) {
-    xmlGetRequest("addBookmark", { path: encodeURIComponent(path) }, htmlFragment => {
-        popupDialog(htmlFragment.documentElement.getHTML(),320, 190, function () {
-            document.bookmarkForm.bookmarkName.focus();
-            document.bookmarkForm.bookmarkName.select();
-        });
+    showPromptDialog("/webfilesys/html/addBookmark.html", 320, function() {
+        document.getElementById("prompt").style.height = "180px";
+        document.getElementById("currentPathShort").innerHTML = abbrevText(path, 40);
+
+        document.getElementById("submitButton").onclick = () => {
+            validateBookmarkName(resourceBundle["alert.bookmarkMissingName"]);
+        };
+        document.getElementById("cancelButton").onclick = hidePrompt;
+
+        document.bookmarkForm.bookmarkName.focus();
+        document.bookmarkForm.bookmarkName.select();
     });
 }
 
@@ -496,6 +540,24 @@ function showPromptDialog(htmlFragmentURL, boxWidth, callback) {
         }
     });
 }
+
+function renameFile(fileName, isMobile) {
+    showPromptDialog("/webfilesys/html/renameFile.html", 360, function() {
+        document.getElementById("oldFileName").value = fileName;
+        document.getElementById("mobileParam").value = isMobile.toString();
+        document.getElementById("shortFileName").innerHTML = abbrevText(fileName, 30);
+        const newFileName = document.getElementById("newFileName");
+        newFileName.value = fileName;
+        newFileName.focus();
+        const extStart = fileName.lastIndexOf(".");
+        if (extStart > 0) {
+            newFileName.setSelectionRange(0, extStart);
+        } else {
+            newFileName.select();
+        }
+    });
+}
+
 
 function renameLink(linkName) {
 	showPromptDialog("/webfilesys/html/renameLink.html", 360, function() {	

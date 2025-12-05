@@ -30,21 +30,6 @@ function editMP3(path)
     window.location.href = "/webfilesys/servlet?command=editMP3&path=" + encodeURIComponent(path);
 }
 
-function renameFile(fileName) {   
-    centeredDialog('/webfilesys/servlet?command=renameFilePrompt&mobile=true&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameFile.xsl', 340, 160, function() {
-        document.renameForm.newFileName.focus();
-        const newFileName = document.renameForm.newFileName.value;
-        if (newFileName) {
-	        const extStart = newFileName.lastIndexOf(".");
-            if (extStart > 0) {
-	            document.renameForm.newFileName.setSelectionRange(0, extStart);
-            } else {
-                document.renameForm.newFileName.select();
-            }
-        }
-    });
-}
-
 function copyToClipboard(fileName)
 {
     cutCopyToClip(fileName, 'copy');
