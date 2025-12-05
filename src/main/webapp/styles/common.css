@@ -157,6 +157,14 @@ div.promptHead {
     padding:3px;
 }
 
+div.promptBox table {
+    width: 100%;
+}
+
+div.promptBox td {
+    padding: 10px;
+}
+
 div.uploadStatus {
     width: 400px;
     height: 240px;

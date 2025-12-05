@@ -120,7 +120,7 @@ function accessRights(path)
 }
 
 function sendFile(fileName) {
-    centeredDialog('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 240, function() {
+    centeredDialog('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 320, function() {
         document.emailForm.receiver.focus();
         document.emailForm.receiver.select();
     });
