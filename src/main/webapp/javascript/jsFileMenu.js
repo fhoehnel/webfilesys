@@ -61,7 +61,12 @@ function cloneFile(fileName) {
         const newFileName = document.getElementById("newFileName");
         newFileName.value = fileName;
         newFileName.focus();
-        newFileName.select();
+        const extStart = fileName.lastIndexOf(".");
+        if (extStart > 0) {
+            newFileName.setSelectionRange(0, extStart);
+        } else {
+            newFileName.select();
+        }
     });
 }
 

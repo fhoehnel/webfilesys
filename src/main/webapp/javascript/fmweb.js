@@ -437,7 +437,7 @@ function enableDisablePatternInput()
 
 function bookmark(path) {
     showPromptDialog("/webfilesys/html/addBookmark.html", 320, function() {
-        document.getElementById("prompt").style.height = "180px";
+        document.getElementById("prompt").style.height = "200px";
         document.getElementById("currentPathShort").innerHTML = abbrevText(path, 40);
 
         document.getElementById("submitButton").onclick = () => {
