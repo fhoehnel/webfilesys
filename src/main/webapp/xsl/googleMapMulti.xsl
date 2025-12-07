@@ -42,36 +42,35 @@
     var map;
   
     function handleGoogleMapsApiReady() {
-        var zoomFactor = <xsl:value-of select="/geoData/mapData/zoomLevel" />;
-
         var centerLatitude = <xsl:value-of select="/geoData/markers/marker[1]/latitude" />;
         var centerLongitude = <xsl:value-of select="/geoData/markers/marker[1]/longitude" />;
   
         var mapCenter = new google.maps.LatLng(centerLatitude, centerLongitude);
     
         var myOptions = {
-            zoom: zoomFactor,
+            zoom: 11,
             center: mapCenter,
-            mapTypeId: google.maps.MapTypeId.HYBRID
+            mapTypeId: google.maps.MapTypeId.HYBRID,
+            mapId: "gpxMultiMap"
         }
       
         map = new google.maps.Map(document.getElementById("map"), myOptions);      
     
 	    var markerPos;
-	    var marker;
+	    let marker;
 		var infoWindow;
 		var infoText;
 		
         <xsl:for-each select="/geoData/markers/marker">
 		  
 		  markerPos = new google.maps.LatLng(<xsl:value-of select="latitude" />, <xsl:value-of select="longitude" />);
-		
-          marker = new google.maps.Marker({
+
+          marker = new google.maps.marker.AdvancedMarkerElement({
               position: markerPos,
-              title: resourceBundle["mapMarkerTitle"]
+              title: resourceBundle["mapMarkerTitle"],
           });
 
-          marker.setMap(map);   
+          marker.setMap(map);
 
           <xsl:if test="infoText">
 		    infoText = '<xsl:value-of select="infoText" />';
@@ -106,9 +105,9 @@
         script.type = "text/javascript";
 
         if (window.location.href.indexOf("https") == 0) {
-            script.src = "https://maps.google.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey;
+            script.src = "https://maps.googleapis.com/maps/api/js?callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey  + "&amp;libraries=marker";
         } else {
-            script.src = "http://maps.google.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey;
+            script.src = "http://maps.googleapis.com/maps/api/js?callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey + "&amp;libraries=marker";
         }        
         document.body.appendChild(script);
     }

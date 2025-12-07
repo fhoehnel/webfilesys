@@ -44,7 +44,8 @@ function handleGoogleMapsApiReady() {
     var mapOptions = {
         zoom: 11,
         center: mapCenter,
-        mapTypeId: google.maps.MapTypeId.HYBRID
+        mapTypeId: google.maps.MapTypeId.HYBRID,
+        mapId: "gpxTrackMap"
     }
       
     map = new google.maps.Map(document.getElementById("mapCont"), mapOptions);      
@@ -63,9 +64,9 @@ function loadGoogleMapsAPIScriptCode(googleMapsAPIKey) {
     script.type = "text/javascript";
       
     if (window.location.href.indexOf("https") == 0) {
-        script.src = "https://maps.google.com/maps/api/js?callback=handleGoogleMapsApiReady&key=" + googleMapsAPIKey;
+        script.src = "https://maps.google.com/maps/api/js?callback=handleGoogleMapsApiReady&key=" + googleMapsAPIKey + "&libraries=marker";
     } else {
-        script.src = "http://maps.google.com/maps/api/js?callback=handleGoogleMapsApiReady&key=" + googleMapsAPIKey;
+        script.src = "http://maps.google.com/maps/api/js?callback=handleGoogleMapsApiReady&key=" + googleMapsAPIKey + "&libraries=marker";
     }      
     document.body.appendChild(script);
 }
@@ -152,17 +153,11 @@ function loadAndShowWayPoints() {
 
 function showWayPointsOnMap(wayPoints) {
     for (let i = 0; i < wayPoints.length; i++) {
-    	
-    	new google.maps.Marker({
+    	let marker = new google.maps.marker.AdvancedMarkerElement({
     	    position: new google.maps.LatLng(wayPoints[i].lat, wayPoints[i].lon),
-    	    label: {
-    	        color: "#c0f0f0",
-    	        fontSize: '13px',
-    	        fontWeight: '900',
-    	        text: wayPoints[i].name
-    	    },
-    	    map: map,
-    	});    
+    	    title: wayPoints[i].name,
+    	});
+    	marker.setMap(map);
     }
 }
 
