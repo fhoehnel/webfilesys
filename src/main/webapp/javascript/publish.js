@@ -44,15 +44,14 @@ function selectPublicLink() {
 
 function copyPublicUrl() {
     document.getElementById("publicLinkCont").select();
-    document.execCommand("Copy");
-    self.close();
+    navigator.clipboard.writeText(document.getElementById("publicLinkCont").value);
+    customAlert(resourceBundle["publicUrlCopied"], resourceBundle["button.ok"], () => self.close());
 }
 
 function copyUrlToClip(copyLink, urlInputId) {
     let urlInput = document.getElementById(urlInputId);
-    urlInput.focus;
     urlInput.select();
-    document.execCommand("Copy");
+    navigator.clipboard.writeText(urlInput.value);
     customAlert(resourceBundle["publicUrlCopied"]);
     urlInput.selectionEnd = urlInput.selectionStart;
 }

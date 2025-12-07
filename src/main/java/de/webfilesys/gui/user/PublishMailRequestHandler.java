@@ -334,8 +334,10 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<script src=\"/webfilesys/javascript/publish.js\" type=\"text/javascript\"></script>");
-		
-		output.println("</head>"); 
+        output.println("<script type=\"text/javascript\" src=\"/webfilesys/javascript/util.js\"></script>");
+        output.println("<script src=\"/webfilesys/servlet?command=getResourceBundle&amp;lang=" + language+ "\" type=\"text/javascript\"></script>");
+
+        output.println("</head>");
 		output.println("<body class=\"publish\">");
 
 		headLine(getResource("label.published","Folder has been published"));
