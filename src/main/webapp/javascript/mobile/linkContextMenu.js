@@ -68,8 +68,9 @@ function jsLinkMenu(linkName, realPath) {
     menuDiv.style.visibility = 'visible';
 }
 
-function editRemoteLink(path) {
-    window.location.href = '/webfilesys/servlet?command=mobile&cmd=editFile&filePath=' + encodeURIComponent(path) + '&screenHeight=' + screen.height;
+function editRemoteLink(filePath) {
+    const realFileName = extractFileName(filePath);
+    window.location.href = "/webfilesys/html/remoteEditor.html?fileName=" + encodeURIComponent(realFileName) + "&filePath=" + encodeURIComponent(filePath) + "&isLink=true&screenHeight=" + screen.height;
 }
 
 function origDir(path) {

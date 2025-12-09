@@ -51,8 +51,7 @@ function refreshDriveList() {
     const parameters = { "method": "refreshDriveList" };
     
 	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
-        const resultItem = responseXml.getElementsByTagName("result")[0];
-        setTimeout(() => parent.location.href = "/webfilesys/servlet", 200);    
+        setTimeout(() => parent.location.href = "/webfilesys/servlet", 200);
     });
 }
 

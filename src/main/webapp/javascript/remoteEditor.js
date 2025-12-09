@@ -1,3 +1,32 @@
+function initRemoteEditor() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileName = urlParams.get("fileName");
+    const filePath = urlParams.get("filePath");
+    const isLink = urlParams.get("isLink");
+
+    let parameters;
+    if (isLink) {
+        parameters = { filePath: encodeURIComponent(filePath) };
+    } else {
+        parameters = { fileName: encodeURIComponent(fileName) };
+    }
+
+    fetchGet("checkTextFileSize", parameters,
+        () => {
+            setBundleResources();
+            setEditorHeight();
+
+            document.getElementById("headline").innerHTML = fileName;
+            document.getElementById("filePath").value = filePath;
+
+            fetchGet("getFile", parameters , responseData => {
+                document.getElementById("editorText").innerHTML = responseData;
+            });
+        },
+        () => customAlert(resourceBundle["alert.editFileSize"], null, () => self.close())
+    );
+}
+
 function saveEditorContent(closeAfterSave) {
 	const formData = getFormData(document.getElementById("editForm"));
 	if (closeAfterSave) {
@@ -22,9 +51,9 @@ function handleCloseAfterSave(xmlDoc) {
     const resultElem = xmlDoc.getElementsByTagName("result")[0];
     const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
 
-    if (success == 'true') {
+    if (success === 'true') {
         const mobile = resultElem.getElementsByTagName("mobile")[0].firstChild.nodeValue;
-        if (mobile == "true") {
+        if (mobile === "true") {
             window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList";
         } else {
       	    setTimeout("window.close()", 100);
@@ -51,7 +80,14 @@ function setEditorHeightInternal() {
     }
     const textArea = document.getElementById("editorText");
     const textAreaYPos = getAbsolutePos(textArea)[1];
-    const textAreaHeight = buttonContYPos - textAreaYPos - 10;
+    const textAreaHeight = buttonContYPos - textAreaYPos - 16;
     textArea.style.height = textAreaHeight + "px";
 }
 
+function cancelRemoteEdit() {
+    if (window.opener) {
+        self.close();
+    } else {
+        window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList";
+    }
+}

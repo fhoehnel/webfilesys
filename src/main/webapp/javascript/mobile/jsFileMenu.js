@@ -40,9 +40,9 @@ function cutToClipboard(fileName)
     cutCopyToClip(fileName, 'move');
 }
 
-function editRemote(fileName)
+function editRemote(filePath, fileName)
 {
-    window.location.href = '/webfilesys/servlet?command=mobile&cmd=editFile&filename=' + encodeURIComponent(fileName) + '&screenHeight=' + screen.height;
+    window.location.href = "/webfilesys/html/remoteEditor.html?fileName=" + encodeURIComponent(fileName) + "&filePath=" + encodeURIComponent(filePath) + "&screenHeight=" + screen.height;
 }
 
 function downloadFile(path) {

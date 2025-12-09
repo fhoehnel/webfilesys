@@ -445,7 +445,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
     }
     
     /**
-     * Guess the character encoing of the file.
+     * Guess the character encoding of the file.
      * @param filePath path and filename
      * @return encoding or null, if unknown
      */

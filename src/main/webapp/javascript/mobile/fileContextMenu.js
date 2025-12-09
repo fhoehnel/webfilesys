@@ -57,7 +57,7 @@ function contextMenu(fileName) {
 
     	addContextMenuEntry(menuDiv, "cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["menuCut"]);
 
-    	addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedFile + "')", resourceBundle["menuEdit"]);
+    	addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", resourceBundle["menuEdit"]);
 
 	    if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR")) {
 	    	addContextMenuEntry(menuDiv, "zipFile('" + scriptPreparedPath + "')", resourceBundle["menuUnzip"]);

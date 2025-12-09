@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
+import de.webfilesys.gui.api.CheckTextFileSizeHandler;
 import de.webfilesys.gui.api.CreateBookmarkHandler;
 import de.webfilesys.gui.xsl.*;
 import org.apache.logging.log4j.LogManager;
@@ -191,7 +192,6 @@ import de.webfilesys.gui.user.PasteAsLinkRequestHandler;
 import de.webfilesys.gui.user.PublishMailRequestHandler;
 import de.webfilesys.gui.user.PublishRequestHandler;
 import de.webfilesys.gui.user.RateVotingHandler;
-import de.webfilesys.gui.user.RemoteEditorRequestHandler;
 import de.webfilesys.gui.api.RenameFileRequestHandler;
 import de.webfilesys.gui.user.RenameLinkRequestHandler;
 import de.webfilesys.gui.user.RenameToExifDateHandler;
@@ -1042,17 +1042,8 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
         
-        if (command.equals("editFile"))
-        {
-        	if (requestIsLocal && (WebFileSysConfig.getInstance().getSystemEditor() != null))
-        	{
-    			(new XmlLocalEditorHandler(req, resp, session, output, userid)).handleRequest(); 
-        	}
-        	else
-        	{
-    		    (new RemoteEditorRequestHandler(req, resp, session, output, userid)).handleRequest(); 
-        	}
-        	
+        if (command.equals("editFile")) {
+   			(new XmlLocalEditorHandler(req, resp, session, output, userid)).handleRequest();
             return(true);
         }
 
@@ -1070,13 +1061,16 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
 
-        if (command.equals("rate"))
-        {
+        if (command.equals("rate")) {
 			(new RateVotingHandler(req, resp, session, output, userid)).handleRequest(); 
-            
             return(true);
         }
-        
+
+        if (command.equals("checkTextFileSize")) {
+            (new CheckTextFileSizeHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
         if (command.equals("saveRemoteEditor")) {
             (new XmlSaveRemoteEditorHandler(req, resp, session, output, userid)).handleRequest();
             return (true);
@@ -2120,13 +2114,7 @@ public class WebFileSysServlet extends ServletBase {
                 return(true);
             }
             
-            if (cmd.equals("editFile"))
-            {
-                (new RemoteEditorRequestHandler(req, resp, session, output, userid)).handleRequest(); 
-                return(true);
-            }
-            
-            if (cmd.equals("showImg")) 
+            if (cmd.equals("showImg"))
             {
                 (new MobileShowImageHandler(req, resp, session, output, userid)).handleRequest(); 
                 return(true);

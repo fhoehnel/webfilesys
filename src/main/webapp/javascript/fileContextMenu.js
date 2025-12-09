@@ -78,7 +78,7 @@ function contextMenu(fileName) {
 		if (parent.localEditor == 'true') {
 	   	    addContextMenuEntry(menuDiv, "editLocal('" + scriptPreparedFile + "')", resourceBundle["label.edit"]);
         } else {
-	   	    addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedFile + "')", resourceBundle["label.edit"]);
+	   	    addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", resourceBundle["label.edit"]);
         }
 
 	    if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR") || (fileExt == ".EAR")) {

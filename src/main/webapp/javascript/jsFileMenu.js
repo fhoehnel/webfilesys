@@ -90,7 +90,7 @@ function addMoveToClipboard(fileName)
     cutCopyToClip(fileName, 'addMove');
 }
 
-function editRemote(fileName)
+function editRemote(filePath, fileName)
 {
     var editWinWidth = screen.width - 80;
     var editWinHeight = screen.height - 70;
@@ -105,9 +105,9 @@ function editRemote(fileName)
         editWinHeight = 700;
     }
     
-    editWin=window.open("/webfilesys/servlet?command=editFile&filename=" + encodeURIComponent(fileName) + "&screenHeight=" + editWinHeight,"editWin","status=no,toolbar=no,location=no,menu=no,width=" + editWinWidth + ",height=" + editWinHeight + ",resizable=yes,left=20,top=5,screenX=20,screenY=5");
+    const editWin = window.open("/webfilesys/html/remoteEditor.html?fileName=" + encodeURIComponent(fileName) + "&filePath=" + encodeURIComponent(filePath) + "&screenHeight=" + editWinHeight,"editWin","status=no,toolbar=no,location=no,menu=no,width=" + editWinWidth + ",height=" + editWinHeight + ",resizable=yes,left=20,top=5,screenX=20,screenY=5");
     editWin.focus();
-    editWin.opener=self;
+    editWin.opener = self;
 }
 
 function viewFile(path)
