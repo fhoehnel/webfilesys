@@ -32,7 +32,9 @@ function videoContextMenu(fileName, domId) {
         
     addContextMenuHead(menuDiv, shortFileName);
 
-	addContextMenuEntry(menuDiv, "playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
+    if (parent.clientIsLocal === 'true') {
+ 	    addContextMenuEntry(menuDiv, "playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
+	}
 
     if (parent.readonly != 'true') {
     	addContextMenuEntry(menuDiv, "delVideo('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);

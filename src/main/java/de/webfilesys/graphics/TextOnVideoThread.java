@@ -82,7 +82,7 @@ public class TextOnVideoThread extends Thread {
             if (!fontFilePath.endsWith(File.separator)) {
             	fontFilePath = fontFilePath + File.separator;
             }
-            fontFilePath = fontFilePath + "fonts" + File.separator + "GoogleKiteOne.woff";
+            fontFilePath = fontFilePath + "fonts" + File.separator + "KiteOne-Regular.ttf";
 
             fontFilePath = fontFilePath.replace("\\", "\\\\").replace(":", "\\:");
 
