@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
+import de.webfilesys.decoration.Decoration;
+import de.webfilesys.decoration.DecorationManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -195,7 +197,9 @@ public class UserRequestHandler extends ProtectedRequestHandler
     
     public boolean copyFolderTreeWithStatus(String sourcePath, String destPath, boolean ignoreExistingDir, CopyStatus copyStatus, DecimalFormat numFormat) {
         boolean copyError = false;
-        
+
+        DecorationManager.getInstance().copyDecoration(sourcePath, destPath);
+
         File sourceFolderFile = new File(sourcePath);
         
         File fileList[] = sourceFolderFile.listFiles();
@@ -204,48 +208,46 @@ public class UserRequestHandler extends ProtectedRequestHandler
         	
         	String formattedTreeFileNum = numFormat.format(copyStatus.getTreeFileNum());
         	String formattedTreeFileSize = numFormat.format(copyStatus.getTreeFileSize());
-        	
-            for (int i = 0; i < fileList.length; i++) {
-            	
-                File sourceFile = fileList[i];
 
-            	if (sourceFile.canRead()) {
+            for (File sourceFile : fileList) {
+
+                if (sourceFile.canRead()) {
                     String destFileName = destPath + File.separator + sourceFile.getName();
 
                     if (sourceFile.isFile()) {
                         if ((copyStatus.getFilesCopied() <= 100) ||
-                            ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
-                            ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
-                            (copyStatus.getFilesCopied() % 50 == 0)) {
+                                ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
+                                ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
+                                (copyStatus.getFilesCopied() % 50 == 0)) {
                             output.println("<script language=\"javascript\">");
                             output.println("document.getElementById('currentFile').innerHTML='" + insertDoubleBackslash(CommonUtils.shortName(getHeadlinePath(sourceFile.getAbsolutePath()), 40)) + "';");
                             output.println("</script>");
                             output.flush();
-                        }                    
+                        }
 
                         if (copyFile(sourceFile.getAbsolutePath(), destFileName)) {
                             copyStatus.setFilesCopied(copyStatus.getFilesCopied() + 1);
                             copyStatus.setBytesCopied(copyStatus.getBytesCopied() + sourceFile.length());
-                                    
+
                             if ((copyStatus.getFilesCopied() <= 100) ||
-                                ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
-                                ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
-                                (copyStatus.getFilesCopied() % 50 == 0)) {
-                                    	
-                            	long progress = 0;
-                            	if (copyStatus.getTreeFileSize() > 0) {
-                                	progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
-                            	}
-                            	
+                                    ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
+                                    ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
+                                    (copyStatus.getFilesCopied() % 50 == 0)) {
+
+                                long progress = 0;
+                                if (copyStatus.getTreeFileSize() > 0) {
+                                    progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
+                                }
+
                                 output.println("<script language=\"javascript\">");
-                                output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyStatus.getFilesCopied()) + " / " + formattedTreeFileNum +  "';");
-                                output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(copyStatus.getBytesCopied()) + " / " + formattedTreeFileSize +  "';");
+                                output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyStatus.getFilesCopied()) + " / " + formattedTreeFileNum + "';");
+                                output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(copyStatus.getBytesCopied()) + " / " + formattedTreeFileSize + "';");
                                 output.println("document.getElementById('copyProgressBar').style.width='" + progress + "px';");
                                 output.println("</script>");
                             }
-                            
+
                             if (sourceFile.getName().equals(MetaInfManager.METAINF_FILE)) {
-                            	MetaInfManager.getInstance().releaseMetaInf(destPath, false);
+                                MetaInfManager.getInstance().releaseMetaInf(destPath, false);
                             }
                         } else {
                             copyError = true;
@@ -255,8 +257,8 @@ public class UserRequestHandler extends ProtectedRequestHandler
 
                         if ((!newDir.mkdir()) && (!ignoreExistingDir)) {
                             javascriptAlert(getResource("alert.mkdirfail", "cannot create directory")
-                                            + "\\n"
-                                            + insertDoubleBackslash(destFileName));
+                                    + "\\n"
+                                    + insertDoubleBackslash(destFileName));
                             copyError = true;
                         } else {
                             if (!copyFolderTreeWithStatus(sourceFile.getAbsolutePath(), destFileName, ignoreExistingDir, copyStatus, numFormat)) {
@@ -264,7 +266,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
                             }
                         }
                     }
-            	}
+                }
             }
             
             if (copyStatus.getFilesCopied() > 100) {
@@ -319,6 +321,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
             deleteError = true;
         } else {
             MetaInfManager.getInstance().releaseMetaInf(path, false);
+            DecorationManager.getInstance().removeDecoration(path);
         }
         return(!(deleteError));
     }

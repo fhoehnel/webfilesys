@@ -329,7 +329,21 @@ public class DecorationManager extends Thread {
         	modified = true;
         }
     }
-    
+
+    public void copyDecoration(String sourcePath, String destPath) {
+        Decoration deco = getDecoration(sourcePath);
+        if (deco != null) {
+            setDecoration(destPath, deco);
+        }
+    }
+
+    public void removeDecoration(String path) {
+        synchronized (decorationRoot) {
+            String normalizedPath = path.replace('\\', '/');
+            index.remove(normalizedPath);
+        }
+    }
+
     /**
      * Icons available for folder decoration.
      * @return List of filenames of files in the icons directory.
