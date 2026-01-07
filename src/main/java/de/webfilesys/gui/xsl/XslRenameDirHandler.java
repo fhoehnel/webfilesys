@@ -127,9 +127,12 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 					    }
 					    
 					    if (savedDeco != null) {
-						    DecorationManager.getInstance().setDecoration(newPath, savedDeco);					    
-					    }
-					    
+						    DecorationManager.getInstance().setDecoration(newPath, savedDeco);
+                            DecorationManager.getInstance().removeDecoration(currentPath);
+                        }
+
+                        DecorationManager.getInstance().moveDecoration(parentDir, oldName, newDirName);
+
 					    String mobile = (String) session.getAttribute("mobile");
 					    
 					    if (mobile != null) {

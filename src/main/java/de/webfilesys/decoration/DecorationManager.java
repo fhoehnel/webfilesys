@@ -340,8 +340,42 @@ public class DecorationManager extends Thread {
     public void removeDecoration(String path) {
         synchronized (decorationRoot) {
             String normalizedPath = path.replace('\\', '/');
-            index.remove(normalizedPath);
+            if (index.get(normalizedPath) == null) {
+                LogManager.getLogger(getClass()).warn("decoration to remove not found in index: {}", path);
+                return;
+            }
+            NodeList decorationList = decorationRoot.getElementsByTagName("decoration");
+            int listLength = decorationList.getLength();
+            for (int i = 0; i < listLength; i++) {
+                Element decorationElement = (Element) decorationList.item(i);
+                String existingPath = XmlUtil.getChildText(decorationElement, "path");
+                if (existingPath.equals(normalizedPath)) {
+                    decorationRoot.removeChild(decorationElement);
+                    index.remove(normalizedPath);
+                    modified = true;
+                    return;
+                }
+            }
         }
+        LogManager.getLogger(getClass()).warn("decoration to remove is in index but not in element list: " + path);
+    }
+
+    public void moveDecoration(String path, String oldFolderName, String newFolderName) {
+        String oldBasePath = path.replace('\\', '/') + "/" + oldFolderName;
+
+        ArrayList<String> affectedPaths = new ArrayList<>();
+
+        index.keySet().stream()
+                .filter(key -> key.startsWith(oldBasePath) && key.length() > oldBasePath.length() && key.charAt(oldBasePath.length()) == '/')
+                .forEach(affectedPaths::add);
+
+        affectedPaths.forEach(affectedPath -> {
+            Decoration deco = getDecoration(affectedPath);
+            String restOfPath = affectedPath.substring(oldBasePath.length());
+            String newPath = path.replace('\\', '/') + "/"  + newFolderName + restOfPath;
+            removeDecoration(affectedPath);
+            setDecoration(newPath, deco);
+        });
     }
 
     /**
