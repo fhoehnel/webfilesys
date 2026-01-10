@@ -37,8 +37,8 @@ public class RenameFileRequestHandler extends UserRequestHandler {
 		String oldFileName = getParameter("fileName");
 
 		String path = getCwd();
-        String oldFilePath = CommonUtils.getFullPath(path, oldFileName);
-        String newFilePath = CommonUtils.getFullPath(path, newFileName);
+        String oldFilePath = CommonUtils.joinFilesysPath(path, oldFileName);
+        String newFilePath = CommonUtils.joinFilesysPath(path, newFileName);
 
         if (!checkAccess(oldFilePath)) {
             try {

@@ -6,47 +6,30 @@ import java.util.Comparator;
  * Comparator for FileSysBookmark objects.
  *
  */
-public class FileSysBookmarkComparator implements Comparator
-{
-    public FileSysBookmarkComparator()
-    {
+public class FileSysBookmarkComparator implements Comparator {
+    public FileSysBookmarkComparator() {
     }
 
-    public int compare(Object o1,Object o2)
-    {
-        if (!o2.getClass().equals(o1.getClass()))
-        {
+    public int compare(Object o1, Object o2) {
+        if (o1 == null || o2 == null) {
+            return 0;
+        }
+        if (!o2.getClass().equals(o1.getClass())) {
             throw new ClassCastException();
         }
-
         FileSysBookmark bookmark1 = (FileSysBookmark) o1;
         FileSysBookmark bookmark2 = (FileSysBookmark) o2;
-
-        if ((bookmark1 == null) || (bookmark2 == null))
-        {
-            return(0);
-        }
-        
-        if (bookmark1.getName()==null)
-        {
-            if (bookmark2.getName()==null)
-            {
+        if (bookmark1.getName() == null) {
+            if (bookmark2.getName()==null) {
                 return(0);
-            }
-            else
-            {
+            } else {
                 return(-1);
             }
-        }
-        else
-        {
-            if (bookmark2.getName()==null)
-            {
+        } else {
+            if (bookmark2.getName()==null) {
                 return(1);
             }
         }
-
-
         return(bookmark1.getName().compareToIgnoreCase(bookmark2.getName()));
     }
 

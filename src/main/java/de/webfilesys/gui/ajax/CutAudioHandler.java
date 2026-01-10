@@ -40,7 +40,7 @@ public class CutAudioHandler extends XmlRequestHandlerBase {
         String endMinParam = getParameter("endMin");
         String endSecParam = getParameter("endSec");
 		
-		String audioFilePath = CommonUtils.getFullPath(getCwd(), audioFileName);
+		String audioFilePath = CommonUtils.joinFilesysPath(getCwd(), audioFileName);
 		
 		AudioCutterThread audioCutter = new AudioCutterThread(audioFilePath);
 		

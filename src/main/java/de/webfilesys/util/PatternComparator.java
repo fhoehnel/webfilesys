@@ -10,7 +10,7 @@ public class PatternComparator
      * The search is not case-sensitive.
      *
      * @param elementName the String to be checked against the search pattern
-     * @param pattern the search pattern containing wildcards
+     * @param searchPattern the search pattern containing wildcards
      */
     public static boolean patternMatch(String elementName,String searchPattern)
     {

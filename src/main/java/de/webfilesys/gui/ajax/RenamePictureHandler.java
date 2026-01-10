@@ -46,8 +46,8 @@ public class RenamePictureHandler extends XmlRequestHandlerBase {
 		}
 		
 		String path = getCwd();
-        String imagePath = CommonUtils.getFullPath(path, oldFileName);
-        String newImagePath = CommonUtils.getFullPath(path, newFileName);
+        String imagePath = CommonUtils.joinFilesysPath(path, oldFileName);
+        String newImagePath = CommonUtils.joinFilesysPath(path, newFileName);
 
         File source = new File(imagePath);
 		File dest = new File(newImagePath);

@@ -41,8 +41,8 @@ public class CloneFileRequestHandler extends UserRequestHandler {
 		String sourceFileName = getParameter("sourceFileName");
 
 		String path = getCwd();
-		String oldFilePath = CommonUtils.getFullPath(path, sourceFileName);
-		String newFilePath = CommonUtils.getFullPath(path, newFileName);
+		String oldFilePath = CommonUtils.joinFilesysPath(path, sourceFileName);
+		String newFilePath = CommonUtils.joinFilesysPath(path, newFileName);
 
 		if (!checkAccess(oldFilePath)) {
             try {

@@ -41,7 +41,7 @@ public class ClipBoard extends Hashtable<String, Integer>
 
     public int getContentType(String ident)
     {
-        Integer contentType=(Integer) get(ident);
+        Integer contentType = get(ident);
         if (contentType == null)
         {
             return(0);
@@ -60,34 +60,21 @@ public class ClipBoard extends Hashtable<String, Integer>
         return(getAllOfType(CONTENT_TYPE_DIR));
     }
 
-    public ArrayList<String> getAllOfType(int typeToRemove)
-    {
+    public ArrayList<String> getAllOfType(int typeToRemove) {
         ArrayList<String> allFiles = null;
-
         Enumeration<String> allKeys = keys();
-
-        if (allKeys != null)
-        {
-            while (allKeys.hasMoreElements())
-            {
-                String path = (String) allKeys.nextElement();
-                int contentType = ((Integer) get(path)).intValue();
-                if (contentType == typeToRemove)
-                {
-                    if (allFiles == null)
-                    {
-                        allFiles = new ArrayList<String>();
+        if (allKeys != null) {
+            while (allKeys.hasMoreElements()) {
+                String path = allKeys.nextElement();
+                int contentType = get(path);
+                if (contentType == typeToRemove) {
+                    if (allFiles == null) {
+                        allFiles = new ArrayList<>();
                     }
                     allFiles.add(path);
                 }   
             }
         }
-
-        if (allFiles == null)
-        {
-            return(null);
-        }        
-
         return(allFiles);
     }
 

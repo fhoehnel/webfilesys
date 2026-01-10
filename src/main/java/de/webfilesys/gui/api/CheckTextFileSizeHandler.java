@@ -36,7 +36,7 @@ public class CheckTextFileSizeHandler extends UserRequestHandler {
         if (filePath == null) {
             String fileName = getParameter("fileName");
             String path = getCwd();
-            filePath = CommonUtils.getFullPath(path, fileName);
+            filePath = CommonUtils.joinFilesysPath(path, fileName);
         }
 
 		if (!accessAllowed(filePath)) {
