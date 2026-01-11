@@ -87,7 +87,7 @@ public class XmlDeleteDirHandler extends XmlRequestHandlerBase
 			{
 				String fileList[] = dirToBeDeleted.list();
 				
-				if (fileList.length > 0)
+				if (fileList != null && fileList.length > 0)
 				{
 					if ((fileList.length > 1) || (!fileList[0].equals(MetaInfManager.METAINF_FILE)))
 					{

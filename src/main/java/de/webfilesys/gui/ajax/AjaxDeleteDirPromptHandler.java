@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.MetaInfManager;
 import org.w3c.dom.Element;
 
 import de.webfilesys.util.CommonUtils;
@@ -16,29 +17,24 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class AjaxDeleteDirPromptHandler extends XmlRequestHandlerBase
-{
+public class AjaxDeleteDirPromptHandler extends XmlRequestHandlerBase {
 	public AjaxDeleteDirPromptHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 	
-	protected void process()
-	{
-        if (!checkWriteAccess())
-        {
+	protected void process() {
+        if (!checkWriteAccess()) {
             return;
         }
         
         String delPath = req.getParameter("param1");
 
-        if (!checkAccess(delPath))
-        {
+        if (!checkAccess(delPath)) {
             return;
         }
 
@@ -46,28 +42,21 @@ public class AjaxDeleteDirPromptHandler extends XmlRequestHandlerBase
         
         File delFile = new File(delPath);
         
-        String deletePromptMsg = null;
+        String deletePromptMsg;
 
-        if (delFile.exists() && delFile.isDirectory())
-        {
+        if (delFile.exists() && delFile.isDirectory()) {
             String[] filesInDir = delFile.list();
-            
-            if (filesInDir.length > 0)
-            {
+            if (filesInDir != null &&
+                    (filesInDir.length > 1 || filesInDir.length == 1 && !filesInDir[0].equals(MetaInfManager.METAINF_FILE))) {
                 deletePromptMsg = getResource("confirm.forcedirdel", "The folder is not empty. Delete it anyway?");      
-            }
-            else
-            {
+            } else {
                 deletePromptMsg = getResource("confirm.removeDir", "Are you sure you want to delete this directory?");
             }
-        }
-        else
-        {
+        } else {
             deletePromptMsg = getResource("alert.delDirError", "The folder cannot be deleted!");
             XmlUtil.setChildText(resultElement, "error", "missingDir");
         }
         
-        // XmlUtil.setChildText(resultElement, "folderName", CommonUtils.shortName(delFile.getName(), 36));
         XmlUtil.setChildText(resultElement, "folderShortPath", CommonUtils.shortName(getHeadlinePath(delPath), 36));
         XmlUtil.setChildText(resultElement, "folderPath", UTF8URLEncoder.encode(delPath));
         XmlUtil.setChildText(resultElement, "deletePromptMsg", deletePromptMsg);
