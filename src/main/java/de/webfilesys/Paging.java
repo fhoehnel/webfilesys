@@ -2,6 +2,7 @@ package de.webfilesys;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 public class Paging
 {
@@ -58,7 +59,7 @@ public class Paging
         listServletClass=null;
     }
 
-    public Paging(ArrayList<?> elementList, int pageSize, int startIdx)
+    public Paging(List<?> elementList, int pageSize, int startIdx)
     {
         init();
 
@@ -79,7 +80,7 @@ public class Paging
         preparePaging(elements, pageSize, startIdx);
     }
 
-    public void preparePaging(ArrayList<?> elementList, int pageSize, int startIdx)
+    public void preparePaging(List<?> elementList, int pageSize, int startIdx)
     {
         if (startIdx > (elementList.size()-1)) {
             // element(s) removed from list - locate the previous page begin index

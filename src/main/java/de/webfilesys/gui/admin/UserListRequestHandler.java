@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -76,8 +77,7 @@ public class UserListRequestHandler extends AdminRequestHandler {
 			if (pageSizeParm != null) {
 				try {
 					pageSize = Integer.parseInt(pageSizeParm);
-					session.setAttribute(SESSION_KEY_USER_LIST_PAGE_SIZE,
-							new Integer(pageSize));
+					session.setAttribute(SESSION_KEY_USER_LIST_PAGE_SIZE, pageSize);
 				} catch (NumberFormatException nfex) {
 				}
 			} else {
@@ -85,7 +85,7 @@ public class UserListRequestHandler extends AdminRequestHandler {
 						.getAttribute(SESSION_KEY_USER_LIST_PAGE_SIZE);
 
 				if (userListPageSize != null) {
-					pageSize = userListPageSize.intValue();
+					pageSize = userListPageSize;
 				}
 			}
 		} else {
@@ -100,22 +100,20 @@ public class UserListRequestHandler extends AdminRequestHandler {
 			if (startIdxParm != null) {
 				try {
 					startIdx = Integer.parseInt(startIdxParm);
-					session.setAttribute(SESSION_KEY_USER_LIST_START_IDX,
-							new Integer(startIdx));
+					session.setAttribute(SESSION_KEY_USER_LIST_START_IDX, startIdx);
 				} catch (NumberFormatException nfex) {
 				}
 			} else {
-				Integer userListStartIdx = (Integer) session
-						.getAttribute(SESSION_KEY_USER_LIST_START_IDX);
+				Integer userListStartIdx = (Integer) session.getAttribute(SESSION_KEY_USER_LIST_START_IDX);
 				if (userListStartIdx != null) {
-					startIdx = userListStartIdx.intValue();
+					startIdx = userListStartIdx;
 				}
 			}
 		} else {
 			session.removeAttribute(SESSION_KEY_USER_LIST_START_IDX);
 		}
 
-		String searchMask = "";
+		String searchMask;
 
 		if (initial == null) {
 			String filter = getParameter("searchMask");
@@ -124,33 +122,32 @@ public class UserListRequestHandler extends AdminRequestHandler {
 				searchMask = filter;
 				session.setAttribute(SESSION_KEY_USER_LIST_FILTER, filter);
 			} else {
-				String userListFilter = (String) session
-						.getAttribute(SESSION_KEY_USER_LIST_FILTER);
+				String userListFilter = (String) session.getAttribute(SESSION_KEY_USER_LIST_FILTER);
 				if (userListFilter != null) {
 					searchMask = userListFilter;
-				}
-			}
+				} else {
+                    searchMask = "";
+                }
+            }
 		} else {
-			session.removeAttribute(SESSION_KEY_USER_LIST_FILTER);
+            searchMask = "";
+            session.removeAttribute(SESSION_KEY_USER_LIST_FILTER);
 		}
 
 		int sortBy = UserComparator.SORT_BY_USERID;
 
 		if (initial == null) {
 			String sortParm = getParameter("sortField");
-
 			if (sortParm != null) {
 				try {
 					sortBy = Integer.parseInt(sortParm);
-					session.setAttribute(SESSION_KEY_USER_LIST_SORT_FIELD,
-							new Integer(sortBy));
+					session.setAttribute(SESSION_KEY_USER_LIST_SORT_FIELD, sortBy);
 				} catch (NumberFormatException nfex) {
 				}
 			} else {
-				Integer userListSortField = (Integer) session
-						.getAttribute(SESSION_KEY_USER_LIST_SORT_FIELD);
+				Integer userListSortField = (Integer) session.getAttribute(SESSION_KEY_USER_LIST_SORT_FIELD);
 				if (userListSortField != null) {
-					sortBy = userListSortField.intValue();
+					sortBy = userListSortField;
 				}
 			}
 		} else {
@@ -231,66 +228,51 @@ public class UserListRequestHandler extends AdminRequestHandler {
 		SimpleDateFormat dateFormat = LanguageManager.getInstance()
 				.getDateFormat("admin");
 
-		ArrayList<TransientUser> allUsers = userMgr.getRealUsers();
+        List<TransientUser> allUsers = userMgr.getRealUsers().stream().filter(user ->
+                        CommonUtils.containsString(user.getUserid(), searchMask) ||
+                        CommonUtils.containsString(user.getLastName(), searchMask) ||
+                        CommonUtils.containsString(user.getFirstName(), searchMask) ||
+                        CommonUtils.containsString(user.getEmail(), searchMask))
+                .collect(Collectors.toList());
 
-		if (allUsers.size() > 1) {
-			Collections.sort(allUsers, new UserComparator(sortBy));
-		}
-
-		if ((searchMask != null) && (searchMask.trim().length() > 0)) {
-			for (int i = allUsers.size() - 1; i >= 0; i--) {
-				TransientUser user = (TransientUser) allUsers.get(i);
-
-				if ((!CommonUtils.containsString(user.getUserid(), searchMask))
-						&& (!CommonUtils.containsString(user.getLastName(),
-								searchMask))
-						&& (!CommonUtils.containsString(user.getFirstName(),
-								searchMask))
-						&& (!CommonUtils.containsString(user.getEmail(),
-								searchMask))) {
-					allUsers.remove(i);
-				}
-			}
-
-			// allUserNames=filterUsers(allUserNames,searchMask);
-		}
+        if (allUsers.size() > 1) {
+            allUsers.sort(new UserComparator(sortBy));
+        }
 
 		Paging paging = new Paging(allUsers, pageSize, startIdx);
 
-		ArrayList<Object> usersOnPage = paging.getElementList();
-
-		for (int i = 0; i < usersOnPage.size(); i++) {
-			TransientUser actUser = (TransientUser) usersOnPage.get(i);
+        for (Object pagedUser : paging.getElementList()) {
+			TransientUser user = (TransientUser) pagedUser;
 
 			output.println("<tr>");
 
 			output.print("<td class=\"data\" align=\"left\" valign=\"top\" nowrap>");
 			output.print("<a href=\"javascript:confirmDelete('"
-					+ actUser.getUserid()
+					+ user.getUserid()
 					+ "')\"><span class=\"icon-font icon-delete iconUserAdmin\" title=\"Delete User\"></span></a>");
 			output.print("<a href=\"/webfilesys/servlet?command=admin&cmd=editUser&username="
-					+ UTF8URLEncoder.encode(actUser.getUserid())
+					+ UTF8URLEncoder.encode(user.getUserid())
 					+ "\"><span class=\"icon-font icon-edit iconUserAdmin\" title=\"Edit User\"></span></a>");
 
-			if (actUser.getDiskQuota() > 0) {
+			if (user.getDiskQuota() > 0) {
 				output.print("<a href=\"javascript:diskQuota('"
-						+ actUser.getUserid()
+						+ user.getUserid()
 						+ "')\"><span class=\"icon-font icon-stats iconUserAdmin\" title=\"Disk Quota Usage\"></span></a>");
 			}
 
 			output.println("</td>");
 
 			output.println("<td class=\"data\" align=\"left\" valign=\"top\">"
-					+ actUser.getUserid() + " </td>");
+					+ user.getUserid() + " </td>");
 
 			output.println("<td class=\"data\" align=\"left\" valign=\"top\">"
-					+ Boolean.valueOf(actUser.isActivated()).toString() + " </td>");
+					+ Boolean.valueOf(user.isActivated()).toString() + " </td>");
 			
-			String docRoot = actUser.getDocumentRoot();
+			String docRoot = user.getDocumentRoot();
 
 			String shortDocRoot = docRoot;
 
-			if ((docRoot == null) || (docRoot.trim().length() == 0)) {
+			if (docRoot == null || docRoot.trim().isEmpty()) {
 				shortDocRoot = "&nbsp;";
 			} else {
 				if (docRoot.length() > 40) {
@@ -301,11 +283,7 @@ public class UserListRequestHandler extends AdminRequestHandler {
 
 			output.println("<td class=\"data\" valign=\"top\" nowrap=\"true\">");
 
-			String title = "";
-
-			if (docRoot.length() > 40) {
-				title = docRoot;
-			}
+			String title = docRoot.length() > 40 ? docRoot : "";
 
 			output.println("<span title=\"" + title + "\">");
 
@@ -320,52 +298,26 @@ public class UserListRequestHandler extends AdminRequestHandler {
 
 			output.println("</td>");
 
-			output.println("<td class=\"data\" valign=\"top\">"
-					+ actUser.isReadonly() + "</td>");
+			output.println("<td class=\"data\" valign=\"top\">" + user.isReadonly() + "</td>");
 
-			String role = actUser.getRole();
-
-			if ((role == null) || (role.trim().length() == 0)) {
+			String role = user.getRole();
+			if (role == null || role.trim().isEmpty()) {
 				role = "&nbsp;";
 			}
 
-			output.println("<td class=\"data\" valign=\"top\"> " + role
-					+ "</td>");
+			output.println("<td class=\"data\" valign=\"top\"> " + role + "</td>");
 
-			String userLanguage = actUser.getLanguage();
-
+			String userLanguage = user.getLanguage();
 			if (userLanguage == null) {
 				userLanguage = LanguageManager.DEFAULT_LANGUAGE;
 			}
 
-			output.println("<td class=\"data\" valign=\"top\"> " + userLanguage
-					+ "</td>");
+			output.println("<td class=\"data\" valign=\"top\"> " + userLanguage + "</td>");
 
-			String lastName = actUser.getLastName();
-			String firstName = actUser.getFirstName();
+            output.println("<td class=\"data\" valign=\"top\"> " + getFullName(user) + "</td>");
 
-			StringBuffer fullName = new StringBuffer();
-			if ((lastName != null) && (lastName.trim().length() > 0)) {
-				fullName.append(lastName);
-				if ((firstName != null) && (firstName.trim().length() > 0)) {
-					fullName.append(", ");
-				}
-			}
-
-			if ((firstName != null) && (firstName.trim().length() > 0)) {
-				fullName.append(firstName);
-			}
-
-			if (fullName.length() == 0) {
-				fullName.append("&nbsp;");
-			}
-
-			output.println("<td class=\"data\" valign=\"top\"> "
-					+ fullName.toString() + "</td>");
-
-			String email = actUser.getEmail();
-
-			if ((email == null) || (email.trim().length() == 0)) {
+			String email = user.getEmail();
+			if (email == null || email.trim().isEmpty()) {
 				output.println("<td class=\"data\">&nbsp;</td>");
 			} else {
 				int atSignIdx = email.indexOf('@');
@@ -375,17 +327,15 @@ public class UserListRequestHandler extends AdminRequestHandler {
 						+ email + "\">" + formattedEmail + "</a></td>");
 			}
 
-			Date lastLogin = actUser.getLastLogin();
-
 			output.println("<td class=\"data\">");
 
-			if (lastLogin == null) {
+            Date lastLogin = user.getLastLogin();
+            if (lastLogin == null) {
 				output.println("&nbsp;");
 			} else {
 				output.println(dateFormat.format(lastLogin));
 			}
 			output.println("</td>");
-
 			output.println("</tr>");
 		}
 
@@ -429,8 +379,7 @@ public class UserListRequestHandler extends AdminRequestHandler {
 			int pageCounter = 1;
 
 			for (int k = 0; k < startIndices.size(); k++) {
-				int idx = startIndices.get(k).intValue();
-
+				int idx = startIndices.get(k);
 				if (idx != paging.getStartIndex() - 1) {
 					if (((pageCounter - 1) % pageStep == 0)
 							|| (k == startIndices.size() - 1)) {
@@ -442,9 +391,7 @@ public class UserListRequestHandler extends AdminRequestHandler {
 				} else {
 					output.print(pageCounter);
 				}
-
 				output.println("&nbsp;");
-
 				pageCounter++;
 			}
 
@@ -488,5 +435,24 @@ public class UserListRequestHandler extends AdminRequestHandler {
 		output.println("</body></html>");
 		output.flush();
 	}
+
+    private String getFullName(TransientUser actUser) {
+        StringBuilder fullName = new StringBuilder();
+        String lastName = actUser.getLastName();
+        String firstName = actUser.getFirstName();
+        if (lastName != null && !lastName.trim().isEmpty()) {
+            fullName.append(lastName);
+            if (firstName != null && !firstName.trim().isEmpty()) {
+                fullName.append(", ");
+            }
+        }
+        if (firstName != null && !firstName.trim().isEmpty()) {
+            fullName.append(firstName);
+        }
+        if (fullName.length() == 0) {
+            fullName.append("&nbsp;");
+        }
+        return fullName.toString();
+    }
 
 }
