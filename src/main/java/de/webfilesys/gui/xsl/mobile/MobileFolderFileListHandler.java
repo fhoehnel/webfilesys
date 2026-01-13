@@ -15,8 +15,6 @@ import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
@@ -443,8 +441,6 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             
             XmlUtil.setChildText(folderFileListElement, "cwdNotSelected", "true");
         } else {
-            DecorationManager decoMgr = DecorationManager.getInstance();
-
         	Arrays.stream(dirFile.listFiles())
 	            .filter(file -> file.isDirectory())
 	            .filter(dir -> !ThumbnailThread.THUMBNAIL_SUBDIR.equals(dir.getName()))
@@ -465,7 +461,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                 
                     subDirElem.setAttribute("path", UTF8URLEncoder.encode(relPathWithSlash + subDirName));
 
-                    Decoration deco = decoMgr.getDecoration(CommonUtils.joinFilesysPath(dirFile.getAbsolutePath(), subDirName));
+                    Decoration deco = MetaInfManager.getInstance().getDecoration(CommonUtils.joinFilesysPath(dirFile.getAbsolutePath(), subDirName), ".");
                     if (deco != null) {
                         if (deco.getIcon() != null) {
                             subDirElem.setAttribute("icon", deco.getIcon());

@@ -10,12 +10,10 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
 import de.webfilesys.calendar.AppointmentManager;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.UserManagerBase;
@@ -112,8 +110,6 @@ implements HttpSessionListener, ServletContextListener
         MetaInfManager.getInstance().interrupt();
         
         CategoryManager.getInstance().interrupt();
-
-        DecorationManager.getInstance().interrupt();
 
         InvitationManager.getInstance().interrupt();
 

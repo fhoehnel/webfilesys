@@ -10,16 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
-import de.webfilesys.Constants;
-import de.webfilesys.DirTreeStatus;
-import de.webfilesys.SubdirExistCache;
-import de.webfilesys.SubdirExistTester;
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -34,8 +30,6 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 	protected int currentDirNum;
 	
 	protected Element folderTreeElement = null;
-	
-	Element resourcesElement = null;
 	
     protected DirTreeStatus dirTreeStatus = null;
     
@@ -193,8 +187,6 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
 			Collections.sort(subdirList, (folder1, folder2) -> folder1.compareToIgnoreCase(folder2));
 		}
 
-		DecorationManager decoMgr = DecorationManager.getInstance();
-
         for (String subdirPath : subdirList) {
             boolean access = (belowDocRoot || accessAllowed(subdirPath));
 
@@ -249,8 +241,7 @@ public class XslDirTreeHandler extends XslRequestHandlerBase
                     folderElement.setAttribute("root", "true");
                 }
 
-                Decoration deco = decoMgr.getDecoration(subdirPath);
-
+                Decoration deco = MetaInfManager.getInstance().getDecoration(subdirPath, ".");
                 if (deco != null) {
                     if (deco.getIcon() != null) {
                         folderElement.setAttribute("icon", deco.getIcon());

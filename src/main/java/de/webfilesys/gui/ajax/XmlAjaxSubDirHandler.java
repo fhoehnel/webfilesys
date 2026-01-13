@@ -16,7 +16,6 @@ import org.apache.logging.log4j.LogManager;
 import org.w3c.dom.Element;
 
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.StringComparator;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -185,10 +184,8 @@ public class XmlAjaxSubDirHandler extends XslRequestHandlerBase
 			parentElement.setAttribute("current", "true");
 		}
 		
-		DecorationManager decoMgr = DecorationManager.getInstance();
+        Decoration deco = MetaInfManager.getInstance().getDecoration(parentPath, ".");
 
-		Decoration deco = decoMgr.getDecoration(parentPath);
-		
 		if (deco != null) 
 		{
 			if (deco.getIcon() != null) 
@@ -319,7 +316,7 @@ public class XmlAjaxSubDirHandler extends XslRequestHandlerBase
 				folderElement.setAttribute("lastInLevel" , "false");
 			}
 			
-			deco = decoMgr.getDecoration(subdirPath);
+			deco = MetaInfManager.getInstance().getDecoration(subdirPath, ".");
 			
 			if (deco != null) 
 			{

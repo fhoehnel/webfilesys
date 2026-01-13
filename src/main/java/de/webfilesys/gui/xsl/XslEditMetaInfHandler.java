@@ -3,22 +3,22 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSys;
 import de.webfilesys.WebFileSysConfig;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ImageDimensions;
 import de.webfilesys.graphics.ImageUtils;
@@ -225,11 +225,11 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			String defaultColor = req.getParameter("defaultColor");
 			if (defaultColor != null) 
 			{
-				Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+				Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
 				if (deco != null) 
 				{
 					deco.setTextColor(null);
-					DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+                    MetaInfManager.getInstance().setDecoration(normalizedPath, ".", deco);
 					colorChanged = true;
 				}
 			}
@@ -238,26 +238,26 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 				String textColor = req.getParameter("textColor");
 				if ((textColor != null) && (textColor.trim().length() > 0)) 
 				{
-					Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+					Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
 					if (deco == null) 
 					{
 						deco = new Decoration();
 					}
 					deco.setTextColor("#" + textColor);
-					DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+                    MetaInfManager.getInstance().setDecoration(normalizedPath, ".", deco);
 					colorChanged = true;
 				}
 			}
 			
 			String icon = req.getParameter("icon");
 			if (icon != null) {
-				Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+				Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
 				if (icon.equals("none")) 
 				{
 					if (deco != null) 
 					{
 						deco.setIcon(null);
-						DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+                        MetaInfManager.getInstance().setDecoration(normalizedPath, ".", deco);
 					    iconChanged = true;
 					}
 				} 
@@ -270,7 +270,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 							deco = new Decoration();
 						}
 						deco.setIcon(icon);
-						DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+                        MetaInfManager.getInstance().setDecoration(normalizedPath, ".", deco);
 					    iconChanged = true;
 					}
 				}
@@ -523,9 +523,8 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		if (path.endsWith(".")) 
 		{
 			String normalizedPath = path.substring(0, path.length() - 2);
-			Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
-			
-			if (deco != null) 
+			Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
+			if (deco != null)
 			{
 				String textColor = deco.getTextColor();
 				if (textColor != null) 
@@ -548,7 +547,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 	        metaInfElement.appendChild(availableIconsElement);
 			
-	        for (String icon : DecorationManager.getInstance().getAvailableIcons()) {
+	        for (String icon : getAvailableIcons()) {
 				Element iconElement = doc.createElement("icon");
 				availableIconsElement.appendChild(iconElement);
 				XmlUtil.setElementText(iconElement, icon);
@@ -597,4 +596,25 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
         return(thumbnailElement);	    
 	}
+
+    /**
+     * Icons available for folder decoration.
+     * @return List of filenames of files in the icons directory.
+     */
+    private List<String> getAvailableIcons() {
+        ArrayList<String> availableIcons = new ArrayList<String>();
+        String iconDirPath = WebFileSys.getInstance().getWebAppRootDir() + "icons";
+        File iconDir = new File(iconDirPath);
+        if (iconDir.exists() && iconDir.isDirectory() && iconDir.canRead()) {
+            String[] iconFiles = iconDir.list();
+            if (iconFiles != null) {
+                Collections.addAll(availableIcons, iconFiles);
+            }
+        }
+        if (availableIcons.size() > 1) {
+            Collections.sort(availableIcons);
+        }
+        return availableIcons;
+    }
+
 }

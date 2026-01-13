@@ -11,10 +11,7 @@ import de.webfilesys.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
-import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -109,9 +106,7 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 				}
 				else
 				{
-					Decoration savedDeco = DecorationManager.getInstance().getDecoration(currentPath);
-					
-					MetaInfManager.getInstance().saveMetaInfFile(currentPath);
+					MetaInfManager.getInstance().saveChangedMetaInfFiles();
 					
 					if (!oldDir.renameTo(newDir))
 					{
@@ -125,13 +120,6 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 					    {
 	                        (new UpdateLinksAfterDirRenameThread(newPath, uid)).start();
 					    }
-					    
-					    if (savedDeco != null) {
-						    DecorationManager.getInstance().setDecoration(newPath, savedDeco);
-                            DecorationManager.getInstance().removeDecoration(currentPath);
-                        }
-
-                        DecorationManager.getInstance().moveDecoration(parentDir, oldName, newDirName);
 
 					    String mobile = (String) session.getAttribute("mobile");
 					    

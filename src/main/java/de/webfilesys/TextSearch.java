@@ -12,12 +12,10 @@ import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.PatternComparator;
@@ -78,7 +76,7 @@ public class TextSearch
         	Decoration deco = new Decoration();
         	deco.setIcon("search.gif");
         	deco.setTextColor("#808080");
-        	DecorationManager.getInstance().setDecoration(searchResultDir, deco);
+        	MetaInfManager.getInstance().setDecoration(searchResultDir, ".", deco);
         }
         
         output.flush();

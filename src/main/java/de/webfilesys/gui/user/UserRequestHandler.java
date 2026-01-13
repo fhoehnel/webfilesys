@@ -7,16 +7,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
-import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -198,7 +194,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
     public boolean copyFolderTreeWithStatus(String sourcePath, String destPath, boolean ignoreExistingDir, CopyStatus copyStatus, DecimalFormat numFormat) {
         boolean copyError = false;
 
-        DecorationManager.getInstance().copyDecoration(sourcePath, destPath);
+        MetaInfManager.getInstance().copyDecoration(sourcePath, destPath);
 
         File sourceFolderFile = new File(sourcePath);
         
@@ -321,7 +317,6 @@ public class UserRequestHandler extends ProtectedRequestHandler
             deleteError = true;
         } else {
             MetaInfManager.getInstance().releaseMetaInf(path, false);
-            DecorationManager.getInstance().removeDecoration(path);
         }
         return(!(deleteError));
     }

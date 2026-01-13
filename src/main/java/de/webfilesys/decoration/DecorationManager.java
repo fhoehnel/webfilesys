@@ -1,20 +1,3 @@
-/*  
- * WebFileSys
- * Copyright (C) 2011 Frank Hoehnel
-
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
-
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>. 
- */
 package de.webfilesys.decoration;
 
 import java.io.File;
@@ -23,14 +6,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.logging.log4j.Logger;
+import de.webfilesys.MetaInfManager;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Document;
@@ -45,15 +27,14 @@ import de.webfilesys.util.XmlUtil;
 /**
  * Manager for decoration of folders with individual icons and text colors.
  * @author Frank Hoehnel
+ * @deprecated will be removed after migration to MetaInfManager has run
  */
-public class DecorationManager extends Thread {
+public class DecorationManager {
 	
     public static final String DECORATION_FILE_NAME = "decorations.xml";
 	
     private static DecorationManager decoMgr = null;
 
-    private boolean modified = false;
-    
     Document doc;
 
     DocumentBuilder builder;
@@ -68,7 +49,7 @@ public class DecorationManager extends Thread {
     {
     	decorationFilePath = WebFileSys.getInstance().getConfigBaseDir() + "/" + DECORATION_FILE_NAME;
     	
-    	index = new HashMap<String, Decoration>();
+    	index = new HashMap<>();
     	
         builder = null;
 
@@ -86,26 +67,20 @@ public class DecorationManager extends Thread {
                 decorationRoot = doc.createElement("decorations");
             } else {
                 createIndex(decorationRoot);
+                migrateToMetaInf();
             }
         }
         catch (ParserConfigurationException pcex)
         {
         	LogManager.getLogger(getClass()).error(pcex.toString());
         }
-
-        modified = false;
-
-        start();
     }
 
-    public static DecorationManager getInstance()
-    {
-        if (decoMgr == null)
-        {
+    public static DecorationManager getInstance() {
+        if (decoMgr == null) {
             decoMgr = new DecorationManager();
         }
-
-        return(decoMgr);
+        return decoMgr;
     }
 
     public void saveToFile()
@@ -141,8 +116,6 @@ public class DecorationManager extends Thread {
                 XmlUtil.writeToStream(decorationRoot, xmlOutFile);
                 
                 xmlOutFile.flush();
-
-                modified = false;
             }
             catch (IOException io1)
             {
@@ -222,11 +195,6 @@ public class DecorationManager extends Thread {
     private void createIndex(Element decorationRoot) {
         NodeList decorationList = decorationRoot.getElementsByTagName("decoration");
 
-        if (decorationList == null)
-        {
-            return;
-        }
-
         int listLength = decorationList.getLength();
 
         for (int i = 0; i < listLength; i++)
@@ -250,263 +218,40 @@ public class DecorationManager extends Thread {
             index.put(path, deco);
         }
     }
-    
-    public Decoration getDecoration(String path)
-    {
-    	return (Decoration) index.get(path.replace('\\', '/'));
-    }
-    
-    public void setDecoration(String path, Decoration newDeco) 
-    {
-        synchronized (decorationRoot) {
-            String normalizedPath = path.replace('\\', '/');    	
-        	
-            boolean existingFound = false;
-            
-        	if (index.get(normalizedPath) != null) 
-        	{
-        		// decoration for this path exists
-                NodeList decorationList = decorationRoot.getElementsByTagName("decoration");
-
-                if (decorationList != null)
-                {
-                    int listLength = decorationList.getLength();
-
-                    for (int i = 0; (!existingFound) && (i < listLength); i++)
-                    {
-                        Element decorationElement = (Element) decorationList.item(i);
-                        String existingPath = XmlUtil.getChildText(decorationElement, "path");
-                        
-                        if (existingPath.equals(normalizedPath)) 
-                        {
-                        	if (newDeco.getIcon() != null) 
-                        	{
-                            	XmlUtil.setChildText(decorationElement, "icon", newDeco.getIcon());
-                        	}
-                        	else
-                        	{
-                        		Element oldIcon = XmlUtil.getChildByTagName(decorationElement, "icon");
-                        		if (oldIcon != null) {
-                        			decorationElement.removeChild(oldIcon);
-                        		}
-                        	}
-                        	if (newDeco.getTextColor() != null) 
-                        	{
-                            	XmlUtil.setChildText(decorationElement, "textColor", newDeco.getTextColor());
-                        	}
-                        	else
-                        	{
-                        		Element oldTextColor = XmlUtil.getChildByTagName(decorationElement, "textColor");
-                        		if (oldTextColor != null) {
-                        			decorationElement.removeChild(oldTextColor);
-                        		}
-                        	}
-                        	
-                        	existingFound = true;
-                        }
-                    }
-                }
-        	}
-        	
-        	if (!existingFound) {
-            	Element newDecoElem = decorationRoot.getOwnerDocument().createElement("decoration");
-                
-            	XmlUtil.setChildText(newDecoElem, "path", normalizedPath);
-            	if (newDeco.getIcon() != null) 
-            	{
-                	XmlUtil.setChildText(newDecoElem, "icon", newDeco.getIcon());
-            	}
-            	if (newDeco.getTextColor() != null) 
-            	{
-                 	XmlUtil.setChildText(newDecoElem, "textColor", newDeco.getTextColor());
-            	}
-             	
-            	decorationRoot.appendChild(newDecoElem);
-        	}
-        	
-        	index.put(normalizedPath, newDeco);
-        	
-        	modified = true;
-        }
-    }
-
-    public void copyDecoration(String sourcePath, String destPath) {
-        Decoration deco = getDecoration(sourcePath);
-        if (deco != null) {
-            setDecoration(destPath, deco);
-        }
-    }
 
     public void removeDecoration(String path) {
-        synchronized (decorationRoot) {
-            String normalizedPath = path.replace('\\', '/');
-            if (index.get(normalizedPath) == null) {
-                LogManager.getLogger(getClass()).warn("decoration to remove not found in index: {}", path);
+        String normalizedPath = path.replace('\\', '/');
+        if (index.get(normalizedPath) == null) {
+            LogManager.getLogger(getClass()).warn("decoration to remove not found in index: {}", path);
+            return;
+        }
+        NodeList decorationList = decorationRoot.getElementsByTagName("decoration");
+        int listLength = decorationList.getLength();
+        for (int i = 0; i < listLength; i++) {
+            Element decorationElement = (Element) decorationList.item(i);
+            String existingPath = XmlUtil.getChildText(decorationElement, "path");
+            if (existingPath.equals(normalizedPath)) {
+                decorationRoot.removeChild(decorationElement);
+                index.remove(normalizedPath);
                 return;
-            }
-            NodeList decorationList = decorationRoot.getElementsByTagName("decoration");
-            int listLength = decorationList.getLength();
-            for (int i = 0; i < listLength; i++) {
-                Element decorationElement = (Element) decorationList.item(i);
-                String existingPath = XmlUtil.getChildText(decorationElement, "path");
-                if (existingPath.equals(normalizedPath)) {
-                    decorationRoot.removeChild(decorationElement);
-                    index.remove(normalizedPath);
-                    modified = true;
-                    return;
-                }
             }
         }
         LogManager.getLogger(getClass()).warn("decoration to remove is in index but not in element list: " + path);
     }
 
-    public void moveDecoration(String path, String oldFolderName, String newFolderName) {
-        String oldBasePath = path.replace('\\', '/') + "/" + oldFolderName;
-
-        ArrayList<String> affectedPaths = new ArrayList<>();
-
-        index.keySet().stream()
-                .filter(key -> key.startsWith(oldBasePath) && key.length() > oldBasePath.length() && key.charAt(oldBasePath.length()) == '/')
-                .forEach(affectedPaths::add);
-
-        affectedPaths.forEach(affectedPath -> {
-            Decoration deco = getDecoration(affectedPath);
-            String restOfPath = affectedPath.substring(oldBasePath.length());
-            String newPath = path.replace('\\', '/') + "/"  + newFolderName + restOfPath;
-            removeDecoration(affectedPath);
-            setDecoration(newPath, deco);
+    // TODO: remove when all servers are migrated
+    private void migrateToMetaInf() {
+        if (index.isEmpty()) {
+            // nothing to migrate
+            return;
+        }
+        ArrayList<String> pathToRemove = new ArrayList<>();
+        index.forEach((key, value) -> {
+            MetaInfManager.getInstance().setDecoration(key, ".", value);
+            LogManager.getLogger(getClass()).debug("decoration migrated for path {}", key);
+            pathToRemove.add(key);
         });
-    }
-
-    /**
-     * Icons available for folder decoration.
-     * @return List of filenames of files in the icons directory.
-     */
-    public ArrayList<String> getAvailableIcons() 
-    {
-    	ArrayList<String> availableIcons = new ArrayList<String>();
-    	
-    	String iconDirPath = WebFileSys.getInstance().getWebAppRootDir() + "icons";
-    	
-    	File iconDir = new File(iconDirPath);
-    	
-    	if (iconDir.exists() && iconDir.isDirectory() && iconDir.canRead())
-    	{
-    		String[] iconFiles = iconDir.list();
-    		
-    		for (int i = 0; i < iconFiles.length; i++) 
-    		{
-    			availableIcons.add(iconFiles[i]);
-    		}
-    	}
-    	
-    	if (availableIcons.size() > 1) {
-    		Collections.sort(availableIcons);
-    	}
-    	
-    	return availableIcons;
-    }
-    
-    public void collectGarbage()
-    {
-        synchronized (decorationRoot) 
-        {
-            NodeList decorationList = decorationRoot.getElementsByTagName("decoration");
-
-            if (decorationList == null)
-            {
-                return;
-            }
-
-            ArrayList<String> availableIcons = getAvailableIcons();
-            
-            int decoGarbageCounter = 0;
-            
-            int listLength = decorationList.getLength();
-
-            for (int i = listLength - 1; i >= 0; i--)
-            {
-                Element decorationElement = (Element) decorationList.item(i);
-                
-                String path = XmlUtil.getChildText(decorationElement, "path");
-
-            	File checkExistFile = new File(path);
-            	
-            	if (!checkExistFile.exists()) {
-                    decorationRoot.removeChild(decorationElement);
-                    index.remove(path);
-                    modified = true;
-                    decoGarbageCounter++;
-            	} else {
-            		String icon = XmlUtil.getChildText(decorationElement, "icon");
-            		if ((icon != null) && (icon.length() > 0))
-            		{
-                		if (!availableIcons.contains(icon))
-                		{
-                			decorationElement.removeChild(XmlUtil.getChildByTagName(decorationElement, "icon"));
-                            
-                			Decoration deco = index.get(path);
-                			if (deco != null) {
-                				deco.setIcon(null);
-                			}
-                			
-                			modified = true;
-                			
-                	        if (LogManager.getLogger(getClass()).isInfoEnabled()) {
-                	            LogManager.getLogger(getClass()).info("removing folder decoration for non-existing icon " + icon);
-                	        }
-                		}
-            		}
-            	}
-            }            
-        	
-            if (LogManager.getLogger(getClass()).isInfoEnabled()) {
-                LogManager.getLogger(getClass()).info(decoGarbageCounter + " decorations for removed folders deleted");
-            }
-        }
-    }
-
-    public synchronized void run()
-    {
-        int counter = 1;
-
-        int sleepHours = 1;
-
-        boolean stop = false;
-        
-        while (!stop)
-        {
-            try
-            {
-                this.wait(60000);
-
-                if (modified)
-                {
-                    saveToFile();
-
-                    modified = false;
-                }
-
-                if (++counter == (sleepHours * 60))
-                {
-                	collectGarbage();
-
-                    counter = 0;
-
-                    sleepHours = 24;
-                }
-            }
-            catch (InterruptedException e)
-            {
-                if (modified)
-                {
-                	saveToFile();
-                }
-				
-                LogManager.getLogger(getClass()).debug("DecorationManager ready for shutdown");
-                
-				stop = true;
-            }
-        }
+        pathToRemove.forEach(this::removeDecoration);
+        saveToFile();
     }
 }
