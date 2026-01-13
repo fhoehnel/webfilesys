@@ -30,7 +30,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.logging.log4j.LogManager;
 
 import de.webfilesys.calendar.AppointmentManager;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.XmlUserManager;
 import de.webfilesys.util.CommonUtils;
@@ -42,7 +41,7 @@ public class WebFileSys {
 
     private static final Logger LOG = LogManager.getLogger(WebFileSys.class);
 
-    public static final String VERSION = "Version 2.32.0-beta14 (13 Jan 2026)";
+    public static final String VERSION = "Version 2.32.0-beta15 (13 Jan 2026)";
  
     public static final int OS_OS2 = 1;
     public static final int OS_WIN = 2;
@@ -264,9 +263,7 @@ public class WebFileSys {
         if (configuration.isFolderWatch()) {
             FolderWatchManager.getInstance();
         }
-        
-        DecorationManager.getInstance();
-        
+
         if (configuration.isEnableCalendar()) {
             AppointmentManager.getInstance();
         }
