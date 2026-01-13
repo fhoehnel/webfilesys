@@ -194,8 +194,6 @@ public class UserRequestHandler extends ProtectedRequestHandler
     public boolean copyFolderTreeWithStatus(String sourcePath, String destPath, boolean ignoreExistingDir, CopyStatus copyStatus, DecimalFormat numFormat) {
         boolean copyError = false;
 
-        MetaInfManager.getInstance().copyDecoration(sourcePath, destPath);
-
         File sourceFolderFile = new File(sourcePath);
         
         File fileList[] = sourceFolderFile.listFiles();

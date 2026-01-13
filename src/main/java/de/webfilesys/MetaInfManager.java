@@ -1590,13 +1590,6 @@ public class MetaInfManager extends Thread
         return decoration;
     }
 
-    public void copyDecoration(String sourcePath, String destPath) {
-        Decoration deco = getDecoration(sourcePath, ".");
-        if (deco != null) {
-            setDecoration(destPath, ".", deco);
-        }
-    }
-
     public void removeDecoration(String path, String fileName) {
         synchronized(this) {
             Element metaInfElement = getMetaInfElement(path, fileName);
