@@ -161,7 +161,7 @@
       </xsl:if>
 
       <input type="button" style="float:right">
-        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=assignCategory&amp;filePath=<xsl:value-of select="/categoryList/filePathForScript" />'</xsl:attribute>
+        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=assignCategory&amp;filePath=<xsl:value-of select="/categoryList/encodedFilePath" />'</xsl:attribute>
         <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.return']/@value" /></xsl:attribute>
       </input>
     

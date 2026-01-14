@@ -17,11 +17,7 @@
  */
 package de.webfilesys.servlet;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +35,7 @@ import de.webfilesys.*;
 import de.webfilesys.gui.api.CheckTextFileSizeHandler;
 import de.webfilesys.gui.api.CreateBookmarkHandler;
 import de.webfilesys.gui.xsl.*;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -237,6 +234,13 @@ import de.webfilesys.user.UserManager;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLDecoder;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.Layout;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.config.builder.api.*;
 
 /**
  * The main servlet class.
@@ -262,10 +266,8 @@ public class WebFileSysServlet extends ServletBase {
         ServletContext context = config.getServletContext();
     	
         String realLogDirPath = context.getRealPath("/WEB-INF/log");
-        
-        // this system property is used in log4j.xml to specify an absolute path for the log files
-        System.setProperty("webfilesys.log.path", realLogDirPath);
-        
+        updateLoggerPath(realLogDirPath + File.separator + "system.log");
+
     	String configFileName = config.getInitParameter("config");
 
 		if ((configFileName == null) || (configFileName.trim().isEmpty())) {
@@ -324,6 +326,27 @@ public class WebFileSysServlet extends ServletBase {
     public void destroy ()
     {
         super.destroy ();
+    }
+
+    private void updateLoggerPath(String logFilePath) {
+        LoggerContext context = (LoggerContext) LogManager.getContext(false);
+        Configuration configuration = context.getConfiguration();
+
+        Appender appender = configuration.getAppender("WebFileSysLogAppender");
+        Layout<? extends Serializable> oldLayout = appender.getLayout();
+        appender.stop();
+        configuration.removeLogger("de.webfilesys");
+
+        LoggerConfig loggerConfig = new LoggerConfig("de.webfilesys", Level.DEBUG, false);
+
+        appender = FileAppender.createAppender(logFilePath, "false", "false", "WebFileSysLogAppender",
+                "true", "true", "true",
+                  "8192", oldLayout, null, "false", "", configuration);
+        appender.start();
+        loggerConfig.addAppender(appender, null, null);
+        configuration.addLogger("de.webfilesys", loggerConfig);
+
+        context.updateLoggers();
     }
 
     public void doGet (HttpServletRequest req, HttpServletResponse resp)

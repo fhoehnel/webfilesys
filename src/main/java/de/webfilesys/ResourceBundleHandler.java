@@ -38,7 +38,7 @@ public class ResourceBundleHandler extends UserRequestHandler{
 		
 		resp.setContentType("text/javascript");
 
-        // overwrite the no chache headers already set in WebFileSysServlet
+        // overwrite the no cache headers already set in WebFileSysServlet
 		// resp.setHeader("Cache-Control", null);
 		resp.setHeader("Cache-Control", "public, max-age=36000, s-maxage=36000");
 		resp.setDateHeader("expires", System.currentTimeMillis() + (10 * 60 * 60 * 1000)); // now + 10 hours

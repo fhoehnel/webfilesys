@@ -292,11 +292,13 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 
 				String realFileName = pictureFile.getName();
 
-				int commentCount = metaInfMgr.countComments(realPath, realFileName);
+                boolean fileHasMetaInf = dirHasMetaInf && metaInfMgr.getMetaInfElement(realPath, realFileName) != null;
+
+				int commentCount = fileHasMetaInf ? metaInfMgr.countComments(realPath, realFileName) : 0;
 
 				XmlUtil.setChildText(fileElement, "comments", Integer.toString(commentCount));
 
-				PictureRating pictureRating = metaInfMgr.getPictureRating(realPath, realFileName);
+				PictureRating pictureRating = fileHasMetaInf ? metaInfMgr.getPictureRating(realPath, realFileName) : null;
 
 				if (pictureRating != null) {
 					if (pictureRating.getNumberOfVotes() > 0) {
@@ -308,8 +310,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 				}
 
 				if (!readonly) {
-					int ownerRating = metaInfMgr.getOwnerRating(pictureFile.getAbsolutePath());
-
+					int ownerRating = fileHasMetaInf ? metaInfMgr.getOwnerRating(pictureFile.getAbsolutePath()) : -1;
 					if (ownerRating > (-1)) {
 						XmlUtil.setChildText(fileElement, "ownerRating", Integer.toString(ownerRating));
 					}
@@ -351,13 +352,10 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			}
 		}
 
-		GeoTag geoTag = metaInfMgr.getGeoTag(currentPath, ".");
+		GeoTag geoTag = dirHasMetaInf ? metaInfMgr.getGeoTag(currentPath, ".") : null;
 
 		if (geoTag != null) {
 			XmlUtil.setChildText(fileListElement, "geoTag", "true", false);
-
-			// the reason for this is historic: previous google maps api version
-			// required an API key
 			XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
 		}
 

@@ -142,9 +142,9 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 
 		XmlUtil.setChildText(fileListElement, "headLine", getHeadlinePath(currentPath), false);
 
-		String description = metaInfMgr.getDescription(currentPath, ".");
+		String description = dirHasMetaInf ? metaInfMgr.getDescription(currentPath, ".") : null;
 
-		if ((description != null) && (description.trim().length() > 0)) {
+		if (description != null && !description.trim().isEmpty()) {
 			XmlUtil.setChildText(fileListElement, "description", description, true);
 		}
 
