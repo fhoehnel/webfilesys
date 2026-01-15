@@ -48,44 +48,34 @@ public class XslCategoryHandler extends XslRequestHandlerBase
 			
 		doc.appendChild(catListElement);
         
-        String filePath = getParameter("filePath");
-        
-        if (filePath != null) {
-            XmlUtil.setChildText(catListElement, "filePath", filePath);
-            XmlUtil.setChildText(catListElement, "filePathForScript", CommonUtils.escapeForJavascript(filePath));
-            XmlUtil.setChildText(catListElement, "encodedFilePath", UTF8URLEncoder.encode(filePath));
-            XmlUtil.setChildText(catListElement, "shortFilePath", UTF8URLEncoder.encode(CommonUtils.shortName(filePath,50)), false);
+        String fileName = getParameter("fileName");
+
+        if (fileName == null) {
+            return;
         }
-			
+
+        XmlUtil.setChildText(catListElement, "fileName", fileName);
+        XmlUtil.setChildText(catListElement, "fileNameForScript", CommonUtils.escapeForJavascript(fileName));
+        XmlUtil.setChildText(catListElement, "encodedFileName", UTF8URLEncoder.encode(fileName));
+        XmlUtil.setChildText(catListElement, "shortFileName", UTF8URLEncoder.encode(CommonUtils.shortName(fileName,50)), false);
+
 		String cmd = getParameter("cmd");
-		
-		if (cmd != null)
-		{
-			if (cmd.equals("list"))
-			{
+        if (cmd != null) {
+			if (cmd.equals("list")) {
 				listCategories(catListElement);
-			}
-			else if (cmd.equals("new"))
-			{
+			} else if (cmd.equals("new")) {
 				newCategory(catListElement);
-			}
-			else if (cmd.equals("delete"))
-			{
+			} else if (cmd.equals("delete")) {
 				deleteCategory(catListElement);
-			}
-			else
-			{
+			} else {
 				listCategories(catListElement);
 			}
-		}
-		else
-		{
+		} else {
 			listCategories(catListElement);
 		}
 	}
 
-    private void listCategories(Element catListElement)
-    {
+    private void listCategories(Element catListElement) {
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/categoryList.xsl\"");
 
 		doc.insertBefore(xslRef, catListElement);
@@ -101,70 +91,44 @@ public class XslCategoryHandler extends XslRequestHandlerBase
         addMsgResource("alert.noCategorySelected", getResource("alert.noCategorySelected","No category selected!"));
 		
 		CategoryManager catMgr = CategoryManager.getInstance();
-
-		ArrayList<Category> userCategories = catMgr.getListOfCategories(uid);
-        
+        ArrayList<Category> userCategories = catMgr.getListOfCategories(uid);
 		for (Category cat : userCategories) {
-        	
-			Element catElement = doc.createElement("category");
-			
+            Element catElement = doc.createElement("category");
 			catElement.setAttribute("id", cat.getId());
-        
-			XmlUtil.setChildText(catElement, "name" , cat.getName());           
-        	
+			XmlUtil.setChildText(catElement, "name" , cat.getName());
 			catListElement.appendChild(catElement);
 		}
-
 		this.processResponse("categoryList.xsl");
     }
 
-	private void newCategory(Element catListElement)
-	{
+	private void newCategory(Element catListElement) {
 		CategoryManager catMgr = CategoryManager.getInstance();
-
 		String newCategoryName = getParameter("newCategory");
 		
-		if ((newCategoryName != null) && (newCategoryName.trim().length() > 0))
-		{
-            if (catMgr.getCategoryElementByName(uid, newCategoryName) != null)
-			{
+		if (!CommonUtils.isEmpty(newCategoryName)) {
+            if (catMgr.getCategoryElementByName(uid, newCategoryName) != null) {
 				addMsgResource("error.duplicateCategory", getResource("error.duplicateCategory","Category already exists"));
-
                 XmlUtil.setChildText(catListElement, "newCategory", newCategoryName);
-			}
-            else
-            {
+			} else {
                 Category newCategory = new Category();
-                
                 newCategory.setName(newCategoryName);
-                
                 catMgr.createCategory(uid, newCategory);
             }
-		}
-        else
-        {
+		} else {
             XmlUtil.setChildText(catListElement, "newCategory", "");
-
             addMsgResource("error.missingCategoryName", getResource("error.missingCategoryName","Enter a name for the new category!"));
         }
-        
         listCategories(catListElement);
 	}
 
-	private void deleteCategory(Element catListElement)
-	{
+	private void deleteCategory(Element catListElement) {
 		CategoryManager catMgr = CategoryManager.getInstance();
-
         String[] selectedIds = req.getParameterValues("categoryId");
-        
-        if (selectedIds != null)
-        {
-            for (int i = 0; i < selectedIds.length; i++) 
-            {
-                catMgr.removeCategory(uid, selectedIds[i]);
+        if (selectedIds != null) {
+            for (String selectedId : selectedIds) {
+                catMgr.removeCategory(uid, selectedId);
             }
         }
-		
 		listCategories(catListElement);
 	}
 

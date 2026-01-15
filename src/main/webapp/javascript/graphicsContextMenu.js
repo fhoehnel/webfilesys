@@ -71,7 +71,7 @@ function jsContextMenu(fileName, imgType, domId) {
 
     if (parent.readonly != 'true') { 
 
-    	addContextMenuEntry(menuDiv, "categories('" + scriptPreparedPath + "')", resourceBundle["label.assignCategories"]);
+    	addContextMenuEntry(menuDiv, "categories('" + scriptPreparedFile + "')", resourceBundle["label.assignCategories"]);
 
         if (parent.mailEnabled == 'true') {
         	addContextMenuEntry(menuDiv, "jsSendFile('" + scriptPreparedFile + "')", resourceBundle["label.sendfile"]);
@@ -149,8 +149,8 @@ function jsEditDesc(path) {
     descWin.opener = self;
 }
 
-function categories(path) {
-    catWin = window.open("/webfilesys/servlet?command=assignCategory&filePath=" + encodeURIComponent(path) + "&random=" + new Date().getTime(), "catWin", "status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=520,height=400,resizable=yes,left=100,top=30,screenX=100,screenY=30");
+function categories(fileName) {
+    const catWin = window.open("/webfilesys/servlet?command=assignCategory&fileName=" + encodeURIComponent(fileName), "catWin", "status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=520,height=400,resizable=yes,left=100,top=30,screenX=100,screenY=30");
     catWin.focus();
 }
 

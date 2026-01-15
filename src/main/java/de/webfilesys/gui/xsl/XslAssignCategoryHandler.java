@@ -18,73 +18,55 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XslAssignCategoryHandler extends XslRequestHandlerBase
-{
+public class XslAssignCategoryHandler extends XslRequestHandlerBase {
 	
 	public XslAssignCategoryHandler(
 			HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 	  
-	protected void process()
-	{
-		String filePath = getParameter("filePath");
-		
+	protected void process() {
+		String fileName = getParameter("fileName");
+        String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
+
 		Element catListElement = doc.createElement("categoryList");
-			
-		doc.appendChild(catListElement);
+        doc.appendChild(catListElement);
 			
 		String cmd = getParameter("cmd");
-		
-		if (cmd != null)
-		{
-			if (cmd.equals("list"))
-			{
-				listAssignment(catListElement, filePath);
+		if (cmd != null) {
+			if (cmd.equals("list")) {
+				listAssignment(catListElement, filePath, fileName);
+			} else if (cmd.equals("assign")) {
+				assignCategory(catListElement, filePath, fileName);
+			} else if (cmd.equals("unassign")) {
+				unassignCategory(catListElement, filePath, fileName);
+			} else {
+				listAssignment(catListElement, filePath, fileName);
 			}
-			else if (cmd.equals("assign"))
-			{
-				assignCategory(catListElement, filePath);
-			}
-			else if (cmd.equals("unassign"))
-			{
-				unassignCategory(catListElement, filePath);
-			}
-			else
-			{
-				listAssignment(catListElement, filePath);
-			}
-		}
-		else
-		{
-			listAssignment(catListElement, filePath);
+		} else {
+			listAssignment(catListElement, filePath, fileName);
 		}
 	}
 
-    private void listAssignment(Element catListElement, String filePath)
-    {
+    private void listAssignment(Element catListElement, String filePath, String fileName) {
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/assignCategory.xsl\"");
-
 		doc.insertBefore(xslRef, catListElement);
 
-		XmlUtil.setChildText(catListElement, "filePath",filePath, false);
+		XmlUtil.setChildText(catListElement, "fileName", fileName, false);
 		
-		String relativePath = this.getHeadlinePath(filePath);
+		String shortFileName = this.getHeadlinePath(fileName);
 		
-		XmlUtil.setChildText(catListElement, "shortFilePath", CommonUtils.shortName(relativePath,50), false);
+		XmlUtil.setChildText(catListElement, "shortFileName", CommonUtils.shortName(shortFileName,50), false);
 
 		addMsgResource("label.assignCategories", getResource("label.assignCategories","Assign Categories"));
 		addMsgResource("button.closewin", getResource("button.closewin","Close Window"));
 		addMsgResource("button.ok", getResource("button.ok","OK"));
-
 		addMsgResource("label.assignedCats", getResource("label.assignedCats","assigned categories"));
 		addMsgResource("label.unassignedCats", getResource("label.unassignedCats","other categories"));
-
 		addMsgResource("button.manageCategories", getResource("button.manageCategories","Manage Categories"));
 		
         MetaInfManager metaInfMgr = MetaInfManager.getInstance();
@@ -95,92 +77,57 @@ public class XslAssignCategoryHandler extends XslRequestHandlerBase
 
 		ArrayList<Category> userCategories = catMgr.getListOfCategories(uid);
         
-        if (userCategories != null)
-        {
+        if (userCategories != null) {
         	for (Category cat : userCategories) {
-        	
 				Element catElement = doc.createElement("category");
-			
 				catElement.setAttribute("id", cat.getId());
-        
-				XmlUtil.setChildText(catElement, "name" , cat.getName());           
-        	
+				XmlUtil.setChildText(catElement, "name" , cat.getName());
 				catListElement.appendChild(catElement);
-			
-			    if (assignedCategories != null)
-			    {
+			    if (assignedCategories != null) {
 					boolean found = false;
-			
-					for (int k=0; (!found) && (k < assignedCategories.size()); k++)
-					{
-						Category assignedCat = (Category) assignedCategories.get(k);
-				
-						if (cat.getName().equals(assignedCat.getName()))
-						{
+					for (int k = 0; !found && k < assignedCategories.size(); k++) {
+						Category assignedCat = assignedCategories.get(k);
+						if (cat.getName().equals(assignedCat.getName())) {
 							XmlUtil.setChildText(catElement, "assigned", "true");
-					
 							found = true;
 						}
 					}
 			    }
 			}
         }
-
-
-        if ((userCategories == null) || (userCategories.size() == 0))
-        {
+        if (userCategories == null || userCategories.isEmpty()) {
 			addMsgResource("label.noCategoryDefined", getResource("label.noCategoryDefined","No categories has been defined."));
         }
-
 		this.processResponse("assignCategory.xsl");
     }
     
-	private void unassignCategory(Element catListElement, String filePath)
-	{
+	private void unassignCategory(Element catListElement, String filePath, String fileName) {
 		String assigned = getParameter("assigned");
-		
-		if ((assigned == null) || (assigned.trim().length() == 0))
-		{
-			listAssignment(catListElement, filePath);
+		if ((assigned == null) || (assigned.trim().isEmpty())) {
+			listAssignment(catListElement, filePath, fileName);
 			return;
 		}
-
 		CategoryManager catMgr = CategoryManager.getInstance();
-		
 		Category category = catMgr.getCategory(uid, assigned);
-		
-		if (category != null)
-		{
+		if (category != null) {
 			MetaInfManager metaInfMgr = MetaInfManager.getInstance();
-		
 			metaInfMgr.removeCategoryByName(filePath, category.getName());
 		}
-		
-		listAssignment(catListElement, filePath);
+		listAssignment(catListElement, filePath, fileName);
 	}
 
-	private void assignCategory(Element catListElement, String filePath)
-	{
+	private void assignCategory(Element catListElement, String filePath, String fileName) {
 		String unassigned = getParameter("unassigned");
-		
-		if ((unassigned == null) || (unassigned.trim().length() == 0))
-		{
-			listAssignment(catListElement, filePath);
+		if (unassigned == null || unassigned.trim().isEmpty()) {
+			listAssignment(catListElement, filePath, fileName);
 			return;
 		}
-		
-		CategoryManager catMgr = CategoryManager.getInstance();
-		
+        CategoryManager catMgr = CategoryManager.getInstance();
 		Category category = catMgr.getCategory(uid, unassigned);
-		
-		if (category != null)
-		{
+		if (category != null) {
 			MetaInfManager metaInfMgr = MetaInfManager.getInstance();
-		
 			metaInfMgr.addCategory(filePath, category);
 		}
-		
-		listAssignment(catListElement, filePath);
+		listAssignment(catListElement, filePath, fileName);
 	}
-
 }

@@ -29,7 +29,7 @@ public class CategoryManager extends Thread {
     
     public static final String CATEGORIES_DIR    = "categories";
 	
-    HashMap<String, Element> categoryTable;
+    HashMap<String, Element> userToCategoryListMap;
 
     HashMap<String, HashMap<String, Element>> indexTable;
 
@@ -47,7 +47,7 @@ public class CategoryManager extends Thread {
     
     private CategoryManager() {
     	categoryPath = WebFileSys.getInstance().getConfigBaseDir() + "/" + CATEGORIES_DIR;
-        categoryTable = new HashMap<>();
+        userToCategoryListMap = new HashMap<>();
         indexTable = new HashMap<>();
         cacheDirty = new HashMap<>();
         shutdownFlag = false;
@@ -69,7 +69,7 @@ public class CategoryManager extends Thread {
     }
 
     public Element getCategoryList(String userid) {
-        Element categoryList = categoryTable.get(userid);
+        Element categoryList = userToCategoryListMap.get(userid);
         if (categoryList != null) {
             return categoryList;
         }
@@ -82,7 +82,7 @@ public class CategoryManager extends Thread {
             }
             categoryList = readCategoryList(categoryFile.getAbsolutePath());
             if (categoryList != null) {
-                categoryTable.put(userid, categoryList);
+                userToCategoryListMap.put(userid, categoryList);
                 createIndex(categoryList, userid);
                 return categoryList;
             }
@@ -92,10 +92,9 @@ public class CategoryManager extends Thread {
 
     Element readCategoryList(String categoryFilePath) {
         File categoryFile = new File(categoryFilePath);
-        if ((!categoryFile.exists()) || (!categoryFile.canRead())) {
+        if (!categoryFile.exists() || !categoryFile.canRead()) {
             return null;
         }
-        Document doc = null;
         FileInputStream fis = null;
         try {
             fis = new FileInputStream(categoryFile);
@@ -104,7 +103,8 @@ public class CategoryManager extends Thread {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("reading categories from " + categoryFilePath);
             }
-            doc = builder.parse(inputSource);
+            Document doc = builder.parse(inputSource);
+            return doc.getDocumentElement();
         } catch (SAXException | IOException saxex) {
             LOG.error("failed to load category file : {}", categoryFilePath, saxex);
         } finally {
@@ -115,42 +115,38 @@ public class CategoryManager extends Thread {
                 }
             }
         }
-        return doc.getDocumentElement();
+        return null;
     }
 
     protected void createIndex(Element categoryList, String userid) {
         NodeList categories = categoryList.getElementsByTagName("category");
-        if (categories == null) {
-            indexTable.remove(userid);
-            return;
-        }
         int listLength = categories.getLength();
-        HashMap<String, Element> userIndex = new HashMap<>();
+        HashMap<String, Element> indexOfUser = new HashMap<>();
         for (int i = 0; i < listLength; i++) {
              Element category = (Element) categories.item(i);
              String categoryId = category.getAttribute("id");
              if (!CommonUtils.isEmpty(categoryId)) {
-                 userIndex.put(categoryId, category);
+                 indexOfUser.put(categoryId, category);
              }
         }
-       indexTable.put(userid,userIndex);
+       indexTable.put(userid, indexOfUser);
     }
 
     public void disposeCategoryList(String userid) {
         Boolean dirtyFlag = cacheDirty.get(userid);
-        if ((dirtyFlag!=null) && dirtyFlag.booleanValue()) {
+        if ((dirtyFlag != null) && dirtyFlag) {
             saveToFile(userid);
         }
-        if (categoryTable.get(userid) != null) {
+        if (userToCategoryListMap.get(userid) != null) {
             LOG.debug("disposing category list of user {}", userid);
         }
-        categoryTable.remove(userid);
+        userToCategoryListMap.remove(userid);
         indexTable.remove(userid);
     }
 
     public void disposeAllCategories() {
         saveChangedUsers();
-        categoryTable = new HashMap<>();
+        userToCategoryListMap = new HashMap<>();
         indexTable = new HashMap<>();
     }
 
@@ -275,7 +271,7 @@ public class CategoryManager extends Thread {
         XmlUtil.setElementText(lastIdElement,"0");
         categoryListElement.appendChild(lastIdElement);
         doc.appendChild(categoryListElement);
-        categoryTable.put(userid, categoryListElement);
+        userToCategoryListMap.put(userid, categoryListElement);
         indexTable.put(userid, new HashMap<>());
         return categoryListElement;
     }
