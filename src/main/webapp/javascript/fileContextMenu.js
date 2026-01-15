@@ -37,11 +37,11 @@ function contextMenu(fileName) {
     addContextMenuHead(menuDiv, shortFileName);
 
     if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR" || fileExt == ".EAR") {
-    	addContextMenuEntry(menuDiv, "viewZip('" + scriptPreparedPath + "')", resourceBundle["label.viewzip"]);
+    	addContextMenuEntry(menuDiv, "viewZip('" + scriptPreparedFile + "')", resourceBundle["label.viewzip"]);
     } else if (fileExt == ".URL") {
     	addContextMenuEntry(menuDiv, "openUrlFile('" + scriptPreparedPath + "')", resourceBundle["label.view"]);
     } else if (fileExt == ".GPX") {
-    	addContextMenuEntry(menuDiv, "viewTrackOnMap('" + scriptPreparedPath + "')", resourceBundle["viewTrackOnMap"]);
+    	addContextMenuEntry(menuDiv, "viewTrackOnMap('" + scriptPreparedFile + "')", resourceBundle["viewTrackOnMap"]);
     } else {
          if ((fileExt == ".MP4") || (fileExt == ".OGG") || (fileExt == ".OGV")|| (fileExt == ".WEBM")) {
          	 addContextMenuEntry(menuDiv, "playVideo('" + scriptPreparedPath + "')", resourceBundle["label.playVideo"]);
@@ -102,7 +102,7 @@ function contextMenu(fileName) {
 		        }
             }
         } else { // win
-   	        addContextMenuEntry(menuDiv, "switchReadWrite('" + scriptPreparedPath + "')", resourceBundle["label.switchReadOnly"]);
+   	        addContextMenuEntry(menuDiv, "switchReadWrite('" + scriptPreparedFile + "')", resourceBundle["label.switchReadOnly"]);
         }
 	}
         
@@ -196,13 +196,13 @@ function extendedFileMenu(shortFileName, path, fileExt) {
        	addContextMenuEntry(menuDiv, "encrypt('" + scriptPreparedFile + "')", resourceBundle["label.encrypt"]);
     }
 
-   	addContextMenuEntry(menuDiv, "tail('" + scriptPreparedPath + "')", resourceBundle["label.tail"]);
+   	addContextMenuEntry(menuDiv, "tail('" + scriptPreparedFile + "')", resourceBundle["label.tail"]);
     
     if (parent.readonly != 'true') {
        	addContextMenuEntry(menuDiv, "touch('" + scriptPreparedFile + "')", resourceBundle["label.touch"]);
     }
     
-   	addContextMenuEntry(menuDiv, "grep('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", resourceBundle["label.grep"]);
+   	addContextMenuEntry(menuDiv, "grep('" + scriptPreparedFile + "')", resourceBundle["label.grep"]);
 
    	var relativeFilePath;
     if (parent.serverOS == 'ix') {

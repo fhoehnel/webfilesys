@@ -483,8 +483,6 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
             
 		XmlUtil.setChildText(folderFileListElement, "userid", uid, false);
 		
-	    XmlUtil.setChildText(folderFileListElement, "language", language, false);
-		
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{
 		    LogManager.getLogger(getClass()).error("directory not found or not readable: " + dirFile);

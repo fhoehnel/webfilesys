@@ -58,7 +58,7 @@ function jsLinkMenu(linkName, realPath) {
         }
 
         if (parent.serverOS == 'win') {
- 	    	addContextMenuEntry(menuDiv, "switchReadWrite('" + scriptPreparedPath + "')", resourceBundle["label.switchReadOnly"]);
+ 	    	addContextMenuEntry(menuDiv, "switchReadWrite('" + insertDoubleBackslash(linkName) + "', true)", resourceBundle["label.switchReadOnly"]);
         }
 
         if (parent.mailEnabled == 'true') {

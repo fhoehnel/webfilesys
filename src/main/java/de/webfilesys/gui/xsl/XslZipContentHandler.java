@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.WebFileSysConfig;
+import de.webfilesys.util.CommonUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -47,12 +48,8 @@ public class XslZipContentHandler extends XslRequestHandlerBase
 	
 	protected void process()
 	{
-		String filePath = getParameter("filePath");
-
-		if (!this.checkAccess(filePath))
-		{
-		    return;	
-		}
+		String fileName = getParameter("fileName");
+        String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
 
 		Element zipRootElement = doc.createElement("folderTree");
 		

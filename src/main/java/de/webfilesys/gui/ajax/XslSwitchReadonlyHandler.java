@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.FileLink;
+import de.webfilesys.MetaInfManager;
+import de.webfilesys.util.CommonUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -33,87 +36,64 @@ public class XslSwitchReadonlyHandler extends XmlRequestHandlerBase
         super(req, resp, session, output, uid);
 	}
 	  
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
-			return;
-		}
-		
-		String path = getParameter("filePath");
-
-		if (!accessAllowed(path))
-		{
-			LogManager.getLogger(getClass()).warn("user " + uid + " tried to access folder outside of his document root: " + path);
-			
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 
-		if (getParameter("readonly") != null)
-		{
-			File file = new File(path);
+        String fileName = getParameter("fileName");
+        boolean isLink = getParameter("isLink") != null;
 
-			if (file.canWrite())
-			{
+        String filePath = null;
+        if (isLink) {
+            FileLink fileLink = MetaInfManager.getInstance().getLink(getCwd(), fileName);
+            if (fileLink != null) {
+                filePath = fileLink.getDestPath();
+            }
+        }
+        if (filePath == null) {
+            filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
+        }
+
+		if (getParameter("readonly") != null) {
+			File file = new File(filePath);
+			if (file.canWrite()) {
 				file.setReadOnly();
-			}
-			else
-			{
-				String execString = "cmd /c attrib -R " + path;
-
+			} else {
+				String execString = "cmd /c attrib -R " + filePath;
 				Process attribProcess=null;
-
-				try
-				{
+				try {
 					attribProcess = Runtime.getRuntime().exec(execString);
-				}
-				catch (IOException rte)
-				{
+				} catch (IOException rte) {
 					LogManager.getLogger(getClass()).error(rte);
 				}
-
-				try
-				{
+				try {
 					attribProcess.waitFor();
-				}
-				catch (InterruptedException iex)
-				{
+				} catch (InterruptedException iex) {
 					LogManager.getLogger(getClass()).error(iex);
 				}
 			}
 			
 			setParameter("actpath", getCwd());
-
 			setParameter("mask","*");
-
 			(new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
-
 			return;
 		}
 		
-        String headLinePath = this.getHeadlinePath(path);
-
-		String shortPath = headLinePath;
-
-		int pathLength = headLinePath.length();
-
-		if (pathLength > 50)
-		{
-			shortPath = headLinePath.substring(0,15) + "..." + headLinePath.substring(pathLength - 31);
-		}
-		
 		Element statusElement = doc.createElement("readWriteStatus");
-			
 		doc.appendChild(statusElement);
 
 		ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/switchReadWrite.xsl\"");
-
 		doc.insertBefore(xslRef, statusElement);
 
-		XmlUtil.setChildText(statusElement, "css", userMgr.getCSS(uid), false);
-		XmlUtil.setChildText(statusElement, "path", path, false);
-		XmlUtil.setChildText(statusElement, "shortPath", shortPath, false);
-		
+		XmlUtil.setChildText(statusElement, "css", userMgr.getCSS(uid));
+		XmlUtil.setChildText(statusElement, "fileName", fileName);
+		XmlUtil.setChildText(statusElement, "shortFileName", CommonUtils.shortName(fileName, 50));
+
+        if (isLink) {
+            XmlUtil.setChildText(statusElement, "isLink", "true");
+        }
+
 		addMsgResource("label.readWriteStatus", getResource("label.readWriteStatus", "Read/Write status"));
 		addMsgResource("label.switchReadOnly", getResource("label.switchReadOnly", "Switch Read/Write"));
 		addMsgResource("label.statusWritable", getResource("label.statusWritable", "writable"));
@@ -122,13 +102,11 @@ public class XslSwitchReadonlyHandler extends XmlRequestHandlerBase
 		addMsgResource("label.setrw", getResource("label.setrw","Set read-write"));
 		addMsgResource("button.cancel", getResource("button.cancel","Cancel"));
 
-		File statusFile = new File(path);
+		File statusFile = new File(filePath);
 		
-		if (!statusFile.canWrite())
-		{
+		if (!statusFile.canWrite()) {
 			XmlUtil.setChildText(statusElement, "readonly", "true", false);
 		}
-			
 		processResponse();
     }
 }

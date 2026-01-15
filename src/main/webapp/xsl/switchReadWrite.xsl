@@ -7,7 +7,7 @@
 <xsl:template match="/">
   
   <div class="promptHead">
-    <xsl:value-of select="/readWriteStatus/shortPath" />
+    <xsl:value-of select="/readWriteStatus/shortFileName" />
   </div>
   
   <br/>
@@ -25,9 +25,13 @@
       </xsl:if>
     </input>
 
-    <input type="hidden" name="filePath">
-      <xsl:attribute name="value"><xsl:value-of select="/readWriteStatus/path" /></xsl:attribute>
-    </input> 
+    <input type="hidden" name="fileName">
+      <xsl:attribute name="value"><xsl:value-of select="/readWriteStatus/fileName" /></xsl:attribute>
+    </input>
+
+    <xsl:if test="/readWriteStatus/isLink">
+      <input type="hidden" name="isLink" value="true" />
+    </xsl:if>
  
     <table border="0" width="100%" cellpadding="10">
       <tr>

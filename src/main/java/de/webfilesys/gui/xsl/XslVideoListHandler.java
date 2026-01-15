@@ -127,10 +127,6 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 			}
 		}
 
-		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
-
-		XmlUtil.setChildText(fileListElement, "language", language, false);
-
 		File dirFile = new File(currentPath);
 
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {

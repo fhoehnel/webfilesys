@@ -8,9 +8,9 @@ function comments(path)
     window.location.href = '/webfilesys/servlet?command=listComments&actPath=' + encodeURIComponent(path);
 }
 
-function viewZip(path)
+function viewZip(fileName)
 {
-    unzipWin=window.open("/webfilesys/servlet?command=viewZip&filePath=" + encodeURIComponent(path),"unzipWin","status=no,toolbar=no,menu=yes,width=500,height=580,resizable=yes,scrollbars=yes,left=100,top=40,screenX=100,screenY=40");
+    unzipWin=window.open("/webfilesys/servlet?command=viewZip&fileName=" + encodeURIComponent(fileName),"zipWin","status=no,toolbar=no,menu=yes,width=500,height=580,resizable=yes,scrollbars=yes,left=100,top=40,screenX=100,screenY=40");
     unzipWin.focus();
 }
 
@@ -129,10 +129,6 @@ function sendFile(fileName) {
 function delLink(linkName)
 {
     window.location.href="/webfilesys/servlet?command=deleteLink&linkName=" + encodeURIComponent(linkName);
-}
-
-function switchReadWrite(path) {  
-    centeredDialog('/webfilesys/servlet?command=switchReadWrite&filePath=' + encodeURIComponent(path), '/webfilesys/xsl/switchReadWrite.xsl', 360, 190);
 }
 
 function associatedProg(path)

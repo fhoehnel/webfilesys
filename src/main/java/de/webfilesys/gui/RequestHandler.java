@@ -80,6 +80,18 @@ public abstract class RequestHandler
 		return(null);
 	}
 
+    public int getIntParameter(String paramName, int defaultValue) {
+        String paramValue = getParameter(paramName);
+        if (paramValue == null) {
+            return defaultValue;
+        }
+        try {
+            return Integer.parseInt(paramValue);
+        } catch (Exception ex) {
+            return (defaultValue);
+        }
+    }
+
 	public String insertDoubleBackslash(String source)
 	{
 		StringBuffer dest=new StringBuffer();

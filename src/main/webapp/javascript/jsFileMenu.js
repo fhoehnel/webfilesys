@@ -27,9 +27,8 @@ function comments(path)
     commentWin.focus();
 }
 
-function viewZip(path)
-{
-    unzipWin=window.open("/webfilesys/servlet?command=viewZip&filePath=" + encodeURIComponent(path),"unzipWin","status=no,toolbar=no,menu=yes,width=500,height=580,resizable=yes,scrollbars=yes,left=100,top=40,screenX=100,screenY=40");
+function viewZip(fileName) {
+    unzipWin = window.open("/webfilesys/servlet?command=viewZip&fileName=" + encodeURIComponent(fileName),"zipWin","status=no,toolbar=no,menu=yes,width=500,height=580,resizable=yes,scrollbars=yes,left=100,top=40,screenX=100,screenY=40");
     unzipWin.focus();
 }
 
@@ -139,13 +138,13 @@ function openUrlFile(path) {
     urlWin.focus();
 }
 
-function tail(path)
+function tail(fileName)
 {
-    window.open('/webfilesys/servlet?command=tail&filePath=' + encodeURIComponent(path) + "&initial=true","_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
+    window.open('/webfilesys/servlet?command=tail&fileName=' + encodeURIComponent(fileName) + "&initial=true","_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
 }
 
-function grep(path, fileName) {
-    const parameters = { "method": "grepAllowed", "param1": encodeURIComponent(path) };
+function grep(fileName) {
+    const parameters = { "method": "grepAllowed", "param1": encodeURIComponent(fileName) };
     
 	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
         var resultItem = responseXml.getElementsByTagName("result")[0];            
@@ -193,8 +192,8 @@ function untar(path)
     window.location.href="/webfilesys/servlet?command=untar&filePath=" + encodeURIComponent(path);
 }
 
-function viewTrackOnMap(path) {
-    mapWin = window.open("/webfilesys/servlet?command=viewGPX&filePath=" + encodeURIComponent(path), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
+function viewTrackOnMap(fileName) {
+    const mapWin = window.open("/webfilesys/servlet?command=viewGPX&fileName=" + encodeURIComponent(fileName), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
     maptWin.focus();
 }
 
@@ -210,8 +209,8 @@ function delLink(linkName)
     window.location.href="/webfilesys/servlet?command=deleteLink&linkName=" + encodeURIComponent(linkName);
 }
 
-function switchReadWrite(path) {   
-    centeredDialog('/webfilesys/servlet?command=switchReadWrite&filePath=' + encodeURIComponent(path), '/webfilesys/xsl/switchReadWrite.xsl', 360, 130);
+function switchReadWrite(fileName, isLink) {
+    centeredDialog('/webfilesys/servlet?command=switchReadWrite&fileName=' + encodeURIComponent(fileName) + (isLink ? '&isLink=true' : ''), '/webfilesys/xsl/switchReadWrite.xsl', 360, 130);
 }
 
 function associatedProg(path) {

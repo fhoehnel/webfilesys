@@ -34,10 +34,10 @@ function contextMenu(fileName) {
 
     addContextMenuHead(menuDiv, shortFileName);
 
-    if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR") {
-    	addContextMenuEntry(menuDiv, "viewZip('" + scriptPreparedPath + "')", resourceBundle["menuViewZip"]);
+    if (fileExt === ".ZIP" || fileExt === ".JAR" || fileExt === ".WAR") {
+    	addContextMenuEntry(menuDiv, "viewZip('" + scriptPreparedFile + "')", resourceBundle["menuViewZip"]);
     } else {
-	    if (fileExt == ".URL") {
+	    if (fileExt === ".URL") {
 	    	addContextMenuEntry(menuDiv, "openUrlFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
 	    } else {
 	    	addContextMenuEntry(menuDiv, "viewFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);

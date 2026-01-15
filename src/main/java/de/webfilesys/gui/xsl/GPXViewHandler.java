@@ -44,8 +44,9 @@ public class GPXViewHandler extends UserRequestHandler {
 	}	
 	
 	protected void process() {
-	
-	    String filePath = getParameter("filePath"); 
+
+        String fileName = getParameter("fileName");
+        String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
 		
 		String googleMapsAPIKey = null;
 		if (req.getScheme().equalsIgnoreCase("https")) {
