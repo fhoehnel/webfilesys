@@ -43,13 +43,13 @@
   <script language="JavaScript">
     function exifData()
     {
-        exifWin=window.open('/webfilesys/servlet?command=exifData&amp;imgFile=<xsl:value-of select="/imageData/encodedPath" />','exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=400,height=480,left=200,top=100,screenX=200,screenY=100,resizable=no');
+        exifWin=window.open('/webfilesys/servlet?command=exifData&amp;imgFile=<xsl:value-of select="/imageData/encodedFileName" />','exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=400,height=480,left=200,top=100,screenX=200,screenY=100,resizable=no');
         exifWin.focus();
     }
     
     function scale()
     {
-        scaleWin = window.open('/webfilesys/servlet?command=resizeParms&amp;imgFile=<xsl:value-of select="/imageData/encodedPath" />&amp;popup=true','resizeWin' + (new Date()).getTime(),'status=no,toolbar=no,menu=no,width=400,height=560,resizable=no,scrollbars=yes,screenX=180,screenY=20,left=180,top=20');
+        scaleWin = window.open('/webfilesys/servlet?command=resizeParms&amp;imgFile=<xsl:value-of select="/imageData/encodedFileName" />&amp;popup=true','resizeWin' + (new Date()).getTime(),'status=no,toolbar=no,menu=no,width=400,height=560,resizable=no,scrollbars=yes,screenX=180,screenY=20,left=180,top=20');
         scaleWin.focus();
     }
     

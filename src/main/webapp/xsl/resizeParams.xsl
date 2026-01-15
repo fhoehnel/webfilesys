@@ -99,7 +99,7 @@
                 </tr>
                 <tr>
                   <td class="formParm2">
-                    <xsl:value-of select="/resizeParams/shortImgPath" />
+                    <xsl:value-of select="/resizeParams/shortImgName" />
                   </td>
                 </tr>
                 

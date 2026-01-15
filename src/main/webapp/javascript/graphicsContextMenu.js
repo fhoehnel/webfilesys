@@ -51,12 +51,12 @@ function jsContextMenu(fileName, imgType, domId) {
         
         if (imgType != '5') { 
         	// not SVG
-        	addContextMenuEntry(menuDiv, "jsResizeParms('" + scriptPreparedPath + "')", resourceBundle["label.editPicture"]);
+        	addContextMenuEntry(menuDiv, "jsResizeParms('" + scriptPreparedFile + "')", resourceBundle["label.editPicture"]);
         }
     }
 
     if (imgType == '1') {  // JPEG 
-    	addContextMenuEntry(menuDiv, "jsExifData('" + scriptPreparedPath + "')", resourceBundle["alt.cameradata"]);
+    	addContextMenuEntry(menuDiv, "jsExifData('" + scriptPreparedFile + "')", resourceBundle["alt.cameradata"]);
     }
 
     if (parent.readonly != 'true') {
@@ -154,14 +154,14 @@ function categories(fileName) {
     catWin.focus();
 }
 
-function jsResizeParms(path)
+function jsResizeParms(fileName)
 {
-    window.location.href = '/webfilesys/servlet?command=resizeParms&imgFile=' + encodeURIComponent(path);
+    window.location.href = '/webfilesys/servlet?command=resizeParms&imgFile=' + encodeURIComponent(fileName);
 }
 
-function jsExifData(path)
+function jsExifData(fileName)
 {
-    exifWin = window.open('/webfilesys/servlet?command=exifData&imgFile=' + encodeURIComponent(path),'exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=500,height=560,left=100,top=20,screenX=100,screenY=20,resizable=no');
+    exifWin = window.open('/webfilesys/servlet?command=exifData&imgFile=' + encodeURIComponent(fileName),'exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=500,height=560,left=100,top=20,screenX=100,screenY=20,resizable=no');
     exifWin.focus();
 }
 
