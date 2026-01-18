@@ -61,13 +61,10 @@ public abstract class RequestHandler
 		req.setAttribute(parmName, parmValue);
 	}
 	
-	public String getParameter(String parmName)
-	{
+	public String getParameter(String parmName) {
 		String parmValue = req.getParameter(parmName);
-		
-		if (parmValue != null)
-		{
-			return(parmValue);
+        if (parmValue != null) {
+            return replaceUnsaveCharacers(parmValue);
 		}
 		
 		Object o = req.getAttribute(parmName);
@@ -79,6 +76,10 @@ public abstract class RequestHandler
 		
 		return(null);
 	}
+
+    private String replaceUnsaveCharacers(String valueEnteredByUser) {
+        return valueEnteredByUser.replaceAll("<", "").replaceAll(">", "");
+    }
 
     public int getIntParameter(String paramName, int defaultValue) {
         String paramValue = getParameter(paramName);
