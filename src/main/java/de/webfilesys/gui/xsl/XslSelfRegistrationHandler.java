@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.WebFileSysConfig;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
@@ -31,6 +30,9 @@ import de.webfilesys.util.XmlUtil;
  */
 public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 {
+    private static final int MIN_LOGIN_LENGTH = 3;
+    private static final int MAX_LOGIN_LENGTH = 64;
+
 	public XslSelfRegistrationHandler(HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
@@ -55,16 +57,9 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		LanguageManager langMgr=LanguageManager.getInstance();
 
         String primaryLanguage = WebFileSysConfig.getInstance().getPrimaryLanguage();
-        
-		if (login.trim().length() < 3)
-		{
-			this.addValidationError("username", langMgr.getResource(primaryLanguage, "error.missinglogin", "the minimum length of the login name is 3 characters"));
-		}
-		else if (login.indexOf(' ')>0)
-		{
-			this.addValidationError("username", langMgr.getResource(primaryLanguage, "error.spacesinlogin", "the login name must not contain spaces"));
-		}
-		
+
+        validateUserName(login, langMgr, primaryLanguage);
+
 		String password=getParameter("password");
 		String pwconfirm=getParameter("pwconfirm");
 
@@ -453,5 +448,23 @@ public class XslSelfRegistrationHandler extends XslRequestHandlerBase
 		
 		
 		processResponse("registerUser.xsl");
+    }
+
+    private void validateUserName(String login, LanguageManager langMgr, String primaryLanguage) {
+        if (login.trim().length() < MIN_LOGIN_LENGTH || login.trim().length() > MAX_LOGIN_LENGTH) {
+            this.addValidationError("username", langMgr.getResource(primaryLanguage, "error.loginLength", "the length of the login name is invalid"));
+            return;
+        }
+        if (login.indexOf(' ') > 0) {
+            this.addValidationError("username", langMgr.getResource(primaryLanguage, "error.spacesinlogin", "the login name must not contain spaces"));
+            return;
+        }
+        for (int i = 0; i < login.length(); i++) {
+            char c = login.charAt(i);
+            if (!Character.isAlphabetic(c) && !Character.isDigit(c) && c != '-' && c != '_' && c != '.' && c != '@') {
+                this.addValidationError("username", langMgr.getResource(primaryLanguage, "error.loginInvalidChar", "the login name contains invalid characters"));
+                return;
+            }
+        }
     }
 }

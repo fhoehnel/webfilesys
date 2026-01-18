@@ -50,7 +50,7 @@ public class XmlSaveRemoteEditorHandler extends XmlRequestHandlerBase {
             LogManager.getLogger(getClass()).warn("failed to save editor content - file is not writable: " + filePath);
         	writeError = true;
         } else {
-			String text = getParameter("text");
+            String text = req.getParameter("text");
 
 			String tmpFileName = filePath + "_tmp$edit";
 
