@@ -50,7 +50,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		String path = getParameter("path");
 		
-		String relPath = req.getParameter("relPath");
+		String relPath = getParameter("relPath");
 		
 		if (relPath != null)
 		{
@@ -98,7 +98,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			return;
 		}
 		
-		String description = req.getParameter("description");
+		String description = getParameter("description");
 		
 		if (description == null)
 		{
@@ -113,7 +113,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		float latitude = 0f;
 		
-		String latitudeParm = req.getParameter("latitude");
+		String latitudeParm = getParameter("latitude");
 		
 		if ((latitudeParm != null) && (latitudeParm.trim().length() > 0))
 		{
@@ -138,7 +138,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		float longitude = 0f;
 		
-		String longitudeParm = req.getParameter("longitude");
+		String longitudeParm = getParameter("longitude");
 		
 		if ((longitudeParm != null) && (longitudeParm.trim().length() > 0))
 		{
@@ -163,7 +163,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		int zoomFactor = 10;
 		
-		String zoomFactorParm = req.getParameter("zoomFactor");
+		String zoomFactorParm = getParameter("zoomFactor");
 		
 		if ((zoomFactorParm != null) && (zoomFactorParm.trim().length() > 0))
 		{
@@ -187,7 +187,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		metaInfMgr.setDescription(path, description);
 		
-		String tags = req.getParameter("tags");
+		String tags = getParameter("tags");
 		
 	    if (tags != null) {
 			String[] newTags = tags.trim().split(",");
@@ -198,7 +198,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		{
 			GeoTag geoTag = new GeoTag(latitude, longitude, zoomFactor);
 			
-			String infoText = req.getParameter("infoText");
+			String infoText = getParameter("infoText");
 			
 			if (infoText != null)
 			{
@@ -222,7 +222,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		if (path.endsWith(".")) {
 			String normalizedPath = path.substring(0, path.length() - 2);
 
-			String defaultColor = req.getParameter("defaultColor");
+			String defaultColor = getParameter("defaultColor");
 			if (defaultColor != null) 
 			{
 				Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
@@ -235,7 +235,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			}
 			else
 			{
-				String textColor = req.getParameter("textColor");
+				String textColor = getParameter("textColor");
 				if ((textColor != null) && (textColor.trim().length() > 0)) 
 				{
 					Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
@@ -249,7 +249,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 				}
 			}
 			
-			String icon = req.getParameter("icon");
+			String icon = getParameter("icon");
 			if (icon != null) {
 				Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
 				if (icon.equals("none")) 
@@ -361,7 +361,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		if (errorMsg != null) 
 		{
-		    description = req.getParameter("description");
+		    description = getParameter("description");
 		}
 		else
 		{
@@ -376,7 +376,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		if (folderOrFile.isFile()) {
 			String tags = "";
 			if (errorMsg != null) {
-				tags = req.getParameter("tags");
+				tags = getParameter("tags");
 			} else {
 				ArrayList<String> tagList = metaInfMgr.getTags(path);
 				if (tagList != null) {
@@ -402,13 +402,13 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
         if (errorMsg != null) 
         {
-            String latitudeParm = req.getParameter("latitude"); 
+            String latitudeParm = getParameter("latitude");
             XmlUtil.setChildText(geoTagElement, "latitude", latitudeParm, false);
 
-            String longitudeParm = req.getParameter("longitude"); 
+            String longitudeParm = getParameter("longitude");
             XmlUtil.setChildText(geoTagElement, "longitude", longitudeParm, false);
             
-            String infoTextParm = req.getParameter("infoText");
+            String infoTextParm = getParameter("infoText");
             XmlUtil.setChildText(geoTagElement, "infoText", infoTextParm, false);
         }
         else
@@ -467,8 +467,8 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			
         boolean mapSelection = false;
 		
-		if ((req.getParameter("geoTag") != null) ||
-		    (req.getParameter("zoomFactor") != null)) // returned to input form because of validation error
+		if ((getParameter("geoTag") != null) ||
+		    (getParameter("zoomFactor") != null)) // returned to input form because of validation error
 		{
 	        mapSelection = true;
 		}
@@ -483,7 +483,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 	        {
 	            try
 	            {
-	                zoomFactor = Integer.parseInt(req.getParameter("zoomFactor"));
+	                zoomFactor = Integer.parseInt(getParameter("zoomFactor"));
 	            }
 	            catch (Exception ex)
 	            {
