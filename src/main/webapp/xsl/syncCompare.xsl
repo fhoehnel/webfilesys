@@ -14,15 +14,14 @@
 
 <meta http-equiv="expires" content="0" />
 
-<xsl:if test="not(folderTree/browserXslEnabled)">
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
-</xsl:if>
+<script language="JavaScript" src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+<script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+<script language="JavaScript" src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+<script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+<script language="JavaScript" src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 
 <script language="JavaScript" src="/webfilesys/javascript/fmweb.js" type="text/javascript"></script>
+<script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
 <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 <script language="JavaScript" src="/webfilesys/javascript/ajaxFolder.js" type="text/javascript"></script>
 <script language="JavaScript" src="/webfilesys/javascript/synchronize.js" type="text/javascript"></script>

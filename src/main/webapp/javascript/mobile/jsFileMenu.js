@@ -8,9 +8,9 @@ function comments(path)
     window.location.href = '/webfilesys/servlet?command=listComments&actPath=' + encodeURIComponent(path);
 }
 
-function viewZip(path)
+function viewZip(fileName)
 {
-    unzipWin=window.open("/webfilesys/servlet?command=viewZip&filePath=" + encodeURIComponent(path),"unzipWin","status=no,toolbar=no,menu=yes,width=500,height=580,resizable=yes,scrollbars=yes,left=100,top=40,screenX=100,screenY=40");
+    unzipWin=window.open("/webfilesys/servlet?command=viewZip&fileName=" + encodeURIComponent(fileName),"zipWin","status=no,toolbar=no,menu=yes,width=500,height=580,resizable=yes,scrollbars=yes,left=100,top=40,screenX=100,screenY=40");
     unzipWin.focus();
 }
 
@@ -30,21 +30,6 @@ function editMP3(path)
     window.location.href = "/webfilesys/servlet?command=editMP3&path=" + encodeURIComponent(path);
 }
 
-function renameFile(fileName) {   
-    centeredDialog('/webfilesys/servlet?command=renameFilePrompt&mobile=true&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameFile.xsl', 340, 160, function() {
-        document.renameForm.newFileName.focus();
-        const newFileName = document.renameForm.newFileName.value;
-        if (newFileName) {
-	        const extStart = newFileName.lastIndexOf(".");
-            if (extStart > 0) {
-	            document.renameForm.newFileName.setSelectionRange(0, extStart);
-            } else {
-                document.renameForm.newFileName.select();
-            }
-        }
-    });
-}
-
 function copyToClipboard(fileName)
 {
     cutCopyToClip(fileName, 'copy');
@@ -55,9 +40,9 @@ function cutToClipboard(fileName)
     cutCopyToClip(fileName, 'move');
 }
 
-function editRemote(fileName)
+function editRemote(filePath, fileName)
 {
-    window.location.href = '/webfilesys/servlet?command=mobile&cmd=editFile&filename=' + encodeURIComponent(fileName) + '&screenHeight=' + screen.height;
+    window.location.href = "/webfilesys/html/remoteEditor.html?fileName=" + encodeURIComponent(fileName) + "&filePath=" + encodeURIComponent(filePath) + "&screenHeight=" + screen.height;
 }
 
 function downloadFile(path) {
@@ -135,7 +120,7 @@ function accessRights(path)
 }
 
 function sendFile(fileName) {
-    centeredDialog('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 240, function() {
+    centeredDialog('/webfilesys/servlet?command=emailFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/emailFile.xsl', 400, 320, function() {
         document.emailForm.receiver.focus();
         document.emailForm.receiver.select();
     });
@@ -144,10 +129,6 @@ function sendFile(fileName) {
 function delLink(linkName)
 {
     window.location.href="/webfilesys/servlet?command=deleteLink&linkName=" + encodeURIComponent(linkName);
-}
-
-function switchReadWrite(path) {  
-    centeredDialog('/webfilesys/servlet?command=switchReadWrite&filePath=' + encodeURIComponent(path), '/webfilesys/xsl/switchReadWrite.xsl', 360, 190);
 }
 
 function associatedProg(path)

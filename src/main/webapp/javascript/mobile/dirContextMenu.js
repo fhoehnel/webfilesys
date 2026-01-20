@@ -1,5 +1,5 @@
 function folderContextMenu(path, folderName) {
-	
+
     let shortFolderName = folderName;
     
     if (folderName.length > 22) {
@@ -8,7 +8,7 @@ function folderContextMenu(path, folderName) {
 
     const scriptPreparedPath = insertDoubleBackslash(path);
 
-    const menuDiv = document.getElementById('contextMenu');    
+    const menuDiv = document.getElementById('contextMenu');
     
     menuDiv.style.visibility = 'hidden';
 
@@ -78,7 +78,7 @@ function folderContextMenu(path, folderName) {
     }
 
     if (readonly != 'true') {
-    	addContextMenuEntry(menuDiv, "bookmark('')", resourceBundle["mobile.addBookmark"]);
+    	addContextMenuEntry(menuDiv, "bookmark('" + scriptPreparedPath + "')", resourceBundle["mobile.addBookmark"]);
     }
     
     positionMenuDiv(menuDiv);

@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -122,7 +123,7 @@ public class AlarmDistributor extends Thread
     	int currentHourIndex = nowCal.get(Calendar.DAY_OF_MONTH) * 100 + nowCal.get(Calendar.HOUR_OF_DAY);
     	if (currentHourIndex == lastMailSentHourIdx)
     	{
-    		if (mailsSentInLastHour > WebFileSys.getInstance().getMaxAppointmentMailsPerHour())
+    		if (mailsSentInLastHour > WebFileSysConfig.getInstance().getMaxAppointmentMailsPerHour())
     		{
             	LogManager.getLogger(getClass()).warn("too many appointment mails sent per hour: " + mailsSentInLastHour);
                 return false;

@@ -10,12 +10,10 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
 import de.webfilesys.calendar.AppointmentManager;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.user.UserManager;
 import de.webfilesys.user.UserManagerBase;
@@ -113,8 +111,6 @@ implements HttpSessionListener, ServletContextListener
         
         CategoryManager.getInstance().interrupt();
 
-        DecorationManager.getInstance().interrupt();
-
         InvitationManager.getInstance().interrupt();
 
         FileSysBookmarkManager.getInstance().interrupt();
@@ -129,7 +125,7 @@ implements HttpSessionListener, ServletContextListener
 			WebFileSys.getInstance().getDiskQuotaInspector().interrupt();
 		}
 
-		if (WebFileSys.getInstance().isEnableCalendar())
+		if (WebFileSysConfig.getInstance().isEnableCalendar())
 		{
 			AppointmentManager.getInstance().interrupt();
 		}
@@ -146,7 +142,7 @@ implements HttpSessionListener, ServletContextListener
         
         FastPathManager.getInstance().interrupt();
         
-        if (WebFileSys.getInstance().isFolderWatch()) {
+        if (WebFileSysConfig.getInstance().isFolderWatch()) {
             FolderWatchManager.getInstance().interrupt();
         }
 

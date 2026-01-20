@@ -42,7 +42,11 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 
 		String currentPath = getCwd();
 
-		String imgFilePath = getParameter("imgFile");
+        String imgFilePath = null;
+		String imgFileName = getParameter("imgFile");
+        if (!CommonUtils.isEmpty(imgFileName)) {
+            imgFilePath = CommonUtils.joinFilesysPath(currentPath, imgFileName);
+        }
 
 		boolean anyJpegFileSelected = false;
 		
@@ -89,8 +93,8 @@ public class XslResizeParmsHandler extends XslRequestHandlerBase {
 		XmlUtil.setChildText(resizeParamsElement, "shortPath", shortPath, false);
 
 		if (imgFilePath != null) {
-			String shortImgPath = CommonUtils.shortName(getHeadlinePath(imgFilePath), fileNameDislayLength);
-			XmlUtil.setChildText(resizeParamsElement, "shortImgPath", shortImgPath, false);
+			String shortImgName = CommonUtils.shortName(getHeadlinePath(imgFileName), fileNameDislayLength);
+			XmlUtil.setChildText(resizeParamsElement, "shortImgName", shortImgName, false);
 		}
 		
 		XmlUtil.setChildText(resizeParamsElement, "imageFolderPath", currentPath, false);

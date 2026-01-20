@@ -13,14 +13,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.Constants;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.gui.user.ZipFileRequestHandler;
 import de.webfilesys.gui.xsl.XslFileListHandler;
@@ -307,7 +304,7 @@ public class UploadServlet extends WebFileSysServlet
 			}
         }
 
-        long uploadLimit = WebFileSys.getInstance().getUploadLimit();
+        long uploadLimit = WebFileSysConfig.getInstance().getUploadLimit();
         
         byte delimiterBytes[] = delimiter_str.getBytes();
 
@@ -550,7 +547,7 @@ public class UploadServlet extends WebFileSysServlet
                     }
         	    }
 
-				if (WebFileSys.getInstance().isAutoCreateThumbs())
+				if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
 				{
 					if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png")))
 					{
@@ -575,7 +572,7 @@ public class UploadServlet extends WebFileSysServlet
             return;
         }
         
-        long uploadLimit = WebFileSys.getInstance().getUploadLimit();
+        long uploadLimit = WebFileSysConfig.getInstance().getUploadLimit();
         
         String requestPath = req.getRequestURI();
         
@@ -642,7 +639,7 @@ public class UploadServlet extends WebFileSysServlet
             }
         }
         
-        if (WebFileSys.getInstance().isAutoCreateThumbs())
+        if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
         {
             String ext = CommonUtils.getFileExtension(fileName);
             

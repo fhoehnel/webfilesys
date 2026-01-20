@@ -217,10 +217,8 @@
       
       function checkUploadFileConflicts() {
     	  
-    	  showHourGlass();
-    	  
     	  var postData = "command=checkUploadConflict";
-		  for (var i = 0; i < selectedForUpload.length; i++) {
+		  for (let i = 0; i < selectedForUpload.length; i++) {
 	    	  postData += "&file=";
 	          if (browserSafari) {
 	    	      postData += selectedForUpload[i].fileName;
@@ -228,35 +226,19 @@
 	    	      postData += selectedForUpload[i].name;
 	          }
 		  }
-		  
-		  xmlRequestPost("/webfilesys/servlet", postData, function(req) {
-	          if (req.readyState == 4) {
-	              if (req.status == 200) {
-		              var conflicts = req.responseXML.getElementsByTagName("conflict");            
 
-			          if (conflicts.length > 0) {
-
-		                  var msg = resourceBundle["upload.conflictHead"];
-			            	
-			              msg += "<br/>"; 
-			                
-			              for (var i = 0; i < conflicts.length; i++) {
-			              	  msg = msg + "<br/>" + conflicts[i].firstChild.nodeValue;
-			              }
-
-			              msg = msg + "<br/><br/>" + resourceBundle["upload.overwrite"];
-
-		            	  hideHourGlass();
-			              
-			              customConfirm(msg, resourceBundle["button.cancel"], resourceBundle["button.ok"], sendFiles);
-			          } else {
-		            	  hideHourGlass();
-			              sendFiles();
-			          }
-	              } else {
-	            	  hideHourGlass();
-	                  alert(resourceBundle["alert.communicationFailure"]);
-	              }
+          xmlFetchPost(postData, xmlDoc => {
+		      const conflicts = xmlDoc.getElementsByTagName("conflict");
+			  if (conflicts.length > 0) {
+		          let msg = resourceBundle["upload.conflictHead"];
+			      msg += "<br/>";
+			      for (var i = 0; i < conflicts.length; i++) {
+			       	  msg = msg + "<br/>" + conflicts[i].firstChild.nodeValue;
+			      }
+    	          msg = msg + "<br/><br/>" + resourceBundle["upload.overwrite"];
+	              customConfirm(msg, resourceBundle["button.cancel"], resourceBundle["button.ok"], sendFiles);
+	          } else {
+	              sendFiles();
 	          }
 	      });
       }

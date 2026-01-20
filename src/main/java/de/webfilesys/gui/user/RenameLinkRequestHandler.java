@@ -86,7 +86,7 @@ public class RenameLinkRequestHandler extends UserRequestHandler
             if (viewMode == Constants.VIEW_MODE_THUMBS) {
                 (new XslThumbnailHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest(); 
             } else if (viewMode == Constants.VIEW_MODE_VIDEO) {
-                (new XslVideoListHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest(); 
+                (new XslVideoListHandler(req, resp, session, output, uid)).handleRequest();
             } else {
                 (new XslFileListHandler(req, resp, session, output, uid)).handleRequest();
             }

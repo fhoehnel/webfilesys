@@ -75,11 +75,8 @@ function removeDir(path) {
     });
 }
 
-function cancelSearch()
-{
-    url = "/webfilesys/servlet?command=cancelSearch";
-
-    xmlRequest(url, handleSearchCanceled);
+function cancelSearch() {
+    xmlGetRequest("cancelSearch", {});
 }
 
 function clearThumbs(path) {
@@ -104,137 +101,71 @@ function createThumbs(path) {
 	});
 }
 
-function winCmdLine(path)
-{
-    url = "/webfilesys/servlet?command=winCmdLine&path=" + encodeURIComponent(path);
-
-    xmlRequest(url, handleCmdLineResult);
-}
-
-function hideMsg()
-{
-     msgBox1 = document.getElementById("msg1");
-     msgBox1.style.visibility = "hidden";
-}
-
-function handleSearchCanceled(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status != 200)
-        {
-             alert("communication failure");
+function winCmdLine(path) {
+    const parameters = { "path": encodeURIComponent(path) };
+    xmlGetRequest("winCmdLine", parameters, xmlDoc => {
+        const successItem = xmlDoc.getElementsByTagName("success")[0];
+        const success = successItem.firstChild.nodeValue;
+        if (success !== 'true') {
+            customAlert("Windows Command Line could not be started");
         }
-    }
+    });
 }
 
-function handleCmdLineResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var successItem = req.responseXML.getElementsByTagName("success")[0];            
-             var success = successItem.firstChild.nodeValue;
-             
-             if (success != 'true')
-             {
-                 alert("Windows Command Line could not be started");
-             }
-        }
-    }
-}
-
-function col(domId)
-{
-    var urlEncodedPath;
-
-    parentDiv = document.getElementById(domId);
-
-    if (!parentDiv)
-    {
+function col(domId) {
+    const parentDiv = document.getElementById(domId);
+    if (!parentDiv) {
         alert('Element with id ' + domId + ' not found');
-    }
-    else
-    {
-        urlEncodedPath = parentDiv.getAttribute("path");
-    
-        // deselectCurrentDir();
+    } else {
+        // change minus sign into plus sign
         
-        // first change minus sign into plus sign
+        const children = parentDiv.childNodes;
         
-        children = parentDiv.childNodes;
-        
-        for (i = 0; i < children.length; i++)
-        {
-            if (children[i].nodeName.toLowerCase()  == 'a')
-            {
+        for (i = 0; i < children.length; i++) {
+            if (children[i].nodeName.toLowerCase()  === 'a') {
                 subChildren = children[i].childNodes;
         
-                for (k = 0; k < subChildren.length; k++)
-                {
-                     if (subChildren[k].nodeName.toLowerCase()  == 'img')
-                     {
-                         if (subChildren[k].src.indexOf('minus') > 0)
-                         {
+                for (k = 0; k < subChildren.length; k++) {
+                     if (subChildren[k].nodeName.toLowerCase()  === 'img') {
+                         if (subChildren[k].src.indexOf('minus') > 0) {
                              subChildren[k].src = subChildren[k].src.replace('minus', 'plus');
-                             
-                             children[i].href = children[i].href.replace('col', 'exp'); 
-                         }        
-                         else
-                         {
-                             if (subChildren[k].src.indexOf('folder.gif') > 0)
-                             {
+                             children[i].href = children[i].href.replace('col', 'exp');
+                         } else {
+                             if (subChildren[k].src.indexOf('folder.gif') > 0) {
                                  subChildren[k].src = subChildren[k].src.replace('folder.gif', 'folder1.gif');
                              }            
                          }    
                      }
                 }
             }
-            
-            /*
-            if (parentDiv.classList) {
-            	parentDiv.classList.add("currentFolder");    
-            }
-            */
-        }   
+        }
         
-        // currentDirId = domId;
-
         // and now remove the divs of the subfolders
 
-        children = parentDiv.childNodes;
-        
-        for (i = children.length - 1; i >= 0; i--)
-        {
-            if (children[i].nodeName.toLowerCase()  == 'div')
-            {
+        for (i = children.length - 1; i >= 0; i--) {
+            if (children[i].nodeName.toLowerCase()  === 'div') {
                 parentDiv.removeChild(children[i]);
             }
         }       
     }
-    
-    url = "/webfilesys/servlet?command=ajaxCollapse&path=" + urlEncodedPath;
 
-    xmlRequest(url, dummy);
-}
+    const urlEncodedPath = parentDiv.getAttribute("path");
 
-function dummy()
-{
+    xmlGetRequest("ajaxCollapse", { path: urlEncodedPath }, null, null, true);
 }
 
 function deselectCurrentDir() {
-    if (currentDirId != '') {
+    if (currentDirId !== '') {
         oldCurrentDirDiv = document.getElementById(currentDirId);
 
         if (oldCurrentDirDiv) {
             children = oldCurrentDirDiv.childNodes;
 
-            for (i = 0; i < children.length; i++) {
-                if (children[i].nodeName.toLowerCase()  == 'a') {
+            for (let i = 0; i < children.length; i++) {
+                if (children[i].nodeName.toLowerCase()  === 'a') {
                     subChildren = children[i].childNodes;
         
-                    for (k = 0; k < subChildren.length; k++) {
+                    for (let k = 0; k < subChildren.length; k++) {
                          if (subChildren[k].nodeName.toLowerCase() === "span") {
                         	 let currentStyle = subChildren[k].getAttribute("class");
                         	 if (currentStyle && currentStyle.indexOf("folderCurrent") >= 0) {
@@ -265,20 +196,20 @@ function deselectCurrentDir() {
 }
 
 function selectCurrentDir(parentDiv) {
-    children = parentDiv.childNodes;
+    const children = parentDiv.childNodes;
         
-    for (i = 0; i < children.length; i++) {
-         if (children[i].nodeName.toLowerCase()  == 'a') {
+    for (let i = 0; i < children.length; i++) {
+         if (children[i].nodeName.toLowerCase()  === 'a') {
              subChildren = children[i].childNodes;
          
-             for (k = 0; k < subChildren.length; k++) {
+             for (let k = 0; k < subChildren.length; k++) {
             	 
                  if (subChildren[k].nodeName.toLowerCase() === "span") {
                 	 let currentStyle = subChildren[k].getAttribute("class");
                 	 if (currentStyle && currentStyle.indexOf("folderCurrent") < 0) {
                 		 subChildren[k].setAttribute("class", currentStyle + " folderCurrent");
                 	 }
-                 } else if (subChildren[k].nodeName.toLowerCase()  == 'img') {
+                 } else if (subChildren[k].nodeName.toLowerCase()  === 'img') {
                       if (subChildren[k].src.indexOf('folder.gif') > 0) {
                           subChildren[k].src = subChildren[k].src.replace('folder.gif', 'folder1.gif');
                       }            
@@ -292,18 +223,15 @@ function selectCurrentDir(parentDiv) {
     }
 }
 
-function listFiles(id)
-{
-    parentDiv = document.getElementById(id);
+function listFiles(id){
+    const parentDiv = document.getElementById(id);
 
-    if (!parentDiv)
-    {
+    if (!parentDiv) {
         alert('Element with id ' + id + ' not found');
-
         return;
     }
 
-    var urlEncodedPath = parentDiv.getAttribute("path");
+    const urlEncodedPath = parentDiv.getAttribute("path");
 
     window.parent.frames[2].location.href = '/webfilesys/servlet?command=listFiles&actpath=' + urlEncodedPath + '&mask=*';
 
@@ -324,233 +252,92 @@ function exp(parentDivId, lastInLevel) {
    
     const urlEncodedPath = parentDiv.getAttribute("path");
 
-    const xmlUrl = "/webfilesys/servlet?command=ajaxExp&path=" + urlEncodedPath + "&lastInLevel=" + lastInLevel;
+    xmlGetRequest("ajaxExp", { path: urlEncodedPath, lastInLevel },
+        htmlFragment => {
+            const fragment = htmlFragment.documentElement.outerHTML;
 
-    const xslUrl = "/webfilesys/xsl/subFolder.xsl";
-
-    if (window.ActiveXObject !== undefined) {
-        // MSIE  
-
-        expMSIE(parentDiv, xmlUrl, xslUrl);
-    } else {
-        if (browserIsFirefox || browserIsChrome) { 
-            // Firefox & Chrome
-            expMozilla(parentDiv, xmlUrl, xslUrl);
-        } else {
-            // XSLT with Javascript (google ajaxslt)
-            expJavascriptXslt(parentDiv, xmlUrl, xslUrl)
-        }
-    }
-}
-    
-function expMozilla(parentDiv, xmlUrl, xslUrl) {
-
-    showHourGlass();
-    
-	xmlRequest(xslUrl, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xslStyleSheet = req.responseXML;
-
-	            xmlRequest(xmlUrl, function(req) {
-                    if (req.readyState == 4) {
-                        if (req.status == 200) {
-			                var xmlDoc = req.responseXML;
-				
-				            if (!xmlDoc) {
-                                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-                                return;
-				            }
-				
-                            var xsltProcessor = new XSLTProcessor();
-       
-                            xsltProcessor.importStylesheet(xslStyleSheet);
-
-                            var fragment = xsltProcessor.transformToFragment(xmlDoc, document);
-       
-                            parentDiv.innerHTML = '';
-                            
-                            let divClass = parentDiv.getAttribute("class");
-                            if (divClass && divClass.indexOf("currentFolder") > 0) {
-                                currentDirId = fragment.childNodes[0].id;
-                            }
-                            
-                            parentDiv.parentNode.replaceChild(fragment, parentDiv);
-                            
-                            hideHourGlass();
-                            
-                            setTimeout('setTooltips()', 500);
-                            
-                            querySubdirs();
-                        } else {
-                            window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-                            return;
-			            }
-			        }
-		        });
-		    } else {
-                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-		    }
-		}
-	});
-}    
-
-function expMSIE(parentDiv, xmlUrl, xslUrl)
-{ 
-    showHourGlass();
-
-    xml = new ActiveXObject("Msxml2.DOMDocument.3.0");
-    xml.async = false;
-    if (!xml.load(xmlUrl))
-    {
-        window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
-
-        return;
-    }
-    
-    var newId = xml.documentElement.getAttribute('id');
-
-    var xslProcessor = xslTemplate.createProcessor();
-    
-    xslProcessor.input = xml;
-   
-    xslProcessor.transform();
-    
-    parentDiv.outerHTML = xslProcessor.output;
-    
-    hideHourGlass();
-    
-    currentDirId = newId;
-
-    setTimeout('setTooltips()', 500);
-    
-    querySubdirs();
-}
-
-function expJavascriptXslt(parentDiv, xmlUrl, xslUrl) { 
-
-	xmlRequest(xslUrl, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xslStyleSheet = req.responseXML;
-
-	            xmlRequest(xmlUrl, function(req) {
-                    if (req.readyState == 4) {
-                        if (req.status == 200) {
-			                var xmlDoc = req.responseXML;
-
-				            if (!xmlDoc) {
-                                alert(resourceBundle["alert.communicationFailure"]);
-                                return;
-				            }
-
-                            var newId = xmlDoc.documentElement.getAttribute('id');
-
-                            // browser-independend client-side XSL transformation with google ajaxslt 
-       
-                            var html = xsltProcess(xmlDoc, xslStyleSheet);
-
-                            parentDiv.outerHTML = html;
-    
-                            // currentDirId = newId;
-
-                            setTimeout('setTooltips()', 500);
-                            
-                            querySubdirs();
-                        } else {
-                            alert(resourceBundle["alert.communicationFailure"]);
-                            return;
-			            }
-                    }
-                });		
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-                window.parent.parent.location.href = '/webfilesys/servlet?command=loginForm';
+            let divClass = parentDiv.getAttribute("class");
+            if (divClass && divClass.indexOf("currentFolder") > 0) {
+                currentDirId = htmlFragment.documentElement.id;
             }
-        }
-    });
+
+            parentDiv.outerHTML = htmlFragment.documentElement.outerHTML;
+            setTimeout('setTooltips()', 500);
+            querySubdirs();
+        },
+        () => {
+            console.warn("expand folder failed");
+            customAlert(resourceBundle["alert.sessionexpired"], "OK", redirectToLogin);
+        },
+        true
+    );
 }
 
 function querySubdirs() {
-	querySubdirQueue = new Array();
+	const querySubdirQueue = [];
 	
     $("div[subdirStatusUnknown]").each(function() {
     	querySubdirQueue.push({"path": $(this).attr("path"), "id": $(this).attr("id")});
     	$(this).removeAttr("subdirStatusUnknown");
     });	
     
-    querySubdirStatus();
+    querySubdirStatus(querySubdirQueue);
 }
 
-function querySubdirStatus() {
+function querySubdirStatus(querySubdirQueue) {
 	if (querySubdirQueue.length > 0) {
-		var queueElem = querySubdirQueue.pop();
-        var ajaxUrl = "/webfilesys/servlet?command=testSubdirExist&path=" + queueElem.path;
-        
-    	xmlRequest(ajaxUrl, function(req) {
-            if (req.readyState == 4) {
-                if (req.status == 200) {
-                    var subdirExists = req.responseXML.getElementsByTagName("result")[0].firstChild.nodeValue;        
-                    if (subdirExists == "false") {
-                    	var folderDiv = document.getElementById(queueElem.id);
-                    	if (folderDiv) {
-                    		var linkElem = getChildElementsByTagName(folderDiv, "A")[0];
-                    		if (linkElem) {
-                        		var expColImg = getChildElementsByTagName(linkElem, "IMG")[0];
-                        		if (expColImg) {
-                        			if (expColImg.src.endsWith("plusMore.gif")) {
-                            			expColImg.src = "/webfilesys/images/branch.gif";
-                        			} else {
-                        				expColImg.src = "/webfilesys/images/branchLast.gif";
-                        			}
-                        		}
-                    		}
-                    	}
+		const queueElem = querySubdirQueue.pop();
+
+        xmlGetRequest("testSubdirExist", { path: queueElem.path },
+            responseXml => {
+                const subdirExists = responseXml.getElementsByTagName("result")[0].firstChild.nodeValue;
+                if (subdirExists === "false") {
+                    const folderDiv = document.getElementById(queueElem.id);
+                    if (folderDiv) {
+                        const linkElem = getChildElementsByTagName(folderDiv, "A")[0];
+                        if (linkElem) {
+                            const expColImg = getChildElementsByTagName(linkElem, "IMG")[0];
+                            if (expColImg) {
+                                if (expColImg.src.endsWith("plusMore.gif")) {
+                                    expColImg.src = "/webfilesys/images/branch.gif";
+                                } else {
+                                    expColImg.src = "/webfilesys/images/branchLast.gif";
+                                }
+                            }
+                        }
                     }
-                    querySubdirStatus();
-                } else {
-                    alert(resourceBundle["alert.communicationFailure"]);
-	            }
-            }
-    	});
+                }
+                querySubdirStatus(querySubdirQueue);
+    	    },
+            null,
+            true
+        );
 	}
 }
 
-function synchronize(path, domId)
-{
+function synchronize(path, domId) {
     parent.syncStarted = !parent.syncStarted;
 	
 	deselectFolder();
 	selectFolder(domId);
 
-    url = "/webfilesys/servlet?command=selectSyncFolder&path=" + encodeURIComponent(path);
+    const parameters = { "path": encodeURIComponent(path) };
 
-    xmlRequest(url, selectSyncFolderResult);
-}
+    xmlGetRequest("selectSyncFolder", parameters, responseXml => {
+        let item = responseXml.getElementsByTagName("success")[0];
+        const result = item.firstChild.nodeValue;
 
-function selectSyncFolderResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var item = req.responseXML.getElementsByTagName("success")[0];            
-             var result = item.firstChild.nodeValue;
-             
-             hideMenu();
+        hideMenu();
 
-             if (result == 'targetSelected')
-             {
-                 openSyncWindow();
-                 return;
-             }
-
-             item = req.responseXML.getElementsByTagName("message")[0];            
-             var message = item.firstChild.nodeValue;
-             
-             toast(message, 4000);
+        if (result === "targetSelected") {
+            openSyncWindow();
+            return;
         }
-    }
+
+        item = responseXml.getElementsByTagName("message")[0];
+        const message = item.firstChild.nodeValue;
+        toast(message, 4000);
+    });
 }
 
 function openSyncWindow()
@@ -569,39 +356,22 @@ function openSyncWindow()
     syncWin.focus();
 }
 
-function deselectSyncFolders()
-{
-    url = "/webfilesys/servlet?command=selectSyncFolder&cmd=deselect";
-    
-    xmlRequest(url, deselectSyncFolderResult);
-}
-
-function deselectSyncFolderResult(req)
-{
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-            setTimeout("self.close()", 100);
-        }
-    }
+function deselectSyncFolders() {
+    const parameters = { "cmd": "deselect" };
+    xmlGetRequest("selectSyncFolder", parameters, responseXml => {
+        setTimeout(() => self.close(), 100);
+    });
 }
 
 function cancelSynchronize() {
     deselectFolder();
 
-    url = "/webfilesys/servlet?command=selectSyncFolder&cmd=deselect";
+    const parameters = {"cmd": "deselect"};
 
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-                parent.syncStarted = false;
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-            hideMenu();    
-            stopMenuClose = true;
-        }
+    xmlGetRequest("selectSyncFolder", parameters, () => {
+        parent.syncStarted = false;
+        hideMenu();
+        stopMenuClose = true;
     });
 }
 
@@ -632,22 +402,20 @@ function compareFolders(path, domId) {
 	});
 }
 
-function cancelCompare()
-{
+function cancelCompare() {
+    console.debug("cancelCompare start new");
     deselectFolder();
-
-    url = "/webfilesys/servlet?command=selectCompFolder&cmd=deselect";
-
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
+    const parameters = { "cmd": "deselect" };
+    xmlGetRequest("selectCompFolder", parameters,
+            responseXml => {
                 parent.compStarted = false;
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-            hideMenu();    
-            stopMenuClose = true;
-        }
+                setTimeout(() => self.close(), 100);
+                hideMenu();
+                stopMenuClose = true;
+            },
+        () => {
+                hideMenu();
+                stopMenuClose = true;
     });
 }
 

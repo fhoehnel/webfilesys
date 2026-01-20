@@ -11,8 +11,6 @@ function jsContextMenu(fileName, imgType, domId) {
         shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 13, fileName.length);
     }    
 
-    fileNameExt = getFileNameExt(fileName);
-    
     lastPathChar = path.charAt(path.length - 1);
     
     if ((lastPathChar == '/') || (lastPathChar == '\\')) {
@@ -30,7 +28,7 @@ function jsContextMenu(fileName, imgType, domId) {
     scriptPreparedFile = insertDoubleBackslash(fileName);
         
     addContextMenuHead(menuDiv, shortFileName);
-    
+	
     if (parent.readonly != 'true') {
     	
     	addContextMenuEntry(menuDiv, "delImg('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
@@ -53,12 +51,12 @@ function jsContextMenu(fileName, imgType, domId) {
         
         if (imgType != '5') { 
         	// not SVG
-        	addContextMenuEntry(menuDiv, "jsResizeParms('" + scriptPreparedPath + "')", resourceBundle["label.editPicture"]);
+        	addContextMenuEntry(menuDiv, "jsResizeParms('" + scriptPreparedFile + "')", resourceBundle["label.editPicture"]);
         }
     }
 
     if (imgType == '1') {  // JPEG 
-    	addContextMenuEntry(menuDiv, "jsExifData('" + scriptPreparedPath + "')", resourceBundle["alt.cameradata"]);
+    	addContextMenuEntry(menuDiv, "jsExifData('" + scriptPreparedFile + "')", resourceBundle["alt.cameradata"]);
     }
 
     if (parent.readonly != 'true') {
@@ -73,7 +71,7 @@ function jsContextMenu(fileName, imgType, domId) {
 
     if (parent.readonly != 'true') { 
 
-    	addContextMenuEntry(menuDiv, "categories('" + scriptPreparedPath + "')", resourceBundle["label.assignCategories"]);
+    	addContextMenuEntry(menuDiv, "categories('" + scriptPreparedFile + "')", resourceBundle["label.assignCategories"]);
 
         if (parent.mailEnabled == 'true') {
         	addContextMenuEntry(menuDiv, "jsSendFile('" + scriptPreparedFile + "')", resourceBundle["label.sendfile"]);
@@ -87,11 +85,19 @@ function jsContextMenu(fileName, imgType, domId) {
     	addContextMenuEntry(menuDiv, "startSlideshowHere('" + scriptPreparedPath + "','" + scriptPreparedFile + "')", resourceBundle["startSlideshowHere"]);
     }
     
+	if (parent.clientIsLocal != 'true') {
+	    addContextMenuEntry(menuDiv, "downloadFile('" + scriptPreparedPath + "')", resourceBundle["label.download"]);
+	}
+	
     if (parent.readonly == 'true') {
         maxMenuHeight = 120;
     } else {
         maxMenuHeight = 380;
     }
+	
+	if (parent.clientIsLocal != 'true') {
+		maxMenuHeight += 20;
+	}
     
     positionMenuDiv(menuDiv, maxMenuHeight);
     menuDiv.style.visibility = 'visible';
@@ -143,19 +149,19 @@ function jsEditDesc(path) {
     descWin.opener = self;
 }
 
-function categories(path) {
-    catWin = window.open("/webfilesys/servlet?command=assignCategory&filePath=" + encodeURIComponent(path) + "&random=" + new Date().getTime(), "catWin", "status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=520,height=400,resizable=yes,left=100,top=30,screenX=100,screenY=30");
+function categories(fileName) {
+    const catWin = window.open("/webfilesys/servlet?command=assignCategory&fileName=" + encodeURIComponent(fileName), "catWin", "status=no,toolbar=no,location=no,menu=no,scrollbars=yes,width=520,height=400,resizable=yes,left=100,top=30,screenX=100,screenY=30");
     catWin.focus();
 }
 
-function jsResizeParms(path)
+function jsResizeParms(fileName)
 {
-    window.location.href = '/webfilesys/servlet?command=resizeParms&imgFile=' + encodeURIComponent(path);
+    window.location.href = '/webfilesys/servlet?command=resizeParms&imgFile=' + encodeURIComponent(fileName);
 }
 
-function jsExifData(path)
+function jsExifData(fileName)
 {
-    exifWin = window.open('/webfilesys/servlet?command=exifData&imgFile=' + encodeURIComponent(path),'exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=500,height=560,left=100,top=20,screenX=100,screenY=20,resizable=no');
+    exifWin = window.open('/webfilesys/servlet?command=exifData&imgFile=' + encodeURIComponent(fileName),'exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=500,height=560,left=100,top=20,screenX=100,screenY=20,resizable=no');
     exifWin.focus();
 }
 
@@ -210,6 +216,10 @@ function addCopyToClipboard(fileName)
 function addMoveToClipboard(fileName)
 {
     cutCopyToClip(fileName, 'addMove');
+}
+
+function downloadFile(path) {
+    window.location.href = "/webfilesys/servlet?command=getFile&filePath=" + encodeURIComponent(path) + "&disposition=download";
 }
 
 function publishFile(path)

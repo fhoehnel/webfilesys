@@ -47,12 +47,10 @@ public class ProtectedRequestHandler extends RequestHandler {
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-    {
-        super(req, resp, session, output);
+            String uid) {
 
+        super(req, resp, session, output);
         this.uid = uid;
-        
         userMgr = WebFileSys.getInstance().getUserMgr();
     }
 
@@ -61,21 +59,17 @@ public class ProtectedRequestHandler extends RequestHandler {
         process();
     }
 
-    protected void process()
-    {
+    protected void process() {
     }
     
-	protected boolean isAdminUser(boolean sendErrorPage)
-	{
+	protected boolean isAdminUser(boolean sendErrorPage) {
 		String role = userMgr.getRole(uid);
 
-		if ((role != null) && role.equals("admin"))
-		{
+		if ((role != null) && role.equals("admin")) {
 			return(true);
 		}
 
-		if (!sendErrorPage)
-		{
+		if (!sendErrorPage) {
 			return(false);
 		}
 
@@ -87,68 +81,57 @@ public class ProtectedRequestHandler extends RequestHandler {
 		output.println("</HEAD>");
 		output.println("<BODY>");
 		output.println("You are not an admin user!");
-		output.println("</html></body>");
+		output.println("</BODY></HTML>");
 		output.flush();
 		return(false);
 	}
 	
-	protected boolean accessAllowed(String fileName)
-	{
-		if (fileName.indexOf("..") >=0)
-		{
+	protected boolean accessAllowed(String requestedPath) {
+		if (requestedPath.contains("..")) {
 			return(false);
 		}
 
-		if (File.separatorChar=='\\')   // WIN
-		{
+		if (File.separatorChar=='\\') {
 			String lowerCaseDocRoot = userMgr.getLowerCaseDocRoot(uid);
 
-			String formattedDocName=fileName.toLowerCase().replace('\\','/');
+			String normalizedRequestedPath = requestedPath.toLowerCase().replace('\\','/');
 
-			if (lowerCaseDocRoot.charAt(0)=='*')
-			{
+			if (lowerCaseDocRoot.charAt(0)=='*') {
 				// may be this branch is not needed
 				// because if document root starts with "*" the user has full access anyway
 				// if this branch makes sense it should get the same test for
 				// doc length or slash at doc root length index as below
 
-				return(formattedDocName.substring(2).startsWith(lowerCaseDocRoot.substring(2)));
+				return(normalizedRequestedPath.substring(2).startsWith(lowerCaseDocRoot.substring(2)));
 			}
 
-			return(formattedDocName.startsWith(lowerCaseDocRoot) &&
-				   ((formattedDocName.length()==lowerCaseDocRoot.length()) ||
-					(formattedDocName.charAt(lowerCaseDocRoot.length())=='/')));
+			return(normalizedRequestedPath.startsWith(lowerCaseDocRoot) &&
+				   ((normalizedRequestedPath.length()==lowerCaseDocRoot.length()) ||
+					(normalizedRequestedPath.charAt(lowerCaseDocRoot.length()) == '/')));
 		}
 
 		String docRoot = userMgr.getDocumentRoot(uid);
 
-		if (docRoot.equals("/"))
-		{
+		if (docRoot.equals("/")) {
 			return(true);
 		}
 
-		return(fileName.startsWith(docRoot) &&
-			   ((fileName.length()==docRoot.length()) ||
-				(fileName.charAt(docRoot.length())=='/')));
+		return(requestedPath.startsWith(docRoot) &&
+			   ((requestedPath.length() == docRoot.length()) ||
+				(requestedPath.charAt(docRoot.length()) == '/')));
 	}
 
-	protected boolean checkAccess(String fileName)
-	{
-		if (accessAllowed(fileName))
-		{
+	protected boolean checkAccess(String requestedPath) {
+		if (accessAllowed(requestedPath)) {
 			return(true);
 		}
 
-		LOG.warn("user " + uid + " tried to access file outside of the document root: " + fileName);
+		LOG.warn("user " + uid + " tried to access file outside of the document root: " + requestedPath);
 
-		if (output == null)
-		{
-			try
-			{
+		if (output == null) {
+			try {
 				output = new PrintWriter(resp.getWriter());
-			}
-			catch (IOException ioex)
-			{
+			} catch (IOException ioex) {
 				return(false);
 			}
 		}
@@ -156,12 +139,11 @@ public class ProtectedRequestHandler extends RequestHandler {
 		output.println("<HTML>");
 		output.println("<HEAD>");
 		output.println("<TITLE> Unauthorized access </TITLE>");
-		output.println("<script language=\"javascript\">");
+        output.println("<script type=\"text/javascript\">");
 		output.println("alert('You are trying to access a file outside of your document root!');");
 		output.println("history.back();");
 		output.println("</script>");
-
-		output.println("</html>");
+		output.println("</HTML>");
 		output.flush();
 
 		return(false);
@@ -182,36 +164,19 @@ public class ProtectedRequestHandler extends RequestHandler {
 
 		boolean copyFailed = false;
 
-		BufferedInputStream fin = null;
-		BufferedOutputStream fout = null;
+        try (BufferedInputStream fin = new BufferedInputStream(new FileInputStream(sourceFilePath));
+             BufferedOutputStream fout = new BufferedOutputStream(new FileOutputStream(destFilePath))) {
 
-		try {
-			fin = new BufferedInputStream(new FileInputStream(sourceFilePath));
-			fout = new BufferedOutputStream(new FileOutputStream(destFilePath));
+            byte[] buff = new byte[4096];
+            int count;
 
-			byte [] buff = new byte[4096];
-			int count;
-
-			while ((count = fin.read(buff)) >= 0) {
-				fout.write(buff, 0, count);
-			}
-		} catch (Exception e) {
-			LOG.error("failed to copy file " + sourceFilePath + " to " + destFilePath, e);
-			copyFailed = true;
-		} finally {
-			if (fin != null) {
-				try {
-					fin.close();
-				} catch (Exception ex) {
-				}
-			}
-			if (fout != null) {
-				try {
-					fout.close();
-				} catch (Exception ex) {
-				}
-			}
-		}
+            while ((count = fin.read(buff)) >= 0) {
+                fout.write(buff, 0, count);
+            }
+        } catch (Exception e) {
+            LOG.error("failed to copy file {} to {}", sourceFilePath, destFilePath, e);
+            copyFailed = true;
+        }
 
 		if (!copyFailed) {
 			File destFile = new File(destFilePath);
@@ -243,88 +208,78 @@ public class ProtectedRequestHandler extends RequestHandler {
 			return zipFileNum;
 		}
 
-		byte buff[] = new byte[4096];
+		byte[] buff = new byte[4096];
 
-		for (int i = 0; i < fileList.length; i++) {
-			File sourceFile = new File(currentPath, fileList[i]);
+        for (String fileName : fileList) {
+            File sourceFile = new File(currentPath, fileName);
 
-			if (sourceFile.isDirectory()) {
-				zipFileNum = zipTree(currentPath + File.separator + fileList[i],
-								     relativePath + fileList[i] + "/",
-								     zipOut, zipFileNum);
-			} else {
-				String fullFileName = currentPath + File.separator + fileList[i];
-				String relativeFileName = relativePath + fileList[i];
+            if (sourceFile.isDirectory()) {
+                zipFileNum = zipTree(currentPath + File.separator + fileName,
+                        relativePath + fileName + "/",
+                        zipOut, zipFileNum);
+            } else {
+                String fullFileName = currentPath + File.separator + fileName;
+                String relativeFileName = relativePath + fileName;
 
-				try {
-					ZipEntry newZipEntry = new ZipEntry(relativeFileName);
+                try {
+                    ZipEntry newZipEntry = new ZipEntry(relativeFileName);
 
-					zipOut.putNextEntry(newZipEntry);
+                    zipOut.putNextEntry(newZipEntry);
 
-					FileInputStream inStream = null;
+                    try (FileInputStream inStream = new FileInputStream(sourceFile)) {
 
-					try {
-						inStream = new FileInputStream(sourceFile);
+                        int count;
 
-						int count;
-
-						while ((count = inStream.read(buff)) >= 0) {
-							zipOut.write(buff, 0, count);
-						}
-
-						zipOut.closeEntry();
-						
-						long originalSize = sourceFile.length();
-
-						treeFileSize += originalSize;
-
-						zipFileNum++;
-
-						 // long compressedSize=newZipEntry.getCompressedSize();
-
-		                boolean showStatus = false;
-		                
-		                if (zipFileNum < 100) {
-		                    showStatus = true;
-		                } else if (zipFileNum < 1000) {
-		                    if (zipFileNum % 10 == 0) {
-		                        showStatus = true;
-		                    }
-		                } else if (zipFileNum < 5000) {
-		                    if (zipFileNum % 50 == 0) {
-		                        showStatus = true;
-		                    }
-		                } else {
-		                    if (zipFileNum % 100 == 0) {
-		                        showStatus = true;
-		                    }
-		                }
-
-		                if (showStatus) {
-	                        output.println("<script language=\"javascript\">");
-	                        output.println("document.getElementById('currentDir').innerHTML=\"" + insertDoubleBackslash(CommonUtils.shortName(relativeFileName, 50)) + "\";");
-                            output.println("document.getElementById('compressCount').innerHTML=\"" + zipFileNum + "\";");
-	                        output.println("</script>");
-	                        output.flush();
-						}
-					} catch (Exception zioe) {
-						LOG.error("failed to zip file " + fullFileName, zioe);
-						output.println("<font color=\"red\">failed to zip file " + fullFileName + "</font><br/>");
-						output.flush();
-					} finally {
-                        if (inStream != null) {
-                        	try {
-            					inStream.close();
-                        	} catch (Exception ex) {
-                        	}
+                        while ((count = inStream.read(buff)) >= 0) {
+                            zipOut.write(buff, 0, count);
                         }
-					}
-				} catch (IOException ioex) {
-                    LOG.error("error during zipping file " + fullFileName, ioex);
-					output.println("<font color=\"red\">failed to zip file " + fullFileName + "</font><br/>");
-				}
-			}
-		}
+
+                        zipOut.closeEntry();
+
+                        long originalSize = sourceFile.length();
+
+                        treeFileSize += originalSize;
+
+                        zipFileNum++;
+
+                        // long compressedSize=newZipEntry.getCompressedSize();
+
+                        boolean showStatus = false;
+
+                        if (zipFileNum < 100) {
+                            showStatus = true;
+                        } else if (zipFileNum < 1000) {
+                            if (zipFileNum % 10 == 0) {
+                                showStatus = true;
+                            }
+                        } else if (zipFileNum < 5000) {
+                            if (zipFileNum % 50 == 0) {
+                                showStatus = true;
+                            }
+                        } else {
+                            if (zipFileNum % 100 == 0) {
+                                showStatus = true;
+                            }
+                        }
+
+                        if (showStatus) {
+                            output.println("<script language=\"javascript\">");
+                            output.println("document.getElementById('currentDir').innerHTML=\"" + insertDoubleBackslash(CommonUtils.shortName(relativeFileName, 50)) + "\";");
+                            output.println("document.getElementById('compressCount').innerHTML=\"" + zipFileNum + "\";");
+                            output.println("</script>");
+                            output.flush();
+                        }
+                    } catch (Exception zioe) {
+                        LOG.error("failed to zip file {}", fullFileName, zioe);
+                        output.println("<font color=\"red\">failed to zip file " + fullFileName + "</font><br/>");
+                        output.flush();
+                    }
+                } catch (IOException ioex) {
+                    LOG.error("error during zipping file {}", fullFileName, ioex);
+                    output.println("<font color=\"red\">failed to zip file " + fullFileName + "</font><br/>");
+                }
+            }
+        }
 
 		return(zipFileNum);
 	}
@@ -334,18 +289,17 @@ public class ProtectedRequestHandler extends RequestHandler {
 		return(userMgr.getCSS(uid));    		
     }
     
-    public String getUid()
-    {
-    	return(uid);
+    public String getUid() {
+    	return uid;
     }
     
 	protected List<String> getSelectedFiles() {
 		ArrayList<String> selectedFiles = new ArrayList<String>();
 
-        Enumeration allKeys = req.getParameterNames();
+        Enumeration<String> allKeys = req.getParameterNames();
 		
 		while (allKeys.hasMoreElements()) {
-			String paramKey =(String) allKeys.nextElement();
+			String paramKey = allKeys.nextElement();
 
             if (paramKey.startsWith(LIST_PREFIX)) {
 				selectedFiles.add(paramKey.substring(LIST_PREFIX_LENGTH)); 

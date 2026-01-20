@@ -40,7 +40,7 @@ public class ThumbnailCreatorBase
     
     public static final String THUMBNAIL_SUBDIR = "_thumbnails";
 
-    public String imgFileMasks[]={"*.jpg","*.jpeg","*.png"};
+    public String[] imgFileMasks ={"*.jpg","*.jpeg","*.png"};
 
     public static final int SCOPE_FILE = 1;
     public static final int SCOPE_DIR  = 2;

@@ -7,10 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import de.webfilesys.MP3ExtractorThread;
-import de.webfilesys.MP3V2Info;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
+import de.webfilesys.*;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -120,7 +117,7 @@ public class EditMP3RequestHandler extends UserRequestHandler
 
 		if (parentPath!=null)
 		{
-			if (WebFileSys.getInstance().isAutoExtractMP3())
+			if (WebFileSysConfig.getInstance().isAutoExtractMP3())
 			{
 				(new MP3ExtractorThread(parentPath)).start();
 			}

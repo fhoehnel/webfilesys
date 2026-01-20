@@ -19,13 +19,33 @@ td.regValidationError {
 
 div.registrationBox {
 	width: 520px;
-	height: 420px;
+	height: 400px;
 	position: relative;
-	top: -230px;
+	top: -200px;
 	left: -260px;
 	background-color: #ffffe0;
 	border-style: solid;
 	border-width: 1px;
 	border-color: black;
-	padding-top: 20px;
+    border-radius: 20px;
+    box-shadow: 5px 5px 5px #666666;
+    padding-top: 20px;
+}
+
+table.registrationBox {
+    width: 100%;
+}
+
+table.registrationBox td {
+    padding: 5px;
+}
+
+table.registrationForm {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+table.registrationForm td {
+    padding: 5px;
 }

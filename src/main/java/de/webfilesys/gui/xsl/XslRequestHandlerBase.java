@@ -1,6 +1,5 @@
 package de.webfilesys.gui.xsl;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.StringTokenizer;
@@ -12,7 +11,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -24,7 +22,6 @@ import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.user.UserRequestHandler;
@@ -33,7 +30,6 @@ import de.webfilesys.util.XmlUtil;
 
 /**
  * @author Frank Hoehnel
- *
  */
 public class XslRequestHandlerBase extends UserRequestHandler
 {
@@ -211,11 +207,6 @@ public class XslRequestHandlerBase extends UserRequestHandler
 		}
     }
 
-	public void processResponse(String xslFile)
-	{
-		processResponse(xslFile, false);
-	}
-
 	protected void addCommonSessionData() {
 		if (uid != null) {
 			XmlUtil.setChildText(doc.getDocumentElement(), "css", userMgr.getCSS(uid), false);
@@ -225,49 +216,33 @@ public class XslRequestHandlerBase extends UserRequestHandler
 	
     /**
      * @param xslFile the name of the XSL file
-     * @param xsltAlwaysOnServer
      */
-	public void processResponse(String xslFile, boolean xsltAlwaysOnServer) {
+	public void processResponse(String xslFile) {
 		addCommonSessionData();
-		
-		if ((session != null) && (!xsltAlwaysOnServer) && isBrowserXslEnabled()) {
-			ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/" + xslFile + "\"");
-			doc.insertBefore(xslRef, doc.getDocumentElement());
-			
-			resp.setContentType("text/xml");
 
-			BufferedWriter xmlOutFile = new BufferedWriter(output);
-                
-			XmlUtil.writeToStream(doc, xmlOutFile);
-		} else { 
-    		resp.setContentType("text/html");
-        	
-			String xslPath = WebFileSys.getInstance().getWebAppRootDir() + "xsl" + File.separator + xslFile;
-        	
-        	// LogManager.getLogger(getClass()).debug("server-side XSLT: " + xslPath);
+        resp.setContentType("text/html");
 
-			TransformerFactory tf = TransformerFactory.newInstance();
-		
-			try {
-				Transformer transformer =
-						 tf.newTransformer(new StreamSource(new File(xslPath)));
+        String xslPath = WebFileSys.getInstance().getWebAppRootDir() + "xsl" + File.separator + xslFile;
 
-				transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-				
-				long start = System.currentTimeMillis();
+        TransformerFactory tf = TransformerFactory.newInstance();
 
-				transformer.transform(new DOMSource(doc), new StreamResult(output));
-		 		    
-				long end = System.currentTimeMillis();
-        
-				if (LOG.isDebugEnabled()) {
-					LOG.debug("server-side XSL transformation in " + (end - start) + " ms");
-				}
-			} catch (TransformerConfigurationException tex) {
-				LOG.warn(tex);
-			} catch (TransformerException tex) {
-				LOG.warn(tex);
-			}
+        try {
+            Transformer transformer =
+                    tf.newTransformer(new StreamSource(new File(xslPath)));
+
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+
+            long start = System.currentTimeMillis();
+
+            transformer.transform(new DOMSource(doc), new StreamResult(output));
+
+            long end = System.currentTimeMillis();
+
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("server-side XSL transformation in " + (end - start) + " ms");
+            }
+        } catch (TransformerException tex) {
+            LOG.warn("XSL transformation failed for XSL stylesheet: " + xslFile, tex);
         }
 
 		output.flush();

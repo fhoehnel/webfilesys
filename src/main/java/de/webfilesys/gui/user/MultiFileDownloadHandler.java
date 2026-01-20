@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -149,7 +150,7 @@ public class MultiFileDownloadHandler extends MultiFileRequestHandler
 			
 			tempFile.delete();
 			
-			if (WebFileSys.getInstance().isDownloadStatistics())
+			if (WebFileSysConfig.getInstance().isDownloadStatistics())
 			{
 				for (String selectedFile : selectedFiles) 
 				{

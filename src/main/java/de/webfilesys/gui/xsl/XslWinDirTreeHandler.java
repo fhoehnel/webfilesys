@@ -8,12 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.w3c.dom.Element;
 
-import de.webfilesys.ClipBoard;
-import de.webfilesys.DirTreeStatusInspector;
-import de.webfilesys.WebFileSys;
-import de.webfilesys.WinDriveManager;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -193,7 +190,7 @@ public class XslWinDirTreeHandler extends XslDirTreeHandler
 			XmlUtil.setChildText(folderTreeElement, "fastPath", insertDoubleBackslash(actPath));
 		}
 
-		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		int pollInterval = WebFileSysConfig.getInstance().getPollFilesysChangesInterval();
 		if (pollInterval > 0) {
 			XmlUtil.setChildText(folderTreeElement, "pollInterval", Integer.toString(pollInterval));
 		}

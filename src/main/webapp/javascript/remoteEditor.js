@@ -1,47 +1,65 @@
+function initRemoteEditor() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const fileName = urlParams.get("fileName");
+    const filePath = urlParams.get("filePath");
+    const isLink = urlParams.get("isLink");
+
+    let parameters;
+    if (isLink) {
+        parameters = { filePath: encodeURIComponent(filePath) };
+    } else {
+        parameters = { fileName: encodeURIComponent(fileName) };
+    }
+
+    fetchGet("checkTextFileSize", parameters,
+        () => {
+            setBundleResources();
+            setEditorHeight();
+
+            document.getElementById("headline").innerHTML = fileName;
+            document.getElementById("filePath").value = filePath;
+
+            fetchGet("getFile", parameters , responseData => {
+                document.getElementById("editorText").innerHTML = responseData;
+            });
+        },
+        () => customAlert(resourceBundle["alert.editFileSize"], null, () => self.close())
+    );
+}
+
 function saveEditorContent(closeAfterSave) {
-	var url = "/webfilesys/servlet?command=saveRemoteEditor";
-	
-	var formData = getFormData(document.getElementById("editForm"));
-	
+	const formData = getFormData(document.getElementById("editForm"));
 	if (closeAfterSave) {
-		xmlRequestPost(url, formData, handleCloseAfterSave);
+        xmlFetchPost(formData, handleCloseAfterSave);
 	} else {
-		xmlRequestPost(url, formData, handleSaveResult);
+        xmlFetchPost(formData, handleSaveResult);
 	}
 }
 
-function handleSaveResult(req) {
-    if (req.readyState == 4) {
-        if (req.status == 200) {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+function handleSaveResult(xmlDoc) {
+    const resultElem = xmlDoc.getElementsByTagName("result")[0];
+    const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
 
-            if (success == 'true') {
-            	toast(resourceBundle["saveSuccess"], 1000);
-            } else {
-            	alert(resourceBundle["saveFailure"]);
-            }
-        }
+    if (success == 'true') {
+       	toast(resourceBundle["saveSuccess"], 1000);
+    } else {
+       	alert(resourceBundle["saveFailure"]);
     }
 }
 
-function handleCloseAfterSave(req) {
-    if (req.readyState == 4) {
-        if (req.status == 200) {
-            var resultElem = req.responseXML.getElementsByTagName("result")[0];            
-            var success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
+function handleCloseAfterSave(xmlDoc) {
+    const resultElem = xmlDoc.getElementsByTagName("result")[0];
+    const success = resultElem.getElementsByTagName("success")[0].firstChild.nodeValue;
 
-            if (success == 'true') {
-                var mobile = resultElem.getElementsByTagName("mobile")[0].firstChild.nodeValue;
-                if (mobile == "true") {
-                    window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList";
-                } else {
-            	    setTimeout("window.close()", 100);
-                }
-            } else {
-            	alert(resourceBundle["saveFailure"]);
-            }
+    if (success === 'true') {
+        const mobile = resultElem.getElementsByTagName("mobile")[0].firstChild.nodeValue;
+        if (mobile === "true") {
+            window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList";
+        } else {
+      	    setTimeout("window.close()", 100);
         }
+    } else {
+     	alert(resourceBundle["saveFailure"]);
     }
 }
 
@@ -54,20 +72,22 @@ function setEditorHeight() {
 }
 
 function setEditorHeightInternal() {
-
-    var buttonCont = document.getElementById("editorButtonCont");
-    var buttonContYPos = getAbsolutePos(buttonCont)[1];
-
+    const buttonCont = document.getElementById("editorButtonCont");
+    let buttonContYPos = getAbsolutePos(buttonCont)[1];
     if (buttonContYPos == 0) {
-        var rect = buttonCont.getBoundingClientRect();
+        const rect = buttonCont.getBoundingClientRect();
         buttonContYPos = rect.top;
     }
-
-    var textArea = document.getElementById("editorText");
-    var textAreaYPos = getAbsolutePos(textArea)[1];
-    
-    var textAreaHeight = buttonContYPos - textAreaYPos - 10;
-    
+    const textArea = document.getElementById("editorText");
+    const textAreaYPos = getAbsolutePos(textArea)[1];
+    const textAreaHeight = buttonContYPos - textAreaYPos - 16;
     textArea.style.height = textAreaHeight + "px";
 }
 
+function cancelRemoteEdit() {
+    if (window.opener) {
+        self.close();
+    } else {
+        window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList";
+    }
+}

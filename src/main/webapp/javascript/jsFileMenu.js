@@ -27,9 +27,8 @@ function comments(path)
     commentWin.focus();
 }
 
-function viewZip(path)
-{
-    unzipWin=window.open("/webfilesys/servlet?command=viewZip&filePath=" + encodeURIComponent(path),"unzipWin","status=no,toolbar=no,menu=yes,width=500,height=580,resizable=yes,scrollbars=yes,left=100,top=40,screenX=100,screenY=40");
+function viewZip(fileName) {
+    unzipWin = window.open("/webfilesys/servlet?command=viewZip&fileName=" + encodeURIComponent(fileName),"zipWin","status=no,toolbar=no,menu=yes,width=500,height=580,resizable=yes,scrollbars=yes,left=100,top=40,screenX=100,screenY=40");
     unzipWin.focus();
 }
 
@@ -54,25 +53,19 @@ function cutAudio(path) {
     window.location.href="/webfilesys/servlet?command=cutAudioParams&filePath=" + encodeURIComponent(path);
 }
 
-function renameFile(fileName) {  
-    centeredDialog('/webfilesys/servlet?command=renameFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/renameFile.xsl', 360, 160, function() {
-        document.renameForm.newFileName.focus();
-        const newFileName = document.renameForm.newFileName.value;
-        if (newFileName) {
-	        const extStart = newFileName.lastIndexOf(".");
-            if (extStart > 0) {
-	            document.renameForm.newFileName.setSelectionRange(0, extStart);
-            } else {
-                document.renameForm.newFileName.select();
-            }
+function cloneFile(fileName) {
+    showPromptDialog("/webfilesys/html/cloneFile.html", 340, function() {
+        document.getElementById("sourceFileName").value = fileName;
+        document.getElementById("shortFileName").innerHTML = abbrevText(fileName, 30);
+        const newFileName = document.getElementById("newFileName");
+        newFileName.value = fileName;
+        newFileName.focus();
+        const extStart = fileName.lastIndexOf(".");
+        if (extStart > 0) {
+            newFileName.setSelectionRange(0, extStart);
+        } else {
+            newFileName.select();
         }
-    });
-}
-
-function cloneFile(fileName) {   
-    centeredDialog('/webfilesys/servlet?command=cloneFilePrompt&fileName=' + encodeURIComponent(fileName), '/webfilesys/xsl/cloneFile.xsl', 360, 160, function() {
-        document.renameForm.newFileName.focus();
-        document.renameForm.newFileName.select();
     });
 }
 
@@ -96,7 +89,7 @@ function addMoveToClipboard(fileName)
     cutCopyToClip(fileName, 'addMove');
 }
 
-function editRemote(fileName)
+function editRemote(filePath, fileName)
 {
     var editWinWidth = screen.width - 80;
     var editWinHeight = screen.height - 70;
@@ -111,9 +104,9 @@ function editRemote(fileName)
         editWinHeight = 700;
     }
     
-    editWin=window.open("/webfilesys/servlet?command=editFile&filename=" + encodeURIComponent(fileName) + "&screenHeight=" + editWinHeight,"editWin","status=no,toolbar=no,location=no,menu=no,width=" + editWinWidth + ",height=" + editWinHeight + ",resizable=yes,left=20,top=5,screenX=20,screenY=5");
+    const editWin = window.open("/webfilesys/html/remoteEditor.html?fileName=" + encodeURIComponent(fileName) + "&filePath=" + encodeURIComponent(filePath) + "&screenHeight=" + editWinHeight,"editWin","status=no,toolbar=no,location=no,menu=no,width=" + editWinWidth + ",height=" + editWinHeight + ",resizable=yes,left=20,top=5,screenX=20,screenY=5");
     editWin.focus();
-    editWin.opener=self;
+    editWin.opener = self;
 }
 
 function viewFile(path)
@@ -145,13 +138,13 @@ function openUrlFile(path) {
     urlWin.focus();
 }
 
-function tail(path)
+function tail(fileName)
 {
-    window.open('/webfilesys/servlet?command=tail&filePath=' + encodeURIComponent(path) + "&initial=true","_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
+    window.open('/webfilesys/servlet?command=tail&fileName=' + encodeURIComponent(fileName) + "&initial=true","_blank","status=yes,toolbar=yes,menubar=yes,location=yes,resizable=yes,scrollbars=yes");
 }
 
-function grep(path, fileName) {
-    const parameters = { "method": "grepAllowed", "param1": encodeURIComponent(path) };
+function grep(fileName) {
+    const parameters = { "method": "grepAllowed", "param1": encodeURIComponent(fileName) };
     
 	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
         var resultItem = responseXml.getElementsByTagName("result")[0];            
@@ -199,8 +192,8 @@ function untar(path)
     window.location.href="/webfilesys/servlet?command=untar&filePath=" + encodeURIComponent(path);
 }
 
-function viewTrackOnMap(path) {
-    mapWin = window.open("/webfilesys/servlet?command=viewGPX&filePath=" + encodeURIComponent(path), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
+function viewTrackOnMap(fileName) {
+    const mapWin = window.open("/webfilesys/servlet?command=viewGPX&fileName=" + encodeURIComponent(fileName), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
     maptWin.focus();
 }
 
@@ -216,15 +209,22 @@ function delLink(linkName)
     window.location.href="/webfilesys/servlet?command=deleteLink&linkName=" + encodeURIComponent(linkName);
 }
 
-function switchReadWrite(path) {   
-    centeredDialog('/webfilesys/servlet?command=switchReadWrite&filePath=' + encodeURIComponent(path), '/webfilesys/xsl/switchReadWrite.xsl', 360, 130);
+function switchReadWrite(fileName, isLink) {
+    centeredDialog('/webfilesys/servlet?command=switchReadWrite&fileName=' + encodeURIComponent(fileName) + (isLink ? '&isLink=true' : ''), '/webfilesys/xsl/switchReadWrite.xsl', 360, 130);
 }
 
-function associatedProg(path)
-{
-    var url = '/webfilesys/servlet?command=runAssociatedProgram&filePath=' + encodeURIComponent(path);
+function associatedProg(path) {
+    const parameters = { "filePath": encodeURIComponent(path) };
 
-    xmlRequest(url, startProgramResult);
+    xmlGetRequest("runAssociatedProgram", parameters, (responseXml) => {
+        const item = responseXml.getElementsByTagName("success")[0];
+        const success = item.firstChild.nodeValue;
+        if (success != 'true') {
+            const msgItem = responseXml.getElementsByTagName("message")[0];
+            const message = msgItem.firstChild.nodeValue;
+            customAlert(message);
+        }
+    });
 }
 
 function encrypt(fileName) {   
@@ -239,23 +239,6 @@ function decrypt(fileName) {
         document.cryptoForm.cryptoKey.focus();
         document.cryptoForm.cryptoKey.select();
     });
-}
-
-function startProgramResult(req) {
-    if (req.readyState == 4)
-    {
-        if (req.status == 200)
-        {
-             var item = req.responseXML.getElementsByTagName("success")[0];            
-             var success = item.firstChild.nodeValue;
-
-             if (success != 'true') {
-                 var msgItem = req.responseXML.getElementsByTagName("message")[0];            
-                 var message = msgItem.firstChild.nodeValue;
-                 customAlert(message);
-             }             
-        }
-    }
 }
 
 function URLEncode(path)

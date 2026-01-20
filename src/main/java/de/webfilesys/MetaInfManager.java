@@ -6,16 +6,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import de.webfilesys.decoration.Decoration;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -37,6 +34,8 @@ import de.webfilesys.util.XmlUtil;
  */
 public class MetaInfManager extends Thread
 {
+    private static final Logger LOG = LogManager.getLogger(MetaInfManager.class);
+
     public static final String METAINF_FILE = "_metainf.fmweb";
 
 	/** maximum length of description meta info text */
@@ -63,7 +62,7 @@ public class MetaInfManager extends Thread
        }
        catch (ParserConfigurationException pcex)
        {
-           LogManager.getLogger(getClass()).error(pcex);
+           LOG.error(pcex);
        }
 
        dirList = new Hashtable<String, Element>();
@@ -81,82 +80,51 @@ public class MetaInfManager extends Thread
         return(metaInfMgr);
     }
 
-    public void saveMetaInfFile(String path)
-    {
-        Element metaInfRoot=(Element) dirList.get(path);
+    public void saveMetaInfFile(String path) {
+        Element metaInfRoot = dirList.get(path);
 
-        if (metaInfRoot==null)
-        {
+        if (metaInfRoot == null) {
             return;
         }
         
         synchronized(this) {
-            String metaInfFileName=null;
-
-            if (path.endsWith(File.separator))
-            {
+            String metaInfFileName;
+            if (path.endsWith(File.separator)) {
                 metaInfFileName=path + METAINF_FILE;
-            }
-            else
-            {
+            } else {
                 metaInfFileName=path + File.separator + METAINF_FILE;
             }
-
             NodeList metaInfList = metaInfRoot.getElementsByTagName("metainf");
-
-            if ((metaInfList==null) || (metaInfList.getLength()==0))
-            {
-                File metaInfFile=new File(metaInfFileName);
-
-                if (metaInfFile.exists() && metaInfFile.canWrite())
-                {
-                    if (LogManager.getLogger(getClass()).isDebugEnabled())
-                    {
-                        LogManager.getLogger(getClass()).debug("removing empty meta inf file " + metaInfFileName);
+            if (metaInfList.getLength() == 0) {
+                File metaInfFile = new File(metaInfFileName);
+                if (metaInfFile.exists() && metaInfFile.canWrite()) {
+                    if (LOG.isDebugEnabled()) {
+                        LOG.debug("removing empty meta inf file " + metaInfFileName);
                     }
-                    
                     metaInfFile.delete();
                 }
-
                 return;
             }
-
-            if (LogManager.getLogger(getClass()).isDebugEnabled())
-            {
-                LogManager.getLogger(getClass()).debug("saving meta info to file: " + metaInfFileName);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("saving meta info to file: " + metaInfFileName);
             }
-
             OutputStreamWriter xmlOutFile = null;
-            
-            try
-            {
+            try {
                 FileOutputStream fos = new FileOutputStream(metaInfFileName);
-                
-                xmlOutFile = new OutputStreamWriter(fos, "UTF-8");
-                
+                xmlOutFile = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
                 XmlUtil.writeToStream(metaInfRoot, xmlOutFile);
-                
                 xmlOutFile.flush();
-            }
-            catch (IOException ioex)
-            {
-                LogManager.getLogger(getClass()).error("error saving metainf file : " + metaInfFileName, ioex);
-            }
-            finally
-            {
-                if (xmlOutFile != null)
-                {
-                    try 
-                    {
+            } catch (IOException ioex) {
+                LOG.error("error saving metainf file : " + metaInfFileName, ioex);
+            } finally {
+                if (xmlOutFile != null) {
+                    try {
                         xmlOutFile.close();
-                    }
-                    catch (Exception ex) 
-                    {
+                    } catch (Exception ex) {
                     }
                 }
             }
         }
-        
     }
 
     public Element loadMetaInfFile(String path)
@@ -192,20 +160,20 @@ public class MetaInfManager extends Thread
                
                inputSource.setEncoding("UTF-8");
 
-               if (LogManager.getLogger(getClass()).isDebugEnabled())
+               if (LOG.isDebugEnabled())
                {
-                   LogManager.getLogger(getClass()).debug("reading meta info from " + metaInfFileName);
+                   LOG.debug("reading meta info from " + metaInfFileName);
                }
 
                doc = builder.parse(inputSource);
            }
            catch (SAXException saxex)
            {
-               LogManager.getLogger(getClass()).error("Failed to load metainf file : " + metaInfFileName, saxex);
+               LOG.error("Failed to load metainf file : " + metaInfFileName, saxex);
            }
            catch (IOException ioex)
            {
-               LogManager.getLogger(getClass()).error("Failed to load metainf file : " + metaInfFileName, ioex);
+               LOG.error("Failed to load metainf file : " + metaInfFileName, ioex);
            }
            finally 
            {
@@ -718,7 +686,7 @@ public class MetaInfManager extends Thread
             }
             catch (NumberFormatException nfex)
             {
-                LogManager.getLogger(getClass()).warn("invalid creation time: " + tmp);
+                LOG.warn("invalid creation time: " + tmp);
             }
 
             Comment comment=new Comment(user,new Date(creationTime),message);
@@ -891,7 +859,7 @@ public class MetaInfManager extends Thread
 		try {
 			return Integer.parseInt(voteVal);
 		} catch (Exception ex) {
-			LogManager.getLogger(getClass()).error("failed to get identified visitor rating for visitor " + visitorId, ex);
+			LOG.error("failed to get identified visitor rating for visitor " + visitorId, ex);
 		}
 
 		return(-1);
@@ -991,7 +959,7 @@ public class MetaInfManager extends Thread
                 pictureRating = new PictureRating();
                 pictureRating.setOwnerRating(rating);
             } catch (NumberFormatException nfe) {
-            	LogManager.getLogger(getClass()).error("invalid owner rating value: " + ownerRating, nfe);
+            	LOG.error("invalid owner rating value: " + ownerRating, nfe);
             }
         }
 		
@@ -1020,7 +988,7 @@ public class MetaInfManager extends Thread
 		            	voteSum += voteVal;
 		            	voteCount++;
 		            } catch (NumberFormatException nfe) {
-		            	LogManager.getLogger(getClass()).error("invalid vote value: " + vote);
+		            	LOG.error("invalid vote value: " + vote);
 		            }
 				}
 			}
@@ -1040,7 +1008,7 @@ public class MetaInfManager extends Thread
 	            	voteSum += voteVal;
 	            	voteCount++;
 	            } catch (NumberFormatException nfe) {
-	            	LogManager.getLogger(getClass()).error("invalid vote value: " + vote);
+	            	LOG.error("invalid vote value: " + vote);
 	            }
 			}
 		}
@@ -1133,7 +1101,7 @@ public class MetaInfManager extends Thread
 					try {
 						starSum += Integer.parseInt(vote);
 					} catch (Exception ex) {
-		            	LogManager.getLogger(getClass()).error("invalid vote value: " + vote);
+		            	LOG.error("invalid vote value: " + vote);
 					}
 				}
 			}
@@ -1151,7 +1119,7 @@ public class MetaInfManager extends Thread
 				try {
 					starSum += Integer.parseInt(vote);
 				} catch (Exception ex) {
-	            	LogManager.getLogger(getClass()).error("invalid vote value: " + vote);
+	            	LOG.error("invalid vote value: " + vote);
 				}
 			}
 		}
@@ -1582,8 +1550,62 @@ public class MetaInfManager extends Thread
         
         return(geoTag);
     }
-	
-	public void createLink(String path, FileLink newLink)
+
+    public void setDecoration(String path, String fileName, Decoration decoration) {
+        synchronized(this) {
+            Element metaInfElement = getMetaInfElement(path, fileName);
+            if (metaInfElement == null) {
+                metaInfElement = createMetaInfElement(path,fileName);
+            }
+            Document doc = metaInfElement.getOwnerDocument();
+
+            Element decorationElement = XmlUtil.getChildByTagName(metaInfElement, "decoration");
+
+            if (decorationElement == null) {
+                decorationElement = doc.createElement("decoration");
+                metaInfElement.appendChild(decorationElement);
+            }
+
+            XmlUtil.setChildText(decorationElement, "icon", decoration.getIcon());
+            XmlUtil.setChildText(decorationElement, "textColor", decoration.getTextColor());
+
+            cacheDirty.put(path, Boolean.TRUE);
+        }
+    }
+
+    public Decoration getDecoration(String path, String fileName) {
+        Element metaInfElement = getMetaInfElement(path, fileName);
+        if (metaInfElement == null) {
+            return null;
+        }
+        Element decorationElement = XmlUtil.getChildByTagName(metaInfElement, "decoration");
+        if (decorationElement == null) {
+            return null;
+        }
+        String icon = XmlUtil.getChildText(decorationElement, "icon");
+        String textColor = XmlUtil.getChildText(decorationElement, "textColor");
+        Decoration decoration = new Decoration();
+        decoration.setIcon(icon.isEmpty() ? null : icon);
+        decoration.setTextColor(textColor.isEmpty() ? null : textColor);
+        return decoration;
+    }
+
+    public void removeDecoration(String path, String fileName) {
+        synchronized(this) {
+            Element metaInfElement = getMetaInfElement(path, fileName);
+            if (metaInfElement == null) {
+                return;
+            }
+            Element decorationElement = XmlUtil.getChildByTagName(metaInfElement, "decoration");
+            if (decorationElement == null) {
+                return;
+            }
+            metaInfElement.removeChild(decorationElement);
+            cacheDirty.put(path, Boolean.TRUE);
+        }
+    }
+
+    public void createLink(String path, FileLink newLink)
 	throws FileNotFoundException
 	{
 		createLink(path, newLink, false);
@@ -1629,7 +1651,7 @@ public class MetaInfManager extends Thread
             
     		if (!suppressReverseLink) 
     		{
-    			if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+    			if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
     			{
     		        createReverseLinkRef(path, newLink);        
     			}
@@ -1795,7 +1817,7 @@ public class MetaInfManager extends Thread
 	 */
 	public void updateLinksAfterMove(String oldPath, String newPath, String userid)
 	{
-	    if (!WebFileSys.getInstance().isReverseFileLinkingEnabled())
+	    if (!WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
 	    {
 	        return;
 	    }
@@ -1827,7 +1849,7 @@ public class MetaInfManager extends Thread
 	            }
 	            catch (IOException ex)
 	            {
-	                LogManager.getLogger(getClass()).error("cannot update link " + linkName + " after file move: " + oldPath + " - " + newPath);
+	                LOG.error("cannot update link " + linkName + " after file move: " + oldPath + " - " + newPath);
 	            }
 	        }
 	    }
@@ -1853,7 +1875,7 @@ public class MetaInfManager extends Thread
         }
         catch (IOException ex)
         {
-            LogManager.getLogger(getClass()).error("cannot update link " + linkName + " newPath=" + newLinkTargetPath);
+            LOG.error("cannot update link " + linkName + " newPath=" + newLinkTargetPath);
         }
 	}
 	
@@ -1998,7 +2020,7 @@ public class MetaInfManager extends Thread
 			}
 			catch (NumberFormatException nfex)
 			{
-				LogManager.getLogger(getClass()).warn("invalid creation time: " + tmp);
+				LOG.warn("invalid creation time: " + tmp);
 			}
 
             FileLink link = new FileLink(name, destPath, creator, new Date(creationTime));
@@ -2052,7 +2074,7 @@ public class MetaInfManager extends Thread
 				try {
 					creationTime = Long.parseLong(tmp);
 				} catch (NumberFormatException nfex) {
-					LogManager.getLogger(getClass()).warn("invalid creation time: " + tmp);
+					LOG.warn("invalid creation time: " + tmp);
 				}
 
 	            FileLink link = new FileLink(name, destPath, creator, new Date(creationTime));
@@ -2101,7 +2123,7 @@ public class MetaInfManager extends Thread
 
                 if (linkName.equals(linkToRemove))
                 {
-                    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+                    if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
                     {
                         String linkTargetPath = XmlUtil.getChildText(linkElement, "destPath");
                         
@@ -2513,7 +2535,7 @@ public class MetaInfManager extends Thread
      * Used in the search function which can cause hundreds of meta info files to get loaded.
      * 
      * @param dirPath the absolute path of the directory
-     * @param forceDirty release metainf even if it unsaved
+     * @param forceReleaseDirty release metainf even if it unsaved
      */
     public void releaseMetaInf(String dirPath, boolean forceReleaseDirty) {
     	synchronized(this) {
@@ -2521,8 +2543,8 @@ public class MetaInfManager extends Thread
         	if ((!cacheDirty.containsKey(dirPath)) || forceReleaseDirty) {
             	if (dirList.get(dirPath) != null) {
             		dirList.remove(dirPath);
-            		// if (LogManager.getLogger(getClass()).isDebugEnabled()) {
-            		//    LogManager.getLogger(getClass()).debug("released metainf for path " + dirPath);
+            		// if (LOG.isDebugEnabled()) {
+            		//    LOG.debug("released metainf for path " + dirPath);
                     // }
                 }
             	
@@ -2532,60 +2554,34 @@ public class MetaInfManager extends Thread
         	}
     	}
     }
-    
-    public synchronized void run()
-    {
+
+    public void saveChangedMetaInfFiles() {
+        synchronized(this) {
+            cacheDirty.entrySet().stream().filter(Map.Entry::getValue).forEach(entry -> saveMetaInfFile(entry.getKey()));
+            cacheDirty.clear();
+        }
+    }
+
+    public synchronized void run() {
         int counter = 0;
-
         boolean stop = false;
-        
-        while (!stop)
-        {
-            try
-            {
+        while (!stop) {
+            try {
                 this.wait(60000);
-
-                Enumeration cacheDirtyList=cacheDirty.keys();
-
-                while (cacheDirtyList.hasMoreElements())
-                {
-                    String path=(String) cacheDirtyList.nextElement();
-
-                    saveMetaInfFile(path);
-
-                    cacheDirty.remove(path);
-                }
-
-                if (counter == 15)
-                {
-                    counter=0;
-
-                    if (dirList.size()>0)
-                    {
-                        synchronized (dirList)
-                        {
-                            LogManager.getLogger(getClass()).debug("removing " + dirList.size() + " elements from metainf cache");
-
+                saveChangedMetaInfFiles();
+                if (counter == 15) {
+                    counter = 0;
+                    if (dirList.size() > 0) {
+                        synchronized (dirList) {
+                            LOG.debug("removing " + dirList.size() + " elements from metainf cache");
                             dirList.clear();
                         }
                     }
                 }
-
                 counter++;
-            }
-            catch (InterruptedException e)
-            {
-				Enumeration cacheDirtyList=cacheDirty.keys();
-
-				while (cacheDirtyList.hasMoreElements())
-				{
-					String path=(String) cacheDirtyList.nextElement();
-
-					saveMetaInfFile(path);
-				}
-				
-				LogManager.getLogger(getClass()).debug("MetaInfmanager ready for shutdown");
-
+            } catch (InterruptedException e) {
+                saveChangedMetaInfFiles();
+				LOG.debug("MetaInfManager ready for shutdown");
 				stop = true;
             }
         }

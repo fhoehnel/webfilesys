@@ -5,7 +5,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -14,193 +13,112 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
  * @author Frank Hoehnel
  */
-public class DownloadFolderZipHandler extends UserRequestHandler
-{
+public class DownloadFolderZipHandler extends UserRequestHandler {
+
+    private static final Logger LOG = LogManager.getLogger(DownloadFolderZipHandler.class);
+
 	public DownloadFolderZipHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 
-	protected void process()
-	{
+	protected void process() {
 		String path = getParameter("path");
-
-		if (!checkAccess(path))
-		{
+		if (!checkAccess(path)) {
 		    return;	
 		}
-
 		String errorMsg = null;
-		
         File folderFile = new File(path);
-        
-        if ((!folderFile.exists()) || (!folderFile.isDirectory()) || (!folderFile.canRead()))
-        {
+        if (!folderFile.exists() || !folderFile.isDirectory() || !folderFile.canRead()) {
             errorMsg = "folder is not a readable directory: " + path;
         }
-
         String dirName = null;
-        
         int lastSepIdx = path.lastIndexOf(File.separatorChar);
-        
-        if (lastSepIdx < 0) 
-        {
+        if (lastSepIdx < 0) {
             lastSepIdx = path.lastIndexOf('/');
         }
-        
-        if ((lastSepIdx < 0) || (lastSepIdx == path.length() - 1))
-        {
+        if ((lastSepIdx < 0) || (lastSepIdx == path.length() - 1)) {
             errorMsg = "invalid path for folder download: " + path;
-        }
-        else
-        {
+        } else {
             dirName = path.substring(lastSepIdx + 1);
         }
-        
-        if (errorMsg != null)
-        {
-        	LogManager.getLogger(getClass()).warn(errorMsg);
-        	
+        if (errorMsg != null) {
+        	LOG.warn(errorMsg);
             resp.setStatus(404);
-
-            try
-    		{
+            try {
     			PrintWriter output = new PrintWriter(resp.getWriter());
-    			
     			output.println(errorMsg);
-    			
     			output.flush();
-    			
     			return;
-    		}
-            catch (IOException ioEx)
-            {
-            	LogManager.getLogger(getClass()).warn(ioEx);
+    		} catch (IOException ioEx) {
+            	LOG.warn(ioEx);
             }
         }
-
         resp.setContentType("application/zip");
-
         resp.setHeader("Content-Disposition", "attachment; filename=" + dirName + ".zip");
 
         BufferedOutputStream buffOut = null;
         ZipOutputStream zipOut = null;
-        
-		try
-		{
+		try {
 			buffOut = new BufferedOutputStream(resp.getOutputStream());
-			
 			zipOut =  new ZipOutputStream(buffOut);
-			
 			zipFolderTree(path, "", zipOut);
-			
 			buffOut.flush();
-		}
-        catch (IOException ioEx)
-        {
-        	LogManager.getLogger(getClass()).warn(ioEx);
-        }
-        finally
-        {
-            try
-            {
-                if (zipOut != null) 
-                {
+		} catch (IOException ioEx) {
+        	LOG.warn(ioEx);
+        } finally {
+            try {
+                if (zipOut != null) {
                     zipOut.close();
                 }
-                if (buffOut != null) 
-                {
+                if (buffOut != null) {
                 	buffOut.close();
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
             }
         }
 	}
 	
-    private void zipFolderTree(String actPath, String relativePath, ZipOutputStream zipOut)
-    {
-        File actDir = new File(actPath);
+    private void zipFolderTree(String actPath, String relativePath, ZipOutputStream zipOut) {
+        File folderFile = new File(actPath);
 
-        String fileList[]=actDir.list();
-
-        if ((fileList == null) || (fileList.length == 0))
-        {
+        File[] fileList = folderFile.listFiles();
+        if ((fileList == null) || (fileList.length == 0)) {
             return;
         }
+        byte[] buff = new byte[4096];
 
-        byte buff[] = new byte[4096];
-
-        for (int i = 0; i < fileList.length; i++)
-        {
-            File tempFile = new File(actPath + File.separator + fileList[i]);
-
-            if (tempFile.isDirectory())
-            {
-                zipFolderTree(actPath + File.separator + fileList[i],
-                                   relativePath + fileList[i] + "/",
+        for (File file : fileList) {
+            if (file.isDirectory()) {
+                zipFolderTree(file.getAbsolutePath(),
+                                   relativePath + file.getName() + "/",
                                    zipOut);
-            }
-            else
-            {
-                String fullFileName = actPath + File.separator + fileList[i];
-                String relativeFileName = relativePath + fileList[i];
-
-                try
-                {
+            } else {
+                String relativeFileName = relativePath + file.getName();
+                try {
                     ZipEntry newZipEntry = new ZipEntry(relativeFileName);
-
                     zipOut.putNextEntry(newZipEntry);
-
-                    BufferedInputStream inStream = null;
-
-                    try
-                    {
-                        File originalFile = new File(fullFileName);
-
-                        inStream = new BufferedInputStream(new FileInputStream(originalFile));
-
+                    try (BufferedInputStream inStream = new BufferedInputStream(new FileInputStream(file))) {
                         int count;
-
-                        while ((count = inStream.read(buff)) >= 0)
-                        {
-                            zipOut.write(buff,0,count);
+                        while ((count = inStream.read(buff)) >= 0) {
+                            zipOut.write(buff, 0, count);
                         }
+                    } catch (Exception zioe) {
+                        LOG.warn("failed to zip file {}", file.getAbsolutePath(), zioe);
                     }
-                    catch (Exception zioe)
-                    {
-                        LogManager.getLogger(getClass()).warn("failed to zip file " + fullFileName, zioe);
-                    }
-                    finally
-                    {
-                        if (inStream != null)
-                        {
-                            try
-                            {
-                                inStream.close();
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        }
-                    }
-                }
-                catch (IOException ioex)
-                {
-                    LogManager.getLogger(getClass()).error("failed to zip file " + fullFileName, ioex);
+                } catch (IOException ioex) {
+                    LOG.error("failed to zip file {}", file.getAbsolutePath(), ioex);
                 }
             }
         }

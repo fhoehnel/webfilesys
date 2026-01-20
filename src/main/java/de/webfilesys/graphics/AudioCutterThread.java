@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,7 +42,7 @@ public class AudioCutterThread extends Thread {
         
         Thread.currentThread().setPriority(1);
 
-        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
+        String ffmpegExePath = WebFileSysConfig.getInstance().getFfmpegExePath();
         
         if (!CommonUtils.isEmpty(ffmpegExePath)) {
 

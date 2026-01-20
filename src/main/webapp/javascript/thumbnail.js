@@ -269,8 +269,8 @@ function resize() {
 function multiImageCopyMove() {
     if (anySelected()) {
         document.form2.command.value = 'multiImageCopyMove';
-        xmlRequestPost("/webfilesys/servlet", getFormData(document.form2), showCopyResult);
-	    document.form2.command.value = 'compareImg';
+        xmlFetchPost(getFormData(document.form2), handleCopyResult);
+        document.form2.command.value = 'compareImg';
     } else {   
         customAlert(resourceBundle["alert.nofileselected"] + "!");
     }
@@ -566,53 +566,46 @@ function setPictureDimensions(pic) {
 
     var picFileName = pixDim.getAttribute("picFileName");
 
-    var url = "/webfilesys/servlet?command=getPicDimensions&fileName=" +  encodeURIComponent(picFileName);
-
+    const parameters = {
+        "fileName": encodeURIComponent(picFileName)
+    };
     var picIsLink = pixDim.getAttribute("picIsLink");
     if (picIsLink) {
-    	url = url + "&link=true";
+    	parameters.link = "true";
     }
-    
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
+
+    xmlGetRequest("getPicDimensions", parameters, responseXml => {
+		let picWidth = null;
+		let picHeight = null;
+        let imageType = null;
 			    
-			    var picWidth = null;
-			    var picHeight = null;
-                var imageType = null;
-			    
-                var item = xmlDoc.getElementsByTagName("xpix")[0];            
-                if (item) {
-                    picWidth = item.firstChild.nodeValue;
-                }
-             
-                item = xmlDoc.getElementsByTagName("ypix")[0];            
-                if (item) {
-                    picHeight = item.firstChild.nodeValue;
-                }
-			    
-                item = xmlDoc.getElementsByTagName("imageType")[0];            
-                if (item) {
-                	imageType = item.firstChild.nodeValue;
-                }
-			    
-			    if ((picWidth != null) && (picHeight != null)) {
-			        pixDim.innerHTML = picWidth + " x " + picHeight + " pix";
-			        
-			        var pic = document.getElementById(picId);
-			        if (pic) {
-			        	pic.setAttribute("origWidth", picWidth);
-			        	pic.setAttribute("origHeight", picHeight);
-			        	if (imageType) {
-			        		pic.setAttribute("imgType", imageType);
-			        	}
-			        } 
-			    }
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
+        let item = responseXml.getElementsByTagName("xpix")[0];
+        if (item) {
+            picWidth = item.firstChild.nodeValue;
         }
+             
+        item = responseXml.getElementsByTagName("ypix")[0];
+        if (item) {
+            picHeight = item.firstChild.nodeValue;
+        }
+			    
+        item = responseXml.getElementsByTagName("imageType")[0];
+        if (item) {
+           	imageType = item.firstChild.nodeValue;
+        }
+			    
+		if ((picWidth != null) && (picHeight != null)) {
+		    pixDim.innerHTML = picWidth + " x " + picHeight + " pix";
+			        
+		    const pic = document.getElementById(picId);
+		    if (pic) {
+		      	pic.setAttribute("origWidth", picWidth);
+		      	pic.setAttribute("origHeight", picHeight);
+		      	if (imageType) {
+		      		pic.setAttribute("imgType", imageType);
+		       	}
+		    }
+		}
     });
 }
 

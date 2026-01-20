@@ -3,6 +3,7 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.Constants;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -43,8 +45,15 @@ public class CompareImageTabHandler extends XslRequestHandlerBase {
 		
 		String currentPath = getCwd();
 
-		List<String> selectedFiles = getSelectedFiles();
-		
+        List<String> selectedFiles;
+
+        String selectAll = getParameter("selectAll");
+        if ("true".equals(selectAll)) {
+            selectedFiles = selectAllPictureFiles(currentPath);
+        } else {
+            selectedFiles = getSelectedFiles();
+        }
+
 		if (selectedFiles.size() < 2) {
 		    LOG.error("this image comparision requires at least two selected pictures");
 		    return;
@@ -97,4 +106,29 @@ public class CompareImageTabHandler extends XslRequestHandlerBase {
         processResponse(XSL_STYLESHEET_NAME);
     }
 
+    private List<String> selectAllPictureFiles(String currentPath) {
+        File currentDirFile = new File(currentPath);
+        ArrayList<String> pictureFiles = new ArrayList<>();
+        if (currentDirFile.exists() && currentDirFile.isDirectory() || currentDirFile.canRead()) {
+            File[] fileList = currentDirFile.listFiles();
+            if (fileList != null) {
+                for (File file : fileList) {
+                    if (file.isFile() && file.canRead() && isPictureFile(file.getName())) {
+                        pictureFiles.add(file.getName());
+                    }
+                }
+            }
+        }
+        return pictureFiles;
+    }
+
+    private boolean isPictureFile(String fileName) {
+        String fileNameExt = CommonUtils.getFileExtension(fileName);
+        for (String imgType : Constants.PICTURE_FILE_MASKS) {
+            if (imgType.substring(1).equals(fileNameExt)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

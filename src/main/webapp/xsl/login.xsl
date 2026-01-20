@@ -122,7 +122,7 @@
               <tr>
                 <td colspan="2" style="text-align:right;padding-right:10px;">
                   <xsl:if test="/login/openRegistration">
-                    <a class="dir" href="/webfilesys/servlet?command=registerSelf" resource="label.registerself"></a>
+                    <a class="dir" href="/webfilesys/html/registerUser.html" resource="label.registerself"></a>
                   </xsl:if>
                 </td>
               </tr>

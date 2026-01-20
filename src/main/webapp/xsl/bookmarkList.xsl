@@ -96,7 +96,7 @@
             <td>
               <a class="dirtree" style="cursor:pointer">
                 <xsl:if test="textColor">
-                  <xsl:attribute name="style">color:<xsl:value-of select="textColor" /></xsl:attribute>
+                  <xsl:attribute name="style">color:<xsl:value-of select="textColor" />;cursor:pointer</xsl:attribute>
                 </xsl:if>
                 <xsl:attribute name="onclick">gotoBookmarkedFolder('<xsl:value-of select="encodedPath" />')</xsl:attribute>
                 <xsl:attribute name="title"><xsl:value-of select="path" /></xsl:attribute>

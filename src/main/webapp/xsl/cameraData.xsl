@@ -42,7 +42,7 @@
   
   <form accept-charset="utf-8" name="form1" style="padding-top:5px;">
 
-    <table class="dataForm" width="100%">
+    <table class="dataForm exifData" width="100%">
    
       <tr>
         <td colspan="2" class="formParm1">
@@ -183,6 +183,17 @@
             </td>
             <td class="formParm2">
               <xsl:value-of select="/cameraData/exifData/gpsLongitude" />
+            </td>
+          </tr>
+        </xsl:if>
+
+        <xsl:if test="/cameraData/exifData/gpsAltitude">
+          <tr>
+            <td class="formParm1">
+              <span resource="label.gpsAltitude"></span>
+            </td>
+            <td class="formParm2">
+              <xsl:value-of select="/cameraData/exifData/gpsAltitude" /> m
             </td>
           </tr>
         </xsl:if>

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -129,7 +130,7 @@ public class VisitorServlet extends WebFileSysServlet {
 
             LogManager.getLogger(getClass()).info(logEntry);
 
-            if ((WebFileSys.getInstance().getMailHost() != null) && WebFileSys.getInstance().isMailNotifyLogin()) {
+            if ((WebFileSysConfig.getInstance().getMailHost() != null) && WebFileSysConfig.getInstance().isMailNotifyLogin()) {
             	
             	ArrayList<String> adminUserEmailList = userMgr.getAdminUserEmails();
                 

@@ -105,6 +105,7 @@ label.menuSynchronize=Synchronisieren
 label.menuCancelSync=Synchronisieren abbrechen
 label.watchFolder=Änderungen überwachen
 label.cloneFolder=klonen
+label.searchGPS=GPS-Suche
 
 # file context menu labels
 label.view=Anzeigen
@@ -340,7 +341,9 @@ label.bytesfree=Freier Speicherplatz (Bytes)
 
 # search window labels and buttons
 label.searchHead=Datei- und Volltextsuche
+label.searchGPSHead=GPS-Suche
 label.searchTitle=WebFileSys: Suche
+label.searchGPSTitle=WebFileSys: GPS-Suche
 label.searchPath=Suche in Ordner (inkl. Unterordner)
 label.filemask=Suchmaske für Dateinamen
 label.searcharg=enthaltener Text
@@ -364,6 +367,8 @@ label.searchResultAsTree=Suchergebnisse als Baum zeigen
 button.keepSearchResults=Suchergebnisse behalten
 button.discardSearchResults=Suchergebnisse verwerfen
 datePickerFormat=dd.mm.yy
+label.searchGPSDistance=max Entfernung (km)
+label.searchGPSDistanceMandatory=Entfernung ist ein Pflichtfeld!
 
 # copy/rename/move/delete/clone labels and buttons
 label.copymovehead=Kopieren/Umbenennen/Verschieben
@@ -575,6 +580,7 @@ label.imgwidth=Bildbreite (Pixel)
 label.thumbexists=enthält Vorschaubild
 label.gpsLatitude=GPS geografische Breite
 label.gpsLongitude=GPS geografische Länge
+label.gpsAltitude=GPS Höhe
 label.imgOrientation=Orientierung
 orientation.landscape=Querformat
 orientation.portrait=Hochformat
@@ -701,6 +707,7 @@ label.registerself=Als neuer Nutzer registrieren
 label.editregistration=Registrierungsdaten ändern
 label.regtitle=Registrierung als neuer Nutzer
 label.login=Nutzername
+label.passwordRegistration=Passwort
 label.passwordconfirm=Passwort-Bestätigung
 label.ropassword=Readonly-Passwort
 label.ropwconfirm=Readonly-Passwort Bestätigung
@@ -720,8 +727,9 @@ registrationConfirmation=Der erste Schritt der Registrierung war erfolgreich. Ei
 button.registrationToLogin=Zum Login
 activationSuccessful=Die Aktivierung des Nutzerkontos war erfolgreich.
 registrationAdminActivation=Das neu registrierte Nutzerkonto muss durch einen Administrator freigeschaltet werden (e-mail Versand ist nicht konfiguriert).
-error.missinglogin=Der Login-Name muss mindestens 3 Zeichen lang sein
+error.loginLength=Die Länge des Login-Namens ist unzulässig
 error.spacesinlogin=Der Login-Name darf keine Leerzeichen enthalten
+error.loginInvalidChar=Der Login-Name enthält nicht erlaubte Zeichen
 error.passwordlength=Das Passwort muss mindestens 5 Zeichen lang sein
 error.spacesinpw=Das Passwort darf keine Leerzeichen enthalten
 error.pwmissmatch=Passwort und Bestätigung stimmen nicht überein
@@ -830,6 +838,8 @@ label.googleMapAllFiles=Geographische Position aller Bilder in Google Maps anzei
 label.geoTag=Geo-Tag Daten
 label.latitude=geogr. Breite in Dezimalgrad (Beispiel: 51.05 für Dresden)
 label.longitude=geogr. Länge in Dezimalgrad (Beispiel: 13.75 für Dresden)
+latitudeSearchResult=geogr. Breite
+longitudeSearchResult=geogr. Länge
 label.zoomFactor=Zoom Factor (1 = weit weg, 16 = ganz nah)
 label.geoTagInfoText=Text für Info-Fenster auf der Karte
 alert.missingLatitude=geogr. Breite ist ein Pflichtfeld

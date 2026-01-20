@@ -1,0 +1,39 @@
+<div>
+    <div class="promptHead" resource="label.addBookmark"></div>
+
+    <form accept-charset="utf-8" name="bookmarkForm" id="bookmarkForm" method="get" action="/webfilesys/servlet"
+          style="display:inline;">
+        <input type="hidden" name="command" value="createBookmark" />
+
+        <table border="0" width="100%" cellpadding="10">
+            <tr>
+                <td class="formParm1" nowrap="nowrap" style="padding-right:0">
+                    <span resource="label.directory"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="formParm2">
+                    <span id="currentPathShort"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="formParm1" nowrap="nowrap" style="padding-right:0;">
+                    <span resource="label.bookmarkName"></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="formParm2">
+                    <input type="text" name="bookmarkName" maxlength="256" value="" style="width:100%;" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="buttonCont" style="float:none">
+                        <input id="submitButton" type="button" style="float:left" resource="button.create"/>
+                        <input id="cancelButton" type="button" style="float:right" resource="button.cancel"/>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>

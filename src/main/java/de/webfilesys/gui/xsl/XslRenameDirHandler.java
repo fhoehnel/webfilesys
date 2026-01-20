@@ -7,20 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Constants;
-import de.webfilesys.DirTreeStatus;
-import de.webfilesys.FastPathManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.SubdirExistCache;
-import de.webfilesys.UpdateLinksAfterDirRenameThread;
-import de.webfilesys.WebFileSys;
-import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.gui.xsl.mobile.MobileFolderFileListHandler;
-import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
 
@@ -115,9 +106,7 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 				}
 				else
 				{
-					Decoration savedDeco = DecorationManager.getInstance().getDecoration(currentPath);
-					
-					MetaInfManager.getInstance().saveMetaInfFile(currentPath);
+					MetaInfManager.getInstance().saveChangedMetaInfFiles();
 					
 					if (!oldDir.renameTo(newDir))
 					{
@@ -127,15 +116,11 @@ public class XslRenameDirHandler extends XslRequestHandlerBase
 					{
                         MetaInfManager.getInstance().releaseMetaInf(currentPath, false);
                         
-					    if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+					    if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
 					    {
 	                        (new UpdateLinksAfterDirRenameThread(newPath, uid)).start();
 					    }
-					    
-					    if (savedDeco != null) {
-						    DecorationManager.getInstance().setDecoration(newPath, savedDeco);					    
-					    }
-					    
+
 					    String mobile = (String) session.getAttribute("mobile");
 					    
 					    if (mobile != null) {

@@ -3,21 +3,22 @@ package de.webfilesys.gui.xsl;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
+import de.webfilesys.WebFileSys;
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
 import de.webfilesys.GeoTag;
 import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.CameraExifData;
 import de.webfilesys.graphics.ImageDimensions;
 import de.webfilesys.graphics.ImageUtils;
@@ -49,7 +50,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		String path = getParameter("path");
 		
-		String relPath = req.getParameter("relPath");
+		String relPath = getParameter("relPath");
 		
 		if (relPath != null)
 		{
@@ -97,7 +98,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			return;
 		}
 		
-		String description = req.getParameter("description");
+		String description = getParameter("description");
 		
 		if (description == null)
 		{
@@ -112,7 +113,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		float latitude = 0f;
 		
-		String latitudeParm = req.getParameter("latitude");
+		String latitudeParm = getParameter("latitude");
 		
 		if ((latitudeParm != null) && (latitudeParm.trim().length() > 0))
 		{
@@ -137,7 +138,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		float longitude = 0f;
 		
-		String longitudeParm = req.getParameter("longitude");
+		String longitudeParm = getParameter("longitude");
 		
 		if ((longitudeParm != null) && (longitudeParm.trim().length() > 0))
 		{
@@ -162,7 +163,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		int zoomFactor = 10;
 		
-		String zoomFactorParm = req.getParameter("zoomFactor");
+		String zoomFactorParm = getParameter("zoomFactor");
 		
 		if ((zoomFactorParm != null) && (zoomFactorParm.trim().length() > 0))
 		{
@@ -186,7 +187,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 		metaInfMgr.setDescription(path, description);
 		
-		String tags = req.getParameter("tags");
+		String tags = getParameter("tags");
 		
 	    if (tags != null) {
 			String[] newTags = tags.trim().split(",");
@@ -197,7 +198,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		{
 			GeoTag geoTag = new GeoTag(latitude, longitude, zoomFactor);
 			
-			String infoText = req.getParameter("infoText");
+			String infoText = getParameter("infoText");
 			
 			if (infoText != null)
 			{
@@ -221,42 +222,42 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		if (path.endsWith(".")) {
 			String normalizedPath = path.substring(0, path.length() - 2);
 
-			String defaultColor = req.getParameter("defaultColor");
+			String defaultColor = getParameter("defaultColor");
 			if (defaultColor != null) 
 			{
-				Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+				Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
 				if (deco != null) 
 				{
 					deco.setTextColor(null);
-					DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+                    MetaInfManager.getInstance().setDecoration(normalizedPath, ".", deco);
 					colorChanged = true;
 				}
 			}
 			else
 			{
-				String textColor = req.getParameter("textColor");
+				String textColor = getParameter("textColor");
 				if ((textColor != null) && (textColor.trim().length() > 0)) 
 				{
-					Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+					Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
 					if (deco == null) 
 					{
 						deco = new Decoration();
 					}
 					deco.setTextColor("#" + textColor);
-					DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+                    MetaInfManager.getInstance().setDecoration(normalizedPath, ".", deco);
 					colorChanged = true;
 				}
 			}
 			
-			String icon = req.getParameter("icon");
+			String icon = getParameter("icon");
 			if (icon != null) {
-				Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
+				Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
 				if (icon.equals("none")) 
 				{
 					if (deco != null) 
 					{
 						deco.setIcon(null);
-						DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+                        MetaInfManager.getInstance().setDecoration(normalizedPath, ".", deco);
 					    iconChanged = true;
 					}
 				} 
@@ -269,7 +270,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 							deco = new Decoration();
 						}
 						deco.setIcon(icon);
-						DecorationManager.getInstance().setDecoration(normalizedPath, deco);
+                        MetaInfManager.getInstance().setDecoration(normalizedPath, ".", deco);
 					    iconChanged = true;
 					}
 				}
@@ -360,7 +361,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
 		if (errorMsg != null) 
 		{
-		    description = req.getParameter("description");
+		    description = getParameter("description");
 		}
 		else
 		{
@@ -375,7 +376,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		if (folderOrFile.isFile()) {
 			String tags = "";
 			if (errorMsg != null) {
-				tags = req.getParameter("tags");
+				tags = getParameter("tags");
 			} else {
 				ArrayList<String> tagList = metaInfMgr.getTags(path);
 				if (tagList != null) {
@@ -401,13 +402,13 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
         if (errorMsg != null) 
         {
-            String latitudeParm = req.getParameter("latitude"); 
+            String latitudeParm = getParameter("latitude");
             XmlUtil.setChildText(geoTagElement, "latitude", latitudeParm, false);
 
-            String longitudeParm = req.getParameter("longitude"); 
+            String longitudeParm = getParameter("longitude");
             XmlUtil.setChildText(geoTagElement, "longitude", longitudeParm, false);
             
-            String infoTextParm = req.getParameter("infoText");
+            String infoTextParm = getParameter("infoText");
             XmlUtil.setChildText(geoTagElement, "infoText", infoTextParm, false);
         }
         else
@@ -466,8 +467,8 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 			
         boolean mapSelection = false;
 		
-		if ((req.getParameter("geoTag") != null) ||
-		    (req.getParameter("zoomFactor") != null)) // returned to input form because of validation error
+		if ((getParameter("geoTag") != null) ||
+		    (getParameter("zoomFactor") != null)) // returned to input form because of validation error
 		{
 	        mapSelection = true;
 		}
@@ -482,7 +483,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 	        {
 	            try
 	            {
-	                zoomFactor = Integer.parseInt(req.getParameter("zoomFactor"));
+	                zoomFactor = Integer.parseInt(getParameter("zoomFactor"));
 	            }
 	            catch (Exception ex)
 	            {
@@ -522,9 +523,8 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		if (path.endsWith(".")) 
 		{
 			String normalizedPath = path.substring(0, path.length() - 2);
-			Decoration deco = DecorationManager.getInstance().getDecoration(normalizedPath);
-			
-			if (deco != null) 
+			Decoration deco = MetaInfManager.getInstance().getDecoration(normalizedPath, ".");
+			if (deco != null)
 			{
 				String textColor = deco.getTextColor();
 				if (textColor != null) 
@@ -547,7 +547,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 
 	        metaInfElement.appendChild(availableIconsElement);
 			
-	        for (String icon : DecorationManager.getInstance().getAvailableIcons()) {
+	        for (String icon : getAvailableIcons()) {
 				Element iconElement = doc.createElement("icon");
 				availableIconsElement.appendChild(iconElement);
 				XmlUtil.setElementText(iconElement, icon);
@@ -556,9 +556,9 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 	    
         String googleMapsAPIKey = null;
 		if (req.getScheme().equalsIgnoreCase("https")) {
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTPS();
 		} else {
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTP();
 		}
 		
 		if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
@@ -569,7 +569,7 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		// when loading the Google maps API Javascript functions from the Google server
 		// so we have to do the XSLT processing always on server side
 		
-		processResponse("editMetaInf.xsl", true);
+		processResponse("editMetaInf.xsl");
     }
 	
 	private Element getThumbnailData(String filePath)
@@ -596,4 +596,25 @@ public class XslEditMetaInfHandler extends XslRequestHandlerBase
 		
         return(thumbnailElement);	    
 	}
+
+    /**
+     * Icons available for folder decoration.
+     * @return List of filenames of files in the icons directory.
+     */
+    private List<String> getAvailableIcons() {
+        ArrayList<String> availableIcons = new ArrayList<String>();
+        String iconDirPath = WebFileSys.getInstance().getWebAppRootDir() + "icons";
+        File iconDir = new File(iconDirPath);
+        if (iconDir.exists() && iconDir.isDirectory() && iconDir.canRead()) {
+            String[] iconFiles = iconDir.list();
+            if (iconFiles != null) {
+                Collections.addAll(availableIcons, iconFiles);
+            }
+        }
+        if (availableIcons.size() > 1) {
+            Collections.sort(availableIcons);
+        }
+        return availableIcons;
+    }
+
 }

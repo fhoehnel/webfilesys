@@ -4,113 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-
 
 /**
  * @author Frank Hoehnel
  */
 public class CommonUtils
 {
-	public static String formatNumberSpaces(long number,int width)
-	{
-		char buffer[]=new char[width];
-
-		StringBuffer formattedNumber=new StringBuffer();
-
-		int idx=width-1;
-
-		int digitNum=0;
-
-		long num=number;
-
-		while (num>0)
-		{
-			buffer[idx]=(char) (num % 10 + '0');
-
-			num=num / 10;
-
-			idx--;
-
-			digitNum++;
-
-			if ((digitNum % 3 == 0) && (num>0))
-			{
-				buffer[idx]='.';
-				idx--;
-			}
-		}
-
-		if (digitNum==0)
-		{
-			buffer[idx]='0';
-			idx--;
-		}
-
-		int numberIdx=idx+1;
-
-		while (idx>=0)
-		{
-			formattedNumber.append("&nbsp;");
-
-			idx--;
-		}                     
-
-		formattedNumber.append(new String(buffer,numberIdx,width-numberIdx));
-
-		return(formattedNumber.toString());
-	}
-
-	public static String formatNumber(long number,int width,boolean leadingZeros)
-	{
-		char buffer[]=new char[width];
-		int idx=width-1;
-
-		int digitNum=0;
-
-		long num=number;
-
-		while (num>0)
-		{
-			buffer[idx]=(char) (num % 10 + '0');
-
-			num=num / 10;
-
-			idx--;
-
-			digitNum++;
-
-			if ((digitNum % 3 == 0) && (num>0))
-			{
-				buffer[idx]='.';
-				idx--;
-			}
-		}
-
-		if (digitNum==0)
-		{
-			buffer[idx]='0';
-			idx--;
-		}
-
-		while (idx>=0)
-		{
-			if (leadingZeros)
-			{
-				buffer[idx]='0';
-			}
-			else
-			{
-				buffer[idx]=' ';
-			}
-
-			idx--;
-		}                     
-
-		return(new String(buffer));
-	}
-
 	public static boolean isEmpty(String val) {
 		if (val == null) {
 			return true;
@@ -157,16 +57,6 @@ public class CommonUtils
 		}
 
 		return(fileName.substring(extIdx).toLowerCase());
-	}
-	
-	public static String getFullPath(String path, String fileOrFolderName)
-	{
-	    if (path.endsWith(File.separator))
-	    {
-	        return path + fileOrFolderName;
-	    }
-	    
-	    return(path + File.separator + fileOrFolderName);
 	}
 	
 	public static final String extractFileName(String path)
@@ -344,43 +234,35 @@ public class CommonUtils
 
         return source;
     }
-    
-    public static String encodeSpecialChars(String line)
-    {
-        StringBuffer buff = new StringBuffer();
 
-        for (int i = 0; i < line.length(); i++)
-        {
+    public static String encodeSpecialChars(String line) {
+        StringBuilder buff = new StringBuilder();
+
+        for (int i = 0; i < line.length(); i++) {
             char ch = line.charAt(i);
 
-            if (ch=='&')
-            {
+            if (ch=='&') {
                 buff.append("&amp;");
-            }
-            else if (ch == '<')
-            {
+            } else if (ch == '<') {
                 buff.append("&lt;");
-            }
-            else if (ch == '>')
-            {
+            } else if (ch == '>') {
                 buff.append("&gt;");
-            }
-            else if (ch == '"')
-            {
+            } else if (ch == '"') {
                 buff.append("&quot;");
-            }
-            else
-            {
-                buff.append(ch);
+            } else {
+                if ((ch < 0x20) && (ch != 0x0a) && (ch != 0x0d)) {
+                    buff.append('.');
+                } else {
+                    buff.append(ch);
+                }
             }
         }
-
         return(buff.toString());
     }
 
-    public static final String escapeJSON(String s)
+    public static String escapeJSON(String s)
     {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         int n = s.length();
         for (int i = 0; i < n; i++) 
         {
@@ -417,8 +299,8 @@ public class CommonUtils
      * @param s the original String
      * @return the HTML escaped String
      */
-    public static final String escapeHTML(String s){
-        StringBuffer sb = new StringBuffer();
+    public static String escapeHTML(String s){
+        StringBuilder sb = new StringBuilder();
         int n = s.length();
         for (int i = 0; i < n; i++) {
            char c = s.charAt(i);
@@ -472,9 +354,8 @@ public class CommonUtils
      }
     
 	public static String[] splitPath(String path) {
-		String dir = null;
-
-		String fileName = null;
+		String dir;
+		String fileName;
 
 		int separatorIdx = path.lastIndexOf(File.separatorChar);
 		if (separatorIdx < 0) {
@@ -500,21 +381,7 @@ public class CommonUtils
 
         return partsOfPath;		
 	}
-	
-    public static String filterForbiddenChars(String text) {
-    	StringBuffer cleanText = new StringBuffer();
-    	
-    	for (int i = 0; i < text.length(); i++) {
-    		char c = text.charAt(i);
-    		
-    		if (c < 0xd800) {
-    			cleanText.append(c);
-    		} 
-    	}
-    	
-    	return cleanText.toString();
-    }
-    
+
     public static String joinFilesysPath(String part1, String part2) {
         
         if (part1.endsWith(File.separator)) {

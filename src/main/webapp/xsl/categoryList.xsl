@@ -6,7 +6,6 @@
 
 <xsl:strip-space elements="categoryList category" />
 
-<!-- root node-->
 <xsl:template match="/">
 
 <html>
@@ -23,31 +22,22 @@
 </link>
 
 <script language="javascript">
-  function anySelected()
-  {
-      for (i=document.form1.elements.length-1;i>=0;i--)
-      {
-           if ((document.form1.elements[i].type=="checkbox") &amp;&amp;
-               (document.form1.elements[i].checked==true))
-	   {
-	        return(true);
-	   }
+  function anySelected() {
+      for (i=document.form1.elements.length-1;i>=0;i--) {
+          if ((document.form1.elements[i].type=="checkbox") &amp;&amp;
+              (document.form1.elements[i].checked==true)) {
+	        return true;
+	      }
       }
-
-      return(false);
+      return false;
   }
 
-
-  function deleteSelected()
-  {
-      if (!anySelected())
-      {
+  function deleteSelected() {
+      if (!anySelected()) {
           alert("<xsl:value-of select="/categoryList/resources/msg[@key='alert.noCategorySelected']/@value" />");
           return;
       }      
-  
-      if (confirm("<xsl:value-of select="/categoryList/resources/msg[@key='confirm.delCategory']/@value" />"))
-      {
+      if (confirm("<xsl:value-of select="/categoryList/resources/msg[@key='confirm.delCategory']/@value" />")) {
           document.form1.cmd.value = 'delete';
           document.form1.submit();
       }
@@ -67,13 +57,12 @@
 
 <body class="categories">
 
-<xsl:apply-templates />
+  <xsl:apply-templates />
 
 </body>
 </html>
 
 </xsl:template>
-<!-- end root node-->
 
 <xsl:template match="categoryList">
 
@@ -86,12 +75,11 @@
   <form accept-charset="utf-8" name="form0" method="post" action="/webfilesys/servlet">
     <input type="hidden" name="command" value="category" />
     <input type="hidden" name="cmd" value="new" />
-    <input type="hidden" name="filePath">
-      <xsl:attribute name="value"><xsl:value-of select="/categoryList/filePath" /></xsl:attribute>
+    <input type="hidden" name="fileName">
+      <xsl:attribute name="value"><xsl:value-of select="/categoryList/fileName" /></xsl:attribute>
     </input>
 
     <table class="dataForm" width="100%">
-
       <tr>
         <td class="formParm1">
           <xsl:value-of select="resources/msg[@key='label.newCategory']/@value" />:
@@ -108,9 +96,7 @@
             <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.createCategory']/@value" /></xsl:attribute>
           </input>
         </td>
-
       </tr>
-      
     </table>
 
   </form>
@@ -118,11 +104,11 @@
   <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet">
     <input type="hidden" name="command" value="category" />
     <input type="hidden" name="cmd" value="new" />
-    <input type="hidden" name="filePath">
-      <xsl:attribute name="value"><xsl:value-of select="/categoryList/filePath" /></xsl:attribute>
+    <input type="hidden" name="fileName">
+      <xsl:attribute name="value"><xsl:value-of select="/categoryList/fileName" /></xsl:attribute>
     </input>
 
-    <br />
+    <br/>
 
     <table class="dataForm" border="0" width="100%" cellpadding="0" cellspacing="0">
 
@@ -161,7 +147,7 @@
       </xsl:if>
 
       <input type="button" style="float:right">
-        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=assignCategory&amp;filePath=<xsl:value-of select="/categoryList/filePathForScript" />'</xsl:attribute>
+        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=assignCategory&amp;fileName=<xsl:value-of select="/categoryList/encodedFileName" />'</xsl:attribute>
         <xsl:attribute name="value"><xsl:value-of select="resources/msg[@key='button.return']/@value" /></xsl:attribute>
       </input>
     

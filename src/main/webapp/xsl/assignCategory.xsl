@@ -6,7 +6,6 @@
 
 <xsl:strip-space elements="categoryList category" />
 
-<!-- root node-->
 <xsl:template match="/">
 
 <html>
@@ -55,15 +54,14 @@
 </html>
 
 </xsl:template>
-<!-- end root node-->
 
 <xsl:template match="categoryList">
 
   <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet">
     <input type="hidden" name="command" value="assignCategory" />
     <input type="hidden" name="cmd" value="list" />
-    <input type="hidden" name="filePath">
-      <xsl:attribute name="value"><xsl:value-of select="filePath" /></xsl:attribute>
+    <input type="hidden" name="fileName">
+      <xsl:attribute name="value"><xsl:value-of select="fileName" /></xsl:attribute>
     </input>
 
     <div class="headline">
@@ -75,7 +73,7 @@
     <table class="dataForm" width="100%">
       <tr>
         <td colspan="2" class="formParm2">
-          <xsl:value-of select="shortFilePath" />
+          <xsl:value-of select="shortFileName" />
         </td>
       </tr>
 

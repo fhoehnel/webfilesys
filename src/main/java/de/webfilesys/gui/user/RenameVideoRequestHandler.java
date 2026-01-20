@@ -8,15 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.Category;
-import de.webfilesys.Comment;
-import de.webfilesys.GeoTag;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.VideoThumbnailCreator;
 import de.webfilesys.gui.xsl.XslVideoListHandler;
 
@@ -120,7 +116,7 @@ public class RenameVideoRequestHandler extends UserRequestHandler {
 			}
 		}
 
-		if (WebFileSys.getInstance().isReverseFileLinkingEnabled()) {
+		if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
 			metaInfMgr.updateLinksAfterMove(oldFilePath, newFilePath, uid);
 		}
 
@@ -136,6 +132,6 @@ public class RenameVideoRequestHandler extends UserRequestHandler {
 			}
 		}
 
-		(new XslVideoListHandler(req, resp, session, output, uid, requestIsLocal)).handleRequest();
+		(new XslVideoListHandler(req, resp, session, output, uid)).handleRequest();
 	}
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -63,7 +64,7 @@ public class AudioInfoExtractor {
             throw new IllegalArgumentException("audio file is not a readable file: " + audioFilePath);
         }        
 
-        String ffprobeExePath = WebFileSys.getInstance().getFfprobeExePath();
+        String ffprobeExePath = WebFileSysConfig.getInstance().getFfprobeExePath();
         
         if (CommonUtils.isEmpty(ffprobeExePath)) {
             throw new IllegalArgumentException("ffprobe executable path not configured");

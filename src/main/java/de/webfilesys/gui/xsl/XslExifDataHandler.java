@@ -39,11 +39,7 @@ public class XslExifDataHandler extends XslRequestHandlerBase
 	protected void process()
 	{
         String imgFileName = getParameter("imgFile");
-
-        if (!this.checkAccess(imgFileName))
-        {
-            return;
-        }
+        String imgFilePath = CommonUtils.joinFilesysPath(getCwd(), imgFileName);
 
 		Element cameraDataElement = doc.createElement("cameraData");
 			
@@ -57,7 +53,7 @@ public class XslExifDataHandler extends XslRequestHandlerBase
         
 		XmlUtil.setChildText(cameraDataElement, "shortImgName", shortImgName, false);
         
-        CameraExifData exifData=new CameraExifData(imgFileName);
+        CameraExifData exifData = new CameraExifData(imgFilePath);
 
         if (exifData.hasExifData())
         {
@@ -152,7 +148,7 @@ public class XslExifDataHandler extends XslRequestHandlerBase
 
             if (thumbLength > 0)
             {
-                String srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(imgFileName);
+                String srcFileName = "/webfilesys/servlet?command=exifThumb&imgFile=" + UTF8URLEncoder.encode(imgFilePath);
 
                 XmlUtil.setChildText(exifDataElement, "thumbnailPath", srcFileName);
             }
@@ -188,6 +184,13 @@ public class XslExifDataHandler extends XslRequestHandlerBase
             {
                 XmlUtil.setChildText(exifDataElement, "gpsLongitude", Float.toString(gpsLongitude) +  " " + exifData.getGpsLongitudeRef());
             }
+
+            float gpsAltitude = exifData.getGpsAltitude();
+            
+            if (!Float.isNaN(gpsAltitude))
+            {
+                XmlUtil.setChildText(exifDataElement, "gpsAltitude", Integer.toString(Math.round(gpsAltitude)));
+            }
             
             int orientation = exifData.getOrientation();
             
@@ -203,7 +206,7 @@ public class XslExifDataHandler extends XslRequestHandlerBase
                 XmlUtil.setChildText(exifDataElement, "thumbnailOrientation", Integer.toString(thumbnailOrientation));
             }
             
-            XmlUtil.setChildText(exifDataElement, "imgPathForScript", insertDoubleBackslash(imgFileName));
+            XmlUtil.setChildText(exifDataElement, "imgPathForScript", insertDoubleBackslash(imgFilePath));
         }
 
         processResponse("cameraData.xsl");

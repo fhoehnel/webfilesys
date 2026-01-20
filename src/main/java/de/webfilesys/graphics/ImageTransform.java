@@ -26,6 +26,7 @@ import javax.imageio.ImageWriter;
 import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 
+import de.webfilesys.WebFileSysConfig;
 import mediautil.image.jpeg.LLJTran;
 import mediautil.image.jpeg.LLJTranException;
 
@@ -213,7 +214,7 @@ public class ImageTransform
             }
         }
 
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
+		if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
 		{
 			AutoThumbnailCreator.getInstance().queuePath(destFilePath, AutoThumbnailCreator.SCOPE_FILE);
 		}
@@ -355,7 +356,7 @@ public class ImageTransform
             }            
         }
         
-		if (WebFileSys.getInstance().isAutoCreateThumbs()) {
+		if (WebFileSysConfig.getInstance().isAutoCreateThumbs()) {
 			AutoThumbnailCreator.getInstance().queuePath(destFilePath , AutoThumbnailCreator.SCOPE_FILE);
 		} else {
         	replaceOldExternalThumbnail(destFilePath, true);

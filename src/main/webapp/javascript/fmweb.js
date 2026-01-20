@@ -95,12 +95,9 @@ function resetSelected() {
     }
 }
 
-function multiFileCopyMove()
-{
+function multiFileCopyMove() {
     document.form1.command.value='multiFileCopyMove';
-
-    xmlRequestPost("/webfilesys/servlet", getFormData(document.form1), showCopyResult);
-    
+    xmlFetchPost(getFormData(document.form1), handleCopyResult);
     document.form1.command.value='multiFileOp';
 }
 
@@ -263,16 +260,61 @@ function checkFileNameSyntax(str)
     return(true);
 }
 
+function validateCloneFileName() {
+    const oldFileName = document.getElementById("sourceFileName").value;
+    const newFileName = document.getElementById("newFileName").value;
+    if (newFileName === oldFileName) {
+        customAlert(resourceBundle["alert.destEqualsSource"]);
+    } else {
+        if (!checkFileNameSyntax(newFileName)) {
+            customAlert(resourceBundle["alert.illegalCharInFilename"]);
+        } else {
+            if (newFileName !== '') {
+                fetchPost(getFormData(document.getElementById("cloneForm")),
+                    responseData => window.location.href = "/webfilesys/servlet?command=listFiles",
+                    () => customAlert(resourceBundle["alert.cloneTargetExists"])
+                );
+            }
+        }
+    }
+}
+
+function validateRenameTargetFileName() {
+    const oldFileName = document.getElementById("oldFileName").value;
+    const newFileName = document.getElementById("newFileName").value;
+    const mobile = document.getElementById("mobileParam").value;
+    if (newFileName === oldFileName) {
+        customAlert(resourceBundle["alert.destEqualsSource"]);
+    } else {
+        if (!checkFileNameSyntax(newFileName)) {
+            customAlert(resourceBundle["alert.illegalCharInFilename"]);
+        } else {
+            if (newFileName !== '') {
+                fetchPost(getFormData(document.getElementById("renameForm")),
+                    responseData => {
+                        if ("true" === mobileParam) {
+                            window.location.href = "/webfilesys/servlet?command=mobile&cmd=folderFileList&initial=true";
+                        } else {
+                            window.location.href = "/webfilesys/servlet?command=listFiles"
+                        }
+                    },
+                    () => customAlert(oldFileName + " " + resourceBundle["error.renameFailed"] + " " + newFileName)
+                );
+            }
+        }
+    }
+}
+
 function validateNewFileName(oldFileName, errorMsg1, errorMsg2) {
     var newFileName = document.getElementById('renameForm').newFileName.value;
 
-    if (newFileName == oldFileName) {
+    if (newFileName === oldFileName) {
         alert(errorMsg1);
     } else {
         if (!checkFileNameSyntax(newFileName)) {
             alert(errorMsg2);
         } else {
-            if (newFileName != '') {
+            if (newFileName !== '') {
                 document.renameForm.submit();
             }
         }
@@ -337,22 +379,15 @@ function validateNewFolderName(errorMsg) {
 }
 
 function validateBookmarkName(errorMsg) {
-    var bookmarkName = document.bookmarkForm.bookmarkName.value;
-
-    if (bookmarkName.trim().length == 0) {
+    const bookmarkName = document.bookmarkForm.bookmarkName.value;
+    if (bookmarkName.trim().length === 0) {
         customAlert(errorMsg);
         document.bookmarkForm.bookmarkName.focus();
         document.bookmarkForm.bookmarkName.select();
     } else {
-        const parameters = { 
-        		"path": encodeURIComponent(document.bookmarkForm.currentPath.value),
-        		"bookmarkName": encodeURIComponent(document.bookmarkForm.bookmarkName.value)
-        };
-        
-        xmlPostRequest("createBookmark", parameters, function(responseXml) {
-            toast(resourceBundle["alert.bookmarkCreated"] + " " + document.bookmarkForm.currentPath.value, 2000);
+        fetchPost(getFormData(document.getElementById("bookmarkForm")), responseData => {
+            toast(resourceBundle["alert.bookmarkCreated"], 2000);
         });
-
         hidePrompt();
     }
 }
@@ -378,16 +413,8 @@ function submitSwitchReadWrite()
 }
 
 function switchFolderWatch(path) {
-    var url = "/webfilesys/servlet?command=switchFolderWatch&path=" + encodeURIComponent(path);
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status != 200) {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-            hidePrompt();
-        }
-    });
+    const parameters = { "path": encodeURIComponent(path) };
+    xmlGetRequest("switchFolderWatch", parameters, () => hidePrompt());
 }
 
 function enableDisablePatternInput()
@@ -409,22 +436,21 @@ function enableDisablePatternInput()
 }
 
 function bookmark(path) {
-    if (path && (path.length > 0)) {
-        centeredDialog('/webfilesys/servlet?command=addBookmark&path=' + encodeURIComponent(path), '/webfilesys/xsl/addBookmark.xsl', 320, 190, function() {
-            document.bookmarkForm.bookmarkName.focus();
-            document.bookmarkForm.bookmarkName.select();
-        });    
-    } else {
-        centeredDialog('/webfilesys/servlet?command=addBookmark', '/webfilesys/xsl/addBookmark.xsl', 320, 190, function() {
-            document.bookmarkForm.bookmarkName.focus();
-            document.bookmarkForm.bookmarkName.select();
-        });
-    }
+    showPromptDialog("/webfilesys/html/addBookmark.html", 320, function() {
+        document.getElementById("prompt").style.height = "200px";
+        document.getElementById("currentPathShort").innerHTML = abbrevText(path, 40);
+
+        document.getElementById("submitButton").onclick = () => {
+            validateBookmarkName(resourceBundle["alert.bookmarkMissingName"]);
+        };
+        document.getElementById("cancelButton").onclick = hidePrompt;
+
+        document.bookmarkForm.bookmarkName.focus();
+        document.bookmarkForm.bookmarkName.select();
+    });
 }
 
 function fastpath(path) {
-	showHourGlass();
-
 	window.location.href = "/webfilesys/servlet?command=exp&expandPath=" + encodeURIComponent(path) + "&mask=*&fastPath=true";
 }
 
@@ -438,6 +464,24 @@ function hidePrompt() {
      promptBox.style.visibility = "hidden";
      promptBox.style.width = "100px";
      promptBox.style.height = "140px";
+}
+
+function popupDialog(domFragment, boxWidth, boxHeight, callback) {
+    const promptBox = document.getElementById("prompt");
+    if (!promptBox) {
+        console.error("promptBox is not defined");
+        return;
+    }
+    hideMenu();
+    if (boxWidth) {
+        promptBox.style.width = boxWidth + "px";
+    }
+    if (boxHeight) {
+        promptBox.style.height = boxHeight + "px";
+    }
+    promptBox.innerHTML = domFragment;
+    centerBox(promptBox);
+    promptBox.style.visibility = "visible";
 }
 
 function centeredDialog(xmlUrl, xslUrl, boxWidth, boxHeight, callback) {
@@ -494,6 +538,24 @@ function showPromptDialog(htmlFragmentURL, boxWidth, callback) {
         }
     });
 }
+
+function renameFile(fileName, isMobile) {
+    showPromptDialog("/webfilesys/html/renameFile.html", 360, function() {
+        document.getElementById("oldFileName").value = fileName;
+        document.getElementById("mobileParam").value = isMobile.toString();
+        document.getElementById("shortFileName").innerHTML = abbrevText(fileName, 30);
+        const newFileName = document.getElementById("newFileName");
+        newFileName.value = fileName;
+        newFileName.focus();
+        const extStart = fileName.lastIndexOf(".");
+        if (extStart > 0) {
+            newFileName.setSelectionRange(0, extStart);
+        } else {
+            newFileName.select();
+        }
+    });
+}
+
 
 function renameLink(linkName) {
 	showPromptDialog("/webfilesys/html/renameLink.html", 360, function() {	
@@ -562,28 +624,8 @@ function checkGrepParamsAndSubmit() {
 }
 
 function copyPathToClipboard(path) {
-	
-   	var toastBox = document.createElement("div");
-   	toastBox.id = "toastBox";
-   	toastBox.setAttribute("class", "toastBox");
-   	document.documentElement.appendChild(toastBox);
-   	
-   	var pathInput = document.createElement("input");
-    pathInput.setAttribute("type", "text");
-    pathInput.setAttribute("value", path);
-    pathInput.setAttribute("class", "copyPathToClip")
-    toastBox.appendChild(pathInput);
-   	
-   	pathInput.select();
-    document.execCommand("Copy");
-   	
-   	var toastText = document.createElement("span");
-   	toastText.innerHTML = resourceBundle["pathCopiedToClip"];
-   	toastBox.appendChild(toastText);
-
-   	centerBox(toastBox);
-   	
-   	setTimeout(hideToast, 1500);
+    navigator.clipboard.writeText(path);
+    toast(resourceBundle["pathCopiedToClip"], 1500);
 }
 
 function clearFilter() {

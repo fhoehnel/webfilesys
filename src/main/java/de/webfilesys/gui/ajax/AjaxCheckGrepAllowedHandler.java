@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
+import de.webfilesys.util.CommonUtils;
 import org.w3c.dom.Element;
 
 import de.webfilesys.WebFileSys;
@@ -30,35 +32,18 @@ public class AjaxCheckGrepAllowedHandler extends XmlRequestHandlerBase
         super(req, resp, session, output, uid);
 	}
 	
-	protected void process()
-	{
-        String filePath = getParameter("param1");
-        
-        if (filePath == null) {
-            return;
-        }
-        
-        if (!checkAccess(filePath)) {
-        	return;
-        }
-
-        boolean grepForbidden = (!isTextFile(filePath, WebFileSys.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK));
-        
+	protected void process() {
+        String fileName = getParameter("param1");
+        String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
+        boolean grepForbidden = (!isTextFile(filePath, WebFileSysConfig.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK));
         Element resultElement = doc.createElement("result");
-        
-        if (grepForbidden)
-        {
+        if (grepForbidden) {
             String errorText = getResource("grepNotAllowed", "grep function allowed only for text files");
-            
             XmlUtil.setElementText(resultElement, errorText);
-        }
-        else
-        {
+        } else {
             XmlUtil.setElementText(resultElement, "true");
         }
-        
         doc.appendChild(resultElement);
-		
 		processResponse();
 	}
 }

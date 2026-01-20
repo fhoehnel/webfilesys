@@ -71,6 +71,17 @@
       customAlert('<xsl:value-of select="/folderFileList/errorMsg" />');
     </xsl:if>
 
+    let fullScreen = false;
+
+    function switchFullScreen() {
+        if (fullScreen) {
+            document.exitFullscreen();
+        } else {
+            requestFullScreen(document.documentElement);
+        }
+        fullScreen = !fullScreen;
+    }
+
   </script>
 
 </head>
@@ -114,6 +125,11 @@
     </table>
     
   </form>
+
+  <a id="fullScreenButton" href="javascript:void(0)" onclick="switchFullScreen()"
+      style="position:absolute;top:0px;right:10px;">
+      <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>
+  </a>
 
 </body>
 
@@ -283,7 +299,14 @@
             <i class="icon-font icon-harddisk mobileFolderIcon"></i>
           </xsl:if>
           <xsl:if test="not(@drive)">
-            <i class="icon-font icon-folderClosed mobileFolderIcon"></i>
+            <xsl:if test="not(@icon)">
+              <i class="icon-font icon-folderClosed mobileFolderIcon"></i>
+            </xsl:if>
+            <xsl:if test="@icon">
+              <img class="icon mobileFolderIcon">
+                <xsl:attribute name="src">/webfilesys/icons/<xsl:value-of select="@icon"/></xsl:attribute>
+              </img>
+            </xsl:if>
           </xsl:if>
         </td>
         <td colspan="2" class="fileListData sepBottom" style="width:95%">

@@ -17,19 +17,9 @@ public class AutoThumbnailCreator extends ThumbnailCreatorBase implements Runnab
     
     private static AutoThumbnailCreator thumbCreator = null;
     
-    private AutoThumbnailCreator()
-    {
-		if (WebFileSys.getInstance().getJavaVersion().startsWith("1.1") || WebFileSys.getInstance().getJavaVersion().startsWith("1.2"))
-		{
-			imgFileMasks=new String[2];
-			imgFileMasks[0]="*.jpg";
-			imgFileMasks[1]="*.jpeg";
-		}
-    	
-    	queue = new ArrayList<QueueElem>();
-    	
+    private AutoThumbnailCreator() {
+    	queue = new ArrayList<>();
     	shutdownFlag = false;
-
     }
     
     public static boolean instanceCreated()

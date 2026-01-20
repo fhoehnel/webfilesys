@@ -1,111 +1,82 @@
 package de.webfilesys;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Properties;
+import java.util.*;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
 import de.webfilesys.util.CommonUtils;
 
-public class LanguageManager
-{
+public class LanguageManager {
+    private static final Logger LOG = LogManager.getLogger(LanguageManager.class);
+
 	public static final String DEFAULT_LANGUAGE = "English";
-
-	public static final String DEFAULT_HELP_LANGUAGE = "English";
-
-    public static final String LANGUAGE_DIR    = "languages";
+    public static final String LANGUAGE_DIR = "languages";
 
     private static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
 
-    private Hashtable resourceTable;
+    private final HashMap<String, Properties> resourceTable;
 
-    private ArrayList<String> availableLanguages;
+    private final ArrayList<String> availableLanguages;
 
-    private String defaultLanguage;
+    private final String defaultLanguage;
 
-    private Hashtable dateFormats;
+    private final HashMap<String, SimpleDateFormat> dateFormats;
 
-    private static LanguageManager languageMgr=null;
+    private static LanguageManager languageMgr = null;
     
-    private String languagePath = null;
+    private String languagePath;
 
-    private LanguageManager(String defaultLang)
-    {
+    private LanguageManager(String defaultLang) {
     	languagePath = WebFileSys.getInstance().getConfigBaseDir() + "/" + LANGUAGE_DIR;
-    	
-        resourceTable=new Hashtable(5);
-
+        resourceTable = new HashMap<>(5);
         availableLanguages = new ArrayList<String>();
-
-        defaultLanguage=defaultLang;
-
-        dateFormats=new Hashtable(5);
-
-        readAvailableLanguages();      
+        defaultLanguage = defaultLang;
+        dateFormats = new HashMap<>(5);
+        readAvailableLanguages();
     }
 
-    public static LanguageManager getInstance()
-    {
-        if (languageMgr==null)
-        {
+    public static LanguageManager getInstance() {
+        if (languageMgr == null) {
             languageMgr=new LanguageManager(null);
         }
-
-        return(languageMgr);
+        return languageMgr;
     }
 
-    public static LanguageManager getInstance(String defaultLang)
-    {
-        if (languageMgr==null)
-        {
-            languageMgr=new LanguageManager(defaultLang);
+    public static LanguageManager getInstance(String defaultLang) {
+        if (languageMgr == null) {
+            languageMgr = new LanguageManager(defaultLang);
         }
-
-        return(languageMgr);
+        return languageMgr;
     }
     
-    protected void readAvailableLanguages()
-    {
+    protected void readAvailableLanguages() {
         File languageDir = new File(languagePath);
-
-        if ((!languageDir.exists()) || (!languageDir.isDirectory()) || (!languageDir.canRead()))
-        {
-        	LogManager.getLogger(getClass()).error("language directory not found or not readable: " + languageDir);
-             
+        if (!languageDir.exists() || !languageDir.isDirectory() || !languageDir.canRead()) {
+            LOG.error("language directory not found or not readable: {}", languageDir);
             return;
         } 
-
-        String languageList[]=languageDir.list();
-
-        for (int i=0;i<languageList.length;i++)
-        {
-             String langFileName=languageList[i];
-
-             if (langFileName.endsWith(".resources"))
-             {
-                 File langFile=new File(languagePath + "/" + langFileName);
-
-                 if (langFile.isFile() && langFile.canRead() && (langFile.length() > 0L))
-                 {
-                     String languageName=langFileName.substring(0,langFileName.lastIndexOf('.'));
-
-                     availableLanguages.add(languageName);
-                 }
-             }
+        String[] languageList = languageDir.list();
+        if (languageList != null) {
+            for (String langFileName : languageList) {
+                if (langFileName.endsWith(".resources")) {
+                    File langFile = new File(languagePath + "/" + langFileName);
+                    if (langFile.isFile() && langFile.canRead() && langFile.length() > 0L) {
+                        String languageName = langFileName.substring(0, langFileName.lastIndexOf('.'));
+                        availableLanguages.add(languageName);
+                    }
+                }
+            }
         }
-
-        if (availableLanguages.size()>1)
-        {
+        if (availableLanguages.size()>1) {
             Collections.sort(availableLanguages);
         }
     }
@@ -115,154 +86,94 @@ public class LanguageManager
         return availableLanguages;
     }
 
-    public String getResource(String language,String resource,String defaultValue)
-    {
-        if (CommonUtils.isEmpty(language))
-        {
+    public String getResource(String language,String resource,String defaultValue) {
+        if (CommonUtils.isEmpty(language)) {
             return(defaultValue);
         }
-
-        Properties langResources=(Properties) resourceTable.get(language);
-
-        if (langResources==null)        
-        {
+        Properties langResources = resourceTable.get(language);
+        if (langResources == null) {
             String resourceFileName = languagePath + "/" + language + "." + "resources";
-
-            langResources=new Properties();
-
-            if (!loadResources(resourceFileName,langResources, language))
-            {
-                return(defaultValue);
+            langResources = new Properties();
+            if (!loadResources(resourceFileName,langResources, language)) {
+                return defaultValue;
             }
         }
-
-        return(langResources.getProperty(resource,defaultValue));
+        return langResources.getProperty(resource,defaultValue);
     }
 
-    public Properties getLanguageResources(String language) 
-    {
-   	    Properties langResources = (Properties) resourceTable.get(language);
+    public Properties getLanguageResources(String language) {
+   	    Properties langResources = resourceTable.get(language);
 
-        if (langResources == null)        
-        {
+        if (langResources == null) {
             String resourceFileName = languagePath + "/" + language + "." + "resources";
-
             langResources = new Properties();
-
             loadResources(resourceFileName, langResources, language);
         }
-           
         return langResources;
     }
     
-    protected synchronized boolean loadResources(String configFilename, Properties langResources,
-    	String language)
-    {
+    protected synchronized boolean loadResources(String configFilename, Properties langResources, String language) {
         InputStreamReader configFile = null;
-
-        LogManager.getLogger(getClass()).info("Loading Resources from " + configFilename);
-
-        try
-        {
-            configFile = new InputStreamReader(new FileInputStream(configFilename), "UTF-8");
-
+        LOG.info("Loading Resources from " + configFilename);
+        try {
+            configFile = new InputStreamReader(Files.newInputStream(Paths.get(configFilename)), StandardCharsets.UTF_8);
             langResources.load(configFile);
-            
             resourceTable.put(language,langResources);
-        }
-        catch(FileNotFoundException fnfe)
-        {
-            LogManager.getLogger(getClass()).error("failed to load language resources", fnfe);
+        } catch (IOException ioex) {
+        	LOG.error("failed to load language resources", ioex);
             return(false);
-        }
-        catch(IOException ioex)
-        {
-        	LogManager.getLogger(getClass()).error("failed to load language resources", ioex);
-            return(false);
-        }
-		finally
-		{
-			if (configFile != null) 
-			{
-				try 
-				{
+        } finally {
+			if (configFile != null) {
+				try {
 					configFile.close();
-				}
-				catch (IOException ex)
-				{
+				} catch (IOException ex) {
 				}
 			}
 		}
-        
-
-        if (!language.equals(DEFAULT_LANGUAGE))
-        {
-        	mergeMissingResources(language, langResources);
+        if (!language.equals(DEFAULT_LANGUAGE)) {
+        	mergeMissingResources(langResources);
         }
-        
-        return(true);
+        return true;
     }
 
-    private void mergeMissingResources(String language, Properties langResources)
-    {
-        Properties defaultLangResources = (Properties) resourceTable.get(DEFAULT_LANGUAGE);
-
-        if (defaultLangResources == null)        
-        {
+    private void mergeMissingResources(Properties langResources) {
+        Properties defaultLangResources = resourceTable.get(DEFAULT_LANGUAGE);
+        if (defaultLangResources == null) {
             String resourceFileName = languagePath + "/" + DEFAULT_LANGUAGE + "." + "resources";
-
             defaultLangResources = new Properties();
-
-            if (!loadResources(resourceFileName, defaultLangResources, DEFAULT_LANGUAGE))
-            {
+            if (!loadResources(resourceFileName, defaultLangResources, DEFAULT_LANGUAGE)) {
                 return;
             }
         }
-        
         Enumeration<Object> defaultLangKeys = defaultLangResources.keys();
-        
-        while (defaultLangKeys.hasMoreElements()) 
-        {
+        while (defaultLangKeys.hasMoreElements()) {
         	Object defaultLangKey = defaultLangKeys.nextElement();
-        	
-        	if (!langResources.containsKey(defaultLangKey))
-        	{
+        	if (!langResources.containsKey(defaultLangKey)) {
         		langResources.put(defaultLangKey, defaultLangResources.get(defaultLangKey));
         	}
         }
     }
     
-    public void addDateFormat(String language,String dateFormat)
-    {
+    public void addDateFormat(String language,String dateFormat) {
         dateFormats.put(language,new SimpleDateFormat(dateFormat));
     }
 
-    public SimpleDateFormat getDateFormat(String language)
-    {
-        if ((language==null) || (language.trim().length()==0) || language.equals(LanguageManager.DEFAULT_LANGUAGE))
-        {
-            return(DEFAULT_DATE_FORMAT);
+    public SimpleDateFormat getDateFormat(String language) {
+        if (language == null || language.trim().isEmpty() || language.equals(LanguageManager.DEFAULT_LANGUAGE)) {
+            return DEFAULT_DATE_FORMAT;
         }
-        
-        SimpleDateFormat dateFormat=(SimpleDateFormat) dateFormats.get(language);
-
-        if (dateFormat==null)
-        {
-            return(DEFAULT_DATE_FORMAT);
+        SimpleDateFormat dateFormat = dateFormats.get(language);
+        if (dateFormat == null) {
+            return DEFAULT_DATE_FORMAT;
         }
-
-        return(dateFormat);
+        return dateFormat;
     }
 
-    public void listAvailableLanguages()
-    {
-        LanguageManager langMgr=LanguageManager.getInstance();
-
+    public void listAvailableLanguages() {
+        LanguageManager langMgr = LanguageManager.getInstance();
         ArrayList<String> languageNames = langMgr.getAvailableLanguages();
-
-        for (int i=0;i<languageNames.size();i++)
-        {
-        	LogManager.getLogger(getClass()).info("available language: " + (String) languageNames.get(i));
+        for (String languageName : languageNames) {
+            LOG.info("available language: {}", languageName);
         }
     }
     

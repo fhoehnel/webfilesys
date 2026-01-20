@@ -6,7 +6,7 @@ function contextMenu(fileName) {
         shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 12, fileName.length);
     }    
 
-    const fileNameExt = getFileNameExt(fileName);
+    const fileExt = getFileNameExt(fileName);
     
     const lastPathChar = path.charAt(path.length - 1);
     
@@ -34,10 +34,10 @@ function contextMenu(fileName) {
 
     addContextMenuHead(menuDiv, shortFileName);
 
-    if (fileExt == ".ZIP" || fileExt == ".JAR" || fileExt == ".WAR") {
-    	addContextMenuEntry(menuDiv, "viewZip('" + scriptPreparedPath + "')", resourceBundle["menuViewZip"]);
+    if (fileExt === ".ZIP" || fileExt === ".JAR" || fileExt === ".WAR") {
+    	addContextMenuEntry(menuDiv, "viewZip('" + scriptPreparedFile + "')", resourceBundle["menuViewZip"]);
     } else {
-	    if (fileExt == ".URL") {
+	    if (fileExt === ".URL") {
 	    	addContextMenuEntry(menuDiv, "openUrlFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
 	    } else {
 	    	addContextMenuEntry(menuDiv, "viewFile('" + scriptPreparedPath + "')", resourceBundle["menuView"]);
@@ -51,13 +51,13 @@ function contextMenu(fileName) {
     if (readonly != 'true') {
     	addContextMenuEntry(menuDiv, "delFile('" + scriptPreparedFile + "')", resourceBundle["menuDelete"]);
 
-    	addContextMenuEntry(menuDiv, "renameFile('" + scriptPreparedFile + "')", resourceBundle["menuRename"]);
+    	addContextMenuEntry(menuDiv, "renameFile('" + scriptPreparedFile + "', true)", resourceBundle["menuRename"]);
 
     	addContextMenuEntry(menuDiv, "copyToClipboard('" + scriptPreparedFile + "')", resourceBundle["menuCopy"]);
 
     	addContextMenuEntry(menuDiv, "cutToClipboard('" + scriptPreparedFile + "')", resourceBundle["menuCut"]);
 
-    	addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedFile + "')", resourceBundle["menuEdit"]);
+    	addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", resourceBundle["menuEdit"]);
 
 	    if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR")) {
 	    	addContextMenuEntry(menuDiv, "zipFile('" + scriptPreparedPath + "')", resourceBundle["menuUnzip"]);

@@ -7,3 +7,25 @@ div.zoomedPicCont {
 div.popupClose {
 	cursor: pointer;
 }
+
+div.picturePopupFixed {
+    position: fixed;
+    top: 0;
+    padding: 0;
+    visibility: hidden;
+    border: 1px solid #ffffff;
+    z-index: 2;
+}
+
+div.picturePopupFixed div.popupClose {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 16px;
+    height: 14px;
+    padding: 0;
+    visibility: hidden;
+    border-style: none;
+    z-index: 3;
+    cursor: auto;
+}

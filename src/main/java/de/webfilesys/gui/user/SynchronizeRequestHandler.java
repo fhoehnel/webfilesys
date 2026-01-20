@@ -72,6 +72,7 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         output.println("<HTML>");
 		output.println("<HEAD>");
 
+        output.println("<script src=\"/webfilesys/javascript/util.js\" type=\"text/javascript\"></script>");
         output.println("<script src=\"/webfilesys/javascript/ajaxCommon.js\" type=\"text/javascript\"></script>");
         output.println("<script src=\"/webfilesys/javascript/ajaxFolder.js\" type=\"text/javascript\"></script>");
         

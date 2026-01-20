@@ -35,23 +35,6 @@
     
     <br/>
 
-    <xsl:if test="/concatParams/missingAudio">
-      <span resource="videoConcatErrorNoAudio"></span>:
-      <ul>
-        <xsl:for-each select="/concatParams/missingAudio/file">
-          <li>
-            <xsl:value-of select="."/>
-          </li>
-        </xsl:for-each>
-      </ul>
-      
-      <input type="button" class="formButton" name="cancel" resource="button.cancel">
-        <xsl:attribute name="onclick">window.location.href='/webfilesys/servlet?command=listVideos'</xsl:attribute>
-      </input>
-    </xsl:if>
-
-    <xsl:if test="not(/concatParams/missingAudio)">
-
     <form accept-charset="utf-8" name="form1" method="post" action="/webfilesys/servlet">
       <input type="hidden" name="command" value="video" />
       <input type="hidden" name="cmd" value="multiVideoJoin" />
@@ -142,8 +125,6 @@
       
     </form>
 
-    </xsl:if>
-  
   </body>
   
   <script type="text/javascript">

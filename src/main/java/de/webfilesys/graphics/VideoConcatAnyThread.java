@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -16,7 +17,9 @@ import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 
 public class VideoConcatAnyThread extends Thread {
-	
+
+    private static final Logger LOG = LogManager.getLogger(VideoConcatAnyThread.class);
+
     private static HashMap<String, String> videoFileExtensions;
 
     static {
@@ -67,7 +70,9 @@ public class VideoConcatAnyThread extends Thread {
 				SubdirExistCache.getInstance().setExistsSubdir(targetDirFile.getAbsolutePath(), Integer.valueOf(1));
             }
         }
-        
+
+        createMissingSilentAudio(selectedFiles);
+
         String firstFileName = selectedFiles.get(0);
         
         String fileNameOnly = firstFileName.substring(0,  firstFileName.lastIndexOf('.'));
@@ -76,7 +81,7 @@ public class VideoConcatAnyThread extends Thread {
         
         String targetFilePath = CommonUtils.getNonConflictingTargetFilePath(targetPath + File.separator + targetFileName);
         
-        String ffmpegExePath = WebFileSys.getInstance().getFfmpegExePath();
+        String ffmpegExePath = WebFileSysConfig.getInstance().getFfmpegExePath();
 		
         ArrayList<String> progNameAndParams = new ArrayList<String>();
         progNameAndParams.add(ffmpegExePath);
@@ -190,6 +195,54 @@ public class VideoConcatAnyThread extends Thread {
 			LogManager.getLogger(getClass()).error("failed to concatente videos", iex);
 		}
     }
-    
+
+    private void createMissingSilentAudio(List<String> selectedFiles) {
+        ArrayList<String> filesWithoutAudio = new ArrayList<>();
+        ArrayList<String> filesWithAddedAudio = new ArrayList<>();
+        for (String fileName : selectedFiles) {
+
+            String filePath = CommonUtils.joinFilesysPath(cwd, fileName);
+
+            VideoInfoExtractor videoInfoExtractor = new VideoInfoExtractor();
+
+            VideoInfo videoInfo = videoInfoExtractor.getVideoInfo(filePath);
+
+            if (videoInfo.getAudioCodec() == null) {
+                VideoSilentAudioGenerator.addSilentAudioToVideo(filePath);
+                String targetPath = CommonUtils.joinFilesysPath(cwd, VideoSilentAudioGenerator.TARGET_SUBDIR);
+                String targetFilePath = CommonUtils.joinFilesysPath(targetPath, fileName);
+                File targetFile = new File(targetFilePath);
+                if (targetFile.exists()) {
+                    String silentAudioFileName = fileName.substring(0, fileName.lastIndexOf('.'))
+                            + ".silentAudio" + CommonUtils.getFileExtension(fileName);
+                    File selectedFileWithAudio = new File(CommonUtils.joinFilesysPath(cwd, silentAudioFileName));
+                    if (targetFile.renameTo(selectedFileWithAudio)) {
+                        filesWithoutAudio.add(fileName);
+                        filesWithAddedAudio.add(silentAudioFileName);
+                    } else {
+                        LOG.error("failed to rename video file with added audio {}", targetFile);
+                    }
+                } else {
+                    LOG.error("target video file with added silent audio not found: {}", targetFile);
+                }
+            }
+        }
+        if (!filesWithoutAudio.isEmpty()) {
+            selectedFiles.removeAll(filesWithoutAudio);
+            File silentAudioTargetFolfder = new File(CommonUtils.joinFilesysPath(cwd, VideoSilentAudioGenerator.TARGET_SUBDIR));
+            if (silentAudioTargetFolfder.exists()) {
+                String[] filesInFolder = silentAudioTargetFolfder.list();
+                if (filesInFolder == null || filesInFolder.length == 0) {
+                    if (!silentAudioTargetFolfder.delete()) {
+                        LOG.warn("failed to delete temporary folder for silent audio: {}", silentAudioTargetFolfder);
+                    }
+                }
+            }
+        }
+        if (!filesWithAddedAudio.isEmpty()) {
+            selectedFiles.addAll(filesWithAddedAudio);
+        }
+    }
+
 }
 

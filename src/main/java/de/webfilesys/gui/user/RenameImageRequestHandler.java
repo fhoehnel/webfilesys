@@ -7,15 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.Category;
-import de.webfilesys.Comment;
-import de.webfilesys.GeoTag;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslThumbnailHandler;
@@ -128,7 +124,7 @@ public class RenameImageRequestHandler extends UserRequestHandler
 			}
 		}
 		
-        if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
+        if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
         {
             metaInfMgr.updateLinksAfterMove(imagePath, newImagePath, uid);
         }
@@ -147,7 +143,7 @@ public class RenameImageRequestHandler extends UserRequestHandler
 			}
 		}
 
-		if (WebFileSys.getInstance().isAutoCreateThumbs())
+		if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
 		{
 			String ext = CommonUtils.getFileExtension(newImagePath);
 

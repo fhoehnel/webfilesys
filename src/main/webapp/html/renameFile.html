@@ -1,0 +1,37 @@
+<div class="promptHead" resource="label.renameFile"></div>
+    
+<form accept-charset="utf-8" name="renameForm" id="renameForm" method="get" action="/webfilesys/servlet">
+  <input type="hidden" name="command" value="renameFile" />
+  <input type="hidden" id="oldFileName" name="fileName" />
+
+  <input type="hidden" id="mobileParam" name="mobile" />
+
+  <table>
+  
+    <tr>
+      <td class="formParm1">
+	    <span resource="label.oldName" />:
+      </td>
+      <td class="formParm2">
+        <span id="shortFileName" />
+      </td>
+    </tr>
+    <tr>
+      <td class="formParm1">
+	    <span resource="label.newname" />:
+      </td>
+      <td class="formParm2">
+        <input type="text" id="newFileName" name="newFileName" maxlength="256" style="width:220px;"/>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2">
+        <input type="button" id="submitButton" onclick="validateRenameTargetFileName()" resource="button.rename" style="float:left" />
+        <input type="button" onclick="hidePrompt()" resource="button.cancel" style="float:right"/>
+	  </td>
+    </tr>
+
+  </table>
+  
+</form>

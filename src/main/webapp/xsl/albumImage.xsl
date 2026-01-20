@@ -44,20 +44,6 @@
 
   <script type="text/javascript">
   
-    function printPage() 
-    {
-        if (confirm('<xsl:value-of select="/imageData/resources/msg[@key='confirm.print']/@value" />'))
-        {
-            window.print();
-        }
-    }
-    
-    function exifData()
-    {
-        exifWin=window.open('/webfilesys/servlet?command=exifData&amp;imgFile=<xsl:value-of select="/imageData/encodedPath" />','exifWin','scrollbars=yes,status=no,toolbar=no,location=no,menu=no,width=400,height=480,left=200,top=100,screenX=200,screenY=100,resizable=no');
-        exifWin.focus();
-    }
-    
     function rate()
     {
         if (navigator.appName=='Netscape')

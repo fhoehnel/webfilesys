@@ -78,8 +78,11 @@ function compareImgDelete(picFilePath, picFileName) {
 	                var deletedFile = deletedFileItem.firstChild.nodeValue; 
 	                    
 	                compareImgClose(deletedFile);
-	                        
-                    window.opener.removeDeletedFile(deletedFile);
+
+                    if (window.opener) {
+                        // not implemented for mobile version
+                        window.opener.removeDeletedFile(deletedFile);
+                    }
 	             } else {
 	                customAlert(resourceBundle["alert.delFileError"]);
 	             }

@@ -7,21 +7,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
+import de.webfilesys.*;
 import org.apache.logging.log4j.LogManager;
 
 
-import de.webfilesys.CopyStatus;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.ViewHandlerConfig;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.ProtectedRequestHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.FileEncodingMap;
@@ -140,27 +134,22 @@ public class UserRequestHandler extends ProtectedRequestHandler
         return (headlinePath);
     }
 
-    public boolean checkWriteAccess()
-    {
+    public boolean checkWriteAccess() {
     	boolean sessionReadonly = false;
     	
-    	Boolean sessRO = (Boolean)session.getAttribute("readonly");
+    	Boolean sessRO = (Boolean) session.getAttribute("readonly");
     	
-    	if (sessRO != null)
-    	{
-    		sessionReadonly = sessRO.booleanValue();
+    	if (sessRO != null) {
+    		sessionReadonly = sessRO;
     	}
     	
-        boolean readonly =
-            sessionReadonly || userMgr.isReadonly(uid);
+        boolean readonly = sessionReadonly || userMgr.isReadonly(uid);
 
-        if (!readonly)
-        {
+        if (!readonly) {
             return (true);
         }
 
-        LogManager.getLogger(getClass()).warn(
-            "read-only user " + uid + " tried write access");
+        LogManager.getLogger(getClass()).warn("read-only user " + uid + " tried write access");
 
         output.print(HTTPUtils.createHTMLHeader());
 
@@ -173,7 +162,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
         output.println("history.back();");
         output.println("</script>");
 
-        output.println("</html>");
+        output.println("</HEAD></HTML>");
         output.flush();
 
         return (false);
@@ -204,7 +193,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
     
     public boolean copyFolderTreeWithStatus(String sourcePath, String destPath, boolean ignoreExistingDir, CopyStatus copyStatus, DecimalFormat numFormat) {
         boolean copyError = false;
-        
+
         File sourceFolderFile = new File(sourcePath);
         
         File fileList[] = sourceFolderFile.listFiles();
@@ -213,48 +202,46 @@ public class UserRequestHandler extends ProtectedRequestHandler
         	
         	String formattedTreeFileNum = numFormat.format(copyStatus.getTreeFileNum());
         	String formattedTreeFileSize = numFormat.format(copyStatus.getTreeFileSize());
-        	
-            for (int i = 0; i < fileList.length; i++) {
-            	
-                File sourceFile = fileList[i];
 
-            	if (sourceFile.canRead()) {
+            for (File sourceFile : fileList) {
+
+                if (sourceFile.canRead()) {
                     String destFileName = destPath + File.separator + sourceFile.getName();
 
                     if (sourceFile.isFile()) {
                         if ((copyStatus.getFilesCopied() <= 100) ||
-                            ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
-                            ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
-                            (copyStatus.getFilesCopied() % 50 == 0)) {
+                                ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
+                                ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
+                                (copyStatus.getFilesCopied() % 50 == 0)) {
                             output.println("<script language=\"javascript\">");
                             output.println("document.getElementById('currentFile').innerHTML='" + insertDoubleBackslash(CommonUtils.shortName(getHeadlinePath(sourceFile.getAbsolutePath()), 40)) + "';");
                             output.println("</script>");
                             output.flush();
-                        }                    
+                        }
 
                         if (copyFile(sourceFile.getAbsolutePath(), destFileName)) {
                             copyStatus.setFilesCopied(copyStatus.getFilesCopied() + 1);
                             copyStatus.setBytesCopied(copyStatus.getBytesCopied() + sourceFile.length());
-                                    
+
                             if ((copyStatus.getFilesCopied() <= 100) ||
-                                ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
-                                ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
-                                (copyStatus.getFilesCopied() % 50 == 0)) {
-                                    	
-                            	long progress = 0;
-                            	if (copyStatus.getTreeFileSize() > 0) {
-                                	progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
-                            	}
-                            	
+                                    ((copyStatus.getFilesCopied() < 300) && (copyStatus.getFilesCopied() % 5 == 0)) ||
+                                    ((copyStatus.getFilesCopied() < 1000) && (copyStatus.getFilesCopied() % 10 == 0)) ||
+                                    (copyStatus.getFilesCopied() % 50 == 0)) {
+
+                                long progress = 0;
+                                if (copyStatus.getTreeFileSize() > 0) {
+                                    progress = copyStatus.getBytesCopied() * 300l / copyStatus.getTreeFileSize();
+                                }
+
                                 output.println("<script language=\"javascript\">");
-                                output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyStatus.getFilesCopied()) + " / " + formattedTreeFileNum +  "';");
-                                output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(copyStatus.getBytesCopied()) + " / " + formattedTreeFileSize +  "';");
+                                output.println("document.getElementById('fileCount').innerHTML='" + numFormat.format(copyStatus.getFilesCopied()) + " / " + formattedTreeFileNum + "';");
+                                output.println("document.getElementById('bytesCopied').innerHTML='" + numFormat.format(copyStatus.getBytesCopied()) + " / " + formattedTreeFileSize + "';");
                                 output.println("document.getElementById('copyProgressBar').style.width='" + progress + "px';");
                                 output.println("</script>");
                             }
-                            
+
                             if (sourceFile.getName().equals(MetaInfManager.METAINF_FILE)) {
-                            	MetaInfManager.getInstance().releaseMetaInf(destPath, false);
+                                MetaInfManager.getInstance().releaseMetaInf(destPath, false);
                             }
                         } else {
                             copyError = true;
@@ -264,8 +251,8 @@ public class UserRequestHandler extends ProtectedRequestHandler
 
                         if ((!newDir.mkdir()) && (!ignoreExistingDir)) {
                             javascriptAlert(getResource("alert.mkdirfail", "cannot create directory")
-                                            + "\\n"
-                                            + insertDoubleBackslash(destFileName));
+                                    + "\\n"
+                                    + insertDoubleBackslash(destFileName));
                             copyError = true;
                         } else {
                             if (!copyFolderTreeWithStatus(sourceFile.getAbsolutePath(), destFileName, ignoreExistingDir, copyStatus, numFormat)) {
@@ -273,7 +260,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
                             }
                         }
                     }
-            	}
+                }
             }
             
             if (copyStatus.getFilesCopied() > 100) {
@@ -297,36 +284,26 @@ public class UserRequestHandler extends ProtectedRequestHandler
         return(!copyError);
     }
     
-    protected boolean delDirTree(String path)
-    { 
+    protected boolean delDirTree(String path) {
         boolean deleteError=false;
 
         File dirToBeDeleted = new File(path);
-        String fileList[] = dirToBeDeleted.list();
 
-        if (fileList != null)
-        {
-            for (int i = 0; i < fileList.length; i++)
-            {
-                File tempFile=new File(path + File.separator + fileList[i]);
-                if (tempFile.isDirectory())
-                {
-                    if (!delDirTree(path + File.separator + fileList[i]))
-                        deleteError=true;
-                }
-                else
-                {
-                    String absolutePath = tempFile.getAbsolutePath();
-                    
-                    if (!tempFile.delete())
-                    {
-                        deleteError=true;
-                        LogManager.getLogger(getClass()).warn("cannot delete " + tempFile);
+        File[] fileList = dirToBeDeleted.listFiles();
+
+        if (fileList != null) {
+            for (File file : fileList) {
+                if (file.isDirectory()) {
+                    if (!delDirTree(file.getAbsolutePath())) {
+                        deleteError = true;
                     }
-                    else
-                    {
-                        if (WebFileSys.getInstance().isReverseFileLinkingEnabled())
-                        {
+                } else {
+                    String absolutePath = file.getAbsolutePath();
+                    if (!file.delete()) {
+                        deleteError = true;
+                        LogManager.getLogger(getClass()).warn("cannot delete " + file.getAbsolutePath());
+                    } else {
+                        if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
                             MetaInfManager.getInstance().updateLinksAfterMove(absolutePath, null, uid);
                         }
                         MetaInfManager.getInstance().removeMetaInf(absolutePath);
@@ -334,16 +311,11 @@ public class UserRequestHandler extends ProtectedRequestHandler
                 }
             }
         }
-
-        if (!dirToBeDeleted.delete())
-        {
-            deleteError=true;
-        } 
-        else 
-        {
+        if (!dirToBeDeleted.delete()) {
+            deleteError = true;
+        } else {
             MetaInfManager.getInstance().releaseMetaInf(path, false);
         }
-
         return(!(deleteError));
     }
     
@@ -423,7 +395,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
             {
                 viewHandler.process(filePath, viewHandlerConfig, req, resp);
 
-                if (WebFileSys.getInstance().isDownloadStatistics())
+                if (WebFileSysConfig.getInstance().isDownloadStatistics())
                 {
                     MetaInfManager.getInstance().incrementDownloads(filePath);
                 }
@@ -469,7 +441,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
     }
     
     /**
-     * Guess the character encoing of the file.
+     * Guess the character encoding of the file.
      * @param filePath path and filename
      * @return encoding or null, if unknown
      */
@@ -540,52 +512,28 @@ public class UserRequestHandler extends ProtectedRequestHandler
         boolean seemsToBeBinary = false;
         
         int byteCounter = 0;
-        
-    	BufferedInputStream fin = null;
-    	
-    	try 
-    	{
-        	fin = new BufferedInputStream(new FileInputStream(filePath));
 
-        	int bytesWithoutLineBreak = 0;
+        try (BufferedInputStream fin = new BufferedInputStream(new FileInputStream(filePath))) {
 
-    		int c;
-    		while ((!seemsToBeBinary) && (byteCounter < bytesToCheck) && ((c = fin.read()) != (-1)))
-    		{
-    			if ((c == 0x0d) || (c == 0x0a))
-    			{
-    				bytesWithoutLineBreak = 0;
-    			}
-    			else 
-    			{
-    				bytesWithoutLineBreak++;
-    				
-    				if (bytesWithoutLineBreak > maxBytesWithoutLineBreak)
-    				{
-    					seemsToBeBinary = true;
-    				}
-    			}
-    			
-    			byteCounter++;
-    		}
-    	}
-    	catch (IOException ioex)
-    	{
-    		LogManager.getLogger(getClass()).error("failed to check if text file", ioex);
-    	}
-    	finally
-    	{
-    		if (fin != null) 
-    		{
-    			try
-    			{
-    				fin.close();
-    			}
-    			catch (IOException ex)
-    			{
-    			}
-    		}
-    	}
+            int bytesWithoutLineBreak = 0;
+
+            int c;
+            while ((!seemsToBeBinary) && (byteCounter < bytesToCheck) && ((c = fin.read()) != (-1))) {
+                if ((c == 0x0d) || (c == 0x0a)) {
+                    bytesWithoutLineBreak = 0;
+                } else {
+                    bytesWithoutLineBreak++;
+
+                    if (bytesWithoutLineBreak > maxBytesWithoutLineBreak) {
+                        seemsToBeBinary = true;
+                    }
+                }
+
+                byteCounter++;
+            }
+        } catch (IOException ioex) {
+            LogManager.getLogger(getClass()).error("failed to check if text file", ioex);
+        }
 
     	return (!seemsToBeBinary);
     }

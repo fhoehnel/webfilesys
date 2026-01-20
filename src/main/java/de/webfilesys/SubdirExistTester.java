@@ -2,21 +2,20 @@ package de.webfilesys;
 
 import java.io.File;
 import java.util.ArrayList;
-import org.apache.logging.log4j.Logger;
+import java.util.Arrays;
+
 import org.apache.logging.log4j.LogManager;
-
-
 import de.webfilesys.graphics.ThumbnailThread;
 
 public class SubdirExistTester extends Thread {
-	private ArrayList<QueueElem> queue = null;
+	private final ArrayList<QueueElem> queue;
 
-	boolean shutdownFlag = false;
+	boolean shutdownFlag;
 
 	private static SubdirExistTester instance = null;
 
 	private SubdirExistTester() {
-		queue = new ArrayList<QueueElem>();
+		queue = new ArrayList<>();
 		shutdownFlag = false;
 	}
 
@@ -29,26 +28,21 @@ public class SubdirExistTester extends Thread {
 			instance = new SubdirExistTester();
 			instance.start();
 		}
-
 		return (instance);
 	}
 
 	public void run() {
 		LogManager.getLogger(getClass()).info("SubdirExistTester started");
-
 		Thread.currentThread().setPriority(1);
 
 		while (!shutdownFlag) {
-			while (queue.size() > 0) {
-				QueueElem elem = (QueueElem) queue.get(0);
-
+			while (!queue.isEmpty()) {
+				QueueElem elem = queue.get(0);
 				testForExistingSubdirs(elem);
-
 				synchronized (queue) {
 					queue.remove(0);
 				}
 			}
-
 			try {
 				synchronized (this) {
 					wait();
@@ -57,7 +51,6 @@ public class SubdirExistTester extends Thread {
 				shutdownFlag = true;
 			}
 		}
-
 		LogManager.getLogger(getClass()).info("SubdirExistTester shutting down");
 	}
 
@@ -65,50 +58,37 @@ public class SubdirExistTester extends Thread {
 		synchronized (queue) {
 			queue.add(new QueueElem(path, scope, forceRescan));
 		}
-
 		notify();
 	}
 
 	private void testForExistingSubdirs(QueueElem queueElem) {
-
 		String path = queueElem.getPath();
-		
 		Integer subdirExist = SubdirExistCache.getInstance().existsSubdir(path);
 
 		if (queueElem.isForceRescan() || (subdirExist == null)) {
 	        File rootDir = new File(path);
-
 	        File[] rootFileList = rootDir.listFiles();
 	        if (rootFileList != null) {
-	        	boolean hasSubdirs = false;
-	        	
-	            for (int i = 0; (!hasSubdirs) && (i < rootFileList.length); i++) {
-	                File tempFile = rootFileList[i];
-
-	                if (tempFile.isDirectory()) {
-						if (!tempFile.getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
-							hasSubdirs = true;
-						}
-	                }
-	            }
+                boolean hasSubdirs = Arrays.stream(rootFileList)
+                        .anyMatch(file -> file.isDirectory() && !file.getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR));
 	            if (hasSubdirs) {
-	             	SubdirExistCache.getInstance().setExistsSubdir(path, new Integer(1));
+	             	SubdirExistCache.getInstance().setExistsSubdir(path, 1);
 	            } else {
-	            	SubdirExistCache.getInstance().setExistsSubdir(path, new Integer(0));
+	            	SubdirExistCache.getInstance().setExistsSubdir(path, 0);
 	            }
 	        } else {
 	        	// TODO: set ExistsSubdir to null ?
-	        	SubdirExistCache.getInstance().setExistsSubdir(path, new Integer(0));
+	        	SubdirExistCache.getInstance().setExistsSubdir(path, 0);
 	        }
 		}
 	}
 
 	public class QueueElem {
-		private String path = null;
+		private String path;
 
-		private int scope = 0;
+		private int scope;
 
-		private boolean forceRescan = false;
+		private boolean forceRescan;
 		
 		public QueueElem(String path, int scope, boolean forceRescan) {
 			this.path = path;

@@ -12,8 +12,6 @@ function videoContextMenu(fileName, domId) {
         shortFileName = fileName.substring(0,7) + "..." + fileName.substring(fileName.length - 14, fileName.length);
     }    
 
-    var fileNameExt = getFileNameExt(fileName);
-    
     var lastPathChar = path.charAt(path.length - 1);
     
     var fullPath;
@@ -34,7 +32,9 @@ function videoContextMenu(fileName, domId) {
         
     addContextMenuHead(menuDiv, shortFileName);
 
-	addContextMenuEntry(menuDiv, "playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
+    if (parent.clientIsLocal === 'true') {
+ 	    addContextMenuEntry(menuDiv, "playVideoLocal('" + scriptPreparedPath + "')", resourceBundle["playVideoLocally"]);
+	}
 
     if (parent.readonly != 'true') {
     	addContextMenuEntry(menuDiv, "delVideo('" + scriptPreparedFile + "')", resourceBundle["label.delete"]);
@@ -65,7 +65,7 @@ function videoContextMenu(fileName, domId) {
 	addContextMenuEntry(menuDiv, "videoComments('" + scriptPreparedPath + "')", resourceBundle["label.comments"]);
     
     let maxMenuHeight = 240;
-    if (parent.readonly == 'true') {
+    if (parent.readonly === 'true') {
         maxMenuHeight = 120;
     } 
     
@@ -201,28 +201,21 @@ function videoComments(path) {
 function playVideoLocal(path) {
 	toast(resourceBundle["playerStartedInBackground"], 4000);
 	
-    var url = "/webfilesys/servlet?command=playVideoLocal&videoPath=" + encodeURIComponent(path);
-	
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
-
-			    var item = xmlDoc.getElementsByTagName("success")[0];            
-                if (item) {
-                    var success = item.firstChild.nodeValue;
-                    if (success != "true") {
-                    	customAlert(resourceBundle["errorVideoPlayer"]);
-                    }
-                } else {
+    xmlGetRequest("playVideoLocal", { videoPath: encodeURIComponent(path) },
+        responseXml => {
+	        const item = responseXml.getElementsByTagName("success")[0];
+            if (item) {
+                const success = item.firstChild.nodeValue;
+                if (success !== "true") {
                 	customAlert(resourceBundle["errorVideoPlayer"]);
                 }
             } else {
-                // no response if external videoplayer is not closed by user
-                // alert(resourceBundle["alert.communicationFailure"]);
+            	customAlert(resourceBundle["errorVideoPlayer"]);
             }
-        }
-	});
+        },
+        () => {},
+        true
+	);
 }
 
 function deshakeVideo(fileName) {
@@ -254,35 +247,32 @@ function deshakeVideo(fileName) {
 }
 
 function addSilentAudio(fileName) {
-    var url = "/webfilesys/servlet?command=video&cmd=addSilentAudio&videoFileName=" + encodeURIComponent(fileName);
-	
-	xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-			    var xmlDoc = req.responseXML;
+    const parameters = {
+        cmd: "addSilentAudio",
+        videoFileName: encodeURIComponent(fileName)
+    }
 
-			    var item = xmlDoc.getElementsByTagName("success")[0];            
-                if (item) {
-                    var success = item.firstChild.nodeValue;
-                    if (success != "true") {
-                    	customAlert(resourceBundle["errorAddSilentAudio"]);
-                    } else {
-                        var targetFolderItem = req.responseXML.getElementsByTagName("targetFolder")[0];            
-                        var targetFolder = targetFolderItem.firstChild.nodeValue;
+    xmlGetRequest("video", parameters, responseXml => {
+        const item = responseXml.getElementsByTagName("success")[0];
+        if (item) {
+            const success = item.firstChild.nodeValue;
+            if (success !== "true") {
+                customAlert(resourceBundle["errorAddSilentAudio"]);
+            } else {
+                const targetFolderItem = responseXml.getElementsByTagName("targetFolder")[0];
+                const targetFolder = targetFolderItem.firstChild.nodeValue;
 
-                        var targetPathItem = req.responseXML.getElementsByTagName("targetPath")[0];            
-                        var targetPath = targetPathItem.firstChild.nodeValue;
-                        
-                        customAlert(resourceBundle["addSilentAudioStarted"] + " " + targetFolder + ".");
-                        
-                        setTimeout(function() {
-                        	parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
-                        }, 6000);
-                    }
-                } else {
-                	customAlert(resourceBundle["errorAddSilentAudio"]);
-                }
-            } 
+                const targetPathItem = responseXml.getElementsByTagName("targetPath")[0];
+                const targetPath = targetPathItem.firstChild.nodeValue;
+
+                customAlert(resourceBundle["addSilentAudioStarted"] + " " + targetFolder + ".");
+
+                setTimeout(function() {
+                    parent.parent.frames[1].location.href = "/webfilesys/servlet?command=exp&actPath=" + encodeURIComponent(targetPath) + "&expand=" + encodeURIComponent(targetPath) + "&fastPath=true";
+                }, 6000);
+            }
+        } else {
+            customAlert(resourceBundle["errorAddSilentAudio"]);
         }
 	});
 }

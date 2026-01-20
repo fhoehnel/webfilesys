@@ -20,13 +20,11 @@
 </link>
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 
-<xsl:if test="not(/fileList/browserXslEnabled)">
-  <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
-</xsl:if>
+<script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 
 <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
@@ -204,13 +202,15 @@
                     <label resource="label.videos"></label>
                     
                     <xsl:if test="sizeSumInt">
-                      &#160;
-                      <xsl:value-of select="sizeSumInt" />
-                      <xsl:if test="sizeSumFract">
-                        <label resource="decimalFractPoint"></label>
-                        <xsl:value-of select="sizeSumFract" />
-                      </xsl:if>
-                      <label style="margin-left:5px"><xsl:value-of select="sizeSumUnit" /></label>
+                      <span id="sizeSum">
+                        &#160;
+                        <xsl:value-of select="sizeSumInt" />
+                        <xsl:if test="sizeSumFract">
+                          <label resource="decimalFractPoint"></label>
+                          <xsl:value-of select="sizeSumFract" />
+                        </xsl:if>
+                        <label style="margin-left:5px"><xsl:value-of select="sizeSumUnit" /></label>
+                      </span>
                     </xsl:if>
                   </td>
                   

@@ -86,21 +86,6 @@ div.loginBox {
     box-shadow: 5px 5px 5px #666666;
 }
 
-div.registrationBox {
-    width: 520px;
-    height: 400px;
-    position: relative;
-    top: -200px;
-    left: -260px;
-    background-color: #ffffe0;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
-    border-radius: 20px;
-    box-shadow: 5px 5px 5px #666666;
-    padding: 20px;
-}
-
 div.msgBox {
     width: 260px;
     height: 100px;
@@ -112,7 +97,7 @@ div.msgBox {
     border-color: black;
     font-size: 13px;
     color: black;
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
@@ -130,7 +115,7 @@ div.promptBox {
     border-color: #a0a0a0;
     font-size: 13px;
     color: black;
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
@@ -150,11 +135,19 @@ div.promptHead {
     border-bottom-color:#a0a0a0;
     font-size:13px;
     color:black;
-    font-family:Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-weight:bold;
     text-align:center;
     vertical-align:middle;
     padding:3px;
+}
+
+div.promptBox table {
+    width: 100%;
+}
+
+div.promptBox td {
+    padding: 6px 10px;
 }
 
 div.uploadStatus {
@@ -172,14 +165,14 @@ div.uploadStatus {
 }
 
 div.uploadStatusText {
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-size: 13px;
     color: black;
     font-weight: normal;
 }
 
 div.uploadStatusCurrentFile {
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-weight: bold;
     font-size: 13px;
 	margin: 12px auto 12px auto;
@@ -203,9 +196,9 @@ div.driveUsageBar {
 }
 
 td.loginTitle {
-    font-size: 16px;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 18px;
     color: navy;
-    font-weight: bold;
 }
 
 span.selfRegistrationSubTitle {
@@ -383,6 +376,12 @@ a.dirtree {
     vertical-align: middle;
 }
 
+@media (pointer:coarse) {
+    a.dirtree {
+        font-size: 20px;
+    }
+}
+
 a.dir {
     font-size:13px;
     color:black;
@@ -450,6 +449,15 @@ a.fn {
     font-weight:bold;
     text-decoration:none;
     word-wrap: break-word;
+}
+
+@media (pointer:coarse) {
+    a.fn {
+        font-size:18px;
+    }
+    .thumbnailCont a.fn {
+        font-size:16px;
+	}
 }
 
 a.fn:hover {
@@ -886,6 +894,10 @@ div.last {
     white-space:nowrap;
 }
 
+div.last a {
+    text-decoration: none;
+}
+
 div.indent {
     padding-left:5px;
     padding-top:0px;
@@ -914,6 +926,10 @@ td.formParm1 {
     padding:8px;
     padding-top:4px;
     padding-bottom:4px;
+}
+
+td.formParm1.mandatory {
+    font-weight: bold;
 }
 
 td.formParm2 {
@@ -2065,7 +2081,7 @@ canvas.gpsProfileLegend {
 div.gpsChartText,
 td.gpsChartText {
     font-size: 13px;
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     color: black;
 }
 
@@ -2097,7 +2113,7 @@ div.dropZone {
 
 div.dragDropHint {
 	color: #808080;
-	font-family: Arial,Helvetica;
+	font-family: Arial,Helvetica,sans-serif;
 	font-size: 16pt;
 	font-weight: bold;
 	margin-top: 45px;
@@ -2124,7 +2140,7 @@ input[type=file] {
 
 li.selectedFile {
 	color: navy;
-	font-family: Arial,Helvetica;
+	font-family: Arial,Helvetica,sans-serif;
 	font-size: 10pt;
 }
 
@@ -2177,6 +2193,10 @@ body.bookmarks .icon-delete:before,
 body.folderWatch .icon-delete:before,
 body.publishList .icon-delete:before {
 	color: #a00000;
+}
+
+body.publishList a {
+    cursor: pointer;
 }
 
 body.folderWatch .icon-folderClosed:before {
@@ -2307,11 +2327,10 @@ div.editorButtonCont {
     bottom: 0;
     padding: 10px;
     box-sizing: border-box;
-    text-align: center;
 }
 
 div.filePreviewCont {
-    position: absolute;
+    position: fixed;
     right: 10px;
     top: 10px;
     width: 400px;
@@ -2359,6 +2378,12 @@ input[type=checkbox].big {
 	border-radius: 3px;
 	display: inline-block;
 	position: relative;
+}
+
+@media (pointer:coarse) {
+	input[type=checkbox].big {
+	    margin-left: 0;
+	}
 }
 
 input[type=checkbox].big:active,
@@ -2414,13 +2439,21 @@ div.findFileResult span.icon-font {
 	vertical-align: bottom;
 	margin-right: 2px;
 }
-	
+
 a.folderTreeIcon span.icon-font:before,
 div.fastpath.last span.icon-font:before,
 div.findFileResult span.icon-font {
 	font-size: 16px;
 	font-weight: bold;
     color: #806000;
+}
+
+@media (pointer:coarse) {
+    a.folderTreeIcon span.icon-font:before,
+    div.fastpath.last span.icon-font:before,
+    div.findFileResult span.icon-font {
+        font-size: 22px;
+    }
 }
 
 a.folderTreeIcon span.icon-font.folderCurrent:before {
@@ -2490,6 +2523,31 @@ div.zipEntry span.icon-font:before {
 
 div.zipEntry img {
 	margin-right: 4px;
+}
+
+table.exifData td:first-child {
+	white-space: nowrap;
+}
+
+ul.searchResultList {
+    list-style-type: none;
+    padding-left: 6px;
+}
+
+ul.searchResultList li {
+    white-space: nowrap;
+}
+
+ul.searchResultList li a {
+    margin-right: 20px;
+}
+
+ul.searchResultList img {
+    vertical-align: bottom;
+}
+
+div.leaflet-container {
+    cursor: pointer;
 }
 
 @media (max-width: 400px) {

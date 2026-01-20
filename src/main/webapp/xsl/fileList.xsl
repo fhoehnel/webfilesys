@@ -25,13 +25,11 @@
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/fileList/css" />.css</xsl:attribute>
 </link>
 
-<xsl:if test="not(fileList/browserXslEnabled)">
-  <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
-</xsl:if>
+<script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 
 <script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
 

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -226,7 +227,7 @@ public class AdminAddUserRequestHandler extends AdminRequestHandler
 		
 		String sendWelcomeMail = getParameter("sendWelcomeMail");
 
-		if ((WebFileSys.getInstance().getMailHost() != null) && (sendWelcomeMail != null))
+		if ((WebFileSysConfig.getInstance().getMailHost() != null) && (sendWelcomeMail != null))
 		{
 			EmailUtils.sendWelcomeMail(email, newUser.getFirstName(), newUser.getLastName(), login, password, null, userLanguage); 
 		}

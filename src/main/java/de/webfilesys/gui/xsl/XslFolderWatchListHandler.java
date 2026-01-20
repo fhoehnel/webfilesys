@@ -7,11 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.MetaInfManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -80,9 +80,8 @@ public class XslFolderWatchListHandler extends XslRequestHandlerBase
 
 			XmlUtil.setChildText(folderElement, "encodedPath" , UTF8URLEncoder.encode(watchedFolder));    
 			
-			Decoration deco = DecorationManager.getInstance().getDecoration(watchedFolder);
-			
-			if (deco != null) 
+			Decoration deco = MetaInfManager.getInstance().getDecoration(watchedFolder, ".");
+			if (deco != null)
 			{
 				if (deco.getIcon() != null) 
 				{

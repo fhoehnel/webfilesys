@@ -6,7 +6,7 @@
 <!-- root node-->
 <xsl:template match="/">
 
-<div class="promptHead" resource="label.renameImage"></div>
+<div class="promptHead" resource="label.renameImage">placeholder</div>
     
 <form accept-charset="utf-8" name="renameForm" id="renameForm" method="get" action="/webfilesys/servlet" style="display:inline;">
   <input type="hidden" name="command" value="renamePicture" />

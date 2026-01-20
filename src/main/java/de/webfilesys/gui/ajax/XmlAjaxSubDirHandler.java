@@ -9,20 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
+import de.webfilesys.*;
+import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
-import de.webfilesys.Constants;
-import de.webfilesys.DirTreeStatus;
-import de.webfilesys.DirTreeStatusInspector;
-import de.webfilesys.SubdirExistCache;
-import de.webfilesys.SubdirExistTester;
-import de.webfilesys.WebFileSys;
-import de.webfilesys.WinDriveManager;
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.StringComparator;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -31,7 +24,7 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
+public class XmlAjaxSubDirHandler extends XslRequestHandlerBase
 {
 	DirTreeStatus dirTreeStatus = null;
 	
@@ -108,10 +101,10 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 		XmlUtil.setChildText(subFolderElement, "css", userMgr.getCSS(uid), false);
 		
 		doc.appendChild(subFolderElement);
+
+        processResponse("subFolder.xsl");
 		
-		processResponse();
-		
-        if (WebFileSys.getInstance().getPollFilesysChangesInterval() > 0) {
+        if (WebFileSysConfig.getInstance().getPollFilesysChangesInterval() > 0) {
     		(new DirTreeStatusInspector(dirTreeStatus)).rememberPathStatus(actPath);		
         }
 	}
@@ -191,10 +184,8 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 			parentElement.setAttribute("current", "true");
 		}
 		
-		DecorationManager decoMgr = DecorationManager.getInstance();
+        Decoration deco = MetaInfManager.getInstance().getDecoration(parentPath, ".");
 
-		Decoration deco = decoMgr.getDecoration(parentPath);
-		
 		if (deco != null) 
 		{
 			if (deco.getIcon() != null) 
@@ -325,7 +316,7 @@ public class XmlAjaxSubDirHandler extends XmlRequestHandlerBase
 				folderElement.setAttribute("lastInLevel" , "false");
 			}
 			
-			deco = decoMgr.getDecoration(subdirPath);
+			deco = MetaInfManager.getInstance().getDecoration(subdirPath, ".");
 			
 			if (deco != null) 
 			{

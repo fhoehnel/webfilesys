@@ -30,6 +30,20 @@
   <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/menubar/language" /></xsl:attribute>
 </script>
 
+    <script type="text/javascript">
+        let fullScreen = false;
+
+        function switchFullScreen() {
+            if (fullScreen) {
+                parent.document.exitFullscreen();
+            } else {
+                requestFullScreen(parent.document.documentElement);
+            }
+            fullScreen = !fullScreen;
+        }
+
+    </script>
+
 </head>
 
 <body class="menubar" onload="setBundleResources();setScreenSize()">
@@ -295,6 +309,12 @@
                   <xsl:text> </xsl:text>
                 </a>
 			  </div>
+            </th>
+
+            <th>
+              <a id="fullScreenButton" href="javascript:void(0)" onclick="switchFullScreen()">
+                  <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>
+              </a>
             </th>
 
           </tr>

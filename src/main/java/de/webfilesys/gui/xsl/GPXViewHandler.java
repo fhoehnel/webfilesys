@@ -13,6 +13,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -43,14 +44,15 @@ public class GPXViewHandler extends UserRequestHandler {
 	}	
 	
 	protected void process() {
-	
-	    String filePath = getParameter("filePath"); 
+
+        String fileName = getParameter("fileName");
+        String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
 		
 		String googleMapsAPIKey = null;
 		if (req.getScheme().equalsIgnoreCase("https")) {
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTPS();
+			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTPS();
 		} else {
-			googleMapsAPIKey = WebFileSys.getInstance().getGoogleMapsAPIKeyHTTP();
+			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTP();
 		}
 
 		BufferedReader gpxReader = null;

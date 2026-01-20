@@ -44,7 +44,8 @@ function handleGoogleMapsApiReady() {
     var mapOptions = {
         zoom: 11,
         center: mapCenter,
-        mapTypeId: google.maps.MapTypeId.HYBRID
+        mapTypeId: google.maps.MapTypeId.HYBRID,
+        mapId: "gpxTrackMap"
     }
       
     map = new google.maps.Map(document.getElementById("mapCont"), mapOptions);      
@@ -63,115 +64,100 @@ function loadGoogleMapsAPIScriptCode(googleMapsAPIKey) {
     script.type = "text/javascript";
       
     if (window.location.href.indexOf("https") == 0) {
-        script.src = "https://maps.google.com/maps/api/js?callback=handleGoogleMapsApiReady&key=" + googleMapsAPIKey;
+        script.src = "https://maps.google.com/maps/api/js?callback=handleGoogleMapsApiReady&key=" + googleMapsAPIKey + "&libraries=marker";
     } else {
-        script.src = "http://maps.google.com/maps/api/js?callback=handleGoogleMapsApiReady&key=" + googleMapsAPIKey;
+        script.src = "http://maps.google.com/maps/api/js?callback=handleGoogleMapsApiReady&key=" + googleMapsAPIKey + "&libraries=marker";
     }      
     document.body.appendChild(script);
 }
 
 function loadAndShowTrack() {
-	
-    var url = "/webfilesys/servlet?command=gpxTrack&filePath=" + encodeURIComponent(filePath) + "&trackNumber=" + currentTrack;
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-            	var response = JSON.parse(req.responseText);
-            
-            	if (response.trackpoints && (response.trackpoints.length > 0)) {
-                	showTrackOnMap(response.trackpoints);
+    const parameters = {
+        filePath: encodeURIComponent(filePath),
+        trackNumber: currentTrack
+    }
+    fetchGet("gpxTrack", parameters,
+        responseText => {
+           	const response = JSON.parse(responseText);
 
-                	showTrackMetaData(response);
-                	
-                	if (response.hasElevation) {
-                    	drawAltDistProfile(response);
-                	}
-                	
-                	if (response.hasRecordedSpeed) {
-                		drawSpeedProfile(response, "recordedSpeed", "averageRecordedSpeedInMotion");
-                	} else {
-                    	if (response.hasSpeed) {
-                    		if (!response.invalidTime) {
-                            	drawSpeedProfile(response, "speed", "averageCalculatedSpeedInMotion");
-                    		} else {
-                    			customAlert("GPX file contains invalid time data - omitting speed profile")
-                    		}
-                    	}
-                	}
-                	
-                	currentTrack++;
-                	
-                	if (currentTrack < trackNumber) {
-                		loadAndShowTrack();
-                	} else {
-                		loadAndShowWayPoints();
-                	}
-            	} else {
-            		customAlert("track " + (currentTrack + 1) + " not found in GPX file");
-            	}
+            if (response.trackpoints && (response.trackpoints.length > 0)) {
+               	showTrackOnMap(response.trackpoints);
+               	showTrackMetaData(response);
+               	if (response.hasElevation) {
+                   	drawAltDistProfile(response);
+               	}
+               	if (response.hasRecordedSpeed) {
+               		drawSpeedProfile(response, "recordedSpeed", "averageRecordedSpeedInMotion");
+               	} else {
+                   	if (response.hasSpeed) {
+                   		if (!response.invalidTime) {
+                           	drawSpeedProfile(response, "speed", "averageCalculatedSpeedInMotion");
+                   		} else {
+                   			customAlert("GPX file contains invalid time data - omitting speed profile")
+                   		}
+                   	}
+               	}
+               	currentTrack++;
+               	if (currentTrack < trackNumber) {
+               		loadAndShowTrack();
+              	} else {
+               		loadAndShowWayPoints();
+               	}
             } else {
-                alert(resourceBundle["alert.communicationFailure"]);
+            	customAlert("track " + (currentTrack + 1) + " not found in GPX file");
             }
-        }
-    });      
+        },
+        null,
+        true,
+        false
+    );
 }
 
 function loadAndShowMultipleGPXFiles() {
-	var filePath = gpxFiles.pop();
-	
-    var url = "/webfilesys/servlet?command=gpxTrack&filePath=" + encodeURIComponent(filePath) + "&trackNumber=0";
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-            	var response = JSON.parse(req.responseText);
-            
-            	showTrackOnMap(response.trackpoints);
-            	
-            	showTrackMetaData(response);
-            	
-            	if (gpxFiles.length > 0) {
-            		loadAndShowMultipleGPXFiles();
-            	}
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
+	const filePath = gpxFiles.pop();
+    const parameters = {
+        filePath: encodeURIComponent(filePath),
+        trackNumber: "0"
+    }
+    fetchGet("gpxTrack", parameters,
+        responseText => {
+            const response = JSON.parse(responseText);
+            showTrackOnMap(response.trackpoints);
+            showTrackMetaData(response);
+            if (gpxFiles.length > 0) {
+            	loadAndShowMultipleGPXFiles();
             }
-        }
-    });      
+        },
+        null,
+        true,
+        false
+    );
 }
 
 function loadAndShowWayPoints() {
-	
-    var url = "/webfilesys/servlet?command=gpxWayPoints&filePath=" + encodeURIComponent(filePath);
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-            	var response = JSON.parse(req.responseText);
-            	if (response.waypoints && (response.waypoints.length > 0)) {
-                	showWayPointsOnMap(response.waypoints);
-            	}
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-        }
-    });      
+    const parameters = {
+        filePath: encodeURIComponent(filePath)
+    }
+    fetchGet("gpxWayPoints", parameters,
+        responseText => {
+           	const response = JSON.parse(responseText);
+           	if (response.waypoints && (response.waypoints.length > 0)) {
+               	showWayPointsOnMap(response.waypoints);
+           	}
+        },
+        null,
+        true,
+        false
+    );
 }
 
 function showWayPointsOnMap(wayPoints) {
     for (let i = 0; i < wayPoints.length; i++) {
-    	
-    	new google.maps.Marker({
+    	let marker = new google.maps.marker.AdvancedMarkerElement({
     	    position: new google.maps.LatLng(wayPoints[i].lat, wayPoints[i].lon),
-    	    label: {
-    	        color: "#c0f0f0",
-    	        fontSize: '13px',
-    	        fontWeight: '900',
-    	        text: wayPoints[i].name
-    	    },
-    	    map: map,
-    	});    
+    	    title: wayPoints[i].name,
+    	});
+    	marker.setMap(map);
     }
 }
 
@@ -633,43 +619,40 @@ function showTrackInSlowMotion(trackId) {
 		slowMotionTracks.pop().setMap(null);
 	}
 	
-    var url = "/webfilesys/servlet?command=gpxTrack&filePath=" + encodeURIComponent(filePath) + "&trackNumber=" + trackId;
-    
-    xmlRequest(url, function(req) {
-        if (req.readyState == 4) {
-            if (req.status == 200) {
-            	var response = JSON.parse(req.responseText);
-            
-            	if (response.trackpoints && (response.trackpoints.length > 0)) {
-            		var pointsPerStep = response.trackpoints.length / 1000;
-            		if (pointsPerStep < 2) {
-            			pointsPerStep = 2;
-            		}
-            		var delay = SLOWMOTION_DURATION / (response.trackpoints.length / pointsPerStep);
+    const parameters = {
+        filePath: encodeURIComponent(filePath),
+        trackNumber: trackId
+    };
 
-            		var invalidTime = false;
-            		
-            		var trackDuration = 0;
-            		if (response.startTime && response.endTime) {
-                		trackDuration = response.endTime - response.startTime;
-            		} else {
-            			invalidTime = true;
-            		}
-            		
-            		if (response.invalidTime) {
-            			invalidTime = true;
-            		}
-            		
-            		showTrackOnMapSlow(trackId, response.trackpoints, 0, TRACK_COLORS[(globalTrackCounter - 1) % TRACK_COLORS.length], 
-            				           delay, pointsPerStep, trackDuration, invalidTime);
-            	} else {
-            		customAlert("track " + (currentTrack + 1) + " not found in GPX file");
+    fetchGet("gpxTrack", parameters,
+        responseText => {
+           	const response = JSON.parse(responseText);
+            if (response.trackpoints && (response.trackpoints.length > 0)) {
+            	let pointsPerStep = response.trackpoints.length / 1000;
+            	if (pointsPerStep < 2) {
+            		pointsPerStep = 2;
             	}
-            } else {
-                alert(resourceBundle["alert.communicationFailure"]);
-            }
-        }
-    });      
+            	const delay = SLOWMOTION_DURATION / (response.trackpoints.length / pointsPerStep);
+           		let invalidTime = false;
+           		var trackDuration = 0;
+           		if (response.startTime && response.endTime) {
+               		trackDuration = response.endTime - response.startTime;
+           		} else {
+           			invalidTime = true;
+           		}
+           		if (response.invalidTime) {
+           			invalidTime = true;
+           		}
+           		showTrackOnMapSlow(trackId, response.trackpoints, 0, TRACK_COLORS[(globalTrackCounter - 1) % TRACK_COLORS.length],
+           				           delay, pointsPerStep, trackDuration, invalidTime);
+           	} else {
+           		customAlert("track " + (currentTrack + 1) + " not found in GPX file");
+           	}
+        },
+        null,
+        true,
+        false
+    );
 }
 
 function showTrackOnMapSlow(trackId, trackpoints, index, trackColor, delay, pointsPerStep, trackDuration, invalidTime) {

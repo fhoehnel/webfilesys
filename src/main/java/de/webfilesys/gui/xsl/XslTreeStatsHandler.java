@@ -100,7 +100,7 @@ public class XslTreeStatsHandler extends XslRequestHandlerBase
                     {
                         folderElement.setAttribute("shortName", shortFolderName);
                     }
-                    folderElement.setAttribute("path", UTF8URLEncoder.encode(CommonUtils.getFullPath(currentPath, folderName)));
+                    folderElement.setAttribute("path", UTF8URLEncoder.encode(CommonUtils.joinFilesysPath(currentPath, folderName)));
                     
                     folderListElement.appendChild(folderElement);
                 }

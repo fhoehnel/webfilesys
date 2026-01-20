@@ -11,12 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
-import de.webfilesys.gui.user.RemoteEditorRequestHandler;
 import de.webfilesys.util.XmlUtil;
 
 /**
@@ -38,28 +36,26 @@ public class XmlSaveRemoteEditorHandler extends XmlRequestHandlerBase {
 			return;
 		}
 
-		String fileName = getParameter("filename");
+		String filePath = getParameter("filePath");
 
-		if (!checkAccess(fileName)) {
+		if (!checkAccess(filePath)) {
 			return;
 		}
 
 		boolean writeError = false;
 
-        File destFile = new File(fileName);
+        File destFile = new File(filePath);
         
         if (!destFile.canWrite()) {
-            LogManager.getLogger(getClass()).warn("failed to save editor content - file is not writable: " + fileName);
+            LogManager.getLogger(getClass()).warn("failed to save editor content - file is not writable: " + filePath);
         	writeError = true;
         } else {
-			String text = getParameter("text");
+            String text = req.getParameter("text");
 
-			String tmpFileName = fileName + "_tmp$edit";
+			String tmpFileName = filePath + "_tmp$edit";
 
-			String fileEncoding = (String) req.getSession(true).getAttribute(RemoteEditorRequestHandler.SESSION_KEY_FILE_ENCODING);
+            String fileEncoding = guessFileEncoding(filePath);
 
-			req.getSession(true).removeAttribute(RemoteEditorRequestHandler.SESSION_KEY_FILE_ENCODING);
-			
 			PrintWriter fout = null;
 
 			try {
@@ -69,7 +65,7 @@ public class XmlSaveRemoteEditorHandler extends XmlRequestHandlerBase {
 			        // use OS default encoding
 	                fout = new PrintWriter(fos);
 			    } else {
-	                LogManager.getLogger(getClass()).debug("saving editor file " + fileName + " with character encoding " + fileEncoding);
+	                LogManager.getLogger(getClass()).debug("saving editor file " + filePath + " with character encoding " + fileEncoding);
 			        
 			        if (fileEncoding.equals("UTF-8-BOM")) {
 			            // write UTF-8 BOM
@@ -111,8 +107,8 @@ public class XmlSaveRemoteEditorHandler extends XmlRequestHandlerBase {
 
 				fout.close();
 
-				if (!copyFile(tmpFileName, fileName)) {
-					String logMsg = "cannot copy temporary file to edited file " + fileName;
+				if (!copyFile(tmpFileName, filePath)) {
+					String logMsg = "cannot copy temporary file to edited file " + filePath;
 					LogManager.getLogger(getClass()).error(logMsg);
 					writeError = true;
 				} else {
@@ -123,7 +119,7 @@ public class XmlSaveRemoteEditorHandler extends XmlRequestHandlerBase {
 					}
 				}
 			} catch (Exception ex) {
-				String logMsg="cannot save changed content of edited file " + fileName + ": " + ex;
+				String logMsg="cannot save changed content of edited file " + filePath + ": " + ex;
 				LogManager.getLogger(getClass()).error(logMsg);
 				writeError = true;
                 

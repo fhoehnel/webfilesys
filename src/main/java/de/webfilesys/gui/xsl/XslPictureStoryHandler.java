@@ -8,20 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Constants;
-import de.webfilesys.FastPathManager;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.ImageDimensions;
 import de.webfilesys.graphics.ImageUtils;
 import de.webfilesys.graphics.ScaledImage;
@@ -287,7 +280,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(fileListElement, "readonly", "true");
         }
 
-		int pageSize = WebFileSys.getInstance().getThumbnailsPerPage();
+		int pageSize = WebFileSysConfig.getInstance().getThumbnailsPerPage();
 
 		String temp = getParameter("pageSize");
 		
@@ -504,7 +497,7 @@ public class XslPictureStoryHandler extends XslRequestHandlerBase
 			}
 		}
 
-        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+        if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
             XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
         }
 		

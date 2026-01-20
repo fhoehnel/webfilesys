@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import de.webfilesys.InvitationManager;
 import de.webfilesys.LanguageManager;
 import de.webfilesys.WebFileSys;
+import de.webfilesys.WebFileSysConfig;
 import de.webfilesys.mail.EmailUtils;
 import de.webfilesys.mail.SmtpEmail;
 import de.webfilesys.util.CommonUtils;
@@ -236,9 +237,9 @@ public class PublishMailRequestHandler extends UserRequestHandler
 			secretURL.append("http://");
 		}
 
-		if (WebFileSys.getInstance().getServerDNS() != null)
+		if (WebFileSysConfig.getInstance().getServerDNS() != null)
 		{
-			secretURL.append(WebFileSys.getInstance().getServerDNS());
+			secretURL.append(WebFileSysConfig.getInstance().getServerDNS());
 		}
 		else
 		{
@@ -333,8 +334,10 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
 		output.println("<script src=\"/webfilesys/javascript/publish.js\" type=\"text/javascript\"></script>");
-		
-		output.println("</head>"); 
+        output.println("<script type=\"text/javascript\" src=\"/webfilesys/javascript/util.js\"></script>");
+        output.println("<script src=\"/webfilesys/servlet?command=getResourceBundle&amp;lang=" + language+ "\" type=\"text/javascript\"></script>");
+
+        output.println("</head>");
 		output.println("<body class=\"publish\">");
 
 		headLine(getResource("label.published","Folder has been published"));
@@ -593,7 +596,8 @@ public class PublishMailRequestHandler extends UserRequestHandler
 		if (invite == null)
 		{
 		    output.print(" disabled=\"true\"");
-		}		output.println(" style=\"width:100%;\">");
+		}
+		output.println(" style=\"width:100%;\">");
 		output.println("</td></tr>");
 
 		output.println("<tr><td colspan=\"2\" class=\"formParm1\">");

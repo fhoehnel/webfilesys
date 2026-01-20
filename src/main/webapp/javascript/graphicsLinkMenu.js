@@ -13,8 +13,6 @@ function linkGraphicsMenu(linkName, realPath, imgType)
         shortFileName = linkName.substring(0,7) + "..." + linkName.substring(linkName.length - 14, linkName.length);
     }    
 
-    fileNameExt = getFileNameExt(linkName);
-
     scriptPreparedPath = insertDoubleBackslash(realPath);
 
     addContextMenuHead(menuDiv, shortFileName);

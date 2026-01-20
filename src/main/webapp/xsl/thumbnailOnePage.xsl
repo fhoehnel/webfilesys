@@ -21,13 +21,11 @@
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/icons.css" />
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/imgZoom.css" />
 
-<xsl:if test="not(/fileList/browserXslEnabled)">
-  <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
-</xsl:if>
+<script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 
 <script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
 
@@ -305,13 +303,15 @@
                     <label resource="label.pictures"></label>
                     
                     <xsl:if test="sizeSumInt">
-                      &#160;
-                      <xsl:value-of select="sizeSumInt" />
-                      <xsl:if test="sizeSumFract">
-                        <label resource="decimalFractPoint"></label>
-                        <xsl:value-of select="sizeSumFract" />
-                      </xsl:if>
-                      <label style="margin-left:5px"><xsl:value-of select="sizeSumUnit" /></label>
+                      <span id="sizeSum">
+                        &#160;
+                        <xsl:value-of select="sizeSumInt" />
+                        <xsl:if test="sizeSumFract">
+                          <label resource="decimalFractPoint"></label>
+                          <xsl:value-of select="sizeSumFract" />
+                        </xsl:if>
+                        <label style="margin-left:5px"><xsl:value-of select="sizeSumUnit" /></label>
+                      </span>
                     </xsl:if>
                   </td>
 	              
@@ -466,33 +466,35 @@
                   </span>
                 </div>
                 
-                <div>
-                  <xsl:value-of select="comments" />
-                  <xsl:value-of select="' '" />
-                  <label resource="label.comments"></label>
+                <xsl:if test="comments != '0' or ownerRating or visitorRating">
+                  <div>
+                    <xsl:value-of select="comments" />
+                    <xsl:value-of select="' '" />
+                    <label resource="label.comments"></label>
 
-                  &#160;
+                    &#160;
 
-                  <xsl:if test="ownerRating or visitorRating">
-                    <span class="thumbRating">
-                      <xsl:attribute name="title">
-                        <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
-                        <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
-                      </xsl:attribute>
-                      <span class="icon-font icon-star ratingStar"></span>
-                      <xsl:if test="ownerRating">
-                        <xsl:value-of select="ownerRating" />
-                        <xsl:if test="visitorRating">/</xsl:if>
-                      </xsl:if>
+                    <xsl:if test="ownerRating or visitorRating">
+                      <span class="thumbRating">
+                        <xsl:attribute name="title">
+                          <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
+                          <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
+                        </xsl:attribute>
+                        <span class="icon-font icon-star ratingStar"></span>
+                        <xsl:if test="ownerRating">
+                          <xsl:value-of select="ownerRating" />
+                          <xsl:if test="visitorRating">/</xsl:if>
+                        </xsl:if>
+                        <xsl:if test="visitorRating">
+                          <xsl:value-of select="visitorRating" />
+                        </xsl:if>
+                      </span>
                       <xsl:if test="visitorRating">
-                        <xsl:value-of select="visitorRating" />
+                        (<xsl:value-of select="numberOfVotes" />)
                       </xsl:if>
-                    </span>
-                    <xsl:if test="visitorRating">
-                      (<xsl:value-of select="numberOfVotes" />)
                     </xsl:if>
-                  </xsl:if>
-                </div>
+                  </div>
+                </xsl:if>
                 
               </div>
             

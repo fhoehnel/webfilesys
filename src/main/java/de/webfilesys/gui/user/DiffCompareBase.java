@@ -130,7 +130,7 @@ public class DiffCompareBase extends UserRequestHandler
             else
             {
                 output.print("<font class=\"diff\">");
-                output.print(encodeSpecialChars(token));
+                output.print(CommonUtils.encodeSpecialChars(token));
                 output.print("</font>");
             }
         }
@@ -178,7 +178,7 @@ public class DiffCompareBase extends UserRequestHandler
             }
             else
             {
-                diffText = encodeSpecialChars(diffText);
+                diffText = CommonUtils.encodeSpecialChars(diffText);
             }
             
             // diffText = newLineToHTML(diffText);
@@ -234,7 +234,7 @@ public class DiffCompareBase extends UserRequestHandler
             else
             {
                 output.print("<font class=\"diff\">");
-                output.print(encodeSpecialChars(token));
+                output.print(CommonUtils.encodeSpecialChars(token));
                 output.print("</font>");
             }
         }
@@ -295,7 +295,7 @@ public class DiffCompareBase extends UserRequestHandler
     {
         if (!checkForLonelyLinefeeds(diffText))
         {
-            return encodeSpecialChars(diffText);
+            return CommonUtils.encodeSpecialChars(diffText);
         }
         
         StringBuffer highlightBuff = new StringBuffer(diffText.length() + 1);
@@ -350,7 +350,7 @@ public class DiffCompareBase extends UserRequestHandler
             }
         }
         
-        return encodeSpecialChars(highlightBuff.toString());
+        return CommonUtils.encodeSpecialChars(highlightBuff.toString());
     }
     
     private String readIntoBuffer(File file) {
@@ -425,47 +425,7 @@ public class DiffCompareBase extends UserRequestHandler
         
         return buff.toString();
     }
-    
-    private String encodeSpecialChars(String line)
-    {
-        StringBuffer buff = new StringBuffer();
 
-        for (int i = 0; i < line.length(); i++)
-        {
-            char ch = line.charAt(i);
-
-            if (ch=='&')
-            {
-                buff.append("&amp;");
-            }
-            else if (ch == '<')
-            {
-                buff.append("&lt;");
-            }
-            else if (ch == '>')
-            {
-                buff.append("&gt;");
-            }
-            else if (ch == '"')
-            {
-                buff.append("&quot;");
-            }
-            else
-            {
-                if ((ch < 0x20) && (ch != 0x0a) && (ch != 0x0d))
-                {
-                    buff.append('.');
-                }
-                else
-                {
-                    buff.append(ch);
-                }
-            }
-        }
-
-        return(buff.toString());
-    }
-    
     private String newLineToHTML(String line)
     {
         StringBuffer buff = new StringBuffer();

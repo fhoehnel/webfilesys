@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -149,7 +150,7 @@ public class GetVideoDimensionsHandler extends XmlRequestHandlerBase {
 
         Element resultElement = doc.createElement("result");
         
-        String ffprobeExePath = WebFileSys.getInstance().getFfprobeExePath();
+        String ffprobeExePath = WebFileSysConfig.getInstance().getFfprobeExePath();
         
         if (!CommonUtils.isEmpty(ffprobeExePath)) {
         	// String progNameAndParams = ffprobeExePath +  " -v error -of flat=s=_ -select_streams v:0 -show_entries stream=height,width,codec_name,duration,avg_frame_rate -sexagesimal " + videoFile.getAbsolutePath();

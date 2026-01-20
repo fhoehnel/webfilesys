@@ -13,24 +13,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
+import de.webfilesys.*;
+import de.webfilesys.decoration.Decoration;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.ClipBoard;
-import de.webfilesys.Constants;
-import de.webfilesys.FastPathManager;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.IconManager;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
-import de.webfilesys.WinDriveManager;
 import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
@@ -60,7 +49,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 	  
 	protected void process()
 	{
-		// session.setViewMode(Constants.VIEW_MODE_THUMBS);
+        session.setAttribute("viewMode", Constants.VIEW_MODE_LIST);
 
 	    if (getParameter("initial") != null)
 	    {
@@ -82,7 +71,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
         String relativePath = getParameter("relPath");
 
-		if (relativePath.indexOf("..") >= 0) {
+		if (relativePath != null && relativePath.indexOf("..") >= 0) {
 			// Hacker attack?
 			LogManager.getLogger(getClass()).warn("potential hacker attack with relPath: " + relativePath);
 			relativePath = null;
@@ -368,18 +357,22 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 		
 		StringTokenizer pathParser = new StringTokenizer(relativePath, File.separator);
 		
-		StringBuffer partialPath = new StringBuffer();
-		
-		while (pathParser.hasMoreTokens())
-		{
+		StringBuilder partialPath = new StringBuilder();
+
+        boolean firstToken = true;
+
+		while (pathParser.hasMoreTokens()) {
 			String partOfPath = pathParser.nextToken();
 			
 			partialPath.append(partOfPath);
-			
-			if (pathParser.hasMoreTokens())
-			{
+
+            if (pathParser.hasMoreTokens()) {
 				partialPath.append(File.separatorChar);		
-			}
+			} else {
+                if (firstToken && partOfPath.length() == 2 && partOfPath.charAt(1) == ':') {
+                    partialPath.append(File.separator);
+                }
+            }
 			
 			Element partOfPathElem = doc.createElement("pathElem");
 			
@@ -388,6 +381,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 			partOfPathElem.setAttribute("name", partOfPath);
 			
 			partOfPathElem.setAttribute("path", UTF8URLEncoder.encode(partialPath.toString()));
+
+            firstToken = false;
 		}
 		// end path section
 
@@ -440,7 +435,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                     
                     subDirElem.setAttribute("displayName", displayName);
                 
-                    subDirElem.setAttribute("path", UTF8URLEncoder.encode(relPathWithSlash + subdirPath));
+                    subDirElem.setAttribute("path", UTF8URLEncoder.encode(subdirPath));
                 }
             }
             
@@ -465,6 +460,13 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
                     subDirElem.setAttribute("displayName", shortDirName);
                 
                     subDirElem.setAttribute("path", UTF8URLEncoder.encode(relPathWithSlash + subDirName));
+
+                    Decoration deco = MetaInfManager.getInstance().getDecoration(CommonUtils.joinFilesysPath(dirFile.getAbsolutePath(), subDirName), ".");
+                    if (deco != null) {
+                        if (deco.getIcon() != null) {
+                            subDirElem.setAttribute("icon", deco.getIcon());
+                        }
+                    }
         	});
         }
         // end subdir section
@@ -474,14 +476,12 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 			XmlUtil.setChildText(folderFileListElement, "readonly", "true", false);
 		}
 		
-        if (WebFileSys.getInstance().getMailHost() !=null)
+        if (WebFileSysConfig.getInstance().getMailHost() !=null)
         {
             XmlUtil.setChildText(folderFileListElement, "mailEnabled", "true");
         }
             
 		XmlUtil.setChildText(folderFileListElement, "userid", uid, false);
-		
-	    XmlUtil.setChildText(folderFileListElement, "language", language, false);
 		
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead()))
 		{
@@ -551,7 +551,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 
 	        IconManager iconMgr = null;
 
-	        if (WebFileSys.getInstance().isShowAssignedIcons())
+	        if (WebFileSysConfig.getInstance().isShowAssignedIcons())
 	        {
 	            iconMgr = IconManager.getInstance();
 	        }
@@ -571,7 +571,7 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 				
 				String docImage = null;
 
-				if (WebFileSys.getInstance().isShowAssignedIcons()) {
+				if (WebFileSysConfig.getInstance().isShowAssignedIcons()) {
 					int extIdx = fileName.lastIndexOf('.');
 					if ((extIdx > 0) && (extIdx < (fileName.length() - 1))) {
 						docImage = iconMgr.getFileIconNoDefault(fileName);

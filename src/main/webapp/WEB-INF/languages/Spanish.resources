@@ -105,6 +105,7 @@ label.menuSynchronize=Sincronizar
 label.menuCancelSync=Cancelar sincronización
 label.watchFolder=Monitor cambio de carpeta
 label.cloneFolder=Clonar carpeta
+label.searchGPS=Buscar GPS
 
 # file context menu labels
 label.view=Ver
@@ -340,7 +341,9 @@ label.bytesfree=Bytes libres
 
 # search window labels and buttons
 label.searchHead=Búsqueda de archivos y texto
+label.searchGPSHead=Búsqueda GPS
 label.searchTitle=WebFileSys: Búsqueda
+label.searchGPSTitle=WebFileSys: Búsqueda GPS
 label.searchPath=Buscar en árbol de carpeta
 label.filemask=filtro para nombre de archivo
 label.searcharg=texto en archivo
@@ -364,6 +367,8 @@ label.searchResultAsTree=mostrar resultados de búsqueda como árbol
 button.keepSearchResults=Conservar resultados de la búsqueda
 button.discardSearchResults=Descartar resultados de la búsqueda
 datePickerFormat=dd-mm-yy
+label.searchGPSDistance=distancia máxima (km)
+label.searchGPSDistanceMandatory=La distancia es obligatorio!
 
 # copy/rename/move labels and buttons
 label.copymovehead=Copiar/Cambiar nombre/Mover
@@ -572,6 +577,7 @@ label.imgwidth=anchura de imagen (píxeles)
 label.thumbexists=miniatura incluida
 label.gpsLatitude=GPS latitud
 label.gpsLongitude=GPS longitud
+label.gpsAltitude=GPS altitud
 label.imgOrientation=formato oblongo/alto
 orientation.landscape=formato oblongo
 orientation.portrait=formato alto
@@ -701,6 +707,7 @@ label.registerself=Soy un nuevo usuario
 label.editregistration=Editar datos de usuario
 label.regtitle=registro de nuevo usuario
 label.login=usuario
+label.passwordRegistration=contraseña
 label.passwordconfirm=teclea la contraseña otra vez
 label.ropassword=contraseña de solo lectura
 label.ropwconfirm=confirma la contraseña de solo lectura
@@ -717,11 +724,12 @@ label.selectLanguage=- seleccionar lengua -
 label.userRole=rol del usuario
 button.register=Registrar
 registrationConfirmation=El primer paso del proceso de registro fue exitoso. Se ha enviado un correo electrónico con información sobre cómo completar el registro a la dirección de correo electrónico introducido.
-button.registrationToLogin=Acceso a arcoíris blog
+button.registrationToLogin=iniciar sesión
 activationSuccessful=El registro de nuevo usario ha completado exitoso.
 registrationAdminActivation=La nueva cuenta registrada debe ser activada por un administrador (el envío de correos electrónicos está desactivado).
-error.missinglogin=nombre de usuario, mínimo 3 caracteres
+error.loginLength=La longitud de usuario no es válida
 error.spacesinlogin=el nombre de usuario no puede tener espacios
+error.loginInvalidChar=El nombre de usuario contiene caracteres no válidos
 error.passwordlength=contraseña, mínimo 3 caracteres
 error.spacesinpw=la contraseña no puede tener espacios
 error.pwmissmatch=la contraseña y la confirmación de contraseña no son iguales
@@ -829,6 +837,8 @@ label.googleMapAllFiles=Mostrar localización geográfica de todos los imagenes 
 label.geoTag=datos Geo-Tag
 label.latitude=latitud (ejemplo: 41.39 para Zaragoza)
 label.longitude=longitud (ejemplo: 0.53 for Zaragoza)
+latitudeSearchResult=latitud
+longitudeSearchResult=longitud
 label.zoomFactor=factor de zoom (1 = vista muy alejada, 16 = vista muy cercana)
 label.geoTagInfoText=Texto para ventana de información en el mapa
 alert.missingLatitude=Se requiere la latitud

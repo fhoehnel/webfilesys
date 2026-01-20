@@ -11,23 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
+import de.webfilesys.*;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 
-import de.webfilesys.ClipBoard;
-import de.webfilesys.Constants;
-import de.webfilesys.FastPathManager;
-import de.webfilesys.FileComparator;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.GeoTag;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.PictureRating;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -168,14 +156,6 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			}
 		}
 
-		XmlUtil.setChildText(fileListElement, "css", userMgr.getCSS(uid), false);
-
-		XmlUtil.setChildText(fileListElement, "language", language, false);
-
-		if (isBrowserXslEnabled()) {
-			XmlUtil.setChildText(fileListElement, "browserXslEnabled", "true", false);
-		}
-
 		File dirFile = new File(currentPath);
 
 		if ((!dirFile.exists()) || (!dirFile.isDirectory()) || (!dirFile.canRead())) {
@@ -308,11 +288,13 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 
 				String realFileName = pictureFile.getName();
 
-				int commentCount = metaInfMgr.countComments(realPath, realFileName);
+                boolean fileHasMetaInf = dirHasMetaInf && metaInfMgr.getMetaInfElement(realPath, realFileName) != null;
+
+				int commentCount = fileHasMetaInf ? metaInfMgr.countComments(realPath, realFileName) : 0;
 
 				XmlUtil.setChildText(fileElement, "comments", Integer.toString(commentCount));
 
-				PictureRating pictureRating = metaInfMgr.getPictureRating(realPath, realFileName);
+				PictureRating pictureRating = fileHasMetaInf ? metaInfMgr.getPictureRating(realPath, realFileName) : null;
 
 				if (pictureRating != null) {
 					if (pictureRating.getNumberOfVotes() > 0) {
@@ -324,8 +306,7 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 				}
 
 				if (!readonly) {
-					int ownerRating = metaInfMgr.getOwnerRating(pictureFile.getAbsolutePath());
-
+					int ownerRating = fileHasMetaInf ? metaInfMgr.getOwnerRating(pictureFile.getAbsolutePath()) : -1;
 					if (ownerRating > (-1)) {
 						XmlUtil.setChildText(fileElement, "ownerRating", Integer.toString(ownerRating));
 					}
@@ -354,11 +335,11 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 				}
 			}
 
-			if (WebFileSys.getInstance().isAutoCreateThumbs()) {
+			if (WebFileSysConfig.getInstance().isAutoCreateThumbs()) {
 				XmlUtil.setChildText(fileListElement, "autoCreateThumbs", "true");
 			}
 
-			if (WebFileSys.getInstance().getMailHost() != null) {
+			if (WebFileSysConfig.getInstance().getMailHost() != null) {
 				XmlUtil.setChildText(fileListElement, "mailEnabled", "true");
 			}
 
@@ -367,22 +348,19 @@ public class XslThumbnailHandler extends XslFileListHandlerBase {
 			}
 		}
 
-		GeoTag geoTag = metaInfMgr.getGeoTag(currentPath, ".");
+		GeoTag geoTag = dirHasMetaInf ? metaInfMgr.getGeoTag(currentPath, ".") : null;
 
 		if (geoTag != null) {
 			XmlUtil.setChildText(fileListElement, "geoTag", "true", false);
-
-			// the reason for this is historic: previous google maps api version
-			// required an API key
 			XmlUtil.setChildText(fileListElement, "googleMaps", "true", false);
 		}
 
-		int pollInterval = WebFileSys.getInstance().getPollFilesysChangesInterval();
+		int pollInterval = WebFileSysConfig.getInstance().getPollFilesysChangesInterval();
 		if (pollInterval > 0) {
 			XmlUtil.setChildText(fileListElement, "pollInterval", Integer.toString(pollInterval));
 		}
 		
-        if (WebFileSys.getInstance().getFfmpegExePath() != null) {
+        if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
             XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
         }
 		

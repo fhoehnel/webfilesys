@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -56,7 +57,7 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
 	}
 
 	private int playVideoInLocalPlayer(String videoFilePath) {
-        String videoPlayerExePath = WebFileSys.getInstance().getVideoPlayerExePath();
+        String videoPlayerExePath = WebFileSysConfig.getInstance().getVideoPlayerExePath();
         
         if (CommonUtils.isEmpty(videoPlayerExePath)) {
             return -1;
@@ -66,7 +67,7 @@ public class VideoLocalPlayerHandler extends XmlRequestHandlerBase {
             ArrayList<String> progNameAndParams = new ArrayList<String>();
             progNameAndParams.add(videoPlayerExePath);
         	
-        	String addParams = WebFileSys.getInstance().getVideoPlayerAddParams();
+        	String addParams = WebFileSysConfig.getInstance().getVideoPlayerAddParams();
             if (addParams != null) {
             	String[] params = addParams.split(" ");
             	for (String param : params) {

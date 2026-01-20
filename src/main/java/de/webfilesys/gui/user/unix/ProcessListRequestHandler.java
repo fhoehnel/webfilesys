@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.WebFileSysConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -67,7 +68,7 @@ public class ProcessListRequestHandler extends UserRequestHandler
 		output.print("</HEAD>"); 
 		output.println("<BODY bgcolor=white>");
 
-		boolean allowProcessKill = WebFileSys.getInstance().isAllowProcessKill();
+		boolean allowProcessKill = WebFileSysConfig.getInstance().isAllowProcessKill();
 		
 		UserManager userMgr = WebFileSys.getInstance().getUserMgr();
 		
@@ -86,7 +87,7 @@ public class ProcessListRequestHandler extends UserRequestHandler
 		{
 			ProcessTree pTree=null;
 
-			if (WebFileSys.getInstance().isOldLinuxPsStyle())
+			if (WebFileSysConfig.getInstance().isOldLinuxPsStyle())
 			{
 				pTree = new OldLinuxProcessTree("all");
 			}

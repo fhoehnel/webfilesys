@@ -12,6 +12,7 @@
 <head>
 
 <meta http-equiv="expires" content="0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
 
@@ -19,13 +20,11 @@
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/mobile.css" />
 <link rel="stylesheet" type="text/css" href="/webfilesys/styles/imgZoom.css" />
 
-<xsl:if test="not(/fileList/browserXslEnabled)">
-  <script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
-  <script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
-</xsl:if>
+<script src="/webfilesys/javascript/ajaxslt/util.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xmltoken.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/dom.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xpath.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/ajaxslt/xslt.js" type="text/javascript"></script>
 
 <script src="/webfilesys/javascript/jquery/jquery.min.js"></script>
 
@@ -37,30 +36,29 @@
 <script src="/webfilesys/javascript/mobile/mobileThumbnail.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/viewMode.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/contextMenuCommon.js" type="text/javascript"></script>
-<script src="/webfilesys/javascript/graphicsContextMenu.js" type="text/javascript"></script>
-<script src="/webfilesys/javascript/graphicsLinkMenu.js" type="text/javascript"></script>
-<script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
+
+<script src="/webfilesys/javascript/mobile/contextMenuCommon.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/mobile/picContextMenu.js" type="text/javascript"></script>
+<script src="/webfilesys/javascript/mobile/jsFileMenu.js" type="text/javascript"></script>
+
 <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/ajaxGraphics.js" type="text/javascript"></script>
 <script src="/webfilesys/javascript/popupPicture.js" type="text/javascript"></script>
-<xsl:if test="/fileList/pollInterval">
-  <script src="/webfilesys/javascript/pollForFilesysChanges.js" type="text/javascript"></script>
-</xsl:if>
 
 <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 <script type="text/javascript">
   <xsl:attribute name="src">/webfilesys/servlet?command=getResourceBundle&amp;lang=<xsl:value-of select="/fileList/language" /></xsl:attribute>
 </script>
 
-<xsl:if test="/fileList/geoTag">
-  <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
-</xsl:if>
-
 <script type="text/javascript">
   
   var lastScrollPos = 0;
-  
+
+  var serverOS = '<xsl:value-of select="/fileList/serverOS" />';
+  var readonly = '<xsl:value-of select="/fileList/readonly" />';
+  var mailEnabled = '<xsl:value-of select="/fileList/mailEnabled" />';
+
   var pathForScript = '<xsl:value-of select="/fileList/pathForScript" />';
   
   function showImage(imgPath) {
@@ -68,7 +66,22 @@
       picWin = window.open('/webfilesys/servlet?command=showImg&amp;imgname=' + encodeURIComponent(imgPath), 'picWin' + randNum, 'status=no,toolbar=no,location=no,menu=no,width=400,height=300,resizable=yes,left=1,top=1,screenX=1,screenY=1');
       picWin.focus();
   }
-  
+
+  let fullScreen = false;
+
+  function switchFullScreen() {
+      if (fullScreen) {
+          document.exitFullscreen();
+      } else {
+          requestFullScreen(document.documentElement);
+      }
+      if (fullScreen) {
+          document.getElementById("scrollAreaCont").style.height = '10px';
+      }
+      fullScreen = !fullScreen;
+      setTimeout(() => setMobileThumbContHeight(), 500);
+  }
+
   var path = '<xsl:value-of select="/fileList/menuPath" />';
   
 </script>
@@ -87,7 +100,7 @@
 
 </head>
 
-<body class="fileListNoMargin">
+<body class="mobile fileListNoMargin">
   <xsl:attribute name="onload">
     setMobileThumbContHeight();
     <xsl:if test="/fileList/file">
@@ -100,15 +113,20 @@
 
   <xsl:apply-templates />
 
-  <div id="contextMenu" class="contextMenuCont"></div>
+  <div id="contextMenu" class="contextMenu"></div>
 
   <div id="msg1" class="msgBox" style="visibility:hidden" />
 
   <div id="prompt" class="promptBox" style="visibility:hidden" />
 
+  <a id="fullScreenButton" href="javascript:void(0)" onclick="switchFullScreen()"
+     style="position:absolute;top:0px;right:10px;">
+    <img src="/webfilesys/images/fullscreen.png" titleResource="fullScreenMode"></img>
+  </a>
+
 </body>
 
-<div id="picturePopup" class="picturePopup zoomedPicCont">
+<div id="picturePopup" class="picturePopupFixed">
   <img id="zoomPic" class="zoomPic zoomedPic" src="" border="0" style="width:100%;height:100%;" onclick="hidePopupPicture()"/>
   <div id="popupClose" class="popupClose" onclick="hidePopupPicture();">
     <img src="images/winClose.gif" border="0" width="16" height="14"/>
@@ -219,9 +237,15 @@
                       <a class="icon-font icon-sort mobileMenuIcon" titleResource="showSortMenu">
                         <xsl:attribute name="href">javascript:showSortMenu()</xsl:attribute>
                       </a>
-                    </td> 
-	
-	              </xsl:if>
+                    </td>
+
+                    <td id="compareLink" class="mobileFolderMenu fileListFunct">
+                      <a class="icon-font icon-watch mobileMenuIcon" titleResource="label.comparehead">
+                        <xsl:attribute name="href">/webfilesys/servlet?command=compareImg&amp;selectAll=true</xsl:attribute>
+                      </a>
+                    </td>
+
+                  </xsl:if>
 	              <xsl:if test="not(/fileList/file)">
 	                <td class="fileListFunct" align="right" nowrap="true" resource="alert.nopictures" />
 	              </xsl:if>
@@ -264,6 +288,7 @@
                     <xsl:if test="description">
                       <xsl:attribute name="title"><xsl:value-of select="description" /></xsl:attribute>
                     </xsl:if>
+                    <xsl:attribute name="oncontextmenu">picContextMenu('<xsl:value-of select="@nameForScript" />');return false;</xsl:attribute>
                   </img>
                 </a>
                 <br/>
@@ -304,33 +329,35 @@
                   </span>
                 </div>
                 
-                <div>
-                  <xsl:value-of select="comments" />
-                  <xsl:value-of select="' '" />
-                  <label resource="label.comments"></label>
+                <xsl:if test="comments != '0' or ownerRating or visitorRating">
+                  <div>
+                    <xsl:value-of select="comments" />
+                    <xsl:value-of select="' '" />
+                    <label resource="label.comments"></label>
 
-                  &#160;
+                    &#160;
 
-                  <xsl:if test="ownerRating or visitorRating">
-                    <a class="dirtree">
-                      <xsl:attribute name="title">
-                        <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
-                        <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
-                      </xsl:attribute>
-                      <img src="images/star.gif" border="0" style="vertical-align:bottom" />
-                      <xsl:if test="ownerRating">
-                        <xsl:value-of select="ownerRating" />
-                        <xsl:if test="visitorRating">/</xsl:if>
-                      </xsl:if>
+                    <xsl:if test="ownerRating or visitorRating">
+                      <span>
+                        <xsl:attribute name="title">
+                          <xsl:if test="ownerRating">Rating by Owner: <xsl:value-of select="ownerRating" /><xsl:if test="visitorRating"> / </xsl:if></xsl:if>
+                          <xsl:if test="visitorRating">Rating by <xsl:value-of select="numberOfVotes" /> Visitors: <xsl:value-of select="visitorRating" /></xsl:if> (5 = best)
+                        </xsl:attribute>
+                        <img src="images/star.gif" border="0" style="vertical-align:bottom" />
+                        <xsl:if test="ownerRating">
+                          <xsl:value-of select="ownerRating" />
+                          <xsl:if test="visitorRating">/</xsl:if>
+                        </xsl:if>
+                        <xsl:if test="visitorRating">
+                          <xsl:value-of select="visitorRating" />
+                        </xsl:if>
+                      </span>
                       <xsl:if test="visitorRating">
-                        <xsl:value-of select="visitorRating" />
+                        (<xsl:value-of select="numberOfVotes" />)
                       </xsl:if>
-                    </a>
-                    <xsl:if test="visitorRating">
-                      (<xsl:value-of select="numberOfVotes" />)
                     </xsl:if>
-                  </xsl:if>
-                </div>
+                  </div>
+                </xsl:if>
                 
               </div>
             

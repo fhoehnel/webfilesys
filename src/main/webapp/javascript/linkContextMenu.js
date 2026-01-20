@@ -9,7 +9,7 @@ function jsLinkMenu(linkName, realPath) {
         shortFileName = linkName.substring(0,7) + "..." + linkName.substring(linkName.length - 14, linkName.length);
     }    
 
-    fileNameExt = getFileNameExt(linkName);
+    const fileExt = getFileNameExt(linkName);
 
     scriptPreparedPath = insertDoubleBackslash(realPath);
 
@@ -36,7 +36,7 @@ function jsLinkMenu(linkName, realPath) {
     	addContextMenuEntry(menuDiv, "delLink('" + linkName + "')", resourceBundle["label.deleteLink"]);
     	addContextMenuEntry(menuDiv, "renameLink('" + linkName + "')", resourceBundle["label.renameLink"]);
 
- 	    if (parent.clientIsLocal == 'true') {
+ 	    if (parent.localEditor === 'true') {
  	    	addContextMenuEntry(menuDiv, "editLocalLink('" + scriptPreparedPath + "')", resourceBundle["label.edit"]);
         } else {
  	    	addContextMenuEntry(menuDiv, "editRemoteLink('" + scriptPreparedPath + "')", resourceBundle["label.edit"]);
@@ -58,7 +58,7 @@ function jsLinkMenu(linkName, realPath) {
         }
 
         if (parent.serverOS == 'win') {
- 	    	addContextMenuEntry(menuDiv, "switchReadWrite('" + scriptPreparedPath + "')", resourceBundle["label.switchReadOnly"]);
+ 	    	addContextMenuEntry(menuDiv, "switchReadWrite('" + insertDoubleBackslash(linkName) + "', true)", resourceBundle["label.switchReadOnly"]);
         }
 
         if (parent.mailEnabled == 'true') {
@@ -109,19 +109,20 @@ function jsLinkMenu(linkName, realPath) {
     menuDiv.style.visibility = 'visible';
 }
 
-function editRemoteLink(path) {
-    var editWinWidth = screen.width - 80;
-    var editWinHeight = screen.height - 70;
+function editRemoteLink(filePath) {
+    let editWinWidth = screen.width - 80;
+    let editWinHeight = screen.height - 70;
 
     if (editWinWidth > 800) {
         editWinWidth = 800;
     }
-
     if (editWinHeight > 700) {
         editWinHeight = 700;
     }
-    
-    editWin = window.open("/webfilesys/servlet?command=editFile&filePath=" + encodeURIComponent(path) + "&screenHeight=" + editWinHeight,"editWin","status=no,toolbar=no,location=no,menu=no,width=" + editWinWidth + ",height=" + editWinHeight + ",resizable=yes,left=20,top=5,screenX=20,screenY=5");
+
+    const realFileName = extractFileName(filePath);
+
+    editWin = window.open("/webfilesys/html/remoteEditor.html?fileName=" + encodeURIComponent(realFileName) + "&filePath=" + encodeURIComponent(filePath) + "&isLink=true&screenHeight=" + editWinHeight,"editWin","status=no,toolbar=no,location=no,menu=no,width=" + editWinWidth + ",height=" + editWinHeight + ",resizable=yes,left=20,top=5,screenX=20,screenY=5");
     editWin.focus();
     editWin.opener = self;
 }

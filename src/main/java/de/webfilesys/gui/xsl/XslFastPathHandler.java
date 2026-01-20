@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.MetaInfManager;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -17,10 +18,8 @@ import de.webfilesys.FastPathManager;
 import de.webfilesys.FileSysBookmark;
 import de.webfilesys.FileSysBookmarkManager;
 import de.webfilesys.decoration.Decoration;
-import de.webfilesys.decoration.DecorationManager;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
-import de.webfilesys.util.XmlUtil;
 
 /**
  * @author Frank Hoehnel
@@ -213,9 +212,8 @@ public class XslFastPathHandler extends XslRequestHandlerBase
                         subFolderElem.setAttribute("bookmark", "true");
                     }
                     
-    				Decoration deco = DecorationManager.getInstance().getDecoration(path);
-    				
-    				if (deco != null) 
+    				Decoration deco = MetaInfManager.getInstance().getDecoration(path, ".");
+    				if (deco != null)
     				{
     					if (deco.getIcon() != null) 
     					{

@@ -20,13 +20,10 @@ public class SystemEditor extends Thread
 
 		int opSysType = WebFileSys.getInstance().getOpSysType();
 		
-		if ((opSysType == WebFileSys.OS_OS2) || (opSysType == WebFileSys.OS_WIN))
-		{
-			cmd = WebFileSys.getInstance().getSystemEditor() + " \"" + fileName + "\"";
-		}
-		else
-		{
-			cmd = WebFileSys.getInstance().getSystemEditor() + " " + fileName;
+		if ((opSysType == WebFileSys.OS_OS2) || (opSysType == WebFileSys.OS_WIN)) {
+			cmd = WebFileSysConfig.getInstance().getSystemEditor() + " \"" + fileName + "\"";
+		} else {
+			cmd = WebFileSysConfig.getInstance().getSystemEditor() + " " + fileName;
 		}
 
 		try

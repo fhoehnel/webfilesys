@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -27,759 +28,373 @@ import org.xml.sax.SAXException;
 
 import de.webfilesys.util.XmlUtil;
 
-public class FileSysBookmarkManager extends Thread
-{
-    public static final String BOOKMARK_DIR    = "bookmarks";
+public class FileSysBookmarkManager extends Thread {
+
+    private static final Logger LOG = LogManager.getLogger(FileSysBookmarkManager.class);
+
+    public static final String BOOKMARK_DIR = "bookmarks";
 	
-    HashMap<String, Element> bookmarkTable = null;
+    HashMap<String, Element> bookmarkTable;
 
-    HashMap<String, HashMap<String, Element>> indexTable = null;
+    HashMap<String, HashMap<String, Element>> indexTable;
 
-    HashMap<String, Boolean> cacheDirty = null;
+    HashMap<String, Boolean> cacheDirty;
     
-    DocumentBuilder builder = null;
+    DocumentBuilder builder;
     
-    String bookmarkFileName = null;
-    
-    boolean shutdownFlag = false;
+    boolean shutdownFlag;
 
     private static FileSysBookmarkManager bookmarkManager = null;
     
-    private String bookmarkPath = null;
+    private final String bookmarkPath;
     
-    private FileSysBookmarkManager()
-    {
+    private FileSysBookmarkManager() {
     	bookmarkPath = WebFileSys.getInstance().getConfigBaseDir() + "/" + BOOKMARK_DIR;
-    	
-        bookmarkTable = new HashMap<String, Element>();
-        
-        indexTable = new HashMap<String, HashMap<String, Element>>();
-        
-        cacheDirty = new HashMap<String, Boolean>();
-
+        bookmarkTable = new HashMap<>();
+        indexTable = new HashMap<>();
+        cacheDirty = new HashMap<>();
         shutdownFlag = false;
-        
         builder = null;
 
-        try
-        {
+        try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             builder = factory.newDocumentBuilder();
-        }
-        catch (ParserConfigurationException pcex)
-        {
+        } catch (ParserConfigurationException pcex) {
             LogManager.getLogger(getClass()).error(pcex);
         }
 
         this.start();
     }
 
-    public static FileSysBookmarkManager getInstance()
-    {
-        if (bookmarkManager == null)
-        {
+    public static FileSysBookmarkManager getInstance() {
+        if (bookmarkManager == null) {
             bookmarkManager = new FileSysBookmarkManager();
         }
-
-        return(bookmarkManager);
+        return bookmarkManager;
     }
 
-    public Element getBookmarkList(String userid)
-    {
+    public Element getBookmarkList(String userid) {
         Element bookmarkList = bookmarkTable.get(userid);
-
-        if (bookmarkList!=null)
-        {
-            return(bookmarkList);
+        if (bookmarkList != null) {
+            return bookmarkList;
         }
     
-        bookmarkFileName = bookmarkPath + File.separator + userid + ".xml";
-
+        String bookmarkFileName = bookmarkPath + File.separator + userid + ".xml";
         File bookmarkFile = new File(bookmarkFileName);
-
-        if (bookmarkFile.exists() && bookmarkFile.isFile())
-        {
-            if (!bookmarkFile.canRead())
-            {
+        if (bookmarkFile.exists() && bookmarkFile.isFile()) {
+            if (!bookmarkFile.canRead()) {
                 LogManager.getLogger(getClass()).error("cannot read bookmark file for user " + userid);
-                return(null);
+                return null;
             }
-
             bookmarkList = readBookmarkList(bookmarkFile.getAbsolutePath());
-
-            if (bookmarkList != null)
-            {
+            if (bookmarkList != null) {
                 bookmarkTable.put(userid, bookmarkList);
                 createIndex(bookmarkList, userid);
-
-                return(bookmarkList);
+                return bookmarkList;
             }
         }
-        
-        return(null);
+        return null;
     }
 
-    Element readBookmarkList(String bookmarkFilePath)
-    {
-        File categoryFile = new File(bookmarkFilePath);
-
-        if ((!categoryFile.exists()) || (!categoryFile.canRead()))
-        {
+    Element readBookmarkList(String bookmarkFilePath) {
+        File bookmarkFile = new File(bookmarkFilePath);
+        if ((!bookmarkFile.exists()) || (!bookmarkFile.canRead())) {
             return(null);
         }
-        
         Document doc = null;
-
         FileInputStream fis = null;
-
-        try
-        {
-            fis = new FileInputStream(categoryFile);
-            
+        try {
+            fis = new FileInputStream(bookmarkFile);
             InputSource inputSource = new InputSource(fis);
-            
             inputSource.setEncoding("UTF-8");
-
-            if (LogManager.getLogger(getClass()).isDebugEnabled())
-            {
+            if (LogManager.getLogger(getClass()).isDebugEnabled()) {
                 LogManager.getLogger(getClass()).debug("reading bookmarks from " + bookmarkFilePath);
             }
-
             doc = builder.parse(inputSource);
-        }
-        catch (SAXException saxex)
-        {
+        } catch (SAXException | IOException saxex) {
             LogManager.getLogger(getClass()).error("failed to load category file : " + bookmarkFilePath, saxex);
-        }
-        catch (IOException ioex)
-        {
-            LogManager.getLogger(getClass()).error("failed to load category file : " + bookmarkFilePath, ioex);
-        }
-        finally 
-        {
-            if (fis != null)
-            {
-                try
-                {
+        } finally {
+            if (fis != null) {
+                try {
                     fis.close();
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                 }
             }
         }
-        
-        return(doc.getDocumentElement());
+        return doc.getDocumentElement();
     }
 
-    protected void createIndex(Element bookmarkList, String userid)
-    {
+    protected void createIndex(Element bookmarkList, String userid) {
         NodeList bookmarks = bookmarkList.getElementsByTagName("bookmark");
-
-        if (bookmarks == null)
-        {
+        if (bookmarks.getLength() == 0) {
             indexTable.remove(userid);
             return;
         }
-
         int listLength = bookmarks.getLength();
-
         HashMap<String, Element> userIndex = new HashMap<String, Element>();
-
-        for (int i = 0; i < listLength; i++)
-        {
-             Element bookmark =(Element) bookmarks.item(i);
-
+        for (int i = 0; i < listLength; i++) {
+             Element bookmark = (Element) bookmarks.item(i);
              String bookmarkId = bookmark.getAttribute("id");
-
-             if (bookmarkId!=null)
-             {
+             if (bookmarkId.isEmpty()) {
                  userIndex.put(bookmarkId, bookmark);
              }
         }
-
         indexTable.put(userid, userIndex);
     }
 
-    public void disposeBookmarkList(String userid)
-    {
-        Boolean dirtyFlag = cacheDirty.get(userid);
-
-        if ((dirtyFlag!=null) && dirtyFlag.booleanValue())
-        {
-            saveToFile(userid);
-        }
-
-        if (bookmarkTable.get(userid) != null)
-        {
-			LogManager.getLogger(getClass()).debug("disposing bookmark list of user " + userid);
-        }
-
-        bookmarkTable.remove(userid);
-        indexTable.remove(userid);
-    }
-
-    public void disposeAllBookmarks()
-    {
-        saveChangedUsers();
-
-        bookmarkTable = new HashMap<String, Element>();
-        indexTable = new HashMap<String, HashMap<String, Element>>();
-    }
-
-    public ArrayList<String> getBookmarkIds(String userid)
-    {
+    public ArrayList<FileSysBookmark> getListOfBookmarks(String userid) {
         Element bookmarkList = getBookmarkList(userid);
-
-        ArrayList<String> bookmarkIds = null;
-
-        if (bookmarkList == null)
-        {
-            // System.out.println("bookmark list for user " + userid + " does not exist!");
-            return(null);
-        }
-
-        NodeList bookmarks = bookmarkList.getElementsByTagName("bookmark");
-
-        if (bookmarks != null)
-        {
-            int listLength = bookmarks.getLength();
-
-            for (int i=0; i < listLength;i++)
-            {
-                Element bookmark = (Element) bookmarks.item(i);
-
-                if (bookmarkIds == null)
-                {
-                    bookmarkIds = new ArrayList<String>();
-                }
-
-                bookmarkIds.add(bookmark.getAttribute("id"));
-            }
-        }
-        else
-        {
-            LogManager.getLogger(getClass()).debug("no bookmarks found for userid " + userid);
-        }
-    
-        return(bookmarkIds);
-    }
-
-    public ArrayList<FileSysBookmark> getListOfBookmarks(String userid)
-    {
-        Element bookmarkList = getBookmarkList(userid);
-
         ArrayList<FileSysBookmark> listOfBookmarks = new ArrayList<FileSysBookmark>();
-
-        if (bookmarkList==null)
-        {
-            LogManager.getLogger(getClass()).debug("bookmark list for user " + userid + " does not exist!");
-
-            return(listOfBookmarks);
+        if (bookmarkList == null) {
+            LOG.debug("bookmark list for user " + userid + " does not exist!");
+            return listOfBookmarks;
         }
-
         NodeList bookmarks = bookmarkList.getElementsByTagName("bookmark");
-
-        if (bookmarks != null)
-        {
-            int listLength = bookmarks.getLength();
-            
-            for (int i=0; i < listLength; i++)
-            {
+        int listLength = bookmarks.getLength();
+        if (listLength > 0) {
+            for (int i = 0; i < listLength; i++) {
                 Element bookmark = (Element) bookmarks.item(i);
-
                 FileSysBookmark newBookmark = new FileSysBookmark(bookmark.getAttribute("id"));
-
                 newBookmark.setName(XmlUtil.getChildText(bookmark, "name"));
-
                 newBookmark.setPath(XmlUtil.getChildText(bookmark, "path"));
-
-                long creationTime = 0L;
-                
+                long creationTime;
                 String timeString = XmlUtil.getChildText(bookmark, "creationTime");
-                
-                try
-                {
+                try {
                     creationTime=Long.parseLong(timeString);
-                }
-                catch (NumberFormatException nfe)
-                {
-                    LogManager.getLogger(getClass()).warn(nfe);
+                } catch (NumberFormatException nfe) {
+                    LOG.warn(nfe);
                     creationTime=(new Date()).getTime();
                 }
-
                 newBookmark.setCreationTime(new Date(creationTime));
-
-                long updateTime=0L;
+                long updateTime;
                 timeString = XmlUtil.getChildText(bookmark, "updateTime");
-                try
-                {
+                try {
                     updateTime=Long.parseLong(timeString);
-                }
-                catch (NumberFormatException nfe)
-                {
-                    LogManager.getLogger(getClass()).warn(nfe);
+                } catch (NumberFormatException nfe) {
+                    LOG.warn(nfe);
                     updateTime=(new Date()).getTime();
                 }
-
                 newBookmark.setUpdateTime(new Date(updateTime));
-
                 listOfBookmarks.add(newBookmark);
             }
         }
-    
-        if (listOfBookmarks != null)
-        {
-            Collections.sort(listOfBookmarks, new FileSysBookmarkComparator());
-        }
-
-        return(listOfBookmarks);
+        Collections.sort(listOfBookmarks, new FileSysBookmarkComparator());
+        return listOfBookmarks;
     }
 
-    public FileSysBookmark getBookmark(String userid, String searchedId)
-    {
-        Element bookmark = getBookmarkElement(userid, searchedId);
-
-        if (bookmark == null)
-        {
-            LogManager.getLogger(getClass()).warn("bookmark for user " + userid + "id " + searchedId + " does not exist!");
-            return(null);
-        }
-
-        FileSysBookmark foundBookmark = new FileSysBookmark(bookmark.getAttribute("id"));
-
-        foundBookmark.setName(XmlUtil.getChildText(bookmark, "name"));
-
-        foundBookmark.setPath(XmlUtil.getChildText(bookmark, "path"));
-
-        long creationTime=0L;
-        String timeString = XmlUtil.getChildText(bookmark, "creationTime");
-        try
-        {
-            creationTime=Long.parseLong(timeString);
-        }
-        catch (NumberFormatException nfe)
-        {
-            LogManager.getLogger(getClass()).error(nfe);
-            creationTime=(new Date()).getTime();
-        }
-
-        foundBookmark.setCreationTime(new Date(creationTime));
-
-        long updateTime = 0L;
-        timeString = XmlUtil.getChildText(bookmark, "updateTime");
-        try
-        {
-             updateTime=Long.parseLong(timeString);
-        }
-        catch (NumberFormatException nfe)
-        {
-			LogManager.getLogger(getClass()).error(nfe);
-            updateTime=(new Date()).getTime();
-        }
-
-        foundBookmark.setUpdateTime(new Date(updateTime));
-
-        return(foundBookmark);
-    }
-
-    protected Element getBookmarkElement(String userid, String searchedId)
-    {
+    protected Element getBookmarkElement(String userid, String searchedId) {
         Element bookmarkList = getBookmarkList(userid);
-
-        if (bookmarkList == null)
-        {
+        if (bookmarkList == null) {
             return(null);
         }
-
-        Element bookmark = null;
-
+        Element bookmark;
         HashMap<String, Element> userIndex = indexTable.get(userid);
 
-        if (userIndex!=null)
-        {
-            bookmark = (Element) userIndex.get(searchedId);
-
-            if (bookmark != null)
-            {
+        if (userIndex != null) {
+            bookmark = userIndex.get(searchedId);
+            if (bookmark != null) {
                 return(bookmark);
             }
         }
-
-        LogManager.getLogger(getClass()).warn("bookmark with id " + searchedId + " not found in index");
-
+        LOG.warn("bookmark with id " + searchedId + " not found in index");
         NodeList bookmarks = bookmarkList.getElementsByTagName("bookmark");
-
-        if (bookmarks == null)
-        {
+        int listLength = bookmarks.getLength();
+        if (listLength == 0) {
             return(null);
         }
-
-        int listLength = bookmarks.getLength();
-
-        for (int i = 0; i < listLength; i++)
-        {
+        for (int i = 0; i < listLength; i++) {
             bookmark = (Element) bookmarks.item(i);
-
-            if (bookmark.getAttribute("id").equals(searchedId))
-            {
+            if (bookmark.getAttribute("id").equals(searchedId)) {
                 return(bookmark);
             }
         }
-    
-        return(null);
+        return null;
     }
 
-    protected Element createBookmarkList(String userid)
-    {
-        LogManager.getLogger(getClass()).debug("creating new bookmark list for user : " + userid);
-        
+    protected Element createBookmarkList(String userid) {
+        LOG.debug("creating new bookmark list for user : " + userid);
         Document doc = builder.newDocument();
-
         Element bookmarkListElement = doc.createElement("bookmarkList");
-
         Element lastIdElement = doc.createElement("lastId");
         XmlUtil.setElementText(lastIdElement,"0");
-
         bookmarkListElement.appendChild(lastIdElement);
-        
         doc.appendChild(bookmarkListElement);
-
         bookmarkTable.put(userid, bookmarkListElement);
-
-        indexTable.put(userid, new HashMap<String, Element>());
-        
-        return(bookmarkListElement);
+        indexTable.put(userid, new HashMap<>());
+        return bookmarkListElement;
     }
 
-    public Element createBookmark(String userid, FileSysBookmark newBookmark)
-    {
+    public void createBookmark(String userid, FileSysBookmark newBookmark) {
         Element bookmarkList = getBookmarkList(userid);
-
-        if (bookmarkList == null)
-        {
+        if (bookmarkList == null) {
             bookmarkList = createBookmarkList(userid);
         }
-
-        Element newElement = null;
-        
-        synchronized (bookmarkList)
-        {
+        Element newElement;
+        synchronized (bookmarkList) {
             Document doc = bookmarkList.getOwnerDocument();
-
             newElement = doc.createElement("bookmark");
-
             newElement.appendChild(doc.createElement("name"));
             newElement.appendChild(doc.createElement("path"));
             newElement.appendChild(doc.createElement("creationTime"));
             newElement.appendChild(doc.createElement("updateTime"));
-
             bookmarkList.appendChild(newElement);
-
             int lastId = getLastId(userid);
-
             lastId++;
-
             setLastId(userid, lastId);
-
             String newIdString = Integer.toString(lastId);
-
             newBookmark.setId(newIdString);
             newElement.setAttribute("id", newIdString);
-            
             HashMap<String, Element> userIndex = indexTable.get(userid);
             userIndex.put(newIdString, newElement);
         }
-
         updateBookmark(userid, newBookmark);
-
-        return(newElement);
     }
 
-    protected int getLastId(String userid)
-    {
+    protected int getLastId(String userid) {
         Element bookmarkList = getBookmarkList(userid);
-
-        if (bookmarkList == null)
-        {
+        if (bookmarkList == null) {
             return(-1);
         }
-
         String lastIdString = XmlUtil.getChildText(bookmarkList, "lastId").trim();
-
-        int lastId=0;
-        try
-        {
-            lastId=Integer.parseInt(lastIdString);
+        int lastId = 0;
+        try {
+            lastId = Integer.parseInt(lastIdString);
+        } catch (NumberFormatException nfe) {
+            LOG.warn(nfe);
         }
-        catch (NumberFormatException nfe)
-        {
-            LogManager.getLogger(getClass()).warn(nfe);
-        }
-
-        return(lastId);
+        return lastId;
     }
 
-    protected void setLastId(String userid, int lastId)
-    {
+    protected void setLastId(String userid, int lastId) {
         Element bookmarkList = getBookmarkList(userid);
-
-        if (bookmarkList == null)
-        {
+        if (bookmarkList == null) {
             return;
         }
-
         XmlUtil.setChildText(bookmarkList, "lastId", Integer.toString(lastId));
     }
 
-    public Element updateBookmark(String userid, FileSysBookmark changedBookmark)
-    {
+    public void updateBookmark(String userid, FileSysBookmark changedBookmark) {
         Element bookmarkListElement = getBookmarkList(userid);
-
-        synchronized (bookmarkListElement)
-        {
+        synchronized (bookmarkListElement) {
             Element bookmarkElement = getBookmarkElement(userid, changedBookmark.getId());
-
-            if (bookmarkElement == null)
-            {
-                LogManager.getLogger(getClass()).warn("updateBookmark: bookmark for user " + userid + " with id " + changedBookmark.getId() +  " not found");
-                return(null);
+            if (bookmarkElement == null) {
+                LOG.warn("updateBookmark: bookmark for user " + userid + " with id " + changedBookmark.getId() +  " not found");
+                return;
             }
-
             XmlUtil.setChildText(bookmarkElement, "name", changedBookmark.getName(), true);
             XmlUtil.setChildText(bookmarkElement, "path", changedBookmark.getPath(), true);
 			XmlUtil.setChildText(bookmarkElement, "creationTime", "" + changedBookmark.getCreationTime().getTime());
 			XmlUtil.setChildText(bookmarkElement, "updateTime", "" + changedBookmark.getUpdateTime().getTime());
-
             cacheDirty.put(userid, new Boolean(true));
-            
-            return(bookmarkElement);
         }
     }
 
-    public Element getBookmarkElementByName(String uid, String searchedName)
-    {
+    public Element getBookmarkElementByName(String uid, String searchedName) {
 		Element bookmarkListElement = getBookmarkList(uid);
-		
-		if (bookmarkListElement == null)
-		{
+        if (bookmarkListElement == null) {
 			return(null);
 		}
-
-		synchronized (bookmarkListElement)
-		{
+		synchronized (bookmarkListElement) {
 			NodeList bookmarks = bookmarkListElement.getElementsByTagName("bookmark");
-
-			if (bookmarks == null)
-			{
-				return(null);
+            int listLength = bookmarks.getLength();
+			if (listLength == 0) {
+				return null;
 			}
-
-			int listLength = bookmarks.getLength();
-
-			for (int i = 0; i < listLength; i++)
-			{
+			for (int i = 0; i < listLength; i++) {
 				Element bookmarkElement = (Element) bookmarks.item(i);
-				
 				String bookmarkName = XmlUtil.getChildText(bookmarkElement, "name");
-				
-				if ((bookmarkName != null) && bookmarkName.equals(searchedName))
-				{
+				if (bookmarkName.equals(searchedName)) {
 					return(bookmarkElement);
 				}
 			}
 		}
-		
-		return(null);
-    }
-    
-    public FileSysBookmark getBookmarkByName(String uid, String searchedName)
-    {
-    	Element bookmarkElement = getBookmarkElementByName(uid, searchedName);
-    	
-    	if (bookmarkElement == null)
-    	{
-    		return(null);
-    	}
-
-    	FileSysBookmark newBookmark = new FileSysBookmark(bookmarkElement.getAttribute("id"));
-
-		newBookmark.setName(XmlUtil.getChildText(bookmarkElement, "name"));
-
-		newBookmark.setPath(XmlUtil.getChildText(bookmarkElement, "path"));
-
-		long creationTime = 0L;
-                
-		String timeString = XmlUtil.getChildText(bookmarkElement, "creationTime");
-                
-		try
-		{
-			creationTime=Long.parseLong(timeString);
-		}
-		catch (NumberFormatException nfe)
-		{
-			LogManager.getLogger(getClass()).warn(nfe);
-			creationTime=(new Date()).getTime();
-		}
-
-		newBookmark.setCreationTime(new Date(creationTime));
-
-		long updateTime=0L;
-		timeString = XmlUtil.getChildText(bookmarkElement, "updateTime");
-		try
-		{
-			updateTime=Long.parseLong(timeString);
-		}
-		catch (NumberFormatException nfe)
-		{
-			LogManager.getLogger(getClass()).warn(nfe);
-			updateTime=(new Date()).getTime();
-		}
-
-		newBookmark.setUpdateTime(new Date(updateTime));
-		
-		return(newBookmark);
+		return null;
     }
 
-    public void removeBookmark(String userid, String searchedId)
-    {
+    public void removeBookmark(String userid, String searchedId) {
         Element bookmarkListElement = getBookmarkList(userid);
-
-        synchronized (bookmarkListElement)
-        {
+        synchronized (bookmarkListElement) {
             Element bookmarkElement = getBookmarkElement(userid, searchedId);
-
-            if (bookmarkElement == null)
-            {
-                LogManager.getLogger(getClass()).warn("bookmark for user " + userid + " id " + searchedId + " not found");
+            if (bookmarkElement == null) {
+                LOG.warn("bookmark for user " + userid + " id " + searchedId + " not found");
                 return;
             }
-
             Node bookmarkList = bookmarkElement.getParentNode();
-
-            if (bookmarkList!=null)
-            {
+            if (bookmarkList != null) {
                 HashMap<String, Element> userIndex = indexTable.get(userid);
                 userIndex.remove(bookmarkElement.getAttribute("id"));
-                
                 bookmarkList.removeChild(bookmarkElement);
-
                 cacheDirty.put(userid, new Boolean(true));
             }
         }
-
     }
 
-    protected synchronized void saveToFile(String userid)
-    {
+    protected synchronized void saveToFile(String userid) {
         Element bookmarkListElement = getBookmarkList(userid);
-
-        if (bookmarkListElement == null)
-        {
-            LogManager.getLogger(getClass()).warn("bookmark list for user " + userid + " does not exist");
+        if (bookmarkListElement == null) {
+            LOG.warn("bookmark list for user " + userid + " does not exist");
             return;
         }
-
-        if (LogManager.getLogger(getClass()).isDebugEnabled())
-        {
-            LogManager.getLogger(getClass()).debug("saving bookmarks for user " + userid);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("saving bookmarks for user " + userid);
         }
-        
-        synchronized (bookmarkListElement)
-        {
+        synchronized (bookmarkListElement) {
             String xmlFileName = bookmarkPath + File.separator + userid + ".xml";
-
             OutputStreamWriter xmlOutFile = null;
-
-            try
-            {
+            try {
                 FileOutputStream fos = new FileOutputStream(xmlFileName);
-                
-                xmlOutFile = new OutputStreamWriter(fos, "UTF-8");
-                
+                xmlOutFile = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
                 XmlUtil.writeToStream(bookmarkListElement, xmlOutFile);
-                
                 xmlOutFile.flush();
-            }
-            catch (IOException io1)
-            {
-                LogManager.getLogger(getClass()).error("error saving bookmark file " + xmlFileName, io1);
-            }
-            finally
-            {
-                if (xmlOutFile != null)
-                {
-                    try 
-                    {
+            } catch (IOException io1) {
+                LOG.error("error saving bookmark file " + xmlFileName, io1);
+            } finally {
+                if (xmlOutFile != null) {
+                    try {
                         xmlOutFile.close();
-                    }
-                    catch (Exception ex) 
-                    {
+                    } catch (Exception ex) {
                     }
                 }
             }
         }
     }
 
-    public synchronized void saveChangedUsers()
-    {
+    public synchronized void saveChangedUsers() {
         Set<String> cacheUserList = cacheDirty.keySet();
-
         for (String userid : cacheUserList) {
-
             boolean dirtyFlag = cacheDirty.get(userid).booleanValue();
-
-            if (dirtyFlag)
-            {
+            if (dirtyFlag) {
                 saveToFile(userid);
-                cacheDirty.put(userid, new Boolean(false));
+                cacheDirty.put(userid, Boolean.FALSE);
             }
         }
     }
 
-    public void deleteUser(String userid)
-    {
+    public void deleteUser(String userid) {
         bookmarkTable.remove(userid);
         indexTable.remove(userid);
-        
         String bookmarkFileName = bookmarkPath + File.separator + userid + ".xml";
-        
         File bookmarkFile = new File(bookmarkFileName);
-        
-        if (!bookmarkFile.exists() || !bookmarkFile.isFile())
-        {
+        if (!bookmarkFile.exists() || !bookmarkFile.isFile()) {
             return;
         }
-        
-        if (bookmarkFile.delete())
-        {
-            if (LogManager.getLogger(getClass()).isDebugEnabled())
-            {
-                LogManager.getLogger(getClass()).debug("bookmark file deleted for user " + userid);
-            }
-            else
-            {
-                LogManager.getLogger(getClass()).warn("failed to delete bookmark file for user " + userid);
+        if (bookmarkFile.delete()) {
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("bookmark file deleted for user " + userid);
+            } else {
+                LOG.warn("failed to delete bookmark file for user " + userid);
             }
         }
     }
     
-	public synchronized void run()
-	{
+	public synchronized void run() {
 		boolean stop = false;
-
-		while (!stop)
-		{
-			try
-			{
+		while (!stop) {
+			try {
 				this.wait(120000);
-
 				saveChangedUsers();
-			}
-			catch (InterruptedException e)
-			{
+			} catch (InterruptedException e) {
 				saveChangedUsers();
-				
 				stop = true;
 			}
 		}
