@@ -19,10 +19,11 @@
   <body onload="initUserRegistration()">
     <div class="centerBox">
       <div class="registrationBox">
-        <table width="100%" cellspacing="0" cellpadding="5" border="0">
+        <table class="registrationBox">
           <tr>
-            <td style="padding-left:10px;vertical-align:top;" class="loginTitle"><img border="0" src="/webfilesys/images/logo.gif">
-              <div style="width:100%;padding-top:10px;padding-left:0px;">WebFileSys
+            <td style="padding-left:10px;vertical-align:top;" class="loginTitle">
+              <img src="/webfilesys/images/logo.gif" alt="WebFileSys Logo"/>
+              <div style="margin-top:10px">WebFileSys
                 <br/><br/>
                 <span class="selfRegistrationSubTitle" resource="label.regtitle"></span>
               </div>
@@ -32,7 +33,7 @@
                 <input value="registerSelf" name="command" type="hidden"/>
                 <input value="webspace" name="userRole" type="hidden"/>
 
-                <table border="0">
+                <table class="registrationForm">
                   <tr>
                     <td class="formParm1 mandatory" resource="label.login"></td><td class="formParm2"><input id="userName" style="width:150px" maxlength="30" size="20" name="username" type="text"></td>
                   </tr>

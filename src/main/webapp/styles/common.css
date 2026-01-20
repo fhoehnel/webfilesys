@@ -86,21 +86,6 @@ div.loginBox {
     box-shadow: 5px 5px 5px #666666;
 }
 
-div.registrationBox {
-    width: 520px;
-    height: 400px;
-    position: relative;
-    top: -200px;
-    left: -260px;
-    background-color: #ffffe0;
-    border-style: solid;
-    border-width: 1px;
-    border-color: black;
-    border-radius: 20px;
-    box-shadow: 5px 5px 5px #666666;
-    padding: 20px;
-}
-
 div.msgBox {
     width: 260px;
     height: 100px;
@@ -112,7 +97,7 @@ div.msgBox {
     border-color: black;
     font-size: 13px;
     color: black;
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
@@ -130,7 +115,7 @@ div.promptBox {
     border-color: #a0a0a0;
     font-size: 13px;
     color: black;
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
@@ -150,7 +135,7 @@ div.promptHead {
     border-bottom-color:#a0a0a0;
     font-size:13px;
     color:black;
-    font-family:Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-weight:bold;
     text-align:center;
     vertical-align:middle;
@@ -180,14 +165,14 @@ div.uploadStatus {
 }
 
 div.uploadStatusText {
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-size: 13px;
     color: black;
     font-weight: normal;
 }
 
 div.uploadStatusCurrentFile {
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     font-weight: bold;
     font-size: 13px;
 	margin: 12px auto 12px auto;
@@ -211,9 +196,9 @@ div.driveUsageBar {
 }
 
 td.loginTitle {
-    font-size: 16px;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 18px;
     color: navy;
-    font-weight: bold;
 }
 
 span.selfRegistrationSubTitle {
@@ -2096,7 +2081,7 @@ canvas.gpsProfileLegend {
 div.gpsChartText,
 td.gpsChartText {
     font-size: 13px;
-    font-family: Arial,Helvetica;
+    font-family: Arial,Helvetica,sans-serif;
     color: black;
 }
 
@@ -2128,7 +2113,7 @@ div.dropZone {
 
 div.dragDropHint {
 	color: #808080;
-	font-family: Arial,Helvetica;
+	font-family: Arial,Helvetica,sans-serif;
 	font-size: 16pt;
 	font-weight: bold;
 	margin-top: 45px;
@@ -2155,7 +2140,7 @@ input[type=file] {
 
 li.selectedFile {
 	color: navy;
-	font-family: Arial,Helvetica;
+	font-family: Arial,Helvetica,sans-serif;
 	font-size: 10pt;
 }
 
