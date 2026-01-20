@@ -943,6 +943,10 @@ td.formParm1 {
     padding-bottom:4px;
 }
 
+td.formParm1.mandatory {
+    font-weight: bold;
+}
+
 td.formParm2 {
     color:navy;
     font-size:13px;

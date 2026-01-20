@@ -32,8 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
-import de.webfilesys.gui.api.CheckTextFileSizeHandler;
-import de.webfilesys.gui.api.CreateBookmarkHandler;
+import de.webfilesys.gui.ajax.*;
+import de.webfilesys.gui.api.*;
 import de.webfilesys.gui.xsl.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -54,81 +54,6 @@ import de.webfilesys.gui.admin.LoginLogoutHistoryHandler;
 import de.webfilesys.gui.admin.SessionListHandler;
 import de.webfilesys.gui.admin.UserListRequestHandler;
 import de.webfilesys.gui.admin.ViewLogRequestHandler;
-import de.webfilesys.gui.ajax.AddAudioToVideoHandler;
-import de.webfilesys.gui.ajax.AjaxCheckFileChangeHandler;
-import de.webfilesys.gui.ajax.AjaxCheckFileExistHandler;
-import de.webfilesys.gui.ajax.AjaxCheckFolderExistHandler;
-import de.webfilesys.gui.ajax.AjaxCheckForGeoDataHandler;
-import de.webfilesys.gui.ajax.AjaxCheckGrepAllowedHandler;
-import de.webfilesys.gui.ajax.AjaxDeleteDirPromptHandler;
-import de.webfilesys.gui.ajax.AjaxDeleteFilePromptHandler;
-import de.webfilesys.gui.ajax.AjaxGrepParamsHandler;
-import de.webfilesys.gui.ajax.AjaxSendEmailHandler;
-import de.webfilesys.gui.ajax.AnyVideoConcatHandler;
-import de.webfilesys.gui.ajax.AutoImageRotateHandler;
-import de.webfilesys.gui.ajax.CheckPasteOverwriteHandler;
-import de.webfilesys.gui.ajax.CheckUploadConflictHandler;
-import de.webfilesys.gui.ajax.CutAudioHandler;
-import de.webfilesys.gui.ajax.DeleteFileHandler;
-import de.webfilesys.gui.ajax.DeshakeVideoHandler;
-import de.webfilesys.gui.ajax.DiscardSearchResultHandler;
-import de.webfilesys.gui.ajax.EditConvertVideoHandler;
-import de.webfilesys.gui.ajax.ExtractVideoFrameHandler;
-import de.webfilesys.gui.ajax.GetFileDescriptionHandler;
-import de.webfilesys.gui.ajax.GetPictureDimensionsHandler;
-import de.webfilesys.gui.ajax.GetVideoDimensionsHandler;
-import de.webfilesys.gui.ajax.MultiVideoAddSilentAudioHandler;
-import de.webfilesys.gui.ajax.MultiVideoConcatHandler;
-import de.webfilesys.gui.ajax.MultiVideoDeshakeHandler;
-import de.webfilesys.gui.ajax.PollForDirChangeHandler;
-import de.webfilesys.gui.ajax.PollForFolderTreeChangeHandler;
-import de.webfilesys.gui.ajax.RefreshDriveListHandler;
-import de.webfilesys.gui.ajax.RenamePictureHandler;
-import de.webfilesys.gui.ajax.ResetExifOrientationHandler;
-import de.webfilesys.gui.ajax.SlideshowToVideoHandler;
-import de.webfilesys.gui.ajax.TestSubdirExistHandler;
-import de.webfilesys.gui.ajax.TextOnVideoHandler;
-import de.webfilesys.gui.ajax.VideoAddSilentAudioHandler;
-import de.webfilesys.gui.ajax.VideoDurationSumHandler;
-import de.webfilesys.gui.ajax.VideoFadeAudioHandler;
-import de.webfilesys.gui.ajax.VideoLocalPlayerHandler;
-import de.webfilesys.gui.ajax.XformImageHandler;
-import de.webfilesys.gui.ajax.XmlAjaxSubDirHandler;
-import de.webfilesys.gui.ajax.XmlAssociatedProgramHandler;
-import de.webfilesys.gui.ajax.XmlCancelSearchHandler;
-import de.webfilesys.gui.ajax.XmlCheckLosslessHandler;
-import de.webfilesys.gui.ajax.XmlClearThumbsHandler;
-import de.webfilesys.gui.ajax.XmlCoBrowsingClientImageHandler;
-import de.webfilesys.gui.ajax.XmlCoBrowsingExitHandler;
-import de.webfilesys.gui.ajax.XmlCoBrowsingMasterImageHandler;
-import de.webfilesys.gui.ajax.XmlCollapseDirHandler;
-import de.webfilesys.gui.ajax.XmlCopyDirHandler;
-import de.webfilesys.gui.ajax.XmlCreateThumbsHandler;
-import de.webfilesys.gui.ajax.XmlCutCopyHandler;
-import de.webfilesys.gui.ajax.XmlDeleteDirHandler;
-import de.webfilesys.gui.ajax.XmlDirStatsHandler;
-import de.webfilesys.gui.ajax.XmlFileAgeStatsHandler;
-import de.webfilesys.gui.ajax.XmlFileSizeStatsHandler;
-import de.webfilesys.gui.ajax.XmlFileTypeStatsHandler;
-import de.webfilesys.gui.ajax.XmlLocalEditorHandler;
-import de.webfilesys.gui.ajax.XmlMoveDirHandler;
-import de.webfilesys.gui.ajax.XmlMultiCutCopyHandler;
-import de.webfilesys.gui.ajax.XmlMultiImageCutCopyHandler;
-import de.webfilesys.gui.ajax.XmlRemoveDirHandler;
-import de.webfilesys.gui.ajax.XmlRotateImagePromptHandler;
-import de.webfilesys.gui.ajax.XmlRunUnixCmdHandler;
-import de.webfilesys.gui.ajax.XmlSaveRemoteEditorHandler;
-import de.webfilesys.gui.ajax.XmlSelectCompFolderHandler;
-import de.webfilesys.gui.ajax.XmlSelectDiffFileHandler;
-import de.webfilesys.gui.ajax.XmlSelectSyncFolderHandler;
-import de.webfilesys.gui.ajax.XmlSetScreenSizeHandler;
-import de.webfilesys.gui.ajax.XmlSlideShowImageHandler;
-import de.webfilesys.gui.ajax.XmlSwitchWatchFolderHandler;
-import de.webfilesys.gui.ajax.XmlTouchFileHandler;
-import de.webfilesys.gui.ajax.XmlUploadStatusHandler;
-import de.webfilesys.gui.ajax.XmlWinCmdLineHandler;
-import de.webfilesys.gui.ajax.XslSwitchReadonlyHandler;
-import de.webfilesys.gui.ajax.XslWatchFolderHandler;
 import de.webfilesys.gui.ajax.calendar.XmlChangeAppointmentHandler;
 import de.webfilesys.gui.ajax.calendar.XmlCheckAlarmHandler;
 import de.webfilesys.gui.ajax.calendar.XmlCreateAppointmentHandler;
@@ -146,7 +71,6 @@ import de.webfilesys.gui.user.ActivateUserRequestHandler;
 import de.webfilesys.gui.user.AddCommentRequestHandler;
 import de.webfilesys.gui.user.CancelPublishRequestHandler;
 import de.webfilesys.gui.user.ClipboardPasteRequestHandler;
-import de.webfilesys.gui.api.CloneFileRequestHandler;
 import de.webfilesys.gui.user.CloneFolderRequestHandler;
 import de.webfilesys.gui.user.CopyLinkRequestHandler;
 import de.webfilesys.gui.user.CreateDirRequestHandler;
@@ -189,7 +113,6 @@ import de.webfilesys.gui.user.PasteAsLinkRequestHandler;
 import de.webfilesys.gui.user.PublishMailRequestHandler;
 import de.webfilesys.gui.user.PublishRequestHandler;
 import de.webfilesys.gui.user.RateVotingHandler;
-import de.webfilesys.gui.api.RenameFileRequestHandler;
 import de.webfilesys.gui.user.RenameLinkRequestHandler;
 import de.webfilesys.gui.user.RenameToExifDateHandler;
 import de.webfilesys.gui.user.RenameVideoRequestHandler;
@@ -514,7 +437,7 @@ public class WebFileSysServlet extends ServletBase {
     	}
         
         if (command.equals("registerSelf")) {
-			(new XslSelfRegistrationHandler(req, resp, req.getSession(true), output)).handleRequest(); 
+            (new SelfRegistrationHandler(req, resp, null, output, null)).handleRequest();
     		return(true);
     	}
         
@@ -532,8 +455,27 @@ public class WebFileSysServlet extends ServletBase {
 		    (new VersionInfoRequestHandler(output)).handleRequest(); 
     		return(true);
     	}
-        
-    	return(false);
+
+        if (command.equals("languages")) {
+            (new GetAvailableLanguagesHandler(req, resp, null, output, null)).handleRequest();
+            return true;
+        }
+
+        if (command.equals("existUser")) {
+            (new CheckUserExistHandler(req, resp, null, output, null)).handleRequest();
+            return true;
+        }
+        if (command.equals("checkOpenRegistration")) {
+            (new CheckOpenRegistrationHandler(req, resp, null, output, null)).handleRequest();
+            return true;
+        }
+
+        if (command.equals("skins")) {
+            (new GetLayoutSkinsHandler(req, resp, null, output, null)).handleRequest();
+            return true;
+        }
+
+        return(false);
     }
 
     private boolean handleCommand(String command, String userid,

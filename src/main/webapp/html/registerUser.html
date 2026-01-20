@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta content="0" http-equiv="expires">
+    <link href="/webfilesys/styles/common.css" type="text/css" rel="stylesheet">
+    <link href="/webfilesys/styles/registration.css" type="text/css" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/webfilesys/styles/skins/fmweb.css">
+    <link href="/webfilesys/images/favicon.ico" rel="shortcut icon">
+    <title resource="label.regtitle"></title>
+
+    <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/registerUser.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/webfilesys/servlet?command=getResourceBundle"></script>
+  </head>
+  <body onload="initUserRegistration()">
+    <div class="centerBox">
+      <div class="registrationBox">
+        <table width="100%" cellspacing="0" cellpadding="5" border="0">
+          <tr>
+            <td style="padding-left:10px;vertical-align:top;" class="loginTitle"><img border="0" src="/webfilesys/images/logo.gif">
+              <div style="width:100%;padding-top:10px;padding-left:0px;">WebFileSys
+                <br/><br/>
+                <span class="selfRegistrationSubTitle" resource="label.regtitle"></span>
+              </div>
+            </td>
+            <td width="65%">
+              <form id="registrationForm" style="margin:0px" action="/webfilesys/servlet" method="POST" name="form1" accept-charset="utf-8">
+                <input value="registerSelf" name="command" type="hidden"/>
+                <input value="webspace" name="userRole" type="hidden"/>
+
+                <table border="0">
+                  <tr>
+                    <td class="formParm1 mandatory" resource="label.login"></td><td class="formParm2"><input id="userName" style="width:150px" maxlength="30" size="20" name="username" type="text"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1 mandatory" resource="label.passwordRegistration"></td><td class="formParm2"><input id="password" style="width:150px" maxlength="30" size="20" name="password" type="password"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1 mandatory" resource="label.passwordconfirm"></td><td class="formParm2"><input id="pwconfirm" style="width:150px" maxlength="30" size="20" name="pwconfirm" type="password"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1" resource="label.ropassword"></td><td class="formParm2"><input id="ropassword" style="width:150px" maxlength="30" size="20" name="ropassword" type="password"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1" resource="label.ropwconfirm"></td><td class="formParm2"><input id="ropwconfirm" style="width:150px" maxlength="30" size="20" name="ropwconfirm" type="password"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1" resource="label.firstname"></td><td class="formParm2"><input style="width:150px" maxlength="30" size="20" name="firstName" type="text"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1" resource="label.lastname"></td><td class="formParm2"><input style="width:150px" maxlength="30" size="20" name="lastName" type="text"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1 mandatory" resource="label.email"></td><td class="formParm2"><input id="email" style="width:150px" maxlength="120" size="20" name="email" type="text"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1" resource="label.phone"></td><td class="formParm2"><input style="width:150px" maxlength="30" size="20" name="phone" type="text"></td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1 mandatory" resource="label.language"></td>
+                    <td class="formParm2">
+                      <select id="languageSelection" size="1" name="language"></select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="formParm1 mandatory" resource="label.css"></td>
+                    <td class="formParm2">
+                      <select id="skinSelection" size="1" name="css"></select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="formButton" align="left">
+                      <input type="button" onclick="validateAndSubmitRegistration()" resource="button.register"/>
+                    </td>
+                    <td class="formButton" align="right">
+                      <input type="button" onclick="window.location.href='/webfilesys/servlet'" resource="button.cancel"/>
+                    </td>
+                  </tr>
+                </table>
+              </form>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+      setBundleResources();
+  </script>
+</html>

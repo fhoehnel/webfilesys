@@ -704,6 +704,7 @@ label.registerself=I am a new user
 label.editregistration=Edit user data
 label.regtitle=new user registration
 label.login=userid/login
+label.passwordRegistration=password
 label.passwordconfirm=confirm password
 label.ropassword=read-only password
 label.ropwconfirm=confirm read-only password

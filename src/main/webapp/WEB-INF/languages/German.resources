@@ -707,6 +707,7 @@ label.registerself=Als neuer Nutzer registrieren
 label.editregistration=Registrierungsdaten ändern
 label.regtitle=Registrierung als neuer Nutzer
 label.login=Nutzername
+label.passwordRegistration=Passwort
 label.passwordconfirm=Passwort-Bestätigung
 label.ropassword=Readonly-Passwort
 label.ropwconfirm=Readonly-Passwort Bestätigung
