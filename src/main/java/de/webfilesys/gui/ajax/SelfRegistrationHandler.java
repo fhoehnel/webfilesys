@@ -173,8 +173,8 @@ public class SelfRegistrationHandler extends XmlRequestHandlerBase {
 
     private boolean validatePasswords(String password, String pwconfirm, boolean emptyAllowed) {
         if (emptyAllowed) {
-            if (CommonUtils.isEmpty(password) && CommonUtils.isEmpty(pwconfirm)) {
-                return true;
+            if (CommonUtils.isEmpty(password)) {
+                return CommonUtils.isEmpty(pwconfirm);
             }
         } else {
             if (CommonUtils.isEmpty(password)) {

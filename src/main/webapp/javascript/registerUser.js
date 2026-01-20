@@ -47,7 +47,7 @@ function validateAndSubmitRegistration() {
     if (!validatePasswords("password", "pwconfirm")) {
         return;
     }
-    if (document.getElementById("ropassword").value.length > 0) {
+    if (document.getElementById("ropassword").value.length > 0 || document.getElementById("ropwconfirm").value.length > 0) {
         if (!validatePasswords("ropassword", "ropwconfirm")) {
             return;
         }
