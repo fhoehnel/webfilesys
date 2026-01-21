@@ -808,13 +808,6 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
 
-        if (command.equals("mkdirPrompt"))
-        {
-		    (new XslCreateFolderPromptHandler(req, resp, session, output, userid)).handleRequest(); 
-
-            return(true);
-        }
-
         if (command.equals("mkdir"))
         {
 		    (new CreateDirRequestHandler(req, resp, session, output, userid, requestIsLocal)).handleRequest(); 

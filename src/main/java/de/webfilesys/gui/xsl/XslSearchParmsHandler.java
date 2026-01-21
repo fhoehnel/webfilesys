@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.util.CommonUtils;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -55,7 +56,7 @@ public class XslSearchParmsHandler extends XslRequestHandlerBase
 			return;
 		}
 
-		String relativePath = this.getHeadlinePath(currentPath);
+		String shortPath = CommonUtils.shortName(this.getHeadlinePath(currentPath), 64);
 
 		Element searchParmsElement = doc.createElement("searchParms");
 			
@@ -66,7 +67,7 @@ public class XslSearchParmsHandler extends XslRequestHandlerBase
 		doc.insertBefore(xslRef, searchParmsElement);
 
 		XmlUtil.setChildText(searchParmsElement, "currentPath", currentPath, false);
-		XmlUtil.setChildText(searchParmsElement, "relativePath", relativePath, false);
+		XmlUtil.setChildText(searchParmsElement, "relativePath", shortPath, false);
 		
 		CategoryManager catMgr = CategoryManager.getInstance();
         

@@ -734,6 +734,7 @@ error.duplicatelogin=an user with this name already exists
 error.email=a valid e-mail address is required
 error.invalidpassword=the current password is invalid
 error.missingLanguage=language is required
+error.emptyFolderName=the folder name must not be empty
 
 # MP3 labels
 label.editmp3=Edit MP3 Tags

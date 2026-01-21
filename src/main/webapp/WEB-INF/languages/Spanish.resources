@@ -737,6 +737,7 @@ error.duplicatelogin=el nombre de usuario ya existe
 error.email=se requiere una dirección e-mail válida
 error.invalidpassword=la contraseña no es válida
 error.missingLanguage=se requiere la lengua
+error.emptyFolderName=el nombre de la carpeta no debe estar vacío
 
 # MP3 labels
 label.editmp3=Editar MP3 Tags

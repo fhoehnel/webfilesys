@@ -19,7 +19,7 @@ function folderContextMenu(path, folderName) {
 	addContextMenuEntry(menuDiv, "showPictureThumbs()", resourceBundle["menuThumbnails"]);
 
     if (readonly != 'true') {
-    	addContextMenuEntry(menuDiv, "mkdir('" + scriptPreparedPath + "')", resourceBundle["menuCreateDir"]);
+    	addContextMenuEntry(menuDiv, "createNewFolder('" + scriptPreparedPath + "')", resourceBundle["menuCreateDir"]);
     }
 
     if (((serverOS == 'win') && 

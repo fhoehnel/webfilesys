@@ -363,19 +363,18 @@ function validateCloneFolderName() {
 
 function validateNewFolderName(errorMsg) {
     var newDirName = document.mkdirForm.NewDirName.value;
-
     if (checkFileNameSyntax(newDirName)) {
         if (newDirName != '') {
             document.mkdirForm.submit();
+            return;
+        } else {
+            errorMsg = resourceBundle["error.emptyFolderName"];
         }
-        return;
     }
-    
-    alert(errorMsg);
-
-    document.mkdirForm.NewDirName.focus();
-
-    document.mkdirForm.NewDirName.select();
+    customAlert(errorMsg, null, () => {
+        document.mkdirForm.NewDirName.focus();
+        document.mkdirForm.NewDirName.select();
+    });
 }
 
 function validateBookmarkName(errorMsg) {
@@ -513,7 +512,7 @@ function centeredDialog(xmlUrl, xslUrl, boxWidth, boxHeight, callback) {
     });
 }
 
-function showPromptDialog(htmlFragmentURL, boxWidth, callback) {
+function showPromptDialog(htmlFragmentURL, boxWidth, callback, boxHeight) {
     var promptBox = document.getElementById("prompt");
         
     hideMenu();        
@@ -521,7 +520,10 @@ function showPromptDialog(htmlFragmentURL, boxWidth, callback) {
     if (boxWidth) {    
         promptBox.style.width = boxWidth + 'px';
     }
-    
+    if (boxHeight) {
+        promptBox.style.height = boxHeight + 'px';
+    }
+
     xmlRequest(htmlFragmentURL, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
