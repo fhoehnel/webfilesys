@@ -74,7 +74,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
             MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
             if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
-                metaInfMgr.updateLinksAfterMove(filePath, null, uid);
+                metaInfMgr.removeLinksToFile(filePath);
             }
 
             metaInfMgr.removeMetaInf(filePath);

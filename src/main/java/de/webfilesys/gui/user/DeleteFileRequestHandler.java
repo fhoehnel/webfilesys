@@ -108,7 +108,7 @@ public class DeleteFileRequestHandler extends UserRequestHandler
 
             if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
             {
-                metaInfMgr.updateLinksAfterMove(filePath, null, uid);
+                metaInfMgr.removeLinksToFile(filePath);
             }
             
             metaInfMgr.removeMetaInf(actPath,fileName);

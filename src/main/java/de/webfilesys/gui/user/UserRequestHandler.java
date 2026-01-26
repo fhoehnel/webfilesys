@@ -304,7 +304,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
                         LogManager.getLogger(getClass()).warn("cannot delete " + file.getAbsolutePath());
                     } else {
                         if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
-                            MetaInfManager.getInstance().updateLinksAfterMove(absolutePath, null, uid);
+                            MetaInfManager.getInstance().removeLinksToFile(absolutePath);
                         }
                         MetaInfManager.getInstance().removeMetaInf(absolutePath);
                     }

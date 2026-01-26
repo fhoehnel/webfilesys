@@ -271,164 +271,54 @@ public class MetaInfManager extends Thread
         return(createMetaInfElement(partsOfPath[0], partsOfPath[1]));
 	}
 
-    protected Element createMetaInfElement(String path, String fileName)
-    {
+    protected Element createMetaInfElement(String path, String fileName) {
         synchronized(this) {
-        	Element metaInfRoot=(Element) dirList.get(path);
-
-            if (metaInfRoot==null)
-            {
+        	Element metaInfRoot = dirList.get(path);
+            if (metaInfRoot == null) {
                 metaInfRoot=loadMetaInfFile(path);
             }
-
-            if (metaInfRoot==null)
-            {
+            if (metaInfRoot == null) {
            		Document doc = builder.newDocument();
-
                 metaInfRoot = doc.createElement("metainfroot");
-
                 dirList.put(path, metaInfRoot);
             }
-
             Element metaInfElement = metaInfRoot.getOwnerDocument().createElement("metainf");
-
             metaInfElement.setAttribute("filename",fileName);
-            
             metaInfRoot.appendChild(metaInfElement);
-
             cacheDirty.put(path, Boolean.TRUE);
-
             return(metaInfElement);
         }
     }
 
-    public String getDescription(String absoluteFileName)
-    {
-        Element metaInfElement=getMetaInfElement(absoluteFileName);
-
-        if (metaInfElement==null)
-        {
-            return(null);
-        }
-
-        return(XmlUtil.getChildText(metaInfElement,"description"));
+    public String getDescription(String absoluteFileName) {
+        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
+        return getDescription(partsOfPath[0], partsOfPath[1]);
     }
 
-    public String getDescription(String path,String fileName)
-    {
+    public String getDescription(String path,String fileName) {
         Element metaInfElement=getMetaInfElement(path,fileName);
-
-        if (metaInfElement==null)
-        {
-            return(null);
+        if (metaInfElement == null) {
+            return null;
         }
-
-        return(XmlUtil.getChildText(metaInfElement,"description"));
+        return XmlUtil.getChildText(metaInfElement,"description");
     }
 
-    public String getShortDescription(String absoluteFileName,int maxLength)
-    {
-        Element metaInfElement=getMetaInfElement(absoluteFileName);
-
-        if (metaInfElement==null)
-        {
-            return(null);
-        }
-
-        String description=XmlUtil.getChildText(metaInfElement,"description");
-
-        if ((description.length() > maxLength) && (maxLength>3))
-        {
-            description=description.substring(0,maxLength-3) + "...";
-        }
-
-        return(description);
-    }
-
-    public String getShortDescription(String path,String fileName,int maxLength)
-    {
-        Element metaInfElement=getMetaInfElement(path,fileName);
-
-        if (metaInfElement==null)
-        {
-            return(null);
-        }
-
-        String description=XmlUtil.getChildText(metaInfElement,"description");
-
-        if ((description.length() > maxLength) && (maxLength>3))
-        {
-            description=description.substring(0,maxLength-3) + "...";
-        }
-
-        return(description);
-    }
-
-    public void setDescription(String path,String newDescription)
-    {
+    public void setDescription(String path,String newDescription) {
         String[] partsOfPath = CommonUtils.splitPath(path);
         setDescription(partsOfPath[0], partsOfPath[1], newDescription);
     }
 
-    public void setDescription(String path,String fileName,String newDescription)
-    {
+    public void setDescription(String path,String fileName,String newDescription) {
     	synchronized(this) {
-            Element metaInfElement=getMetaInfElement(path,fileName);
-            
-            if (metaInfElement==null)
-            {
+            Element metaInfElement = getMetaInfElement(path,fileName);
+            if (metaInfElement == null) {
                 metaInfElement=createMetaInfElement(path,fileName);
             }
-
-            XmlUtil.setChildText(metaInfElement,"description",newDescription,true);
-            
+            XmlUtil.setChildText(metaInfElement,"description", newDescription,true);
             cacheDirty.put(path,Boolean.TRUE);
-            // saveMetaInfFile(path);
     	}
     }
 
-    public void setTitlePic(String path, String titlePicFileName) {
-    	synchronized(this) {
-            Element metaInfElement = getMetaInfElement(path, ".");
-            
-            if (metaInfElement == null) {
-                metaInfElement = createMetaInfElement(path, ".");
-            }
-
-            XmlUtil.setChildText(metaInfElement, "titlePic", titlePicFileName);
-            
-            cacheDirty.put(path, Boolean.TRUE);
-    	}
-    }
-    
-    public String getTitlePic(String path) {
-        Element metaInfElement = getMetaInfElement(path, ".");
-
-        if (metaInfElement == null) {
-            return null;
-        }
-
-        return XmlUtil.getChildText(metaInfElement,"titlePic");
-    }
-
-    public void unsetTitlePic(String path) {
-    	synchronized(this) {
-            Element metaInfElement = getMetaInfElement(path, ".");
-            
-            if (metaInfElement == null) {
-                return;
-            }
-
-            Element titlePicElem = XmlUtil.getChildByTagName(metaInfElement, "titlePic");
-            if (titlePicElem != null) {
-            	metaInfElement.removeChild(titlePicElem);
-            }
-            
-            cacheDirty.put(path, Boolean.TRUE);
-    	}
-    }
-    
-    
     public boolean moveMetaInf(String currentPath, String srcFileName, String destFileName) {
     	synchronized(this) {
             Element destMetaInfElement = getMetaInfElement(currentPath, destFileName);
@@ -452,36 +342,17 @@ public class MetaInfManager extends Thread
     	}
     }
     
-    public void removeMetaInf(String absoluteFileName)
-    {
-        int separatorIdx=absoluteFileName.lastIndexOf(File.separator);
-
-        if (separatorIdx<0)
-        {
-            separatorIdx=absoluteFileName.lastIndexOf('/');
-        }
-
-        if (separatorIdx<0)
-        {
-            // removeDescription(path,absoluteFileName);
-            return;
-        }
-
-        removeMetaInf(absoluteFileName.substring(0,separatorIdx),
-                      absoluteFileName.substring(separatorIdx+1));
+    public void removeMetaInf(String absoluteFileName) {
+        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
+        removeMetaInf(partsOfPath[0], partsOfPath[1]);
     }
 
-    public void removeMetaInf(String path,String fileName)
-    {
+    public void removeMetaInf(String path,String fileName) {
     	synchronized(this) {
         	Element metaInfElement = getMetaInfElement(path,fileName);
-        	
-        	if (metaInfElement!=null)
-        	{
-    			Element metaInfRoot=(Element) dirList.get(path);
-
-    			metaInfRoot.removeChild(metaInfElement);                
-                    
+        	if (metaInfElement!=null) {
+    			Element metaInfRoot= dirList.get(path);
+    			metaInfRoot.removeChild(metaInfElement);
     			cacheDirty.put(path,Boolean.TRUE);
         	}
     	}    	
@@ -578,60 +449,6 @@ public class MetaInfManager extends Thread
     	}
     }
 
-    public void setCommentsSeenByOwner(String absoluteFileName, boolean newVal) {
-        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
-        setCommentsSeenByOwner(partsOfPath[0], partsOfPath[1], newVal);
-    }
-    
-    public void setCommentsSeenByOwner(String path, String fileName, boolean newVal) 
-    {
-        Element metaInfElement = getMetaInfElement(path, fileName);
-
-        if (metaInfElement == null)
-        {
-            return;
-        }
-
-        Element commentListElement = XmlUtil.getChildByTagName(metaInfElement,"comments");
-
-        if (commentListElement == null)
-        {
-            return;
-        }
-    	
-        commentListElement.setAttribute("seenByOwner", Boolean.toString(newVal));
-
-        cacheDirty.put(path, Boolean.TRUE);
-    }
-    
-    public boolean isCommentsSeenByOwner(String absoluteFileName) {
-        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
-        return isCommentsSeenByOwner(partsOfPath[0], partsOfPath[1]);
-    }
-
-    public boolean isCommentsSeenByOwner(String path, String fileName) 
-    {
-        Element metaInfElement = getMetaInfElement(path, fileName);
-
-        if (metaInfElement == null)
-        {
-            return false;
-        }
-
-        Element commentListElement = XmlUtil.getChildByTagName(metaInfElement,"comments");
-
-        if (commentListElement == null)
-        {
-            return false;
-        }
-        
-        String seenByOwner = commentListElement.getAttribute("seenByOwner");
-        if (seenByOwner == null) {
-        	return false;
-        }
-        return (seenByOwner.equals("true"));
-    }
-    
     public ArrayList<Comment> getListOfComments(String absoluteFileName) {
         String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
         return(getListOfComments(partsOfPath[0], partsOfPath[1]));
@@ -1316,11 +1133,6 @@ public class MetaInfManager extends Thread
     		
 	}
 
-	public void removeCategories(String absoluteFileName) {
-        String[] partsOfPath = CommonUtils.splitPath(absoluteFileName);
-        removeCategories(partsOfPath[0], partsOfPath[1]);
-	}
-
 	public void removeCategories(String path,String fileName)
 	{
     	synchronized(this) {
@@ -1399,51 +1211,29 @@ public class MetaInfManager extends Thread
         return(getListOfCategories(partsOfPath[0], partsOfPath[1]));
 	}
 
-	public ArrayList<Category> getListOfCategories(String path, String fileName)
-	{
+	public ArrayList<Category> getListOfCategories(String path, String fileName) {
 		Element metaInfElement = getMetaInfElement(path,fileName);
-
-		if (metaInfElement==null)
-		{
-			return(null);
+		if (metaInfElement == null) {
+			return null;
 		}
-
 		Element catListElement = XmlUtil.getChildByTagName(metaInfElement,"categories");
-
-		if (catListElement==null)
-		{
-			return(null);
+		if (catListElement == null) {
+			return null;
 		}
-        
 		NodeList categoryList = catListElement.getElementsByTagName("category");
-
-		if (categoryList == null)
-		{
-			return(null);
-		}
-
 		int listLength = categoryList.getLength();
-
-		if (listLength == 0)
-		{
-			return(null);
+		if (listLength == 0) {
+			return null;
 		}
-
 		ArrayList<Category> listOfCategories = new ArrayList<Category>();
 
-		for (int i=0; i<listLength; i++)
-		{
+		for (int i = 0; i < listLength; i++) {
 			Element categoryElement = (Element) categoryList.item(i);
-
             String catName = XmlUtil.getChildText(categoryElement, "name");
-
             Category category = new Category();
-            
             category.setName(catName);
-            
 			listOfCategories.add(category);
 		}
-
 		return(listOfCategories);
 	}
 
@@ -1606,42 +1396,28 @@ public class MetaInfManager extends Thread
     }
 
     public void createLink(String path, FileLink newLink)
-	throws FileNotFoundException
-	{
+	throws FileNotFoundException {
 		createLink(path, newLink, false);
 	}
 	
 	public void createLink(String path, FileLink newLink, boolean suppressReverseLink)
-	throws FileNotFoundException
-	{
+	throws FileNotFoundException {
     	synchronized(this) {
     		File destFile = new File(newLink.getDestPath());
-    		
-    		if ((!destFile.exists()) || (!destFile.isFile()) || (!destFile.canRead()))
-    		{
+            if ((!destFile.exists()) || (!destFile.isFile()) || (!destFile.canRead())) {
     			throw new FileNotFoundException("MetaInfManager.createLink: file not found: " + destFile);
     		}
-    		
-    		Element metaInfElement=getMetaInfElement(path,".");
-            
-    		if (metaInfElement==null)
-    		{
-    			metaInfElement=createMetaInfElement(path,".");
+    		Element metaInfElement = getMetaInfElement(path,".");
+    		if (metaInfElement == null) {
+    			metaInfElement = createMetaInfElement(path,".");
     		}
-
-    		Document doc=metaInfElement.getOwnerDocument();
-
+    		Document doc = metaInfElement.getOwnerDocument();
     		Element linkListElement = XmlUtil.getChildByTagName(metaInfElement,"links");
-
-    		if (linkListElement==null)
-    		{
-    			linkListElement=doc.createElement("links");
-
+    		if (linkListElement == null) {
+    			linkListElement = doc.createElement("links");
     			metaInfElement.appendChild(linkListElement);
     		}
-
-    		Element linkElement=doc.createElement("link");
-
+    		Element linkElement = doc.createElement("link");
     		linkListElement.appendChild(linkElement);
 
     		XmlUtil.setChildText(linkElement,"name",newLink.getName(),false);
@@ -1649,17 +1425,13 @@ public class MetaInfManager extends Thread
     		XmlUtil.setChildText(linkElement,"creationTime",Long.toString(newLink.getCreationTime()),false);
     		XmlUtil.setChildText(linkElement,"creator",newLink.getCreator(),false);
             
-    		if (!suppressReverseLink) 
-    		{
-    			if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
-    			{
+    		if (!suppressReverseLink) {
+    			if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
     		        createReverseLinkRef(path, newLink);        
     			}
     		}
-    		
     		cacheDirty.put(path,Boolean.TRUE);
     	}
-    		
 	}
 
 	/**
@@ -1667,76 +1439,48 @@ public class MetaInfManager extends Thread
 	 * @param sourcePath the path of the linking file
 	 * @param newLink the link info
 	 */
-	private void createReverseLinkRef(String sourcePath, FileLink newLink)
-	{
+	private void createReverseLinkRef(String sourcePath, FileLink newLink) {
     	synchronized(this) {
-            String linkingFilePath = null;
-            
-            if (sourcePath.endsWith(File.separator)) 
-            {
+            String linkingFilePath;
+            if (sourcePath.endsWith(File.separator)) {
                 linkingFilePath = sourcePath + newLink.getName();
-            }
-            else
-            {
+            } else {
                 linkingFilePath = sourcePath + File.separator + newLink.getName();
             }
     	    
             Element metaInfElement = getMetaInfElement(newLink.getDestPath());
-            
-            if (metaInfElement == null)
-            {
+            if (metaInfElement == null) {
                 metaInfElement = createMetaInfElement(newLink.getDestPath());
             }
 
             Element linkedByElement = null;
-
             Element linkedByListElement = XmlUtil.getChildByTagName(metaInfElement, "linkedBy");
 
-            if (linkedByListElement == null)
-            {
+            if (linkedByListElement == null) {
                 linkedByListElement = metaInfElement.getOwnerDocument().createElement("linkedBy");
                 metaInfElement.appendChild(linkedByListElement);
             } 
 
             NodeList linkingFileList = linkedByListElement.getElementsByTagName("linkingFile");
-
-            if (linkingFileList != null)
-            {
-                int listLength = linkingFileList.getLength();
-
-                if (listLength > 0)
-                {
-                    boolean existingFound = false;
-                    
-                    for (int i = 0; (!existingFound) && (i < listLength); i++) 
-                    {
-                        Element existingLinkedByElement = (Element) linkingFileList.item(i);
-                        
-                        String existingLinkingFile = XmlUtil.getElementText(existingLinkedByElement);
-
-                        if (existingLinkingFile.equals(linkingFilePath))
-                        {
-                            linkedByElement = existingLinkedByElement;
-                            existingFound = true;
-                        }
-                    }
+            int listLength = linkingFileList.getLength();
+            boolean existingFound = false;
+            for (int i = 0; !existingFound && i < listLength; i++) {
+                Element existingLinkedByElement = (Element) linkingFileList.item(i);
+                String existingLinkingFile = XmlUtil.getElementText(existingLinkedByElement);
+                if (existingLinkingFile.equals(linkingFilePath)) {
+                    linkedByElement = existingLinkedByElement;
+                    existingFound = true;
                 }
             }
 
-            if (linkedByElement == null) 
-            {
+            if (linkedByElement == null) {
                 Document doc = metaInfElement.getOwnerDocument();
-
                 linkedByElement = doc.createElement("linkingFile");
-                
                 XmlUtil.setElementText(linkedByElement, linkingFilePath);
-
                 linkedByListElement.appendChild(linkedByElement);
-                
                 cacheDirty.put(CommonUtils.getParentDir(newLink.getDestPath()), Boolean.TRUE);
             }
     	}
-    		
 	}
 	
 	/**
@@ -1746,63 +1490,40 @@ public class MetaInfManager extends Thread
 	 * @param linkName name of the link
 	 * @param linkTargetPath path of the link target file
 	 */
-	public void removeReverseLink(String sourcePath, String linkName, String linkTargetPath) 
-	{
+	public void removeReverseLink(String sourcePath, String linkName, String linkTargetPath) {
     	synchronized(this) {
-    	    String linkPath = null;
-    	    if (sourcePath.endsWith(File.separator))
-    	    {
+    	    String linkPath;
+    	    if (sourcePath.endsWith(File.separator)) {
     	        linkPath = sourcePath + linkName;
-    	    }
-    	    else
-    	    {
+    	    } else {
                 linkPath = sourcePath + File.separator + linkName;
     	    }
     	    
             Element metaInfElement = getMetaInfElement(linkTargetPath);
-            
-            if (metaInfElement == null)
-            {
+            if (metaInfElement == null) {
                 return;
             }
             
             Element linkedByElement = XmlUtil.getChildByTagName(metaInfElement, "linkedBy");
-
-            if (linkedByElement == null)
-            {
+            if (linkedByElement == null) {
                 return;
             }
 
             NodeList linkingFileList = linkedByElement.getElementsByTagName("linkingFile");
-
-            if (linkingFileList == null)
-            {
-                return;
-            }
-            
             int listLength = linkingFileList.getLength();
-
-            for (int i = 0; i < listLength; i++) 
-            {
+            for (int i = 0; i < listLength; i++) {
                  Element linkingFileElement = (Element) linkingFileList.item(i);
-                 
                  String linkingFilePath = XmlUtil.getElementText(linkingFileElement);
-                 
-                 if (linkPath.equals(linkingFilePath)) 
-                 {
+                 if (linkPath.equals(linkingFilePath)) {
                      linkedByElement.removeChild(linkingFileElement);
-                     
-                     if (listLength == 1) 
-                     {
+                     if (listLength == 1) {
                          metaInfElement.removeChild(linkedByElement);
-
                          cacheDirty.put(CommonUtils.getParentDir(linkTargetPath), Boolean.TRUE);
                      }
                      return;
                  }
             }   
     	}
-    		
 	}
 	
 	/**
@@ -1815,67 +1536,82 @@ public class MetaInfManager extends Thread
 	 * @param newPath new path of the (possibly) linked file or null if the file is to be deleted
 	 * @param userid the uid of the current user
 	 */
-	public void updateLinksAfterMove(String oldPath, String newPath, String userid)
-	{
-	    if (!WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
-	    {
+	public void updateLinksAfterMove(String newPath, String userid) {
+	    if (!WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
 	        return;
 	    }
-    		
-	    ArrayList linkingFiles = getLinkingFiles(oldPath);
-	    
-	    if (linkingFiles == null)
-	    {
+	    ArrayList<String> linkingFiles = getLinkingFiles(newPath);
+	    if (linkingFiles == null) {
 	        // file is not linked - nothing to do
 	        return;
 	    }
-	    
-	    Iterator iter = linkingFiles.iterator();
-	    while (iter.hasNext()) 
-	    {
-	        String linkingFilePath = (String) iter.next();
-	        
+        for (String linkingFilePath :  linkingFiles) {
 	        String linkName = CommonUtils.extractFileName(linkingFilePath);
-	        
 	        String linkPath = CommonUtils.getParentDir(linkingFilePath);
-	        
 	        removeLink(linkPath, linkName);
-	        
-	        if (newPath != null)
-	        {
-	            try
-	            {
+	        if (newPath != null) {
+	            try {
 	                createLink(linkPath, new FileLink(linkName, newPath, userid));
-	            }
-	            catch (IOException ex)
-	            {
-	                LOG.error("cannot update link " + linkName + " after file move: " + oldPath + " - " + newPath);
+	            } catch (IOException ex) {
+                    LOG.error("cannot update link {} after file move to: {}", linkName, newPath);
 	            }
 	        }
 	    }
 	}
-	
+
+    public void moveFileLinks(String oldPath, String newPath, String userid) {
+        if (!WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
+            return;
+        }
+        ArrayList<String> linkingFiles = getLinkingFiles(oldPath);
+        if (linkingFiles == null) {
+            // file is not linked - nothing to do
+            return;
+        }
+        for (String linkingFilePath :  linkingFiles) {
+            String linkName = CommonUtils.extractFileName(linkingFilePath);
+            String linkPath = CommonUtils.getParentDir(linkingFilePath);
+            removeLink(linkPath, linkName);
+            if (newPath != null) {
+                try {
+                    createLink(linkPath, new FileLink(linkName, newPath, userid));
+                } catch (IOException ex) {
+                    LOG.error("cannot update link {} after file move to: {}", linkName, newPath);
+                }
+            }
+        }
+    }
+
+    public void removeLinksToFile(String targetFilePath) {
+        if (!WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
+            return;
+        }
+        ArrayList<String> linkingFiles = getLinkingFiles(targetFilePath);
+        if (linkingFiles == null) {
+            // file is not linked - nothing to do
+            return;
+        }
+        for (String linkingFilePath : linkingFiles) {
+            String linkName = CommonUtils.extractFileName(linkingFilePath);
+            String linkPath = CommonUtils.getParentDir(linkingFilePath);
+            removeLink(linkPath, linkName);
+        }
+    }
+
 	/**
 	 * Updates the target path of a link.
 	 * @param linkingFilePath path of the link
 	 * @param newLinkTargetPath new link target path
 	 * @param uid userid
 	 */
-	public void updateLinkTarget(String linkingFilePath, String newLinkTargetPath, String uid)
-	{
+	public void updateLinkTarget(String linkingFilePath, String newLinkTargetPath, String uid) {
         String linkName = CommonUtils.extractFileName(linkingFilePath);
-        
         String linkPath = CommonUtils.getParentDir(linkingFilePath);
-        
         removeLink(linkPath, linkName);
-        
-        try
-        {
+        try {
             createLink(linkPath, new FileLink(linkName, newLinkTargetPath, uid));
-        }
-        catch (IOException ex)
-        {
-            LOG.error("cannot update link " + linkName + " newPath=" + newLinkTargetPath);
+        } catch (IOException ex) {
+            LOG.error("cannot update link {} newPath={}", linkName, newLinkTargetPath);
         }
 	}
 	
@@ -1927,373 +1663,204 @@ public class MetaInfManager extends Thread
     		
 	}
 	
-	public ArrayList getLinkingFiles(String path)
-	{
+	public ArrayList<String> getLinkingFiles(String path) {
 	    Element metaInfElement = getMetaInfElement(path);
-        
-        if (metaInfElement == null)
-        {
+        if (metaInfElement == null) {
             return null;
         }
 
         Element linkedByListElement = XmlUtil.getChildByTagName(metaInfElement, "linkedBy");
-
-        if (linkedByListElement == null)
-        {
+        if (linkedByListElement == null) {
             // no links pointing to this file
             return null;
         }
 
         NodeList linkingFileList = linkedByListElement.getElementsByTagName("linkingFile");
-
-        if (linkingFileList == null)
-        {
-            return null;
-        }
-        
         int listLength = linkingFileList.getLength();
-
-        if (listLength == 0)
-        {
+        if (listLength == 0) {
             return null;
         }
 
-        ArrayList linkingFiles = new ArrayList();
-            
-        for (int i = 0; i < listLength; i++) 
-        {
+        ArrayList<String> linkingFiles = new ArrayList<>();
+        for (int i = 0; i < listLength; i++) {
              Element linkingFileElement = (Element) linkingFileList.item(i);
-             
              linkingFiles.add(XmlUtil.getElementText(linkingFileElement));
         }   
-        
         return linkingFiles;
 	}
 	
-	public ArrayList<FileLink> getListOfLinks(String path)
-	{
-		Element metaInfElement=getMetaInfElement(path,".");
-
-		if (metaInfElement==null)
-		{
-			return(null);
+	public ArrayList<FileLink> getListOfLinks(String path) {
+		Element metaInfElement = getMetaInfElement(path,".");
+		if (metaInfElement == null) {
+			return null;
 		}
-
-		Element linkListElement=XmlUtil.getChildByTagName(metaInfElement,"links");
-
-		if (linkListElement==null)
-		{
-			return(null);
+		Element linkListElement = XmlUtil.getChildByTagName(metaInfElement,"links");
+		if (linkListElement == null) {
+			return null;
 		}
-        
 		NodeList linkList = linkListElement.getElementsByTagName("link");
-
-		if (linkList==null)
-		{
-			return(null);
-		}
-
 		int listLength = linkList.getLength();
-
-		if (listLength==0)
-		{
-			return(null);
+		if (listLength == 0) {
+			return null;
 		}
-
 		ArrayList<FileLink> listOfLinks = new ArrayList<FileLink>();
-
-		for (int i=0;i<listLength;i++)
-		{
-			Element linkElement=(Element) linkList.item(i);
-
+		for (int i = 0; i < listLength; i++) {
+			Element linkElement = (Element) linkList.item(i);
 			String name = XmlUtil.getChildText(linkElement,"name");
 			String creator = XmlUtil.getChildText(linkElement,"creator");
 			String destPath = XmlUtil.getChildText(linkElement,"destPath");
-
 			String tmp = XmlUtil.getChildText(linkElement,"creationTime");
-
-			long creationTime=0L;
-
-			try
-			{
+			long creationTime = 0L;
+			try {
 				creationTime=Long.parseLong(tmp);
-			}
-			catch (NumberFormatException nfex)
-			{
+			} catch (NumberFormatException nfex) {
 				LOG.warn("invalid creation time: " + tmp);
 			}
-
             FileLink link = new FileLink(name, destPath, creator, new Date(creationTime));
-
 			listOfLinks.add(link);
 		}
-
-        // Collections.sort(listOfLinks, new FileLinkComparator(FileLinkComparator.SORT_BY_NAME));
-
-		return(listOfLinks);
+		return listOfLinks;
 	}
 
 	public FileLink getLink(String path, String linkName) {
-		Element metaInfElement=getMetaInfElement(path,".");
-
-		if (metaInfElement==null) {
-			return(null);
+		Element metaInfElement = getMetaInfElement(path,".");
+		if (metaInfElement == null) {
+			return null;
 		}
 
-		Element linkListElement=XmlUtil.getChildByTagName(metaInfElement,"links");
-
-		if (linkListElement==null) {
-			return(null);
+		Element linkListElement = XmlUtil.getChildByTagName(metaInfElement,"links");
+		if (linkListElement == null) {
+			return null;
 		}
         
 		NodeList linkList = linkListElement.getElementsByTagName("link");
-
-		if (linkList==null) {
-			return(null);
-		}
-
 		int listLength = linkList.getLength();
-
-		if (listLength==0) {
-			return(null);
+		if (listLength == 0) {
+			return null;
 		}
 
 		for (int i = 0; i < listLength; i++) {
 			Element linkElement = (Element) linkList.item(i);
-
 			String name = XmlUtil.getChildText(linkElement, "name");
-			
-			if ((name != null) && name.equals(linkName)) {
+			if (name.equals(linkName)) {
 				String creator = XmlUtil.getChildText(linkElement,"creator");
 				String destPath = XmlUtil.getChildText(linkElement,"destPath");
-
 				String tmp = XmlUtil.getChildText(linkElement,"creationTime");
-
 				long creationTime = 0L;
-
 				try {
 					creationTime = Long.parseLong(tmp);
 				} catch (NumberFormatException nfex) {
 					LOG.warn("invalid creation time: " + tmp);
 				}
-
-	            FileLink link = new FileLink(name, destPath, creator, new Date(creationTime));
-			    return link;
+                return new FileLink(name, destPath, creator, new Date(creationTime));
 			}
 		}
 		return null;
 	}
-	
-	public boolean removeLink(String path, String linkToRemove)
-	{
+
+	public boolean removeLink(String path, String linkToRemove) {
     	synchronized(this) {
-    		Element metaInfElement=getMetaInfElement(path,".");
-
-    		if (metaInfElement==null)
-    		{
+    		Element metaInfElement = getMetaInfElement(path,".");
+    		if (metaInfElement == null) {
     			return(false);
     		}
-
-    		Element linkListElement=XmlUtil.getChildByTagName(metaInfElement,"links");
-
-    		if (linkListElement==null)
-    		{
-    			return(false);
+    		Element linkListElement = XmlUtil.getChildByTagName(metaInfElement,"links");
+    		if (linkListElement == null) {
+    			return false;
     		}
-            
     		NodeList linkList = linkListElement.getElementsByTagName("link");
-
-    		if (linkList==null)
-    		{
-    			return(false);
-    		}
-
     		int listLength = linkList.getLength();
-
-    		if (listLength == 0)
-    		{
-    			return(false);
+    		if (listLength == 0) {
+    			return false;
     		}
 
-    		for (int i=0;i<listLength;i++)
-    		{
-    			Element linkElement=(Element) linkList.item(i);
-
+    		for (int i = 0; i < listLength; i++) {
+    			Element linkElement = (Element) linkList.item(i);
     			String linkName = XmlUtil.getChildText(linkElement,"name");
-
-                if (linkName.equals(linkToRemove))
-                {
-                    if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
-                    {
+                if (linkName.equals(linkToRemove)) {
+                    if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
                         String linkTargetPath = XmlUtil.getChildText(linkElement, "destPath");
-                        
                         removeReverseLink(path, linkToRemove, linkTargetPath);
                     }
-
                     linkListElement.removeChild(linkElement);
-                	
     				cacheDirty.put(path,Boolean.TRUE);
-
-                	return(true);
+                	return true;
                 }
     		}
-
-    		return(false);
+    		return false;
     	}
-    		
 	}
 
-	public boolean renameLink(String path, String oldLinkName, String newLinkName)
-	{
+	public boolean renameLink(String path, String oldLinkName, String newLinkName) {
     	synchronized(this) {
-    		Element metaInfElement=getMetaInfElement(path,".");
-
-    		if (metaInfElement==null)
-    		{
-    			return(false);
+    		Element metaInfElement = getMetaInfElement(path,".");
+    		if (metaInfElement == null) {
+    			return false;
     		}
 
     		Element linkListElement=XmlUtil.getChildByTagName(metaInfElement,"links");
-
-    		if (linkListElement==null)
-    		{
-    			return(false);
+    		if (linkListElement == null) {
+    			return false;
     		}
             
     		NodeList linkList = linkListElement.getElementsByTagName("link");
-
-    		if (linkList==null)
-    		{
-    			return(false);
-    		}
-
     		int listLength = linkList.getLength();
-
-    		if (listLength == 0)
-    		{
-    			return(false);
+    		if (listLength == 0) {
+    			return false;
     		}
 
-    		for (int i=0;i<listLength;i++)
-    		{
-    			Element linkElement=(Element) linkList.item(i);
-
+    		for (int i = 0; i < listLength; i++) {
+    			Element linkElement = (Element) linkList.item(i);
     			String linkName = XmlUtil.getChildText(linkElement,"name");
-
-    			if (linkName.equals(oldLinkName))
-    			{
+    			if (linkName.equals(oldLinkName)) {
     				XmlUtil.setChildText(linkElement, "name", newLinkName);
-                	
-    				cacheDirty.put(path,Boolean.TRUE);
-
-    				return(true);
+    				cacheDirty.put(path, Boolean.TRUE);
+    				return true;
     			}
     		}
-
-    		return(false);
+    		return false;
     	}
-    		
 	}
 
-    public void incrementDownloads(String path)
-    {
-        String dir=null;
-
-        String fileName=null;
-
-        int separatorIdx=path.lastIndexOf('/');
-
-        if (separatorIdx < 0)
-        {
-            separatorIdx=path.lastIndexOf(File.separatorChar);
-        }
-
-        if (separatorIdx < 0)
-        {
-            return;
-        }
-
-        if (separatorIdx>0)
-        {
-            dir=path.substring(0,separatorIdx);
-            fileName=path.substring(separatorIdx+1);
-        }
-        else
-        {
-            if (separatorIdx==0)
-            {
-                dir=path.substring(0,1);
-                fileName=path.substring(1);
-            }
-        }
-
-        if (File.separatorChar!='/')
-        {
-            dir=dir.replace('/',File.separatorChar);
-        }
-
-        incrementDownloads(dir,fileName);
+    public void incrementDownloads(String path) {
+        String[] partsOfPath = CommonUtils.splitPath(path);
+        incrementDownloads(partsOfPath[0], partsOfPath[1]);
     }
 
-    public void incrementDownloads(String path,String fileName)
-    {
+    public void incrementDownloads(String path,String fileName) {
     	synchronized(this) {
-            Element metaInfElement=getMetaInfElement(path,fileName);
-            
-            if (metaInfElement==null)
-            {
+            Element metaInfElement = getMetaInfElement(path,fileName);
+            if (metaInfElement == null) {
                 metaInfElement=createMetaInfElement(path,fileName);
             }
-
-            String oldValue=XmlUtil.getChildText(metaInfElement,"downloads");
-
-            int downloadNum=0;
-
-            if (oldValue!=null)
-            {
-                try
-                {
+            String oldValue = XmlUtil.getChildText(metaInfElement,"downloads");
+            int downloadNum = 0;
+            if (!oldValue.isEmpty()) {
+                try {
                     downloadNum=Integer.parseInt(oldValue);
-                }
-                catch (NumberFormatException nfex)
-                {
+                } catch (NumberFormatException nfex) {
                 }
             }
-
             downloadNum++;
-            
-            XmlUtil.setChildText(metaInfElement,"downloads",Integer.toString(downloadNum),false);
-            
+            XmlUtil.setChildText(metaInfElement,"downloads", Integer.toString(downloadNum),false);
             cacheDirty.put(path,Boolean.TRUE);
-            // saveMetaInfFile(path);
     	}
     }
 
-	public int getNumberOfDownloads(String absoluteFileName)
-	{
+	public int getNumberOfDownloads(String absoluteFileName) {
 		Element metaInfElement = getMetaInfElement(absoluteFileName);
-
-		if (metaInfElement == null)
-		{
+		if (metaInfElement == null) {
 			return(0);
 		}
-
         int downLoadNum = 0;
-        
 		String temp = XmlUtil.getChildText(metaInfElement,"downloads");
-		
-		if (temp != null)
-		{
-			try
-			{
+		if (!temp.isEmpty()) {
+			try {
 				downLoadNum = Integer.parseInt(temp);
-			}
-			catch (NumberFormatException nfex)
-			{
+			} catch (NumberFormatException nfex) {
 			}
 		}
-		
-		return(downLoadNum);
+		return downLoadNum;
 	}
 
     public ArrayList<Element> getTopDownloadList(String path)
@@ -2361,175 +1928,52 @@ public class MetaInfManager extends Thread
         return(sortedTopList);
     }
 
-	public Date getStatisticsResetDate(String path)
-	{
-		Element metaInfRoot=(Element) dirList.get(path);
-
-		if (metaInfRoot==null)
-		{
-			metaInfRoot=loadMetaInfFile(path);
-            
-			if (metaInfRoot==null)
-			{
-				return(null);
-			}
-			else
-			{
-				dirList.put(path,metaInfRoot);
+	public Date getStatisticsResetDate(String path) {
+		Element metaInfRoot = dirList.get(path);
+		if (metaInfRoot == null) {
+			metaInfRoot = loadMetaInfFile(path);
+            if (metaInfRoot == null) {
+				return null;
+			} else {
+				dirList.put(path, metaInfRoot);
 			}
 		}
-
         String resetDateString = XmlUtil.getChildText(metaInfRoot,"statsResetDate");
-        
-        if (resetDateString == null)
-        {
-        	return(null);
+        if (resetDateString.isEmpty()) {
+        	return null;
         }
-        
-        try
-        {
+        try {
         	return(new Date(Long.parseLong(resetDateString)));
+        } catch (NumberFormatException nfex) {
         }
-        catch (NumberFormatException nfex)
-        {
-        }
-        
-        return(null);
+        return null;
 	}
 
-    public void resetStatistics(String path)
-    {
+    public void resetStatistics(String path) {
     	synchronized(this) {
-    		Element metaInfRoot=(Element) dirList.get(path);
-
-    		if (metaInfRoot==null)
-    		{
-    			metaInfRoot=loadMetaInfFile(path);
-                
-    			if (metaInfRoot==null)
-    			{
+    		Element metaInfRoot = dirList.get(path);
+    		if (metaInfRoot == null) {
+    			metaInfRoot = loadMetaInfFile(path);
+    			if (metaInfRoot == null) {
     				return;
     			}
-    			else
-    			{
-    				dirList.put(path,metaInfRoot);
-    			}
+  				dirList.put(path, metaInfRoot);
     		}
-    		
-    	    XmlUtil.setChildText(metaInfRoot,"statsResetDate",Long.toString(System.currentTimeMillis()));
+    	    XmlUtil.setChildText(metaInfRoot,"statsResetDate", Long.toString(System.currentTimeMillis()));
 
-    		NodeList metaInfList=metaInfRoot.getElementsByTagName("metainf");
-
-    		if (metaInfList!=null)
-    		{
-    			int listLength=metaInfList.getLength();
-
-    			for (int i=0;i<listLength;i++)
-    			{
-    				Element metaInfElement=(Element) metaInfList.item(i);
-
-    				Element downloadElement = XmlUtil.getChildByTagName(metaInfElement,"downloads");
-    		
-    				if (downloadElement != null)
-    				{
-    					metaInfElement.removeChild(downloadElement);
-    				}
-    			}
-    		}
-
-    		cacheDirty.put(path,Boolean.TRUE);
-    	}
-    }
-    
-    public boolean isStagedPublication(String path) {
-    	
-		Element metaInfElement = getMetaInfElement(path, ".");
-
-		if (metaInfElement == null) {
-			return false;
-		}
-
-		String temp = XmlUtil.getChildText(metaInfElement, "stagedPublication");
-		
-		if (temp == null) {
-			return false;
-		}
-		
-    	return Boolean.valueOf(temp);
-    }
-
-	public void setStagedPublication(String path, boolean publicateStaged) {
-    	synchronized(this) {
-    		Element metaInfElement = getMetaInfElement(path, ".");
-            
-    		if (metaInfElement == null) {
-    			metaInfElement = createMetaInfElement(path, ".");
-    		}
-
-    		Document doc = metaInfElement.getOwnerDocument();
-
-    		Element stagedPublicationElement = XmlUtil.getChildByTagName(metaInfElement, "stagedPublication");
-
-    		if (stagedPublicationElement == null) {
-    			stagedPublicationElement = doc.createElement("stagedPublication");
-    			metaInfElement.appendChild(stagedPublicationElement);
-    		}
-
-    		XmlUtil.setElementText(stagedPublicationElement, Boolean.toString(publicateStaged));
-            
+            NodeList metaInfList = metaInfRoot.getElementsByTagName("metainf");
+            int listLength = metaInfList.getLength();
+            for (int i = 0; i < listLength; i++) {
+                Element metaInfElement=(Element) metaInfList.item(i);
+                Element downloadElement = XmlUtil.getChildByTagName(metaInfElement,"downloads");
+                if (downloadElement != null) {
+                    metaInfElement.removeChild(downloadElement);
+                }
+            }
     		cacheDirty.put(path, Boolean.TRUE);
     	}
-	}
-    
-	public int getStatus(String absoluteFileName) {
-		Element metaInfElement = getMetaInfElement(absoluteFileName);
+    }
 
-		if (metaInfElement == null) {
-			return STATUS_NONE;
-		}
-
-        int status = STATUS_NONE;
-        
-		String temp = XmlUtil.getChildText(metaInfElement, "status");
-		
-		if (temp != null) {
-			try {
-				status = Integer.parseInt(temp);
-			} catch (NumberFormatException nfex) {
-			}
-		}
-		
-		return(status);
-	}
-	
-	public void setStatus(String path, int newStatus) {
-        String[] partsOfPath = CommonUtils.splitPath(path);
-        setStatus(partsOfPath[0], partsOfPath[1], newStatus);
-	}
-
-	public void setStatus(String path, String fileName, int newStatus) {
-    	synchronized(this) {
-    		Element metaInfElement = getMetaInfElement(path, fileName);
-            
-    		if (metaInfElement == null) {
-    			metaInfElement = createMetaInfElement(path, fileName);
-    		}
-
-    		Document doc = metaInfElement.getOwnerDocument();
-
-    		Element statusElement = XmlUtil.getChildByTagName(metaInfElement, "status");
-
-    		if (statusElement == null) {
-    			statusElement = doc.createElement("status");
-    			metaInfElement.appendChild(statusElement);
-    		}
-
-    		XmlUtil.setElementText(statusElement, Integer.toString(newStatus));
-            
-    		cacheDirty.put(path, Boolean.TRUE);
-    	}
-	}
-	
     /**
      * Explicitly remove the meta information of a directory from the cache.
      * Used in the search function which can cause hundreds of meta info files to get loaded.
@@ -2539,15 +1983,10 @@ public class MetaInfManager extends Thread
      */
     public void releaseMetaInf(String dirPath, boolean forceReleaseDirty) {
     	synchronized(this) {
-    		
         	if ((!cacheDirty.containsKey(dirPath)) || forceReleaseDirty) {
             	if (dirList.get(dirPath) != null) {
             		dirList.remove(dirPath);
-            		// if (LOG.isDebugEnabled()) {
-            		//    LOG.debug("released metainf for path " + dirPath);
-                    // }
                 }
-            	
                 if (forceReleaseDirty && cacheDirty.containsKey(dirPath)) {
                     cacheDirty.remove(dirPath);
                 }
@@ -2571,7 +2010,7 @@ public class MetaInfManager extends Thread
                 saveChangedMetaInfFiles();
                 if (counter == 15) {
                     counter = 0;
-                    if (dirList.size() > 0) {
+                    if (!dirList.isEmpty()) {
                         synchronized (dirList) {
                             LOG.debug("removing " + dirList.size() + " elements from metainf cache");
                             dirList.clear();
@@ -2587,9 +2026,8 @@ public class MetaInfManager extends Thread
         }
     }
 
-    public boolean isMetaInfFile(String path)
-    {
-        return(path.endsWith(METAINF_FILE));
+    public boolean isMetaInfFile(String path) {
+        return path.endsWith(METAINF_FILE);
     }
 
 }

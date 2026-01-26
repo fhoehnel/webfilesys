@@ -63,11 +63,9 @@ public class RenameFileRequestHandler extends UserRequestHandler {
 
         metaInfMgr.moveMetaInf(path, oldFileName, newFileName);
 
-		if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
-			metaInfMgr.updateLinksAfterMove(oldFilePath, newFilePath, uid);
-		}
-
-		metaInfMgr.removeMetaInf(oldFilePath);
+        if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
+            metaInfMgr.updateLinksAfterMove(newFilePath, uid);
+        }
 
 		String thumbnailPath = ThumbnailThread.getThumbnailPath(oldFilePath);
 

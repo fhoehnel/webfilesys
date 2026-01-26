@@ -60,11 +60,11 @@ public class RenamePictureHandler extends XmlRequestHandlerBase {
 
             metaInfMgr.moveMetaInf(path, oldFileName, newFileName);
 
-			if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
-				metaInfMgr.updateLinksAfterMove(imagePath, newImagePath, uid);
-			}
+            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
+                metaInfMgr.updateLinksAfterMove(newImagePath, uid);
+            }
 
-			metaInfMgr.removeMetaInf(imagePath);
+            // metaInfMgr.removeMetaInf(imagePath);
 
 			String thumbnailPath = ThumbnailThread.getThumbnailPath(imagePath);
 
