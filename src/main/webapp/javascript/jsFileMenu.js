@@ -194,7 +194,12 @@ function untar(path)
 
 function viewTrackOnMap(fileName) {
     const mapWin = window.open("/webfilesys/servlet?command=viewGPX&fileName=" + encodeURIComponent(fileName), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
-    maptWin.focus();
+    mapWin.focus();
+}
+
+function viewTrackOnOSM(fileName) {
+    const mapWin = window.open("/webfilesys/servlet?command=viewGPXOSM&fileName=" + encodeURIComponent(fileName), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
+    mapWin.focus();
 }
 
 function sendFile(fileName) {

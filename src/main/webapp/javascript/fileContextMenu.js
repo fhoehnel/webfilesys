@@ -42,6 +42,7 @@ function contextMenu(fileName) {
     	addContextMenuEntry(menuDiv, "openUrlFile('" + scriptPreparedPath + "')", resourceBundle["label.view"]);
     } else if (fileExt == ".GPX") {
     	addContextMenuEntry(menuDiv, "viewTrackOnMap('" + scriptPreparedFile + "')", resourceBundle["viewTrackOnMap"]);
+        addContextMenuEntry(menuDiv, "viewTrackOnOSM('" + scriptPreparedFile + "')", resourceBundle["viewTrackOnOSM"]);
     } else {
          if ((fileExt == ".MP4") || (fileExt == ".OGG") || (fileExt == ".OGV")|| (fileExt == ".WEBM")) {
          	 addContextMenuEntry(menuDiv, "playVideo('" + scriptPreparedPath + "')", resourceBundle["label.playVideo"]);

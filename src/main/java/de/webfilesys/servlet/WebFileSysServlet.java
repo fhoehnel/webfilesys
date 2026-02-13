@@ -1932,6 +1932,11 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
 
+        if (command.equals("viewGPXOSM")) {
+            (new GPXOSMViewHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
         if (command.equals("multiGPX")) {
             (new MultiGPXTrackHandler(req, resp, session, output, userid)).handleRequest();
             return(true);
