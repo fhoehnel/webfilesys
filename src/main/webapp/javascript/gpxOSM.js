@@ -3,6 +3,7 @@ function showTracksOnOSM(gpxFilePath) {
 }
 
 function showMap(gpxFilePath) {
+    document.getElementById("mapDiv").style.height = (window.innerHeight - 20 )+ "px";
     const map = new OpenLayers.Map("mapDiv");
     map.addLayer(new OpenLayers.Layer.OSM());
 
