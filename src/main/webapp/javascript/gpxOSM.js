@@ -62,9 +62,18 @@ function showMap(gpxFilePath) {
 }
 
 function loadAndShowWayPointsOSM(map, gpxFilePath) {
-    var pois = new OpenLayers.Layer.Text("My Points", {
+
+    const styleMap = new OpenLayers.StyleMap({
+        'default': new OpenLayers.Style({
+            fontSize: "12px",
+            fontColor: "#a00000"
+        })
+    });
+
+    const pois = new OpenLayers.Layer.Text("My Points", {
                            location:"/webfilesys/servlet?command=osmWayPoints&filePath=" + encodeURIComponent(gpxFilePath),
                            projection: map.displayProjection,
+                           styleMap: styleMap
                        });
     map.addLayer(pois);
 }
