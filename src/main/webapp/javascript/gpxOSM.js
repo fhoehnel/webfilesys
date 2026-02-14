@@ -35,10 +35,36 @@ function showMap(gpxFilePath) {
 
                 const lineExtent = lineFeature.geometry.getBounds();
                 map.zoomToExtent(lineExtent);
+
+               	showTrackMetaData(response);
+               	if (response.hasElevation) {
+                   	drawAltDistProfile(response);
+               	}
+               	if (response.hasRecordedSpeed) {
+               		drawSpeedProfile(response, "recordedSpeed", "averageRecordedSpeedInMotion");
+               	} else {
+                   	if (response.hasSpeed) {
+                   		if (!response.invalidTime) {
+                           	drawSpeedProfile(response, "speed", "averageCalculatedSpeedInMotion");
+                   		} else {
+                   			customAlert("GPX file contains invalid time data - omitting speed profile")
+                   		}
+                   	}
+               	}
+
+               	loadAndShowWayPointsOSM(map, gpxFilePath);
             }
         },
         null,
         true,
         false
     );
+}
+
+function loadAndShowWayPointsOSM(map, gpxFilePath) {
+    var pois = new OpenLayers.Layer.Text("My Points", {
+                           location:"/webfilesys/servlet?command=osmWayPoints&filePath=" + encodeURIComponent(gpxFilePath),
+                           projection: map.displayProjection,
+                       });
+    map.addLayer(pois);
 }
