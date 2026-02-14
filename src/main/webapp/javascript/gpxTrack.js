@@ -190,7 +190,7 @@ function showTrackOnMap(trackpoints, trackCounter) {
     globalTrackMap[globalTrackCounter - 1] = trackPath;
 }
 
-function showTrackMetaData(response) {
+function showTrackMetaData(response, mapType) {
    	var trackElem = document.createElement("div");
    	trackElem.setAttribute("class", "trackMetaInfo");
    	var trackCont = document.getElementById("gpsTrackMetaInfo");
@@ -220,19 +220,21 @@ function showTrackMetaData(response) {
 	}
 	
 	if (response.trackpoints) {
-	   	var trackpointNumElem = document.createElement("span");
+	   	const trackpointNumElem = document.createElement("span");
 	   	trackpointNumElem.setAttribute("class", "trackName");
 	   	trackpointNumElem.innerHTML = "(" + response.trackpoints.length + " trackpoints)";
 	   	trackElem.appendChild(trackpointNumElem);
 
 	    if (typeof(gpxFiles) == "undefined") {
-		   	var slowMotionLink = document.createElement("a");
-		   	slowMotionLink.id = "slowMotionLink-" + (globalTrackCounter - 1);
-		   	slowMotionLink.setAttribute("href", "javascript:showTrackInSlowMotion(" + (globalTrackCounter - 1) + ")");
-		   	slowMotionLink.setAttribute("class", "gpxSlowMotionLink");
-		   	slowMotionLink.setAttribute("title", resourceBundle["slowMotionTitle"]);
-		   	slowMotionLink.innerHTML = resourceBundle["slowMotionLink"];
-		   	trackElem.appendChild(slowMotionLink);
+		   	if (mapType !== "osm") {
+  		   	    const slowMotionLink = document.createElement("a");
+		   	    slowMotionLink.id = "slowMotionLink-" + (globalTrackCounter - 1);
+		   	    slowMotionLink.setAttribute("href", "javascript:showTrackInSlowMotion(" + (globalTrackCounter - 1) + ")");
+		   	    slowMotionLink.setAttribute("class", "gpxSlowMotionLink");
+		   	    slowMotionLink.setAttribute("title", resourceBundle["slowMotionTitle"]);
+		   	    slowMotionLink.innerHTML = resourceBundle["slowMotionLink"];
+		   	    trackElem.appendChild(slowMotionLink);
+		   	}
 	    }
 	}
 }

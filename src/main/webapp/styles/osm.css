@@ -1,4 +1,10 @@
 .olPopup {
-    font-size: 12px;
-    color: red;
+    height: 80px!important;
+    background-color: lavender!important;
+    border: 2px solid!important;
+    border-color: #808080;
+    border-radius: 8px;
+    font-family: Arial,Helvetica,Sans-serif;
+    font-size: 10px;
+    color: navy;
 }
