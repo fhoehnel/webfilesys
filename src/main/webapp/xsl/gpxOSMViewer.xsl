@@ -13,7 +13,7 @@
     <meta http-equiv="expires" content="0" />
 
     <link rel="stylesheet" type="text/css" href="/webfilesys/styles/common.css" />
-    <link rel="stylesheet" type="text/css" href="/webfilesys/styles/osm.css" />
+    <link rel="stylesheet" type="text/css" href="/webfilesys/styles/osmap.css" />
 
     <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
