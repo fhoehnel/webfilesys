@@ -1879,6 +1879,11 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
 
+        if (command.equals("multiGPXOSM")) {
+            (new MultiOSMTrackHandler(req, resp, session, output, userid)).handleRequest();
+            return(true);
+        }
+
         if (command.equals("gpxTrack")) {
             (new GPXTrackHandler(req, resp, session, output, userid)).handleRequest();
             return(true);
