@@ -1,51 +1,45 @@
 var TRACK_COLORS = [
-    "#008020",
+    "#002080",
     "#802000",
-    "#002080"
+    "#008020"
+];
+
+var OSM_SLOW_MOTION_TRACK_COLORS = [
+    "#b000b0",
+    "#ff4040",
+    "#ffff00",
+    "#00c0ff",
+    "#0080a0"
 ];
 
 var globalTrackCounter = 0;
 
 var overallBounds = null;
 
-function showTracksOnOSM(gpxFilePath) {
-    showMap(gpxFilePath);
-}
+var osmMap = null;
 
-function showMap(gpxFilePath) {
-    document.getElementById("mapDiv").style.height = (window.innerHeight - 20 )+ "px";
+function showOSMTracks(gpxFilePath) {
+    document.getElementById("mapDiv").style.height = (window.innerHeight - 30 )+ "px";
     const map = new OpenLayers.Map("mapDiv");
+    osmMap = map;
     map.addLayer(new OpenLayers.Layer.OSM());
 
-    fetchGet("gpxTrack", { filePath: encodeURIComponent(gpxFilePath) },
+    showSingleOSMTrack(gpxFilePath, map);
+}
+
+function showSingleOSMTrack(gpxFilePath, map) {
+
+    const parameters = {
+        filePath: encodeURIComponent(gpxFilePath),
+        trackNumber: currentTrack
+    }
+
+    fetchGet("gpxTrack", parameters,
         responseText => {
             const response = JSON.parse(responseText);
             if (response.trackpoints && response.trackpoints.length > 0) {
-
                 const trackPoints = response.trackpoints;
-                const fromProjection = new OpenLayers.Projection("EPSG:4326");
-                const toProjection = map.getProjectionObject();
-
-                const coordinates = [];
-                for (let i = 0; i < trackPoints.length; i++) {
-                    coordinates.push(new OpenLayers.Geometry.Point(trackPoints[i].lon, trackPoints[i].lat).transform(fromProjection, toProjection));
-                }
-
-                const lines = new OpenLayers.Layer.Vector("Track Line");
-                const lineFeature = new OpenLayers.Feature.Vector(
-                    new OpenLayers.Geometry.LineString(coordinates),
-                    {},
-                    {
-                        strokeColor: "#002080",
-                        strokeWidth: 4
-                    }
-                );
-                lines.addFeatures([lineFeature]);
-                map.addLayer(lines);
-
-                const lineExtent = lineFeature.geometry.getBounds();
-                map.zoomToExtent(lineExtent);
-
+                showTrackOnOSMMap(trackPoints, map);
                	showTrackMetaData(response, "osm");
                	if (response.hasElevation) {
                    	drawAltDistProfile(response);
@@ -61,8 +55,12 @@ function showMap(gpxFilePath) {
                    		}
                    	}
                	}
-
-               	loadAndShowWayPointsOSM(map, gpxFilePath);
+                currentTrack++;
+                if (currentTrack < trackNumber) {
+                    showSingleOSMTrack(gpxFilePath, map);
+                } else {
+                    loadAndShowWayPointsOSM(map, gpxFilePath);
+                }
             }
         },
         null,
@@ -80,14 +78,14 @@ function loadAndShowWayPointsOSM(map, gpxFilePath) {
 }
 
 function showMultipleOSMTracks() {
-    document.getElementById("mapDiv").style.height = (window.innerHeight - 20 )+ "px";
+    document.getElementById("mapDiv").style.height = (window.innerHeight - 30 )+ "px";
     const map = new OpenLayers.Map("mapDiv");
     map.addLayer(new OpenLayers.Layer.OSM());
 
-    showSingleOSMTrack(map);
+    showNextOSMTrack(map);
 }
 
-function showSingleOSMTrack(map) {
+function showNextOSMTrack(map) {
 
     const filePath = gpxFiles.pop();
     const parameters = {
@@ -100,7 +98,7 @@ function showSingleOSMTrack(map) {
             showTrackOnOSMMap(response.trackpoints, map);
             showTrackMetaData(response, "osm");
             if (gpxFiles.length > 0) {
-                showSingleOSMTrack(map);
+                showNextOSMTrack(map);
             }
         },
         null,
@@ -140,4 +138,5 @@ function showTrackOnOSMMap(trackPoints, map) {
     map.zoomToExtent(overallBounds);
 
     globalTrackCounter++;
+    globalTrackMap[globalTrackCounter - 1] = lines;
 }
