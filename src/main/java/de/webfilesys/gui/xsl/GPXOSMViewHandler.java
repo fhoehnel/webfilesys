@@ -2,9 +2,11 @@ package de.webfilesys.gui.xsl;
 
 import com.ctc.wstx.exc.WstxParsingException;
 import de.webfilesys.WebFileSysConfig;
-import de.webfilesys.gui.user.UserRequestHandler;
 import de.webfilesys.util.CommonUtils;
+import de.webfilesys.util.XmlUtil;
 import org.apache.logging.log4j.LogManager;
+import org.w3c.dom.Element;
+import org.w3c.dom.ProcessingInstruction;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,11 +25,7 @@ import java.io.PrintWriter;
  * 
  * @author Frank Hoehnel
  */
-public class GPXOSMViewHandler extends UserRequestHandler {
-	private static final String STYLESHEET_REF = "<?xml-stylesheet type=\"text/xsl\" href=\"/webfilesys/xsl/gpxOSMViewer.xsl\"?>";
-
-	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
-
+public class GPXOSMViewHandler extends XslRequestHandlerBase {
 	public GPXOSMViewHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
@@ -49,11 +47,15 @@ public class GPXOSMViewHandler extends UserRequestHandler {
 			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTP();
 		}
 
-		BufferedReader gpxReader = null;
+        Element gpxElem = doc.createElement("gpx");
+        doc.appendChild(gpxElem);
+
+        ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/gpxOSMViewer.xsl\"");
+        doc.insertBefore(xslRef, gpxElem);
+
+        BufferedReader gpxReader = null;
 
 		try {
-			resp.setContentType("text/xml");
-
 			gpxReader = new BufferedReader(new FileReader(filePath));
 
 			XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -82,31 +84,14 @@ public class GPXOSMViewHandler extends UserRequestHandler {
 						tagName = parser.getLocalName();
 
 						if (tagName.equals("gpx")) {
-							output.println(XML_HEADER);
-							output.println(STYLESHEET_REF);
-
-							output.println("<gpx>");
-
-							if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
-								output.println("  <googleMapsAPIKey>" + googleMapsAPIKey + "</googleMapsAPIKey>");
-							}
-							output.println("  <filePath>" + CommonUtils.escapeForJavascript(filePath) + "</filePath>");
-							
-							output.println("  <language>" + language + "</language>");
+                            XmlUtil.setChildText(gpxElem, "filePath", CommonUtils.escapeForJavascript(filePath));
+                            XmlUtil.setChildText(gpxElem, "language", language);
 						}
-
 						if (tagName.equals("trk")) {
-							output.println("<track>" + trackCounter + "</track>");
-							trackCounter++;
-						}
-
-						break;
-
-					case XMLStreamConstants.END_ELEMENT:
-
-						tagName = parser.getLocalName();
-						if (tagName.equals("gpx")) {
-							output.println("</gpx>");
+                            Element trackElem = doc.createElement("track");
+                            XmlUtil.setElementText(trackElem, Integer.toString(trackCounter));
+                            gpxElem.appendChild(trackElem);
+                            trackCounter++;
 						}
 						break;
 
@@ -117,8 +102,6 @@ public class GPXOSMViewHandler extends UserRequestHandler {
 					LogManager.getLogger(getClass()).warn("GPX parsing error", epex);
 				}
 			}
-
-			output.flush();
 		} catch (IOException e) {
 			LogManager.getLogger(getClass()).error("failed to read GPX file", e);
 		} catch (XMLStreamException xmlEx) {
@@ -133,5 +116,6 @@ public class GPXOSMViewHandler extends UserRequestHandler {
 				}
 			}
 		}
-	}
+        processResponse("gpxOSMViewer.xsl");
+    }
 }

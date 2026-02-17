@@ -14,25 +14,22 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import de.webfilesys.WebFileSysConfig;
-import org.apache.logging.log4j.Logger;
+import de.webfilesys.util.XmlUtil;
 import org.apache.logging.log4j.LogManager;
 
 
 import com.ctc.wstx.exc.WstxParsingException;
 
-import de.webfilesys.WebFileSys;
-import de.webfilesys.gui.user.UserRequestHandler;
 import de.webfilesys.util.CommonUtils;
+import org.w3c.dom.Element;
+import org.w3c.dom.ProcessingInstruction;
 
 /**
- * GPS track file viewer.
+ * GPS track file viewer for Google maps.
  * 
  * @author Frank Hoehnel
  */
-public class GPXViewHandler extends UserRequestHandler {
-	private static final String STYLESHEET_REF = "<?xml-stylesheet type=\"text/xsl\" href=\"/webfilesys/xsl/gpxViewer.xsl\"?>";
-
-	private static final String XML_HEADER = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\" standalone=\"yes\"?>";
+public class GPXViewHandler extends XslRequestHandlerBase {
 
 	public GPXViewHandler(
     		HttpServletRequest req, 
@@ -55,17 +52,21 @@ public class GPXViewHandler extends UserRequestHandler {
 			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTP();
 		}
 
+        Element gpxElem = doc.createElement("gpx");
+        doc.appendChild(gpxElem);
+
+        ProcessingInstruction xslRef = doc.createProcessingInstruction("xml-stylesheet", "type=\"text/xsl\" href=\"/webfilesys/xsl/gpxViewer.xsl\"");
+        doc.insertBefore(xslRef, gpxElem);
+
 		BufferedReader gpxReader = null;
 
 		try {
-			resp.setContentType("text/xml");
-
 			gpxReader = new BufferedReader(new FileReader(filePath));
 
 			XMLInputFactory factory = XMLInputFactory.newInstance();
 			XMLStreamReader parser = factory.createXMLStreamReader(gpxReader);
 
-			String tagName = null;
+			String tagName;
 
 			boolean documentEnd = false;
 
@@ -87,33 +88,19 @@ public class GPXViewHandler extends UserRequestHandler {
 					case XMLStreamConstants.START_ELEMENT:
 						tagName = parser.getLocalName();
 
-						if (tagName.equals("gpx")) {
-							output.println(XML_HEADER);
-							output.println(STYLESHEET_REF);
-
-							output.println("<gpx>");
-
-							if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
-								output.println("  <googleMapsAPIKey>" + googleMapsAPIKey + "</googleMapsAPIKey>");
-							}
-							output.println("  <filePath>" + CommonUtils.escapeForJavascript(filePath) + "</filePath>");
-							
-							output.println("  <language>" + language + "</language>");
-						}
-
-						if (tagName.equals("trk")) {
-							output.println("<track>" + trackCounter + "</track>");
-							trackCounter++;
-						}
-
-						break;
-
-					case XMLStreamConstants.END_ELEMENT:
-
-						tagName = parser.getLocalName();
-						if (tagName.equals("gpx")) {
-							output.println("</gpx>");
-						}
+                        if (tagName.equals("gpx")) {
+                            if (!CommonUtils.isEmpty(googleMapsAPIKey)) {
+                                XmlUtil.setChildText(gpxElem, "googleMapsAPIKey", googleMapsAPIKey);
+                            }
+                            XmlUtil.setChildText(gpxElem, "filePath", CommonUtils.escapeForJavascript(filePath));
+                            XmlUtil.setChildText(gpxElem, "language", language);
+                        }
+                        if (tagName.equals("trk")) {
+                            Element trackElem = doc.createElement("track");
+                            XmlUtil.setElementText(trackElem, Integer.toString(trackCounter));
+                            gpxElem.appendChild(trackElem);
+                            trackCounter++;
+                        }
 						break;
 
 					default:
@@ -139,5 +126,6 @@ public class GPXViewHandler extends UserRequestHandler {
 				}
 			}
 		}
-	}
+        processResponse("gpxViewer.xsl");
+    }
 }
