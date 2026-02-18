@@ -45,7 +45,7 @@
     
   </head>
 
-  <body>
+  <body class="gpxTrack">
     <xsl:if test="/gpx/track">
       <xsl:attribute name="onload">showOSMTracks('<xsl:value-of select="/gpx/filePath" />')</xsl:attribute>
     </xsl:if>

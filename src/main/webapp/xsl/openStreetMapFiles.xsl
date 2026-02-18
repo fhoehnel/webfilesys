@@ -42,22 +42,20 @@
                                                  projection: map.displayProjection
                                              });
         map.addLayer(pois);
- 
+
         var lonLat = new OpenLayers.LonLat(longitude, latitude);
         lonLat.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
                          map.getProjectionObject()); // to Spherical Mercator Projection
-        map.setCenter(lonLat, zoomFactor); 
-        
-        // TODO:
-        // bounds = new OpenLayers.Bounds(2996.2336935074995, 56840.21183910011, 1777863.3259255073, 1312326.8861909)
-        // map.zoomToExtent(bounds);   
-    }  
+        map.setCenter(lonLat, zoomFactor);
+
+        // map.zoomToExtent(pois.getDataExtent());
+    }
 
 </script>
 
 </head>
 
-<body onload="showMap()" style="margin:0px;">
+<body onload="showMap()" style="margin:0px;" class="pictureLocations">
 
   <div id="mapdiv"></div>
 
