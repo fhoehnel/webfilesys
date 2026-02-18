@@ -25,7 +25,7 @@ var bounds;
 
 var map;
 
-var globalTrackMap = {};
+var globalTrackMap = [];
 
 var slowMotionTracks = [];
 

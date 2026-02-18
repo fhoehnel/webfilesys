@@ -12,8 +12,6 @@ var OSM_SLOW_MOTION_TRACK_COLORS = [
     "#0080a0"
 ];
 
-var globalTrackCounter = 0;
-
 var overallBounds = null;
 
 var osmMap = null;
