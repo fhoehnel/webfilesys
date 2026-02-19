@@ -67,9 +67,9 @@
         script.type = "text/javascript";
         
         if (window.location.href.indexOf("https") == 0) {
-            script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey + "&libraries=marker";
+            script.src = "https://maps.googleapis.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey + "&amp;libraries=marker";
         } else {
-            script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey + "&libraries=marker";
+            script.src = "http://maps.googleapis.com/maps/api/js?sensor=false&amp;callback=handleGoogleMapsApiReady&amp;key=" + googleMapsAPIKey + "&amp;libraries=marker";
         }
         
         document.body.appendChild(script);
