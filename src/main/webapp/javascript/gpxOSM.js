@@ -138,3 +138,27 @@ function showTrackOnOSMMap(trackPoints, map) {
     globalTrackCounter++;
     globalTrackMap[globalTrackCounter - 1] = lines;
 }
+
+function showLocationsOnOSMMap(folderPath) {
+    const map = new OpenLayers.Map("mapdiv");
+    map.addLayer(new OpenLayers.Layer.OSM());
+
+    const pois = new OpenLayers.Layer.Text("My Points",
+        {
+            location:"/webfilesys/servlet?command=osmFilesPOIList&path=" + encodeURIComponent(folderPath),
+            projection: map.displayProjection
+        });
+    map.addLayer(pois);
+
+    const lonLat = new OpenLayers.LonLat(0, 0);
+    lonLat.transform(new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+                     map.getProjectionObject()); // to Spherical Mercator Projection
+    map.setCenter(lonLat, 1);
+
+    pois.events.register("loadend", pois, function() {
+        const extent = pois.getDataExtent();
+        if (extent) {
+            map.zoomToExtent(extent);
+        }
+    });
+}
