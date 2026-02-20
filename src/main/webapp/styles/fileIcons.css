@@ -69,3 +69,7 @@
 .icon-file-html:before {
 	content: '\f121';
 }
+
+.icon-file-terminal:before {
+    content: '\f120';
+}
