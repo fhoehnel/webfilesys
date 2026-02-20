@@ -2,6 +2,7 @@ package de.webfilesys.gui.user;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -72,23 +73,23 @@ public class OpenStreetMapPOIHandler extends UserRequestHandler
 
 		float latitude = Float.NEGATIVE_INFINITY;
 		float longitude = Float.NEGATIVE_INFINITY;
+        float altitude = Float.NaN;
 		String infoText = "";
 		String description = metaInfMgr.getDescription(metaInfPath);
 		if ((description == null) || (description.trim().length() == 0)) {
 			description = folderOrFile.getName();
 		}
 		
-		if (geoTag != null)
-		{
+		if (geoTag != null) {
 	        latitude = geoTag.getLatitude();
 	        longitude = geoTag.getLongitude();
 	        infoText = geoTag.getInfoText();
 	        if ((infoText == null) || (infoText.trim().length() == 0)) {
 	        	infoText = folderOrFile.getName();
 	        }
-		}
-		else
-		{
+		} else {
+            infoText = folderOrFile.getName();
+
             String fileExt = CommonUtils.getFileExtension(path);
             
             if (fileExt.equals(".jpg") || fileExt.equals(".jpeg"))
@@ -115,7 +116,8 @@ public class OpenStreetMapPOIHandler extends UserRequestHandler
                         if ((longitudeRef != null) && longitudeRef.equalsIgnoreCase("W")) 
                         {
                             longitude = (-longitude);
-                        } 
+                        }
+                        altitude = exifData.getGpsAltitude();
                     }
                 }
             }
@@ -126,6 +128,17 @@ public class OpenStreetMapPOIHandler extends UserRequestHandler
             LogManager.getLogger(getClass()).error("No Geo Tag / GPS Exif data exists for file/folder " + path);
             
             return;
+        }
+
+        if (!folderOrFile.isDirectory()) {
+            description = "<img src=\"/webfilesys/servlet?command=picThumb&amp;imgFile=" + URLEncoder.encode(folderOrFile.getName()) + "\" style=\"max-width:160px;display:inline;\">";
+            String metaInfDescr = metaInfMgr.getDescription(folderOrFile.getAbsolutePath());
+            if (!CommonUtils.isEmpty(metaInfDescr)) {
+                description += "<p>" + CommonUtils.escapeHTML(metaInfDescr) + "</p>";
+            }
+            if (!Float.isNaN(altitude)) {
+                description += "<p>" + ((long) altitude) + " m</p>";
+            }
         }
 
         resp.setContentType("text/plain");
