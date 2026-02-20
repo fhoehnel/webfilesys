@@ -11,19 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import de.webfilesys.*;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.Constants;
-import de.webfilesys.FastPathManager;
-import de.webfilesys.FileContainer;
-import de.webfilesys.FileLinkSelector;
-import de.webfilesys.FileSelectionStatus;
-import de.webfilesys.LanguageManager;
-import de.webfilesys.MetaInfManager;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -120,6 +113,10 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 		if (readonly) {
 			XmlUtil.setChildText(fileListElement, "readonly", "true", false);
 		}
+
+        if (WebFileSysConfig.getInstance().isDownloadStatistics()) {
+            XmlUtil.setChildText(fileListElement, "statistics", "true", false);
+        }
 
 		if (WebFileSys.getInstance().isMaintananceMode()) {
 			if (!isAdminUser(false)) {

@@ -237,7 +237,7 @@
         <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
-      <xsl:if test="not(/fileList/readonly)">
+      <xsl:if test="not(/fileList/readonly) and /fileList/statistics">
         <td class="tabSpacer"></td>
 
         <td class="tabInactive">
