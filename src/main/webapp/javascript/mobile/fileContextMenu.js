@@ -60,9 +60,9 @@ function contextMenu(fileName) {
     	addContextMenuEntry(menuDiv, "editRemote('" + scriptPreparedPath + "', '" + scriptPreparedFile + "')", resourceBundle["menuEdit"]);
 
 	    if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR")) {
-	    	addContextMenuEntry(menuDiv, "zipFile('" + scriptPreparedPath + "')", resourceBundle["menuUnzip"]);
+	    	addContextMenuEntry(menuDiv, "zipFile('" + scriptPreparedFile + "')", resourceBundle["menuUnzip"]);
         } else {
-	    	addContextMenuEntry(menuDiv, "zipFile('" + scriptPreparedPath + "')", resourceBundle["menuZip"]);
+	    	addContextMenuEntry(menuDiv, "zipFile('" + scriptPreparedFile + "')", resourceBundle["menuZip"]);
         }
         
         if (mailEnabled == 'true') {

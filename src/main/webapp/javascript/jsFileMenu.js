@@ -38,9 +38,8 @@ function hexView(fileName)
     hexWin.focus();
 }
 
-function zip(path)
-{
-    window.location.href="/webfilesys/servlet?command=zipFile&filePath=" + encodeURIComponent(path);
+function zip(fileName) {
+    window.location.href = "/webfilesys/servlet?command=zipFile&fileName=" + encodeURIComponent(fileName);
 }
 
 function editMP3(path)

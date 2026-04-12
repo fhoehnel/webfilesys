@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -28,13 +28,11 @@ import de.webfilesys.user.UserManager;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLDecoder;
 
-public class UploadServlet extends WebFileSysServlet
-{
+public class UploadServlet extends WebFileSysServlet {
 	private static final long serialVersionUID = 1L;
 	
 	public void doPost ( HttpServletRequest req, HttpServletResponse resp )
-    throws ServletException, java.io.IOException
-    {
+    throws ServletException, java.io.IOException {
         // prevent caching
 		resp.setDateHeader("expires", 0l); 
     	
@@ -42,28 +40,19 @@ public class UploadServlet extends WebFileSysServlet
     	
 		HttpSession session = req.getSession(false);
     	
-		if (session != null)
-		{
+		if (session != null) {
 			userid = (String) session.getAttribute("userid");
-			
-			if (userid == null)
-			{
+			if (userid == null) {
 				(new XslLogonHandler(req, resp, session, resp.getWriter(), false)).handleRequest(); 
-				
 				return;
 			}
-	    }
-		else
-		{
+	    } else {
 		    session = req.getSession(true);
-
-		    (new XslLogonHandler(req, resp, session, resp.getWriter(), false)).handleRequest(); 
-		    
+		    (new XslLogonHandler(req, resp, session, resp.getWriter(), false)).handleRequest();
 		    return;
 		}    	
     	
-        if (!checkWriteAccess(userid, session))
-        {
+        if (!checkWriteAccess(userid, session)) {
             throw new ServletException("write access forbidden");
         }
 		
@@ -77,534 +66,318 @@ public class UploadServlet extends WebFileSysServlet
 		
 		long contentLength = req.getContentLength();
 		
-		// System.out.println("content length: " + contentLength);
-		
 		InputStream input = req.getInputStream();
 		
         session.removeAttribute(Constants.UPLOAD_LIMIT_EXCEEDED);
         session.removeAttribute(Constants.UPLOAD_CANCELED);
 
         UserManager userMgr = WebFileSys.getInstance().getUserMgr();
-        
         String language = userMgr.getLanguage(userid);
         
-        String actPath = null;
+        long bytesUploaded = 0;
 
-        int bytesUploaded = 0;
-
-        Long uploadCounter = new Long(bytesUploaded);
+        Long uploadCounter = bytesUploaded;
 
         session.setAttribute(Constants.UPLOAD_COUNTER, uploadCounter);
         session.setAttribute(Constants.UPLOAD_SIZE, new Long(0));
 
-        Boolean uploadSuccess = Boolean.valueOf(false);
+        Boolean uploadSuccess = Boolean.FALSE;
 
         session.setAttribute(Constants.UPLOAD_SUCCESS, uploadSuccess);
 
-        String full_path = null;
-        String fn_only = null;
-        String text_line = null;
-        boolean stop = false;
-        int compare_length = 0;
-        boolean fn_found = false;
-        String delimiter_str = null;
-
-        String exceptionText = null;
-
-        String xferMode = null;
-
         long prefixLength = 0;
 
-		boolean uploadLimitExceeded = false;
-
-		boolean unzipAfterUpload = false;
-		
-		String destFileName = null;
-		
-		String description = null;
-		
         String temp;
 
-        for (int i = 0; i < 3; i++)
-        {
+        for (int i = 0; i < 3; i++) {
             temp = readLineAsUTF8(input);
             prefixLength += temp.length();
-
-			// System.out.println("read line: " + temp);
         }
 
         temp = readLineAsUTF8(input);
         prefixLength += temp.length();
 
-		// System.out.println("read line: " + temp);
-
-        actPath = temp;
-
-        if (!accessAllowed(actPath, userid))
-        {
+        String actPath = temp;
+        if (!accessAllowed(actPath, userid)) {
             throw new ServletException("access forbidden");
         }
 
-		for (int i = 0; i < 3; i++)
-		{
+		for (int i = 0; i < 3; i++) {
 			temp = readLineAsUTF8(input);
 			prefixLength += temp.length();
-
-			// System.out.println("read line: " + temp);
 		}
 
 		temp = readLineAsUTF8(input);
 		prefixLength += temp.length();
 
-		// System.out.println("read line: " + temp);
+		boolean unzipAfterUpload = temp.equalsIgnoreCase("true");
 
-		unzipAfterUpload = (temp.equalsIgnoreCase("true"));
-
-		for (int i = 0; i < 3; i++)
-		{
+		for (int i = 0; i < 3; i++) {
 			temp = readLineAsUTF8(input);
 			prefixLength += temp.length();
-
-			// System.out.println("read line: " + temp);
 		}
 
 		temp = readLineAsUTF8(input);
 		prefixLength += temp.length();
 
-		// System.out.println("read line: " + temp);
+        String destFileName = temp.trim();
 
-        destFileName = temp.trim();
-
-		// System.out.println("destFileName: " + destFileName);
-		
-		for (int i = 0; i < 3; i++)
-		{
+		for (int i = 0; i < 3; i++) {
 			temp = readLineAsUTF8(input);
 			prefixLength += temp.length();
-
-			// System.out.println("read line: " + temp);
 		}
 
 		temp = readLineAsUTF8(input);
 		prefixLength += temp.length();
 
-		// System.out.println("read line: " + temp);
+		String description = temp.trim();
 
-		description = temp.trim();
+        String fullPath;
+        String fn_only = null;
+        int compare_length = 0;
+        boolean fn_found = false;
+        String delimiter_str = null;
+        String exceptionText = null;
+        boolean stop = false;
 
-        stop = false;
-        while (!stop)
-        {
-            text_line = readLineAsUTF8(input);
-            
-            // System.out.println("read line in loop: >>" + text_line + "<<");
-
+        while (!stop) {
+            String text_line = readLineAsUTF8(input);
             prefixLength += text_line.length();
-
-            if (delimiter_str == null)
-            {
+            if (delimiter_str == null) {
                 delimiter_str = text_line;
                 compare_length = delimiter_str.length();
-                
-            }
-            else
-            {
-                if ((!fn_found) && (text_line.indexOf("filename=") > 0))
-                {
-                    full_path =
-                        text_line.substring(
-                            text_line.indexOf("filename=") + 10,
-                            text_line.length() - 1);
-
-                    if (full_path.indexOf("\\") > 0)
-                        fn_only =
-                            full_path.substring(
-                                full_path.lastIndexOf("\\") + 1);
-                    else
-                        fn_only =
-                            full_path.substring(
-                                full_path.lastIndexOf("/") + 1);
-
+            } else {
+                if (!fn_found && text_line.indexOf("filename=") > 0) {
+                    fullPath = text_line.substring(text_line.indexOf("filename=") + 10, text_line.length() - 1);
+                    if (fullPath.indexOf("\\") > 0) {
+                        fn_only = fullPath.substring(fullPath.lastIndexOf("\\") + 1);
+                    } else {
+                        fn_only = fullPath.substring(fullPath.lastIndexOf("/") + 1);
+                    }
                     fn_found = true;
-                    
-                    // System.out.println("filename: " + fn_only);
                 }
             }
-
-            if (text_line.equals(""))
-            {
+            if (text_line.equals("")) {
                 stop = true;
             }
         }
 
-        if (contentLength > 0)
-        {
+        if (contentLength > 0) {
             session.setAttribute(
                 Constants.UPLOAD_SIZE,
                 new Long(contentLength - prefixLength - ((long) compare_length)));
         }
 
         String out_file_name = null;
-
-		if ((destFileName != null) && (destFileName.length() > 0))
-        {
-			if (!CommonUtils.isEmpty(fn_only)) 
-			{
+        if (!CommonUtils.isEmpty(destFileName)) {
+			if (!CommonUtils.isEmpty(fn_only)) {
 				String origFileExt = CommonUtils.getFileExtension(fn_only);
-
-				if (!CommonUtils.isEmpty(origFileExt)) 
-				{
-					if (isPictureFile(origFileExt)) 
-					{
-						String destFileExt = CommonUtils.getFileExtension(destFileName);
-						if (CommonUtils.isEmpty(destFileExt) || (!destFileExt.equalsIgnoreCase(origFileExt))) 
-						{
-							destFileName = destFileName + origFileExt;
-						}
-					}
+				if (!CommonUtils.isEmpty(origFileExt)) {
+                    String destFileExt = CommonUtils.getFileExtension(destFileName);
+                    if (CommonUtils.isEmpty(destFileExt) ||
+                            (isPictureFile(origFileExt) && !destFileExt.equalsIgnoreCase(origFileExt))) {
+                        destFileName = destFileName + origFileExt;
+                    }
 				}
 			}
-			
 		    destFileName = replaceIllegalChars(destFileName);
-		    
-			if (actPath.endsWith(File.separator))
-			{
-				out_file_name = actPath + destFileName;
-			}
-			else
-			{
-				out_file_name = actPath + File.separator + destFileName;
-			}
+            out_file_name = CommonUtils.joinFilesysPath(actPath, destFileName);
 
 			File outFile = new File(out_file_name);
-        
-			try
-			{
+			try {
 				outFile.getCanonicalPath();
-			}
-			catch (IOException ioex)
-			{
+			} catch (IOException ioex) {
 				LogManager.getLogger(getClass()).debug("cannot write upload to file " + out_file_name + " - using original file name " + fn_only);
-			    
 			    out_file_name = null;
 			}
         }
 
-        if (out_file_name == null)
-        {
+        if (out_file_name == null) {
             fn_only = replaceIllegalChars(fn_only);
-            
-			if (actPath.endsWith(File.separator))
-			{
-				out_file_name = actPath + fn_only;
-			}
-			else
-			{
-				out_file_name = actPath + File.separator + fn_only;
-			}
+            out_file_name = CommonUtils.joinFilesysPath(actPath, fn_only);
         }
-
         long uploadLimit = WebFileSysConfig.getInstance().getUploadLimit();
-        
-        byte delimiterBytes[] = delimiter_str.getBytes();
-
-        byte equalBuff[] = new byte[compare_length + 1];
-
-        byte inBuffer[] = new byte[4096];
+        byte[] delimiterBytes = delimiter_str.getBytes();
+        byte[] equalBuff = new byte[compare_length + 1];
+        byte[] inBuffer = new byte[4096];
 
         int inBufferByteNum = 0;
-
         int inIdx = 0;
 
-        byte outBuffer[] = new byte[4096 + compare_length + 1];
+        byte[] outBuffer = new byte[4096 + compare_length + 1];
 
         byte buff2 = 0;
         byte buff1 = 0;
-
         int outIdx = 0;
-
         int delimiterIdx = 0;
+        boolean uploadLimitExceeded = false;
 
         FileOutputStream outFile = null;
-
-        try
-        {
+        try {
             outFile = new FileOutputStream(out_file_name);
-
             stop = false;
-            while (!stop)
-            {
-                if (inIdx >= inBufferByteNum)
-                {
+            while (!stop) {
+                if (inIdx >= inBufferByteNum) {
                     inBufferByteNum = input.read(inBuffer);
-                    
                     session.setAttribute("lastActiveTime", new Date());
-
-                    if (inBufferByteNum < 0)
-                    {
+                    if (inBufferByteNum < 0) {
                         stop = true;
-
                         LogManager.getLogger(getClass()).warn("unexpected end of upload stream of file " + out_file_name + " at byte index "
                                 + bytesUploaded);
-                    }
-                    else
-                    {
+                    } else {
                         Boolean uploadCanceled = (Boolean) session.getAttribute(Constants.UPLOAD_CANCELED);
-                
-                        if (uploadCanceled != null)
-                        {
+                        if (uploadCanceled != null) {
                             LogManager.getLogger(getClass()).warn("upload of file " + out_file_name + " canceled by user at byte index " + bytesUploaded);
                             stop = true;
                         }
                     }
-
                     inIdx = 0;
                 }
 
-                if (!stop)
-                {
+                if (!stop) {
                     byte b = inBuffer[inIdx];
-
                     inIdx++;
-                    
-                    if (delimiterBytes[delimiterIdx] == b)
-                    {
+                    if (delimiterBytes[delimiterIdx] == b) {
                         equalBuff[delimiterIdx] = b;
-
                         delimiterIdx++;
-
-                        if (delimiterIdx >= compare_length)
-                        {
+                        if (delimiterIdx >= compare_length) {
                             stop = true;
                         }
-                    }
-                    else
-                    {
-                        if (delimiterIdx > 0)
-                        {
-                            for (int i = 0; i < delimiterIdx; i++)
-                            {
-                                if (bytesUploaded > 1)
-                                {
+                    } else {
+                        if (delimiterIdx > 0) {
+                            for (int i = 0; i < delimiterIdx; i++) {
+                                if (bytesUploaded > 1) {
                                     outBuffer[outIdx] = buff2;
                                     outIdx++;
                                 }
-
                                 buff2 = buff1;
-
                                 buff1 = equalBuff[i];
                             }
-
                             bytesUploaded += delimiterIdx;
                         }
-
                         delimiterIdx = 0;
-
-                        if (bytesUploaded > 1)
-                        {
+                        if (bytesUploaded > 1) {
                             outBuffer[outIdx] = buff2;
                             outIdx++;
                         }
-
                         buff2 = buff1;
-
                         buff1 = b;
-
                         bytesUploaded++;
                     }
-
-                    if (outIdx >= 4096)
-                    {
-                        if (!uploadLimitExceeded)
-                        {
+                    if (outIdx >= 4096) {
+                        if (!uploadLimitExceeded) {
                             outFile.write(outBuffer, 0, outIdx);
                         }
-
                         outIdx = 0;
-
-                        if (bytesUploaded > uploadLimit)
-                        {
-                            if (!uploadLimitExceeded)
-                            {
+                        if (bytesUploaded > uploadLimit) {
+                            if (!uploadLimitExceeded) {
                                 uploadLimitExceeded = true;
-                                
                                 session.setAttribute(Constants.UPLOAD_LIMIT_EXCEEDED,new Boolean(true));
-                                
                                 LogManager.getLogger(getClass()).warn("upload limit exceeded for user " + userid + " for file " + out_file_name);
-
                                 exceptionText = LanguageManager.getInstance().getResource(language, "alert.uploadLimitExceeded", "The size of the uploaded file exceeds the limit");
                             }
                         }
-
-                        uploadCounter = new Long(bytesUploaded);
-                        session.setAttribute(
-                            Constants.UPLOAD_COUNTER,
-                            uploadCounter);
+                        uploadCounter = bytesUploaded;
+                        session.setAttribute(Constants.UPLOAD_COUNTER, uploadCounter);
                     }
                 }
             }
-
-            if (outIdx > 0)
-            {
-                if (!uploadLimitExceeded)
-                {
+            if (outIdx > 0) {
+                if (!uploadLimitExceeded) {
                     outFile.write(outBuffer, 0, outIdx);
                 }
             }
-
-            uploadSuccess = new Boolean(!uploadLimitExceeded);
+            uploadSuccess = !uploadLimitExceeded;
             session.setAttribute(Constants.UPLOAD_SUCCESS, uploadSuccess);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             LogManager.getLogger(getClass()).error("error writing upload file to " + out_file_name, e);
-
-            if (e instanceof FileNotFoundException)
-            {
+            if (e instanceof FileNotFoundException) {
                 exceptionText = LanguageManager.getInstance().getResource(language, "error.upload", "Error writing uploaded file");
-            }
-            else
-            {
+            } else {
                 exceptionText = e.toString();
             }
-            stop = true;
-        }
-        finally
-        {
-        	if (outFile != null) 
-        	{
-        		try
-        		{
+        } finally {
+        	if (outFile != null) {
+        		try {
         			outFile.close();
-        		}
-        		catch (Exception ex) 
-        		{
+        		} catch (Exception ex) {
         			LogManager.getLogger(getClass()).error("error closing upload file", ex);
         		}
         	}
         }
-
         PrintWriter output = resp.getWriter();
-        
-        if (exceptionText != null)
-        {
-            output.println("<HTML>");
-            output.println("<HEAD>");
+        if (exceptionText != null) {
+            output.println("<html>");
+            output.println("<head>");
 
-            output.println("<script labguage=\"javascript\">");
+            output.println("<script type=\"text/javascript\">");
             output.println("alert('" + exceptionText + "');");
             output.println("</script>");
-
-			output.print(
-				"<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=/webfilesys/servlet?command=listFiles\">");
-
-            output.print("</HEAD>");
+			output.print("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"0; URL=/webfilesys/servlet?command=listFiles\">");
+            output.print("</head>");
             output.println("</html>");
             output.flush();
-        }
-        else
-        {
-        	if ((description != null) && (description.length() > 0))
-        	{
+        } else {
+        	if (!CommonUtils.isEmpty(description)) {
         		MetaInfManager.getInstance().setDescription(out_file_name, description);
         	}
-        	
 			String ext = CommonUtils.getFileExtension(out_file_name);
-			
-        	if (unzipAfterUpload && ext.equals(".zip"))
-        	{
-        		req.setAttribute("filePath", out_file_name);
+        	if (unzipAfterUpload && ext.equals(".zip")) {
+        		req.setAttribute("fileName", destFileName);
         		req.setAttribute("delZipFile", "true");
-        		
-    		    (new ZipFileRequestHandler(req, resp, session, output, userid)).handleRequest(); 
-        	}
-        	else
-        	{
+    		    (new ZipFileRequestHandler(req, resp, session, output, userid)).handleRequest();
+        	} else {
         	    String mobile = (String) session.getAttribute("mobile");
-        	    
-        	    if (mobile != null)
-        	    {
+        	    if (mobile != null) {
                     (new MobileFolderFileListHandler(req, resp, session, output, userid)).handleRequest(); 
-        	    }
-        	    else
-        	    {
+        	    } else {
                     int viewMode = Constants.VIEW_MODE_LIST;
-
                     Integer sessionViewMode = (Integer) session.getAttribute("viewMode");
-                    
-                    if (sessionViewMode != null)
-                    {
+                    if (sessionViewMode != null) {
                         viewMode = sessionViewMode.intValue();
                     }
-        	        
-                    if (viewMode == Constants.VIEW_MODE_THUMBS) 
-                    {
+                    if (viewMode == Constants.VIEW_MODE_THUMBS) {
                         (new XslThumbnailHandler(req, resp, session, output, userid, false)).handleRequest(); 
-                    }
-                    else
-                    {
-                       (new XslFileListHandler(req, resp, session, output, userid)).handleRequest();
+                    } else {
+                        (new XslFileListHandler(req, resp, session, output, userid)).handleRequest();
                     }
         	    }
-
-				if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
-				{
-					if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png")))
-					{
+				if (WebFileSysConfig.getInstance().isAutoCreateThumbs()) {
+					if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png"))) {
 						AutoThumbnailCreator.getInstance().queuePath(out_file_name, AutoThumbnailCreator.SCOPE_FILE);
 					}
 				}
         	}
         }
-
 		session.setAttribute(Constants.UPLOAD_COUNTER, new Integer(0));
     }
     
     public void handleSingleBinaryUpload(HttpServletRequest req, HttpServletResponse resp)
-    throws ServletException, java.io.IOException
-    {
+    throws ServletException, java.io.IOException {
         HttpSession session = req.getSession(true);
-        
         String currentPath = (String) session.getAttribute(Constants.SESSION_KEY_CWD);
-        
         if (currentPath == null) {
             LogManager.getLogger(getClass()).error("current working directory unknown");
             return;
         }
         
         long uploadLimit = WebFileSysConfig.getInstance().getUploadLimit();
-        
         String requestPath = req.getRequestURI();
-        
         int lastPathDelimiterIdx = requestPath.lastIndexOf('/');
-        
         String fileName = UTF8URLDecoder.decode(requestPath.substring(lastPathDelimiterIdx + 1));
-
         fileName = replaceIllegalChars(fileName);
-
         File outFile = new File(currentPath, fileName);
-        
-        if (LogManager.getLogger(getClass()).isDebugEnabled())
-        {
+        if (LogManager.getLogger(getClass()).isDebugEnabled()) {
             LogManager.getLogger(getClass()).debug("ajax binary file upload: " + outFile.getAbsolutePath());
         }
-        
-        long uploadSize = 0l;
-        
+        long uploadSize = 0L;
         byte[] buff = new byte[4096];
-        
         FileOutputStream uploadOut = null;
-        
-        try
-        {
+        try {
             uploadOut = new FileOutputStream(outFile);
-            
             InputStream input = req.getInputStream();
-            
             int bytesRead;
-            
-            while ((bytesRead = input.read(buff)) > 0) 
-            {
+            while ((bytesRead = input.read(buff)) > 0) {
                 uploadSize += bytesRead;
                 if (uploadSize > uploadLimit) {
                     LogManager.getLogger(getClass()).warn("upload limit of " + uploadLimit + " bytes exceeded for file " + outFile.getAbsolutePath());
@@ -613,151 +386,102 @@ public class UploadServlet extends WebFileSysServlet
                     outFile.delete();
                     throw new ServletException("upload limit of " + uploadLimit + " bytes exceeded");
                 }
-                
                 uploadOut.write(buff, 0, bytesRead);
             }
-            
             uploadOut.flush();
-            
-        }
-        catch (IOException ex) 
-        {
+        } catch (IOException ex) {
             LogManager.getLogger(getClass()).error("error in ajax binary upload", ex);
             throw ex;
-        }
-        finally 
-        {
-            if (uploadOut != null)
-            {
-                try
-                {
+        } finally {
+            if (uploadOut != null) {
+                try {
                     uploadOut.close();
-                }
-                catch (Exception closeEx)
-                {
+                } catch (Exception closeEx) {
                 }
             }
         }
-        
-        if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
-        {
+        if (WebFileSysConfig.getInstance().isAutoCreateThumbs()) {
             String ext = CommonUtils.getFileExtension(fileName);
-            
-            if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals(".png")))
-            {
+            if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals(".png"))) {
                 AutoThumbnailCreator.getInstance().queuePath(outFile.getAbsolutePath(), AutoThumbnailCreator.SCOPE_FILE);
             }
         }
     }
     
-    private String replaceIllegalChars(String fileName) 
-    {
-        StringBuffer buff = new StringBuffer(fileName.length());
+    private String replaceIllegalChars(String fileName) {
+        StringBuilder buff = new StringBuilder(fileName.length());
         
-        for (int i = 0; i < fileName.length(); i++) 
-        {
+        for (int i = 0; i < fileName.length(); i++) {
             char c = fileName.charAt(i);
-            
-            if ((c == '\'') || (c == '#') || (c == '`') || (c == '%') || (c == '!') || (c == '§') || 
-                (c == '&') || (c == '[') || (c == ']') || (c == '\"'))
-            {
+            if ((c == '\'') || (c == '#') || (c == '`') || (c == '%') || (c == '!') || (c == '§') ||
+                (c == '&') || (c == '[') || (c == ']') || (c == '\"')) {
                 c = '_';
             }
-
             buff.append(c);
         }
-        
-        return (buff.toString());
+        return buff.toString();
     }
     
-    private String readLineAsUTF8(InputStream input) 
-    throws IOException
-    {
+    private String readLineAsUTF8(InputStream input) throws IOException {
         byte[] buff = new byte[1024];
         int idx = 0;
         boolean stop = false;
         
-        do 
-        {
+        do {
             int c = input.read();
-            if (c < 0)
-            {
+            if (c < 0) {
                 // end of stream
                 stop = true;
-            }
-            else
-            {
-                if (c == '\r') 
-                {
+            } else {
+                if (c == '\r') {
                     // found CR, skip over LF
                     input.read();
                     stop = true;
-                }
-                else if (c == '\n') 
-                {
+                } else if (c == '\n') {
                     // LF without preceding CR - ignore
                     stop = true;
-                }
-                else
-                {
+                } else {
                     buff[idx] = (byte) c;
                     idx++;
-                    if (idx == 1024)
-                    {
+                    if (idx == 1024) {
                         stop = true;
                     }
                 }
             }
-        }
-        while (!stop);
+        } while (!stop);
         
-        return new String(buff, 0, idx, "UTF8");
+        return new String(buff, 0, idx, StandardCharsets.UTF_8);
     }
     
-    public boolean checkWriteAccess(String userid, HttpSession session)
-    {
+    public boolean checkWriteAccess(String userid, HttpSession session) {
         boolean sessionReadonly = false;
-        
         Boolean sessRO = (Boolean) session.getAttribute("readonly");
-        
-        if (sessRO != null)
-        {
+        if (sessRO != null) {
             sessionReadonly = sessRO.booleanValue();
         }
-        
         boolean readonly =
             sessionReadonly || WebFileSys.getInstance().getUserMgr().isReadonly(userid);
-
-        if (!readonly)
-        {
+        if (!readonly) {
             return (true);
         }
-
         LogManager.getLogger(getClass()).warn("read-only user " + userid + " tried write access");
-
-        return (false);
+        return false;
     }
 
-    protected boolean accessAllowed(String fileName, String userid)
-    {
-        if (fileName.indexOf("..") >=0)
-        {
-            return(false);
+    protected boolean accessAllowed(String fileName, String userid) {
+        if (fileName.contains("..")) {
+            return false;
         }
 
-        if (File.separatorChar=='\\')   // WIN
-        {
+        if (File.separatorChar == '\\') {
             String lowerCaseDocRoot = WebFileSys.getInstance().getUserMgr().getLowerCaseDocRoot(userid);
+            String formattedDocName = fileName.toLowerCase().replace('\\','/');
 
-            String formattedDocName=fileName.toLowerCase().replace('\\','/');
-
-            if (lowerCaseDocRoot.charAt(0)=='*')
-            {
+            if (lowerCaseDocRoot.charAt(0)=='*') {
                 // may be this branch is not needed
                 // because if document root starts with "*" the user has full access anyway
                 // if this branch makes sense it should get the same test for
                 // doc length or slash at doc root length index as below
-
                 return(formattedDocName.substring(2).startsWith(lowerCaseDocRoot.substring(2)));
             }
 
@@ -767,14 +491,11 @@ public class UploadServlet extends WebFileSysServlet
         }
 
         String docRoot = WebFileSys.getInstance().getUserMgr().getDocumentRoot(userid);
-
-        if (docRoot.equals("/"))
-        {
-            return(true);
+        if (docRoot.equals("/")) {
+            return true;
         }
-
         return(fileName.startsWith(docRoot) &&
-               ((fileName.length()==docRoot.length()) ||
+               ((fileName.length() == docRoot.length()) ||
                 (fileName.charAt(docRoot.length())=='/')));
     }
     
@@ -788,7 +509,7 @@ public class UploadServlet extends WebFileSysServlet
     		   fileExt.equalsIgnoreCase(".bmp") ||
     		   fileExt.equalsIgnoreCase(".jpeg"));
     }
-    
+
 }
 
 

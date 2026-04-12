@@ -66,15 +66,11 @@ public abstract class RequestHandler
         if (parmValue != null) {
             return replaceUnsaveCharacers(parmValue);
 		}
-		
 		Object o = req.getAttribute(parmName);
-		
-		if ((o != null) && (o instanceof String))
-		{
-			return((String) o);
+		if (o instanceof String) {
+			return (String) o;
 		}
-		
-		return(null);
+		return null;
 	}
 
     private String replaceUnsaveCharacers(String valueEnteredByUser) {

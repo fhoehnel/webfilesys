@@ -24,7 +24,6 @@ import org.apache.logging.log4j.LogManager;
 
 
 import de.webfilesys.SubdirExistTester;
-import de.webfilesys.WebFileSys;
 import de.webfilesys.graphics.AutoThumbnailCreator;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
@@ -47,20 +46,16 @@ public class ZipFileRequestHandler extends UserRequestHandler {
 
 	protected void process() {
 		if (!checkWriteAccess()) {
+            LOG.warn("unauthorized write access to folder " + getCwd());
 			return;
 		}
 
-		String filePath = getParameter("filePath");
-
-		if (filePath == null) {
-			// we come from UploadServlet
-			
-			filePath = (String) req.getAttribute("filePath");
-		}
-		
-		if (!checkAccess(filePath)) {
-			return;
-		}
+        String fileName = getParameter("fileName");
+        if (CommonUtils.isEmpty(fileName)) {
+            LOG.warn("missing parameter value for zip file name");
+            return;
+        }
+        String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
 
 		output.println("<html>");
 		output.println("<head>");
@@ -255,13 +250,6 @@ public class ZipFileRequestHandler extends UserRequestHandler {
                 output.println("</tr>");
             } else {
 				String deleteZipFile = getParameter("delZipFile");
-				
-				if (deleteZipFile == null) {
-					// maybe we come from the UploadServlet
-					
-					deleteZipFile = (String) req.getAttribute("delZipFile");
-				}
-				
 				if (deleteZipFile != null) {
 					// do not ask what to do with the ZIP file
                     output.println("</table>");
