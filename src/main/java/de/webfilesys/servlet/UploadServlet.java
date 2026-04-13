@@ -64,8 +64,6 @@ public class UploadServlet extends WebFileSysServlet {
 		resp.setContentType("text/html");
 		resp.setCharacterEncoding("UTF-8");
 		
-		long contentLength = req.getContentLength();
-		
 		InputStream input = req.getInputStream();
 		
         session.removeAttribute(Constants.UPLOAD_LIMIT_EXCEEDED);
@@ -76,64 +74,50 @@ public class UploadServlet extends WebFileSysServlet {
         
         long bytesUploaded = 0;
 
-        Long uploadCounter = bytesUploaded;
+        long uploadCounter = bytesUploaded;
 
         session.setAttribute(Constants.UPLOAD_COUNTER, uploadCounter);
-        session.setAttribute(Constants.UPLOAD_SIZE, new Long(0));
+        session.setAttribute(Constants.UPLOAD_SIZE, 0L);
 
-        Boolean uploadSuccess = Boolean.FALSE;
-
-        session.setAttribute(Constants.UPLOAD_SUCCESS, uploadSuccess);
+        session.setAttribute(Constants.UPLOAD_SUCCESS, false);
 
         long prefixLength = 0;
 
-        String temp;
+        String line = null;
 
-        for (int i = 0; i < 3; i++) {
-            temp = readLineAsUTF8(input);
-            prefixLength += temp.length();
+        for (int i = 0; i < 4; i++) {
+            line = readLineAsUTF8(input);
+            prefixLength += line.length();
         }
 
-        temp = readLineAsUTF8(input);
-        prefixLength += temp.length();
-
-        String actPath = temp;
-        if (!accessAllowed(actPath, userid)) {
+        String currentPath = line;
+        if (!accessAllowed(currentPath, userid)) {
             throw new ServletException("access forbidden");
         }
 
-		for (int i = 0; i < 3; i++) {
-			temp = readLineAsUTF8(input);
-			prefixLength += temp.length();
+		for (int i = 0; i < 4; i++) {
+			line = readLineAsUTF8(input);
+			prefixLength += line.length();
 		}
 
-		temp = readLineAsUTF8(input);
-		prefixLength += temp.length();
+		boolean unzipAfterUpload = line.equalsIgnoreCase("true");
 
-		boolean unzipAfterUpload = temp.equalsIgnoreCase("true");
-
-		for (int i = 0; i < 3; i++) {
-			temp = readLineAsUTF8(input);
-			prefixLength += temp.length();
+		for (int i = 0; i < 4; i++) {
+			line = readLineAsUTF8(input);
+			prefixLength += line.length();
 		}
 
-		temp = readLineAsUTF8(input);
-		prefixLength += temp.length();
+        String destFileName = line.trim();
 
-        String destFileName = temp.trim();
-
-		for (int i = 0; i < 3; i++) {
-			temp = readLineAsUTF8(input);
-			prefixLength += temp.length();
+		for (int i = 0; i < 4; i++) {
+			line = readLineAsUTF8(input);
+            prefixLength += line.length();
 		}
 
-		temp = readLineAsUTF8(input);
-		prefixLength += temp.length();
-
-		String description = temp.trim();
+		String description = line.trim();
 
         String fullPath;
-        String fn_only = null;
+        String sourceFileName = null;
         int compare_length = 0;
         boolean fn_found = false;
         String delimiter_str = null;
@@ -141,37 +125,39 @@ public class UploadServlet extends WebFileSysServlet {
         boolean stop = false;
 
         while (!stop) {
-            String text_line = readLineAsUTF8(input);
-            prefixLength += text_line.length();
+            String textLine = readLineAsUTF8(input);
+            prefixLength += textLine.length();
             if (delimiter_str == null) {
-                delimiter_str = text_line;
+                delimiter_str = textLine;
                 compare_length = delimiter_str.length();
             } else {
-                if (!fn_found && text_line.indexOf("filename=") > 0) {
-                    fullPath = text_line.substring(text_line.indexOf("filename=") + 10, text_line.length() - 1);
+                if (!fn_found && textLine.indexOf("filename=") > 0) {
+                    fullPath = textLine.substring(textLine.indexOf("filename=") + 10, textLine.length() - 1);
+                    // seems as if the upload contains the original filename only without path, but the following code works anyway
                     if (fullPath.indexOf("\\") > 0) {
-                        fn_only = fullPath.substring(fullPath.lastIndexOf("\\") + 1);
+                        sourceFileName = fullPath.substring(fullPath.lastIndexOf("\\") + 1);
                     } else {
-                        fn_only = fullPath.substring(fullPath.lastIndexOf("/") + 1);
+                        sourceFileName = fullPath.substring(fullPath.lastIndexOf("/") + 1);
                     }
                     fn_found = true;
                 }
             }
-            if (text_line.equals("")) {
+            if (textLine.equals("")) {
                 stop = true;
             }
         }
 
+        long contentLength = req.getContentLength();
         if (contentLength > 0) {
             session.setAttribute(
                 Constants.UPLOAD_SIZE,
-                new Long(contentLength - prefixLength - ((long) compare_length)));
+                    contentLength - prefixLength - ((long) compare_length));
         }
 
-        String out_file_name = null;
+        String outFilePath = null;
         if (!CommonUtils.isEmpty(destFileName)) {
-			if (!CommonUtils.isEmpty(fn_only)) {
-				String origFileExt = CommonUtils.getFileExtension(fn_only);
+			if (!CommonUtils.isEmpty(sourceFileName)) {
+				String origFileExt = CommonUtils.getFileExtension(sourceFileName);
 				if (!CommonUtils.isEmpty(origFileExt)) {
                     String destFileExt = CommonUtils.getFileExtension(destFileName);
                     if (CommonUtils.isEmpty(destFileExt) ||
@@ -181,20 +167,20 @@ public class UploadServlet extends WebFileSysServlet {
 				}
 			}
 		    destFileName = replaceIllegalChars(destFileName);
-            out_file_name = CommonUtils.joinFilesysPath(actPath, destFileName);
+            outFilePath = CommonUtils.joinFilesysPath(currentPath, destFileName);
 
-			File outFile = new File(out_file_name);
+			File outFile = new File(outFilePath);
 			try {
 				outFile.getCanonicalPath();
 			} catch (IOException ioex) {
-				LogManager.getLogger(getClass()).debug("cannot write upload to file " + out_file_name + " - using original file name " + fn_only);
-			    out_file_name = null;
+				LogManager.getLogger(getClass()).debug("cannot write upload to file " + outFilePath + " - using original file name " + sourceFileName);
+			    outFilePath = null;
 			}
         }
 
-        if (out_file_name == null) {
-            fn_only = replaceIllegalChars(fn_only);
-            out_file_name = CommonUtils.joinFilesysPath(actPath, fn_only);
+        if (outFilePath == null) {
+            sourceFileName = replaceIllegalChars(sourceFileName);
+            outFilePath = CommonUtils.joinFilesysPath(currentPath, sourceFileName);
         }
         long uploadLimit = WebFileSysConfig.getInstance().getUploadLimit();
         byte[] delimiterBytes = delimiter_str.getBytes();
@@ -214,7 +200,7 @@ public class UploadServlet extends WebFileSysServlet {
 
         FileOutputStream outFile = null;
         try {
-            outFile = new FileOutputStream(out_file_name);
+            outFile = new FileOutputStream(outFilePath);
             stop = false;
             while (!stop) {
                 if (inIdx >= inBufferByteNum) {
@@ -222,12 +208,12 @@ public class UploadServlet extends WebFileSysServlet {
                     session.setAttribute("lastActiveTime", new Date());
                     if (inBufferByteNum < 0) {
                         stop = true;
-                        LogManager.getLogger(getClass()).warn("unexpected end of upload stream of file " + out_file_name + " at byte index "
+                        LogManager.getLogger(getClass()).warn("unexpected end of upload stream of file " + outFilePath + " at byte index "
                                 + bytesUploaded);
                     } else {
                         Boolean uploadCanceled = (Boolean) session.getAttribute(Constants.UPLOAD_CANCELED);
                         if (uploadCanceled != null) {
-                            LogManager.getLogger(getClass()).warn("upload of file " + out_file_name + " canceled by user at byte index " + bytesUploaded);
+                            LogManager.getLogger(getClass()).warn("upload of file " + outFilePath + " canceled by user at byte index " + bytesUploaded);
                             stop = true;
                         }
                     }
@@ -273,7 +259,7 @@ public class UploadServlet extends WebFileSysServlet {
                             if (!uploadLimitExceeded) {
                                 uploadLimitExceeded = true;
                                 session.setAttribute(Constants.UPLOAD_LIMIT_EXCEEDED,new Boolean(true));
-                                LogManager.getLogger(getClass()).warn("upload limit exceeded for user " + userid + " for file " + out_file_name);
+                                LogManager.getLogger(getClass()).warn("upload limit exceeded for user " + userid + " for file " + outFilePath);
                                 exceptionText = LanguageManager.getInstance().getResource(language, "alert.uploadLimitExceeded", "The size of the uploaded file exceeds the limit");
                             }
                         }
@@ -287,10 +273,9 @@ public class UploadServlet extends WebFileSysServlet {
                     outFile.write(outBuffer, 0, outIdx);
                 }
             }
-            uploadSuccess = !uploadLimitExceeded;
-            session.setAttribute(Constants.UPLOAD_SUCCESS, uploadSuccess);
+            session.setAttribute(Constants.UPLOAD_SUCCESS, !uploadLimitExceeded);
         } catch (IOException e) {
-            LogManager.getLogger(getClass()).error("error writing upload file to " + out_file_name, e);
+            LogManager.getLogger(getClass()).error("error writing upload file to " + outFilePath, e);
             if (e instanceof FileNotFoundException) {
                 exceptionText = LanguageManager.getInstance().getResource(language, "error.upload", "Error writing uploaded file");
             } else {
@@ -319,9 +304,9 @@ public class UploadServlet extends WebFileSysServlet {
             output.flush();
         } else {
         	if (!CommonUtils.isEmpty(description)) {
-        		MetaInfManager.getInstance().setDescription(out_file_name, description);
+        		MetaInfManager.getInstance().setDescription(outFilePath, description);
         	}
-			String ext = CommonUtils.getFileExtension(out_file_name);
+			String ext = CommonUtils.getFileExtension(outFilePath);
         	if (unzipAfterUpload && ext.equals(".zip")) {
         		req.setAttribute("fileName", destFileName);
         		req.setAttribute("delZipFile", "true");
@@ -343,13 +328,13 @@ public class UploadServlet extends WebFileSysServlet {
                     }
         	    }
 				if (WebFileSysConfig.getInstance().isAutoCreateThumbs()) {
-					if (ext.equals(".jpg") || ext.equals(".jpeg") || (ext.equals("png"))) {
-						AutoThumbnailCreator.getInstance().queuePath(out_file_name, AutoThumbnailCreator.SCOPE_FILE);
+					if (ext.equals(".jpg") || ext.equals(".jpeg") || ext.equals("png")) {
+						AutoThumbnailCreator.getInstance().queuePath(outFilePath, AutoThumbnailCreator.SCOPE_FILE);
 					}
 				}
         	}
         }
-		session.setAttribute(Constants.UPLOAD_COUNTER, new Integer(0));
+		session.setAttribute(Constants.UPLOAD_COUNTER, 0);
     }
     
     public void handleSingleBinaryUpload(HttpServletRequest req, HttpServletResponse resp)
