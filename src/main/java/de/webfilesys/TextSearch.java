@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.http.HttpSession;
@@ -20,8 +21,7 @@ import de.webfilesys.graphics.ThumbnailThread;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.PatternComparator;
 
-public class TextSearch
-{
+public class TextSearch {
     PrintWriter output;
     int hitNum;
 
@@ -50,8 +50,7 @@ public class TextSearch
                Category category, String searchResultDir,
                HttpSession session, boolean readonly,
                String relativePath,
-               String uid)
-    {
+               String uid) {
         this.output=output;
         this.searchResultDir = searchResultDir;
         this.session=session;
@@ -103,27 +102,12 @@ public class TextSearch
         }
 
         String shortPath = CommonUtils.shortName(relativePath, 70);
-        
-        if (session.getAttribute("searchCanceled") == null) {
-        	dirCounter++;
-        	
-        	boolean printPath = true;
-        	if (dirCounter > 10000) {
-        		printPath = (dirCounter % 50 == 0);
-        	} else if (dirCounter > 5000) {
-        		printPath = (dirCounter % 20 == 0);
-        	} else if (dirCounter > 1000) {
-        		printPath = (dirCounter % 10 == 0);
-        	} else if (dirCounter > 500) {
-        		printPath = (dirCounter % 5 == 0);
-        	} else if (dirCounter > 100) {
-        		printPath = (dirCounter % 3 == 0);
-        	}
-        	
-        	if (printPath) {
-    			output.println("<div class=\"searchPath\"><span class=\"searchPath\">" + shortPath + "</span></div>");
-                output.flush();
-        	}
+
+        dirCounter++;
+
+        if (printPath(dirCounter)) {
+            output.println("<div class=\"searchPath\"><span class=\"searchPath\">" + shortPath + "</span></div>");
+            output.flush();
         }
 
         File dirFile = new File(act_path);
@@ -131,16 +115,9 @@ public class TextSearch
 
         if (fileList != null) {
             for (int i = 0; (session.getAttribute("searchCanceled") == null) && (i < fileList.length); i++) {
-                String relativeFile = null;
+                String relativeFilePath = CommonUtils.joinFilesysPath(relativePath, fileList[i].getName());
 
-                if (act_path.endsWith(File.separator)) {
-                    relativeFile = relativePath + fileList[i].getName();
-                } else {
-					relativeFile = relativePath + File.separator + fileList[i].getName();
-                }
-                
                 File tempFile = fileList[i];
-
             	String fullPath = tempFile.getAbsolutePath();
             	
                 if (tempFile.isDirectory()) {
@@ -153,14 +130,13 @@ public class TextSearch
     						if (description != null) {
     							boolean allWordsFound = true;
     							for (int j = 0; allWordsFound && (j < searchArgs.length); j++) {
-    								if (description.toLowerCase().indexOf(searchArgs[j].toLowerCase()) < 0) {
+    								if (!description.toLowerCase().contains(searchArgs[j].toLowerCase())) {
     								    allWordsFound = false;
     								}
     							}
     							if (allWordsFound) {
                                 	String folderViewLink = "javascript:gotoSearchResultFolder('" + CommonUtils.escapeForJavascript(fullPath) + "')";
-
-    								output.println("<a class=\"fn\" href=\"" + folderViewLink + "\"><img border=\"0\" src=\"/webfilesys/images/folder.gif\" style=\"margin-top:8px;\"> " + relativeFile + "</a>");
+    								output.println("<a class=\"fn\" href=\"" + folderViewLink + "\"><img border=\"0\" src=\"/webfilesys/images/folder.gif\" style=\"margin-top:8px;\"> " + relativeFilePath + "</a>");
     								output.println("<br/>");
     								output.flush();
     								hitNum++;
@@ -168,43 +144,24 @@ public class TextSearch
     						}
                 		}
                 	}
-                	
                 	if (includeSubdirs) {
                         if (!CommonUtils.dirIsLink(tempFile)) {
     						if (!fileList[i].getName().equals(ThumbnailThread.THUMBNAIL_SUBDIR)) {
-    							String relativeSubPath = null;
-    							
-    					        String subDir;
-    							
-    							if (act_path.endsWith(File.separator)) {
-    								subDir = act_path + fileList[i].getName();
-    								
-    								relativeSubPath = relativePath + fileList[i].getName();
-    							} else {
-    								subDir = act_path + File.separator + fileList[i].getName();
-
-    								relativeSubPath = relativePath + File.separator + fileList[i].getName();
-    							}
-    							
+                                String subDir = CommonUtils.joinFilesysPath(act_path, fileList[i].getName());
+                                String relativeSubPath = CommonUtils.joinFilesysPath(relativePath, fileList[i].getName());
     							search_tree(subDir, file_mask, fromDate, toDate, relativeSubPath);
     						}
                         }
                 	}
-                } else {                                             // file
-                    if ((tempFile.lastModified() >= fromDate) &&
-                        (tempFile.lastModified() <= toDate))
-                    {
-                        if (PatternComparator.patternMatch(fileList[i].getName(), file_mask))
-                        {
-                        	if ((category == null) || metaInfMgr.isCategoryAssigned(fullPath, category))
-                        	{
+                } else {  // file
+                    if ((tempFile.lastModified() >= fromDate) && (tempFile.lastModified() <= toDate)) {
+                        if (PatternComparator.patternMatch(fileList[i].getName(), file_mask)) {
+                        	if ((category == null) || metaInfMgr.isCategoryAssigned(fullPath, category)) {
 								boolean allWordsFound = true;
-
-								int firstMatchIdx[] = new int[searchArgs.length];
+								int[] firstMatchIdx = new int[searchArgs.length];
 
 								for (int j = 0; (j < searchArgs.length) && allWordsFound; j++) {
 									firstMatchIdx[j] = (-1);
-
 									if (metaInfOnly) {
 										if (!searchInMetaInf(fullPath, searchArgs[j])) {
 											allWordsFound = false;
@@ -213,8 +170,7 @@ public class TextSearch
 										if (metaInfMgr.isMetaInfFile(fullPath)) {
 											allWordsFound = false;
 										} else {
-											firstMatchIdx[j]=locateTextInFile(tempFile.toString(), searchArgs[j]);
-                                        
+											firstMatchIdx[j] = locateTextInFile(tempFile.toString(), searchArgs[j]);
 											if (firstMatchIdx[j] < 0) {
 												if (!includeMetaInf) {
 													allWordsFound = false;
@@ -227,7 +183,6 @@ public class TextSearch
 										}
 									}
 								}
-                            
 								if (allWordsFound) {
                                     String viewLink = null;
                                     try {
@@ -236,19 +191,17 @@ public class TextSearch
                                         // should never happen
                                     }
 
-									if (session.getAttribute("searchCanceled")==null) {
+									if (session.getAttribute("searchCanceled") == null) {
                                         String iconImg = "doc.gif";
-
                                         if (WebFileSysConfig.getInstance().isShowAssignedIcons()) {
                                             iconImg = IconManager.getInstance().getIconForFileName(fileList[i].getName());
                                         }
-									    
-										output.println("<a class=\"fn\" href=\"" + viewLink + "\" target=\"_blank\"><img border=\"0\" src=\"icons/" + iconImg + "\" align=\"absbottom\" style=\"margin-top:8px;\"> " + relativeFile + "</a>");
+										output.println("<a class=\"fn\" href=\"" + viewLink + "\" target=\"_blank\"><img border=\"0\" src=\"icons/" + iconImg + "\" align=\"absbottom\" style=\"margin-top:8px;\"> " + relativeFilePath + "</a>");
 										output.println("<br/>");
 										output.flush();
 										hitNum++;
 
-										printMatches(fullPath,firstMatchIdx);
+										printMatches(fullPath, firstMatchIdx);
 										
 										if (!readonly) {
 											try {
@@ -275,83 +228,72 @@ public class TextSearch
             output.println("<br/>");
             output.flush();
         }
-        
-        fileList=null;
     }
 
-    public int locateTextInFile(String act_file,String search_arg)
-    {
+    private boolean printPath(int dirCounter) {
+        if (dirCounter > 10000) {
+            return dirCounter % 50 == 0;
+        }
+        if (dirCounter > 5000) {
+            return dirCounter % 20 == 0;
+        }
+        if (dirCounter > 1000) {
+            return dirCounter % 10 == 0;
+        }
+        if (dirCounter > 500) {
+            return dirCounter % 5 == 0;
+        }
+        if (dirCounter > 100) {
+            return dirCounter % 3 == 0;
+        }
+        return true;
+    }
+
+    public int locateTextInFile(String act_file, String search_arg) {
         int search_length = search_arg.length();
 
         FileInputStream file_input = null;
-
-        try
-        {
+        try {
             file_input = new FileInputStream(act_file);
-        }
-        catch (FileNotFoundException e)
-        {
+        } catch (FileNotFoundException e) {
             LogManager.getLogger(getClass()).error("cannot open search result file", e);
             return(-1);
         }
 
         int idx=0;
-
         int count=0;
-
         int equal=0;
-
-        try
-        {
+        try {
             byte[] buffer = new byte[4096];
-
-            while (( count = file_input.read(buffer))>=0 )
-            {
-                for (int i = 0; i < count; i++)
-                {
-                    if (Character.toUpperCase((char) buffer[i])==Character.toUpperCase(search_arg.charAt(equal)))
-                    {
-                        if (++equal==search_length)
-                        {
-                            return(idx - search_arg.length() + 1);
+            while ((count = file_input.read(buffer)) >= 0) {
+                for (int i = 0; i < count; i++) {
+                    if (Character.toUpperCase((char) buffer[i]) == Character.toUpperCase(search_arg.charAt(equal))) {
+                        if (++equal == search_length) {
+                            return idx - search_arg.length() + 1;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         equal=0;
                     }
-                    
                     idx++;
                 }
             }
-        }
-        catch (IOException e)
-        {
-        	LogManager.getLogger(getClass()).warn("fulltext search error: " + e);
-        }
-        finally
-        {
-        	if (file_input != null)
-        	{
-        		try
-        		{
+        } catch (IOException e) {
+        	LogManager.getLogger(getClass()).warn("fulltext search error:", e);
+        } finally {
+        	if (file_input != null) {
+        		try {
         			file_input.close();
-        		}
-        		catch (Exception ex) 
+        		} catch (Exception ex)
         		{
         		}
         	}
         }
-
-        return(-1);
+        return -1;
     }
 
-    protected void printMatches(String fileName,int firstMatchIdx[])
-    {
-        for (int i = 0; i < searchArgs.length; i++)
-        {
-            if (firstMatchIdx[i] > 0)
-            {
+    protected void printMatches(String fileName, int[] firstMatchIdx) {
+        for (int i = 0; i < searchArgs.length; i++) {
+            if (firstMatchIdx[i] > 0) {
                 printHitEnvironment(fileName, searchArgs[i], firstMatchIdx[i]);
             } else {
             	if (includeMetaInf || metaInfOnly) {
@@ -399,7 +341,7 @@ public class TextSearch
         if (tags != null) {
         	boolean anyTagMatches = false;
         	for (String tag : tags) {
-        		if (tag.toLowerCase().indexOf(searchArg.toLowerCase()) >= 0) {
+        		if (tag.toLowerCase().contains(searchArg.toLowerCase())) {
             		output.print("<span class=\"plaintext\" style=\"margin-left:30px;\">tag: ");             		
                     output.print(tag);
             		output.println("</span>");
@@ -412,144 +354,85 @@ public class TextSearch
         }
     }
     
-    protected void printHitEnvironment(String fileName,String searched,int firstMatchIdx)
-    {
+    protected void printHitEnvironment(String fileName,String searched,int firstMatchIdx) {
         int searchLength = searched.length();
+        char[] resultBuff = new char[searchLength + 10];
 
-        char resultBuff[] = new char[searchLength + 10]; 
-
-        for (int i = 0; i < resultBuff.length; i++)
-        {
-            resultBuff[i] = ' ';
-        }
-        
+        Arrays.fill(resultBuff, ' ');
         int matchCounter = 0;
-
-        int count=0;
-
-        int equal=0;
+        int count = 0;
+        int equal = 0;
 
         FileInputStream fin = null;
-
-        try
-        {
+        try {
             fin = new FileInputStream(fileName);
-        	
             int startIdx = firstMatchIdx - 10;
-
-            if (startIdx < 0)
-            {
+            if (startIdx < 0) {
                 startIdx = 0;
             }
-            
-            if (startIdx > 0)
-            {
-            	if (fin.skip(startIdx) != startIdx) 
-            	{
+            if (startIdx > 0) {
+            	if (fin.skip(startIdx) != startIdx) {
                     LogManager.getLogger(getClass()).warn("cannot locate to search hit index " + firstMatchIdx);
             	}
             }
-
             byte[] buffer = new byte[4096];
-
-            while ((matchCounter < 5) && ((count = fin.read(buffer))>=0))
-            {
-                for (int i=0;(matchCounter < 5) && (i<count);i++)
-                {
-                    char ch=(char) buffer[i];
-
-                    for (int k=0;k<resultBuff.length-1;k++)
-                    {
-                        resultBuff[k]=resultBuff[k+1];
+            while ((matchCounter < 5) && ((count = fin.read(buffer)) >= 0)) {
+                for (int i = 0; matchCounter < 5 && i < count; i++) {
+                    char ch = (char) buffer[i];
+                    for (int k = 0; k < resultBuff.length - 1; k++) {
+                        resultBuff[k] = resultBuff[k+1];
                     }
-                    
-                    if ((ch=='\n') || (ch=='\r'))
-                    {
-                        resultBuff[resultBuff.length-1]=' ';
+                    if ( ch == '\n' || ch == '\r') {
+                        resultBuff[resultBuff.length-1] = ' ';
+                    } else {
+                        resultBuff[resultBuff.length-1] = ch;
                     }
-                    else
-                    {
-                        resultBuff[resultBuff.length-1]=ch;
-                    }
-
-                    if (Character.toUpperCase(ch) == Character.toUpperCase(searched.charAt(equal)))
-                    {
-                        if (++equal == searchLength)
-                        {
-                            if (matchCounter == 0)
-                            {
+                    if (Character.toUpperCase(ch) == Character.toUpperCase(searched.charAt(equal))) {
+                        if (++equal == searchLength) {
+                            if (matchCounter == 0) {
                                 output.println("<span class=\"plaintext\" style=\"margin-left:30px;\">");
                             }
-
                             output.print("<b>...</b> ");
-
                             String prefix = new String(resultBuff,0,resultBuff.length-searchLength);
-
                             output.print(CommonUtils.escapeHTML(prefix));
-
                             output.print("<span class=\"searchMatchInContext\">");
-
                             String matchText = new String(resultBuff, resultBuff.length-searchLength, searchLength);
                             output.print(CommonUtils.escapeHTML(matchText));
-
                             output.print("</span>");
 
-                            StringBuffer postfix = new StringBuffer();
+                            StringBuilder postfix = new StringBuilder();
                             
-                            for (int t = i + 1; (t < count) && (t < i + 11); t++)
-                            {
+                            for (int t = i + 1; t < count && t < i + 11; t++) {
                                 char ch2 = (char) buffer[t];
-                                
-                                if ((ch2=='\n') || (ch2=='\r'))
-                                {
+                                if (ch2 == '\n' || ch2 == '\r') {
                                     postfix.append(' ');
-                                }
-                                else
-                                {
+                                } else {
                                     postfix.append(ch2);
                                 }
                             }
-                            
                             output.print(CommonUtils.escapeHTML(postfix.toString()));
-                            
                             output.print("<b>... </b> &nbsp;&nbsp;");
-                            
                             output.flush();
-                            
                             equal = 0;
-
                             matchCounter++;
                         }
-                    }
-                    else
-                    {
+                    } else {
                         equal = 0;
                     }
                 }
             }
-
-            if (matchCounter > 0)
-            {
+            if (matchCounter > 0) {
                 output.println("</span>");
                 output.println("<br/>");
             }
-            
             output.flush();
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
         	LogManager.getLogger(getClass()).warn("fulltext search error", e);
-        }
-        finally
-        {
-        	if (fin != null) 
-        	{
-        		try
-        		{
+        } finally {
+        	if (fin != null) {
+        		try {
         			fin.close();
-        		}
-        		catch (Exception ex)
-        		{
+        		} catch (Exception ex) {
         		}
         	}
         }
@@ -559,18 +442,13 @@ public class TextSearch
 		ArrayList<String> tags = metaInfMgr.getTags(fullPath);
 		if (tags != null) {
 			for (String tag : tags) {
-				if (tag.toLowerCase().indexOf(searchArg.toLowerCase()) >= 0) {
+				if (tag.toLowerCase().contains(searchArg.toLowerCase())) {
 					return true;
 				}
 			}
 		}
-		
 		String description = metaInfMgr.getDescription(fullPath);
-		if ((description != null) &&
-			(description.toLowerCase().indexOf(searchArg.toLowerCase()) >= 0)) {
-			return true;
-		}
-		return false;
+        return (description != null) && description.toLowerCase().contains(searchArg.toLowerCase());
     }
     
 }
