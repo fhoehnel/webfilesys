@@ -6,7 +6,7 @@ function initRemoteEditor() {
 
     let parameters;
     if (isLink) {
-        parameters = { filePath: encodeURIComponent(filePath) };
+        parameters = { linkName: encodeURIComponent(fileName) };
     } else {
         parameters = { fileName: encodeURIComponent(fileName) };
     }
@@ -17,7 +17,11 @@ function initRemoteEditor() {
             setEditorHeight();
 
             document.getElementById("headline").innerHTML = fileName;
-            document.getElementById("filePath").value = filePath;
+            if (isLink) {
+                document.getElementById("linkName").value = fileName;
+            } else {
+                document.getElementById("fileName").value = fileName;
+            }
 
             fetchGet("getFile", parameters , responseData => {
                 document.getElementById("editorText").innerHTML = responseData;

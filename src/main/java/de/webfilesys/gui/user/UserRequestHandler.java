@@ -537,5 +537,28 @@ public class UserRequestHandler extends ProtectedRequestHandler
 
     	return (!seemsToBeBinary);
     }
-    
+
+    protected String getRequestedFilePath() {
+        String filePath = getParameter("filePath");
+        if (CommonUtils.isEmpty(filePath)) {
+            String cwdPath = getCwd();
+            String fileName = getParameter("fileName");
+            if (CommonUtils.isEmpty(fileName)) {
+                String linkName = getParameter("linkName");
+                if (!CommonUtils.isEmpty(linkName)) {
+                    FileLink fileLink = MetaInfManager.getInstance().getLink(cwdPath, linkName);
+                    if (fileLink != null) {
+                        filePath = fileLink.getDestPath();
+                    }
+                }
+            } else {
+                filePath = CommonUtils.joinFilesysPath(cwdPath, fileName);
+            }
+        }
+        if (CommonUtils.isEmpty(filePath)) {
+            LogManager.getLogger(getClass()).warn("missing file identifier in request");
+        }
+        return filePath;
+    }
+
 }

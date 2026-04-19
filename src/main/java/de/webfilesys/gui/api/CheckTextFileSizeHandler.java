@@ -1,7 +1,6 @@
 package de.webfilesys.gui.api;
 
 import de.webfilesys.gui.user.UserRequestHandler;
-import de.webfilesys.util.CommonUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,11 +31,9 @@ public class CheckTextFileSizeHandler extends UserRequestHandler {
 	}
 
 	protected void process() {
-        String filePath = req.getParameter("filePath");
+        String filePath = getRequestedFilePath();
         if (filePath == null) {
-            String fileName = getParameter("fileName");
-            String path = getCwd();
-            filePath = CommonUtils.joinFilesysPath(path, fileName);
+            return;
         }
 
 		if (!accessAllowed(filePath)) {

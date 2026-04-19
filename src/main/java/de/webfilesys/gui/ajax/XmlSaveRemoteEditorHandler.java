@@ -36,7 +36,10 @@ public class XmlSaveRemoteEditorHandler extends XmlRequestHandlerBase {
 			return;
 		}
 
-		String filePath = getParameter("filePath");
+		String filePath = getRequestedFilePath();
+		if (filePath == null) {
+			return;
+		}
 
 		if (!checkAccess(filePath)) {
 			return;

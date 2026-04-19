@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -36,22 +35,11 @@ public class GetFileRequestHandler extends UserRequestHandler
 
 	protected void process()
 	{
-		String filePath = getParameter("filePath");
-
+		String filePath = getRequestedFilePath();
 		if (filePath == null) {
-			String fileName = getParameter("fileName");
-			if (fileName != null) {
-				String cwdPath = getCwd();
-				if (cwdPath != null) {
-					if (cwdPath.endsWith(File.separator)) {
-						filePath = cwdPath + fileName;
-					} else {
-						filePath = cwdPath + File.separatorChar + fileName;
-					}
-				}
-			}
+			return;
 		}
-		
+
 		if (!this.checkAccess(filePath))
 		{
 		    return;	
