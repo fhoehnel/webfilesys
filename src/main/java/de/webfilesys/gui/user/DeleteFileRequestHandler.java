@@ -9,7 +9,6 @@ import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
 import de.webfilesys.gui.xsl.mobile.MobileFolderPictureHandler;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -51,99 +50,61 @@ public class DeleteFileRequestHandler extends UserRequestHandler
         this.clientIsLocal = clientIsLocal;
 	}
 
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 
-		String actPath = getCwd();
+        String filePath = getRequestedFilePath();
 
-		String fileName = getParameter("fileName");
-        
-        String filePath = null;
-
-		if (actPath.endsWith(File.separator))
-		{
-			filePath = actPath + fileName;
-		}
-		else
-		{
-			filePath = actPath + File.separator + fileName;
-		}
-
-		if (!accessAllowed(filePath))
-		{
+		if (!accessAllowed(filePath)) {
 			LogManager.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's document root: " + filePath);
 			return;
 		}
 
 		File delFile = new File(filePath);
 
-		if (!delFile.canWrite())
-		{
+		if (!delFile.canWrite()) {
             if ((WebFileSys.getInstance().getOpSysType() == WebFileSys.OS_OS2)  ||
-                    (WebFileSys.getInstance().getOpSysType() == WebFileSys.OS_WIN))
-            {
+                    (WebFileSys.getInstance().getOpSysType() == WebFileSys.OS_WIN)) {
                 SystemCmdParms sys_cmd_parm = new SystemCmdParms("attrib","-R " + delFile);
                 sys_cmd_parm.start();
             }
         }
         
-        if (!delFile.delete())
-        {
+        if (!delFile.delete()) {
             String delDir = getCwd();
-
-            if (File.separatorChar=='\\')
-            {
+            if (File.separatorChar=='\\') {
                 delDir = insertDoubleBackslash(delDir);
             }
-
-            deleteFailed(fileName, delDir);         
-        }
-        else
-        {
+            deleteFailed(getParameter("fileName"), delDir);
+        } else {
             MetaInfManager metaInfMgr = MetaInfManager.getInstance();
-
-            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
-            {
+            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
                 metaInfMgr.removeLinksToFile(filePath);
             }
             
-            metaInfMgr.removeMetaInf(actPath,fileName);
+            metaInfMgr.removeMetaInf(filePath);
 
             String thumbnailPath = ThumbnailThread.getThumbnailPath(filePath);
-            
             File thumbnailFile = new File(thumbnailPath);
-            
-            if (thumbnailFile.exists())
-            {
-                if (!thumbnailFile.delete())
-                {
+            if (thumbnailFile.exists()) {
+                if (!thumbnailFile.delete()) {
                     LogManager.getLogger(getClass()).warn("cannot remove thumbnail file " + thumbnailPath);
                 }
             }
 
             String closeWin = req.getParameter("closeWin");
-            
-            if ((closeWin != null) && closeWin.equals("true"))
-            {
+            if ((closeWin != null) && closeWin.equals("true")) {
                 closeWin();
-            }
-            else
-            {
+            } else {
                 int viewMode = Constants.VIEW_MODE_LIST;
-
                 Integer sessionViewMode = (Integer) session.getAttribute("viewMode");
-
-                if (sessionViewMode != null)
-                {
+                if (sessionViewMode != null) {
                     viewMode = sessionViewMode.intValue();
                 }
 
                 String mobile = (String) session.getAttribute("mobile");
-                
                 if (mobile == null) {
                     if (viewMode == Constants.VIEW_MODE_THUMBS) {
                         (new XslThumbnailHandler(req, resp, session, output, uid, clientIsLocal)).handleRequest(); 

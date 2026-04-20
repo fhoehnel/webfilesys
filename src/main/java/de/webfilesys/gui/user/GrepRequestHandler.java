@@ -37,28 +37,14 @@ public class GrepRequestHandler extends UserRequestHandler
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 
-	protected void process()
-	{
-        String fileName = req.getParameter("fileName");
+	protected void process() {
+        String filePath = getRequestedFilePath();
 
-        String filePath = getCwd();
-
-        if (!filePath.endsWith(File.separator))
-        {
-            filePath = filePath + File.separatorChar + fileName;
-        }
-        else 
-        {
-            filePath = filePath + fileName;
-        }
-        
-        if (!checkAccess(filePath))
-        {
+        if (!checkAccess(filePath)) {
             return;
         }
 
@@ -68,21 +54,15 @@ public class GrepRequestHandler extends UserRequestHandler
         
         File fileToSend = new File(filePath);
         
-        if (!fileToSend.exists())
-        {
+        if (!fileToSend.exists()) {
         	LogManager.getLogger(getClass()).warn("requested file does not exist: " + filePath);
-        	
         	error = true;
-        }
-        else if ((!fileToSend.isFile()) || (!fileToSend.canRead()))
-        {
+        } else if ((!fileToSend.isFile()) || (!fileToSend.canRead())) {
         	LogManager.getLogger(getClass()).warn("requested file is not a readable file: " + filePath);
-        	
         	error = true;
         }
 
-        if (error)
-        {
+        if (error) {
             resp.setStatus(404);
             output.println("File not found or not readable: " + filePath);
             output.flush();
@@ -93,8 +73,7 @@ public class GrepRequestHandler extends UserRequestHandler
 		// this is not 100 % save as we check only the beginning of very large files
 		// alternative would be to write our own readLine() method with limited line length
         
-        if (!isTextFile(filePath, WebFileSysConfig.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK))
-        {
+        if (!isTextFile(filePath, WebFileSysConfig.getInstance().getTextFileMaxLineLength(), BYTES_TO_CHECK)) {
             resp.setStatus(404);
             output.println("This file seems not to be a text file: " + getHeadlinePath(filePath));
             output.flush();
@@ -107,7 +86,7 @@ public class GrepRequestHandler extends UserRequestHandler
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
         output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");
 
-        output.println("<title>WebFileSys: grep " + fileName + "</title>");
+        output.println("<title>WebFileSys: grep in " + getParameter("fileName") + "</title>");
         
         output.println("</head>");
         output.println("<body>");

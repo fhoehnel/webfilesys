@@ -50,12 +50,7 @@ public class ZipFileRequestHandler extends UserRequestHandler {
 			return;
 		}
 
-        String fileName = getParameter("fileName");
-        if (CommonUtils.isEmpty(fileName)) {
-            LOG.warn("missing parameter value for zip file name");
-            return;
-        }
-        String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
+        String filePath = getRequestedFilePath();
 
 		output.println("<html>");
 		output.println("<head>");
