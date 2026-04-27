@@ -43,7 +43,7 @@ function folderContextMenu(path, folderName) {
             	}
             }
 
-        	addContextMenuEntry(menuDiv, "uploadParams()", resourceBundle["button.upload"]);
+        	addContextMenuEntry(menuDiv, "upload()", resourceBundle["button.upload"]);
         }
     }
 

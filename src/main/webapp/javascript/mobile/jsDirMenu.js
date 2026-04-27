@@ -53,9 +53,8 @@ function mkfile(path) {
     });
 }
 
-function upload(path)
-{
-    window.parent.frames['FileList'].location.href = "/webfilesys/servlet?command=uploadParms&actpath=" + encodeURIComponent(path);
+function upload() {
+    window.location.href = "/webfilesys/servlet?command=multiUpload";
 }
 
 function publish(path,mailEnabled)
@@ -132,8 +131,4 @@ function pasteFromClipboard() {
 
 function pasteAsLink() {
 	window.location.href = "/webfilesys/servlet?command=pasteLinks";	
-}
-
-function uploadParams() {
-	window.location.href = "/webfilesys/servlet?command=uploadParms";	
 }

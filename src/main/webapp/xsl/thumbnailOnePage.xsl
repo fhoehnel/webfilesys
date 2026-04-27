@@ -619,7 +619,7 @@
                   <xsl:if test="not(/fileList/readonly)">
 
                     <input type="button" resource="button.upload">
-                      <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');</xsl:attribute>
+                      <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=multiUpload';</xsl:attribute>
                     </input> 
                                  
                     <input type="button" resource="button.paste" id="pasteButton">

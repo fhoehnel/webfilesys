@@ -127,9 +127,8 @@ function mkfile(path) {
     });
 }
 
-function upload(path)
-{
-    window.parent.frames[2].location.href = "/webfilesys/servlet?command=uploadParms&actpath=" + encodeURIComponent(path);
+function upload(path){
+    window.parent.frames[2].location.href = "/webfilesys/servlet?command=multiUpload";
 }
 
 function publish(path,mailEnabled)

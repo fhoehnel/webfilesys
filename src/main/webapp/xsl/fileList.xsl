@@ -126,10 +126,6 @@
     }
   </xsl:if>
   
-  function uploadParms() {
-      window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');  
-  }
-  
   function addBookmark() {
       bookmark('<xsl:value-of select="/fileList/menuPath" />');
   }
@@ -610,7 +606,7 @@
             <div class="buttonCont">
 
               <input type="button" resource="button.upload">
-                <xsl:attribute name="onclick">javascript:uploadParms();</xsl:attribute>
+                <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=multiUpload'</xsl:attribute>
               </input> 
               
               <input type="button" resource="button.paste" id="pasteButton">

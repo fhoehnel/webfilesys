@@ -35,21 +35,7 @@ public class XslMultiUploadHandler extends XslRequestHandlerBase
 			return;
 		}
 
-		String currentPath = getParameter("actpath");
-		
-		if (currentPath == null)
-		{
-		    currentPath = getCwd();
-		} 
-		else 
-		{
-		    session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
-		}
-
-		if (!checkAccess(currentPath))
-		{
-			return;
-		}
+		String currentPath = getCwd();
 
 		String relativePath = this.getHeadlinePath(currentPath);
 

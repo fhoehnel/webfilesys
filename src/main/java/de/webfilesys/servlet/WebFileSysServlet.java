@@ -1177,11 +1177,9 @@ public class WebFileSysServlet extends ServletBase {
             }
         }
         
-        if (command.equals("uploadStatus"))
-        {
-			(new XmlUploadStatusHandler(req, resp, session, output, userid)).handleRequest();
-			
-            return(true);
+        if (command.equals("uploadStatus")) {
+			(new UploadStatusHandler(req, resp, session, output, userid)).handleRequest();
+            return true;
         }
         
         if (command.equals("checkUploadConflict"))
