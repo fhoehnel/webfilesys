@@ -96,15 +96,10 @@
 
           for (let i = 0; i < files.length; i++) {
               const file = files[i];
-              let fileName;
-              let fileSize;
-              if (browserSafari) {
-                  fileName = file.fileName;
-                  fileSize = file.fileSize;
-              } else {
-                  fileName = file.name
-                  fileSize = file.size;
-              }
+
+              const fileName = browserSafari ? file.fileName : file.name;
+              const fileSize = browserSafari ? file.fileSize : file.size;
+
               if (!selectedDuplicate(fileName)) {
                   if (!browserSafari) {
                       const hintText = document.getElementById("dragDropHint");
@@ -121,7 +116,7 @@
                           dropZone.appendChild(img);
 
                           const reader = new FileReader();
-                          reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);
+                          reader.onload = e => img.src = e.target.result;
                           reader.readAsDataURL(file);
 
                           pictureFileSize += file.size;
@@ -154,7 +149,7 @@
             	  sizeSum += selectedForUpload[i].size;
               }
     	  }
-    	  
+    	  document.getElementById("selectedFileCount").innerHTML = selectedForUpload.length + " ";
     	  document.getElementById("selectedFilesSize").innerHTML = formatDecimalNumber(sizeSum) + " Bytes";
       }
       

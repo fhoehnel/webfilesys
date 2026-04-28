@@ -47,7 +47,7 @@
       
       var uploadStartedByButton = false;
       
-      var MAX_PICTURE_SIZE_SUM = 40000000;
+      var MAX_PICTURE_SIZE_SUM = 200000000;
       
       var pictureFileSize = 0;
 	  
@@ -120,6 +120,7 @@
 
       <tr id="selectedForUpload">
         <td colspan="2" class="formParm1">
+          <span id="selectedFileCount"></span>
           <span resource="upload.selectedFiles"></span>:&#160;
           <span id="selectedFilesSize"></span>
           <ul id="uploadFiles"/>
