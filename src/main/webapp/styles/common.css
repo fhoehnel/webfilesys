@@ -178,6 +178,10 @@ div.uploadStatusCurrentFile {
 	margin: 12px auto 12px auto;
 }
 
+div.uploadStatusCont {
+    display: inline-block;
+}
+
 div.uploadStatusBar {
     width: 302px;
 	height: 20px;

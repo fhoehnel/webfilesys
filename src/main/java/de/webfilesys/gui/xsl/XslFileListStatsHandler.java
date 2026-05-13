@@ -1,6 +1,5 @@
 package de.webfilesys.gui.xsl;
 
-import java.io.File;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -10,14 +9,15 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
+import de.webfilesys.util.CommonUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.util.XmlUtil;
 
 /**
- * Statistics (view/download count, voting count, comment count) for the files of the current
- * directory (Tab Statistics).
+ * Statistics (view/download count, voting count, comment count) for the files of the current directory
+ * (Tab Statistics).
  * 
  * @author Frank Hoehnel
  */
@@ -33,50 +33,33 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
         super(req, resp, session, output, uid);
 	}
 	  
-	protected void process()
-	{
-		String currentPath = getParameter("actpath");
+	protected void process() {
 
-		if ((currentPath == null) || (currentPath.length() == 0))
-		{
-			currentPath = getCwd();
-		}
+        String currentPath = getParameter("actpath");
+        if (currentPath == null || currentPath.isEmpty()) {
+            currentPath = getCwd();
+        } else {
+            if (!accessAllowed(currentPath)) {
+                return;
+            }
+            session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
+        }
 
-		if (!accessAllowed(currentPath))
-		{
-			currentPath = userMgr.getDocumentRoot(uid);
-		}
-		
-		session.setAttribute(Constants.SESSION_KEY_CWD, currentPath);
-		
-		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_STATS));
+		session.setAttribute("viewMode", Constants.VIEW_MODE_STATS);
 
 		int sortBy = FileComparator.SORT_BY_FILENAME;
 
         String temp = getParameter("sortBy");
-        if ((temp != null) && (temp.length()>0))
-        {
-            try
-            {
+        if (temp != null && !temp.isEmpty()) {
+            try {
                 sortBy = Integer.parseInt(temp);
-
-                session.setAttribute("sortField", new Integer(sortBy));
+                session.setAttribute("sortField", sortBy);
+            } catch (NumberFormatException nfe) {
             }
-            catch (NumberFormatException nfe)
-            {
-            }
-        }
-        else
-        {
+        } else {
             Integer sortField = (Integer) session.getAttribute("sortField");
-            
-            if (sortField != null)
-            {
-                sortBy = sortField.intValue();
-            }
-            else
-            {
-                sortBy = FileComparator.SORT_BY_FILENAME;
+            if (sortField != null) {
+                sortBy = sortField;
             }
         }
 		
@@ -94,19 +77,17 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 		XmlUtil.setChildText(fileListElem, "sortBy", Integer.toString(sortBy), false);
 		
         String description = MetaInfManager.getInstance().getDescription(currentPath, ".");
-        if ((description != null) && (description.length() > 0))
-        {
+        if (description != null && !description.isEmpty()) {
     		XmlUtil.setChildText(fileListElem, "description", description, true);
         }
 
 		Date resetDate = MetaInfManager.getInstance().getStatisticsResetDate(currentPath);
-		if (resetDate != null)
-		{
+		if (resetDate != null) {
 			SimpleDateFormat dateFormat = LanguageManager.getInstance().getDateFormat(language);
 			XmlUtil.setChildText(fileListElem, "lastResetDate", dateFormat.format(resetDate), false);
 		}
 		
-		String fileMasks[] = new String[1];
+		String[] fileMasks = new String[1];
 		fileMasks[0] = "*";
 
 		FileLinkSelector fileSelector = new FileLinkSelector(currentPath, sortBy, true);
@@ -115,68 +96,55 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 
 		ArrayList<FileContainer> selectedFiles = selectionStatus.getSelectedFiles();
 
-		if (selectedFiles != null)
-		{
-			int fileNum = selectedFiles.size();
-			
-			for (int i = 0; i < fileNum; i++)
-			{
-				FileContainer fileCont = (FileContainer) selectedFiles.get(i);
-				
-				Element fileElem = doc.createElement("file");
-				
-				fileListElem.appendChild(fileElem);
-				
-				String filename = fileCont.getName();
+		if (selectedFiles != null) {
+            for (FileContainer fileCont : selectedFiles) {
+                if (!fileCont.isLink()) {
+                    Element fileElem = doc.createElement("file");
+                    fileListElem.appendChild(fileElem);
 
-				File tempFile = fileCont.getRealFile();
+                    String filename = fileCont.getName();
 
-				if (WebFileSysConfig.getInstance().isShowAssignedIcons())
-				{
-					String docImage = null;
+                    if (WebFileSysConfig.getInstance().isShowAssignedIcons()) {
+                        String docImage = null;
 
-					int extIdx = filename.lastIndexOf('.');
+                        int extIdx = filename.lastIndexOf('.');
 
-					if ((extIdx > 0) && (extIdx < (filename.length() - 1)))
-					{
-						docImage = IconManager.getInstance().getAssignedIcon(filename.substring(extIdx + 1));
-					}
+                        if ((extIdx > 0) && (extIdx < (filename.length() - 1))) {
+                            docImage = IconManager.getInstance().getAssignedIcon(filename.substring(extIdx + 1));
+                        }
 
-					if (docImage == null) {
-						docImage = "doc.gif";
-					}
-					
-					fileElem.setAttribute("icon", docImage);
-				}
+                        if (docImage == null) {
+                            docImage = "doc.gif";
+                        }
 
-                fileElem.setAttribute("name", filename);
+                        fileElem.setAttribute("icon", docImage);
+                    }
 
-                if (filename.length() > 50)
-                {
-                	String displayName = filename.substring(0, 45) + " " + filename.substring(45);
-                    fileElem.setAttribute("displayName", displayName);
+                    fileElem.setAttribute("name", filename);
+
+                    if (filename.length() > 50) {
+                        fileElem.setAttribute("displayName", CommonUtils.shortName(filename, 50));
+                    }
+
+                    String filePath = fileCont.getRealFile().getAbsolutePath();
+
+                    int viewCount = MetaInfManager.getInstance().getNumberOfDownloads(filePath);
+                    XmlUtil.setChildText(fileElem, "viewCount", Integer.toString(viewCount));
+
+                    int voteCount = MetaInfManager.getInstance().getVisitorRatingCount(filePath);
+                    XmlUtil.setChildText(fileElem, "voteCount", Integer.toString(voteCount));
+
+                    int voteStarSum = MetaInfManager.getInstance().getVisitorRatingStarSum(filePath);
+                    XmlUtil.setChildText(fileElem, "voteStarSum", Integer.toString(voteStarSum));
+
+                    int commentCount = MetaInfManager.getInstance().countComments(filePath);
+                    XmlUtil.setChildText(fileElem, "commentCount", Integer.toString(commentCount));
+
+                    if (commentCount > 0) {
+                        XmlUtil.setChildText(fileElem, "pathForScript", insertDoubleBackslash(filePath));
+                    }
                 }
-
-                int viewCount = MetaInfManager.getInstance().getNumberOfDownloads(tempFile.getAbsolutePath());
-                XmlUtil.setChildText(fileElem, "viewCount", Integer.toString(viewCount));
-
-                int voteCount = MetaInfManager.getInstance().getVisitorRatingCount(tempFile.getAbsolutePath());
-                XmlUtil.setChildText(fileElem, "voteCount", Integer.toString(voteCount));
-
-                int voteStarSum = MetaInfManager.getInstance().getVisitorRatingStarSum(tempFile.getAbsolutePath());
-                XmlUtil.setChildText(fileElem, "voteStarSum", Integer.toString(voteStarSum));
-                
-                String realPath = tempFile.getParent();
-                String realFileName = tempFile.getName();
-
-				int commentCount = MetaInfManager.getInstance().countComments(realPath, realFileName);
-                XmlUtil.setChildText(fileElem, "commentCount", Integer.toString(commentCount));
-
-                if (commentCount > 0)
-                {
-                	XmlUtil.setChildText(fileElem, "pathForScript", insertDoubleBackslash(tempFile.getAbsolutePath()));
-                }
-			}
+            }
 		}		
 		
         if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {

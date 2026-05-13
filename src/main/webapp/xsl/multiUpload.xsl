@@ -25,10 +25,10 @@
       <link rel="stylesheet" type="text/css" href="/webfilesys/styles/mobile.css" />
     </xsl:if>
 
-    <script language="JavaScript" src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/ajaxUpload.js" type="text/javascript"></script>
-    <script language="JavaScript" src="/webfilesys/javascript/util.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/browserCheck.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/ajaxUpload.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
     
     <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -60,8 +60,7 @@
 	  var sizeOfCurrentFile = 0;
       
       var resourceOf = resourceBundle["label.of"];
-      var resourceFileTooLarge = resourceBundle["upload.file.too.large"];
-          
+
       function hideBrowserSpecifics()
       {
           document.getElementById('lastUploaded').style.visibility = 'hidden';
@@ -78,7 +77,7 @@
           
     </script>
 
-    <script language="JavaScript" src="/webfilesys/javascript/multiUpload.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/multiUpload.js" type="text/javascript"></script>
   </head>
 
   <body onload="prepareDropZone();hideBrowserSpecifics();positionStatusDiv();" class="upload">
@@ -156,27 +155,27 @@
   </form>
     
   </body>
-  
-  <div id="uploadStatus" class="uploadStatus" style="visibility:hidden">
-  
+
+    <div id="uploadStatus" class="uploadStatus" style="visibility:hidden">
+
     <div class="headline" resource="label.uploadStatus"></div>
 	
 	<div id="currentFile" class="uploadStatusCurrentFile"></div>
-  
-    <center>
+
+    <div class="uploadStatusCont">
 
       <div class="uploadStatusBar">
         <img id="done" width="1" height="20" border="0">
           <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/progressbar.gif</xsl:attribute>
         </img>
-        <img id="todo" src="/webfilesys/images/space.gif" width="299" height="20" border="0" />  
+        <img id="todo" src="/webfilesys/images/space.gif" width="299" height="20" border="0" />
       </div>
 
       <table border="0" cellspacing="0" cellpadding="0" style="width:300px">
         <tr>
           <td class="fileListData">
             <div id="statusText" class="uploadStatusText">
-              0 
+              0
               <span resource="label.of"></span>
               0 bytes (0 %)
             </div>
@@ -193,7 +192,7 @@
         <img id="totalDone" src="/webfilesys/images/bluedot.gif" width="1" height="20" border="0">
           <xsl:attribute name="src">/webfilesys/img-skin/<xsl:value-of select="css" />/progressbar.gif</xsl:attribute>
         </img>
-        <img id="totalTodo" src="/webfilesys/images/space.gif" width="299" height="20" border="0" />  
+        <img id="totalTodo" src="/webfilesys/images/space.gif" width="299" height="20" border="0" />
       </div>
 
       <table border="0" cellspacing="0" cellpadding="0" style="width:300px">
@@ -201,9 +200,9 @@
         <tr>
           <td class="fileListData">
             <div id="statusText" class="uploadStatusText">
-			  <span resource="label.file"></span>
-			  <xsl:text> </xsl:text>
-              <span id="currentFileNum">1</span> 
+	          <span resource="label.file"></span>
+		      <xsl:text> </xsl:text>
+              <span id="currentFileNum">1</span>
 			  <xsl:text> </xsl:text>
               <span resource="label.of"></span>
 			  <xsl:text> </xsl:text>
@@ -211,20 +210,19 @@
 		    </div>
 
             <div id="totalStatusText" class="uploadStatusText">
-              0 
-			  <xsl:text> </xsl:text>
+              0
+		      <xsl:text> </xsl:text>
               <span resource="label.of"></span>
 			  <xsl:text> </xsl:text>
               0 bytes (0 %)
             </div>
-
           </td>
         </tr>
     
       </table>
-	  
-    </center>
-  
+
+    </div>
+
   </div>
   
   <script type="text/javascript">
