@@ -6,6 +6,10 @@ frameset > frameset > frame+frame {
     background-color: #f0f0f0;
 }
 
+frameset.mainFrames > frame {
+    overflow: auto;
+}
+
 body {
     margin-top: 5px;
     margin-left: 10px;
@@ -43,6 +47,7 @@ body.story {
 }
   
 body.menubar {
+    overflow: hidden;
     margin-top:0px;
     margin-left:10px;
     margin-right:10px;
