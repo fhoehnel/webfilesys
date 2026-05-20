@@ -863,3 +863,7 @@ body.zipContent span.icon-folderOpen:before,
 div.zipEntry span.icon-folderOpenFilled:before {
 	color: #ffffa0;
 }
+
+.userAtHost {
+    color: #ffffff;
+}

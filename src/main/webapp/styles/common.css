@@ -2559,6 +2559,13 @@ div.leaflet-container {
     cursor: pointer;
 }
 
+.userAtHost {
+    text-align: center;
+    font-size: 13px;
+    color: black;
+    font-weight: normal;
+}
+
 @media (max-width: 400px) {
     div.centerBox {
         position: static;
