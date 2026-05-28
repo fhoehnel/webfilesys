@@ -11,10 +11,10 @@ mvn install:install-file -Dfile=[your-path-to-project-webfilesys]/maven-reposito
 mvn install:install-file -Dfile=[your-path-to-project-webfilesys]/maven-repository/com/keypoint/png-gif/1.0/png-gif-1.0.jar -DgroupId=com.keypoint -DartifactId=png-gif -Dversion=1.0 -Dpackaging=jar
 mvn install:install-file -Dfile=[your-path-to-project-webfilesys]/maven-repository/mediachest/mediautil/1.0.0/mediautil-1.0.0.jar -DgroupId=mediachest -DartifactId=mediautil -Dversion=1.0.0 -Dpackaging=jar
 
-Use the command
-  maven install
+Use the maven command
+  mvn install
 to build the webfilesys.war web application archive which can be deployed
-in any servlet container.
+in any servlet container (exploaded deployment is required).
 
 You can import the project into the Eclipse IDE using the provided project files (".project", ".classpath", ".setting/*").
 
@@ -24,3 +24,20 @@ in the servlet container.
 
 If you have problems getting the project to run contact the author at
 frank_hoehnel@hotmail.com !
+
+Docker (Tomcat 9 + Java 17)
+---------------------------
+Build image:
+docker build -t webfilesys:java17-tomcat9 .
+
+Run container:
+docker run --rm -p 9753:8080 --name webfilesys webfilesys:java17-tomcat9
+
+Open in browser:
+http://localhost:9753/webfilesys
+
+Docker Compose:
+docker compose up -d --build
+docker compose logs -f webfilesys
+docker compose down
+

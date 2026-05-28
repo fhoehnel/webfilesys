@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<users>
+  <user id="admin">
+    <password encryption="none">topsecret</password>
+    <documentRoot>/</documentRoot>
+    <role>admin</role>
+    <firstName>Admin</firstName>
+    <lastName>Administrator</lastName>
+    <language>English</language> 
+    <readonly>false</readonly>   
+    <email>nobody@nowhere.com</email>   
+    <css>fmweb</css>   
+  <lastLogin>1779797112283</lastLogin></user>
+<user id="demo"><role>webspace</role><email>frank_hoehnel@hotmail.com</email><language>German</language><css>dark</css><documentRoot>/usr/local/tomcat/webapps/webfilesys/WEB-INF/userhome/demo</documentRoot><readonly>false</readonly><pageSize>12</pageSize><password encryption="SHA-256">rdsPXngmyFfXN20b2bwzwMVEeQourJYUSoryKxKYyUA=</password><lastLogin>1779799397817</lastLogin></user></users>

@@ -117,40 +117,40 @@
   </xsl:if>
 
   <!-- tabs start -->
-  <table class="tabs" cellspacing="0">
+  <table class="tabs">
     <tr>
       <td class="tabSpacer" style="min-width:13px;"></td>
       
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
       </td>
  
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
       </td>
 
       <td class="tabSpacer"></td>
 
-      <td class="tabActive" nowrap="true" resource="label.modeVideo" />
+      <td class="tabActive" resource="label.modeVideo" />
       
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
       <xsl:if test="not(/fileList/readonly) and /fileList/statistics">
         <td class="tabSpacer"></td>
 
-        <td class="tabInactive" nowrap="true">
+        <td class="tabInactive">
           <a class="tab" href="javascript:fileStats()" resource="label.fileStats" />
         </td>
       </xsl:if>
@@ -164,7 +164,7 @@
   
     <input type="hidden" name="command" value="listVideos" />
     
-	    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
+	    <table cellpadding="0" style="width:100%;border-bottom-style:none;border-spacing:0">
 	      <input type="hidden" name="actpath">
 	        <xsl:attribute name="value">
 	          <xsl:value-of select="currentPath" />
@@ -334,7 +334,7 @@
          
     </div>
 
-    <table id="buttonCont" cellspacing="0" class="fileListButtonCont2">
+    <table id="buttonCont" class="fileListButtonCont2">
       <tr>
         <td class="fileListButton sepTop" style="white-space:nowrap">
             <input type="checkbox" class="big" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" />

@@ -346,6 +346,7 @@ a.listHead:hover {
 
 table.fileListButtonCont2 {
     background-color: #204020;
+    border-top: 1px solid #b0b0b0;
 }
 
 td.fileListButton {

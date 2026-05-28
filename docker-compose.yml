@@ -1,0 +1,28 @@
+services:
+  webfilesys:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: webfilesys:java17-tomcat9
+    container_name: webfilesys
+    restart: unless-stopped
+    ports:
+      - "9753:8080"
+    volumes:
+      # Persist mutable WEB-INF config files on the host.
+      - ./docker/config/webfilesys.conf:/usr/local/tomcat/webapps/webfilesys/WEB-INF/webfilesys.conf
+      - ./docker/config/users.xml:/usr/local/tomcat/webapps/webfilesys/WEB-INF/users.xml
+      - ./docker/config/invitations.xml:/usr/local/tomcat/webapps/webfilesys/WEB-INF/invitations.xml
+      # Persist mutable WEB-INF subfolders.
+      - webfilesys_bookmarks:/usr/local/tomcat/webapps/webfilesys/WEB-INF/bookmarks
+      - webfilesys_categories:/usr/local/tomcat/webapps/webfilesys/WEB-INF/categories
+      - webfilesys_fastpath:/usr/local/tomcat/webapps/webfilesys/WEB-INF/fastpath
+      # Persists self-registered user home folders (default UserDocumentRoot).
+      - webfilesys_userhome:/usr/local/tomcat/webapps/webfilesys/WEB-INF/userhome
+
+volumes:
+  webfilesys_bookmarks:
+  webfilesys_categories:
+  webfilesys_fastpath:
+  webfilesys_userhome:
+

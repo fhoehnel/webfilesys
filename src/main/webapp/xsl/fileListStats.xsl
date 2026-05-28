@@ -109,13 +109,13 @@
     <tr>
       <td class="tabSpacer" style="min-width:13px;"></td>
       
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
       </td>
  
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
       </td>
       
@@ -131,19 +131,19 @@
 
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
       <td class="tabSpacer"></td>
 
-      <td class="tabActive" nowrap="true" resource="label.fileStats" />
+      <td class="tabActive" resource="label.fileStats" />
 
       <td class="tabSpacer" style="width:90%"></td>
     </tr>

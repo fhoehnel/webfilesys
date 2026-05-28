@@ -658,9 +658,18 @@ table.fileListButtonCont2 {
     border: none;
 }
 
+table.folderMetaInf {
+    width: 100%;
+    border-spacing: 0;
+}
+
 table.fileListFunctCont {
 	width: 100%;
 	border-spacing: 0;
+}
+
+td.fileListFunctCont {
+    padding: 0;
 }
 
 table.storyButtonCont {
@@ -1280,10 +1289,11 @@ table.fileListHead {
 }
 
 table.fileList {
-    width:100%;
-    background-color:ivory;
-    border:0;
-    margin:0;
+    width: 100%;
+    background-color: ivory;
+    border-spacing: 0;
+    border: 0;
+    margin: 0;
 }
 
 th.fileList {

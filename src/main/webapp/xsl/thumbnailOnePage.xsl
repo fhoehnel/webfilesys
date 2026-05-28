@@ -175,9 +175,8 @@
   </xsl:for-each>
 
   <xsl:if test="description or geoTag">
-    <table id="folderMetaInf" width="100%" border="0" cellpadding="2" cellspacing="0">
+    <table id="folderMetaInf" class="folderMetaInf">
       <tr>
-      
         <td style="width:90%">
           <xsl:if test="description">
             <div class="fileListFolderDesc">
@@ -187,7 +186,7 @@
         </td>
 
         <xsl:if test="geoTag">
-          <td valign="top" style="text-align:right">
+          <td style="vertical-align:top;text-align:right">
             <select id="geoLocSel" style="width:150px;display:none">
               <xsl:attribute name="onchange">geoMapFolderSelected('<xsl:value-of select="/fileList/pathForScript" />')</xsl:attribute>
               <option value="0" resource="selectMapType" />
@@ -212,17 +211,17 @@
   </xsl:if>
 
   <!-- tabs start -->
-  <table class="tabs" cellspacing="0">
+  <table class="tabs">
     <tr>
       <td class="tabSpacer" style="min-width:13px;"></td>
       
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
       </td>
  
       <td class="tabSpacer"></td>
 
-      <td class="tabActive" nowrap="true" resource="label.modethumb" />
+      <td class="tabActive" resource="label.modethumb" />
       
       <xsl:if test="/fileList/videoEnabled">
       
@@ -236,20 +235,20 @@
       
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
       </td>
    
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
       </td>
 
       <xsl:if test="not(/fileList/readonly) and /fileList/statistics">
         <td class="tabSpacer"></td>
 
-        <td class="tabInactive" nowrap="true">
+        <td class="tabInactive">
           <a class="tab" href="javascript:fileStats()" resource="label.fileStats" />
         </td>
       </xsl:if>
@@ -263,7 +262,7 @@
   
     <input type="hidden" name="command" value="thumbnail" />
     
-	    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
+	    <table style="width:100%;border-bottom-style:none;border-spacing:0">
 	      <input type="hidden">
 	        <xsl:attribute name="actpath">
 	          <xsl:value-of select="currentPath" />
@@ -503,7 +502,7 @@
          
     </div>
 
-    <table id="buttonCont" cellspacing="0" class="fileListButtonCont2">
+    <table id="buttonCont" class="fileListButtonCont2">
 
       <xsl:if test="file">
 
@@ -610,9 +609,9 @@
       <tr>
         <td class="fileListButton">
         
-          <table border="0" width="100%" cellpadding="0" cellspacing="0">
+          <table width="100%">
             <tr>
-              <td>
+              <td style="padding: 0">
         
                 <div class="buttonCont">
 

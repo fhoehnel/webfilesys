@@ -100,20 +100,15 @@
   }
 
   function setHeightInternal() {
-
-      var buttonCont = document.getElementById("buttonCont");
-      var buttonContYPos = getAbsolutePos(buttonCont)[1];
-
+      const buttonCont = document.getElementById("buttonCont");
+      const buttonContYPos = getAbsolutePos(buttonCont)[1];
       if (buttonContYPos == 0) {
-          var rect = buttonCont.getBoundingClientRect();
+          const rect = buttonCont.getBoundingClientRect();
           buttonContYPos = rect.top;
       }
-
-      var fileListTable = document.getElementById('fileListTable');
-      var fileListYPos = getAbsolutePos(fileListTable)[1];
-      
-      var scrollContHeight = buttonContYPos - fileListYPos;
-      
+      const fileListTable = document.getElementById('fileListTable');
+      const fileListYPos = getAbsolutePos(fileListTable)[1];
+      const scrollContHeight = buttonContYPos - fileListYPos;
       fileListTable.style.height = scrollContHeight + "px";
   }
 
@@ -199,7 +194,7 @@
   </xsl:if>
 
   <!-- tabs start -->
-  <table class="tabs" cellspacing="0">
+  <table class="tabs">
     <tr>
       <td class="tabSpacer" style="min-width:13px;"></td>
       
@@ -417,7 +412,7 @@
     
     <div id="fileListTable" class="fileListScrollDiv">
     
-    <table id="tableFileList" class="fileList" cellspacing="0" cellpadding="0">
+    <table id="tableFileList" class="fileList" cellpadding="0">
 
       <xsl:if test="file">
 
