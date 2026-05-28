@@ -269,7 +269,11 @@ public class XslVideoListHandler extends XslFileListHandlerBase {
 				XmlUtil.setChildText(fileListElement, "linksExist", "true");
 			}
 		}
-		
+
+		if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
+			XmlUtil.setChildText(fileListElement, "videoEnabled", "true");
+		}
+
 		addCurrentTrail(fileListElement, currentPath, userMgr.getDocumentRoot(uid), mask);
 
 		processResponse("videoList.xsl");

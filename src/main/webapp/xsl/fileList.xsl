@@ -193,54 +193,9 @@
     </div>
   </xsl:if>
 
-  <!-- tabs start -->
-  <table class="tabs">
-    <tr>
-      <td class="tabSpacer" style="min-width:13px;"></td>
-      
-      <td class="tabActive" resource="label.modelist" />
- 
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive">
-        <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
-      </td>
-      
-      <xsl:if test="/fileList/videoEnabled">
-      
-        <td class="tabSpacer"></td>
-
-        <td class="tabInactive">
-          <a class="tab" href="javascript:viewModeVideo()" resource="label.modeVideo" />
-        </td>
-      
-      </xsl:if>
-
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive">
-        <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
-      </td>
-   
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive">
-        <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
-      </td>
-
-      <xsl:if test="not(/fileList/readonly) and /fileList/statistics">
-        <td class="tabSpacer"></td>
-
-        <td class="tabInactive">
-          <a class="tab" href="javascript:fileStats()" resource="label.fileStats" />
-        </td>
-      </xsl:if>
-
-      <td class="tabSpacer" style="width:90%"></td>
-    </tr>
-  </table>
-  <!-- tabs end -->
-  
+  <xsl:call-template name="tabNavigation">
+    <xsl:with-param name="activeTab" select="'files'"/>
+  </xsl:call-template>
 
   <form accept-charset="utf-8" name="sortform" method="get" action="/webfilesys/servlet" style="padding:0px;margin:0px;">
     <input type="hidden" name="command" value="listFiles" />
@@ -647,5 +602,6 @@
 </xsl:template>
 
 <xsl:include href="currentTrail.xsl" />
+<xsl:include href="tabNavigation.xsl" />
 
 </xsl:stylesheet>

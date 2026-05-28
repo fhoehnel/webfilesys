@@ -21,7 +21,7 @@ import de.webfilesys.util.XmlUtil;
  * 
  * @author Frank Hoehnel
  */
-public class XslFileListStatsHandler extends XslRequestHandlerBase
+public class XslFileListStatsHandler extends XslFileListHandlerBase
 {
 	public XslFileListStatsHandler(
 			HttpServletRequest req, 
@@ -73,7 +73,6 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
 
 		XmlUtil.setChildText(fileListElem, "currentPath", currentPath, false);
     	XmlUtil.setChildText(fileListElem, "pathForScript", insertDoubleBackslash(currentPath));
-		XmlUtil.setChildText(fileListElem, "headLine", getHeadlinePath(currentPath), false);
 		XmlUtil.setChildText(fileListElem, "sortBy", Integer.toString(sortBy), false);
 		
         String description = MetaInfManager.getInstance().getDescription(currentPath, ".");
@@ -150,8 +149,13 @@ public class XslFileListStatsHandler extends XslRequestHandlerBase
         if (WebFileSysConfig.getInstance().getFfmpegExePath() != null) {
             XmlUtil.setChildText(fileListElem, "videoEnabled", "true");
         }
-		
-		processResponse("fileListStats.xsl");
+        if (WebFileSysConfig.getInstance().isDownloadStatistics()) {
+            XmlUtil.setChildText(fileListElem, "statistics", "true", false);
+        }
+
+        addCurrentTrail(fileListElem, currentPath, userMgr.getDocumentRoot(uid), "*");
+
+        processResponse("fileListStats.xsl");
     }
 	
 }
