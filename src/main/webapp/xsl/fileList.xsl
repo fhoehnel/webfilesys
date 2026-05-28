@@ -182,9 +182,7 @@
 <xsl:template match="fileList">
 
   <xsl:for-each select="/fileList/currentTrail">
-    <div class="headline headlineBorderless">
-      <xsl:call-template name="currentTrail" />
-    </div>
+    <xsl:call-template name="currentTrail" />
   </xsl:for-each>
 
   <xsl:if test="description">
