@@ -153,9 +153,7 @@ public class RotatedExifThumbHandler extends UserRequestHandler
             OutputStream out = resp.getOutputStream();
 
             pngBytes = pngEncoder.pngEncode();
-            
-            long endTime = System.currentTimeMillis();
-            
+
             if (pngBytes == null)
             {
                 LogManager.getLogger(getClass()).warn("PNG Encoder : Null image");

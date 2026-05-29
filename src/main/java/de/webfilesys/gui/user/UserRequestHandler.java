@@ -32,53 +32,29 @@ public class UserRequestHandler extends ProtectedRequestHandler
 	
 	protected boolean readonly = true;
 	
-	private int fileCopyCounter = 0;
-	
     public UserRequestHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-    {
+            String uid) {
         super(req, resp, session, output, uid);
-        
-        if (uid != null)
-        {
+        if (uid != null) {
             language = userMgr.getLanguage(uid);
-        }
-        else
-        {
+            String sessionReadonly = (String) session.getAttribute("readonly");
+            readonly = (sessionReadonly != null) || userMgr.isReadonly(uid);
+        } else {
         	language = LanguageManager.getInstance().getDefaultLanguage();
         }
-
-        if (uid != null)
-        {
-            String sessionReadonly = (String) session.getAttribute("readonly");
-    		
-    		readonly = (sessionReadonly != null) || userMgr.isReadonly(uid);
-        }
     }
 
-    public void handleRequest()
-    {
-        process();
+    public String getResource(String key, String defaultValue) {
+        return LanguageManager.getInstance().getResource(language, key, defaultValue);
     }
 
-    public String getResource(String key, String defaultValue)
-    {
-        return (
-            LanguageManager.getInstance().getResource(
-                language,
-                key,
-                defaultValue));
-    }
-
-    protected boolean isWebspaceUser()
-    {
+    protected boolean isWebspaceUser() {
         String role = userMgr.getRole(uid);
-
-        return ((role != null) && (role.equals("webspace") || role.equals("album")));
+        return "webspace".equals(role) || "album".equals(role);
     }
 
     /**
@@ -86,51 +62,35 @@ public class UserRequestHandler extends ProtectedRequestHandler
      * For webspace users the root of the path to the document root is hidden.
      * For anonymous access, only the last part of the path is displayed.
      */
-    public String getHeadlinePath(String fullPath)
-    {
+    public String getHeadlinePath(String fullPath) {
         String docRoot = null;
-
-        if (uid == null)
-        {
+        if (uid == null) {
             docRoot = fullPath;
-        }
-        else
-        {
-            if (!isWebspaceUser())
-            {
+        } else {
+            if (!isWebspaceUser()) {
                 return (fullPath);
             }
-
             docRoot = userMgr.getDocumentRoot(uid);
-
-            if (docRoot == null)
-            {
+            if (docRoot == null) {
                 docRoot = fullPath;
             }
         }
 
         String headlinePath = fullPath;
 
-        if ((File.separatorChar == '/')
-            && (docRoot.length() != 1)
-            || (File.separatorChar == '\\')
-            && (docRoot.charAt(0) != '*'))
-        {
-            int idx = docRoot.length() - 1;
+        if (File.separatorChar == '/' && docRoot.length() != 1 ||
+            File.separatorChar == '\\' && docRoot.charAt(0) != '*') {
 
-            if (fullPath.length() > idx)
-            {
-                while ((idx > 0)
-                    && (fullPath.charAt(idx) != File.separatorChar)
-                    && (fullPath.charAt(idx) != '/'))
-                {
+            int idx = docRoot.length() - 1;
+            if (fullPath.length() > idx) {
+                while (idx > 0
+                        && fullPath.charAt(idx) != File.separatorChar
+                        && fullPath.charAt(idx) != '/') {
                     idx--;
                 }
-
                 headlinePath = fullPath.substring(idx);
             }
         }
-
         return (headlinePath);
     }
 
@@ -138,17 +98,13 @@ public class UserRequestHandler extends ProtectedRequestHandler
     	boolean sessionReadonly = false;
     	
     	Boolean sessRO = (Boolean) session.getAttribute("readonly");
-    	
-    	if (sessRO != null) {
+        if (sessRO != null) {
     		sessionReadonly = sessRO;
     	}
-    	
         boolean readonly = sessionReadonly || userMgr.isReadonly(uid);
-
         if (!readonly) {
-            return (true);
+            return true;
         }
-
         LogManager.getLogger(getClass()).warn("read-only user " + uid + " tried write access");
 
         output.print(HTTPUtils.createHTMLHeader());
@@ -156,10 +112,9 @@ public class UserRequestHandler extends ProtectedRequestHandler
         output.println("<HTML>");
         output.println("<HEAD>");
         output.println("<TITLE> Unauthorized access </TITLE>");
-        output.println("<script language=\"javascript\">");
+        output.println("<script type=\"text/javascript\">");
         output.println(
             "alert('Write access is required to perform this operation!');");
-        output.println("history.back();");
         output.println("</script>");
 
         output.println("</HEAD></HTML>");
@@ -168,10 +123,8 @@ public class UserRequestHandler extends ProtectedRequestHandler
         return (false);
     }
 
-    public static boolean dirIsLink(File f)
-    {
-        if (File.separatorChar != '/')
-        {
+    public static boolean dirIsLink(File f) {
+        if (File.separatorChar != '/') {
             // there is no way to detect NTFS symbolic links / junctions with Java functions
             // see http://stackoverflow.com/questions/3249117/cross-platform-way-to-detect-a-symbolic-link-junction-point
             // possible workaround: if the directory is not empty, files in the linked directory
@@ -180,12 +133,9 @@ public class UserRequestHandler extends ProtectedRequestHandler
             return (false);
         }
 
-        try
-        {
+        try {
             return (!(f.getCanonicalPath().equals(f.getAbsolutePath())));
-        }
-        catch (IOException ioex)
-        {
+        } catch (IOException ioex) {
             LogManager.getLogger(UserRequestHandler.class).warn(ioex);
             return (false);
         }
@@ -316,7 +266,7 @@ public class UserRequestHandler extends ProtectedRequestHandler
         } else {
             MetaInfManager.getInstance().releaseMetaInf(path, false);
         }
-        return(!(deleteError));
+        return !deleteError;
     }
     
     /**
@@ -446,30 +396,21 @@ public class UserRequestHandler extends ProtectedRequestHandler
      * @return encoding or null, if unknown
      */
     protected String guessFileEncoding(String filePath) {
-        try 
-        {
-            FileInputStream fin = new FileInputStream(filePath);
-            
+        try (FileInputStream fin = new FileInputStream(filePath)) {
             int byte1 = fin.read();
-            if (byte1 != (-1)) 
-            {
+            if (byte1 != (-1)) {
                 int byte2 = fin.read();
-                if (byte2 != (-1)) 
-                {
+                if (byte2 != (-1)) {
                     int byte3 = fin.read();
-                    if ((byte1 == 0xef) && (byte2 == 0xbb) && (byte3 == 0xbf)) 
-                    {
+                    if ((byte1 == 0xef) && (byte2 == 0xbb) && (byte3 == 0xbf)) {
                         // BOM found - UTF-8
                         return "UTF-8-BOM";
                     }
                 }
             }
-            fin.close();
-            
         } catch (IOException ioex) {
             LogManager.getLogger(getClass()).warn("cannot determine file encoding for " + filePath);
         }
-
         return FileEncodingMap.getInstance().getFileEncoding(filePath);
     }
     

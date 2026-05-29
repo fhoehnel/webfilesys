@@ -6,20 +6,17 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.*;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -27,7 +24,7 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class MobileFolderPictureHandler extends XslRequestHandlerBase {
+public class MobileFolderPictureHandler extends MobileFileListHandlerBase {
 	private static final int MOBILE_FILE_PAGE_SIZE = 2048;
 	
 	public MobileFolderPictureHandler(
@@ -117,7 +114,7 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
 
         boolean dirHasMetaInf = false;
 
-        if (pathNoSlash.length() > 0) {
+        if (!pathNoSlash.isEmpty()) {
             dirHasMetaInf = metaInfMgr.dirHasMetaInf(currentPath);
         }
 		
@@ -131,80 +128,14 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
 			
 		doc.insertBefore(xslRef, fileListElem);
 		
-		if (File.separatorChar == '\\') 
-		{
-		    XmlUtil.setChildText(fileListElem, "serverOS", "win");
-		}
-		else
-		{
-            XmlUtil.setChildText(fileListElem, "serverOS", "ix");
-		}
-		
-		String relativePath = getHeadlinePath(currentPath);
-		
-		// path section
-		Element currentPathElem = doc.createElement("currentPath");
-		
-		fileListElem.appendChild(currentPathElem);
-		
-		currentPathElem.setAttribute("path", relativePath);
-		
-		currentPathElem.setAttribute("pathForScript", insertDoubleBackslash(relativePath));
-		
-		XmlUtil.setChildText(fileListElem, "filter", mask, false);
+		XmlUtil.setChildText(fileListElem, "serverOS", File.separatorChar == '\\' ? "win" : "ix");
 
 		String docRoot = userMgr.getDocumentRoot(uid);
-        
-        if (((File.separatorChar == '\\') && (docRoot.charAt(0) != '*')) ||
-            ((File.separatorChar == '/') && (docRoot.length() > 1))) {
-            // userid as first path element
-            
-            Element partOfPathElem = doc.createElement("pathElem");
-            
-            currentPathElem.appendChild(partOfPathElem);
-                
-            partOfPathElem.setAttribute("name", uid);
-                
-            partOfPathElem.setAttribute("path", "/");
-        }
-        
-        if (((File.separatorChar == '\\') && (docRoot.charAt(0) == '*')) ||
-            ((File.separatorChar == '/') && (docRoot.length() == 1))) {
-            // host name as first path element
-            
-            Element partOfPathElem = doc.createElement("pathElem");
-            
-            currentPathElem.appendChild(partOfPathElem);
-                
-            partOfPathElem.setAttribute("name", WebFileSys.getInstance().getLocalHostName());
-                
-            partOfPathElem.setAttribute("path", "/");
-        }        
-		
-		StringTokenizer pathParser = new StringTokenizer(relativePath, File.separator);
-		
-		StringBuffer partialPath = new StringBuffer();
-		
-		while (pathParser.hasMoreTokens()) {
-			String partOfPath = pathParser.nextToken();
-			
-			partialPath.append(partOfPath);
-			
-			if (pathParser.hasMoreTokens())
-			{
-				partialPath.append(File.separatorChar);		
-			}
-			
-			Element partOfPathElem = doc.createElement("pathElem");
-			
-			currentPathElem.appendChild(partOfPathElem);
-			
-			partOfPathElem.setAttribute("name", partOfPath);
-			
-			partOfPathElem.setAttribute("path", UTF8URLEncoder.encode(partialPath.toString()));
-		}
-		// end path section
-		
+
+        String relPath = docRoot.charAt(0) == '*' ? currentPath : currentPath.substring(docRoot.length());
+
+		addCurrentTrail(fileListElem, docRoot, relPath);
+
 		if (readonly) {
 			XmlUtil.setChildText(fileListElem, "readonly", "true", false);
 		}
@@ -223,7 +154,9 @@ public class MobileFolderPictureHandler extends XslRequestHandlerBase {
 			return; 
 		}
 
-        if ((File.separatorChar != '\\') ||
+		String relativePath = getHeadlinePath(currentPath);
+
+		if ((File.separatorChar != '\\') ||
             (docRoot.charAt(0) != '*') ||
             (!relativePath.equals(File.separator))) {
             String description = metaInfMgr.getDescription(currentPath,".");

@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +20,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
 import de.webfilesys.graphics.ThumbnailThread;
-import de.webfilesys.gui.xsl.XslRequestHandlerBase;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLEncoder;
 import de.webfilesys.util.XmlUtil;
@@ -29,7 +27,7 @@ import de.webfilesys.util.XmlUtil;
 /**
  * @author Frank Hoehnel
  */
-public class MobileFolderFileListHandler extends XslRequestHandlerBase
+public class MobileFolderFileListHandler extends MobileFileListHandlerBase
 {
 	private static final int MOBILE_FILE_PAGE_SIZE = 2048;
 	
@@ -317,74 +315,8 @@ public class MobileFolderFileListHandler extends XslRequestHandlerBase
 		{
 		    XmlUtil.setChildText(folderFileListElement, "errorMsg", errorMsg, false);
 		}
-		
-		// path section
-		Element currentPathElem = doc.createElement("currentPath");
-		
-		folderFileListElement.appendChild(currentPathElem);
-		
-		currentPathElem.setAttribute("path", relativePath);
-		
-		currentPathElem.setAttribute("pathForScript", insertDoubleBackslash(relativePath));
-		
-        if (((File.separatorChar == '\\') && (docRoot.charAt(0) != '*')) ||
-            ((File.separatorChar == '/') && (docRoot.length() > 1)))
-        {
-            // userid as first path element
-            
-            Element partOfPathElem = doc.createElement("pathElem");
-            
-            currentPathElem.appendChild(partOfPathElem);
-                
-            partOfPathElem.setAttribute("name", uid);
-                
-            partOfPathElem.setAttribute("path", "/");
-        }
-        
-        if (((File.separatorChar == '\\') && (docRoot.charAt(0) == '*')) ||
-            ((File.separatorChar == '/') && (docRoot.length() == 1)))
-        {
-            // host name as first path element
-            
-            Element partOfPathElem = doc.createElement("pathElem");
-            
-            currentPathElem.appendChild(partOfPathElem);
-                
-            partOfPathElem.setAttribute("name", WebFileSys.getInstance().getLocalHostName());
-                
-            partOfPathElem.setAttribute("path", "/");
-        }        
-		
-		StringTokenizer pathParser = new StringTokenizer(relativePath, File.separator);
-		
-		StringBuilder partialPath = new StringBuilder();
 
-        boolean firstToken = true;
-
-		while (pathParser.hasMoreTokens()) {
-			String partOfPath = pathParser.nextToken();
-			
-			partialPath.append(partOfPath);
-
-            if (pathParser.hasMoreTokens()) {
-				partialPath.append(File.separatorChar);		
-			} else {
-                if (firstToken && partOfPath.length() == 2 && partOfPath.charAt(1) == ':') {
-                    partialPath.append(File.separator);
-                }
-            }
-			
-			Element partOfPathElem = doc.createElement("pathElem");
-			
-			currentPathElem.appendChild(partOfPathElem);
-			
-			partOfPathElem.setAttribute("name", partOfPath);
-			
-			partOfPathElem.setAttribute("path", UTF8URLEncoder.encode(partialPath.toString()));
-
-            firstToken = false;
-		}
-		// end path section
+		Element currentPathElem = addCurrentTrail(folderFileListElement, docRoot, relativePath);
 
         // subdir section
 		Element foldersElem = doc.createElement("folders");
