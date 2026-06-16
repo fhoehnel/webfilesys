@@ -109,7 +109,7 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
                             latitude = exifData.getGpsLatitude();
                             longitude = exifData.getGpsLongitude();
                             
-                            if ((latitude >= 0.0f) && (longitude >= 0.0f))
+                            if ((latitude > 0.0f) && (longitude > 0.0f))
                             {
                                 geoDataExist = true;
                                 

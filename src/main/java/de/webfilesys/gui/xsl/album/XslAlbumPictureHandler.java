@@ -454,23 +454,17 @@ public class XslAlbumPictureHandler extends XslRequestHandlerBase
 		this.processResponse("album/albumPicture.xsl");
     }
 	
-    private boolean hasGpsExifData(String path)
-    {
+    private boolean hasGpsExifData(String path) {
         String fileExt = CommonUtils.getFileExtension(path);
         
-        if (fileExt.equals(".jpg") || fileExt.equals(".jpeg"))
-        {
+        if (fileExt.equals(".jpg") || fileExt.equals(".jpeg")) {
             CameraExifData exifData = new CameraExifData(path);
-
-            if (exifData.hasExifData())
-            {
+            if (exifData.hasExifData()) {
                 float gpsLatitude = exifData.getGpsLatitude();
                 float gpsLongitude = exifData.getGpsLongitude();
-                
-                return((gpsLatitude >= 0.0f) && (gpsLongitude >= 0.0f));
+                return gpsLatitude > 0.0f && gpsLongitude > 0.0f;
             }
         }
-      
         return false;
     }
     

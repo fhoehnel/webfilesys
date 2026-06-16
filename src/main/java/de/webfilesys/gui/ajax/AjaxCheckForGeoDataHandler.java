@@ -74,33 +74,25 @@ public class AjaxCheckForGeoDataHandler extends XmlRequestHandlerBase
 		processResponse();
 	}
 	
-	private boolean hasGeoData(String imgPath)
-	{
+	private boolean hasGeoData(String imgPath) {
         GeoTag geoTag = MetaInfManager.getInstance().getGeoTag(imgPath);
-
-        if (geoTag != null)
-        {
+        if (geoTag != null) {
             return true;
         }
         
         String fileExt = CommonUtils.getFileExtension(imgPath);
         
-        if (fileExt.equals(".jpg") || fileExt.equals(".jpeg"))
-        {
+        if (fileExt.equals(".jpg") || fileExt.equals(".jpeg")) {
             CameraExifData exifData = new CameraExifData(imgPath);
-
-            if (exifData.hasExifData())
-            {
+            if (exifData.hasExifData()) {
                 float gpsLatitude = exifData.getGpsLatitude();
                 float gpsLongitude = exifData.getGpsLongitude();
                 
-                if ((gpsLatitude >= 0.0f) && (gpsLongitude >= 0.0f))
-                {
+                if ((gpsLatitude > 0.0f) && (gpsLongitude > 0.0f)) {
                     return true;
                 }
             }
         }
-        
         return false;
     }
 }

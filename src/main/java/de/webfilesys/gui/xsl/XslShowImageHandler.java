@@ -165,8 +165,7 @@ public class XslShowImageHandler extends XslRequestHandlerBase
         if (exifData.hasExifData()) {
             float gpsLatitude = exifData.getGpsLatitude();
             float gpsLongitude = exifData.getGpsLongitude();
-            
-            return((gpsLatitude >= 0.0f) && (gpsLongitude >= 0.0f));
+            return gpsLatitude > 0.0f && gpsLongitude > 0.0f;
         }
 	  
         return false;
