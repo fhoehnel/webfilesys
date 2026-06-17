@@ -40,13 +40,6 @@ public class GPXOSMViewHandler extends XslRequestHandlerBase {
         String fileName = getParameter("fileName");
         String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
 		
-		String googleMapsAPIKey = null;
-		if (req.getScheme().equalsIgnoreCase("https")) {
-			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTPS();
-		} else {
-			googleMapsAPIKey = WebFileSysConfig.getInstance().getGoogleMapsAPIKeyHTTP();
-		}
-
         Element gpxElem = doc.createElement("gpx");
         doc.appendChild(gpxElem);
 
