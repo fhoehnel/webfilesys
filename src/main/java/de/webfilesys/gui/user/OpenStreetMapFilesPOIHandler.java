@@ -85,6 +85,7 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
         		
         		float latitude = Float.NEGATIVE_INFINITY;
         		float longitude = Float.NEGATIVE_INFINITY;
+                float altitude = Float.NaN;
         		String infoText = null;
 
         		if (geoTag != null)
@@ -108,7 +109,7 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
                             latitude = exifData.getGpsLatitude();
                             longitude = exifData.getGpsLongitude();
                             
-                            if ((latitude >= 0.0f) && (longitude >= 0.0f))
+                            if ((latitude > 0.0f) && (longitude > 0.0f))
                             {
                                 geoDataExist = true;
                                 
@@ -124,7 +125,9 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
                                 if ((longitudeRef != null) && longitudeRef.equalsIgnoreCase("W")) 
                                 {
                                     longitude = (-longitude);
-                                } 
+                                }
+
+                                altitude = exifData.getGpsAltitude();
                             }
                         }
                     }
@@ -142,6 +145,9 @@ public class OpenStreetMapFilesPOIHandler extends UserRequestHandler
             		if (!CommonUtils.isEmpty(description)) {
             			descrText += "<p>" + CommonUtils.escapeHTML(description) + "</p>";
             		}
+                    if (!Float.isNaN(altitude)) {
+                        descrText += "<p>" + ((long) altitude) + " m</p>";
+                    }
             		
                     output.print(latitude);
                     output.print('\t');

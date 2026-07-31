@@ -35,28 +35,13 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
             return;
         }
 
-        String filePath = getParameter("filePath");
-
-        if (filePath == null) {
-        	String fileName = getParameter("fileName");
-        	if (CommonUtils.isEmpty(fileName)) {
-        		LogManager.getLogger(getClass()).warn("missing parameter filePath or fileName");
-        		return;
-        	}
-        	filePath = getCwd();
-        	if (filePath.endsWith(File.separator)) {
-        		filePath = filePath + fileName;
-        	} else {
-        		filePath = filePath + File.separator + fileName;
-        	}
-        } else {
-            if (!accessAllowed(filePath)) {
-                LogManager.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's document root: " + filePath);
-                return;
-            }
-            if (File.separatorChar == '\\') {
-                filePath = filePath.replace('/', '\\');
-            }
+        String filePath = getRequestedFilePath();
+        if (!accessAllowed(filePath)) {
+            LogManager.getLogger(getClass()).warn("user " + uid + " tried to delete file outside of it's home directory: " + filePath);
+            return;
+        }
+        if (File.separatorChar == '\\') {
+            filePath = filePath.replace('/', '\\');
         }
 
         String deleteWriteProtected = getParameter("deleteWriteProtected");
@@ -74,7 +59,7 @@ public class DeleteFileHandler extends XmlRequestHandlerBase {
             MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
             if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
-                metaInfMgr.updateLinksAfterMove(filePath, null, uid);
+                metaInfMgr.removeLinksToFile(filePath);
             }
 
             metaInfMgr.removeMetaInf(filePath);

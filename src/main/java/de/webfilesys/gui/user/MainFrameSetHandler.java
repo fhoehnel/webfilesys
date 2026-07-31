@@ -17,9 +17,8 @@ import de.webfilesys.util.UTF8URLEncoder;
  * The main frameset.
  * @author Frank Hoehnel
  */
-public class MainFrameSetHandler extends UserRequestHandler
-{
-	boolean clientIsLocal = false;
+public class MainFrameSetHandler extends UserRequestHandler {
+	boolean clientIsLocal;
 	 
 	public MainFrameSetHandler(
     		HttpServletRequest req, 
@@ -27,24 +26,26 @@ public class MainFrameSetHandler extends UserRequestHandler
             HttpSession session,
             PrintWriter output, 
             String uid,
-            boolean clientIsLocal)
-	{
+            boolean clientIsLocal) {
         super(req, resp, session, output, uid);
-		
 		this.clientIsLocal = clientIsLocal;
 	}
 
-	protected void process()
-	{
+	protected void process() {
 	    session.removeAttribute("mobile");
-	    
-        String act_path = getParameter("actPath");
 
-        if ((act_path == null) || (act_path.length() == 0))
-        {
-            if (File.separatorChar == '\\')
-            {
-                act_path = "C:\\";
+        if (WebFileSys.getInstance().isMaintananceMode()) {
+            if (!this.isAdminUser(false)) {
+                maintananceMode();
+                return;
+            }
+        }
+
+        String currentPath = getParameter("actPath");
+
+        if (CommonUtils.isEmpty(currentPath)) {
+            if (File.separatorChar == '\\') {
+                currentPath = "C:\\";
 
                 boolean existingDriveFound = false;
                 for (int i = 3; (!existingDriveFound) &&  (i <= 26); i++) {
@@ -53,49 +54,28 @@ public class MainFrameSetHandler extends UserRequestHandler
 
                         char driveChar = 'A';
                         driveChar += (i - 1);
-                        act_path = driveChar + ":" + File.separator;
+                        currentPath = driveChar + ":" + File.separator;
                     }
                 }
-            }
-            else
-            {
-                act_path = "/";
+            } else {
+                currentPath = "/";
             }
         }
         
 		String viewModeParm = this.getParameter("viewMode");
-        	
-		if (viewModeParm != null)
-		{
-			try
-			{
+		if (viewModeParm != null) {
+			try {
 				int viewMode = Integer.parseInt(viewModeParm);
-
-                session.setAttribute("viewMode", new Integer(viewMode));
-			}
-			catch (NumberFormatException nfex)
-			{
+                session.setAttribute("viewMode", viewMode);
+			} catch (NumberFormatException nfex) {
 			}
 		}
 
-        if (WebFileSys.getInstance().isMaintananceMode())
-        {
-            if (!this.isAdminUser(false))
-            {
-                maintananceMode();
-                return;
-            }
-        }
-
-        if (!accessAllowed(act_path))
-        {
-            if (File.separatorChar == '\\')
-            {
-                act_path = userMgr.getDocumentRoot(uid).replace('/', '\\');
-            }
-            else
-            {
-                act_path = userMgr.getDocumentRoot(uid);
+        if (!accessAllowed(currentPath)) {
+            if (File.separatorChar == '\\') {
+                currentPath = userMgr.getDocumentRoot(uid).replace('/', '\\');
+            } else {
+                currentPath = userMgr.getDocumentRoot(uid);
             }
         }
 
@@ -109,97 +89,32 @@ public class MainFrameSetHandler extends UserRequestHandler
 		
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 
-		// global JavaScript variables needed for context menu
 		output.println("<script type=\"text/javascript\">");
 	
-		if (File.separatorChar == '/')
-		{
+		if (File.separatorChar == '/') {
 			output.println("var serverOS = 'ix';");
-		}
-		else
-		{
+		} else {
 			output.println("var serverOS = 'win';");
 		}
-	
-		if (clientIsLocal)
-		{
-			output.println("var clientIsLocal = 'true';");
-		}
-		else
-		{
-			output.println("var clientIsLocal = 'false';");
-		}
 
-		if (clientIsLocal && (WebFileSysConfig.getInstance().getSystemEditor() != null))
-		{
-			output.println("var localEditor = 'true';");
-		}
-		else
-		{
-			output.println("var localEditor = 'false';");
-		}
-		
-		if (readonly)
-		{
-			output.println("var readonly = 'true';");
-		}
-		else
-		{
-			output.println("var readonly = 'false';");
-		}
-	
-		String role = userMgr.getRole(uid);
-		if ((role != null) && role.equals("webspace"))
-		{
-			output.println("var webspaceUser = 'true';");
-		}
-		else
-		{
-			output.println("var webspaceUser = 'false';");
-		}
+        printBooleanJavascriptVar("clientIsLocal", clientIsLocal);
+        printBooleanJavascriptVar("localEditor", clientIsLocal && WebFileSysConfig.getInstance().getSystemEditor() != null);
+        printBooleanJavascriptVar("readonly", readonly);
 
-		if (WebFileSysConfig.getInstance().getMailHost() != null)
-		{
-			output.println("var mailEnabled = 'true';");
-		}
-		else
-		{
-			output.println("var mailEnabled = 'false';");
-		}
-		
-		if (WebFileSysConfig.getInstance().isAutoCreateThumbs())
-		{
-			output.println("var autoCreateThumbs = 'true';");
-		}
-        else
-        {
-			output.println("var autoCreateThumbs = 'false';");
-        }
-        
-        if (isAdminUser(false))
-        {
-			output.println("var adminUser = 'true';");
-        }
-        else
-        {
-			output.println("var adminUser = 'false';");
-        }
-        
-        if (WebFileSysConfig.getInstance().isChmodAllowed())
-        {
-			output.println("var chmodAllowed = 'true';");
-        }
-        else
-        {
-			output.println("var chmodAllowed = 'false';");
-        }
-        
+        String role = userMgr.getRole(uid);
+        printBooleanJavascriptVar("webspaceUser", "webspace".equals(role));
+
+        printBooleanJavascriptVar("mailEnabled", WebFileSysConfig.getInstance().getMailHost() != null);
+        printBooleanJavascriptVar("autoCreateThumbs", WebFileSysConfig.getInstance().isAutoCreateThumbs());
+        printBooleanJavascriptVar("adminUser", isAdminUser(false));
+
+        printBooleanJavascriptVar("chmodAllowed", WebFileSysConfig.getInstance().isChmodAllowed());
+
         if (!CommonUtils.isEmpty(WebFileSysConfig.getInstance().getFfmpegExePath())) {
 			output.println("var ffmpegEnabled = true;");
         }
         
-        if (!readonly)
-		{
+        if (!readonly) {
             if (WebFileSysConfig.getInstance().isFolderWatch()) {
                 output.println("var watchEnabled = true;");
             }
@@ -222,70 +137,52 @@ public class MainFrameSetHandler extends UserRequestHandler
 
         output.println("</head>");
         
-        // output.println("<frameset rows=\"32,*\" frameborder=\"0\" framespacing=\"0\" border=\"0\">");
         output.println("<frameset rows=\"35,*\">");
         output.println(
-            "<frame name=\"menu\" scrolling=\"no\" src=\"/webfilesys/servlet?command=menuBar\" leftmargin=\"0\" topmargin=\"0\" marginwidth=\"0\" marginheight=\"0\" frameborder=\"0\" noresize />");
+            "<frame name=\"menu\" src=\"/webfilesys/servlet?command=menuBar\" noresize />");
 
-        if (File.separatorChar == '/')
-        {
-            output.print("<frameset COLS=\"33%,*\">");
-
+        if (File.separatorChar == '/') {
+            output.println("<frameset cols=\"33%,*\" class=\"mainFrames\">");
             output.println(
-                    "<frame name=\"DirectoryPath\" SRC=\"/webfilesys/servlet?command=exp&expandPath="
-                        + UTF8URLEncoder.encode(act_path)
-                        + "\" scrolling=\"auto\" />");
-
-            output.print(
-                "<frame name=\"FileList\" SRC=\"/webfilesys/servlet?command=listFiles&actpath="
-                    + UTF8URLEncoder.encode(act_path)
-                    + "&mask=*\" />");
-            output.print("</frameset>");
-        }
-        else
-        {
-            output.println("<frameset cols=\"33%,*\">");
+                    "<frame name=\"DirectoryPath\" src=\"/webfilesys/servlet?command=exp&expandPath="
+                        + UTF8URLEncoder.encode(currentPath)
+                        + "\" />");
+            output.println(
+                    "<frame name=\"FileList\" src=\"/webfilesys/servlet?command=listFiles&actpath="
+                            + UTF8URLEncoder.encode(currentPath) + "&mask=*\" />");
+            output.println("</frameset>");
+        } else {
+            output.println("<frameset cols=\"33%,*\" class=\"mainFrames\">");
 
             String docRoot = userMgr.getDocumentRoot(uid);
-
             String fastPath = getParameter("fastPath");
             
-            if ((fastPath != null) || (docRoot.charAt(0) != '*'))
-            {
+            if ((fastPath != null) || (docRoot.charAt(0) != '*')) {
                 // return to previous folder, expand it
-                output.println(
-                        "<frame name=\"DirectoryPath\" src=\"/webfilesys/servlet?command=exp&expandPath="
-                            + UTF8URLEncoder.encode(act_path)
-                            + "\" scrolling=\"auto\" />");
-            }
-            else
-            {
-                output.println(
-                        "<frame name=\"DirectoryPath\" src=\"/webfilesys/servlet?command=winDirTree&actPath="
-                            + UTF8URLEncoder.encode(act_path)
-                            + "\" scrolling=\"auto\" />");
+                output.println("<frame name=\"DirectoryPath\" src=\"/webfilesys/servlet?command=exp&expandPath="
+                        + UTF8URLEncoder.encode(currentPath) + "\" />");
+            } else {
+                output.println("<frame name=\"DirectoryPath\" src=\"/webfilesys/servlet?command=winDirTree&actPath="
+                        + UTF8URLEncoder.encode(currentPath) + "\" />");
             }
 
-            output.println(
-                "<frame name=\"FileList\" SRC=\"/webfilesys/servlet?command=listFiles&actpath="
-                    + UTF8URLEncoder.encode(act_path)
-                    + "&mask=*\" scrolling=\"auto\" />");
+            output.println("<frame name=\"FileList\" SRC=\"/webfilesys/servlet?command=listFiles&actpath="
+                    + UTF8URLEncoder.encode(currentPath) + "&mask=*\" />");
             output.println("</frameset>");
         }
 
         output.println("</frameset>");
-
         output.println("</html>");
         output.flush();
-        return;
 	}
-	
-    private void maintananceMode()
-    {
+
+    private void printBooleanJavascriptVar(String varName, boolean value) {
+        output.println("var " + varName + " = '" + value + "';");
+    }
+
+    private void maintananceMode() {
         output.println("<html>");
         output.println("<head>");
-
-        // output.println("<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"20; URL=/_logout\">");
 
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/common.css\">");
 		output.println("<link rel=\"stylesheet\" type=\"text/css\" href=\"/webfilesys/styles/skins/" + userMgr.getCSS(uid) + ".css\">");

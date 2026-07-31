@@ -94,9 +94,9 @@
 
 <xsl:template name="fileList">
 
-  <div class="headline headlineBorderless">
-    <xsl:value-of select="fileList/headLine" />
-  </div>
+  <xsl:for-each select="/fileList/currentTrail">
+    <xsl:call-template name="currentTrail" />
+  </xsl:for-each>
 
   <xsl:if test="/fileList/description">
     <div class="fileListFolderDesc">
@@ -104,51 +104,9 @@
     </div>
   </xsl:if>
 
-  <!-- tabs start -->
-  <table class="tabs" cellspacing="0">
-    <tr>
-      <td class="tabSpacer" style="min-width:13px;"></td>
-      
-      <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
-      </td>
- 
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
-      </td>
-      
-      <xsl:if test="/fileList/videoEnabled">
-      
-        <td class="tabSpacer"></td>
-
-        <td class="tabInactive">
-          <a class="tab" href="javascript:viewModeVideo()" resource="label.modeVideo" />
-        </td>
-      
-      </xsl:if>
-
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
-      </td>
-   
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
-      </td>
-
-      <td class="tabSpacer"></td>
-
-      <td class="tabActive" nowrap="true" resource="label.fileStats" />
-
-      <td class="tabSpacer" style="width:90%"></td>
-    </tr>
-  </table>
-  <!-- tabs end -->
+  <xsl:call-template name="tabNavigation">
+    <xsl:with-param name="activeTab" select="'stats'"/>
+  </xsl:call-template>
   
   <xsl:if test="/fileList/file">
   
@@ -296,5 +254,8 @@
   </xsl:if>
   
 </xsl:template>
-  
+
+<xsl:include href="currentTrail.xsl" />
+<xsl:include href="tabNavigation.xsl" />
+
 </xsl:stylesheet>

@@ -1,5 +1,15 @@
+body.gpxTrack .olPopup {
+    height: 80px!important;
+}
+
 .olPopup {
-	border: 2px ridge #a0a0a0!important;
+    background-color: lavender!important;
+    border: 2px solid!important;
+    border-color: #808080;
+    border-radius: 8px;
+    font-family: Arial,Helvetica,Sans-serif;
+    font-size: 10px;
+    color: navy;
 }
 
 .olPopupContent {

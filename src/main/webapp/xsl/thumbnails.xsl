@@ -220,9 +220,7 @@
 <xsl:template match="fileList">
 
   <xsl:for-each select="/fileList/currentTrail">
-    <div class="headline">
-      <xsl:call-template name="currentTrail" />
-    </div>
+    <xsl:call-template name="currentTrail" />
   </xsl:for-each>
 
   <xsl:if test="description or geoTag">
@@ -645,7 +643,7 @@
                   <xsl:if test="not(/fileList/readonly)">
 
                     <input type="button" resource="button.upload">
-                      <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');</xsl:attribute>
+                      <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=multiUpload';</xsl:attribute>
                     </input> 
                                  
                     <input type="button" resource="button.paste" id="pasteButton">

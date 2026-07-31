@@ -1,17 +1,5 @@
       var firefoxDragDrop = existFileReader();
 
-      var SINGLE_FILE_MAX_SIZE;
-      
-      if (browserFirefox)
-      {
-          // SINGLE_FILE_MAX_SIZE = 134217728;
-          SINGLE_FILE_MAX_SIZE = 500000000;
-      }
-      else 
-      {
-          SINGLE_FILE_MAX_SIZE = 999999999;
-      }
-
       function existFileReader()
       {
           try
@@ -97,8 +85,8 @@
       }
 
       function handleFiles(files) {  
-          var dropZone = document.getElementById("dropZone");  
-          var uploadFileList = document.getElementById("uploadFiles");
+          const dropZone = document.getElementById("dropZone");
+          const uploadFileList = document.getElementById("uploadFiles");
 
           // there is a bug in Safari:
           // when multiple files are dropped onto the file input component,
@@ -106,77 +94,54 @@
           // this results in only one single file added per drag/drop operation
           // see http://www.thecssninja.com/javascript/gmail-upload
 
-          for (var i = 0; i < files.length; i++) {  
-              var file = files[i];  
-              
-              var fileName;
-              var fileSize;
-              
-              if (browserSafari) {
-                  fileName = file.fileName;
-                  file.size = file.fileSize;
-              } else {
-                  fileName = file.name
-                  fileSize = file.size;
-              }
-              
-              if (file.size > SINGLE_FILE_MAX_SIZE) {
-                  alert(fileName + ': ' + resourceFileTooLarge);
-              } else {
-                  if (!selectedDuplicate(fileName)) {
-                      if (!browserSafari) {
-                          var hintText = document.getElementById("dragDropHint");
-                          if (hintText) {
-                              dropZone.removeChild(hintText);
-                          }
-                      }
+          for (let i = 0; i < files.length; i++) {
+              const file = files[i];
 
-                      if (firefoxDragDrop && isPictureFile(file.type)) {  
-                      
-                          if (pictureFileSize < MAX_PICTURE_SIZE_SUM) {
-                              var img = document.createElement("img");  
-                      
-                              // firefox 3.6 only
-                              // img.classList.add("uploadPreview");  
-                      
-                              img.className += (img.className ? " " : "") + "uploadPreview";
-                      
-                              img.file = file;  
-                              dropZone.appendChild(img);  
-     
-                              var reader = new FileReader();  
-                              reader.onload = (function(aImg) { return function(e) { aImg.src = e.target.result; }; })(img);  
-                              reader.readAsDataURL(file);  
-                              
-                              pictureFileSize += file.size;
-                          }
-                      } 
-                      
-                      var listElem = document.createElement("li");
-                      
-                      // Firefox 3.6 only
-                      // listElem.classList.add("selectedFile");
-                      listElem.className += (listElem.className ? " " : "") + "selectedFile";
-                      
-                      var listElemText = document.createTextNode(fileName);
-                      listElem.appendChild(listElemText);
-                      uploadFileList.appendChild(listElem);
-                      
-                      selectedForUpload.push(file);
-                      
-                      updateSelectedFileSize();
+              const fileName = browserSafari ? file.fileName : file.name;
+              const fileSize = browserSafari ? file.fileSize : file.size;
+
+              if (!selectedDuplicate(fileName)) {
+                  if (!browserSafari) {
+                      const hintText = document.getElementById("dragDropHint");
+                      if (hintText) {
+                          dropZone.removeChild(hintText);
+                      }
                   }
-                  
-                  document.getElementById('uploadButton').style.visibility = 'visible';
-                  document.getElementById('uploadButton').style.display = 'inline';
-                  document.getElementById('selectedForUpload').style.visibility = 'visible';
-                  document.getElementById('selectedForUpload').style.display = 'block';
+                  if (firefoxDragDrop && isPictureFile(file.type)) {
+                      if (pictureFileSize < MAX_PICTURE_SIZE_SUM) {
+                          const img = document.createElement("img");
+                          img.className += (img.className ? " " : "") + "uploadPreview";
+
+                          img.file = file;
+                          dropZone.appendChild(img);
+
+                          const reader = new FileReader();
+                          reader.onload = e => img.src = e.target.result;
+                          reader.readAsDataURL(file);
+
+                          pictureFileSize += file.size;
+                      }
+                  }
+                  const listElem = document.createElement("li");
+                  listElem.className += (listElem.className ? " " : "") + "selectedFile";
+
+                  const listElemText = document.createTextNode(fileName);
+                  listElem.appendChild(listElemText);
+                  uploadFileList.appendChild(listElem);
+
+                  selectedForUpload.push(file);
+                  updateSelectedFileSize();
               }
-          }  
+
+              document.getElementById('uploadButton').style.visibility = 'visible';
+              document.getElementById('uploadButton').style.display = 'inline';
+              document.getElementById('selectedForUpload').style.visibility = 'visible';
+              document.getElementById('selectedForUpload').style.display = 'block';
+          }
       } 
       
       function updateSelectedFileSize() {
-          var sizeSum = 0;
+          let sizeSum = 0;
     	  for (var i = 0; i < selectedForUpload.length; i++) {
               if (browserSafari) {
             	  sizeSum += selectedForUpload[i].fileSize;
@@ -184,7 +149,7 @@
             	  sizeSum += selectedForUpload[i].size;
               }
     	  }
-    	  
+    	  document.getElementById("selectedFileCount").innerHTML = selectedForUpload.length + " ";
     	  document.getElementById("selectedFilesSize").innerHTML = formatDecimalNumber(sizeSum) + " Bytes";
       }
       

@@ -74,6 +74,9 @@ public class IconManager {
     	fileIconFontMap.put(".properties", "conf");
     	fileIconFontMap.put(".html", "html");
     	fileIconFontMap.put(".htm", "html");
+        fileIconFontMap.put(".bat", "terminal");
+        fileIconFontMap.put(".sh", "terminal");
+        fileIconFontMap.put(".cmd", "terminal");
     }
     
     public static IconManager getInstance() {

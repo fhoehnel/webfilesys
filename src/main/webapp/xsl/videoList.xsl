@@ -105,9 +105,7 @@
 <xsl:template match="fileList">
 
   <xsl:for-each select="/fileList/currentTrail">
-    <div class="headline headlineBorderless">
-      <xsl:call-template name="currentTrail" />
-    </div>
+    <xsl:call-template name="currentTrail" />
   </xsl:for-each>
 
   <xsl:if test="description">
@@ -116,55 +114,15 @@
     </div>
   </xsl:if>
 
-  <!-- tabs start -->
-  <table class="tabs" cellspacing="0">
-    <tr>
-      <td class="tabSpacer" style="min-width:13px;"></td>
-      
-      <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeList()" resource="label.modelist" />
-      </td>
- 
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
-      </td>
-
-      <td class="tabSpacer"></td>
-
-      <td class="tabActive" nowrap="true" resource="label.modeVideo" />
-      
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
-      </td>
-   
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive" nowrap="true">
-        <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
-      </td>
-
-      <xsl:if test="not(/fileList/readonly)">
-        <td class="tabSpacer"></td>
-
-        <td class="tabInactive" nowrap="true">
-          <a class="tab" href="javascript:fileStats()" resource="label.fileStats" />
-        </td>
-      </xsl:if>
-
-      <td class="tabSpacer" style="width:90%"></td>
-    </tr>
-  </table>
-  <!-- tabs end -->
+  <xsl:call-template name="tabNavigation">
+    <xsl:with-param name="activeTab" select="'videos'"/>
+  </xsl:call-template>
 
   <form accept-charset="utf-8" name="sortform" method="get" action="/webfilesys/servlet" style="padding:0px;margin:0px;">
   
     <input type="hidden" name="command" value="listVideos" />
     
-	    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-bottom-style:none">
+	    <table cellpadding="0" style="width:100%;border-bottom-style:none;border-spacing:0">
 	      <input type="hidden" name="actpath">
 	        <xsl:attribute name="value">
 	          <xsl:value-of select="currentPath" />
@@ -334,7 +292,7 @@
          
     </div>
 
-    <table id="buttonCont" cellspacing="0" class="fileListButtonCont2">
+    <table id="buttonCont" class="fileListButtonCont2">
       <tr>
         <td class="fileListButton sepTop" style="white-space:nowrap">
             <input type="checkbox" class="big" name="cb-setAll" id="cb-setAll" onClick="javascript:setAllSelected()" />
@@ -348,7 +306,7 @@
             <xsl:if test="not(/fileList/readonly)">
 
               <input type="button" resource="button.upload">
-                <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');</xsl:attribute>
+                <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=multiUpload';</xsl:attribute>
               </input> 
                                  
               <input type="button" resource="button.paste" id="pasteButton">
@@ -420,5 +378,6 @@
 </xsl:template>
 
 <xsl:include href="currentTrail.xsl" />
+<xsl:include href="tabNavigation.xsl" />
 
 </xsl:stylesheet>

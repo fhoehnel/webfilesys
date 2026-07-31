@@ -43,9 +43,7 @@ public class ResetStatisticsRequestHandler extends UserRequestHandler
 
 		session.setAttribute("viewMode", new Integer(Constants.VIEW_MODE_STATS));
 
-		String actPath = getParameter("actPath");
-
-		MetaInfManager.getInstance().resetStatistics(actPath);
+		MetaInfManager.getInstance().resetStatistics(getCwd());
 
 		setParameter("mask", "*");
 

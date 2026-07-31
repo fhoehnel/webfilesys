@@ -32,19 +32,9 @@ public class AjaxGrepParamsHandler extends XmlRequestHandlerBase
 	{
         String fileName = req.getParameter("param1");
 
-        String filePath = getCwd();
+        String filePath = CommonUtils.joinFilesysPath(getCwd(), fileName);
 
-        if (!filePath.endsWith(File.separator))
-        {
-            filePath = filePath + File.separatorChar + fileName;
-        }
-        else 
-        {
-            filePath = filePath + fileName;
-        }
-        
-        if (!checkAccess(filePath))
-        {
+        if (!checkAccess(filePath)) {
             return;
         }
 

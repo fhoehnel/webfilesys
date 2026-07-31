@@ -48,11 +48,12 @@ function setScreenSize() {
 }
 
 function refreshDriveList() {
-    const parameters = { "method": "refreshDriveList" };
-    
-	xmlGetRequest("ajaxRPC", parameters, function(responseXml) {
-        setTimeout(() => parent.location.href = "/webfilesys/servlet", 200);
-    });
+    fetchGet("ajaxRPC", { "method": "refreshDriveList" },
+            null,
+            null,
+            false,
+            false
+    );
 }
 
 function unixCmdWin() {

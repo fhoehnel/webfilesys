@@ -1,6 +1,5 @@
 package de.webfilesys.gui.ajax;
 
-import java.io.File;
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,43 +11,24 @@ import org.w3c.dom.Element;
 import de.webfilesys.ClipBoard;
 import de.webfilesys.util.XmlUtil;
 
-/**
- * @author Frank Hoehnel
- */
-public class XmlCutCopyHandler extends XmlRequestHandlerBase
-{
+public class XmlCutCopyHandler extends XmlRequestHandlerBase {
 	public XmlCutCopyHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 	
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 		
-		String fileName = getParameter("fileName");
+		String filePath = getRequestedFilePath();
 
-		String path = getCwd();
-		
-		if (path.endsWith(File.separator))
-		{
-			path = path + fileName;
-		}
-		else
-		{
-			path = path + File.separator + fileName;
-		}
-
-		if (!checkAccess(path))
-		{
+		if (!checkAccess(filePath)) {
 			return;
 		}
 
@@ -60,8 +40,7 @@ public class XmlCutCopyHandler extends XmlRequestHandlerBase
 		
         boolean wasMoveOperation = false;
 		
-		if (clipBoard != null)
-		{
+		if (clipBoard != null) {
 			wasMoveOperation = clipBoard.isMoveOperation();
 			
 			if ((!cmd.equals("addCopy")) && (!cmd.equals("addMove"))) {
@@ -72,35 +51,25 @@ public class XmlCutCopyHandler extends XmlRequestHandlerBase
 			session.setAttribute("clipBoard", clipBoard);
 		}
 
-		clipBoard.addFile(path);
+		clipBoard.addFile(filePath);
 		
-		if (cmd.equals("copy"))
-		{
+		if (cmd.equals("copy")) {
 			clipBoard.setCopyOperation();
-		}
-		else if (cmd.equals("move"))
-		{
+		} else if (cmd.equals("move")) {
 			clipBoard.setMoveOperation();
 		}
 		
 		String resultMsg = null;
 		
-		if (cmd.equals("copy"))
-		{	
+		if (cmd.equals("copy")) {
 			resultMsg = "1 " + getResource("alert.filescopied","files copied to clipboard");
-		}
-		else if (cmd.equals("addCopy"))
-		{	
+		} else if (cmd.equals("addCopy")) {
 			resultMsg = "1 " + getResource("alert.filesAddedForCopy","files added for copy operation.")
 			          + " " + clipBoard.keySet().size() + " " + getResource("alert.filesInClipboard","files are selected now.");
-		}
-		else if (cmd.equals("addMove"))
-		{	
+		} else if (cmd.equals("addMove")) {
 			resultMsg = "1 " + getResource("alert.filesAddedForMove","files added for move operation.")
 			          + " " + clipBoard.keySet().size() + " " + getResource("alert.filesInClipboard","files are selected now.");
-		}
-		else if (cmd.equals("move"))
-		{
+		} else if (cmd.equals("move")) {
 			resultMsg = "1 " + getResource("alert.filesmoved","files moved to clipboard");
 		}
 

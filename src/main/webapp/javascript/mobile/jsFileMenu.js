@@ -14,9 +14,8 @@ function viewZip(fileName)
     unzipWin.focus();
 }
 
-function zipFile(path)
-{
-    window.location.href="/webfilesys/servlet?command=zipFile&filePath=" + encodeURIComponent(path);
+function zipFile(fileName) {
+    window.location.href = "/webfilesys/servlet?command=zipFile&fileName=" + encodeURIComponent(fileName);
 }
 
 function openUrlFile(path) {

@@ -100,20 +100,15 @@
   }
 
   function setHeightInternal() {
-
-      var buttonCont = document.getElementById("buttonCont");
-      var buttonContYPos = getAbsolutePos(buttonCont)[1];
-
+      const buttonCont = document.getElementById("buttonCont");
+      const buttonContYPos = getAbsolutePos(buttonCont)[1];
       if (buttonContYPos == 0) {
-          var rect = buttonCont.getBoundingClientRect();
+          const rect = buttonCont.getBoundingClientRect();
           buttonContYPos = rect.top;
       }
-
-      var fileListTable = document.getElementById('fileListTable');
-      var fileListYPos = getAbsolutePos(fileListTable)[1];
-      
-      var scrollContHeight = buttonContYPos - fileListYPos;
-      
+      const fileListTable = document.getElementById('fileListTable');
+      const fileListYPos = getAbsolutePos(fileListTable)[1];
+      const scrollContHeight = buttonContYPos - fileListYPos;
       fileListTable.style.height = scrollContHeight + "px";
   }
 
@@ -125,10 +120,6 @@
         }
     }
   </xsl:if>
-  
-  function uploadParms() {
-      window.location.href='/webfilesys/servlet?command=uploadParms&amp;actpath='+encodeURIComponent('<xsl:value-of select="/fileList/menuPath" />');  
-  }
   
   function addBookmark() {
       bookmark('<xsl:value-of select="/fileList/menuPath" />');
@@ -191,9 +182,7 @@
 <xsl:template match="fileList">
 
   <xsl:for-each select="/fileList/currentTrail">
-    <div class="headline headlineBorderless">
-      <xsl:call-template name="currentTrail" />
-    </div>
+    <xsl:call-template name="currentTrail" />
   </xsl:for-each>
 
   <xsl:if test="description">
@@ -202,54 +191,9 @@
     </div>
   </xsl:if>
 
-  <!-- tabs start -->
-  <table class="tabs" cellspacing="0">
-    <tr>
-      <td class="tabSpacer" style="min-width:13px;"></td>
-      
-      <td class="tabActive" resource="label.modelist" />
- 
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive">
-        <a class="tab" href="javascript:viewModeThumbs()" resource="label.modethumb" />
-      </td>
-      
-      <xsl:if test="/fileList/videoEnabled">
-      
-        <td class="tabSpacer"></td>
-
-        <td class="tabInactive">
-          <a class="tab" href="javascript:viewModeVideo()" resource="label.modeVideo" />
-        </td>
-      
-      </xsl:if>
-
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive">
-        <a class="tab" href="javascript:viewModeStory()" resource="label.modestory" />
-      </td>
-   
-      <td class="tabSpacer"></td>
-
-      <td class="tabInactive">
-        <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow" />
-      </td>
-
-      <xsl:if test="not(/fileList/readonly)">
-        <td class="tabSpacer"></td>
-
-        <td class="tabInactive">
-          <a class="tab" href="javascript:fileStats()" resource="label.fileStats" />
-        </td>
-      </xsl:if>
-
-      <td class="tabSpacer" style="width:90%"></td>
-    </tr>
-  </table>
-  <!-- tabs end -->
-  
+  <xsl:call-template name="tabNavigation">
+    <xsl:with-param name="activeTab" select="'files'"/>
+  </xsl:call-template>
 
   <form accept-charset="utf-8" name="sortform" method="get" action="/webfilesys/servlet" style="padding:0px;margin:0px;">
     <input type="hidden" name="command" value="listFiles" />
@@ -421,7 +365,7 @@
     
     <div id="fileListTable" class="fileListScrollDiv">
     
-    <table id="tableFileList" class="fileList" cellspacing="0" cellpadding="0">
+    <table id="tableFileList" class="fileList" cellpadding="0">
 
       <xsl:if test="file">
 
@@ -596,6 +540,7 @@
               <option value="download" resource="button.downloadAsZip" />
               <option value="diff" resource="action.diff" />
               <option value="multiGPX" resource="viewMultipleGPX" />
+              <option value="multiGPXOSM" resource="viewMultipleGPXOSM" />
             </select>
           </td>
         </tr>
@@ -609,7 +554,7 @@
             <div class="buttonCont">
 
               <input type="button" resource="button.upload">
-                <xsl:attribute name="onclick">javascript:uploadParms();</xsl:attribute>
+                <xsl:attribute name="onclick">javascript:window.location.href='/webfilesys/servlet?command=multiUpload'</xsl:attribute>
               </input> 
               
               <input type="button" resource="button.paste" id="pasteButton">
@@ -655,5 +600,6 @@
 </xsl:template>
 
 <xsl:include href="currentTrail.xsl" />
+<xsl:include href="tabNavigation.xsl" />
 
 </xsl:stylesheet>

@@ -108,7 +108,11 @@ public class XslFileListHandler extends XslFileListHandlerBase
         if (readonly) {
         	XmlUtil.setChildText(fileListElement, "readonly", "true", false);
         }
-        
+
+        if (WebFileSysConfig.getInstance().isDownloadStatistics()) {
+            XmlUtil.setChildText(fileListElement, "statistics", "true", false);
+        }
+
 		if (WebFileSys.getInstance().isMaintananceMode()) {
 			if (!isAdminUser(false)) {
 				XmlUtil.setChildText(fileListElement, "maintananceMode", "true", false);

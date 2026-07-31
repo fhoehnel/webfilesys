@@ -48,39 +48,28 @@ public class AdminSelectWinFolderHandler extends AdminSelectFolderHandler
 
 		char docRootDriveChar = docRoot.charAt(0);
 
-		int docRootDriveNum=0;
+		int docRootDriveNum = 0;
 
-		if (docRootDriveChar!='*')
-		{
-			if (docRootDriveChar > 'Z')
-			{
-				docRootDriveNum=docRootDriveChar - 'a' + 1;
-			}
-			else
-			{
-				docRootDriveNum=docRootDriveChar - 'A' + 1;
+		if (docRootDriveChar !='*') {
+			if (docRootDriveChar > 'Z') {
+				docRootDriveNum = docRootDriveChar - 'a' + 1;
+			} else {
+				docRootDriveNum = docRootDriveChar - 'A' + 1;
 			}
 		}
 
-        if (actPath == null) 
-        {
+        if (actPath == null) {
             actPath = "C:\\";
         }
         
 		String currentPath = actPath;
-
         XmlUtil.setChildText(folderTreeElement, "currentPath", currentPath);
-
 		XmlUtil.setChildText(folderTreeElement, "encodedPath", UTF8URLEncoder.encode(currentPath));
 
-		if (currentPath.charAt(0) > 'Z')
-		{
+		if (currentPath.charAt(0) > 'Z') {
 			char driveChar = (char) ('A' + (currentPath.charAt(0)-'a'));
-
-			actPath=driveChar + currentPath.substring(1);
-		}
-		else
-		{
+			actPath = driveChar + currentPath.substring(1);
+		}  else {
 			actPath=currentPath;
 		}
 
@@ -95,29 +84,23 @@ public class AdminSelectWinFolderHandler extends AdminSelectFolderHandler
 
 		ArrayList<Integer> existingDrives = new ArrayList<Integer>();
 
-		for (int i = 1; i <= 26; i++)
-		{
+		for (int i = 1; i <= 26; i++) {
 			String driveLabel = WinDriveManager.getInstance().getDriveLabel(i);
-
-			if (driveLabel!=null)
-			{
-				if ((docRootDriveChar=='*') || (i==docRootDriveNum))
-				{
-					existingDrives.add(new Integer(i));
+			if (driveLabel != null) {
+				if ((docRootDriveChar == '*') || (i == docRootDriveNum)) {
+					existingDrives.add(i);
 				}
 			}
 		}
 
-		for (int i=0;i<existingDrives.size();i++)
-		{
-			int driveNum=((Integer) existingDrives.get(i)).intValue();
+		for (int i = 0; i < existingDrives.size(); i++) {
+			int driveNum = existingDrives.get(i);
 
 			String driveLabel = WinDriveManager.getInstance().getDriveLabel(driveNum);
 
-			if (driveLabel!=null)
-			{
-				char driveChar='A';
-				driveChar+=(driveNum-1);
+			if (driveLabel != null) {
+				char driveChar = 'A';
+				driveChar += (driveNum - 1);
 
 				String subdirPath = driveChar + ":" + File.separator;
 
@@ -125,65 +108,46 @@ public class AdminSelectWinFolderHandler extends AdminSelectFolderHandler
 
 				boolean access = accessAllowed(subdirPath);
 
-				if (access)
-				{
+				if (access) {
 					dirCounter++;
-					
-					if (subdirPath.equals(actPath))
-					{
+					if (subdirPath.equals(actPath)) {
 						currentDirNum = dirCounter;
 					}
-
-					// boolean isActPath=subdirPath.equals(actPath);
 
 					String encodedPath = UTF8URLEncoder.encode(subdirPath);
 
 					Element driveElement = doc.createElement("folder");
 
-                    if (driveNum < 3)
-                    {
+                    if (driveNum < 3) {
 						driveElement.setAttribute("type", "floppy");
-                    }
-                    else
-                    {
+                    } else {
 						driveElement.setAttribute("type", "drive");
                     }
                     
 					driveElement.setAttribute("name", subdirPath);
-					
 					driveElement.setAttribute("id", Integer.toString(dirCounter));
-
 					driveElement.setAttribute("path", encodedPath);
-
 					driveElement.setAttribute("label", driveLabel);
-
                     computerElement.appendChild(driveElement);
-                    
                     parentElement = driveElement;
 				}
 
-				if (dirTreeStatus.dirExpanded(subdirPath))
-				{
+				if (dirTreeStatus.dirExpanded(subdirPath)) {
 					dirSubTree(parentElement, actPath, subdirPath, access);
 				}
 			}
 		}
 
-		int topOfScreenDir=0;
+		int topOfScreenDir = 0;
 
-		if (currentDirNum > 5)
-		{
-			topOfScreenDir=currentDirNum - 5;
+		if (currentDirNum > 5) {
+			topOfScreenDir = currentDirNum - 5;
 		}
 
 		int scrollPos;
-		
-		if (browserManufacturer == BROWSER_MSIE)
-		{
+		if (browserManufacturer == BROWSER_MSIE) {
 			scrollPos = topOfScreenDir * 17;  // pixels per line
-		}
-		else
-		{
+		} else {
 			scrollPos = topOfScreenDir * 18;  // pixels per line
 		}
 

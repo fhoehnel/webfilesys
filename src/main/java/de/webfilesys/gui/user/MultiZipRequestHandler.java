@@ -196,23 +196,16 @@ public class MultiZipRequestHandler extends MultiFileRequestHandler
 			LogManager.getLogger(getClass()).error(io4);
 		}
 
-        for (String selectedFile : selectedFiles) 
-		{
+        for (String selectedFile : selectedFiles) {
 			File temp_file = new File(pathWithSlash + selectedFile);
-			if (temp_file.delete()) 
-			{
-	            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
-	            {
-	                MetaInfManager.getInstance().updateLinksAfterMove(pathWithSlash + selectedFile, null, uid);
+			if (temp_file.delete()) {
+	            if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
+	                MetaInfManager.getInstance().removeLinksToFile(pathWithSlash + selectedFile);
 	            }
-	            
 	            MetaInfManager.getInstance().removeMetaInf(actPath, selectedFile);
-			}
-			else
-			{
+			} else {
 			    LogManager.getLogger(getClass()).error("failed to delete file " + temp_file.getAbsolutePath() + " after adding to ZIP archive");
 			}
-			
 		}
 
         output.println("<script language=\"javascript\">");

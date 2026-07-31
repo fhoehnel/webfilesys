@@ -213,7 +213,7 @@
  
       </td>
       
-      <td class="plaintext" align="center">
+      <td class="userAtHost">
         <xsl:value-of select="userid" /> @ <xsl:value-of select="hostname" />
 
         <xsl:if test="readonly and (readonly='true')"> (read-only)</xsl:if>

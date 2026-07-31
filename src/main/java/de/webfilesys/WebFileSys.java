@@ -41,7 +41,7 @@ public class WebFileSys {
 
     private static final Logger LOG = LogManager.getLogger(WebFileSys.class);
 
-    public static final String VERSION = "Version 2.32.0 (20 Jan 2026)";
+    public static final String VERSION = "Version 2.32.1 (31 Jul 2026)";
  
     public static final int OS_OS2 = 1;
     public static final int OS_WIN = 2;
@@ -90,11 +90,11 @@ public class WebFileSys {
 	    return(instance);
     }
 	
-	public static WebFileSys createInstance(Properties configProps, String configBaseDir) {
+	public static WebFileSys createInstance(Properties configProps, String webAppRootDir) {
 		if (instance != null) {
 			return instance;
 		}
-		instance = new WebFileSys(configProps, configBaseDir);
+		instance = new WebFileSys(configProps, webAppRootDir);
 		return(instance);
     }
 	

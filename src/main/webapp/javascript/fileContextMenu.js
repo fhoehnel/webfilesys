@@ -42,6 +42,7 @@ function contextMenu(fileName) {
     	addContextMenuEntry(menuDiv, "openUrlFile('" + scriptPreparedPath + "')", resourceBundle["label.view"]);
     } else if (fileExt == ".GPX") {
     	addContextMenuEntry(menuDiv, "viewTrackOnMap('" + scriptPreparedFile + "')", resourceBundle["viewTrackOnMap"]);
+        addContextMenuEntry(menuDiv, "viewTrackOnOSM('" + scriptPreparedFile + "')", resourceBundle["viewTrackOnOSM"]);
     } else {
          if ((fileExt == ".MP4") || (fileExt == ".OGG") || (fileExt == ".OGV")|| (fileExt == ".WEBM")) {
          	 addContextMenuEntry(menuDiv, "playVideo('" + scriptPreparedPath + "')", resourceBundle["label.playVideo"]);
@@ -82,11 +83,11 @@ function contextMenu(fileName) {
         }
 
 	    if ((fileExt == ".ZIP") || (fileExt == ".JAR") || (fileExt == ".WAR") || (fileExt == ".EAR")) {
-	   	    addContextMenuEntry(menuDiv, "zip('" + scriptPreparedPath + "')", resourceBundle["label.unzip"]);
+	   	    addContextMenuEntry(menuDiv, "zip('" + scriptPreparedFile + "')", resourceBundle["label.unzip"]);
         } else if ((fileExt == ".GZ")  || (fileExt == ".GZIP")) {
 	   	    addContextMenuEntry(menuDiv, "gunzip('" + scriptPreparedPath + "')", resourceBundle["label.unzip"]);
   	    } else {
-	   	    addContextMenuEntry(menuDiv, "zip('" + scriptPreparedPath + "')", resourceBundle["label.zip"]);
+	   	    addContextMenuEntry(menuDiv, "zip('" + scriptPreparedFile + "')", resourceBundle["label.zip"]);
         }
 
         if (fileExt == ".TAR") {

@@ -65,7 +65,7 @@ function dirContextMenu(domId, root) {
     addContextMenuHead(menuDiv, folderName);
 
     if (parent.readonly != 'true') {
-    	addContextMenuEntry(menuDiv, "mkdir('" + scriptPreparedPath + "')", resourceBundle["label.mkdir"]);
+    	addContextMenuEntry(menuDiv, "createNewFolder('" + scriptPreparedPath + "')", resourceBundle["label.mkdir"]);
     }
 
     if (((parent.serverOS == 'win') && (path.length > 3)) ||

@@ -346,6 +346,7 @@ a.listHead:hover {
 
 table.fileListButtonCont2 {
     background-color: #204020;
+    border-top: 1px solid #b0b0b0;
 }
 
 td.fileListButton {
@@ -862,4 +863,8 @@ span.thumbRating {
 body.zipContent span.icon-folderOpen:before,
 div.zipEntry span.icon-folderOpenFilled:before {
 	color: #ffffa0;
+}
+
+.userAtHost {
+    color: #ffffff;
 }

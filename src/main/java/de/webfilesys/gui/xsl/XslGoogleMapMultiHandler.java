@@ -119,7 +119,7 @@ public class XslGoogleMapMultiHandler extends XslRequestHandlerBase {
 	                    float gpsLatitude = exifData.getGpsLatitude();
 	                    float gpsLongitude = exifData.getGpsLongitude();
 	                    
-	                    if ((gpsLatitude >= 0.0f) && (gpsLongitude >= 0.0f))
+	                    if ((gpsLatitude > 0.0f) && (gpsLongitude > 0.0f))
 	                    {
 	                        String latitudeRef = exifData.getGpsLatitudeRef();
 	                        

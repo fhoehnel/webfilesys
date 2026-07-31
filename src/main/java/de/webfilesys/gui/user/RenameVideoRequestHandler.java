@@ -88,39 +88,11 @@ public class RenameVideoRequestHandler extends UserRequestHandler {
 
 		MetaInfManager metaInfMgr = MetaInfManager.getInstance();
 
-		String description = metaInfMgr.getDescription(oldFilePath);
+        metaInfMgr.moveMetaInf(path, oldFileName, newFileName);
 
-		if ((description != null) && (description.trim().length() > 0)) {
-			metaInfMgr.setDescription(newFilePath, description);
-		}
-
-		ArrayList<Category> assignedCategories = metaInfMgr.getListOfCategories(oldFilePath);
-
-		if (assignedCategories != null) {
-			for (int i = 0; i < assignedCategories.size(); i++) {
-				Category cat = (Category) assignedCategories.get(i);
-
-				metaInfMgr.addCategory(newFilePath, cat);
-			}
-		}
-
-		GeoTag geoTag = metaInfMgr.getGeoTag(oldFilePath);
-		if (geoTag != null) {
-			metaInfMgr.setGeoTag(newFilePath, geoTag);
-		}
-
-		ArrayList<Comment> comments = metaInfMgr.getListOfComments(oldFilePath);
-		if ((comments != null) && (comments.size() > 0)) {
-			for (Comment comment : comments) {
-				metaInfMgr.addComment(newFilePath, comment);
-			}
-		}
-
-		if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
-			metaInfMgr.updateLinksAfterMove(oldFilePath, newFilePath, uid);
-		}
-
-		metaInfMgr.removeMetaInf(oldFilePath);
+        if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
+            metaInfMgr.updateLinksAfterMove(newFilePath, uid);
+        }
 
 		String thumbnailPath = VideoThumbnailCreator.getThumbnailPath(oldFilePath);
 

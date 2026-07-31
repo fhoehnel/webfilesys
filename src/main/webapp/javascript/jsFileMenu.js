@@ -38,9 +38,8 @@ function hexView(fileName)
     hexWin.focus();
 }
 
-function zip(path)
-{
-    window.location.href="/webfilesys/servlet?command=zipFile&filePath=" + encodeURIComponent(path);
+function zip(fileName) {
+    window.location.href = "/webfilesys/servlet?command=zipFile&fileName=" + encodeURIComponent(fileName);
 }
 
 function editMP3(path)
@@ -194,7 +193,12 @@ function untar(path)
 
 function viewTrackOnMap(fileName) {
     const mapWin = window.open("/webfilesys/servlet?command=viewGPX&fileName=" + encodeURIComponent(fileName), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
-    maptWin.focus();
+    mapWin.focus();
+}
+
+function viewTrackOnOSM(fileName) {
+    const mapWin = window.open("/webfilesys/servlet?command=viewGPXOSM&fileName=" + encodeURIComponent(fileName), "mapWin", "status=no,toolbar=no,menu=no,resizable=yes,scrollbars=yes,width=" + (screen.width - 40) + ",height=" + (screen.height - 110) + ",left=1,top=1,screenX=1,screenY=1");
+    mapWin.focus();
 }
 
 function sendFile(fileName) {

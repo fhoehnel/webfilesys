@@ -125,7 +125,7 @@
       <td class="tabSpacer" style="min-width:13px;"></td>
       
       <xsl:if test="not(role) or (role!='album')">
-        <td class="tabInactive" nowrap="true">
+        <td class="tabInactive">
           <a class="tab" href="javascript:viewModeList()" resource="label.modelist">
           </a>
         </td>
@@ -134,7 +134,7 @@
 
       </xsl:if>
  
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" resource="label.modethumb">
           <xsl:if test="role and (role='album')">
             <xsl:attribute name="href">javascript:viewModeAlbum()</xsl:attribute>
@@ -150,7 +150,7 @@
         <xsl:if test="not(role) or (role!='album')">
           <td class="tabSpacer"></td>
 
-          <td class="tabInactive" nowrap="true">
+          <td class="tabInactive">
             <a class="tab" href="javascript:viewModeVideo()" resource="label.modeVideo">
             </a>
           </td>
@@ -161,13 +161,13 @@
 
       <td class="tabSpacer"></td>
 
-      <td class="tabActive" nowrap="true">
+      <td class="tabActive">
         <span resource="label.modestory"></span>
       </td>
       
       <td class="tabSpacer"></td>
 
-      <td class="tabInactive" nowrap="true">
+      <td class="tabInactive">
         <a class="tab" href="javascript:viewModeSlideshow()" resource="label.modeSlideshow">
         </a>
       </td>
@@ -176,7 +176,7 @@
         <xsl:if test="not(/fileList/readonly)">
           <td class="tabSpacer"></td>
 
-          <td class="tabInactive" nowrap="true">
+          <td class="tabInactive">
             <a class="tab" href="javascript:fileStats()" resource="label.fileStats">
             </a>
           </td>

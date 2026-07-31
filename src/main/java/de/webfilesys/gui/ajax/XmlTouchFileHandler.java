@@ -15,55 +15,35 @@ import de.webfilesys.util.XmlUtil;
  * Set the last modified time of the file to the current time (touch command in UNIX).
  * @author Frank Hoehnel
  */
-public class XmlTouchFileHandler extends XmlRequestHandlerBase
-{
+public class XmlTouchFileHandler extends XmlRequestHandlerBase {
 	public XmlTouchFileHandler(
     		HttpServletRequest req, 
     		HttpServletResponse resp,
             HttpSession session,
             PrintWriter output, 
-            String uid)
-	{
+            String uid) {
         super(req, resp, session, output, uid);
 	}
 	
-	protected void process()
-	{
-		if (!checkWriteAccess())
-		{
+	protected void process() {
+		if (!checkWriteAccess()) {
 			return;
 		}
 		
-		String fileName = getParameter("fileName");
+		String filePath = getRequestedFilePath();
 
-		String targetFilePath = getCwd();
-		
-		if (targetFilePath.endsWith(File.separator))
-		{
-			targetFilePath = targetFilePath + fileName;
-		}
-		else
-		{
-			targetFilePath = targetFilePath + File.separator + fileName;
-		}
-
-		if (!checkAccess(targetFilePath))
-		{
+		if (!checkAccess(filePath)) {
 			return;
 		}
         
         boolean touchOk = true;
         
-        File targetFile = new File(targetFilePath);
+        File targetFile = new File(filePath);
         
-        if (!targetFile.exists() || (!targetFile.isFile() || (!targetFile.canWrite())))
-        {
+        if (!targetFile.exists() || (!targetFile.isFile() || (!targetFile.canWrite()))) {
             touchOk = false;
-        }
-        else
-        {
-            if (!targetFile.setLastModified(System.currentTimeMillis()))
-            {
+        } else {
+            if (!targetFile.setLastModified(System.currentTimeMillis())) {
                 touchOk = false;
             }
         }

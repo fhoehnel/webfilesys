@@ -178,7 +178,7 @@ span.menuitem:hover {
   }
 
   div.promptHead {background-color:lavender;border-bottom-style:solid;border-bottom-width:1px;border-bottom-color:#a0a0a0;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:3px;}
-  div.uploadStatus {width:400px;height:200px;position:absolute;top:150px;left:50px;background-color:ivory;border-style:solid;border-width:1px;border-color:black;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:0px;}
+  div.uploadStatus {width:400px;height:240px;position:absolute;top:150px;left:50px;background-color:ivory;border-style:solid;border-width:1px;border-color:black;font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-align:center;vertical-align:middle;padding:0px;}
   th.datahead {background-color:lavender;font-size:10pt;font-family:Arial,Helvetica;font-weight:bold;}
   td.data {background-color:ivory;font-size:10pt;font-family:Arial,Helvetica;}
   a.dir {font-size:10pt;color:black;font-family:Arial,Helvetica;font-weight:bold;text-decoration:none;}

@@ -281,7 +281,7 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
 						{
 					        if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled())
 					        {
-	                            metaInfMgr.updateLinksAfterMove(sourceFile, destFile, uid);
+	                            metaInfMgr.moveFileLinks(sourceFile, destFile, uid);
 					        }
 						    
 							metaInfMgr.removeMetaInf(sourceFile);

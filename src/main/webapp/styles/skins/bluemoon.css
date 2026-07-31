@@ -88,6 +88,7 @@ th.fileListHead {
 
 table.fileListButtonCont2 {
     background-color: #c0c0ff;
+    border-top: 1px solid #b0b0b0;
 }
 
 div.searchPath

@@ -126,10 +126,6 @@ public class FileSysBookmarkManager extends Thread {
 
     protected void createIndex(Element bookmarkList, String userid) {
         NodeList bookmarks = bookmarkList.getElementsByTagName("bookmark");
-        if (bookmarks.getLength() == 0) {
-            indexTable.remove(userid);
-            return;
-        }
         int listLength = bookmarks.getLength();
         HashMap<String, Element> userIndex = new HashMap<String, Element>();
         for (int i = 0; i < listLength; i++) {

@@ -1,8 +1,10 @@
-function mkdir(path) {  
-    centeredDialog('/webfilesys/servlet?command=mkdirPrompt&path=' + encodeURIComponent(path), '/webfilesys/xsl/createFolder.xsl', 320, 190, function() {
-        document.mkdirForm.NewDirName.focus();
-        document.mkdirForm.NewDirName.select();
-    });
+function createNewFolder(currentFolder) {
+    showPromptDialog("/webfilesys/html/newFolder.html", 360, function() {
+        document.getElementById("currentPath").value = currentFolder;
+        document.getElementById("currentFolder").innerHTML = abbrevText(currentFolder, 50);
+        document.getElementById("newFolderName").focus();
+    },
+    190);
 }
 
 function deleteDir(path, domId)
@@ -51,9 +53,8 @@ function mkfile(path) {
     });
 }
 
-function upload(path)
-{
-    window.parent.frames['FileList'].location.href = "/webfilesys/servlet?command=uploadParms&actpath=" + encodeURIComponent(path);
+function upload() {
+    window.location.href = "/webfilesys/servlet?command=multiUpload";
 }
 
 function publish(path,mailEnabled)
@@ -130,8 +131,4 @@ function pasteFromClipboard() {
 
 function pasteAsLink() {
 	window.location.href = "/webfilesys/servlet?command=pasteLinks";	
-}
-
-function uploadParams() {
-	window.location.href = "/webfilesys/servlet?command=uploadParms";	
 }

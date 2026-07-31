@@ -19,15 +19,15 @@ var SLOWMOTION_DURATION = 10000;
 
 var globalTrackCounter = 0;
 
-var trackPointList = new Array();
+var trackPointList = [];
 
 var bounds;
 
 var map;
 
-var globalTrackMap = new Object();
+var globalTrackMap = [];
 
-var slowMotionTracks = new Array();
+var slowMotionTracks = [];
 
 function handleGoogleMapsApiReady() {
 
@@ -163,7 +163,7 @@ function showWayPointsOnMap(wayPoints) {
 
 function showTrackOnMap(trackpoints, trackCounter) {
 
-	trackPointList = new Array();
+	trackPointList = [];
 	
 	for (var i = 0; i < trackpoints.length; i++) {
 		
@@ -190,7 +190,7 @@ function showTrackOnMap(trackpoints, trackCounter) {
     globalTrackMap[globalTrackCounter - 1] = trackPath;
 }
 
-function showTrackMetaData(response) {
+function showTrackMetaData(response, mapType) {
    	var trackElem = document.createElement("div");
    	trackElem.setAttribute("class", "trackMetaInfo");
    	var trackCont = document.getElementById("gpsTrackMetaInfo");
@@ -220,19 +220,20 @@ function showTrackMetaData(response) {
 	}
 	
 	if (response.trackpoints) {
-	   	var trackpointNumElem = document.createElement("span");
+	   	const trackpointNumElem = document.createElement("span");
 	   	trackpointNumElem.setAttribute("class", "trackName");
 	   	trackpointNumElem.innerHTML = "(" + response.trackpoints.length + " trackpoints)";
 	   	trackElem.appendChild(trackpointNumElem);
 
 	    if (typeof(gpxFiles) == "undefined") {
-		   	var slowMotionLink = document.createElement("a");
-		   	slowMotionLink.id = "slowMotionLink-" + (globalTrackCounter - 1);
-		   	slowMotionLink.setAttribute("href", "javascript:showTrackInSlowMotion(" + (globalTrackCounter - 1) + ")");
-		   	slowMotionLink.setAttribute("class", "gpxSlowMotionLink");
-		   	slowMotionLink.setAttribute("title", resourceBundle["slowMotionTitle"]);
-		   	slowMotionLink.innerHTML = resourceBundle["slowMotionLink"];
-		   	trackElem.appendChild(slowMotionLink);
+            let slowMoLinkHref = "javascript:showTrackInSlowMotion(" + (globalTrackCounter - 1) + ", '" + mapType + "')";
+            const slowMotionLink = document.createElement("a");
+            slowMotionLink.id = "slowMotionLink-" + (globalTrackCounter - 1);
+            slowMotionLink.setAttribute("href", slowMoLinkHref);
+            slowMotionLink.setAttribute("class", "gpxSlowMotionLink");
+            slowMotionLink.setAttribute("title", resourceBundle["slowMotionTitle"]);
+            slowMotionLink.innerHTML = resourceBundle["slowMotionLink"];
+            trackElem.appendChild(slowMotionLink);
 	    }
 	}
 }
@@ -610,13 +611,21 @@ function drawSpeedProfile(response, speedProperty, averageSpeedInMotionProp) {
     rowElem.appendChild(endTimeElem);
 }
  
-function showTrackInSlowMotion(trackId) {
+function showTrackInSlowMotion(trackId, mapType) {
 	document.getElementById("slowMotionLink-" + trackId).style.display = "none";
-	
-	globalTrackMap[trackId].setMap(null);	
-	
+
+    if (mapType === "osm") {
+        globalTrackMap[trackId].destroy();
+    } else {
+        globalTrackMap[trackId].setMap(null);
+    }
+
 	for (var t = slowMotionTracks.length - 1; t >= 0; t--) {
-		slowMotionTracks.pop().setMap(null);
+		if (mapType === "osm") {
+            slowMotionTracks.pop().destroy();
+        } else {
+            slowMotionTracks.pop().setMap(null);
+        }
 	}
 	
     const parameters = {
@@ -634,7 +643,7 @@ function showTrackInSlowMotion(trackId) {
             	}
             	const delay = SLOWMOTION_DURATION / (response.trackpoints.length / pointsPerStep);
            		let invalidTime = false;
-           		var trackDuration = 0;
+           		let trackDuration = 0;
            		if (response.startTime && response.endTime) {
                		trackDuration = response.endTime - response.startTime;
            		} else {
@@ -643,7 +652,7 @@ function showTrackInSlowMotion(trackId) {
            		if (response.invalidTime) {
            			invalidTime = true;
            		}
-           		showTrackOnMapSlow(trackId, response.trackpoints, 0, TRACK_COLORS[(globalTrackCounter - 1) % TRACK_COLORS.length],
+           		showTrackOnMapSlow(mapType, trackId, response.trackpoints, 0, TRACK_COLORS[(globalTrackCounter - 1) % TRACK_COLORS.length],
            				           delay, pointsPerStep, trackDuration, invalidTime);
            	} else {
            		customAlert("track " + (currentTrack + 1) + " not found in GPX file");
@@ -655,85 +664,104 @@ function showTrackInSlowMotion(trackId) {
     );
 }
 
-function showTrackOnMapSlow(trackId, trackpoints, index, trackColor, delay, pointsPerStep, trackDuration, invalidTime) {
-	
+function showTrackOnMapSlow(mapType, trackId, trackpoints, index, trackColor, delay, pointsPerStep, trackDuration, invalidTime) {
 	if (index >= trackpoints.length - 1) {
 		document.getElementById("slowMotionLink-" + trackId).style.display = "inline";
 		return;
 	}
+	let idx = index;
+	const trackPointList = [];
+	let sectionStartTime = trackpoints[idx].time;
+	let sectionEndTime = trackpoints[idx].time;
+	
+	const sectionStartDist = trackpoints[idx].totalDist;
+	let sectionEndDist = sectionStartDist;
 
-	var idx = index;
-	
-	var trackPointList = new Array();
+    let fromProjection;
+    let toProjection;
+    if (mapType === "osm") {
+        fromProjection = new OpenLayers.Projection("EPSG:4326");
+        toProjection = osmMap.getProjectionObject();
+    }
 
-	var sectionStartTime = trackpoints[idx].time;
-	var sectionEndTime = trackpoints[idx].time;
-	
-	var sectionStartDist = trackpoints[idx].totalDist;
-	var sectionEndDist = sectionStartDist;
-	
-	for (var p = 0; (p < pointsPerStep) && (idx < trackpoints.length); p++, idx++) {
-		var latLon = new google.maps.LatLng(trackpoints[idx].lat, trackpoints[idx].lon);
-	    trackPointList.push(latLon);
+    for (let p = 0; (p < pointsPerStep) && (idx < trackpoints.length); p++, idx++) {
+        if (mapType === "osm") {
+            trackPointList.push(new OpenLayers.Geometry.Point(trackpoints[idx].lon, trackpoints[idx].lat).transform(fromProjection, toProjection));
+        } else {
+            trackPointList.push(new google.maps.LatLng(trackpoints[idx].lat, trackpoints[idx].lon));
+        }
 	    sectionEndTime = trackpoints[idx].time;
 	    sectionEndDist = trackpoints[idx].totalDist;
 	}
 
-	var speedTrackColor = trackColor;
-	
-    var speedAdjustedDelay = delay;
+	let speedTrackColor = trackColor;
+    let speedAdjustedDelay = delay;
 
     if (!invalidTime) {
-    	var sectionDuration = sectionEndTime - sectionStartTime;
-    	
-		var trackLength = trackpoints[trackpoints.length -1].totalDist;
-		
-    	var sectionDist = sectionEndDist - sectionStartDist;
-    	
-        var distPercentage = sectionDist / trackLength;
-        
-        var durationPercentage = sectionDuration / trackDuration;
-        
+    	const sectionDuration = sectionEndTime - sectionStartTime;
+		const trackLength = trackpoints[trackpoints.length -1].totalDist;
+    	const sectionDist = sectionEndDist - sectionStartDist;
+        const distPercentage = sectionDist / trackLength;
+        const durationPercentage = sectionDuration / trackDuration;
         speedAdjustedDelay = delay * durationPercentage / distPercentage;
-        
         if (speedAdjustedDelay > delay * 10) {
         	speedAdjustedDelay = delay * 10;
         } else if (speedAdjustedDelay < delay / 10) {
         	speedAdjustedDelay = delay / 10;
         }
-        
-        speedTrackColor = calculateSpeedAdjustedTrackColor(delay, speedAdjustedDelay);
+        const slowMotionTrackColors = mapType === "osm" ? OSM_SLOW_MOTION_TRACK_COLORS : SLOW_MOTION_TRACK_COLORS;
+        speedTrackColor = calculateSpeedAdjustedTrackColor(delay, speedAdjustedDelay, slowMotionTrackColors);
     }
-	
-    var trackPath = new google.maps.Polyline({
+
+    if (mapType === "osm") {
+        showPartOfTrackOnOSMMap(trackPointList, speedTrackColor);
+    } else {
+        showPartOfTrackOnGoogleMap(trackPointList, speedTrackColor);
+    }
+
+    setTimeout(function() {
+    	showTrackOnMapSlow(mapType, trackId, trackpoints, idx - 1, trackColor, delay, pointsPerStep, trackDuration, invalidTime);
+    }, speedAdjustedDelay);
+}
+
+function showPartOfTrackOnGoogleMap(trackPointList, trackColor) {
+    const trackPath = new google.maps.Polyline({
         path: trackPointList,
-        strokeColor: speedTrackColor,
+        strokeColor: trackColor,
         strokeOpacity: 0.8,
         strokeWeight: 4
     });
-         
     trackPath.setMap(map);
-    
     slowMotionTracks.push(trackPath);
-
-    setTimeout(function() {
-    	showTrackOnMapSlow(trackId, trackpoints, idx - 1, trackColor, delay, pointsPerStep, trackDuration, invalidTime);
-    }, speedAdjustedDelay);
-	
 }
 
-function calculateSpeedAdjustedTrackColor(delay, speedAdjustedDelay) {
-    if (speedAdjustedDelay < 0.25 * delay) {
-    	return SLOW_MOTION_TRACK_COLORS[0];
+function showPartOfTrackOnOSMMap(trackPoints, trackColor) {
+    const lines = new OpenLayers.Layer.Vector("Track Line");
+    const lineFeature = new OpenLayers.Feature.Vector(
+        new OpenLayers.Geometry.LineString(trackPoints),
+        {},
+        {
+            strokeColor: trackColor,
+            strokeWidth: 4
+        }
+    );
+    lines.addFeatures([lineFeature]);
+    osmMap.addLayer(lines);
+    slowMotionTracks.push(lines);
+}
+
+function calculateSpeedAdjustedTrackColor(delay, speedAdjustedDelay, slowMotionTrackColors) {
+    if (speedAdjustedDelay < 0.4 * delay) {
+    	return slowMotionTrackColors[0];
     }
-    if (speedAdjustedDelay < 0.5 * delay) {
-    	return SLOW_MOTION_TRACK_COLORS[1];
+    if (speedAdjustedDelay < 0.6 * delay) {
+    	return slowMotionTrackColors[1];
     }
-    if (speedAdjustedDelay > 4 * delay) {
-      	return SLOW_MOTION_TRACK_COLORS[4];
+    if (speedAdjustedDelay > 3 * delay) {
+      	return slowMotionTrackColors[4];
     }
     if (speedAdjustedDelay > 2 * delay) {
-    	return SLOW_MOTION_TRACK_COLORS[3];
+    	return slowMotionTrackColors[3];
     }
-    return SLOW_MOTION_TRACK_COLORS[2];
+    return slowMotionTrackColors[2];
 }

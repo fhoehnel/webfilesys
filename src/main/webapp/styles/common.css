@@ -6,6 +6,10 @@ frameset > frameset > frame+frame {
     background-color: #f0f0f0;
 }
 
+frameset.mainFrames > frame {
+    overflow: auto;
+}
+
 body {
     margin-top: 5px;
     margin-left: 10px;
@@ -43,6 +47,7 @@ body.story {
 }
   
 body.menubar {
+    overflow: hidden;
     margin-top:0px;
     margin-left:10px;
     margin-right:10px;
@@ -176,6 +181,10 @@ div.uploadStatusCurrentFile {
     font-weight: bold;
     font-size: 13px;
 	margin: 12px auto 12px auto;
+}
+
+div.uploadStatusCont {
+    display: inline-block;
 }
 
 div.uploadStatusBar {
@@ -649,9 +658,18 @@ table.fileListButtonCont2 {
     border: none;
 }
 
+table.folderMetaInf {
+    width: 100%;
+    border-spacing: 0;
+}
+
 table.fileListFunctCont {
 	width: 100%;
 	border-spacing: 0;
+}
+
+td.fileListFunctCont {
+    padding: 0;
 }
 
 table.storyButtonCont {
@@ -1271,10 +1289,11 @@ table.fileListHead {
 }
 
 table.fileList {
-    width:100%;
-    background-color:ivory;
-    border:0;
-    margin:0;
+    width: 100%;
+    background-color: ivory;
+    border-spacing: 0;
+    border: 0;
+    margin: 0;
 }
 
 th.fileList {
@@ -2548,6 +2567,13 @@ ul.searchResultList img {
 
 div.leaflet-container {
     cursor: pointer;
+}
+
+.userAtHost {
+    text-align: center;
+    font-size: 13px;
+    color: black;
+    font-weight: normal;
 }
 
 @media (max-width: 400px) {

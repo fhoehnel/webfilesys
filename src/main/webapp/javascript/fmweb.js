@@ -1,33 +1,29 @@
 function selectAll() {
-    var allSelected = true;
-	
-	var fileCheckboxes = new Array();
-	
-    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
-        if ((document.form1.elements[i].type == "checkbox") &&
-		    (document.form1.elements[i].name != "cb-confirm") &&
-            (document.form1.elements[i].name != "cb-setAll")) {
-			fileCheckboxes.push(document.form1.elements[i]);
-	        if ((!document.form1.elements[i].checked) &&
-	            (!document.form1.elements[i].disabled)) {
-		        allSelected = false;
-	        }
-	    } 
+    let allSelected = true;
+	const fileCheckboxes = [];
+
+    for (let i = 0; i < document.form1.elements.length; i++) {
+        const formElem = document.form1.elements[i];
+        if (formElem.type === "checkbox" &&
+            formElem.name !== "cb-confirm" &&
+            formElem.name !== "cb-setAll") {
+            fileCheckboxes.push(formElem);
+            if (!formElem.checked && !formElem.disabled) {
+                allSelected = false;
+            }
+        }
     }
-	
+
     if (allSelected) {
-	    for (var i = 0; i < fileCheckboxes.length; i++) {
-		    fileCheckboxes[i].checked = false;
-	    }
+        fileCheckboxes.forEach(checkBox => checkBox.checked = false);
     } else {
-	    for (var i = 0; i < fileCheckboxes.length; i++) {
-		    if (!fileCheckboxes[i].disabled) {
-		        fileCheckboxes[i].checked = true;
-			}
-	    }
+        fileCheckboxes.forEach(checkBox => {
+           if (!checkBox.disabled) {
+               checkBox.checked = true;
+           }
+        });
 		document.getElementById("cb-setAll").checked = true;
     }	
-    
     return (!allSelected);
 }
 
@@ -76,21 +72,22 @@ function setRelatedCheckbox(master,dependent)
 }
 
 function anySelected() {
-    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
-        if ((document.form1.elements[i].type == "checkbox") &&
-            document.form1.elements[i].checked &&
-            (document.form1.elements[i].name != 'cb-confirm')) {
-	        return(true);
+    for (let i = document.form1.elements.length - 1; i >= 0; i--) {
+        const formElem = document.form1.elements[i];
+        if (formElem.type === "checkbox" &&
+            formElem.checked &&
+            formElem.name !== 'cb-confirm') {
+	        return true;
 	    }
     }
-
-    return(false);
+    return false;
 }
 
 function resetSelected() {
-    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
-	    if ((document.form1.elements[i].type == "checkbox") && document.form1.elements[i].checked) {
-	        document.form1.elements[i].checked = false;
+    for (let i = document.form1.elements.length - 1; i >= 0; i--) {
+        const formElem = document.form1.elements[i];
+	    if (formElem.type === "checkbox" && formElem.checked) {
+            formElem.checked = false;
         }
     }
 }
@@ -113,46 +110,42 @@ function diffCompare() {
     }
 }
 
-function showMultipleGPX() {
+function showMultipleGPX(command) {
 
-    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
-         if ((document.form1.elements[i].type == "checkbox") && 
-		     (document.form1.elements[i].name != "cb-setAll") &&
-		     document.form1.elements[i].checked) {
-	         if (getFileNameExt(document.form1.elements[i].name) != ".GPX") {
+    for (let i = document.form1.elements.length - 1; i >= 0; i--) {
+        const formElem = document.form1.elements[i];
+        if (formElem.type === "checkbox" &&
+            formElem.name !== "cb-setAll" &&
+            formElem.checked) {
+	         if (getFileNameExt(formElem.name) !== ".GPX") {
 	             customAlert(resourceBundle["nonGPXFile"]);
 	             return;
 	         }
          }
     }
-
-
-    var mapWin = window.open('/webfilesys/servlet?command=blank','mapWin','width=' + (screen.width - 20) + ',height=' + (screen.height - 110) + ',scrollbars=yes,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
+    const mapWin = window.open('/webfilesys/servlet?command=blank','mapWin','width=' + (screen.width - 20) + ',height=' + (screen.height - 110) + ',scrollbars=yes,resizable=yes,status=no,menubar=no,toolbar=no,location=no,directories=no,screenX=0,screenY=0,left=0,top=0');
     mapWin.focus();
-    document.form1.command.value = 'multiGPX';
+    document.form1.command.value = command;
     document.form1.target = 'mapWin';
-    
     document.form1.submit();
     document.form1.target = '';
 }
 
 function checkTwoFilesSelected() {
-    var numChecked = 0;
+    let numChecked = 0;
     
-    for (var i = document.form1.elements.length - 1; i >= 0; i--) {
-         if ((document.form1.elements[i].type == "checkbox") && 
-		     (document.form1.elements[i].name != "cb-setAll") &&
-		     document.form1.elements[i].checked) {
-	         numChecked++;
-         }
+    for (let i = document.form1.elements.length - 1; i >= 0; i--) {
+        const formElem = document.form1.elements[i];
+
+        if (formElem.type === "checkbox" && formElem.name !== "cb-setAll" && formElem.checked) {
+	        numChecked++;
+        }
     }
-    
-    if (numChecked != 2) {
+    if (numChecked !== 2) {
         customAlert(resourceBundle["selectTwoFilesForDiff"]);
-	    return(false);
+	    return false;
     }
-    
-    return(true);
+    return true;
 }
 
 function selectedFileFunction(unhighlight) {
@@ -161,12 +154,10 @@ function selectedFileFunction(unhighlight) {
         customAlert(noFileSelected + '!');
         return;
     }
+    const idx = document.form1.cmd.selectedIndex;
+    const cmd = document.form1.cmd.options[idx].value;
 
-    var idx = document.form1.cmd.selectedIndex;
-
-    var cmd = document.form1.cmd.options[idx].value;
-
-    if (cmd == 'delete') {
+    if (cmd === 'delete') {
     	customConfirm(resourceBundle["confirm.deleteFiles"], resourceBundle["button.cancel"], resourceBundle["button.ok"], 
     			function() {
                     document.form1.submit();
@@ -176,25 +167,26 @@ function selectedFileFunction(unhighlight) {
     	        	closeAlert();
     	        }
     	);
-    	
     	return;
     }
 
-    if ((cmd == 'zip') || (cmd == 'tar')) {
+    if (cmd === 'zip' || cmd === 'tar') {
         document.form1.submit();
         return;
     }
 
-    if ((cmd == 'copy') || (cmd == 'copyAdd') || (cmd == 'move') || (cmd == 'moveAdd')) {
+    if (cmd === 'copy' || cmd === 'copyAdd' || cmd === 'move' || cmd === 'moveAdd') {
         multiFileCopyMove();
-    } else if (cmd == 'download') {
+    } else if (cmd === 'download') {
 	    multiDownload();
-    } else if (cmd == 'diff') {
+    } else if (cmd === 'diff') {
 	    diffCompare();
-    } else if (cmd == 'multiGPX') {
-	    showMultipleGPX();
+    } else if (cmd === 'multiGPX') {
+	    showMultipleGPX("multiGPX");
+    } else if (cmd === 'multiGPXOSM') {
+        showMultipleGPX("multiGPXOSM");
     }
-     
+
     resetMultifileSelection(unhighlight);
 }
 
@@ -306,13 +298,13 @@ function validateRenameTargetFileName() {
 }
 
 function validateNewFileName(oldFileName, errorMsg1, errorMsg2) {
-    var newFileName = document.getElementById('renameForm').newFileName.value;
+    const newFileName = document.getElementById('renameForm').newFileName.value;
 
     if (newFileName === oldFileName) {
-        alert(errorMsg1);
+        customAlert(errorMsg1);
     } else {
         if (!checkFileNameSyntax(newFileName)) {
-            alert(errorMsg2);
+            customAlert(errorMsg2);
         } else {
             if (newFileName !== '') {
                 document.renameForm.submit();
@@ -363,19 +355,18 @@ function validateCloneFolderName() {
 
 function validateNewFolderName(errorMsg) {
     var newDirName = document.mkdirForm.NewDirName.value;
-
     if (checkFileNameSyntax(newDirName)) {
         if (newDirName != '') {
             document.mkdirForm.submit();
+            return;
+        } else {
+            errorMsg = resourceBundle["error.emptyFolderName"];
         }
-        return;
     }
-    
-    alert(errorMsg);
-
-    document.mkdirForm.NewDirName.focus();
-
-    document.mkdirForm.NewDirName.select();
+    customAlert(errorMsg, null, () => {
+        document.mkdirForm.NewDirName.focus();
+        document.mkdirForm.NewDirName.select();
+    });
 }
 
 function validateBookmarkName(errorMsg) {
@@ -513,7 +504,7 @@ function centeredDialog(xmlUrl, xslUrl, boxWidth, boxHeight, callback) {
     });
 }
 
-function showPromptDialog(htmlFragmentURL, boxWidth, callback) {
+function showPromptDialog(htmlFragmentURL, boxWidth, callback, boxHeight) {
     var promptBox = document.getElementById("prompt");
         
     hideMenu();        
@@ -521,7 +512,10 @@ function showPromptDialog(htmlFragmentURL, boxWidth, callback) {
     if (boxWidth) {    
         promptBox.style.width = boxWidth + 'px';
     }
-    
+    if (boxHeight) {
+        promptBox.style.height = boxHeight + 'px';
+    }
+
     xmlRequest(htmlFragmentURL, function(req) {
         if (req.readyState == 4) {
             if (req.status == 200) {
@@ -573,22 +567,22 @@ function renameLink(linkName) {
 function validateNewLinkName() {
 	var newLinkName = document.getElementById("newLinkName").value;
 	
-	if (trim(newLinkName).length == 0) {
-		alert(resourceBundle["alert.newLinkNameEmpty"]);
+	if (trim(newLinkName).length === 0) {
+        customAlert(resourceBundle["alert.newLinkNameEmpty"]);
 		document.getElementById("newLinkName").focus()
 		return;
 	}
 	
 	var oldLinkName = document.getElementById("oldLinkName").value;
 		
-	if (oldLinkName == newLinkName) {
-		alert(resourceBundle["alert.destEqualsSource"]);
+	if (oldLinkName === newLinkName) {
+		customAlert(resourceBundle["alert.destEqualsSource"]);
 		document.getElementById("newLinkName").focus()
 		return;
 	}
 		
 	if (!checkFileNameSyntax(newLinkName)) {
-		alert(resourceBundle["alert.illegalCharInFilename"]);
+        customAlert(resourceBundle["alert.illegalCharInFilename"]);
 		document.getElementById("newLinkName").focus()
 		return;
 	}
