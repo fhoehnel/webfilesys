@@ -49,7 +49,7 @@ function setScreenSize() {
 
 function refreshDriveList() {
     fetchGet("ajaxRPC", { "method": "refreshDriveList" },
-            null,
+        () => setTimeout(() => parent.location.href = "/webfilesys/servlet", 200),
             null,
             false,
             false
