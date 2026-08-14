@@ -41,7 +41,7 @@ public class WebFileSys {
 
     private static final Logger LOG = LogManager.getLogger(WebFileSys.class);
 
-    public static final String VERSION = "Version 2.32.2-beta1 (14 Aug 2026)";
+    public static final String VERSION = "Version 2.32.2-beta2 (14 Aug 2026)";
  
     public static final int OS_OS2 = 1;
     public static final int OS_WIN = 2;
