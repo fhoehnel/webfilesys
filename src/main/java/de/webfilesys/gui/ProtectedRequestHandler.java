@@ -1,12 +1,12 @@
 package de.webfilesys.gui;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -159,31 +159,16 @@ public class ProtectedRequestHandler extends RequestHandler {
 			return(false);
 		}
 
-		File sourceFile = new File(sourceFilePath);
-		long lastChangeDate = sourceFile.lastModified();
-
-		boolean copyFailed = false;
-
-        try (BufferedInputStream fin = new BufferedInputStream(new FileInputStream(sourceFilePath));
-             BufferedOutputStream fout = new BufferedOutputStream(new FileOutputStream(destFilePath))) {
-
-            byte[] buff = new byte[4096];
-            int count;
-
-            while ((count = fin.read(buff)) >= 0) {
-                fout.write(buff, 0, count);
-            }
+        try {
+            Files.copy(Paths.get(sourceFilePath), Paths.get(destFilePath),
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.COPY_ATTRIBUTES);
         } catch (Exception e) {
             LOG.error("failed to copy file {} to {}", sourceFilePath, destFilePath, e);
-            copyFailed = true;
+            return(false);
         }
 
-		if (!copyFailed) {
-			File destFile = new File(destFilePath);
-			destFile.setLastModified(lastChangeDate);
-		}
-		
-		return(!copyFailed);
+		return(true);
 	}
 	
 	public int zipTree(String currentPath, String relativePath, ZipOutputStream zipOut, int fileCount) {
