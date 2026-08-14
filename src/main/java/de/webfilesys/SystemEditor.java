@@ -15,20 +15,20 @@ public class SystemEditor extends Thread
 
 	public void run()
 	{
-		String cmd=null;
-		Runtime rt=Runtime.getRuntime();
-
 		int opSysType = WebFileSys.getInstance().getOpSysType();
-		
-		if ((opSysType == WebFileSys.OS_OS2) || (opSysType == WebFileSys.OS_WIN)) {
-			cmd = WebFileSysConfig.getInstance().getSystemEditor() + " \"" + fileName + "\"";
-		} else {
-			cmd = WebFileSysConfig.getInstance().getSystemEditor() + " " + fileName;
-		}
+
+		String systemEditor = WebFileSysConfig.getInstance().getSystemEditor();
 
 		try
 		{
-			rt.exec(cmd);
+			if ((opSysType == WebFileSys.OS_OS2) || (opSysType == WebFileSys.OS_WIN)) {
+				// launch via "cmd /c start" so the editor window receives
+				// foreground activation and appears on top of other windows.
+				// The empty string after "start" is the (unused) window title.
+				new ProcessBuilder("cmd", "/c", "start", "WebFileSys Editor", systemEditor, fileName).start();
+			} else {
+				new ProcessBuilder(systemEditor, fileName).start();
+			}
 		}
 		catch (Exception e)
 		{

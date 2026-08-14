@@ -7,9 +7,10 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -279,17 +280,10 @@ public class ProtectedRequestHandler extends RequestHandler {
     }
     
 	protected List<String> getSelectedFiles() {
-		ArrayList<String> selectedFiles = new ArrayList<String>();
-
-        Enumeration<String> allKeys = req.getParameterNames();
-		
-		while (allKeys.hasMoreElements()) {
-			String paramKey = allKeys.nextElement();
-
-            if (paramKey.startsWith(LIST_PREFIX)) {
-				selectedFiles.add(paramKey.substring(LIST_PREFIX_LENGTH)); 
-            }
-		}
-		return selectedFiles;
+		Enumeration<String> paramNames = req.getParameterNames();
+		return Collections.list(paramNames).stream()
+				.filter(paramKey -> paramKey.startsWith(LIST_PREFIX))
+				.map(paramKey -> paramKey.substring(LIST_PREFIX_LENGTH))
+				.collect(Collectors.toList());
 	}
 }
