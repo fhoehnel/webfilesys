@@ -31,63 +31,46 @@ public class FileSelector
         this.hideMetaInf=hideMetaInf;
     }
 
-    public FileSelectionStatus selectFiles(String searchMask[],int pageSize,
-                                                  String afterName,String beforeName)
-    {
-        FileSelectionStatus selectionStatus=new FileSelectionStatus();
+    public FileSelectionStatus selectFiles(String[] searchMask,int pageSize,
+                                                  String afterName,String beforeName) {
+        FileSelectionStatus selectionStatus = new FileSelectionStatus();
         
-        File dirFile=new File(path);
-        if ((!dirFile.exists()) || (!dirFile.canRead()))
-        {
-            return(selectionStatus);
+        File dirFile = new File(path);
+        if (!dirFile.exists() || !dirFile.canRead()) {
+            return selectionStatus;
         }
 
-        String fileList[]=null;
-        
-        fileList=dirFile.list();
+        File[] fileList = dirFile.listFiles();
 
-        if ((fileList==null) || (fileList.length==0))
-        {
-            return(selectionStatus);
+        if ((fileList == null) || (fileList.length == 0)) {
+            return selectionStatus;
         }
 
-        selectedFiles = new ArrayList<String>();
+        selectedFiles = new ArrayList<>();
 
-        int selectedFileNumber=0;
+        int selectedFileNumber = 0;
 
-        for (int i=0;i<fileList.length;i++)
-        {
-            String fileName=fileList[i];
+        for (File file : fileList) {
+            String fileName = file.getName();
 
-            if ((!hideMetaInf) || (fileName.charAt(0)!='_') ||
-                (!fileName.equals(MetaInfManager.METAINF_FILE)))
-            {
-                File tempFile=new File(path + File.separator + fileName);
-
-                if (tempFile.isFile())
-                {
-                    boolean maskMatch=false;
-
-                    for (int j=0;(!maskMatch) && (j<searchMask.length);j++)
-                    {
-                        if (PatternComparator.patternMatch(fileName,searchMask[j]))
-                        {
-                            maskMatch=true;
+            if (!hideMetaInf || fileName.charAt(0) != '_' ||
+                !fileName.equals(MetaInfManager.METAINF_FILE)) {
+                if (file.isFile()) {
+                    boolean maskMatch = false;
+                    for (int j = 0; !maskMatch && j < searchMask.length; j++) {
+                        if (PatternComparator.patternMatch(fileName, searchMask[j])) {
+                            maskMatch = true;
                         }
                     }
-
-                    if (maskMatch)
-                    {
+                    if (maskMatch) {
                         selectedFiles.add(fileName);
-
                         selectedFileNumber++;
                     }
                 }
             }
         }
 
-        if (selectedFiles.size() > 1)
-        {
+        if (selectedFiles.size() > 1) {
             Collections.sort(selectedFiles,new FileComparator(path,sortBy));
         }
 
@@ -95,92 +78,58 @@ public class FileSelector
         
         // String lastFileOfAll=(String) selectedFiles.elementAt(selectedFiles.size()-1);
 
-        String lastFileOfAll=null;
-        
-        if (selectedFiles.size()>0)
-        {
-            lastFileOfAll=(String) selectedFiles.get(selectedFiles.size()-1);
+        String lastFileOfAll = null;
+        if (!selectedFiles.isEmpty()) {
+            lastFileOfAll = selectedFiles.get(selectedFiles.size() - 1);
         }
 
-        int beginIndex=(-1);
-        int endIndex=0;
+        int beginIndex = (-1);
+        int endIndex;
 
-        int i;
-        
-        ArrayList<String> filesOnPage = new ArrayList<String>();
+        ArrayList<String> filesOnPage = new ArrayList<>();
 
-        if ((afterName==null) && (beforeName==null))
-        {
-            if (selectedFiles.size()>pageSize)
-            {
-                for (i=0;i<pageSize;i++)
-                {
-                    filesOnPage.add(selectedFiles.get(i));
-                }
-            }
-            else
-            {
-                filesOnPage=selectedFiles;
-            }
+        if (afterName == null && beforeName == null) {
+            int toIndex = Math.min(pageSize, selectedFiles.size());
+            filesOnPage = new ArrayList<>(selectedFiles.subList(0, toIndex));
+            beginIndex = 0;
+            endIndex = filesOnPage.size();
+        } else {
+            if (afterName != null) {
+                boolean found = false;
 
-            beginIndex=0;
-            endIndex=filesOnPage.size();
-        }
-        else
-        {
-            if (afterName!=null)
-            {
-                boolean found=false;
-
-                for (i=0;(i<selectedFiles.size()) && (!found);i++)
-                {
-                    String upperCaseFile=((String) selectedFiles.get(i)).toUpperCase();
-
-                    if (upperCaseFile.compareTo(afterName.toUpperCase())>0)
-                    {
-                        found=true;
-
-                        beginIndex=i;
+                for (int i = 0; i < selectedFiles.size() && !found; i++) {
+                    String upperCaseFile = selectedFiles.get(i).toUpperCase();
+                    if (upperCaseFile.compareTo(afterName.toUpperCase()) > 0) {
+                        found = true;
+                        beginIndex = i;
                     }
                 }
-                
-                if (!found)
-                {
+                if (!found) {
                 	beginIndex = selectedFiles.size() - 1;
                 }
             }
 
-            if (beforeName!=null)
-            {
-                boolean found=false;
-
-                for (i=selectedFiles.size()-1;(i>=0) && (!found);i--)
-                {
-                    String upperCaseFile=((String) selectedFiles.get(i)).toUpperCase();
-
-                    if (upperCaseFile.compareTo(beforeName.toUpperCase())<0)
-                    {
-                        found=true;
+            if (beforeName != null) {
+                boolean found = false;
+                int i;
+                for (i = selectedFiles.size() - 1; i >= 0 && !found; i--) {
+                    String upperCaseFile= selectedFiles.get(i).toUpperCase();
+                    if (upperCaseFile.compareTo(beforeName.toUpperCase()) < 0) {
+                        found = true;
                     }
                 }
-
-                beginIndex=i-pageSize+2;
-
-                if (beginIndex<0)
-                {
-                    beginIndex=0;
+                beginIndex = i - pageSize + 2;
+                if (beginIndex < 0) {
+                    beginIndex = 0;
                 }
             }
         
-            endIndex=beginIndex + pageSize;
-
-            if (endIndex>selectedFiles.size())
-            {
-                endIndex=selectedFiles.size();
+            endIndex = beginIndex + pageSize;
+            if (endIndex > selectedFiles.size()) {
+                endIndex = selectedFiles.size();
             }
 
-            for (i=beginIndex;i<endIndex;i++)
-            {
+            for (int i = beginIndex; i < endIndex; i++) {
                 filesOnPage.add(selectedFiles.get(i));
             }
         }
@@ -188,18 +137,14 @@ public class FileSelector
         selectionStatus.setBeginIndex(beginIndex);
         selectionStatus.setEndIndex(endIndex);
 
-        if (selectedFiles.size()>0)
-        {
-            String lastSelectedFile=(String) filesOnPage.get(filesOnPage.size()-1);
-
+        if (!selectedFiles.isEmpty()) {
+            String lastSelectedFile = filesOnPage.get(filesOnPage.size()-1);
             selectionStatus.setIsLastPage(lastSelectedFile.equals(lastFileOfAll));
-            selectionStatus.setFirstFileName((String) filesOnPage.get(0));
+            selectionStatus.setFirstFileName(filesOnPage.get(0));
             selectionStatus.setLastFileName(lastSelectedFile);
         }
-        
         selectionStatus.setSelectedFileNames(filesOnPage);
-
-        return(selectionStatus);
+        return selectionStatus;
     }
 
 }
