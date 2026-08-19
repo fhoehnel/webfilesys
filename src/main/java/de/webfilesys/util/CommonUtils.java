@@ -128,50 +128,30 @@ public class CommonUtils
 		return(result.toString());
 	}
 
-	public static boolean deleteDirTree(String actPath)
-	{ 
+	public static boolean deleteDirTree(String path) {
 		boolean delError = false;
-
-		File dirFile = new File(actPath);
-
-		String fileList[] = dirFile.list();
-
-		if (fileList!=null)
-		{
-			for (int i=0; i < fileList.length; i++)
-			{
-				File tempFile = new File(actPath, fileList[i]);
-				
-				if (tempFile.isDirectory())
-				{
-					if (!deleteDirTree(actPath + File.separator + fileList[i]))
-					{
-						delError=true;
+		File dirFile = new File(path);
+		File[] fileList = dirFile.listFiles();
+		if (fileList != null) {
+			for (File file : fileList) {
+				if (file.isDirectory()) {
+					if (!deleteDirTree(file.getAbsolutePath())) {
+						delError = true;
 					}
-				}
-				else
-				{
-					if (!tempFile.delete())
-					{
-						delError=true;
-						LogManager.getLogger(CommonUtils.class).warn("cannot delete " + tempFile);
+				} else {
+					if (!file.delete()) {
+						delError = true;
+                        LogManager.getLogger(CommonUtils.class).warn("cannot delete file {}", file.getAbsolutePath());
 					}
 				}
 			}
+		} else {
+			LogManager.getLogger(CommonUtils.class).warn("cannot get dir entries for {}", path);
 		}
-		else
-		{
-			LogManager.getLogger(CommonUtils.class).warn("cannot get dir entries for " + actPath);
+		if (!dirFile.delete()) {
+			delError = true;
 		}
-		
-		fileList=null;
-
-		if (!dirFile.delete())
-		{
-			delError=true;
-		}
-
-		return(!(delError));
+		return !delError;
 	}
     
 	/**

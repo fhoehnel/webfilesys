@@ -1,13 +1,12 @@
 package de.webfilesys.gui.user;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
+import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -18,9 +17,11 @@ import de.webfilesys.util.UTF8URLDecoder;
  */
 public class MultiFileRequestHandler extends UserRequestHandler
 {
+	private static final Set<String> IGNORED_PARAMS = new HashSet<>(Arrays.asList("cb-setAll", "command", "cmd", "actpath"));
+
 	protected String actPath = null;
 	
-	protected ArrayList<String> selectedFiles = null;
+	protected List<String> selectedFiles = null;
 
 	protected String cmd = null;
 	
@@ -32,47 +33,19 @@ public class MultiFileRequestHandler extends UserRequestHandler
             String uid)
 	{
         super(req, resp, session, output, uid);
-        
-		selectedFiles = new ArrayList<String>();
 
-		Enumeration allKeys = req.getParameterNames();
-		
-		while (allKeys.hasMoreElements())
-		{
-			String parm_key=(String) allKeys.nextElement();
-
-			String parm_value = req.getParameter(parm_key);
-			
-			if (parm_key.equals("cmd"))
-			{
-				cmd=parm_value;
-			}
-			else if (parm_key.equals("actpath"))
-			{
-				actPath = parm_value;
-			}
-			else if ((!parm_key.equals("cb-setAll")) && (!parm_key.equals("command")))
-			{
-				try
-				{
-					String fileName = UTF8URLDecoder.decode(parm_key);
-					selectedFiles.add(fileName); 
-				}
-				catch (Exception ue1)
-				{
-					System.out.println(ue1);
-				}
-			}
-		}
+		Map<String, String[]> params = req.getParameterMap();
+		selectedFiles = params.keySet().stream()
+				.filter(paramKey -> !IGNORED_PARAMS.contains(paramKey))
+				.map(UTF8URLDecoder::decode)
+				.filter(Objects::nonNull)
+				.toList();
 
 		session.setAttribute("selectedFiles", selectedFiles);
 		
-		if (actPath == null) 
-		{
+		if (actPath == null) {
 		    actPath = getCwd();
-		}
-		else
-		{
+		} else {
 	        if (isMobile()) {
 	            actPath = getAbsolutePath(actPath);
 	        }

@@ -13,13 +13,9 @@ public class FastPathManager extends Thread
 
     HashMap<String, FastPathQueue> queueTable = null;
 
-    HashMap<String, Boolean> cacheModified = null;
-
     private FastPathManager()
     {
         queueTable = new HashMap<String, FastPathQueue>(5);
-
-        cacheModified = new HashMap<String, Boolean>(5);
 
         this.start();
     }
@@ -46,8 +42,6 @@ public class FastPathManager extends Thread
         }
 
         userQueue.queuePath(pathName);
-
-        cacheModified.put(userid, new Boolean(true));
     }
 
     /**
@@ -67,7 +61,7 @@ public class FastPathManager extends Thread
 
         for (int i = fastPathList.size() - 1; i >= 0; i--) 
         {
-            String fastPath = (String) fastPathList.get(i);
+            String fastPath = fastPathList.get(i);
             
             if (fastPath.startsWith(path))
             {
@@ -80,7 +74,7 @@ public class FastPathManager extends Thread
             }
         }
         
-        cacheModified.put(userid, new Boolean(true));
+        userQueue.setDirty(true);
     }
     
     public ArrayList<String> getPathList(String userid)
@@ -120,24 +114,18 @@ public class FastPathManager extends Thread
         
         fastPathList.remove(0);
 
-        cacheModified.put(userid, new Boolean(true));
+        userQueue.setDirty(true);
         
         return lastVisitedDir;
     }
 
     protected void saveChangedUsers()
     {
-        for (String userid : cacheModified.keySet()) {
+        for (FastPathQueue userQueue : queueTable.values()) {
 
-            Boolean modified = (Boolean) cacheModified.get(userid);
-
-            if (modified.booleanValue())
+            if (userQueue.isDirty())
             {
-                FastPathQueue userQueue = queueTable.get(userid);
-
                 userQueue.saveToFile();
-                
-                cacheModified.put(userid, new Boolean(false));
             }
         }
     }
@@ -145,9 +133,8 @@ public class FastPathManager extends Thread
     public void deleteUser(String userid)
     {
         queueTable.remove(userid);
-        cacheModified.remove(userid);
         
-        String fastPathFileName = WebFileSys.getInstance().getConfigBaseDir() + "/" + FastPathQueue.FAST_PATH_DIR + "/" + userid + ".dat";
+        String fastPathFileName = WebFileSys.getInstance().getConfigBaseDir() + "/" + FastPathQueue.FAST_PATH_DIR + "/" + userid + ".json";
         
         File fastPathFile = new File(fastPathFileName);
         

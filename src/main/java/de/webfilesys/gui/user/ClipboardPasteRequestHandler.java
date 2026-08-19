@@ -415,6 +415,10 @@ public class ClipboardPasteRequestHandler extends UserRequestHandler
                             {
                     	        SubdirExistTester.getInstance().queuePath(parentOfSourceDir, 1, true);	        
                             }
+
+							if (WebFileSysConfig.getInstance().isReverseFileLinkingEnabled()) {
+								(new UpdateLinksAfterDirRenameThread(destSubdir, uid)).start();
+							}
                         }
 
             	        SubdirExistTester.getInstance().queuePath(destSubdir, 1, true);	        

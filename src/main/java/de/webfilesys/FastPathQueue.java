@@ -2,18 +2,25 @@ package de.webfilesys;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 
 public class FastPathQueue {
 	public static final String FAST_PATH_DIR = "fastpath";
+
+	private static final Gson gson = new Gson();
+
+	private static final Type PATH_LIST_TYPE = new TypeToken<ArrayList<String>>() {}.getType();
 
 	private String fastPathFileName = null;
 
@@ -21,8 +28,10 @@ public class FastPathQueue {
 
 	private ArrayList<String> pathQueue = null;
 
+	private boolean dirty = false;
+
 	FastPathQueue(String userid) {
-		fastPathFileName = WebFileSys.getInstance().getConfigBaseDir() + "/" + FAST_PATH_DIR + "/" + userid + ".dat";
+		fastPathFileName = WebFileSys.getInstance().getConfigBaseDir() + "/" + FAST_PATH_DIR + "/" + userid + ".json";
 
 		if (!loadFromFile()) {
 			pathQueue = new ArrayList<String>(MAX_QUEUE_SIZE);
@@ -31,29 +40,28 @@ public class FastPathQueue {
 
 	private boolean loadFromFile() {
 
+		File fastPathFile = new File(fastPathFileName);
+
+		if ((!fastPathFile.exists()) || (!fastPathFile.canRead())) {
+			return false;
+		}
+
 		boolean success = false;
-		
-		ObjectInputStream fastPathFile = null;
+
+		InputStreamReader reader = null;
 
 		try {
-			fastPathFile = new ObjectInputStream(new FileInputStream(fastPathFileName));
-			pathQueue = (ArrayList<String>) fastPathFile.readObject();
-			fastPathFile.close();
-			success = true;
-		} catch (ClassNotFoundException cnfe) {
-			LogManager.getLogger(getClass()).warn(cnfe);
-		} catch (FileNotFoundException ioe) {
-			if (LogManager.getLogger(getClass()).isDebugEnabled()) {
-				LogManager.getLogger(getClass()).debug(ioe);
+			reader = new InputStreamReader(new FileInputStream(fastPathFile), StandardCharsets.UTF_8);
+			pathQueue = gson.fromJson(reader, PATH_LIST_TYPE);
+			if (pathQueue != null) {
+				success = true;
 			}
-		} catch (IOException ioe) {
-			LogManager.getLogger(getClass()).warn(ioe);
-		} catch (ClassCastException cex) {
-			LogManager.getLogger(getClass()).warn(cex);
+		} catch (Exception ex) {
+			LogManager.getLogger(getClass()).warn("failed to load fastpath file " + fastPathFileName, ex);
 		} finally {
-			if (fastPathFile != null) {
+			if (reader != null) {
 				try {
-					fastPathFile.close();
+					reader.close();
 				} catch (Exception ex) {
 				}
 			}
@@ -73,18 +81,19 @@ public class FastPathQueue {
 			return;
 		}
 
-		ObjectOutputStream fastPathFile = null;
+		OutputStreamWriter jsonOutFile = null;
 
 		try {
-			fastPathFile = new ObjectOutputStream(new FileOutputStream(fastPathFileName));
-			fastPathFile.writeObject(pathQueue);
-			fastPathFile.flush();
+			jsonOutFile = new OutputStreamWriter(new FileOutputStream(fastPathFileName), StandardCharsets.UTF_8);
+			gson.toJson(pathQueue, jsonOutFile);
+			jsonOutFile.flush();
+			setDirty(false);
 		} catch (IOException ioEx) {
 			LogManager.getLogger(getClass()).warn(ioEx);
 		} finally {
-			if (fastPathFile != null) {
+			if (jsonOutFile != null) {
 				try {
-					fastPathFile.close();
+					jsonOutFile.close();
 				} catch (Exception ex) {
 				}
 			}
@@ -110,10 +119,20 @@ public class FastPathQueue {
 		if (pathQueue.size() > MAX_QUEUE_SIZE) {
 			pathQueue.remove(pathQueue.size() - 1);
 		}
+
+		dirty = true;
 	}
 
 	public ArrayList<String> getPathList() {
 		return (pathQueue);
+	}
+
+	public synchronized boolean isDirty() {
+		return dirty;
+	}
+
+	public synchronized void setDirty(boolean dirty) {
+		this.dirty = dirty;
 	}
 
 }

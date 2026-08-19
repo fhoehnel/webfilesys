@@ -1,21 +1,18 @@
 package de.webfilesys.gui.xsl;
 
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import de.webfilesys.WebFileSysConfig;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
-import de.webfilesys.WebFileSys;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLDecoder;
 import de.webfilesys.util.XmlUtil;
@@ -24,7 +21,8 @@ import de.webfilesys.util.XmlUtil;
  * @author Frank Hoehnel
  */
 public class MultiGPXTrackHandler extends XslRequestHandlerBase {
-	private static final Logger LOG = LogManager.getLogger(MultiGPXTrackHandler.class);
+
+	private static final Set<String> IGNORED_PARAMS = new HashSet<>(Arrays.asList("cb-setAll", "command", "cmd", "actpath"));
 
 	public MultiGPXTrackHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
 			PrintWriter output, String uid) {
@@ -34,24 +32,12 @@ public class MultiGPXTrackHandler extends XslRequestHandlerBase {
 	protected void process() {
 		String currentPath = getCwd();
 
-		ArrayList<String> selectedFiles = new ArrayList<String>();
-
-		// Enumeration allKeys=requestParms.keys();
-
-		Enumeration allKeys = req.getParameterNames();
-
-		while (allKeys.hasMoreElements()) {
-			String paramKey = (String) allKeys.nextElement();
-
-			if ((!paramKey.equals("cb-setAll")) && (!paramKey.equals("command")) && (!paramKey.equals("cmd")) && (!paramKey.equals("actpath"))) {
-				try {
-					String fileName = UTF8URLDecoder.decode(paramKey);
-					selectedFiles.add(fileName);
-				} catch (Exception ue1) {
-					LOG.error(ue1);
-				}
-			}
-		}
+		Map<String, String[]> params = req.getParameterMap();
+		List<String> selectedFiles = params.keySet().stream()
+				.filter(paramKey -> !IGNORED_PARAMS.contains(paramKey))
+				.map(UTF8URLDecoder::decode)
+				.filter(Objects::nonNull)
+				.toList();
 
 		Element gpxTrackElem = doc.createElement("gpxTracks");
 

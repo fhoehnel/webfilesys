@@ -1,11 +1,8 @@
 package de.webfilesys.gui.xsl;
 
-import de.webfilesys.gui.ajax.XmlMultiFileRequestHandler;
 import de.webfilesys.util.CommonUtils;
 import de.webfilesys.util.UTF8URLDecoder;
 import de.webfilesys.util.XmlUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Element;
 import org.w3c.dom.ProcessingInstruction;
 
@@ -13,15 +10,20 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author Frank Hoehnel
  */
 public class MultiOSMTrackHandler extends XslRequestHandlerBase {
-	private static final Logger LOG = LogManager.getLogger(MultiOSMTrackHandler.class);
+	private static final Set<String> IGNORED_PARAMS =
+			new HashSet<>(Arrays.asList("cb-setAll", "command", "cmd", "actpath"));
 
 	public MultiOSMTrackHandler(HttpServletRequest req, HttpServletResponse resp, HttpSession session,
                                 PrintWriter output, String uid) {
@@ -31,19 +33,12 @@ public class MultiOSMTrackHandler extends XslRequestHandlerBase {
 	protected void process() {
 		String currentPath = getCwd();
 
-        ArrayList<String> selectedFiles = new ArrayList<String>();
-        Enumeration allKeys = req.getParameterNames();
-        while (allKeys.hasMoreElements()) {
-            String paramKey = (String) allKeys.nextElement();
-            if ((!paramKey.equals("cb-setAll")) && (!paramKey.equals("command")) && (!paramKey.equals("cmd")) && (!paramKey.equals("actpath"))) {
-                try {
-                    String fileName = UTF8URLDecoder.decode(paramKey);
-                    selectedFiles.add(fileName);
-                } catch (Exception ue1) {
-                    LOG.error(ue1);
-                }
-            }
-        }
+        Map<String, String[]> params = req.getParameterMap();
+        List<String> selectedFiles = params.keySet().stream()
+                .filter(paramKey -> !IGNORED_PARAMS.contains(paramKey))
+                .map(UTF8URLDecoder::decode)
+                .filter(Objects::nonNull)
+                .toList();
 
         Element gpxTrackElem = doc.createElement("gpxTracks");
 		doc.appendChild(gpxTrackElem);
