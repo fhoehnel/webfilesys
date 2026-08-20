@@ -35,6 +35,7 @@ import de.webfilesys.*;
 import de.webfilesys.gui.ajax.*;
 import de.webfilesys.gui.api.*;
 import de.webfilesys.gui.user.*;
+import de.webfilesys.gui.user.windows.DriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.*;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -74,7 +75,6 @@ import de.webfilesys.gui.user.unix.MultiTarArchiveHandler;
 import de.webfilesys.gui.user.unix.ProcessListRequestHandler;
 import de.webfilesys.gui.user.unix.UnixOwnerRequestHandler;
 import de.webfilesys.gui.user.unix.XslUnixFileSysStatHandler;
-import de.webfilesys.gui.user.windows.XslDriveInfoRequestHandler;
 import de.webfilesys.gui.xsl.album.AddAlbumCommentHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumPictureHandler;
 import de.webfilesys.gui.xsl.album.XslAlbumSlideShowHandler;
@@ -95,7 +95,6 @@ import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.FileAppender;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.config.builder.api.*;
 
 /**
  * The main servlet class.
@@ -1782,12 +1781,10 @@ public class WebFileSysServlet extends ServletBase {
             return(true);
         }
 
-        if (command.equals("driveInfo"))
-        {
-			(new XslDriveInfoRequestHandler(req, resp, session, output, userid)).handleRequest();
-			
-            return(true);
-        }
+        if (command.equals("driveInfo")) {
+			(new DriveInfoRequestHandler(req, resp, session, output, userid)).handleRequest();
+			return true;
+		}
 
         if (command.equals("winCmdLine"))
         {

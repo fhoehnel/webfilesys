@@ -39,6 +39,7 @@
     <script src="/webfilesys/javascript/dirContextMenu.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/contextMenuMouse.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/jsDirMenu.js" type="text/javascript"></script>
+    <script src="/webfilesys/javascript/driveInfo.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/keyDirTree.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/util.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/xmlUtil.js" type="text/javascript"></script>

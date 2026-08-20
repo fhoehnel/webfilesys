@@ -152,10 +152,6 @@ function description(path)
     // descWin.opener=parent.FileList;
 }
 
-function driveInfo(path) {
-    centeredDialog("/webfilesys/servlet?command=driveInfo&path=" + encodeURIComponent(path), "/webfilesys/xsl/driveInfo.xsl", 260, 400);
-}
-
 function refresh(path)
 {
     window.location.href="/webfilesys/servlet?command=refresh&path=" + encodeURIComponent(path);

@@ -202,6 +202,11 @@ div.driveUsageBar {
     width: 200px;
 	height: 20px;
 	border: 1px solid blue;
+    background-color: #d0d0d0;
+}
+
+div.driveUsageBar img {
+    height: 20px;
 }
 
 td.loginTitle {

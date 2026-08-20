@@ -33,6 +33,9 @@ docker build -t webfilesys:java17-tomcat9 .
 Run container:
 docker run --rm -p 9753:8080 --name webfilesys webfilesys:java17-tomcat9
 
+Build + Run:
+docker compose -f docker-compose.yml up -d --build
+
 Open in browser:
 http://localhost:9753/webfilesys
 

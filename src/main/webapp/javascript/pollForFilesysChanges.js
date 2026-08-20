@@ -17,7 +17,6 @@ function pollForDirChanges(immediateRefreshView) {
         mask: fileFilter
     };
     if (typeof pollThumbs !== 'undefined') {
-        console.log("pollThumbs is set");
         params.thumbnails = "true";
     }
 
