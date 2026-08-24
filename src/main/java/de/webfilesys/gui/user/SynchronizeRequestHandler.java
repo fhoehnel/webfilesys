@@ -1,23 +1,19 @@
 package de.webfilesys.gui.user;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-
-import de.webfilesys.WebFileSys;
 import de.webfilesys.gui.xsl.XslSyncCompareHandler;
 import de.webfilesys.sync.SyncItem;
 
@@ -350,54 +346,22 @@ public class SynchronizeRequestHandler extends UserRequestHandler
         return false;
     }
     
-    private boolean copySyncFile(String sourceFileName, String targetFileName)
-    {
-        File sourceFile = new File(sourceFileName);
-        
-        long lastChangeDate = sourceFile.lastModified();
-
+    private boolean copySyncFile(String sourceFileName, String targetFileName) {
         boolean copyFailed = false;
-
-        byte buff[] = new byte[4096];
-
-        try
-        {
-            BufferedInputStream fin = new BufferedInputStream(new FileInputStream(sourceFileName));
-            BufferedOutputStream fout = new BufferedOutputStream(new FileOutputStream(targetFileName));
-
-            int count;
-            while (( count = fin.read(buff)) >= 0 )
-            {
-                fout.write(buff, 0, count);
-            }
-
-            fin.close();
-            fout.close();
-        }
-        catch (Throwable e)
-        {
+        try {
+            Files.copy(Paths.get(sourceFileName), Paths.get(targetFileName),
+                    StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+        } catch (Throwable e) {
             LogManager.getLogger(getClass()).error(e);
             copyFailed = true;
         }
-
-        if (!copyFailed)
-        {
-            File destFile = new File(targetFileName);
-            destFile.setLastModified(lastChangeDate);
-        }
-
-        if (copyFailed)
-        {
+        if (copyFailed) {
             output.println("<nobr><span style=\"color:red\">" + getResource("sync.fileCopiedFailed", "failed to copy file") + ": " + getHeadlinePath(sourceFileName) + "</span></nobr><br>");
-        }
-        else
-        {
+        } else {
             output.println("<nobr>" + getResource("sync.fileCopied", "file copied") + ": " + getHeadlinePath(sourceFileName) + "</nobr><br>");
         }
-        
         output.flush();
-
-        return(!copyFailed);
+        return !copyFailed;
     }
     
     private boolean deleteFile(String path)
