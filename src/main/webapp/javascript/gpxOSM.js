@@ -20,7 +20,7 @@ function showOSMTracks(gpxFilePath) {
     document.getElementById("mapDiv").style.height = (window.innerHeight - 30 )+ "px";
     const map = new OpenLayers.Map("mapDiv");
     osmMap = map;
-    map.addLayer(new OpenLayers.Layer.OSM());
+    map.addLayer(createOSMBaseLayer());
 
     showSingleOSMTrack(gpxFilePath, map);
 }
@@ -78,7 +78,7 @@ function loadAndShowWayPointsOSM(map, gpxFilePath) {
 function showMultipleOSMTracks() {
     document.getElementById("mapDiv").style.height = (window.innerHeight - 30 )+ "px";
     const map = new OpenLayers.Map("mapDiv");
-    map.addLayer(new OpenLayers.Layer.OSM());
+    map.addLayer(createOSMBaseLayer());
 
     showNextOSMTrack(map);
 }
@@ -141,7 +141,7 @@ function showTrackOnOSMMap(trackPoints, map) {
 
 function showLocationsOnOSMMap(folderPath) {
     const map = new OpenLayers.Map("mapdiv");
-    map.addLayer(new OpenLayers.Layer.OSM());
+    map.addLayer(createOSMBaseLayer());
 
     const pois = new OpenLayers.Layer.Text("My Points",
         {

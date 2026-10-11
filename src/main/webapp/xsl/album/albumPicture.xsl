@@ -41,6 +41,7 @@
   <script src="/webfilesys/javascript/resourceBundle.js" type="text/javascript"></script>
 
   <xsl:if test="/imageData/geoTag">
+    <script src="/webfilesys/javascript/osmCommon.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
   </xsl:if>
 
@@ -134,7 +135,7 @@
       <a class="pictureAlbumPath">
         <xsl:if test="count(/imageData/currentPath/pathElem) = 1">
           <xsl:if test="not(/imageData/fromStory)">
-            <xsl:attribute name="href">/webfilesys/servlet?command=album&amp;relPath=<xsl:value-of select="@path"/></xsl:attribute>
+            <xsl:attribute name="href">/webfilesys/servlet?command=album</xsl:attribute>
           </xsl:if>
           <xsl:if test="/imageData/fromStory">
             <xsl:attribute name="href">/webfilesys/servlet?command=storyInFrame&amp;mode=pictureBook</xsl:attribute>

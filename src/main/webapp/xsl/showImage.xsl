@@ -37,6 +37,7 @@
   </script>
 
   <xsl:if test="/imageData/geoTag">
+    <script src="/webfilesys/javascript/osmCommon.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/geoMap.js" type="text/javascript"></script>
   </xsl:if>
 
