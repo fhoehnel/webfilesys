@@ -20,7 +20,11 @@
 <link rel="stylesheet" type="text/css">
   <xsl:attribute name="href">/webfilesys/styles/skins/<xsl:value-of select="/metaInf/css" />.css</xsl:attribute>
 </link>
-  
+
+<script type="text/javascript">
+  <xsl:attribute name="src">/webfilesys/javascript/osmCommon.js</xsl:attribute>
+</script>
+
 <script type="text/javascript">
   <xsl:attribute name="src">/webfilesys/javascript/openStreetMaps/OpenLayers.js</xsl:attribute>
 </script>
@@ -38,7 +42,7 @@
         var zoomFactor = '<xsl:value-of select="/geoTag/zoomFactor" />';
   
         var map = new OpenLayers.Map("mapdiv");
-        map.addLayer(new OpenLayers.Layer.OSM());
+        map.addLayer(createOSMBaseLayer());
  
         var pois = new OpenLayers.Layer.Text("My Points",
                                              {

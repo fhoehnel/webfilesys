@@ -23,6 +23,7 @@
     <script src="/webfilesys/javascript/ajaxCommon.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/ajax.js" type="text/javascript"></script>
 
+    <script src="/webfilesys/javascript/osmCommon.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/gpxTrack.js" type="text/javascript"></script>
     <script src="/webfilesys/javascript/gpxOSM.js" type="text/javascript"></script>
 
