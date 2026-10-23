@@ -2,6 +2,7 @@ package de.webfilesys.gui.xsl.album;
 
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -229,7 +230,7 @@ public class XslPictureAlbumHandler extends XslRequestHandlerBase {
 
         partOfPathElem.setAttribute("name", "home");
 
-        partOfPathElem.setAttribute("path", File.separator);
+        partOfPathElem.setAttribute("path", URLEncoder.encode(File.separator));
 
         StringTokenizer pathParser = new StringTokenizer(relativePath, File.separator);
 
